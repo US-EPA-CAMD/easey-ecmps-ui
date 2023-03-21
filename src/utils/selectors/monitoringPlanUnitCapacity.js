@@ -1,24 +1,15 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansUnitCapacityRecords = (data) => {
   const records = [];
   data.forEach((el) => {
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
+    const beginDate = formatDateString(el.beginDate);
+    const endDate = formatDateString(el.endDate);
 
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-
-    const commercialOperationDateString = el.commercialOperationDate
-      ? formatStringToDate(el.commercialOperationDate.toString())
-      : "";
-    const operationDateString = el.operationDate
-      ? formatStringToDate(el.operationDate.toString())
-      : "";
-    const boilerTurbineBeginDateString = el.boilerTurbineBeginDate
-      ? formatStringToDate(el.boilerTurbineBeginDate.toString())
-      : "";
-    const boilerTurbineEndDateString = el.boilerTurbineEndDate
-      ? formatStringToDate(el.boilerTurbineEndDate.toString())
-      : "";
+    const commercialOperationDateString = formatDateString(el.commercialOperationDate)
+    const operationDateString = formatDateString(el.operationDate)
+    const boilerTurbineBeginDateString = formatDateString(el.boilerTurbineBeginDate)
+    const boilerTurbineEndDateString = formatDateString(el.boilerTurbineEndDate)
 
     records.push({
       col1: commercialOperationDateString,
@@ -27,17 +18,11 @@ export const getMonitoringPlansUnitCapacityRecords = (data) => {
       col4: boilerTurbineBeginDateString,
       col5: boilerTurbineEndDateString,
       col6: el.maximumHourlyHeatInputCapacity,
-      col7: `${beginDate} `,
-      col8: `${endDate} `,
+      col7: `${beginDate}`,
+      col8: `${endDate}`,
       col9: el.id,
     });
   });
 
   return records;
-};
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
-
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };

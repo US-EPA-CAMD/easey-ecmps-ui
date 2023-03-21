@@ -279,3 +279,14 @@ export const resetTabOrder = (history) => {
     }
   }
 };
+
+export const formatDateString = date => {
+  return date ? date.replaceAll('-', '/') : '';
+};
+
+export const formatHourString = hour => {
+  if (hour === null || hour === undefined) {
+    return ''
+  }
+  return String(hour).padStart(2, '0');
+}

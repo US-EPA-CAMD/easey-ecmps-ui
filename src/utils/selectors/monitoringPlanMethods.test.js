@@ -40,8 +40,8 @@ describe("testing monitoring plan data selectors", () => {
         col2: undefined,
         col3: "SPTS",
         col4: null,
-        col5: "07/01/2019 0",
-        col6: " ",
+        col5: "2019/07/01 00",
+        col6: "",
         col7: "TWCORNEL5-E87023808E5C43F18BD84AC8A9DCF332",
       },
       {
@@ -49,8 +49,8 @@ describe("testing monitoring plan data selectors", () => {
         col2: undefined,
         col3: "SPTS",
         col4: null,
-        col5: " ",
-        col6: "07/01/2019 0",
+        col5: "",
+        col6: "2019/07/01 00",
         col7: "TWCORNEL5-E87023808E5C43F18BD84AC8A9DCF332",
       },
     ];
@@ -80,15 +80,15 @@ describe("testing monitoring plan data selectors", () => {
       {
         col1: "HCL",
         col2: "QST",
-        col3: "04/16/2016 0",
-        col4: " ",
+        col3: "2016/04/16 00",
+        col4: "",
         col5: "TAG182357-8F800321D1384A86BA068C39281AF76F",
       },
       {
         col1: "HCL",
         col2: "QST",
-        col3: " ",
-        col4: "04/16/2016 0",
+        col3: "",
+        col4: "2016/04/16 00",
         col5: "TAG182357-8F800321D1384A86BA068C39281AF76F",
       },
     ];
@@ -103,9 +103,5 @@ describe("testing monitoring plan data selectors", () => {
     expect(
       fs.getMonitoringPlansMatsMethodsTableRecords(selectedMonitoringMatsMethod)
     ).toEqual(monitoringMatsMethdsTableRecods);
-  });
-
-  test("should return formatted date ", () => {
-    expect(fs.formatAndNormalizeDate("2020-10-10")).toEqual("10/10/2020");
   });
 });

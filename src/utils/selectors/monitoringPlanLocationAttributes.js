@@ -1,3 +1,5 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
   const data = totalData;
   const records = [];
@@ -17,10 +19,8 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
       bypassIndicator = "No";
     }
 
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const beginDate = formatDateString(el.beginDate);
+    const endDate = formatDateString(el.endDate);
     records.push({
       col1: ductIndicator,
       col2: bypassIndicator,
@@ -44,10 +44,8 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const beginDate = formatDateString(el.beginDate);
+    const endDate = formatDateString(el.endDate);
 
     records.push({
       col1: el.stackPipeId,
@@ -58,12 +56,4 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
     });
   });
   return records;
-};
-
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const splitDate = date.split("T");
-  const parts = splitDate[0].split("-");
-  //Removes the time component from the Day part
-  return `${parts[1]}/${parts[2].substring(0, 2)}/${parts[0]}`;
 };
