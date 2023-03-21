@@ -277,30 +277,37 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if (
+    if(dataTableName === "Formula"){
+      if(userInput.endHour === null || !userInput.endDate){
+        setErrorMsgs([needEndDate])
+        return;
+      }
+    }
+    else if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour &&
         userInput.endDate &&
         dataTableName !== lAttr &&
         dataTableName !== rDat)
     ) {
-      setErrorMsgs([needEndDate])
-    } else {
-      try {
-        const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
-        if (resp.status === 200) {
-          setShow(false);
-          setDataLoaded(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        } else {
-          const errorResp = Array.isArray(resp) ? resp : [resp];
-          setErrorMsgs(errorResp);
-        }
-      } catch (error) {
-        setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([needEndDate]);
+      return;
+    } 
+    try {
+      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+      if (resp.status === 200) {
+        setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
       }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
+    
   };
 
   const createData = async () => {
@@ -309,7 +316,13 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if (
+    if(dataTableName === "Formula"){
+      if(userInput.endHour === null || !userInput.endDate){
+        setErrorMsgs([needEndDate])
+        return;
+      }
+    }
+    else if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour &&
         userInput.endDate &&
