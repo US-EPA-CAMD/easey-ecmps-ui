@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as assertSelector from "../../../utils/selectors/assert";
 
@@ -17,10 +17,6 @@ import {
   changeGridCellAttributeValue,
   ensure508,
 } from "../../../additional-functions/ensure-508";
-import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
@@ -277,22 +273,11 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if(dataTableName === "Formula"){
-      if(userInput.endHour === null || !userInput.endDate){
-        setErrorMsgs([needEndDate])
-        return;
-      }
+    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors)
+      return
     }
-    else if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour &&
-        userInput.endDate &&
-        dataTableName !== lAttr &&
-        dataTableName !== rDat)
-    ) {
-      setErrorMsgs([needEndDate]);
-      return;
-    } 
     try {
       const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
       if (resp.status === 200) {
@@ -316,22 +301,12 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if(dataTableName === "Formula"){
-      if(userInput.endHour === null || !userInput.endDate){
-        setErrorMsgs([needEndDate])
-        return;
-      }
+    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors)
+      return
     }
-    else if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour &&
-        userInput.endDate &&
-        dataTableName !== lAttr &&
-        dataTableName !== rDat)
-    ) {
-      setErrorMsgs([needEndDate])
-      return;
-    }
+
     try {
       const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
       if (resp.status === 201) {
