@@ -48,7 +48,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     }
   }
 
-  // payloadArray.forEach((item) => {
   for (const item of payloadArray) {
     if (item.value === null || item.value === "") {
       payload[item.name] = null
