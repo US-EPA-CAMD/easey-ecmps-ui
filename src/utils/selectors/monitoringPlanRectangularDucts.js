@@ -6,7 +6,7 @@ export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
 
   data.forEach((el) => {
     const beginDate = formatDateString(el.wafBeginDate)
-    const beginHour =formatHourString(el.wafBeginHour);
+    const beginHour = formatHourString(el.wafBeginHour);
     const endDate = formatDateString(el.wafEndDate)
     const endHour = formatHourString(el.wafEndHour);
     const wafDeterminationDate = formatDateString(el.wafDeterminationDate)
