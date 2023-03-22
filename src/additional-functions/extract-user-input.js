@@ -52,12 +52,12 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   payloadArray.forEach((item) => {
     if (item.value !== undefined) {
-      if (typeof item.value === "string" && isNaN(item.value)) {
+      if (typeof item.value === "string" && (isNaN(item.value) || (item.value.length > 1 && item.value.charAt(0) === '0'))) {
         payload[item.name] =
           item.value.trim() === "" ? null : item.value.trim();
       }
       // is a number
-      if (typeof item.value === "string" && !isNaN(item.value)) {
+      else if (typeof item.value === "string" && !isNaN(item.value)) {
         if (payload[item.name] === "string") {
           payload[item.name] =
             item.value.trim() === "" ? null : item.value.trim();
