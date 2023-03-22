@@ -175,7 +175,7 @@ const componentRenderer = (location) => {
     settingInactiveCheckBox: jest.fn(),
     setUpdateRelatedTables: jest.fn(),
     updateRelatedTables: false,
-    currentTabIndex: 0,
+    currentTabIndex:0,
     tabs: [{ inactive: [{}] }],
   };
   return render(<DataTableMats {...props} />);

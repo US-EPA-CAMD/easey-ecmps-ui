@@ -49,7 +49,7 @@ export const DataTableMats = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
-  tabs,
+  tabs
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -409,7 +409,6 @@ export const DataTableMats = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
-
     tabs: state.openedFacilityTabs[
       'monitoringPlans'
     ],
