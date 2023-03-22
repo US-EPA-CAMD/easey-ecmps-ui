@@ -1,4 +1,4 @@
-import { extractUserInput } from "./extract-user-input";
+import { extractUserInput, validateUserInput } from "./extract-user-input";
 import React from "react";
 import { Radio } from "@trussworks/react-uswds";
 import { render } from "@testing-library/react";
@@ -45,7 +45,7 @@ class Test extends React.Component {
   }
 }
 
-describe("extract user  functions", () => {
+describe("extract user functions", () => {
   it("should test with valid input", () => {
     const { container } = render(<Test />);
 
@@ -80,3 +80,30 @@ describe("extract user  functions", () => {
     expect(test).toBeDefined();
   });
 });
+
+describe("validateUserInput", () => {
+  const options = {
+    dataTableName: 'Formula',
+    lAttr: 'lAttr',
+    rDat: 'rDat'
+  }
+  test("given valid data then returns no errors", () => {
+    const validInput = {
+      beginDate: '03/22/2023',
+      beginHour: 0,
+      endDate: '03/23/2023',
+      endHour: 0
+    }
+    const errors = validateUserInput(validInput, options)
+    expect(errors).toHaveLength(0)
+  })
+
+  test("given invalid data then returns errors", () => {
+    const invalidInput = {
+      beginDate: null,
+      beginHour: 0
+    }
+    const errors = validateUserInput(invalidInput, options)
+    expect(errors).not.toHaveLength(0)
+  })
+})

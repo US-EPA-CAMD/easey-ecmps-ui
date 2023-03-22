@@ -1,6 +1,4 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
-
-  console.log('payload', payload)
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -50,7 +48,11 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     }
   }
 
-  payloadArray.forEach((item) => {
+  for (const item of payloadArray) {
+    if (item.value === null || item.value === "") {
+      payload[item.name] = null
+      continue;
+    }
     if (item.value !== undefined) {
       if (typeof item.value === "string" && (isNaN(item.value) || (item.value.length > 1 && item.value.charAt(0) === '0'))) {
         payload[item.name] =
@@ -77,7 +79,48 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         }
       }
     }
-  });
+  }
 
   return payload;
 };
+
+export const validateUserInput = (userInput, options = {}) => {
+  const errors = []
+  const { dataTableName, lAttr, rDat } = options
+  const needsEndDateTime = 'Must enter in both End Date and Time'
+
+  checkFormulaBeginDateAndHour(userInput, errors, dataTableName);
+
+  // checks end date and hour for formula table
+  if (options.dataTableName === "Formula") {
+    if(userInput.endHour === null || !userInput.endDate){
+      errors.push(needsEndDateTime)
+    }
+  } else if (
+    (userInput.endHour && !userInput.endDate) ||
+    (!userInput.endHour &&
+      userInput.endDate &&
+      dataTableName !== lAttr &&
+      dataTableName !== rDat)
+  ) {
+    errors.push(needsEndDateTime)
+  }
+
+  return errors;
+}
+
+/**
+ * Checks if begin date and hour exist as options in user input and are nonempty
+ * for Formula table in MP
+ */
+const checkFormulaBeginDateAndHour = (userInput, errors, dataTableName) => {
+  const [beginDate, beginHour] = ["beginDate", "beginHour"]
+  const needsBeginDateTime = 'Must enter in both Begin Date and Time';
+
+  // skip validation if not Formula table
+  if (dataTableName !== 'Formula') return
+
+  if (userInput[beginDate] === null || userInput[beginHour] === null) {
+    errors.push(needsBeginDateTime)
+  }
+}
