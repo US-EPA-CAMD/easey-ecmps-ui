@@ -64,9 +64,9 @@ export const formulasDataTableProps = (location) => {
       formulaCode: "string",
       formulaText: "string",
       beginDate: "2021-10-21T17:12:00.643Z",
-      beginHour: 0,
+      beginHour: null,
       endDate: "2021-10-21T17:12:00.643Z",
-      endHour: 0,
+      endHour: null,
     },
     dropdownArray: [["parameterCode", "formulaCode", "prefilteredFormulas"]],
     columnNames: [
