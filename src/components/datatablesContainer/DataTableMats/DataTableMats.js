@@ -48,6 +48,8 @@ export const DataTableMats = ({
   settingInactiveCheckBox,
   setUpdateRelatedTables,
   updateRelatedTables,
+  currentTabIndex,
+  tabs
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -166,9 +168,9 @@ export const DataTableMats = ({
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(inactive[0], false);
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMatsMethodsTableRecords(
-          !inactive[0] ? getActiveData(matsMethods) : matsMethods
+          tabs[currentTabIndex].inactive[0] === false ? getActiveData(matsMethods) : matsMethods
         );
       }
     }
@@ -181,7 +183,7 @@ export const DataTableMats = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsMethods, methods, inactive, updateTable]);
+  }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 
   const saveMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -407,6 +409,9 @@ export const DataTableMats = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+    ],
   };
 };
 
