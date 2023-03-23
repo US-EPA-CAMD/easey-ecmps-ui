@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useCallback, useRef } from "react";
 import { config } from "../../config";
 import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
 import { useInterval } from "../../additional-functions/use-interval";
@@ -10,8 +10,8 @@ import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import "../Modal/Modal.scss";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import { useCallback } from "react";
-import { useRef } from "react";
+import "./InactivityTracker.scss"
+
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
 const modalContext = createContext(null);
 const widthPercent = 50;
@@ -96,7 +96,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
           <div>
             <modalContext.Provider value={{ resetUserInactivityTimer }}>
               <div
-                className={`${modalClassName} react-transition flip-in-x`}
+                className={`${modalClassName} inactivity-modal react-transition flip-in-x`}
                 style={{
                   width: `${widthPercent}%`,
                   left: `${(100 - widthPercent) / 2}`,
