@@ -59,7 +59,7 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
-import { handleError } from "../../utils/api/apiUtils";
+import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
   hideAppError,
@@ -682,7 +682,7 @@ export const HeaderInfo = ({
       .importMP(payload)
       .then((response) => {
         setIsLoading(true);
-        if (response) {
+        if (!successResponses.includes(response.status)) {
           setImportedFileErrorMsgs(response);
         }
       })
