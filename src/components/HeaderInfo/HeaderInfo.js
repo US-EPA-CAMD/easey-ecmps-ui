@@ -49,6 +49,7 @@ import {
   displayReport,
   getPreviouslyFullSubmitedQuarter,
   getQuarter,
+  formatErrorResponse,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
@@ -683,7 +684,8 @@ export const HeaderInfo = ({
       .then((response) => {
         setIsLoading(true);
         if (!successResponses.includes(response.status)) {
-          setImportedFileErrorMsgs(response);
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
         }
       })
       .catch((err) => {
