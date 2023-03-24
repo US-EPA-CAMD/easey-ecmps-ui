@@ -23,7 +23,7 @@ const ImportModal = ({
   fileName,
   setHasFormatError,
   setHasInvalidJsonError,
-  importedFileErrorMsgs,
+  importedFileErrorMsgs = [],
   setImportedFile,
   workspaceSection,
 }) => {
@@ -32,6 +32,8 @@ const ImportModal = ({
   const [emSchema, setEmSchema] = useState([]);
   const [schemaErrors, setSchemaErrors] = useState([]);
   const [label, setLabel] = useState("");
+
+  importedFileErrorMsgs = Array.isArray(importedFileErrorMsgs) ? importedFileErrorMsgs : [importedFileErrorMsgs]
 
   useEffect(() => {
     switch (workspaceSection) {
@@ -171,7 +173,6 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
-  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
