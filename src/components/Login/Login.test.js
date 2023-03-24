@@ -55,6 +55,7 @@ test("renders and tests Login component", async () => {
   // username
   const usernameInput = screen.getByLabelText("Username");
   expect(usernameInput).not.toBeDisabled();
+  expect(usernameInput.type).toBe("text");
   userEvent.type(usernameInput, "myusername");
   expect(screen.getByDisplayValue("myusername")).toBeInTheDocument();
 
