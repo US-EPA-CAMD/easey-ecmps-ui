@@ -1,20 +1,10 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import {getReport,submitData} from "./camdServices";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-const mock = new MockAdapter(axios);
+import {getReport,submitData} from "./camdServices";
+
 import config from "../../config";
 
-const props = {
-  selectionData: { beginDate: '1/1/11', endDate: '1/1/11' },
-  selectedConfig: { locations: [{unitId:"51", type:"unitId", stackPipeId:null}] },
-  exportState: {},
-  setExportState: null,
-  workspaceSection: 'workspacesection',
-  orisCode: '3776',
-  dataRef: {},
-}
+const mock = new MockAdapter(axios);
 
 describe("Report API calls", () => {
   
@@ -26,7 +16,7 @@ describe("Report API calls", () => {
     const getReportUrl = "https://api.epa.gov/easey/dev/camd-services/reports?reportCode=reportCode&facilityId=facilityId"
     mock.onGet(getReportUrl).reply(200, []);
 
-    getReport("reportCode","facilityId");
+    getReport({ reportCode: "test", facilityId: 3 });
 
     expect(mock.history.get.length).toBe(1);
   })
@@ -39,9 +29,7 @@ describe("Report API calls", () => {
     const submitUrl = `${config.services.camd.uri}/submit`;
     mock.onPost(submitUrl).reply(200);
 
-    const resp = await submitData(payload);
-
-    //expect(mock.history.post.length).toBe(1);
+    await submitData(payload);
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000);
   })
 });

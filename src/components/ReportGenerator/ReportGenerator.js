@@ -1,6 +1,7 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+import { Button, GovBanner } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Login from "../Login/Login";
@@ -8,48 +9,44 @@ import Report from "./Report/Report";
 import * as camdApi from '../../utils/api/camdServices';
 
 import "./ReportGenerator.scss";
-import { Button, GovBanner } from "@trussworks/react-uswds";
 
 export const ReportGenerator = ({user, requireAuth = false}) => {
   const search = useLocation().search;
-  const params = new URLSearchParams(search);
+  const searchParams = new URLSearchParams(search);
 
-  const teeId = params.get("teeId");
-  const qceId = params.get("qceId");
-  const testId = params.get("testId");
-  const facilityId = params.get("facilityId");
-  const reportCode = params.get("reportCode");
-  const monitorPlanId = params.get("monitorPlanId");
+  const year = searchParams.get("year");
+  const teeId = searchParams.get("teeId");
+  const qceId = searchParams.get("qceId");
+  const testId = searchParams.get("testId");
+  const quarter = searchParams.get("quarter");
+  const facilityId = searchParams.get("facilityId");
+  const reportCode = searchParams.get("reportCode");
+  const monitorPlanId = searchParams.get("monitorPlanId");
 
+  const [error, setError] = useState();
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [error, setError] = useState(false);
+
+  const params = { reportCode, facilityId, monitorPlanId, testId, qceId, teeId, year, quarter };
 
   useEffect(() => {
-    if (!dataLoaded) {
-      camdApi.getReport(reportCode, facilityId, monitorPlanId, testId, qceId, teeId)
+    if (((requireAuth && user) || !requireAuth) && !dataLoaded) {
+      camdApi.getReport(params)
         .then(response => response.data)
         .then(data => {
           setReportData(data);
           setDataLoaded(true);
         })
-        .catch((err) =>{
-          setError(true);
-          console.error(err);
+        .catch((error) => {
+          setError(error.response.data.message);
         });
     }
-  }, [reportCode, facilityId, monitorPlanId, testId, qceId, teeId, dataLoaded]);
+  }, [user, requireAuth, dataLoaded, params]);
 
-  const Loading = () => {
-    return (
-      <div className="height-viewport display-flex flex-justify-center flex-align-center text-center">
-        <Preloader />
-      </div>
-    );
-  };
   if (error) {
-    return <ErrorMessage />
+    return <ErrorMessage error={error} />
   }
+  
   return (
     <div className="ReportGenerator">
       {requireAuth && !user ? (
@@ -59,14 +56,14 @@ export const ReportGenerator = ({user, requireAuth = false}) => {
       ) : (
         <div className="padding-bottom-5">
           {!dataLoaded ? (
-            <Loading />
+            <div className="height-viewport display-flex flex-justify-center flex-align-center text-center">
+              <Preloader />
+            </div>
           ) : (
             <div>
-              <Suspense fallback={Loading}>
-                <div className="react-transition scale-in">
-                  <Report reportData={reportData} dataLoaded={dataLoaded} />
-                </div>
-              </Suspense>
+              <div className="react-transition scale-in">
+                <Report reportData={reportData} dataLoaded={dataLoaded} />
+              </div>
             </div>
           )}
         </div>
@@ -77,10 +74,9 @@ export const ReportGenerator = ({user, requireAuth = false}) => {
 
 export default ReportGenerator;
 
-export const ErrorMessage = () => (
+export const ErrorMessage = ({ error }) => (
   <div>
     <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
-
     <div className="">
       <div className="padding-x-5 padding-y-3 border-bottom-1px border-base-light">
         <img
@@ -100,9 +96,9 @@ export const ErrorMessage = () => (
           Close Report
         </Button>
       </div>
-
       <div className="padding-x-5">
-        <h1 className="text-bold">Report could not be generated</h1>
+        <h1 className="text-bold">An error occurred while generating the report</h1>
+        <p>{error}</p>
       </div>
     </div>
   </div>

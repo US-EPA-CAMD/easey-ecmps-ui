@@ -80,32 +80,41 @@ const TableRender = forwardRef(
     };
 
     const handleRowView = useCallback((row, printout) => {
-      let reportTitle;
-      let reportCode;
       let url;
+      let reportCode;
+      let reportTitle;
       const reportType = printout ? "Printout" : "Evaluation";
       //TODO: Filter by type
       reportCode = "MPP";
-      reportTitle = `ECMPS Monitoring Plan ${reportType} Report`;
+      reportTitle = `Monitoring Plan ${reportType} Report`;
 
       let additionalParams = "";
 
       if (type === "MP") {
         reportCode = printout ? "MPP" : "MP_EVAL";
+        reportTitle = `Monitoring Plan ${reportType} Report`;
         additionalParams = "&monitorPlanId=" + row.monPlanId;
       } else if (type === "QA") {
         if (rowId === "testSumId") {
           reportCode = printout ? "TEST_DETAIL" : "TEST_EVAL";
+          reportTitle = `QA/Cert Test Data ${reportType} Report`;
           additionalParams = "&testId=" + row.testSumId;
         }
         if (rowId === "qaCertEventIdentifier") {
           reportCode = printout ? "QCE" : "QCE_EVAL";
+          reportTitle = `QA/Cert Events ${reportType} Report`;
           additionalParams = "&qceId=" + row.qaCertEventIdentifier;
         }
         if (rowId === "testExtensionExemptionIdentifier") {
           reportCode = printout ? "TEE" : "TEE_EVAL";
+          reportTitle = `Test Ext/Exemptions ${reportType} Report`;
           additionalParams = "&teeId=" + row.testExtensionExemptionIdentifier;
         }
+        // TODO: need to add case for EM and EM_EVAL for emissions
+        // and pass year and quarter as additional params
+        // reportCode = printout ? "EM" : "EM_EVAL";
+        // reportTitle = `Emissions ${reportType} Report`;
+        // additionalParams = `&year=${year}&quarter=${quarter}`;
       }
 
       url =
