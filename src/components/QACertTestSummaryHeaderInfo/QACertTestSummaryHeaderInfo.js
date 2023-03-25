@@ -28,6 +28,8 @@ import {
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import { successResponses } from "../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../utils/functions";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -269,8 +271,9 @@ export const QACertTestSummaryHeaderInfo = ({
       .then((response) => {
         setShowImportModal(true)
         setUsePortBtn(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
         }
       })
       .catch((err) => {
