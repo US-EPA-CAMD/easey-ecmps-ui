@@ -290,3 +290,13 @@ export const formatHourString = hour => {
   }
   return String(hour).padStart(2, '0');
 }
+
+/**
+ * Formats errored response into list of strings
+ * @param {*} errorResp 
+ * @returns 
+ */
+export const formatErrorResponse = errorResp => {
+  const errorMsgs = Array.isArray(errorResp) ? errorResp : [JSON.stringify(errorResp)]
+  return errorMsgs
+}
