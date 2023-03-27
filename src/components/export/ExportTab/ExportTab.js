@@ -67,6 +67,11 @@ export const ExportTab = ({
       },
       workspaceSection
     );
+
+    if(previewOptions && !dataTypesCopy[index].checked){
+      setPreviewOptions(undefined);
+    }
+      
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
