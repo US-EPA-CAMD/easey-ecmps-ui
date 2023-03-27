@@ -1,11 +1,9 @@
 @import "/variables";
 
 .data-display-table {
-  overflow: hidden !important;
   .rdt_Table {
     width: 99%;
     margin: 0.5% 0.5%;
-    overflow: auto !important;
   }
   .rdt_TableCol_Sortable {
     color: $epa-black !important;
