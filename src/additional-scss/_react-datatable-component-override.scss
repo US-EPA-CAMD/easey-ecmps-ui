@@ -1,9 +1,11 @@
 @import "/variables";
 
 .data-display-table {
+  overflow: hidden !important;
   .rdt_Table {
     width: 99%;
     margin: 0.5% 0.5%;
+    overflow: auto !important;
   }
   .rdt_TableCol_Sortable {
     color: $epa-black !important;
@@ -120,7 +122,8 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: $epa-off-white !important;
+  background-color: $epa-off-white;
+  border: none !important;
 }
 .rdt_TableRow:nth-child(even) {
   background-color: $epa-white !important;
