@@ -1300,7 +1300,7 @@ export const qaUnitDefaultTestDataProps = () => {
     ],
     controlInputs: {
       fuelCode: ["Fuel Code", "dropdown", "", ""],
-      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      noxDefaultRate: ["NOX Default Rate", "input", "", ""],
       operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
       groupID: ["Group ID", "input", "", ""],
       numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
@@ -1330,7 +1330,7 @@ export const qaUnitDefaultTestRunDataProps = () => {
       "Run Used Indicator",
     ],
     controlInputs: {
-      operatingLevel: ["Operating Level for Run", "input", "", ""],
+      operatingLevelForRun: ["Operating Level for Run", "input", "", ""],
       runNumber: ["Run Number", "input", "", ""],
       responseTime: ["Response Time", "input", "", ""],
       referenceValue: ["Reference Value", "input", "", ""],
