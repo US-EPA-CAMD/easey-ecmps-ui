@@ -1,9 +1,13 @@
 @import "../../additional-scss/variables";
-
-.expandBTN:hover {
-  cursor: pointer;
-}
-.editViewExpandGroup {
-  display: flex;
-  align-items: center;
+.qa-table-wrapper{
+  .expandBTN:hover {
+    cursor: pointer;
+  }
+  .editViewExpandGroup {
+    display: flex;
+    align-items: center;
+  }
+  .rdt_TableRow:nth-child(odd) > .rdt_TableCell {
+    background-color: $epa-off-white !important;
+  }
 }
