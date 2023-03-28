@@ -3,6 +3,8 @@ import Modal from "./Modal";
 import "@testing-library/jest-dom/extend-expect";
 import { render, fireEvent, screen } from "@testing-library/react";
 
+window.scrollTo = jest.fn();
+
 beforeAll(() => {
   const myInitialState = 0;
   React.useState = jest.fn().mockReturnValue([myInitialState, {}]);
@@ -119,5 +121,5 @@ describe("testing the creation of a modal", () => {
     );
     const errorMsgDisplay = screen.getByText(errorMsg);
     expect(errorMsgDisplay).toBeInTheDocument();
-  })
+  });
 });

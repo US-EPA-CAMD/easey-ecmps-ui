@@ -6,11 +6,11 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Login from "../Login/Login";
 import Report from "./Report/Report";
-import * as camdApi from '../../utils/api/camdServices';
+import * as camdApi from "../../utils/api/camdServices";
 
 import "./ReportGenerator.scss";
 
-export const ReportGenerator = ({user, requireAuth = false}) => {
+export const ReportGenerator = ({ user, requireAuth = false }) => {
   const search = useLocation().search;
   const searchParams = new URLSearchParams(search);
 
@@ -27,26 +27,35 @@ export const ReportGenerator = ({user, requireAuth = false}) => {
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const params = { reportCode, facilityId, monitorPlanId, testId, qceId, teeId, year, quarter };
+  const params = {
+    reportCode,
+    facilityId,
+    monitorPlanId,
+    testId,
+    qceId,
+    teeId,
+    year,
+    quarter,
+  };
 
   useEffect(() => {
     if (((requireAuth && user) || !requireAuth) && !dataLoaded) {
-      camdApi.getReport(params)
-        .then(response => response.data)
-        .then(data => {
-          setReportData(data);
+      camdApi
+        .getReport(params)
+        .then((response) => {
+          setReportData(response.data);
           setDataLoaded(true);
         })
         .catch((error) => {
-          setError(error.response.data.message);
+          setError(error.response?.data?.message);
         });
     }
   }, [user, requireAuth, dataLoaded, params]);
 
   if (error) {
-    return <ErrorMessage error={error} />
+    return <ErrorMessage error={error} />;
   }
-  
+
   return (
     <div className="ReportGenerator">
       {requireAuth && !user ? (
@@ -97,7 +106,9 @@ export const ErrorMessage = ({ error }) => (
         </Button>
       </div>
       <div className="padding-x-5">
-        <h1 className="text-bold">An error occurred while generating the report</h1>
+        <h1 className="text-bold">
+          An error occurred while generating the report
+        </h1>
         <p>{error}</p>
       </div>
     </div>
