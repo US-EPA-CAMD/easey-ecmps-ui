@@ -84,10 +84,6 @@ const TableRender = forwardRef(
       let reportCode;
       let reportTitle;
       const reportType = printout ? "Printout" : "Evaluation";
-      //TODO: Filter by type
-      reportCode = "MPP";
-      reportTitle = `Monitoring Plan ${reportType} Report`;
-
       let additionalParams = "";
 
       if (type === "MP") {
@@ -110,11 +106,15 @@ const TableRender = forwardRef(
           reportTitle = `Test Ext/Exemptions ${reportType} Report`;
           additionalParams = "&teeId=" + row.testExtensionExemptionIdentifier;
         }
-        // TODO: need to add case for EM and EM_EVAL for emissions
-        // and pass year and quarter as additional params
-        // reportCode = printout ? "EM" : "EM_EVAL";
-        // reportTitle = `Emissions ${reportType} Report`;
-        // additionalParams = `&year=${year}&quarter=${quarter}`;
+      } else if (type === "EM") {
+        reportCode = printout ? "EM" : "EM_EVAL";
+        reportTitle = `Emissions ${reportType} Report`;
+
+        const yearQuarter = row.periodAbbreviation.split(" ");
+
+        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${
+          yearQuarter[0]
+        }&quarter=${yearQuarter[1].charAt(1)}`;
       }
 
       url =
