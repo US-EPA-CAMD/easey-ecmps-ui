@@ -99,6 +99,7 @@ export const ExportTab = ({
 
   const exportClickHandler = async () => {
     setIsExporting(true);
+    setLoading(true);
     let exportFileName;
     const promises = [];
 
@@ -132,6 +133,7 @@ export const ExportTab = ({
 
     await Promise.all(promises);
     setIsExporting(false);
+    setLoading(false);
   };
 
   const isExportDisabled = () => {
