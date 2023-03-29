@@ -14,7 +14,7 @@ export const CountdownTimer = ({ duration, countdownExpired }) => {
         All checked-out monitor plans will be checked-in and this session will
         be automatically logged out once the timer below reaches zero.
       </p>
-      <div className="timer-container" aria-hidden="true" style={{ webkitBackfaceVisibility: 'hidden' }}>
+      <div className="timer-container" aria-hidden="true">
         <Timer minutes={duration/60_000} size={200} fillColor="#004777" onComplete={countdownExpired} showMs={false}/>
       </div>
       <p>
