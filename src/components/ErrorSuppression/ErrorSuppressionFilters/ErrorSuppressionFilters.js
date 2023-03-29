@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button, ComboBox } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmApi";
@@ -54,14 +54,14 @@ export const getLocations = (facilityValue, checkResultObj) => {
       return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
           const locations = data.map((f) => f.locations).flat(1);
           let availLoc = locations?.map((l) => ({
-              id: l.unitId,
+              id: l.id,
               label: l.unitId,
               selected: false,
               enabled: true,
           }));
           if (checkResultObj.locationTypeCode === "LOC") {
               const availStackPipe = locations?.map((l) => ({
-                  id: l.stackPipeId,
+                  id: l.id,
                   label: l.stackPipeId,
                   selected: false,
                   enabled: true,
@@ -75,7 +75,6 @@ export const getLocations = (facilityValue, checkResultObj) => {
               .sort((a, b) => a.label - b.label);
       });
   };
-
 
 export const ErrorSuppressionFilters = () => {
 
@@ -115,13 +114,11 @@ export const ErrorSuppressionFilters = () => {
     const [dateAfterKey, setDateAfterKey] = useState(false);
     const [dateBeforeKey, setDateBeforeKey] = useState(false);
 
-
     // API check result data transformed
     // const [transformedData, setTransformedData] = useState([])
 
     // Make all api calls that only need to happen once on page load here
     useEffect(() => {
-
         getCheckCatalogResults().then(({ data }) => {
             const _transformedData = transformCheckResultData(data);
             const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
@@ -134,7 +131,20 @@ export const ErrorSuppressionFilters = () => {
         })
 
         getAllFacilities().then(({ data }) => {
-            setFacilityList(data.map(f => ({ orisCode: f.facilityId, facilityName: f.facilityName })));
+          const formattedFacilities = data.map(f => ({ value: f.facilityId, label: `${f.facilityName} (${f.facilityId})` }))
+            setFacilityList(formattedFacilities);
+
+            // The following lines of code are hacks to mitigate an issue with the ComboBox USWDS component.
+            // BUG: When the page is initially loaded, clicking on the combobox only brings up an empty list.
+            //      The data does not populate until the second click. The below code does the initial click
+            //      on the ComboBox and then focuses away again. Tab is then reset to where it was when page
+            //      initially loaded.
+            const previouslyFocusedEle = document.activeElement;
+            document.getElementById("facility-name").click();
+            document.activeElement.blur();
+            previouslyFocusedEle.tabIndex=0;
+            previouslyFocusedEle.focus();
+            previouslyFocusedEle.tabIndex=-1;
         }).catch(error => {
             console.error("Error getting facilities", error)
         })
@@ -167,12 +177,14 @@ export const ErrorSuppressionFilters = () => {
             return;
     }
    
-    const onFacilityChange = (e) => {
-      let { value } = e.target;
-      value = value === "false" ? false : value;
+    const onFacilityChange = (value) => {
 
       setSelectedFacility(value);
-      if (!value) return;
+      if (!value || value === defaultDropdownText) {
+        setSelectedLocations([]);
+        setLocationData([]);
+        return;
+      }
 
       if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
@@ -220,14 +232,17 @@ export const ErrorSuppressionFilters = () => {
       value = value === "false" ? false : value;
 
       setSelectedCheckResult(value);
-      if( !value )
-        return
+      if (!value) {
+        setSelectedLocations([]);
+        setLocationData([]);
+        return;
+      }
 
       if (selectedCheckType && selectedCheckNumber && value) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
-        getLocations(selectedFacility, checkResultObj).then(availLoc=>{
-          setLocationData(availLoc)
-        });
+        getLocations(selectedFacility, checkResultObj).then((availLoc) =>
+          setLocationData([...availLoc])
+        );
       }
     };
 
@@ -266,7 +281,7 @@ export const ErrorSuppressionFilters = () => {
       setSelectedFacility("");
       setSelectedLocations([]);
       setLocationData([]);
-      setSelectedIsActive(true);
+      setSelectedIsActive(false);
       setSelectedReason("");
       setCheckType(null);
       setCheckNumber(null);
@@ -366,23 +381,16 @@ export const ErrorSuppressionFilters = () => {
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
             </Label>
-            <Dropdown
-              id={"facility-name"}
-              name={"facility-name"}
+            <ComboBox
+              id="facility-name"
+              name="facility-name"
               epa-testid={"facility-name"}
               data-testid={"facility-name"}
-              value={selectedFacility}
+              options={facilityList}
               onChange={onFacilityChange}
-            >
-              <option value="false">{defaultDropdownText}</option>
-              {facilityList.map((d) => (
-                <option
-                  key={d.orisCode}
-                  value={d.orisCode}
-                  data-testid={d.orisCode}
-                >{`${d.facilityName} (${d.orisCode})`}</option>
-              ))}
-            </Dropdown>
+              disableFiltering={true}
+            />
+
           </Grid>
           <Grid col={4}>
             <div className="margin-left-2">
@@ -397,7 +405,8 @@ export const ErrorSuppressionFilters = () => {
                     selectedCheckType &&
                     selectedCheckNumber &&
                     selectedCheckResult &&
-                    selectedFacility
+                    selectedFacility &&
+                    selectedFacility != defaultDropdownText
                   )
                 }
               ></MultiSelectCombobox>
@@ -481,6 +490,7 @@ export const ErrorSuppressionFilters = () => {
           <Grid col={4}>
             <ButtonGroup type="default" className="float-right margin-top-3">
               <Button
+                id="clearButton"
                 type="button"
                 data-testid={"clear-filters"}
                 className="usa-button usa-button--outline"

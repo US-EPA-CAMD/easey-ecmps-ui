@@ -175,6 +175,8 @@ const componentRenderer = (location) => {
     settingInactiveCheckBox: jest.fn(),
     setUpdateRelatedTables: jest.fn(),
     updateRelatedTables: false,
+    currentTabIndex:0,
+    tabs: [{ inactive: [{}] }],
   };
   return render(<DataTableMats {...props} />);
 };
@@ -207,7 +209,7 @@ test('DataTableMats edit', async () => {
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object
   const dispatch = jest.fn();
-  const state = { dropdowns: [1] };
+  const state = { dropdowns: [1], openedFacilityTabs: ["monitoringPlans"] };
   const stateProps = mapStateToProps(state, true);
 });
 

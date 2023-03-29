@@ -4,6 +4,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
 import LeftNavigation from "./LeftNavigation";
 
+jest.mock("@us-epa-camd/easey-design-system", () => ({
+  ...jest.requireActual("@us-epa-camd/easey-design-system"),
+  Header: () => <></>,
+}));
 describe("Left Navigation links", () => {
   test("renders links correctly", () => {
     const { container } = render(

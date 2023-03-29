@@ -6,7 +6,6 @@ import config from "./../../config";
 export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
-
   if (successResponses.includes(response.status) && (response.data !== null && response.data !== undefined)) {
     return response;
   } else {
@@ -33,6 +32,7 @@ export async function logServerError(message, metadata = {}) {
 
 export function handleError(error) {
   let errorMessage = "";
+  console.log('handleError: ', error);
 
   if (error.response) {
     // client received an error response (5xx, 4xx)
@@ -42,7 +42,7 @@ export function handleError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
-    errorMessage = `${error.response.data?.error} ${error.response.data?.message}`;
+    errorMessage = error.response.data.message
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
@@ -59,9 +59,10 @@ export function handleError(error) {
   }
 
   if (error.response) {
-    return error.response?.data?.message;
+    return error.response.data.message;
   }
 }
+
 export function handleImportError(error) {
   if (error.response) {
     // client received an error response (5xx, 4xx)

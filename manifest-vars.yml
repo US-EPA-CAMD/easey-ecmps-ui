@@ -24,3 +24,5 @@ cdxForgotUserIdPath: "/AccountRecovery/ForgotUserId"
 cdxForgotPasswordPath: "/PasswordReset/GetResetCode"
 cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
+refreshLastActivityInterval: 1
+enableSystemAdminstrationModule: true

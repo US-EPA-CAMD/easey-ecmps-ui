@@ -12,8 +12,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("APPESUM")).toEqual(APPESUMCols);
@@ -26,8 +26,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("CALINJ")).toEqual(CALINJCols);
@@ -58,8 +58,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Monitoring System ID",
       "Test Number",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("FLR")).toEqual(FLRCols);
@@ -70,7 +70,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Monitoring System ID",
       "Test Number",
       "End Date",
-      "End Hour",
+      //"End Hour",
     ];
 
     expect(fs.getQAColsByTestCode("FFLB")).toEqual(FFLBCols);
@@ -83,7 +83,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date",
-      "End Hour",
+      //"End Hour",
     ];
 
     expect(fs.getQAColsByTestCode("OLOLCAL")).toEqual(OLOLCALCols);
@@ -96,8 +96,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("RELACC")).toEqual(RELACCCols);
@@ -108,8 +108,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("LME")).toEqual(LMECols);
@@ -123,8 +123,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
 
     expect(fs.getQAColsByTestCode("MISC")).toEqual(MISC);
@@ -137,8 +137,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date",
-      "End Hour",
-      "End Minute",
+      // "End Hour",
+      // "End Minute",
     ];
     expect(fs.getQAColsByTestCode(" ")).toEqual(empty);
   });

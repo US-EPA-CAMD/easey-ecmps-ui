@@ -64,6 +64,7 @@ export const DataTableSystems = ({
 }) => {
   const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
+  const [disableExitBtn, setDisableExitBtn] = useState(true);
 
   // for components/ fuel flow view
   const [secondLevel, setSecondLevel] = useState(false);
@@ -86,6 +87,12 @@ export const DataTableSystems = ({
     []
   );
   const [errorMsgs, setErrorMsgs] = useState([])
+
+  useEffect(() => {
+    if (selectedUnlinkedComponent.length > 0) {
+      setDisableExitBtn(false);
+    }
+  }, [selectedUnlinkedComponent]);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -221,6 +228,7 @@ export const DataTableSystems = ({
     setErrorMsgs([]);
     resetFlags();
     setShow(false);
+    setDisableExitBtn(true);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
   };
@@ -713,6 +721,7 @@ export const DataTableSystems = ({
                 cols={2}
                 title={`Create System`}
                 viewOnly={!(user && checkout)}
+                setDisableExitBtnStatus={setDisableExitBtn}
               />
             }
           />
@@ -779,6 +788,7 @@ export const DataTableSystems = ({
                       createAnalyzerRange();
                       backToSecondLevelBTN(false);
                       setCreateAnalyzerRangesFlag(false);
+                      setDisableExitBtn(false);
                     }
                     : // in just editing a range
                     () => {
@@ -786,6 +796,7 @@ export const DataTableSystems = ({
 
                       backToSecondLevelBTN(false);
                       setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
+                      setDisableExitBtn(false);
                     }
             }
             close={closeModalHandler}
@@ -810,7 +821,7 @@ export const DataTableSystems = ({
                         ? "Create New Component"
                         : null
             }
-            disableExitBtn={selectedUnlinkedComponent.length === 0 ? true : false}
+            // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
             children={
@@ -824,6 +835,7 @@ export const DataTableSystems = ({
                     cols={2}
                     title={`System: ${selected[0]["value"]}`}
                     viewOnly={!(user && checkout)}
+                    setDisableExitBtnStatus={setDisableExitBtn}
                   />
                 ) : (
                   <Preloader />
@@ -875,6 +887,7 @@ export const DataTableSystems = ({
                   setCurrentBar={setCurrentBar}
                   openFuelFlowsView={openFuelFlowsView}
                   setOpenFuelFlowsView={setOpenFuelFlowsView}
+                  setDisableExitBtn={setDisableExitBtn}
                 />
               </div>
             }

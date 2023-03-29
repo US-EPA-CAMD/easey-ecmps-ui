@@ -11,7 +11,6 @@ import {
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
-import MockPermissions from "./MockPermissions";
 import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import {
@@ -31,19 +30,22 @@ import {
   qaTeeColumns,
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import { getDropDownFacilities } from "./utils/functions";
+import useGetContent from "./utils/useGetContent";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
   user,
   componentType,
 }) => {
+  const {content: waitTimeData} = useGetContent("/ecmps/workspace/evaluate-submit/wait-time.json");
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
-
+  const [dropdownFacilities, setDropdownFacilities] = useState([]);
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -146,18 +148,20 @@ export const EvaluateAndSubmit = ({
     );
   };
 
-  const idToPermissionsMap = useRef([]);
-
+  const idToPermissionsMap = useRef(new Map());
+  const userPermissions = user.permissions?.facilities || [];
+  const populateDropdown = async () => {
+    setDropdownFacilities(await getDropDownFacilities());
+  };
   useEffect(() => {
     // Get permissions from user object here
-    const permissions = MockPermissions;
-    for (const p of permissions) {
-      idToPermissionsMap.current[p.id] = p.permissions;
+    populateDropdown();
+    for (const p of userPermissions) {
+      idToPermissionsMap.current.set(p.id, p.permissions);
     }
-
     return () => {
       checkInAllCheckedOutLocations();
-    };
+    }; //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -181,7 +185,7 @@ export const EvaluateAndSubmit = ({
         }
       }
       cat.setState(_.cloneDeep(cat.ref.current));
-    }
+    }//eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations, userId]);
 
   const filterClick = () => {
@@ -316,6 +320,15 @@ export const EvaluateAndSubmit = ({
         setSubmitting(false);
         if (componentType === "Submission") {
           window.location.reload(false);
+        } else {
+          for (const value of dataList) {
+            const { ref } = value;
+            for (const chunk of ref.current) {
+              chunk.selected = false;
+            }
+          }
+          monitorPlanIdToSelectedMap.current = new Map();
+          setNumFilesSelected(0);
         }
       })
       .catch((e) => {
@@ -357,7 +370,6 @@ export const EvaluateAndSubmit = ({
       const { ref, setState, call, type } = value;
 
       let data;
-
       if (type !== "MP") {
         //Filter emissions by quarter as well
         data = (await call(orisCodes, monPlanIds, submissionPeriods)).data;
@@ -398,6 +410,9 @@ export const EvaluateAndSubmit = ({
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
+      if (componentType === "Submission") {
+        data = data.filter(d => idToPermissionsMap.current.get(d.orisCode)?.includes("DS"+type))
+      }
       ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
       setState(data);
     }
@@ -419,6 +434,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
+      {waitTimeData?.displayAlert && <Alert className="margin-y-2" type="info" heading={waitTimeData?.title} children={waitTimeData?.content} />}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">
@@ -431,7 +447,7 @@ export const EvaluateAndSubmit = ({
         )}
 
         <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
-        {finalSubmitStage && (
+        {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -441,7 +457,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )}
+        )} */}
       </div>
 
       {componentType !== "Submission" && (
@@ -457,7 +473,7 @@ export const EvaluateAndSubmit = ({
           showModal={setShowModal}
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
-          facilities={MockPermissions}
+          facilities={dropdownFacilities}
           filesSelected={numFilesSelected}
           buttonText={buttonText}
           filterClick={filterClick}
@@ -501,7 +517,7 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {finalSubmitStage && (
+        {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -511,7 +527,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

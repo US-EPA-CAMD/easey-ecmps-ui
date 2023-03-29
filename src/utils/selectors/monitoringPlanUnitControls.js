@@ -1,16 +1,12 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansUnitControlRecords = (data) => {
   const records = [];
 
   data.forEach((el) => {
-    const installDate = el["installDate"]
-      ? formatStringToDate(el.installDate.toString())
-      : "";
-    const optimizationDate = el["optimizationDate"]
-      ? formatStringToDate(el.optimizationDate.toString())
-      : "";
-    const retireDate = el["retireDate"]
-      ? formatStringToDate(el.retireDate.toString())
-      : "";
+    const installDate = formatDateString(el.installDate)
+    const optimizationDate = formatDateString(el.optimizationDate)
+    const retireDate = formatDateString(el.retireDate)
 
     const seasonalControlsIndicator =
       el["seasonalControlsIndicator"] === "1" ? "Yes" : "No";
@@ -28,11 +24,4 @@ export const getMonitoringPlansUnitControlRecords = (data) => {
     });
   });
   return records;
-};
-
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
-
-  return `${parts[1]}/${parts[2]}/${parts[0]}`;
 };

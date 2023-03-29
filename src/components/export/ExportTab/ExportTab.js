@@ -46,7 +46,8 @@ export const ExportTab = ({
   const [reportingPeriod, setReportingPeriod] = useState(null);
   const [previewOptions, setPreviewOptions] = useState();
   const [loading, setLoading] = useState(false);
-  const qaTestSummaryData = useRef();
+
+  const rowsData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
     const dataTypesCopy = [...dataTypes];
@@ -66,6 +67,11 @@ export const ExportTab = ({
       },
       workspaceSection
     );
+
+    if(previewOptions && !dataTypesCopy[index].checked){
+      setPreviewOptions(undefined);
+    }
+      
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -93,6 +99,7 @@ export const ExportTab = ({
 
   const exportClickHandler = async () => {
     setIsExporting(true);
+    setLoading(true);
     let exportFileName;
     const promises = [];
 
@@ -103,10 +110,10 @@ export const ExportTab = ({
     // export qa
     if (dataTypes.find((e) => e.name === qa).checked) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = qaTestSummaryData.current;
+      const selectedRows = rowsData.current;
       const exportJson = {
         orisCode: orisCode,
-        testSummaryData: selectedRows,
+        ...selectedRows,
       };
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
@@ -126,6 +133,7 @@ export const ExportTab = ({
 
     await Promise.all(promises);
     setIsExporting(false);
+    setLoading(false);
   };
 
   const isExportDisabled = () => {
@@ -135,25 +143,29 @@ export const ExportTab = ({
     const isEmissionsChecked = dataTypes.find((dataType) => {
       return dataType.name === em;
     }).checked;
-    const rowHasSelected = exportState?.selectedIds?.testSummary?.length > 0;
+
+    const rowsHasSelected = () => {
+      if (!exportState?.selectedIds) {
+        return false;
+      }
+      for (const listOfSelected of Object.values(exportState?.selectedIds)) {
+        if (listOfSelected.length > 0) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     return (
       isExporting ||
-      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowHasSelected)
+      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowsHasSelected())
     );
   };
 
-  const isPreviewDisabled = ()=>{
-
-    const checkedDataTypes = dataTypes.filter(e=>e.checked);
-
+  const isPreviewDisabled = () => {
+    const checkedDataTypes = dataTypes.filter(e => e.checked);
     // if only qa is checked
-    if( checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa){
-
-      return false;
-    }
-    
-    return true;
+    return !(checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa);
   }
 
   return (
@@ -162,12 +174,10 @@ export const ExportTab = ({
       <div className="margin-x-3 grid-container">
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           <div className="grid-row">
-            <h3 className="display-inline-block">
+            <h3>
               <span className="font-body-lg">{facilityMainName}</span>
+              <span className="text-bold font-body-xl display-block">{facilityAdditionalName}</span>
             </h3>{" "}
-          </div>
-          <div className=" grid-row text-bold font-body-xl display-block">
-            {facilityAdditionalName}
           </div>
         </div>
         <div className="grid-row margin-y-3">
@@ -210,15 +220,42 @@ export const ExportTab = ({
           </div>
         </div>
         {previewOptions && (
-          <ExportTablesContainer
-            selectionData={previewOptions}
-            selectedConfig={selectedConfig}
-            exportState={exportState}
-            setExportState={setExportState}
-            workspaceSection={workspaceSection}
-            orisCode={orisCode}
-            dataRef={qaTestSummaryData}
-          />
+          <>
+            <ExportTablesContainer
+              tableTitle={'Test Summary'}
+              dataKey={'testSummaryData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={rowsData}
+            />
+            <ExportTablesContainer
+              tableTitle={'QA Certification Events'}
+              dataKey={'certificationEventData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={rowsData}
+            />
+            <ExportTablesContainer
+              tableTitle={'Test Extension Exemptions'}
+              dataKey={'testExtensionExemptionData'}
+              selectionData={previewOptions}
+              selectedConfig={selectedConfig}
+              exportState={exportState}
+              setExportState={setExportState}
+              workspaceSection={workspaceSection}
+              orisCode={orisCode}
+              dataRef={rowsData}
+            />
+          </>
+
         )}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button

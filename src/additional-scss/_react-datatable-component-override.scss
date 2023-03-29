@@ -4,10 +4,6 @@
   .rdt_Table {
     width: 99%;
     margin: 0.5% 0.5%;
-
-    .epa-active-element:not(.maintainBorder) {
-      border: none !important;
-    }
   }
   .rdt_TableCol_Sortable {
     color: $epa-black !important;
@@ -34,10 +30,12 @@
       :focus {
         outline: none;
         border: solid 4px #2672de;
-        color: $epa-black !important;
+        //color: $epa-black !important;
       }
-      :hover:not(:focus) {
-        color: $epa-black !important;
+      :focus {
+        .MuiSvgIcon-root {
+          opacity: 1;
+        }
       }
     }
     border: none !important;
@@ -122,7 +120,8 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: $epa-off-white !important;
+  background-color: $epa-off-white;
+  border: none !important;
 }
 .rdt_TableRow:nth-child(even) {
   background-color: $epa-white !important;

@@ -5,12 +5,15 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from "./DataTableConfigurations";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import {getMonitoringPlans} from "../../../utils/api/monitoringPlansApi";
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
 const axios = require("axios");
 
 jest.mock("axios");
+jest.mock('../../../utils/api/monitoringPlansApi', () => ({
+  getMonitoringPlans: jest.fn(),
+}));
 //testing redux connected component to mimic props passed as argument
 const data = [
   "5",
@@ -103,15 +106,12 @@ afterAll(() => {
 });
 
 test("tests a configuration with only active systems", async () => {
-  /*
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: data })
-  );
-  const title = await mpApi.getMonitoringPlans(6);
+  const mockGetMonitoringPlans = jest.fn().mockResolvedValue({data})
+  getMonitoringPlans.mockImplementation(() => mockGetMonitoringPlans())
+  const title = await getMonitoringPlans(6);
   expect(title.data).toEqual(data);
   let { container } = await waitForElement(() => componentRenderer());
   expect(container).toBeDefined();
-  */
 });
 
 test("mapDispatchToProps calls the appropriate action", async () => {

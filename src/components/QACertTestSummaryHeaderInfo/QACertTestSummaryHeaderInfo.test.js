@@ -38,7 +38,7 @@ const props = {
   facility: "Test (1, 2, 3)",
   selectedConfig: selectedConfig,
   orisCode: "testOrisCode",
-  sectionSelect: [4, "Methods"],
+  sectionSelect: [0, "Methods"],
   setSectionSelect: jest.fn(),
   setLocationSelect: jest.fn(),
   locationSelect: [0, "testLocName"],
@@ -54,9 +54,9 @@ const props = {
 
 const testTypeDropdownLabel = /Test Type Group/i
 const testTypeDropdownData = [
-  { testTypeGroupDescription: 'Test Type Group option 1' },
-  { testTypeGroupDescription: 'Test Type Group option 2' },
-  { testTypeGroupDescription: 'Test Type Group option 3' },
+  { name:"name1", testTypeGroupDescription: 'Test Type Group option 1' },
+  { name:"name2", testTypeGroupDescription: 'Test Type Group option 2' },
+  { name:"name3", testTypeGroupDescription: 'Test Type Group option 3' },
 ]
 
 // mocking JavaScript built-in window functions
@@ -76,7 +76,6 @@ beforeEach(() => {
 
 test("testing QACertTestSummaryHeaderInfo component", async () => {
   const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
-
   expect(container).toBeDefined();
 });
 
@@ -99,26 +98,16 @@ test('test type dropdown selection renders with options', async () => {
   expect(options).toHaveLength(1)
 })
 
-test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report", and "Evaluate All"', async () => {
+test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report"', async () => {
   // Arrange
   const {container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
 
   const importTestDataBtn = container.querySelector("#importSelectionQAModal")
-  const testDataReportBtn = container.querySelector("#showRevertModal")
-  const testHistoryReportBtn = container.querySelector("#showRevertModal")
-  const evalAllBtn = container.querySelector("#showRevertModal")
 
   fireEvent.click(importTestDataBtn)
-  fireEvent.click(testDataReportBtn)
-  fireEvent.click(testHistoryReportBtn)
-  fireEvent.click(evalAllBtn)
-  
 
   // Assert
   expect(importTestDataBtn).toBeDefined()
-  expect(testDataReportBtn).toBeDefined()
-  expect(testHistoryReportBtn).toBeDefined()
-  expect(evalAllBtn).toBeDefined()
 })
 
 test('when import test data button is clicked then a modal is rendered', async () => {

@@ -36,6 +36,7 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
+import { isEqual } from "lodash";
 
 const cdx_user = sessionStorage.getItem("cdx_user");
 
@@ -63,22 +64,26 @@ const App = () => {
     });
   };
 
+  let checkedOutLocationsCache = [];
   const refreshCheckoutInterval = () => {
-    return setInterval(async () => {
-      const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-      if (checkedOutLocationResult) {
-        dispatch({
-          type: types.SET_CHECKED_OUT_LOCATIONS,
-          checkedOutLocations: checkedOutLocationResult,
-        });
-      }
-    }, 10000);
+    if (user) {
+      return setInterval(async () => {
+        const checkedOutLocationResult = (await getCheckedOutLocations()).data;
+        if (checkedOutLocationResult && !isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
+          dispatch({
+            type: types.SET_CHECKED_OUT_LOCATIONS,
+            checkedOutLocations: checkedOutLocationResult,
+          });
+          checkedOutLocationsCache = checkedOutLocationResult;
+        }
+      }, 10000);
+    }
   };
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     prepDocument();

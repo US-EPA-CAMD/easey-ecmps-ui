@@ -151,9 +151,9 @@ const AboutHome = ({ user, setCurrentLink }) => {
       </div>
       <div className="grid-col-3 float-right padding-2">
         <div className="box border-1px">
-          <div className="title text-white text-center padding-y-2">
+          <h3 className="title text-white text-center padding-y-2 margin-y-0">
             What's New
-          </div>
+          </h3>
           <div className="padding-2">
             <ReactMarkdown
               children={whatIsNewContent}

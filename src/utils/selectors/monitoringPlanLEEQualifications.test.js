@@ -37,7 +37,7 @@ describe("testing monitoring plan fuel data selectors", () => {
     ];
     monitoringDataTableRecods = [
       {
-        col1: "07/15/2018",
+        col1: "2018/07/15",
         col2: "HG",
         col3: "INITIAL",
         col4: "1",

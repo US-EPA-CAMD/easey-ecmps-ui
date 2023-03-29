@@ -32,7 +32,13 @@ div.row.column1 {
   transition: transform 0.3s;
   z-index: 99999;
 }
-
+#appErrorMessage {
+  color: #d10000;
+  border-color: #d10000;
+}
+#appErrorMessageText {
+  white-space: pre-wrap;
+}
 .skip-to-content-link:focus {
   transform: translateY(0%);
 }

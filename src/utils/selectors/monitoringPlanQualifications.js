@@ -1,12 +1,12 @@
+import { formatDateString } from "../functions";
+
 export const getMonitoringPlansQualifications = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = el.beginDate
-      ? formatStringToDate(el.beginDate.toString())
-      : "";
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
+    const beginDate = formatDateString(el.beginDate);
+    const endDate = formatDateString(el.endDate);
 
     records.push({
       col1: el.qualificationTypeCode,
@@ -17,11 +17,4 @@ export const getMonitoringPlansQualifications = (totalData) => {
   });
 
   return records;
-};
-
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  const parts = date.split("-");
-  //Removes the time component from the Day part
-  return `${parts[1]}/${parts[2].substring(0, 2)}/${parts[0]}`;
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as assertSelector from "../../../utils/selectors/assert";
 
@@ -15,15 +15,11 @@ import { convertSectionToStoreName } from "../../../additional-functions/data-ta
 import {
   addAriaLabelToDatatable,
   changeGridCellAttributeValue,
+  ensure508,
 } from "../../../additional-functions/ensure-508";
-import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
   getActiveData,
@@ -106,7 +102,6 @@ export const DataTableAssert = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
@@ -116,7 +111,6 @@ export const DataTableAssert = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
@@ -197,11 +191,12 @@ export const DataTableAssert = ({
     setRevertedState(false);
     setUpdateRelatedTables(false);
     addAriaLabelToDatatable();
+    ensure508()
   };
 
   useEffect(() => {
-    // Load MDM data (for dropdowns) only if we don't have them already
-    if (mdmData && Object.keys(mdmData).length === 0) {
+    // Load MDM data (for dropdowns) only if dropdown is not empty and we don't have them already
+    if (!dropdownArrayIsEmpty && mdmData && Object.keys(mdmData).length === 0) {
       loadDropdownsData(dataTableName, dropdownArray);
     } else {
       setDropdownsLoaded(true);
@@ -278,30 +273,26 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour &&
-        userInput.endDate &&
-        dataTableName !== lAttr &&
-        dataTableName !== rDat)
-    ) {
-      setErrorMsgs([needEndDate])
-    } else {
-      try {
-        const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
-        if (resp.status === 200) {
-          setShow(false);
-          setDataLoaded(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        } else {
-          const errorResp = Array.isArray(resp) ? resp : [resp];
-          setErrorMsgs(errorResp);
-        }
-      } catch (error) {
-        setErrorMsgs([JSON.stringify(error)])
-      }
+    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors)
+      return
     }
+    try {
+      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+      if (resp.status === 200) {
+        setShow(false);
+        setDataLoaded(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
+    }
+    
   };
 
   const createData = async () => {
@@ -310,16 +301,12 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour &&
-        userInput.endDate &&
-        dataTableName !== lAttr &&
-        dataTableName !== rDat)
-    ) {
-      setErrorMsgs([needEndDate])
-      return;
+    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors)
+      return
     }
+
     try {
       const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
       if (resp.status === 201) {
@@ -360,6 +347,18 @@ export const DataTableAssert = ({
               name: selectText,
             });
             modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+          
+          // Modal focus resets to close button on setState
+          if (modalDetailData[4] === "mainDropdown") {
+            // Overrides the firstComponentFocusableElement.focus() in focus-trap
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            });
+            // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            }, 1000);
           }
         }
       }

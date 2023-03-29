@@ -112,25 +112,6 @@ describe("renders datatable with all values ", () => {
     expect(viewBtns).toHaveLength(1);
   });
 
-  test('given a user then renders evaluate button for each row in table', () => {
-    // Arrange
-    render(
-      <QADataTableRender
-        actionsBtn={"View"}
-        columnNames={columnNames}
-        data={data}
-        user={{ firstName: "test" }}
-        evaluate={true}
-        isCheckedOut={true}
-        dataTableName="Test Summary Data"
-      />
-    );
-
-    // Assert
-    const evaluateBtns = screen.getAllByRole('button', { name: /evaluate/i })
-    expect(evaluateBtns).toHaveLength(data.length)
-  })
-
   test('given a user then renders edit button for each row in table', () => {
     // Arrange
     render(

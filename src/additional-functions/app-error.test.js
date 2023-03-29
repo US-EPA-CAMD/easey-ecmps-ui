@@ -36,6 +36,22 @@ describe("app error functions", () => {
     expect(test).toBeDefined();
   });
 
+  test('displays list of errors', () => {
+    const { container } = render(<Valid />);
+    const appErrorMessageTextEle = container.querySelector("#appErrorMessageText");
+    const errorMsgs = ['error1', 'error2', 'error3']
+
+    displayAppError(errorMsgs);
+
+    for (const msg of errorMsgs) {
+      expect(appErrorMessageTextEle).toHaveTextContent(msg);
+    }
+
+    hideAppError();
+
+    expect(appErrorMessageTextEle).toBeDefined();
+  })
+
   it("should test without a valid query", () => {
     const { container } = render(<Conditional />);
 

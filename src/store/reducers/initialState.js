@@ -39,4 +39,5 @@ export default {
     matsMethods: [],
   },
   currentSection: '',
+  currentTabIndex: 0,
 };

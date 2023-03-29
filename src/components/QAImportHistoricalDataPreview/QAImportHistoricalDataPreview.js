@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
-import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
-import { exportQA } from "../../utils/api/qaCertificationsAPI";
+import React, { useEffect, useState, useRef } from "react";
 import DataTable from "react-data-table-component";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { ArrowDownwardSharp } from "@material-ui/icons";
+
+import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
+import { exportQA } from "../../utils/api/qaCertificationsAPI";
 import { qaTestSummaryCols as columns } from "../../utils/constants/tableColumns";
 import { assignAriaLabelsToDataTable } from "../../additional-functions/ensure-508";
+
+const TEST_SUMMARY_KEY = 'testSummaryData';
+const CERT_EVENT_KEY = 'certificationEventData';
+const TEST_EXT_EXE_KEY = 'testExtensionExemptionData'
 
 export const getUnitIdAndStackPipeIds = (locs) => {
   const unitIds = [];
@@ -31,11 +36,14 @@ export const QAImportHistoricalDataPreview = ({
   setFileName,
   setDisablePortBtn,
   orisCode,
+  showTestSummaryTable = true
 }) => {
   const [reportingPeriodObj, setReportingPeriodObj] = useState(null);
-  const [testSummaryData, setTestSummaryData] = useState(null);
+  const [tableData, setTableData] = useState(null);
   const [previewData, setPreviewData] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const selectedRows = useRef()
 
   const fetchDataPreviewRecords = async () => {
     if (reportingPeriodObj && !previewData) {
@@ -54,19 +62,19 @@ export const QAImportHistoricalDataPreview = ({
           }
         );
         if (response) {
-          setTestSummaryData(response.data.testSummaryData);
+          setTableData(response.data);
           setPreviewData(true);
           setLoading(false);
 
-          const rowsAriaLabelData = [];
-          response.data.testSummaryData.forEach((e) => {
-            rowsAriaLabelData.push(e.testNumber);
-          });
-
-          assignAriaLabelsToDataTable(
-            "#importTestSummaryData",
-            rowsAriaLabelData
-          );
+          const dataKeys = showTestSummaryTable ? [TEST_SUMMARY_KEY] : [CERT_EVENT_KEY, TEST_EXT_EXE_KEY]
+          for (const dataKey of dataKeys) {
+            const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
+            const dataTableId = `#import-${dataKey}`
+            assignAriaLabelsToDataTable(
+              dataTableId,
+              rowsAriaLabelData
+            );
+          }
         }
       } catch (err) {
         console.log(err);
@@ -76,10 +84,6 @@ export const QAImportHistoricalDataPreview = ({
 
   useEffect(() => {
     setDisablePortBtn(true);
-    // // Loads Test summary data
-    // if (testSummaryData === null) {
-    //   fetchDataPreviewRecords();
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportingPeriodObj]);
 
@@ -94,25 +98,33 @@ export const QAImportHistoricalDataPreview = ({
     }
   };
 
-  const handleHistoricalDataSelection = (state) => {
-    let fName = "";
-    const length = state.selectedRows.length;
-
-    if (length > 0) {
-      setDisablePortBtn(false);
-    } else {
-      setDisablePortBtn(true);
+  const handleHistoricalDataSelection = (state, dataKey) => {
+    selectedRows.current = {
+      ...selectedRows.current,
+      [dataKey]: state.selectedRows
     }
-
-    state.selectedRows.forEach((data, idx) => {
-      if (idx !== 0 && idx < length) {
-        fName += ", ";
+    setSelectedHistoricalData(prevSelected => {
+      const newSelection = {
+        ...prevSelected,
+        [dataKey]: state.selectedRows
       }
-      fName += `${data.id}`;
-    });
+      return newSelection;
+    })
 
+    const rowsHasSelected = () => {
+      for (const listOfSelected of Object.values(selectedRows.current)) {
+        if (listOfSelected.length > 0) {
+          return true;
+        }
+      }
+      return false;
+    }
+    rowsHasSelected() ? setDisablePortBtn(false) : setDisablePortBtn(true)
+
+    const listsOfSelected = Object.values(selectedRows.current ?? [])
+    const allSelectedIds = listsOfSelected.flat().map(row => row.id)
+    const fName = allSelectedIds.join(', ')
     setFileName(fName);
-    setSelectedHistoricalData(state.selectedRows);
   };
 
   return (
@@ -140,26 +152,73 @@ export const QAImportHistoricalDataPreview = ({
       {loading ? (
         <Preloader />
       ) : (
-        testSummaryData &&
+        tableData &&
         previewData && (
-          <div className="margin-x-3 margin-y-4" id="importTestSummaryData">
-            <h4 className="margin-y-1">Test Summary</h4>
-            <DataTable
-              responsive={true}
-              fixedHeader={true}
-              noHeader={true}
-              striped={false}
-              highlightOnHover={true}
-              sortIcon={
-                <ArrowDownwardSharp className="margin-left-2 text-primary" />
-              }
-              columns={columns}
-              data={testSummaryData}
-              onSelectedRowsChange={handleHistoricalDataSelection}
-              style={{ overflowX: "visible", overflowY: "visible" }}
-              selectableRows
-            />
-          </div>
+          <>
+            {showTestSummaryTable &&
+              <div className="margin-x-3 margin-y-4" id={`import-${TEST_SUMMARY_KEY}`}>
+                <h4 className="margin-y-1">Test Summary</h4>
+                <DataTable
+                  className="data-display-table"
+                  responsive={true}
+                  fixedHeader={true}
+                  noHeader={true}
+                  striped={false}
+                  highlightOnHover={true}
+                  sortIcon={
+                    <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                  }
+                  columns={columns}
+                  data={tableData.testSummaryData}
+                  onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_SUMMARY_KEY)}
+                  style={{ overflowX: "visible", overflowY: "visible" }}
+                  selectableRows
+                />
+              </div>
+            }
+            {!showTestSummaryTable &&
+              <>
+                <div className="margin-x-3 margin-y-4" id={`import-${CERT_EVENT_KEY}`}>
+                  <h4 className="margin-y-1">QA Certification Events</h4>
+                  <DataTable
+                    className="data-display-table"
+                    responsive={true}
+                    fixedHeader={true}
+                    noHeader={true}
+                    striped={false}
+                    highlightOnHover={true}
+                    sortIcon={
+                      <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    columns={columns}
+                    data={tableData.certificationEventData}
+                    onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, CERT_EVENT_KEY)}
+                    style={{ overflowX: "visible", overflowY: "visible" }}
+                    selectableRows
+                  />
+                </div>
+                <div className="margin-x-3 margin-y-4" id={`import-${TEST_EXT_EXE_KEY}`}>
+                  <h4 className="margin-y-1">Test Extension Exemptions</h4>
+                  <DataTable
+                    className="data-display-table"
+                    responsive={true}
+                    fixedHeader={true}
+                    noHeader={true}
+                    striped={false}
+                    highlightOnHover={true}
+                    sortIcon={
+                      <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    columns={columns}
+                    data={tableData.testExtensionExemptionData}
+                    onSelectedRowsChange={(state) => handleHistoricalDataSelection(state, TEST_EXT_EXE_KEY)}
+                    style={{ overflowX: "visible", overflowY: "visible" }}
+                    selectableRows
+                  />
+                </div>
+              </>
+            }
+          </>
         )
       )}
     </>

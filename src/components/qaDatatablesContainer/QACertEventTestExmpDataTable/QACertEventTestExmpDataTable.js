@@ -99,7 +99,9 @@ const QACertEventTestExmpDataTable = ({
     controlDatePickerInputs,
     extraControlInputs,
   } = props;
-
+  if (user) {
+    columns.push("Eval Status");
+  }
   useEffect(() => {
     setQATestSummary([]);
     setUpdateTable(true);
@@ -122,7 +124,6 @@ const QACertEventTestExmpDataTable = ({
         .then((res) => {
           if (res !== undefined && res.data.length > 0) {
             setQATestSummary(res.data);
-            executeOnClose(res.data);
           } else {
             setQATestSummary([]);
           }
@@ -532,7 +533,6 @@ const QACertEventTestExmpDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          evaluate={false}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender

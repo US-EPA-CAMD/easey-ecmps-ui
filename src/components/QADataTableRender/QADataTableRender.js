@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { normalizeRowObjectFormat } from "../../additional-functions/react-data-table-component";
 import "./QADataTableRender.scss";
-import { changeGridCellAttributeValue, returnsFocusDatatableExpandBTN } from "../../additional-functions/ensure-508";
+import {
+  changeGridCellAttributeValue,
+  returnsFocusDatatableExpandBTN,
+} from "../../additional-functions/ensure-508";
 // *** local
 import { oneSecond } from "../../config";
 /*********** COMPONENTS ***********/
@@ -9,7 +12,10 @@ import { oneSecond } from "../../config";
 import { Add, Remove, ArrowDownwardSharp } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
-import { getEmptyRows, getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
+import {
+  getEmptyRows,
+  getTableRowActionAriaLabel,
+} from "../../utils/selectors/QACert/TestSummary";
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
@@ -24,10 +30,10 @@ const QADataTableRender = ({
   actionsBtn,
   expandableRowComp,
   onRemoveHandler,
-  evaluate,
   noDataComp,
   isCheckedOut,
-  dataTableName
+  dataTableName,
+  sectionSelect = null,
 }) => {
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -46,6 +52,7 @@ const QADataTableRender = ({
         break;
     }
   });
+
   useEffect(() => {
     setTimeout(() => {
       const header = document.querySelector('[role="heading"');
@@ -55,13 +62,13 @@ const QADataTableRender = ({
       }
     });
     setTimeout(() => {
-      ensure508(dataTableName);
+      ensure508(dataTableName, sectionSelect ? sectionSelect[1] : null);
     }, oneSecond);
 
     return () => {
       cleanUp508();
     };
-  }, []);
+  }, [sectionSelect]);
 
   const [totalExpand, setTotalExpand] = useState([]);
 
@@ -92,19 +99,31 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, false, row.col1);
+          returnsFocusDatatableExpandBTN(
+            dataTableName.replaceAll(" ", "-"),
+            index,
+            false,
+            row.col1
+          );
           row.expanded = true;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, false, row.col1);
+            returnsFocusDatatableExpandBTN(
+              dataTableName.replaceAll(" ", "-"),
+              index,
+              false,
+              row.col1
+            );
             row.expanded = true;
           }
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1}`}
+        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${
+          index + 1
+        }`}
         aria-expanded={false}
         role="button"
         tabIndex="0"
@@ -115,19 +134,31 @@ const QADataTableRender = ({
         className="expandBTN "
         onClick={() => {
           expandRowBTN(index);
-          returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, true, row.col1);
+          returnsFocusDatatableExpandBTN(
+            dataTableName.replaceAll(" ", "-"),
+            index,
+            true,
+            row.col1
+          );
           row.expanded = false;
         }}
         onKeyPress={(event) => {
           if (event.key === "Enter") {
             expandRowBTN(index);
-            returnsFocusDatatableExpandBTN(dataTableName.replaceAll(" ", "-"), index, true, row.col1);
+            returnsFocusDatatableExpandBTN(
+              dataTableName.replaceAll(" ", "-"),
+              index,
+              true,
+              row.col1
+            );
             row.expanded = false;
           }
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1}`}
+        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${
+          index + 1
+        }`}
         role="button"
         tabIndex="0"
         aria-expanded={true}
@@ -141,7 +172,7 @@ const QADataTableRender = ({
       columns.unshift({
         name: actionColumnName,
         button: true,
-        width: user ? (evaluate ? "25%" : "20%") : `${columnWidth}%`,
+        width: user ? "20%" : `${columnWidth}%`,
         style: {
           justifyContent: "left",
           // width:'fit-content'
@@ -156,20 +187,29 @@ const QADataTableRender = ({
                 <div className="editViewExpandGroup ">
                   {data.length > 0 && (
                     <>
-                      {evaluate ? <Button>Evaluate</Button> : null}
                       <Button
                         type="button"
                         epa-testid="btnOpen"
                         className="cursor-pointer open-modal-button"
-                        id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1}`}
+                        id={`btnEditView${dataTableName.replaceAll(" ", "-")}${
+                          index + 1
+                        }`}
                         onClick={() => {
                           openHandler(normalizedRow, false, null, index);
                         }}
                         role="button"
+                        aria-label={getTableRowActionAriaLabel(
+                          dataTableName,
+                          row,
+                          "Edit"
+                        )}
+                        data-testid="Edit"
                       >
                         {"Edit"}
                       </Button>
                       <RemoveButton
+                        row={row}
+                        dataTableName={dataTableName}
                         onConfirm={() => onRemoveHandler(normalizedRow)}
                       />
                       {expandableRowComp ? createExpandBTNS(index, row) : null}
@@ -183,11 +223,15 @@ const QADataTableRender = ({
                     type="button"
                     epa-testid="btnOpen"
                     className="cursor-pointer open-modal-button"
-                    aria-label={getTableRowActionAriaLabel(dataTableName, row, 'View')}
+                    aria-label={getTableRowActionAriaLabel(
+                      dataTableName,
+                      row,
+                      "View"
+                    )}
                     outline={true}
-                    id={
-                      `btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1}`
-                    }
+                    id={`btnEditView${dataTableName.replaceAll(" ", "-")}${
+                      index + 1
+                    }`}
                     onClick={() => {
                       openHandler(normalizedRow, false, null, index);
                     }}
@@ -206,7 +250,7 @@ const QADataTableRender = ({
   }
 
   return (
-    <div aria-live="polite" className="padding-3" id={dataTableName.replaceAll(" ", "-")}>
+    <div className="padding-3 qa-table-wrapper" id={dataTableName.replaceAll(" ", "-")}>
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
@@ -215,8 +259,8 @@ const QADataTableRender = ({
           data.length > 0
             ? data
             : user && isCheckedOut
-              ? getEmptyRows(columns)
-              : []
+            ? getEmptyRows(columns)
+            : []
         }
         expandableRows
         expandableRowsHideExpander
@@ -230,12 +274,14 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({ onConfirm }) => {
+const RemoveButton = ({ onConfirm, row, dataTableName }) => {
   return (
     <ConfirmActionModal
       buttonText="Remove"
       description="Are you sure you want to remove the selected data?"
       onConfirm={onConfirm}
+      row={row}
+      dataTableName={dataTableName}
     />
   );
 };

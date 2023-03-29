@@ -1,13 +1,9 @@
-import axios from "axios";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
-
-axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
-};
+import axios from "axios";
 
 export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
@@ -31,8 +27,13 @@ export const getMonitoringPlanById = async (id) => {
 };
 
 // *** obtain monitoring plans
-export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
+export const getMonitoringPlans = async (
+  orisCodes,
+  monPlanIds = [],
+  forWorkspace = false
+) => {
   let queryString;
+
   if (typeof orisCodes == "number") {
     queryString = "orisCodes=" + orisCodes;
   } else {
@@ -43,7 +44,7 @@ export const getMonitoringPlans = async (orisCodes, monPlanIds = []) => {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  const url = getApiUrl(`/configurations?${queryString}`);
+  const url = getApiUrl(`/configurations?${queryString}`, forWorkspace);
   return secureAxios({
     method: "GET",
     url: url,
@@ -280,7 +281,7 @@ export const getCheckedOutLocations = async () => {
 };
 
 export const getRefreshInfo = async (planId) => {
-  const url = getApiUrl(`/plans/${planId}`, true);
+  const url = getApiUrl(`/plans/${planId}`);
   return secureAxios({
     method: "GET",
     url: url,
@@ -1019,7 +1020,6 @@ export const createLMEQualificationData = async (payload) => {
 };
 
 export const getLocationAttributes = async (locationId) => {
-  console.log("locationid", locationId);
   const url = getApiUrl(`/locations/${locationId}/attributes`);
   return secureAxios({
     method: "GET",
@@ -1115,7 +1115,7 @@ export const importMP = async (payload) => {
 
 export const getMPSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
-  return secureAxios({
+  return axios({
     method: "GET",
     url: url,
   })

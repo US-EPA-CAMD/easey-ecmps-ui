@@ -28,6 +28,8 @@ import {
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { checkoutAPI } from "../../additional-functions/checkout";
+import { successResponses } from "../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../utils/functions";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -69,7 +71,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-  const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
   const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [refresherInfo, setRefresherInfo] = useState(null);
@@ -83,6 +85,12 @@ export const QACertTestSummaryHeaderInfo = ({
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
+  useEffect(() => {
+    if (testTypeGroupOptions.length > 0 && testTypeGroupOptions[0]['name'] !== "Loading...") {
+      setSectionSelect([sectionSelect[0], testTypeGroupOptions[sectionSelect[0]]['name']]);
+    }
+  }, [testTypeGroupOptions]);
 
   useEffect(() => {
     const fetchTestTypeCodes = () => {
@@ -171,9 +179,9 @@ export const QACertTestSummaryHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -186,9 +194,9 @@ export const QACertTestSummaryHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
+        checkedOutConfigs
+          .map((con) => con["monPlanId"])
+          .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -263,8 +271,9 @@ export const QACertTestSummaryHeaderInfo = ({
       .then((response) => {
         setShowImportModal(true)
         setUsePortBtn(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
         }
       })
       .catch((err) => {
@@ -279,7 +288,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
-      testSummaryData: selectedHistoricalData,
+      ...selectedHistoricalData,
     };
     importQABtn(payload);
     setShowImportDataPreview(false);
@@ -307,9 +316,8 @@ export const QACertTestSummaryHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -352,27 +360,17 @@ export const QACertTestSummaryHeaderInfo = ({
               {facilityMainName}
             </h3>
           </div>
-          {user && isCheckedOut && (
-            <div>
-              <Button
-                // className="padding-x-5"
-                type="button"
-                outline={false}
-                onClick={() => openSelectionTypeImportModal()}
-                id="importSelectionQAModal"
-              >
-                {importTestTitle}
-              </Button>
-              <Button
-                // className="float-right text-right bottom-0 text-no-wrap"
-                type="button"
-                id="showRevertModal"
-                outline={false}
-              >
-                Evaluate
-              </Button>
-            </div>
-          )}
+          {(user && isCheckedOut) && 
+            <Button
+              // className="padding-x-5"
+              type="button"
+              outline={false}
+              onClick={() => openSelectionTypeImportModal()}
+              id="importSelectionQAModal"
+            >
+              {importTestTitle}
+            </Button>
+          }
         </div>
 
         <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
@@ -447,46 +445,16 @@ export const QACertTestSummaryHeaderInfo = ({
           </div>{" "}
           <div className="grid-col-3"></div>{" "}
         </div>
-        <div className="grid-row float-left">
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {"Test Data Report"}
-          </Button>
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {"Test History Report"}
-          </Button>
-          {user ? (
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {"Evaluation Report"}
-            </Button>
-          ) : (
-            ""
-          )}
-        </div>
+
       </div>
       <div
-        className={`usa-overlay ${
-          showImportModal ||
-          showSelectionTypeImportModal ||
-          showImportDataPreview ||
-          isLoading
+        className={`usa-overlay ${showImportModal ||
+            showSelectionTypeImportModal ||
+            showImportDataPreview ||
+            isLoading
             ? "is-visible"
             : ""
-        }`}
+          }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
@@ -566,7 +534,7 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          successMsg={"QA Certification has been Successfully Imported."}
+          successMsg={`${selectedConfig.facilityName} Test Data has been Successfully Imported.`}
           setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal

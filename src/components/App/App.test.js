@@ -8,6 +8,12 @@ jest.useFakeTimers();
 jest.spyOn(global, 'setInterval');
 jest.spyOn(global, 'setTimeout');
 const mockDispatch = jest.fn();
+
+jest.mock("@us-epa-camd/easey-design-system", () => ({
+  ...jest.requireActual("@us-epa-camd/easey-design-system"),
+  Header: () => <></>,
+}));
+
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
   useDispatch: () => mockDispatch,

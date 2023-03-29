@@ -2,9 +2,10 @@ import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
+import { globalView, getWorkspacePaths, home } from "../../utils/constants/menuTopics";
 
-import { globalView, workSpace, home } from "../../utils/constants/menuTopics";
-
+const workSpace = getWorkspacePaths();
+ 
 export const LeftNavigation = (props) => {
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);

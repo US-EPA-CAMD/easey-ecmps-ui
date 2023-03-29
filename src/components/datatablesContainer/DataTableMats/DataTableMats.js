@@ -6,7 +6,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
   displayAppError,
@@ -35,6 +34,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { ensure508 } from "../../../additional-functions/ensure-508";
 
 export const DataTableMats = ({
   mdmData,
@@ -48,6 +48,8 @@ export const DataTableMats = ({
   settingInactiveCheckBox,
   setUpdateRelatedTables,
   updateRelatedTables,
+  currentTabIndex,
+  tabs
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -68,8 +70,8 @@ export const DataTableMats = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      returnFocusToLast();
       assignFocusEventListeners();
+      ensure508()
     }
   }, [dataLoaded, dropdownsLoaded]);
 
@@ -77,8 +79,8 @@ export const DataTableMats = ({
   useEffect(() => {
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
+      ensure508()
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
@@ -166,9 +168,9 @@ export const DataTableMats = ({
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(inactive[0], false);
+        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMatsMethodsTableRecords(
-          !inactive[0] ? getActiveData(matsMethods) : matsMethods
+          tabs[currentTabIndex].inactive[0] === false ? getActiveData(matsMethods) : matsMethods
         );
       }
     }
@@ -181,7 +183,7 @@ export const DataTableMats = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matsMethods, methods, inactive, updateTable]);
+  }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 
   const saveMats = () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
@@ -262,6 +264,18 @@ export const DataTableMats = ({
             });
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+          
+          // Modal focus resets to close button on setState
+          if (modalDetailData[4] === "mainDropdown") {
+            // Overrides the firstComponentFocusableElement.focus() in focus-trap
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            });
+            // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            }, 1000);
           }
         }
       }
@@ -395,6 +409,9 @@ export const DataTableMats = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
+    tabs: state.openedFacilityTabs[
+      'monitoringPlans'
+    ],
   };
 };
 

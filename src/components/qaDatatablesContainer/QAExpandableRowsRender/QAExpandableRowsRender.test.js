@@ -153,7 +153,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(protocolGasData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -161,7 +161,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(protocolGasData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -277,7 +277,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(rataSummaryData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -285,7 +285,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(rataSummaryData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -363,7 +363,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(rataRunData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -371,7 +371,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(rataRunData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -459,7 +459,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(rataFlowData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -467,7 +467,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(rataFlowData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -553,7 +553,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(rataTraverseData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -561,7 +561,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(rataTraverseData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -627,7 +627,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(fuelFlowToLoadData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -635,102 +635,13 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(fuelFlowToLoadData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
   })
-
-  /*test('renders Appendix E Correlation Heat Input from Oil rows and create/save/delete', async () => {
-    const appendixECorrelationSummaryHeatInputOilData = [
-      {
-        "id": "id1",
-        "appECorrTestRunId": "appECorrTestRunId",
-        "userId": "string",
-        "addDate": "string",
-        "updateDate": "string",
-        "monitoringSystemID": '100',
-        "oilMass": 1,
-        "calculatedOilMass": 1,
-        "oilGCV": 1,
-        "oilGCVUnitsOfMeasureCode": "string",
-        "oilHeatInput": 1,
-        "calculatedOilHeatInput": 1,
-        "oilVolume": 1,
-        "oilVolumeUnitsOfMeasureCode": "string",
-        "oilDensity": 1,
-        "oilDensityUnitsOfMeasureCode": "string",
-      },
-      {
-        "id": "id1",
-        "appECorrTestRunId": "appECorrTestRunId",
-        "userId": "string",
-        "addDate": "string",
-        "updateDate": "string",
-        "monitoringSystemID": '100',
-        "oilMass": 12,
-        "calculatedOilMass": 1,
-        "oilGCV": 1,
-        "oilGCVUnitsOfMeasureCode": "string",
-        "oilHeatInput": 1,
-        "calculatedOilHeatInput": 1,
-        "oilVolume": 1,
-        "oilVolumeUnitsOfMeasureCode": "string",
-        "oilDensity": 1,
-        "oilDensityUnitsOfMeasureCode": "string",
-      }
-    ]
-
-    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils`;
-    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils/${idRegex}`);
-    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-oils/${idRegex}`);
-
-    mock.onGet(getUrl).reply(200, appendixECorrelationSummaryHeatInputOilData)
-    mock.onPost(postUrl).reply(200, 'created')
-    mock.onPut(putUrl).reply(200, 'updated')
-    mock.onDelete(deleteUrl).reply(200, 'deleted')
-    //api calls
-    mock.onGet(`https://api.epa.gov/easey/dev/monitor-plan-mgmt/locations/${locId}/systems`)
-    .reply(200,[{"id":"CAMD-01B98E68BA934DFC8340212E46B63D76","locationId":"2286","monitoringSystemId":"100","systemTypeCode":"OILM","systemDesignationCode":"P","fuelCode":"DSL","beginDate":"1995-05-05","endDate":null,"beginHour":0,"endHour":null,"userId":"crandle","addDate":"2008-08-13","updateDate":"2008-09-18","active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-DB89ED70AC4A43EE9D75A2E2FCDDCD82","locationId":"2286","monitoringSystemId":"200","systemTypeCode":"GAS","systemDesignationCode":"P","fuelCode":"PNG","beginDate":"1995-05-05","endDate":"2021-09-30","beginHour":0,"endHour":23,"userId":"CRandle","addDate":"2008-08-13","updateDate":"2022-01-18","active":false,"components":[],"fuelFlows":[]},{"id":"L3FY866-170A61A64EA64BF8A604D440BA34E0B3","locationId":"2286","monitoringSystemId":"201","systemTypeCode":"GAS","systemDesignationCode":"P","fuelCode":"NNG","beginDate":"2021-10-01","endDate":null,"beginHour":0,"endHour":null,"userId":"CRandle","addDate":"2022-01-18","updateDate":null,"active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-07BEC0123C004B979E23A3F694B29FD9","locationId":"2286","monitoringSystemId":"400","systemTypeCode":"NOX","systemDesignationCode":"P","fuelCode":"DSL","beginDate":"1995-05-05","endDate":null,"beginHour":0,"endHour":null,"userId":"crandle","addDate":"2008-08-13","updateDate":"2008-09-18","active":true,"components":[],"fuelFlows":[]},{"id":"CAMD-C9EE74334D134F3C815277E67C71D4FA","locationId":"2286","monitoringSystemId":"410","systemTypeCode":"NOXE","systemDesignationCode":"P","fuelCode":"PNG","beginDate":"1995-05-05","endDate":"2021-09-30","beginHour":0,"endHour":23,"userId":"CRandle","addDate":"2008-08-13","updateDate":"2022-01-18","active":false,"components":[],"fuelFlows":[]},{"id":"L3FY866-30135E185FB147CD932A888D4261929E","locationId":"2286","monitoringSystemId":"411","systemTypeCode":"NOXE","systemDesignationCode":"P","fuelCode":"NNG","beginDate":"2021-10-01","endDate":null,"beginHour":0,"endHour":null,"userId":"CRandle","addDate":"2022-01-18","updateDate":null,"active":true,"components":[],"fuelFlows":[]}]);
-    mock.onGet("https://api.epa.gov/easey/dev/master-data-mgmt/units-of-measure-codes")
-    .reply(200,[{"unitOfMeasureCode":"1","unitOfMeasureDescription":"100 Standard Cubic Feet / Hour per Megawatt"},{"unitOfMeasureCode":"2","unitOfMeasureDescription":"100 Standard Cubic Feet / Hour per 1000 Pounds / Hour of Steam Load"}])
-    
-    const props = qaAppendixECorrelationSummaryHeatInputOilProps()
-    const idArray = [locId, testSumId, appECorrTestSumId, appECorrTestRunId, id]
-    const data = { locationId: locId, id: appECorrTestRunId }
-    renderComponent(props, idArray, data);
-  
-    // renders rows
-    const rows = await screen.findAllByRole('row')
-    expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
-
-    // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-
-    // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    expect(editBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
-    userEvent.click(editBtns[0])
-    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-
-    // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    expect(deleteBtns).toHaveLength(appendixECorrelationSummaryHeatInputOilData.length)
-    const secondDeleteBtn = deleteBtns[1]
-    userEvent.click(secondDeleteBtn)
-    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])
-  })*/
 
   test('renders Appendix E Correlation test Summary data rows and create/save/delete', async () => {
     const appendixECorrTestSumData = [
@@ -790,7 +701,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -798,7 +709,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -878,7 +789,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(appendixECorrTestRunData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -886,7 +797,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(appendixECorrTestRunData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -954,7 +865,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 */
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(appendixECorrelationSummaryHeatInputGasData.length)
     userEvent.click(editBtns[0])
     let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -962,7 +873,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(appendixECorrelationSummaryHeatInputGasData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1038,14 +949,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(fuelFlowToLoadBaselineData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1098,7 +1009,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(qaCycleTimeSummaryData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -1106,7 +1017,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(qaCycleTimeSummaryData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1182,14 +1093,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(cycleInjectionData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(cycleInjectionData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1293,14 +1204,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(onlineOfflineCalibrationData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(onlineOfflineCalibrationData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1324,10 +1235,10 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "operatingLevelCode": "string",
         "averageGrossUnitLoad": 0,
         "averageReferenceMethodFlow": 0,
-        "referenceFlowToLoadRatio": 0,
+        "referenceFlowLoadRatio": 0,
         "averageHourlyHeatInputRate": 0,
         "referenceGrossHeatRate": 0,
-        "calculatedSeparateReferenceIndicator": 0
+        "calcSeparateReferenceIndicator": 0
       },
       {
         "id": "id2",
@@ -1343,10 +1254,10 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "operatingLevelCode": "string",
         "averageGrossUnitLoad": 0,
         "averageReferenceMethodFlow": 0,
-        "referenceFlowToLoadRatio": 0,
+        "referenceFlowLoadRatio": 0,
         "averageHourlyHeatInputRate": 0,
         "referenceGrossHeatRate": 0,
-        "calculatedSeparateReferenceIndicator": 0
+        "calcSeparateReferenceIndicator": 0
       }
     ]
 
@@ -1382,7 +1293,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(flowToLoadReferenceData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -1390,7 +1301,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(flowToLoadReferenceData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1404,7 +1315,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "id": "id1",
         "testSumId": "testSumId1",
         "fuelCode": "string",
-        "NOxDefaultRate": 0,
+        "noxDefaultRate": 0,
         "operatingConditionCode": "string",
         "groupID": "string",
         "numberOfUnitsInGroup": 0,
@@ -1414,7 +1325,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
         "id": "id2",
         "testSumId": "testSumId2",
         "fuelCode": "string2",
-        "NOxDefaultRate": 2,
+        "noxDefaultRate": 2,
         "operatingConditionCode": "string2",
         "groupID": "string2",
         "numberOfUnitsInGroup": 2,
@@ -1446,20 +1357,6 @@ describe('Test cases for QAExpandableRowsRender', () => {
     expect(mock.history.get.length).not.toBe(0)
     // expect(rows).toHaveLength(unitDefaultTestData.length)
     expect(rows).toHaveLength(6)
-    // add row
-    // const addBtn = screen.getAllByRole('button', { name: /Add/i });
-    // expect(addBtn.length).not.toBe(0);
-    // userEvent.click(addBtn[0])
-    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-
-    // edit row
-    // const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    // expect(editBtns).toHaveLength(flowToLoadReferenceData.length)
-    // userEvent.click(editBtns[0])
-    // saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
 
   })
 
@@ -1468,7 +1365,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
       {
         "id": "1",
         "unitDefaultTestSumId": "efa0789c-8731-4255-a48a-767f3b3ddfea",
-        "operatingLevel": 1,
+        "operatingLevelForRun": 1,
         "runNumber": 2,
         "beginDate": "2022-12-05",
         "beginHour": 12,
@@ -1486,7 +1383,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
       {
         "id": "2",
         "unitDefaultTestSumId": "efa0789c-8731-4255-a48a-767f3b3ddfea",
-        "operatingLevel": 1,
+        "operatingLevelForRun": 1,
         "runNumber": 2,
         "beginDate": "2022-12-05",
         "beginHour": 12,
@@ -1530,20 +1427,13 @@ describe('Test cases for QAExpandableRowsRender', () => {
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(unitDefaultTestRun.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    // remove row
-    // const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    // expect(deleteBtns).toHaveLength(hgInjectionData.length)
-    // const secondDeleteBtn = deleteBtns[1]
-    // userEvent.click(secondDeleteBtn)
-    // const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    // userEvent.click(confirmBtns[1])
   })
 
   test('renders Hg Summary data rows and create/save/delete', async () => {
@@ -1599,14 +1489,14 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(hgSummaryData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
     userEvent.click(saveAndCloseBtn)
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(hgSummaryData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1670,7 +1560,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(hgInjectionData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -1678,7 +1568,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(hgInjectionData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
@@ -1754,7 +1644,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
 
     // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
+    const editBtns = screen.getAllByTestId(/Edit/i);
     expect(editBtns).toHaveLength(appECorrHeatInputOilData.length)
     userEvent.click(editBtns[0])
     saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
@@ -1762,251 +1652,11 @@ describe('Test cases for QAExpandableRowsRender', () => {
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
 
     // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
+    const deleteBtns = screen.getAllByTestId(/Remove/i);
     expect(deleteBtns).toHaveLength(appECorrHeatInputOilData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
     userEvent.click(confirmBtns[1])
   })
-
-  // test.only('renders Flow to load check data rows and create/save/delete', async () => {
-  //   const flowToLoadCheckData = [
-  //     {
-  //       "id": "id1",
-  //       "testSumId": "string",
-  //       "userId": "string",
-  //       "addDate": "string",
-  //       "updateDate": "string",
-  //       "testBasisCode": "string",
-  //       "biasAdjustedIndicator": 0,
-  //       "averageAbsolutePercentDifference": 0,
-  //       "numberOfHours": 0,
-  //       "numberOfHoursExcludedForFuel": 0,
-  //       "numberOfHoursExcludedForRamping": 0,
-  //       "numberOfHoursExcludedForBypass": 0,
-  //       "numberOfHoursExcludedPreRata": 0,
-  //       "numberOfHoursExcludedTest": 0,
-  //       "numberOfHoursExcludedForMainAndBypass": 0,
-  //       "operatingLevelCode": "string"
-  //     },
-  //     {
-  //       "id": "id2",
-  //       "testSumId": "string",
-  //       "userId": "string",
-  //       "addDate": "string",
-  //       "updateDate": "string",
-  //       "testBasisCode": "string",
-  //       "biasAdjustedIndicator": 0,
-  //       "averageAbsolutePercentDifference": 0,
-  //       "numberOfHours": 0,
-  //       "numberOfHoursExcludedForFuel": 0,
-  //       "numberOfHoursExcludedForRamping": 0,
-  //       "numberOfHoursExcludedForBypass": 0,
-  //       "numberOfHoursExcludedPreRata": 0,
-  //       "numberOfHoursExcludedTest": 0,
-  //       "numberOfHoursExcludedForMainAndBypass": 0,
-  //       "operatingLevelCode": "string"
-  //     }
-  //   ];
-
-  //   const getUrl = new RegExp(`${qaCertBaseUrl}/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks`);
-  //   const postUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks`);
-  //   const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks/${idRegex}`);
-  //   const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${idRegex}/test-summary/${idRegex}/flow-to-load-checks/${idRegex}`);
-
-  //   mock.onGet(getUrl).reply(200, flowToLoadCheckData);
-  //   mock.onPost(postUrl).reply(200, 'created');
-  //   mock.onPut(putUrl).reply(200, 'updated');
-  //   mock.onPut(deleteUrl).reply(200, 'deleted');
-
-  //   const props = qaFlowToLoadCheckProps()
-  //   const idArray = []
-  //   const data = { locationId: locId, id: testSumId }
-  //   renderComponent(props, idArray, data);
-
-  //   // renders rows
-  //   const rows = screen.getAllByRole('row')
-  //   expect(mock.history.get.length).not.toBe(0)
-  //   expect(rows).not.toHaveLength(0)
-
-  //   // add row
-  //   const addBtn = screen.getByRole('button', { name: /Add/i })
-  //   userEvent.click(addBtn)
-  //   let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-  //   userEvent.click(saveAndCloseBtn)
-  //   setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-
-  //   // edit row
-  //   const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-  //   expect(editBtns).toHaveLength(flowToLoadCheckData.length)
-  //   userEvent.click(editBtns[0])
-  //   saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-  //   userEvent.click(saveAndCloseBtn)
-  //   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-
-  //   // remove row
-  //   const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-  //   expect(deleteBtns).toHaveLength(flowToLoadCheckData.length)
-  //   const secondDeleteBtn = deleteBtns[1]
-  //   userEvent.click(secondDeleteBtn)
-  //   const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-  //   userEvent.click(confirmBtns[1])
-  // });
 })
-
-/*
-describe('Appendix E Correlation test Summary data', () => {
-  const appendixECorrTestSumData = [
-    {
-      "id": "id1",
-      "testSumId": "stri g",
-      "userId": "string",
-      "addDate": "string",
-      "updateDate": "string",
-      "Operating Level For Run": 1,
-      "Mean Reference Value": 2,
-      "Average Hourly Heat Input Rate": 3,
-      "F-Factor": 4,
-      "calculatedMeanReferenceValue": 5,
-      "calculatedAverageHourlyHeatInputRate": 6,
-    },
-    {
-      "id": "id2",
-      "testSumId": "string",
-      "userId": "string",
-      "addDate": "string",
-      "updateDate": "string",
-      "Operating Level For Run": 2,
-      "Mean Reference Value": 3,
-      "Average Hourly Heat Input Rate": 4,
-      "F-Factor": 5,
-      "calculatedMeanReferenceValue": 6,
-      "calculatedAverageHourlyHeatInputRate": 7,
-    }
-  ]
-  
-  test('renders Appendix E Correlation test summary rows and create/save/delete', async () => {
-    const appendixECorrTestSumData = [
-      {
-        "id": "id1",
-        "testSumId": "stri g",
-        "userId": "string",
-        "addDate": "string",
-        "updateDate": "string",
-        "Operating Level For Run": 1,
-        "Mean Reference Value": 2,
-        "Average Hourly Heat Input Rate": 3,
-        "F-Factor": 4,
-        "calculatedMeanReferenceValue": 5,
-        "calculatedAverageHourlyHeatInputRate": 6,
-      },
-      {
-        "id": "id2",
-        "testSumId": "string",
-        "userId": "string",
-        "addDate": "string",
-        "updateDate": "string",
-        "Operating Level For Run": 2,
-        "Mean Reference Value": 3,
-        "Average Hourly Heat Input Rate": 4,
-        "F-Factor": 5,
-        "calculatedMeanReferenceValue": 6,
-        "calculatedAverageHourlyHeatInputRate": 7,
-      }
-    ]
-    
-    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
-    const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
-    const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
-  
-    mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
-    mock.onPost(postUrl).reply(200, 'created')
-    mock.onPut(putUrl).reply(200, 'updated')
-    mock.onPut(deleteUrl).reply(200, 'deleted');
-    
-    const props = qaAppendixECorrelationSummaryTestProps()
-    const idArray = [locId, testSumId, id]
-    const data = { locationId: locId, id: testSumId }
-    renderComponent(props, idArray, data);
-    // renders rows
-    const rows = await screen.findAllByRole('row')
-    expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
-    // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-    // edit row
-    const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-    expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
-    userEvent.click(editBtns[0])
-    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
-    setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-    // remove row
-    const deleteBtns = await screen.getAllByRole('button', { name: /Remove/i })
-    expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
-    const secondDeleteBtn = deleteBtns[1]
-    userEvent.click(secondDeleteBtn)
-    const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
-    userEvent.click(confirmBtns[1])
-  });
-  
-  test('renders Flow to load check data rows and create/save/delete', async () => {
-    const flowToLoadCheckData = [
-      {"id":"d9b87972-ebe7-46ff-9176-3219778b0bc1","testSumId":"701733a2-2b6e-4896-828e-5accaab929d4","testBasisCode":"H","biasAdjustedIndicator":1,
-      "averageAbsolutePercentDifference":12,"numberOfHours":24,"numberOfHoursExcludedForFuel":25,"numberOfHoursExcludedForRamping":26,"numberOfHoursExcludedForBypass":27,
-      "numberOfHoursExcludedPreRata":28,"numberOfHoursExcludedTest":29,"numberOfHoursExcludedForMainAndBypass":30,"operatingLevelCode":"H","userId":"agebremichael-dp",
-      "addDate":"10/27/2022, 3:55:09 PM","updateDate":"10/27/2022, 3:55:09 PM"}];
-  
-    const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
-    const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
-    const putUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
-    const deleteUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks/${id}`;
-    //mdm calls
-    mock.onGet("https://api.epa.gov/easey/dev/master-data-mgmt/test-basis-codes")
-    .reply(200,[{"testBasisCode":"H","testBasisDescription":"Gross Heat Rate"},{"testBasisCode":"Q","testBasisDescription":"Flow-to-Load Ratio"}]);
-    mock.onGet("https://api.epa.gov/easey/dev/master-data-mgmt/operating-level-codes")
-    .reply(200,[{"opLevelCode":"H","opLevelDescription":"High"},{"opLevelCode":"L","opLevelDescription":"Low"},{"opLevelCode":"M","opLevelDescription":"Mid"},
-    {"opLevelCode":"N","opLevelDescription":"Normal"},{"opLevelCode":"T","opLevelDescription":"Typical Unit Load"}]);
-    mock.onGet(getUrl).reply(200, flowToLoadCheckData);
-    mock.onPost(postUrl).reply(200, 'created');
-    mock.onPut(putUrl).reply(200, 'updated');
-    mock.onPut(deleteUrl).reply(200, 'deleted');
-    
-    const props = qaFlowToLoadCheckProps()
-    const idArray = []
-    const data = { locationId: locId, id: testSumId }
-    renderComponent(props, idArray, data);
-    // renders rows
-    const rows = screen.getAllByRole('row')
-    expect(mock.history.get.length).not.toBe(0)
-    expect(rows).not.toHaveLength(0)
-    //add row
-    // const addBtn = screen.getByRole('button', { name: /Add/i })
-    // userEvent.click(addBtn)
-    // let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    // userEvent.click(saveAndCloseBtn)
-    // setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-    
-  //   //edit row
-  //   const editBtns = screen.getAllByRole('button', { name: /Edit/i })
-  //   expect(editBtns).toHaveLength(flowToLoadCheckData.length)
-  //   userEvent.click(editBtns[0])
-  //   saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-  //   userEvent.click(saveAndCloseBtn)
-  //   setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-  //   // await waitForElement(() => {
-  //   //   expect(mock.history.put.length).toBe(1);
-  //   // });
-  
-  //   //remove row
-  //   const deleteBtns = screen.getAllByRole('button', { name: /Remove/i })
-  //   expect(deleteBtns).toHaveLength(flowToLoadCheckData.length);
-  });
-});
-*/

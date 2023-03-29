@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
-import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox } from "@trussworks/react-uswds";
-// import { Modal, ModalFooter, ModalHeading, Button, ButtonGroup, ModalToggleButton, ModalRef } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Dropdown, Label, DatePicker, TextInput, Checkbox, ComboBox } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
@@ -9,9 +8,10 @@ import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription, getLocations } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { formatDate, getQuarter } from "../../../utils/functions";
+import { createMatchTypeDropdownLists } from "./esFunctions";
 
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
-    //console.log(values)
+
     // Values being used from context
     const {
         transformedData,
@@ -23,15 +23,17 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [checkNumberList, setCheckNumberList] = useState([]);
     const [checkResultList, setCheckResultList] = useState([]);
     const [severityCodeList, setSeverityCodeList] = useState([]);
-    
+    const [matchDataList, setMatchDataList] = useState([]);
+
     // Selected form 
     const [selectedCheckType, setSelectedCheckType] = useState();
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
+    const [selectedCheckResultObj, setSelectedCheckResultObj] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedReason, setSelectedReason] = useState();
-    const [selectedFuelType, setSelectedFuelType] = useState();
+    const [selectedMatchDataType, setSelectedMatchDataType] = useState();
     const [selectedSeverityCode, setSelectedSeverityCode] = useState();
     const [selectedNotes, setSelectedNotes] = useState('');
 
@@ -43,7 +45,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
     const [selectedEndQuarter, setSelectedEndQuarter] = useState();
-
+    
     // Locations multiselect items
     const [locationData, setLocationData] = useState([]);
 
@@ -52,22 +54,18 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const yearQuarters = useMemo(getReportingPeriods, [])
 
     // Time Criteria booleans
-    const showDateHour = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HOUR',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
-
-    const showDate = useMemo(() => findCheckResultObject()?.timeTypeCode === 'DATE',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
-
-    const showQuarter = useMemo(() => findCheckResultObject()?.timeTypeCode === 'QUARTER',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+    const showDateHour = selectedCheckResultObj?.timeTypeCode === 'HOUR';
+    const showDate = selectedCheckResultObj?.timeTypeCode === 'DATE';
+    const showQuarter = selectedCheckResultObj?.timeTypeCode === 'QUARTER';
+    const showHistorical = selectedCheckResultObj?.timeTypeCode === 'HISTIND';
     
-    const showHistorical = useMemo(() => findCheckResultObject()?.timeTypeCode === 'HISTIND',
-        [selectedCheckType, selectedCheckNumber, selectedCheckResult, transformedData]);
+
 
     useEffect(() => {
         const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
         setCheckTypeList(uniqueTypeCodeAndDesc);
-    }, [transformedData])
+    }, [transformedData]);
+
 
     // When the clone button is clicked and values is set, this useEffect takes care of prepopulating
     // all the form fields with the values of the row that was selected
@@ -75,7 +73,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         if (!values)
             return;
 
-        const { checkTypeCode, checkNumber, checkResultCode, orisCode,
+        const { checkTypeCode, checkNumber, checkResultCode, orisCode, matchDataTypeCode,
             locations, reasonCode, severityCode, note, matchTimeTypeCode,
             matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator } = values;
 
@@ -88,21 +86,34 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedSeverityCode(severityCode);
         setSelectedNotes(note);
 
-        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r=>r.checkResult === checkResultCode);
+        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r => r.checkResult === checkResultCode);
+        setSelectedCheckResultObj(checkResultObj);
 
-        getLocations(orisCode, checkResultObj).then((availLoc)=>{
-            setLocationData([...availLoc]);
+        getLocations(orisCode, checkResultObj).then((availLoc) => {
             // split the locations coming from the table row
             const splitLocationList = locations?.split(",");
+
             if (splitLocationList) {
                 splitLocationList.forEach(locName => {
-                    const found = availLoc.find(datum => datum.id === locName);
+                    const found = availLoc.find(datum => datum.label === locName);
                     if (found)
                         found.selected = true
                 })
             }
-    
+
+            setLocationData(availLoc);
+            if (matchDataTypeCode === "TESTNUM") {
+                createMatchTypeDropdownLists(checkResultObj, orisCode, availLoc.map(l => l.id)).then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
+            }
         });
+
+        if (matchDataTypeCode !== "TESTNUM") {
+            createMatchTypeDropdownLists(checkResultObj, orisCode).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            })
+        }
 
         // Match time values
         switch (matchTimeTypeCode) {
@@ -139,7 +150,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         });
     }, []);
 
-
     const saveFunc = () => {
         // Make api call here later on to save and create new ES
         // Might move this to ErrorSuppressionDataContainer and pass in as prop
@@ -152,25 +162,23 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         ];
 
         if (changeType === "add") {
+            createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, uniqueLocations)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
             setSelectedLocations(uniqueLocations);
         }
         else if (changeType === "remove") {
             const selected = locationData.filter((l) => l.selected).map(l => l.id);
+            createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, selected)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                })
+
             setSelectedLocations(selected);
         }
         else
             return;
-    }
-
-    // Assuming user has chosen a value for Check Type, Check Number, and Check Result, 
-    // this function finds and returns the checkCatalogResult object from transformedData.
-    // Returns undefined if nothing is found.
-    function findCheckResultObject() {
-        if (!(selectedCheckType && selectedCheckNumber && selectedCheckResult))
-            return;
-        // the list of check catalog objects for the checkType and checkNumber selected
-        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
-        return checkCatalogList.find(c => c.checkResult === selectedCheckResult);
     }
 
     const onCheckTypeChange = (e) => {
@@ -180,15 +188,15 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedCheckType(value);
         setSelectedCheckNumber(false);
         setSelectedCheckResult(false);
-
+        setSelectedCheckResultObj(null)
         if (!value)
             return;
-        
+
         const checkNumbers = Object.keys(transformedData[value]);
         setCheckNumberList(checkNumbers)
         // reset location selections if there are any
-        locationData.forEach(d=>d.selected=false)
-    }   
+        locationData.forEach(d => d.selected = false)
+    }
 
     const onCheckNumberChange = (e, selCheckType) => {
         let { value } = e.target;
@@ -196,11 +204,12 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         setSelectedCheckNumber(value);
         setSelectedCheckResult(false);
+        setSelectedCheckResultObj(null);
         if (!value)
             return;
         setCheckResultList(transformedData[selCheckType][value].map(d => d.checkResult))
         // reset location selections if there are any
-        locationData.forEach(d=>d.selected=false)
+        locationData.forEach(d => d.selected = false)
 
     }
 
@@ -209,29 +218,50 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         value = value === "false" ? false : value;
         setSelectedCheckResult(value);
 
+        // set the actual catalog result object
+        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
+        const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
+        setSelectedCheckResultObj(checkCatalogResult);
+
+        createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
+            setMatchDataList(universalMatchDataList)
+        });
+
         if (selectedCheckType && selectedCheckNumber && value) {
-            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value)
-            getLocations(selectedFacility, checkResultObj).then(availLoc=>{
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value)
+            getLocations(selectedFacility, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc])
-            }).catch(err=>{
+            }).catch(err => {
                 console.log("error", err)
             });
         }
     };
 
-    const onFacilityChange = (e) => {
-        let { value } = e.target;
+    const onFacilityChange = (value) => {
+
         value = value === "false" ? false : value;
 
         setSelectedFacility(value);
         if (!value) return;
+
         if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult)
-            getLocations(value, checkResultObj).then(availLoc=>{
+            createMatchTypeDropdownLists(selectedCheckResultObj, value).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            });
+
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult)
+            getLocations(value, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc]);
             });
         }
     };
+
+    const onMatchDataTypeChange = (e) => {
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
+        setSelectedMatchDataType(value);
+    }
 
     return (
         <div>
@@ -351,20 +381,19 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                     </Grid>
                     <Grid row gap={2}>
                         <Grid col={5}>
-                            <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
-                                Facility Name
-                            </Label>
-                            <Dropdown
-                                id={"add-facility-name"}
-                                name={"add-facility-name"}
-                                epa-testid={"add-facility-name"}
-                                data-testid={"add-facility-name"}
-                                value={selectedFacility}
-                                onChange={onFacilityChange}
-                            >
-                                <option value={"false"}>{defaultDropdownText}</option>
-                                {facilityList.map((d) => <option key={d.orisCode} value={d.orisCode} data-testid={d.orisCode}>{`${d.facilityName} (${d.orisCode})`}</option>)}
-                            </Dropdown>
+                            { facilityList.length > 0 ? (<div>
+                                <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
+                                    Facility Name
+                                </Label>
+                                <ComboBox
+                                    id="facility-name"
+                                    name="facility-name"
+                                    epa-testid={"facility-name"}
+                                    data-testid={"facility-name"}
+                                    options={facilityList}
+                                    onChange={onFacilityChange}
+                                />
+                            </div>) : null}
                         </Grid>
                         <Grid col={5}>
                             <MultiSelectCombobox
@@ -386,27 +415,37 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
                         </Grid>
                     </Grid>
-                    <Grid row gap={2}>
-                        <Grid col={5}>
-                            <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
-                                Fuel Type
-                            </Label>
-                            <Dropdown
-                                id={"add-fuel-type"}
-                                name={"add-fuel-type"}
-                                epa-testid={"add-fuel-type"}
-                                data-testid={"add-fuel-type"}
-                                value={selectedFuelType}
-                            >
-                                <option>Coming Soon...</option>
-                            </Dropdown>
+                    {/* Dropdown is hidden if no check result is selected and in the case that check result's matchDataType is PARAM, it is not shown if there is no data for matchDataList.
+                        See ticket 4621 for the explanation of PARAM match type */}
+                    {!selectedCheckResultObj || (selectedCheckResultObj?.dataTypeCode === "PARAM" && matchDataList?.length === 0) ?
+                         null :
+                         <Grid row gap={2}>
+                            <Grid col={5}>
+                                <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
+                                    {selectedCheckResultObj.dataTypeLabel}
+                                </Label>
+                                <Dropdown
+                                    id={"add-fuel-type"}
+                                    name={"add-fuel-type"}
+                                    epa-testid={"add-fuel-type"}
+                                    data-testid={"add-fuel-type"}
+                                    value={selectedMatchDataType}
+                                    onChange={onMatchDataTypeChange}
+                                >
+                                    <option value={"false"}>{defaultDropdownText}</option>
+                                    {
+                                        matchDataList.map((d, i) => <option key={`${d.value}-${i}`} value={d.value}>{d.label}</option>)
+                                    }
+                                </Dropdown>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    }
+
                     {/* Only show the time criteria section if we determined a valid time type code */}
-                    { showDateHour || showDate || showQuarter || showHistorical ? 
-                    <Grid row gap={2}>
-                        <h3>Time Criteria</h3>
-                    </Grid> : null}
+                    {showDateHour || showDate || showQuarter || showHistorical ?
+                        <Grid row gap={2}>
+                            <h3>Time Criteria</h3>
+                        </Grid> : null}
 
                     {/* HOUR */}
                     {showDateHour ?
@@ -517,7 +556,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                             <Grid col={3}>
                                 <Checkbox
                                     id="add-is-historical"
-                                    name="add-is-historical"
+                                    name="a(checkResultObj);
+
+                                    dd-is-historical"
                                     label="Historical"
                                     checked={selectedIsHistorical}
                                     value={selectedIsHistorical}

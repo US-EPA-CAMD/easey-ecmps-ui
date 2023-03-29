@@ -2,18 +2,26 @@ import React from "react";
 import {
   render,
   waitForElement,
-  fireEvent,
   screen,
 } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
 import ModalAddComponent from "./ModalAddComponent";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-const axios = require("axios");
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import config from "../../config";
 
-jest.mock("axios");
+const mock = new MockAdapter(axios);
 
-const comps = [{}];
+const idRegex = '[\\w\\-]+';
+
+const comps = {};
+
+const getMonitoringComponents = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/components`)
+const getMonitoringSystemsComponentsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/systems/${idRegex}/components`)
+
+mock.onGet(getMonitoringComponents).reply(200, comps)
+mock.onGet(getMonitoringSystemsComponentsUrl).reply(200, comps)
 
 const componentRenderer = (back) => {
   const props = {
@@ -27,35 +35,19 @@ const componentRenderer = (back) => {
   return render(<ModalAddComponent {...props} />);
 };
 
-test("Here so test run", () => {
-  expect(true);
-});
 
-/*
-test("renders the add modalcomponentpage", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: comps })
-  );
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: comps })
-  );
-  const compData = await mpApi.getMonitoringComponents("5");
-
-  const sysCompData = await mpApi.getMonitoringSystemsComponents(
-    "5",
-    "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5"
-  );
-  expect(compData.data).toEqual(comps);
-  expect(sysCompData.data).toEqual(comps);
+test("renders ModalAddComponent with back button", async () => {
   let { container } = await waitForElement(() => componentRenderer(true));
 
-  fireEvent.click(container.querySelector("#backBtn"));
+  const backBtn = await screen.findAllByRole('button', { name: /Back/i });
+  expect(backBtn[0]).toBeEnabled();
+  userEvent.click(backBtn[0]);
+
   expect(container).toBeDefined();
 });
 
-test("renders the add modalcomponentpage with no backbtn", async () => {
+test("renders ModalAddComponent with no back button", async () => {
   let { container } = await waitForElement(() => componentRenderer(false));
-
   expect(container).toBeDefined();
 });
-*/
+

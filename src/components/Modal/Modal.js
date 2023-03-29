@@ -43,7 +43,7 @@ export const Modal = ({
       if (document.querySelector("#closeModalBtn")) {
         document.querySelector("#closeModalBtn").focus();
       }
-    }, 1000);
+    });
 
     // * clean up
     return () => {

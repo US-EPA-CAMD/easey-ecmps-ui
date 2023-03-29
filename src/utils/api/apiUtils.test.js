@@ -55,7 +55,7 @@ describe("test response and error handler functions", () => {
     const err4 = { message: "" };
 
     handleError(err1);
-    expect(globalMsg).toBe(`${errorName} ${firstErrorMsg}`);
+    expect(globalMsg).toBe(firstErrorMsg);
 
     handleError(err2);
     expect(globalMsg).toBe(apiErrorMsg);

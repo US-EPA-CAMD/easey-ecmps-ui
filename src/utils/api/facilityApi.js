@@ -1,11 +1,6 @@
-import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
-
-axios.defaults.headers.common = {
-  "x-api-key": config.app.apiKey,
-};
 
 //Endpoint that dynamically routes to workspace or non-workspace environments
 const fireApiGetRequest = async (path, workspaceOnly = false) => {

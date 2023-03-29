@@ -48,6 +48,8 @@ import {
   getUser,
   displayReport,
   getPreviouslyFullSubmitedQuarter,
+  getQuarter,
+  formatErrorResponse,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
@@ -58,7 +60,7 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
-import { handleError } from "../../utils/api/apiUtils";
+import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
   hideAppError,
@@ -80,9 +82,12 @@ export const getReportingPeriods = (minYear = 2009) => {
   const maxYear = new Date().getFullYear();
   const reportingPeriods = [];
 
+  const currentYearQuarter = parseInt(`${maxYear}${getQuarter()}`);
+
   for (let year = maxYear; year >= minYear; year--) {
     for (const quarter of quarters) {
-      reportingPeriods.push(`${year} Q${quarter}`);
+      if( parseInt(`${year}${quarter}`) <= currentYearQuarter)
+        reportingPeriods.push(`${year} Q${quarter}`);
     }
   }
 
@@ -160,7 +165,11 @@ export const HeaderInfo = ({
   const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
-  const closeRevertModal = () => setShowRevertModal(false);
+  const closeRevertModal = () => {
+    setShowRevertModal(false);
+    const revertBtn = document.querySelector("#showRevertModal");
+    revertBtn.focus();
+  }
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
@@ -369,6 +378,7 @@ export const HeaderInfo = ({
     }
 
     await Promise.allSettled(promises);
+
   };
 
   const formatCommentsToTable = (data) => {
@@ -603,19 +613,6 @@ export const HeaderInfo = ({
   };
 
   const evalStatusContent = () => {
-    if (checkedOutByUser && evalStatusText(evalStatus) === "Needs Evaluation") {
-      return (
-        <Button
-          type="button"
-          outline={false}
-          onClick={evaluate}
-          className="height-6"
-        >
-          Evaluate
-        </Button>
-      );
-    }
-
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
       evalStatus
     )} margin-y-0`;
@@ -686,8 +683,9 @@ export const HeaderInfo = ({
       .importMP(payload)
       .then((response) => {
         setIsLoading(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
         }
       })
       .catch((err) => {
@@ -833,10 +831,17 @@ export const HeaderInfo = ({
     }
   };
 
-  const handleExport = () => {
-    if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-      mpApi.exportMonitoringPlanDownload(configID);
+  const handleExport = async () => {
+    try{
+      setDataLoaded(false);
+      if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
+      if (workspaceSection === MONITORING_PLAN_STORE_NAME)
+        await mpApi.exportMonitoringPlanDownload(configID);
+      setDataLoaded(true);
+    }catch(error){
+      setDataLoaded(true);
+      console.error(error)
+    }
   };
 
   const onChangeOfEmissionsImportType = (e) => {
@@ -919,7 +924,7 @@ export const HeaderInfo = ({
         } `}
       />
 
-      {showRevertModal ? (
+      {showRevertModal &&
         <Modal
           show={showRevertModal}
           close={closeRevertModal}
@@ -934,8 +939,8 @@ export const HeaderInfo = ({
             </div>
           }
         />
-      ) : null}
-      {showEvalReport ? (
+      }
+      {showEvalReport &&
         <Modal
           title="Monitoring Plan Evaluation Report"
           width="80%"
@@ -946,7 +951,7 @@ export const HeaderInfo = ({
           showCancel={true}
           children={<ReportGenerator user={user} />}
         />
-      ) : null}
+      }
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
@@ -1053,7 +1058,7 @@ export const HeaderInfo = ({
                   desktopLg={{ col: 7 }}
                   desktop={{ col: 8 }}
                 >
-                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0">
+                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0" aria-live="polite">
                     <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
                       Evaluation Status:
                     </label>
@@ -1140,22 +1145,12 @@ export const HeaderInfo = ({
                   View Audit Report
                 </Button>
                 */}
-                <Button
-                  outline
-                  type="button"
-                  title="View Printout Report"
-                  className={"hyperlink-btn cursor-pointer"}
-                  onClick={() =>
-                    displayReport("MPP", orisCode, selectedConfig.id)
-                  }
-                >
-                  View Printout Report
-                </Button>
+
               </Grid>
             </GridContainer>
           )}
 
-          {workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1202,9 +1197,9 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          ) : null}
+          }
 
-          {workspaceSection === EMISSIONS_STORE_NAME ? (
+          {workspaceSection === EMISSIONS_STORE_NAME &&
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1276,38 +1271,14 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
               {/* ------------------------------------------------------------------------------- */}
-              <Grid row>
-                <Grid col={2}>
-                  <Button
-                    outline
-                    type="button"
-                    title="Summary Report"
-                    onClick={() => null}
-                    className={"hyperlink-btn cursor-pointer text-no-wrap"}
-                  >
-                    Summary Report
-                  </Button>
-                </Grid>
-                <Grid col={2}>
-                  <Button
-                    outline
-                    type="button"
-                    title="Data Report"
-                    className={"hyperlink-btn cursor-pointer margin-left-2"}
-                    onClick={() => null}
-                  >
-                    Data Report
-                  </Button>
-                </Grid>
-              </Grid>
             </GridContainer>
-          ) : null}
+          }
         </div>
       ) : (
         <Preloader />
       )}
 
-      {showImportModal && !finishedLoading && !isLoading ? (
+      {(showImportModal && !finishedLoading && !isLoading) &&
         <div>
           <UploadModal
             show={showImportModal}
@@ -1339,7 +1310,7 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      ) : null}
+      }
       {isReverting && (
         <UploadModal
           width={"30%"}

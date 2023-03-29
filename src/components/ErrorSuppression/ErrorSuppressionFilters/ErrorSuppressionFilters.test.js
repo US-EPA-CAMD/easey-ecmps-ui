@@ -8,6 +8,7 @@ import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import userEvent from "@testing-library/user-event";
 import { testtest } from "./ErrorSuppressionFilters";
+import { defaultDropdownText } from "../ErrorSuppression";
 
 const configurations = [
   {
@@ -150,10 +151,23 @@ describe("ErrorSuppressionFilters component", () => {
     expect(screen.getByTestId("check-result")).toHaveValue(
       "false"
     );
-    expect(screen.getByTestId("facility-name")).toHaveValue("false");
+
     expect(screen.getByTestId("reason")).toHaveValue("false");
-    expect(screen.getByTestId("is-active")).toBeChecked(true);
+    expect(screen.getByTestId("is-active")).not.toBeChecked();
     expect(screen.getByLabelText("Location Name")).toHaveValue("");
+  });
+
+  it("calls onFacilityChange() when default dropdown text is selected", async () => {
+    await act(async ()=>{
+      await userEvent.click(screen.getByTestId("combo-box-toggle"))
+      await userEvent.click(screen.getByTestId("combo-box-option-3"));
+    })
+    expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)")
+  });
+
+  it("calls onCheckResultChange() when default dropdown text is selected", () => {
+    userEvent.selectOptions(screen.getByLabelText("Check Result"), ["false"]);
+    expect(screen.getByTestId("check-result")).toHaveValue("false");
   });
 });
 

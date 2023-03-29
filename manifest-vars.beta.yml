@@ -7,3 +7,4 @@ inactivityDurationLogoutMinutes: 15
 googleAnalyticsEnabled: true
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
+enableSystemAdminstrationModule: false

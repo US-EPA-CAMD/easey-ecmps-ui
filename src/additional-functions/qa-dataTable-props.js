@@ -1,5 +1,3 @@
-import { Restaurant } from "@material-ui/icons";
-
 export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
@@ -752,7 +750,7 @@ export const qaFlowToLoadCheckProps = () => {
     controlInputs: {
       testBasisCode: ["Test Basis Code", "dropdown", "", ""],
       biasAdjustedIndicator: ["Bias Adjusted Indicator", "dropdown", "", ""],
-      averageAbsolutePercentDifference: [
+      avgAbsolutePercentDiff: [
         "Average Absolute Percent Difference",
         "input",
         "",
@@ -765,19 +763,19 @@ export const qaFlowToLoadCheckProps = () => {
         "",
         "",
       ],
-      numberOfHoursExcludedForRamping: [
+      numberOfHoursExcludedRamping: [
         "Number of Hours Excluded for Ramping",
         "input",
         "",
         "",
       ],
-      numberOfHoursExcludedForBypass: [
+      numberOfHoursExcludedBypass: [
         "Number of Hours Excluded for Bypass",
         "input",
         "",
         "",
       ],
-      numberOfHoursExcludedPreRata: [
+      numberOfHoursExcludedPreRATA: [
         "Number of Hours Excluded Pre RATA",
         "input",
         "",
@@ -789,7 +787,7 @@ export const qaFlowToLoadCheckProps = () => {
         "",
         "",
       ],
-      numberOfHoursExcludedForMainAndBypass: [
+      numberOfHoursExcMainBypass: [
         "Number of Hours Excluded for Main and Bypass",
         "input",
         "",
@@ -1222,7 +1220,7 @@ export const qaFlowToLoadReferenceProps = () => {
     dropdownArray: [
       "rataTestNumber",
       "operatingLevelCode",
-      "calculatedSeparateReferenceIndicator",
+      "calcSeparateReferenceIndicator",
     ],
     // mdmProps: [
     //   {
@@ -1253,7 +1251,7 @@ export const qaFlowToLoadReferenceProps = () => {
         "",
         "",
       ],
-      referenceFlowToLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
+      referenceFlowLoadRatio: ["Reference Flow Load Ratio", "input", "", ""],
       averageHourlyHeatInputRate: [
         "Average Hourly Heat Input Rate",
         "input",
@@ -1261,7 +1259,7 @@ export const qaFlowToLoadReferenceProps = () => {
         "",
       ],
       referenceGrossHeatRate: ["Reference Gross Heat Rate", "input", "", ""],
-      calculatedSeparateReferenceIndicator: [
+      calcSeparateReferenceIndicator: [
         "Calculated Separate Reference Indicator",
         "dropdown",
         "",
@@ -1302,7 +1300,7 @@ export const qaUnitDefaultTestDataProps = () => {
     ],
     controlInputs: {
       fuelCode: ["Fuel Code", "dropdown", "", ""],
-      NOxDefaultRate: ["NOX Default Rate", "input", "", ""],
+      noxDefaultRate: ["NOX Default Rate", "input", "", ""],
       operatingConditionCode: ["Operating Condition Code", "dropdown", "", ""],
       groupID: ["Group ID", "input", "", ""],
       numberOfUnitsInGroup: ["Number of Units in Group", "input", "", ""],
@@ -1332,7 +1330,7 @@ export const qaUnitDefaultTestRunDataProps = () => {
       "Run Used Indicator",
     ],
     controlInputs: {
-      operatingLevel: ["Operating Level for Run", "input", "", ""],
+      operatingLevelForRun: ["Operating Level for Run", "input", "", ""],
       runNumber: ["Run Number", "input", "", ""],
       responseTime: ["Response Time", "input", "", ""],
       referenceValue: ["Reference Value", "input", "", ""],
@@ -1439,12 +1437,9 @@ export const qaCertEventsProps = (selectedLocation) => {
       "Monitoring System ID",
       "QA Cert Event Code",
       "QA Cert Event Date",
-      "QA Cert Event Hour",
       "Required Test Code",
       "Conditional Begin Date",
-      "Conditional Begin Hour",
       "Completion Test Date",
-      "Completion Test Hour",
     ],
     controlInputs: {
       //locId:["Unit or Stack Pipe ID", "input", "", ""],
@@ -1495,7 +1490,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       id: null,
       unitId: null,
       monitoringSystemID: "string",
-      componentID: 'string',
+      componentID: "string",
       year: null,
       quarter: null,
       hoursUsed: null,

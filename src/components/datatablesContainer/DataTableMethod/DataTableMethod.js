@@ -19,7 +19,6 @@ import {
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
-  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -82,7 +81,6 @@ export const DataTableMethod = ({
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
-      //returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
@@ -92,7 +90,6 @@ export const DataTableMethod = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
   }, [returnedFocusToLast]);
@@ -105,6 +102,20 @@ export const DataTableMethod = ({
   }, []);
 
   useEffect(() => {
+    const fetchMethods = async () => {
+      try {
+        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
+        setMethods(methods.data)
+        setDataLoaded(true)
+        const matsMethods = await mpApi.getMonitoringMatsMethods(locationSelectValue)
+        setMatsMethods(matsMethods.data)
+        setUpdateTable(false)
+        setRevertedState(false)
+        setUpdateRelatedTables(false)
+      } catch (error) {
+        console.log('error fetching methods', error);
+      }
+    }
     if (
       updateTable ||
       methods.length <= 0 ||
@@ -112,16 +123,7 @@ export const DataTableMethod = ({
       revertedState ||
       updateRelatedTables
     ) {
-      mpApi.getMonitoringMethods(locationSelectValue).then((methodRes) => {
-        setMethods(methodRes.data);
-        setDataLoaded(true);
-        mpApi.getMonitoringMatsMethods(locationSelectValue).then((matRes) => {
-          setMatsMethods(matRes.data);
-          setUpdateTable(false);
-          setRevertedState(false);
-          setUpdateRelatedTables(false);
-        });
-      });
+      fetchMethods()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -201,6 +203,18 @@ export const DataTableMethod = ({
             });
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
+          }
+          
+          // Modal focus resets to close button on setState
+          if (modalDetailData[4] === "mainDropdown") {
+            // Overrides the firstComponentFocusableElement.focus() in focus-trap
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            });
+            // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
+            setTimeout(() => {
+              document.getElementById(modalDetailData[1]).focus()
+            }, 1000);
           }
         }
       }

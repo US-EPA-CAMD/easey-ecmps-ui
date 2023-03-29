@@ -22,6 +22,7 @@ import { CreateOutlined, LockOpenSharp } from '@material-ui/icons';
 import * as mpApi from '../../utils/api/monitoringPlansApi';
 import { checkoutAPI } from '../../additional-functions/checkout';
 import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import QAImportModalSelect from '../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect';
 
 export const QACertEventHeaderInfo = ({
   facility,
@@ -60,7 +61,7 @@ export const QACertEventHeaderInfo = ({
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
-  const [selectedHistoricalData, setSelectedHistoricalData] = useState([]);
+  const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
   const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [refresherInfo, setRefresherInfo] = useState(null);
@@ -263,7 +264,7 @@ export const QACertEventHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
-      testSummaryData: selectedHistoricalData,
+      ...selectedHistoricalData,
     };
     importQABtn(payload);
     setShowImportDataPreview(false);
@@ -336,27 +337,16 @@ export const QACertEventHeaderInfo = ({
               {facilityMainName}
             </h3>
           </div>
-          {user && isCheckedOut && (
-            <div>
-              <Button
-                // className="padding-x-5"
-                type="button"
-                outline={false}
-                onClick={() => openSelectionTypeImportModal()}
-                id="importSelectionQAModal"
-              >
-                {importTestTitle}
-              </Button>
-              <Button
-                // className="float-right text-right bottom-0 text-no-wrap"
-                type="button"
-                id="showRevertModal"
-                outline={false}
-              >
-                Evaluate
-              </Button>
-            </div>
-          )}
+          {(user && isCheckedOut) &&
+            <Button
+              type="button"
+              outline={false}
+              onClick={() => openSelectionTypeImportModal()}
+              id="importSelectionQAModal"
+            >
+              {importTestTitle}
+            </Button>
+          }
         </div>
 
         <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
@@ -431,36 +421,7 @@ export const QACertEventHeaderInfo = ({
           </div>{' '}
           <div className="grid-col-3"></div>{' '}
         </div>
-        <div className="grid-row float-left">
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {'Test Data Report'}
-          </Button>
-          <Button
-            className="float-right text-right bottom-0 text-no-wrap "
-            type="button"
-            id="showRevertModal"
-            outline={true}
-          >
-            {'Test History Report'}
-          </Button>
-          {user ? (
-            <Button
-              className="float-right text-right bottom-0 text-no-wrap "
-              type="button"
-              id="showRevertModal"
-              outline={true}
-            >
-              {'Evaluation Report'}
-            </Button>
-          ) : (
-            ''
-          )}
-        </div>
+
       </div>
       <div
         className={`usa-overlay ${
@@ -486,6 +447,11 @@ export const QACertEventHeaderInfo = ({
             port={() => {
               openModalType(importTypeSelection);
             }}
+            children={
+              <QAImportModalSelect
+                setImportTypeSelection={setImportTypeSelection}
+              />
+            }
           />
         </div>
       ) : null}
@@ -580,6 +546,7 @@ export const QACertEventHeaderInfo = ({
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
+              showTestSummaryTable={false}
             />
           }
         />

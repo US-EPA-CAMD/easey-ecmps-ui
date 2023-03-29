@@ -15,14 +15,29 @@ export const secureAxios = async (options) => {
     if (sessionStorage.getItem("cdx_user")) {
       const token = await refreshToken();
 
-      options.headers = {
-        authorization: `Bearer ${token}`,
-        "x-api-key": config.app.apiKey,
-      };
+      if (options["headers"]) {
+        options.headers = {
+          ...options.headers,
+          authorization: `Bearer ${token}`,
+          "x-api-key": config.app.apiKey,
+        };
+      } else {
+        options.headers = {
+          authorization: `Bearer ${token}`,
+          "x-api-key": config.app.apiKey,
+        };
+      }
     } else {
-      options.headers = {
-        "x-api-key": config.app.apiKey,
-      };
+      if (options["headers"]) {
+        options.headers = {
+          ...options.headers,
+          "x-api-key": config.app.apiKey,
+        };
+      } else {
+        options.headers = {
+          "x-api-key": config.app.apiKey,
+        };
+      }
     }
   } catch (e) {
     displayAppError(e);
@@ -50,6 +65,17 @@ export const refreshClientToken = async () => {
 
     sessionStorage.setItem("client_token", response.data.token);
     sessionStorage.setItem("client_token_expiration", response.data.expiration);
+  } catch (err) {
+    displayAppError(err);
+  }
+};
+
+export const refreshLastActivity = async () => {
+  try {
+    await secureAxios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/authentication/update-last-activity`,
+    });
   } catch (err) {
     displayAppError(err);
   }

@@ -6,3 +6,4 @@ inactivityDurationCheckoutMinutes: 10
 inactivityDurationLogoutMinutes: 10
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
+enableSystemAdminstrationModule: true

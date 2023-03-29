@@ -76,6 +76,12 @@ export const config = {
         "REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES",
         15
       ) * oneMinute,
+
+    refreshLastActivityInterval:
+      getConfigValueNumber(
+        "REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL",
+        1
+      ) * oneMinute,
     cbsBaseUrl: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL",
       "https://camd.epa.gov"
@@ -102,6 +108,9 @@ export const config = {
     ),
     enableManageDelegations: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS"
+    ),
+    enableSystemAdminModule: getConfigValueBoolean(
+      "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE", true
     ),
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),

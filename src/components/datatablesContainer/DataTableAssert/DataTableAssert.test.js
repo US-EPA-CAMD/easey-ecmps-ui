@@ -16,9 +16,38 @@ import { authenticate } from "../../../utils/api/easeyAuthApi";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
+import {getMonitoringSpans, getLocationAttributes} from "../../../utils/api/monitoringPlansApi";
 import * as auth from "../../../utils/api/easeyAuthApi";
 
+
+// UseRetrieveDropdownApi()
+jest.mock("../../../additional-functions/retrieve-dropdown-api", ()=>({
+  ...jest.requireActual("../../../additional-functions/retrieve-dropdown-api"),
+  useRetrieveDropdownApi: jest.fn().mockResolvedValue({})
+}))
+
+jest.mock('../../../utils/api/monitoringPlansApi', () => ({
+  getMonitoringSpans: jest.fn(),
+  getMonitoringSystems: jest.fn(),
+  getLocationAttributes: jest.fn(),
+  saveSystems: jest.fn(),
+  createSystems: jest.fn(),
+  saveAnalyzerRanges: jest.fn(),
+  createAnalyzerRanges: jest.fn(),
+  saveSystemsFuelFlows: jest.fn(),
+  createSystemsFuelFlows: jest.fn(),
+  createSystemsComponents: jest.fn(),
+  saveSystemsComponents: jest.fn(),
+}));
+jest.mock('', () => ({
+  getDataTableApis: jest.fn(),
+  getDataTableRecords: jest.fn(),
+  saveDataSwitch: jest.fn(),
+  createDataSwitch: jest.fn(),
+}))
+jest.mock("../../../utils/api/easeyAuthApi", () => ({
+  authenticate: jest.fn(),
+}))
 const dropdownData = [
   {
     componentTypeCode: "BGFF",
@@ -330,11 +359,12 @@ describe("DataTableAssert", () => {
     jest.clearAllMocks();
   });
 
-  test("needed to run", () => {
-    expect(true);
-  });
+//   test("run without error", () => {
+//     // expect(true);
+//     render(<DataTableAssert {...props} />)
+// });
 
-  /*
+
 
   test("should fire test button", async () => {
     const spanData = [
@@ -390,19 +420,18 @@ describe("DataTableAssert", () => {
       },
     ];
 
-    jest.spyOn(auth, "secureAxios").mockResolvedValue({
-      status: 200,
-      data: spanData,
-    });
 
-    const spanDataReturned = await mpApi.getMonitoringSpans(6);
+    const mockGetMonitoringSpans = jest.fn().mockResolvedValue({data: spanData});
+    getMonitoringSpans.mockImplementation(() => mockGetMonitoringSpans());
+
+    const spanDataReturned = await getMonitoringSpans(6);
     expect(spanDataReturned.data).toEqual(spanData);
 
     let { container } = await waitForElement(() =>
       render(<DataTableAssert {...props} />)
     );
     const btns = screen.getAllByText("View");
-
+    authenticate.mockImplementation(()=>sessionStorage.setItem("cdx_user", JSON.stringify({})))
     await authenticate({});
     expect(sessionStorage.getItem("cdx_user")).toBe("{}");
     window.isDataChanged = true;
@@ -410,10 +439,11 @@ describe("DataTableAssert", () => {
     fireEvent.click(container.querySelector("#testingBtn2"));
     window.isDataChanged = false;
     fireEvent.click(container.querySelector("#testingBtn2"));
-    const val = 1;
-    expect(val === 1);
+    // const val = 1;
+    // expect(val === 1);
   });
 
+  /*
   test("conditional rendering of datatable asserts", async () => {
     const locationAttrData = [
       {
@@ -435,20 +465,18 @@ describe("DataTableAssert", () => {
         active: true,
       },
     ];
-    jest.spyOn(auth, "secureAxios").mockResolvedValue({
-      status: 200,
-      data: locationAttrData,
-    });
 
-    const locationAttrDataReturned = await mpApi.getLocationAttributes(5);
+    const mockGetLocationAttributes = jest.fn().mockResolvedValue({data: locationAttrData})
+    getLocationAttributes.mockImplementation(() => mockGetLocationAttributes())
+    const locationAttrDataReturned = await getLocationAttributes(5);
     expect(locationAttrDataReturned.data).toEqual(locationAttrData);
 
     let { container } = await waitForElement(() =>
       render(<DataTableAssert {...conditionalProps} />)
     );
-    const btns = screen.getAllByText("View");
+    const btns = screen.queryAllByText("View");
     // fireEvent.click(btns[0]);
-
+    authenticate.mockImplementation(()=>sessionStorage.setItem("cdx_user", JSON.stringify({})));
     await authenticate({});
     expect(sessionStorage.getItem("cdx_user")).toBe("{}");
 
@@ -472,5 +500,5 @@ describe("DataTableAssert", () => {
     // expect(loadDropdowns).toHaveBeenCalled();
   });
 
-  */
+*/
 });

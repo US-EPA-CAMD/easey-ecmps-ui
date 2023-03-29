@@ -1,16 +1,18 @@
 import React from "react";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import * as axios from "axios";
 import {
   mapStateToProps,
   mapDispatchToProps,
   DataTableLEEQualifications,
 } from "./DataTableLEEQualifications";
 
-jest.mock("axios");
 
 const selectedQualifications = [{}];
+
+jest.mock("../../../utils/api/easeyAuthApi", () => ({
+  secureAxios: jest.fn().mockResolvedValue({ data: [{}], status: 200 }),
+}));
 
 const locationSelectValue = 60;
 
@@ -48,11 +50,7 @@ const componentRenderer = (
   return render(<DataTableLEEQualifications {...props} />);
 };
 
-/*
 test("tests getMonitoringQualifications", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
   const title = await mpApi.getQualifications(locationSelectValue);
   expect(title.data).toEqual(selectedQualifications);
 
@@ -68,9 +66,6 @@ test("tests getMonitoringQualifications", async () => {
 });
 
 test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
   const title = await mpApi.getQualifications(locationSelectValue);
   expect(title.data).toEqual(selectedQualifications);
 
@@ -79,7 +74,6 @@ test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
   );
   expect(container).toBeDefined();
 });
-*/
 
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object

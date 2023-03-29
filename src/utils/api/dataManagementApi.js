@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handleResponse, handleError } from "./apiUtils";
 import config from "../../config";
+import { secureAxios } from "./easeyAuthApi";
 
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
@@ -450,7 +451,7 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
   }
 
   let monitoringSystemUrl = `${url}/locations/${locationId}/systems`;
-  return axios.get(monitoringSystemUrl).then((response) => {
+  return secureAxios({method: "GET", url: monitoringSystemUrl}).then((response) => {
     const actualResponse = response;
     const dataArray = [];
     response.data.map((monitorCode) => {
@@ -500,12 +501,12 @@ export const getAllAccuracySpecCodes = async () => {
 export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
   const data = [
     {
-      calculatedSeparateReferenceIndicatorCode: '0',
-      calculatedSeparateReferenceIndicatorDescription: '0'
+      calcSeparateReferenceIndicatorCode: '0',
+      calcSeparateReferenceIndicatorDescription: '0'
     },
     {
-      calculatedSeparateReferenceIndicatorCode: '1',
-      calculatedSeparateReferenceIndicatorDescription: '1'
+      calcSeparateReferenceIndicatorCode: '1',
+      calcSeparateReferenceIndicatorDescription: '1'
     }
   ]
   return Promise.resolve({ status: 200, data })
@@ -514,7 +515,14 @@ export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
 export const getRataTestNumber = async (locationId) => {
   const testSummaryUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
   const testSummaryWorkspaceUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
-  const testSummaries = await Promise.all([axios.get(testSummaryUrl), axios.get(testSummaryWorkspaceUrl)])
+  const testSummaries = await Promise.all([
+    secureAxios({
+      method: "GET",
+      url: testSummaryUrl,
+    }), secureAxios({
+      method: "GET",
+      url: testSummaryWorkspaceUrl,
+    })])
   const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data]
   const rataTestNumbers = allTestSummaries.map(testSummary => {
     const testNumber = testSummary.testNumber

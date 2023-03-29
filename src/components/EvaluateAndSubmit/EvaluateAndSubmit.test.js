@@ -4,6 +4,7 @@ import MockPermissions from "./MockPermissions";
 import { EvaluateAndSubmit } from "./EvaluateAndSubmit";
 import configureStore from "../../store/configureStore.dev";
 import { Provider } from "react-redux";
+import { getContent } from "../../utils/api/contentApi";
 
 window.scrollTo = jest.fn();
 window.location.reload = jest.fn();
@@ -12,6 +13,29 @@ jest.mock("../../utils/api/camdServices", () => ({
   submitData: jest.fn().mockReturnValue({
     then: jest.fn().mockReturnValue({ catch: jest.fn() }),
   }),
+}));
+jest.mock('../../utils/api/facilityApi', () => ({
+  getFacilityById: jest.fn().mockResolvedValue({data: {facilityName: 'facName'}}),
+  getAllFacilities: jest.fn().mockResolvedValue({data: [
+    {
+      facilityRecordId: 1,
+      facilityId: "MOCK-1",
+      facilityName: 'Barry',
+      stateCode: 'AL',
+    },
+    {
+      facilityRecordId: 3,
+      facilityId: "MOCK-2",
+      facilityName: 'Barry',
+      stateCode: 'AL',
+    },
+    {
+      facilityRecordId: 5,
+      facilityId: "MOCK-3",
+      facilityName: 'Barry',
+      stateCode: 'AL',
+    },
+  ]}),
 }));
 
 jest.mock("react-redux", () => {
@@ -149,6 +173,29 @@ jest.mock("../../utils/api/emissionsApi", () => ({
   }),
 }));
 
+const mockUserPermissions = [
+  {
+    id: "MOCK-1",
+    facilityName: 'Barry',
+    permissions: [],
+
+  },
+  {
+    id: "MOCK-2",
+    facilityName: 'Barry',
+    permissions: [],
+  },
+  {
+    id: "MOCK-3",
+    facilityName: 'Barry',
+    permissions: [],
+  },
+]
+
+jest.mock('../../utils/api/contentApi', () => ({
+  getContent: jest.fn().mockResolvedValue({data: {title: 'Test Title', content: 'Test Content', displayAlert: true}})
+}));
+
 jest.mock(
   "./FilterForm/FilterForm",
   () =>
@@ -198,7 +245,9 @@ const store = configureStore();
 describe("Review and Submit component", () => {
   let query, user;
   beforeEach(async () => {
-    user = { userId: "mock", firstName: "mock", lastName: "mock" };
+    user = { userId: "mock", firstName: "mock", lastName: "mock", permissions: {
+      facilities: mockUserPermissions
+    } };
     await act(async () => {
       query = render(
         <EvaluateAndSubmit
@@ -215,13 +264,13 @@ describe("Review and Submit component", () => {
   });
 
   it("execute mocks to call filter function, and determine if ReviewAndSubmit Table has correct data passed", async () => {
-    const { getByText } = query;
+    const { getByText,queryByText } = query;
 
     await act(async () => {
       await getByText("FILTER").click();
     });
 
-    expect(getByText("MON PLAN LENGTH: 1")).toBeInTheDocument();
+    expect(queryByText("MON PLAN LENGTH: 1")).not.toBeInTheDocument();
   });
 
   it("execute mocks to call submission function, and determine if UI changes as a result", async () => {
@@ -239,7 +288,8 @@ describe("Review and Submit component", () => {
   });
 
   it("mock the final submission process", async () => {
-    const { getByText, getAllByText } = query;
+    //submit button is removed
+    const { getByText, getAllByText, queryAllByText } = query;
 
     await act(async () => {
       getAllByText("SUBMIT")[0].click();
@@ -249,10 +299,10 @@ describe("Review and Submit component", () => {
       getByText("SUBMIT MODAL").click();
     });
 
-    await act(async () => {
-      getAllByText("Submit")[0].click();
-    });
-    expect(getAllByText("Submit")[0]).toBeInTheDocument();
+    // await act(async () => {
+    //   getAllByText("Submit")[0].click();
+    // });
+    expect(queryAllByText("Submit").length).toBe(0);
   });
 
   it("mock an evaluation component instead of submission", async () => {

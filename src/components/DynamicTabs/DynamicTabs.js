@@ -1,11 +1,12 @@
 import React, { useState, cloneElement } from "react";
 import { connect } from "react-redux";
-import { Tabs } from "../Tabs/Tabs";
+import Tabs from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
 import {
   addFacilityTab,
   removeFacilityTab,
   setActiveTab,
+  setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 
 import {
@@ -13,6 +14,7 @@ import {
   EXPORT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
+import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 
 export const DynamicTabs = ({
   tabsProps,
@@ -23,6 +25,9 @@ export const DynamicTabs = ({
   setMostRecentlyCheckedInMonitorPlanId,
   mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
+  setCurrentTabIndex,
+  currentTabIndex,
+  setCheckout,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -48,9 +53,10 @@ export const DynamicTabs = ({
     setTabs([...tabs]);
 
     setTimeout(() => {
-      document
-        .querySelectorAll(".tab-button")
-        [document.querySelectorAll(".tab-button").length - 1].focus();
+      const elems = document.querySelectorAll(".tab-button")
+      if (elems.length > 0) {
+        elems[elems.length - 1].focus();
+      }
     });
   };
 
@@ -59,6 +65,13 @@ export const DynamicTabs = ({
     tabs.splice(index, 1);
     removeFacility(index, workspaceSection);
     setTabs([...tabs]);
+
+    setTimeout(() => {
+      const elems = document.querySelectorAll(".tab-button")
+      if (elems.length > 0) {
+        elems[elems.length - 1].focus();
+      }
+    });
 
     // },100)
   };
@@ -71,6 +84,9 @@ export const DynamicTabs = ({
           tabProps={tabs}
           user={user}
           workspaceSection={workspaceSection}
+          currentTabIndex={currentTabIndex}
+          setCheckout={setCheckout}
+          setCurrentTabIndex={setCurrentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -102,6 +118,9 @@ export const DynamicTabs = ({
             setMostRecentlyCheckedInMonitorPlanId
           }
           workspaceSection={workspaceSection}
+          currentTabIndex={currentTabIndex}
+          setCheckout={setCheckout}
+          setCurrentTabIndex={setCurrentTabIndex}
         >
           {tabs &&
             tabs.map((tab, i) => (
@@ -127,6 +146,12 @@ export const DynamicTabs = ({
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    currentTabIndex: state.currentTabIndex,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     removeFacility: (facility, workspaceSection) =>
@@ -137,12 +162,27 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         addFacilityTab(facility, convertSectionToStoreName(workspaceSection))
       ),
-      setActive: (facility, workspaceSection) =>
+    setActive: (facility, workspaceSection) =>
       dispatch(
         setActiveTab(facility, convertSectionToStoreName(workspaceSection))
       ),
+    setCheckout: (value, configID, workspaceSection) =>
+      dispatch(
+        setCheckoutState(
+          value,
+          configID,
+          convertSectionToStoreName(workspaceSection)
+        )
+      ),
+    setCurrentTabIndex: (value) => 
+      dispatch(
+        setCurrentTabIndex(
+          value
+        )
+      )
   };
 };
 
-export default connect(null, mapDispatchToProps)(DynamicTabs);
+export default connect(mapStateToProps, mapDispatchToProps)(DynamicTabs);
 export { mapDispatchToProps };
+export { mapStateToProps };
