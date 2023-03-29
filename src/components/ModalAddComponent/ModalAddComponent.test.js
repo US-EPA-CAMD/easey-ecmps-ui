@@ -39,9 +39,9 @@ const componentRenderer = (back) => {
 test("renders ModalAddComponent with back button", async () => {
   let { container } = await waitForElement(() => componentRenderer(true));
 
-  const backBtn = await screen.findByRole('button', { name: /Back/i });
-  expect(backBtn).toBeEnabled();
-  userEvent.click(backBtn);
+  const backBtn = await screen.findAllByRole('button', { name: /Back/i });
+  expect(backBtn[0]).toBeEnabled();
+  userEvent.click(backBtn[0]);
 
   expect(container).toBeDefined();
 });
