@@ -32,7 +32,7 @@ export const DefaultTemplate = ({
         {
           codeGroups.filter(x => x.items.length > 0).map(group => {
             return (
-              <>
+              <div key={group.name}>
                 <hr />
                 <div className="display-flex grid-col-12" key={group.name}>
                   <div className="grid-col-3 text-bold text-no-wrap padding-right-1">{`${group.name}:`}</div>
@@ -46,7 +46,7 @@ export const DefaultTemplate = ({
                     }
                   </div>
                 </div>
-              </>
+              </div>
             )
           })
         }
