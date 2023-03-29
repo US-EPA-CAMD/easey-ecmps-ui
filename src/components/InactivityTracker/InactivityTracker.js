@@ -52,7 +52,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const handleInterval = useCallback(async () => {
     // checkInactivity
     if (timeInactive > inactiveDuration) {
-      // await logOut();
+      await logOut();
       return;
     }
 
