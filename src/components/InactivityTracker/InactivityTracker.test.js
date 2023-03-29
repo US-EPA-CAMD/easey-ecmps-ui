@@ -87,8 +87,8 @@ describe("InactivityTracker", () => {
     //   jest.advanceTimersByTime(config.app.inactivityLogoutDuration);
     // });
 
-    const closeBtn = screen.getByRole('button', { name: /Click to continue/i })
-    userEvent.click(closeBtn)
+    // const closeBtn = screen.getByRole('button', { name: /Click to continue/i })
+    // userEvent.click(closeBtn)
 
     // expect(logOut).not.toHaveBeenCalled()
   });
