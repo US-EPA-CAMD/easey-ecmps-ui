@@ -49,6 +49,7 @@ import {
   displayReport,
   getPreviouslyFullSubmitedQuarter,
   getQuarter,
+  formatErrorResponse,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
@@ -59,7 +60,7 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
-import { handleError } from "../../utils/api/apiUtils";
+import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
   hideAppError,
@@ -377,6 +378,7 @@ export const HeaderInfo = ({
     }
 
     await Promise.allSettled(promises);
+
   };
 
   const formatCommentsToTable = (data) => {
@@ -681,8 +683,9 @@ export const HeaderInfo = ({
       .importMP(payload)
       .then((response) => {
         setIsLoading(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
         }
       })
       .catch((err) => {
@@ -828,10 +831,17 @@ export const HeaderInfo = ({
     }
   };
 
-  const handleExport = () => {
-    if (workspaceSection === EMISSIONS_STORE_NAME) handleEmissionsExport();
-    if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-      mpApi.exportMonitoringPlanDownload(configID);
+  const handleExport = async () => {
+    try{
+      setDataLoaded(false);
+      if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
+      if (workspaceSection === MONITORING_PLAN_STORE_NAME)
+        await mpApi.exportMonitoringPlanDownload(configID);
+      setDataLoaded(true);
+    }catch(error){
+      setDataLoaded(true);
+      console.error(error)
+    }
   };
 
   const onChangeOfEmissionsImportType = (e) => {

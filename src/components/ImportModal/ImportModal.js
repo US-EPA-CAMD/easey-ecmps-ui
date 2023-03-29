@@ -171,7 +171,6 @@ const ImportModal = ({
       setHasInvalidJsonError(false);
     }
   };
-  // && typeof importedFileErrorMsgs.data.message === "string"
 
   return (
     <div className="import-modal-container">
