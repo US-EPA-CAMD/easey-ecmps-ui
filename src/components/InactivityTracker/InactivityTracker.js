@@ -15,7 +15,8 @@ import "./InactivityTracker.scss"
 const modalClassName = "modal-wrapper bg-base-lightest radius-md";
 const modalContext = createContext(null);
 const widthPercent = 50;
-const showCancel = true;
+const inactiveDuration = config.app.inactivityDuration;
+const countDownDuration = config.app.countdownDuration;
 
 export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   const [timeInactive, setTimeInactive] = useState(0);
@@ -49,13 +50,9 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
   }, []);
 
   const handleInterval = useCallback(async () => {
-    const inactiveDuration = isFacilityCheckedOut()
-      ? config.app.inactivityDuration
-      : config.app.inactivityLogoutDuration;
-
     // checkInactivity
-    if (timeInactive >= inactiveDuration) {
-      await logOut();
+    if (timeInactive > inactiveDuration) {
+      // await logOut();
       return;
     }
 
@@ -127,7 +124,7 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                   <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
                     <div>
                       <CountdownTimer
-                        duration={config.app.countdownDuration / 1000}
+                        duration={countDownDuration}
                         countdownExpired={async () => {
                           resetUserInactivityTimer();
                           await logOut();
@@ -136,19 +133,27 @@ export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
                     </div>
                   </div>
                   <span className="break-line" />
-                  <div className="modal-footer  ">
-                    {showCancel ? (
-                      <Button
-                        type="button"
-                        onClick={resetUserInactivityTimer}
-                        title="Click to close"
-                        epa-testid="closeBtn"
-                        className="float-left"
-                        aria-live="off"
-                      >
-                        {"Close"}
-                      </Button>
-                    ) : null}
+                  <div className="modal-footer">
+                    <Button
+                      type="button"
+                      onClick={logOut}
+                      title="Click to Sign out"
+                      epa-testid="signOutBtn"
+                      className="float-right margin-2"
+                      aria-live="off"
+                    >
+                      Log Out
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={resetUserInactivityTimer}
+                      title="Click to continue"
+                      epa-testid="closeBtn"
+                      className="float-right margin-2"
+                      aria-live="off"
+                    >
+                      Continue
+                    </Button>
                   </div>
                 </div>
               </div>

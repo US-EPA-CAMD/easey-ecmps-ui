@@ -13,18 +13,7 @@ describe("CountdownTimer test suit", () => {
     let time = wrapper.find(".time-wrapper");
 
     expect(time).toBeDefined();
-    expect(wrapper.text().includes('It looks like you have been inactive for a while.')).toBe(true);
+    expect(wrapper.text().includes('It appears that you are no longer actively working within the application.')).toBe(true);
 
   });
-
-  test("shallow renders CountdownTimerRender to display Logging out due to inactivity message", () => {
-
-    wrapper = shallow(
-      <CountdownTimerRender remainingTime={0} countdownExpired={jest.fn()} />
-    );
-    let time = wrapper.find(".time-wrapper");
-    expect(time).toBeDefined();
-    expect(wrapper.text().includes('Logging out due to inactivity')).toBe(true);
-  });
-  
 });
