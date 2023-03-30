@@ -85,7 +85,7 @@ export const Report = ({
         const columnNumber = `"col${index + 1}": `;
         if (columnValue !== null && columnValue !== undefined) {
           if (columnValue.includes('"')) {
-            return `${columnNumber}"${columnValue.replace('"', '\\"')}"`;
+            return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
           }
           return `${columnNumber}"${columnValue}"`;
         }
