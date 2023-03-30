@@ -18,6 +18,7 @@ export const ExportTab = ({
   setExportState,
   workspaceSection,
 }) => {
+
   const [isExporting, setIsExporting] = useState(false);
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -50,6 +51,7 @@ export const ExportTab = ({
   const rowsData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
+
     const dataTypesCopy = [...dataTypes];
     const index = dataTypesCopy.findIndex((d) => d.name === e.target.name);
     if (index > -1) {
@@ -68,7 +70,7 @@ export const ExportTab = ({
       workspaceSection
     );
 
-    if(previewOptions && !dataTypesCopy[index].checked){
+    if(e.target.name === qa && !dataTypesCopy[index].checked){
       setPreviewOptions(undefined);
     }
       
@@ -92,7 +94,7 @@ export const ExportTab = ({
     const { id, beginDate, calendarYear, endDate, quarter } =
       reportingPeriodObj;
     setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
-    if (exportState) {
+    if (exportState && exportState?.checkedDataTypes.includes(qa)) {
       setPreviewOptions({ beginDate, endDate });
     }
   };
@@ -219,7 +221,7 @@ export const ExportTab = ({
             </Button>
           </div>
         </div>
-        {previewOptions && (
+        {previewOptions ? (
           <>
             <ExportTablesContainer
               tableTitle={'Test Summary'}
@@ -256,7 +258,7 @@ export const ExportTab = ({
             />
           </>
 
-        )}
+        ) : null}
         <div className="border-top-1px border-base-lighter padding-y-2">
           <Button
             type={"button"}
