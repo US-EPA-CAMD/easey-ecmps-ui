@@ -2542,7 +2542,7 @@ describe("testing ImportModal component ", () => {
     const { container, findByText, getByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
-        complete={true}
+        complete={false}
         setFileName={jest.fn()}
         fileName={"test"}
         setHasFormatError={jest.fn()}
@@ -2571,11 +2571,6 @@ describe("testing ImportModal component ", () => {
         files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
       }
     });
-    // Object.defineProperty(fileInput, 'files', { value: [fakeFile] });
-    // fireEvent.input(fileInput)
-    //fireEvent.change(fileInput, { target: { files: [fakeFile] }})
-    // fireEvent.input(fileInput)
-    //screen.debug();
   });
 
   test("renders the content of ImportModal component with EMISSIONS_STORE_NAME", async() => {
