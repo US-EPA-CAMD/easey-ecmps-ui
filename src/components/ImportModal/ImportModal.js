@@ -236,69 +236,6 @@ const ImportModal = ({
       {content}
     </div>
   );
-
-
-  return (
-    <div className="import-modal-container">
-      {complete &&
-        importedFileErrorMsgs !== undefined &&
-        importedFileErrorMsgs !== null &&
-        successResponses.includes(importedFileErrorMsgs.status) ? (
-        <span id="fileName">{fileName}</span>
-      ) : complete && importedFileErrorMsgs?.length > 0 ? (
-        <div className="overflow-y-auto maxh-mobile">
-          <div className="padding-right-2 padding-left-3 " aria-live="polite">
-            {" "}
-            {importedFileErrorMsgs.map((error, i) => (
-              <Alert
-                type="error"
-                slim
-                noIcon
-                key={`${i}-${error}`}
-                role="alert"
-              >
-                {error}
-              </Alert>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          {schemaErrors.length > 0 ? (
-            <div className="overflow-y-auto maxh-mobile">
-              <div
-                className="padding-right-2 padding-left-3 "
-                aria-live="polite"
-              >
-                {schemaErrors.map((error, i) => (
-                  <Alert
-                    type="error"
-                    slim
-                    noIcon
-                    key={`${i}-${error}`}
-                    role="alert"
-                  >
-                    {error}
-                  </Alert>
-                ))}
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-          <FormGroup>
-            <Label htmlFor="file-input-single">{label}</Label>
-            <FileInput
-              id="file-input-single"
-              name="file-input-single"
-              onChange={onChangeHandler}
-            />
-          </FormGroup>
-        </div>
-      )}
-      {/* need to center in modal */}
-    </div>
-  );
 };
 
 export default ImportModal;
