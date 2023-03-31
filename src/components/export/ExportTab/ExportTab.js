@@ -67,6 +67,11 @@ export const ExportTab = ({
       },
       workspaceSection
     );
+
+    if(previewOptions && !dataTypesCopy[index].checked){
+      setPreviewOptions(undefined);
+    }
+      
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -94,6 +99,7 @@ export const ExportTab = ({
 
   const exportClickHandler = async () => {
     setIsExporting(true);
+    setLoading(true);
     let exportFileName;
     const promises = [];
 
@@ -127,6 +133,7 @@ export const ExportTab = ({
 
     await Promise.all(promises);
     setIsExporting(false);
+    setLoading(false);
   };
 
   const isExportDisabled = () => {

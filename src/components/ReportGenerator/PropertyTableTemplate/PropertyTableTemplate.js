@@ -23,21 +23,23 @@ export const PropertyTableTemplate = ({
         {
           columnGroups.map((columnGroup, index) => {
             return (
-              <table className="grid-col-4 desktop:grid-col-3" key={`${columnGroup.code}-col-grp-${index}`}>
-                {
-                  columnGroup.map(column => {
-                    return (
-                      <tr key={column.name}>
-                        <td className="text-bold text-no-wrap grid-col-2 desktop:grid-col-1">
-                          {column.displayName}:
-                        </td>
-                        <td className="text-no-wrap grid-col-2 desktop:grid-col-1">
-                          {data[column.name]}
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
+              <table className="grid-col-4 desktop:grid-col-3" key={`col-grp-${index}`}>
+                <tbody>
+                  {
+                    columnGroup.map(column => {
+                      return (
+                        <tr style={{ height: `${100.00/columnGroup.length}%` }} key={column.name}>
+                          <td className="text-bold text-no-wrap grid-col-2 desktop:grid-col-1">
+                            {column.displayName !== 'HIDDEN' ? column.displayName : '' }
+                          </td>
+                          <td className="text-no-wrap grid-col-2 desktop:grid-col-1">
+                            {data[column.name] ?? ''}
+                          </td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
               </table>
             )
           })
