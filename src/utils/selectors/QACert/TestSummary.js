@@ -444,7 +444,7 @@ export const mapCalibrationInjectionsToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.onLineOffLineIndicator === 1 ? "Yes" : "No",
+      col1: el.onlineOfflineIndicator === 1 ? "Yes" : "No",
       col2: el.upscaleGasLevelCode,
       col3: el.zeroInjectionDate,
       col4: el.zeroInjectionHour,
