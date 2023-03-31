@@ -120,7 +120,8 @@
 }
 
 .rdt_TableRow:nth-child(odd) {
-  background-color: $epa-off-white !important;
+  background-color: $epa-off-white;
+  border: none !important;
 }
 .rdt_TableRow:nth-child(even) {
   background-color: $epa-white !important;

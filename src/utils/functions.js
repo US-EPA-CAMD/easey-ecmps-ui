@@ -141,20 +141,15 @@ export const reportWindowParams = [
   //`fullscreen=yes`,
 ].join(",");
 
-export const formatReportUrl = (
-  reportCode,
-  facilityId,
-  monPlanId = null,
-  testId = null,
-  qceId = null,
-  teeId = null,
-) => {
-  const tee = teeId ? `&teeId=${teeId}` : "";
-  const qce = qceId ? `&qceId=${qceId}` : "";  
-  const test = testId ? `&testId=${testId}` : "";
-  const facility = facilityId ? `&facilityId=${facilityId}` : "";
-  const monitorPlan = monPlanId ? `&monitorPlanId=${monPlanId}` : "";
-  let url = `/reports?reportCode=${reportCode}${facility}${monitorPlan}${test}${qce}${tee}`;
+export const formatReportUrl = (params) => {
+  const year = params.year ? `&year=${params.year}` : "";
+  const tee = params.teeId ? `&teeId=${params.teeId}` : "";
+  const qce = params.qceId ? `&qceId=${params.qceId}` : "";  
+  const test = params.testId ? `&testId=${params.testId}` : "";
+  const quarter = params.quarter ? `&quarter=${params.quarter}` : "";  
+  const facility = params.facilityId ? `&facilityId=${params.facilityId}` : "";
+  const monitorPlan = params.monitorPlanId ? `&monitorPlanId=${params.monitorPlanId}` : "";
+  let url = `/reports?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
 
   if (window.location.href.includes('/workspace')) {
     return url.replace('/reports', '/workspace/reports');
@@ -163,22 +158,21 @@ export const formatReportUrl = (
   return url;
 }
 
-export const displayReport = (
-  reportCode,
-  facilityId,
-  monPlanId = null,
-  testId = null,
-  qceId = null,
-  teeId = null,
-) => {
+export const displayReport = (params) => {
   let reportTitle;
 
-  switch (reportCode) {
+  switch (params.reportCode) {
     case "QCE":
       reportTitle = "QA/Cert Events Printout";
       break;
+    case "QCE_EVAL":
+      reportTitle = "QA/Cert Events Evaluation";
+      break;
     case "TEE":
-      reportTitle = "Test Extensions and Exemptions Printout";
+      reportTitle = "Test Ext/Exemptions Printout";
+      break;
+    case "TEE_EVAL":
+      reportTitle = "Test Ext/Exemptions Evaluation";
       break;
     case "MPP":
       reportTitle = "Monitoring Plan Printout";
@@ -186,18 +180,23 @@ export const displayReport = (
     case "MP_EVAL":
       reportTitle = "Monitoring Plan Evaluation";
       break;
+    case "TEST_EVAL":
+      reportTitle = "QA/Cert Test Evaluation";
+      break;
     case "TEST_DETAIL":
       reportTitle = "QA/Cert Test Detail";
       break;
+    case "EM_EVAL":
+      reportTitle = "Emissions Evaluation";
+      break;
     default:
-      reportTitle = "Not a valid Report";
+      reportTitle = null;
       break;
   }
 
-  const url = formatReportUrl(
-    reportCode, facilityId, monPlanId, testId, qceId, teeId
-  );
-  window.open(url, `ECMPS ${reportTitle} Report`, reportWindowParams);
+  reportTitle += ' Report';
+  const url = formatReportUrl(params);
+  window.open(url, reportTitle ?? 'ECMPS Report', reportWindowParams);
 };
 
 export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);
@@ -289,4 +288,14 @@ export const formatHourString = hour => {
     return ''
   }
   return String(hour).padStart(2, '0');
+}
+
+/**
+ * Formats errored response into list of strings
+ * @param {*} errorResp 
+ * @returns 
+ */
+export const formatErrorResponse = errorResp => {
+  const errorMsgs = Array.isArray(errorResp) ? errorResp : [JSON.stringify(errorResp)]
+  return errorMsgs
 }

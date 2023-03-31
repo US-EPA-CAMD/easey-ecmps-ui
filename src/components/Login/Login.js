@@ -134,7 +134,7 @@ const Login = ({ isModal, source }) => {
               data-test="component-login-username"
               id={usernameText}
               name={usernameText}
-              type={username ? "text" : "password"}
+              type="text"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />

@@ -77,7 +77,7 @@ export const UploadModal = ({
     // * clean up
     return () => {
       document.removeEventListener("keydown", handleKeyPress);
-      const importBtn = document.getElementById("importBtn")
+      const importBtn = document.getElementById("importBtn");
       if (importBtn) {
         importBtn.focus();
       }
@@ -165,7 +165,7 @@ export const UploadModal = ({
                           ) : (
                             <div className="left-2 bottom-0 padding-x-5 padding-top-2">
                               <h2 className="text-bold">{title}</h2>
-                              {showSeparators && (<hr/>)}
+                              {showSeparators && <hr />}
                             </div>
                           )}
                         </div>
@@ -203,7 +203,7 @@ export const UploadModal = ({
                     } `}
                   >
                     {children}
-                    {showSeparators && <hr/>}
+                    {showSeparators && <hr />}
                   </div>
                   {complete && hasErrors ? (
                     <div className="padding-x-8">
@@ -250,7 +250,9 @@ export const UploadModal = ({
                           epa-testid="importBtn"
                           id="importBtn"
                           data-testid="importBtn"
-                          className={`margin-right-2 ${!showImport && "visibility-hidden"}`}
+                          className={`margin-right-2 ${
+                            !showImport && "visibility-hidden"
+                          }`}
                           disabled={disablePortBtn}
                         >
                           {mainBTN ? mainBTN : "Import"}
