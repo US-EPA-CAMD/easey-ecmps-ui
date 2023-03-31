@@ -517,7 +517,7 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {/* {finalSubmitStage && (
+        {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -527,7 +527,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )} */}
+        )}
       </div>
     </div>
   );
