@@ -64,6 +64,7 @@ export const DataTableMats = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const selectText = "-- Select a value --";
+  const [errorMsgs, setErrorMsgs] = useState([])
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
@@ -185,46 +186,50 @@ export const DataTableMats = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 
-  const saveMats = () => {
+  const saveMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveMonitoringMats(userInput)
-        .then((result) => {
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          setShow(false);
-        });
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await mpApi.saveMonitoringMats(userInput);
+      if (resp.status === 200) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
-  const createMats = () => {
+  const createMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     if (
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createMats(userInput)
-        .then((result) => {
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          setShow(false);
-        });
+      setErrorMsgs([needEndDate])
+      return;
+    }
+    try {
+      const resp = await mpApi.createMats(userInput);
+      if (resp.status === 201) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)])
     }
   };
 
@@ -347,6 +352,7 @@ export const DataTableMats = ({
   };
 
   const executeOnClose = () => {
+    setErrorMsgs([])
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
@@ -381,6 +387,7 @@ export const DataTableMats = ({
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
           exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>

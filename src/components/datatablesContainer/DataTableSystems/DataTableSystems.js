@@ -42,6 +42,7 @@ import {
   cleanupFocusEventListeners,
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
+import { successResponses } from "../../../utils/api/apiUtils";
 
 export const DataTableSystems = ({
   mdmData,
@@ -380,8 +381,9 @@ export const DataTableSystems = ({
     }
     try {
       const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id);
-      if (resp.status === 200) {
+      if (successResponses.includes(resp.status)) {
         setUpdateSystemTable(true);
+        executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -390,6 +392,7 @@ export const DataTableSystems = ({
       setErrorMsgs([JSON.stringify(error)])
     }
   };
+
   const createSystems = async () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
     if (
@@ -401,11 +404,10 @@ export const DataTableSystems = ({
     }
     try {
       const resp = await mpApi.createSystems(userInput, locationSelectValue);
-      if (resp.status === 201) {
+      if (successResponses.includes(resp.status)) {
         setSecondLevel(false);
         setUpdateSystemTable(true);
-        // setCreateNewSystem(false);
-        // setShow(false);
+        executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);

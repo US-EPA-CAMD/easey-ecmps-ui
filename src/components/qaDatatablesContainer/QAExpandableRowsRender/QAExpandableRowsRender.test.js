@@ -1029,7 +1029,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
     const cycleInjectionData = [
       {
         "id": "string",
-        "onLineOffLineIndicator": 0,
+        "onlineOfflineIndicator": 0,
         "upscaleGasLevelCode": "string",
         "zeroInjectionDate": "2022-11-10T21:03:31.847Z",
         "zeroInjectionHour": 0,
@@ -1048,7 +1048,7 @@ describe('Test cases for QAExpandableRowsRender', () => {
       },
       {
         "id": "string2",
-        "onLineOffLineIndicator": 0,
+        "onlineOfflineIndicator": 0,
         "upscaleGasLevelCode": "string",
         "zeroInjectionDate": "2022-11-10T21:03:31.847Z",
         "zeroInjectionHour": 0,

@@ -1094,7 +1094,7 @@ export const qaCalibrationInjectionProps = () => {
       "Upscale Reference Value",
     ],
     controlInputs: {
-      onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
+      onlineOfflineIndicator: ["Online Offline Indicator", "radio", "", ""],
       upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
       zeroMeasuredValue: ["Zero Measured Value", "input", "", ""],
       upscaleMeasuredValue: ["Upscale Measured Value", "input", "", ""],
@@ -1134,7 +1134,7 @@ export const qaCalibrationInjectionProps = () => {
       ],
     },
     radioBtnPayload: [
-      "onLineOffLineIndicator",
+      "onlineOfflineIndicator",
       "zeroAPSIndicator",
       "upscaleAPSIndicator",
     ],
