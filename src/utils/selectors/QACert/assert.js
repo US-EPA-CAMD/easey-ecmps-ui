@@ -2,8 +2,6 @@ import * as qaApi from "../../api/qaCertificationsAPI";
 
 // Selectors that normalize api data to fit the columns in UI datatable
 import * as selector from "./TestSummary";
-import * as injectionSelector from "./LinearityInjection";
-import * as cycleTimeInjections from "./CycleTimeInjection";
 // Table Names
 const proGas = "Protocol Gas";
 const lineTest = "Linearity Test";
@@ -246,7 +244,7 @@ export const getDataTableRecords = (dataIn, name) => {
     case proGas:
       return selector.getProtocolGasRecords(dataIn);
     case lineInjection:
-      return injectionSelector.getLinearityInjection(dataIn);
+      return selector.getLinearityInjection(dataIn);
     case rataData:
       return selector.getRataDataRecords(dataIn);
     case rataRunData:
@@ -284,7 +282,7 @@ export const getDataTableRecords = (dataIn, name) => {
     case cycleTimeSummary:
       return selector.mapCycleTimeSummariesToRows(dataIn);
     case cycleTimeInjection:
-      return cycleTimeInjections.mapCycleTimeInjectionsToRows(dataIn);
+      return selector.mapCycleTimeInjectionsToRows(dataIn);
     case transmitterTransducerAccuracyData:
       return selector.mapTransmitterTransducerAccuracyDataToRows(dataIn);
     case flowToLoadReference:

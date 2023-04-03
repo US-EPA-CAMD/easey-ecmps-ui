@@ -566,4 +566,57 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapHgSummaryDataToRows(data)).toEqual(records);
   });
+  test("mapCycleTimeInjectionsToRows", () => {
+    const data = [
+      {
+        id: "ab681a06-0fd9-4d30-a208-421bcd62a554",
+        gasLevelCode: "HIGH",
+        calibrationGasValue: 1.000,
+        beginDate: "2008-10-14",
+        beginHour: 4,
+        beginMinute: 6,
+        endDate: "2008-10-14",
+        endHour: 8,
+        endMinute: 10,
+        injectionCycleTime: 12,
+        beginMonitorValue: 0.000,
+        endMonitorValue: 400.678
+      },
+    ];
+    const records = [
+      {
+        id: 'ab681a06-0fd9-4d30-a208-421bcd62a554',
+        col1: "HIGH",
+        col2: 1,
+        col3: "2008/10/14 04:06",
+        col4: "2008/10/14 08:10",
+        col5: 12,
+        col6: 0,
+        col7: 400.678
+      },
+    ];
+    expect(fs.mapCycleTimeInjectionsToRows(data)).toEqual(records);
+  });
+  test("getLinearityInjection", () => {
+    const data = [
+      {
+        id: "ab681a06-0fd9-4d30-a208-421bcd62a554",
+        linSumId: "668a63e8-6491-4d13-9594-e0e4ad830b82",
+        injectionDate: "2022-08-01",
+        injectionHour: 9,
+        injectionMinute: 9,
+        measuredValue: 1.001,
+        referenceValue: 1,
+      },
+    ];
+    const records = [
+      {
+        id: 'ab681a06-0fd9-4d30-a208-421bcd62a554',
+        col1: "2022/08/01 09:09",
+        col2:  1.001,
+        col3: 1,
+      },
+    ];
+    expect(fs.getLinearityInjection(data)).toEqual(records);
+  });
 });
