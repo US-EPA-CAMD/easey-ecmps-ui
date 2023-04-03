@@ -1478,7 +1478,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       hoursUsed: null,
       spanScaleCode: null,
       fuelCode: null,
-      extensionOrExemptionCode: "LOWSYTD",
+      extensionOrExemptionCode: null,
     },
     dropdownArray: [
       [
