@@ -274,7 +274,6 @@ export const DataTableAssert = ({
       radioNames ? radioNames : null
     );
     const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
-    console.log('val errors',validationErrors,dataTableName)
     if (validationErrors.length > 0) {
       setErrorMsgs(validationErrors)
       return
