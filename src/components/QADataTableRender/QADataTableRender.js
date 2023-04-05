@@ -262,7 +262,7 @@ const QADataTableRender = ({
             ? getEmptyRows(columns)
             : []
         }
-        expandableRows
+        expandableRows={expandableRowComp}
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
         expandableRowsComponent={expandableRowComp}
