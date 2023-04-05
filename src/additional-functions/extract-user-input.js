@@ -93,7 +93,9 @@ export const validateUserInput = (userInput, options = {}) => {
 
   // checks end date and hour for formula table
   if (options.dataTableName === "Formula") {
-    if(userInput.endHour === null || !userInput.endDate){
+    if(!(userInput.endHour !== null && userInput.endDate|| (userInput.endHour 
+      !== null && userInput.endDate) || (userInput.endHour === null && !userInput.endDate))){
+      console.log('userInput.endHour',userInput.endHour)
       errors.push(needsEndDateTime)
     }
   } else if (
