@@ -18,10 +18,10 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       return;
     }
     const item = { name: "", value: "" };
-    item.name = input.getAttribute('epadataname');
+    item.name = input.getAttribute("epadataname");
     item.value = input.value;
     if (!item.value) {
-      item.value = input.getAttribute('value');
+      item.value = input.getAttribute("value");
     }
     payloadArray.push(item);
   });
@@ -50,11 +50,17 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   for (const item of payloadArray) {
     if (item.value === null || item.value === "") {
-      payload[item.name] = null
+      payload[item.name] = null;
       continue;
     }
     if (item.value !== undefined) {
-      if (typeof item.value === "string" && (isNaN(item.value) || (item.value.length > 1 && item.value.charAt(0) === '0' && item.value.charAt(1) != '.'))) {
+      if (
+        typeof item.value === "string" &&
+        (isNaN(item.value) ||
+          (item.value.length > 1 &&
+            item.value.charAt(0) === "0" &&
+            item.value.charAt(1) != "."))
+      ) {
         payload[item.name] =
           item.value.trim() === "" ? null : item.value.trim();
       }
@@ -85,18 +91,19 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 };
 
 export const validateUserInput = (userInput, options = {}) => {
-  const errors = []
-  const { dataTableName, lAttr, rDat } = options
-  const needsEndDateTime = 'Must enter in both End Date and Time'
+  const errors = [];
+  const { dataTableName, lAttr, rDat } = options;
+  const needsEndDateTime = "Must enter in both End Date and Time";
 
   checkFormulaBeginDateAndHour(userInput, errors, dataTableName);
 
   // checks end date and hour for formula table
   if (options.dataTableName === "Formula") {
-    if(!(userInput.endHour !== null && userInput.endDate|| (userInput.endHour 
-      !== null && userInput.endDate) || (userInput.endHour === null && !userInput.endDate))){
-      console.log('userInput.endHour',userInput.endHour)
-      errors.push(needsEndDateTime)
+    if (
+      (userInput.endHour !== null && userInput.endDate) ||
+      (userInput.endHour === null && !userInput.endDate)
+    ) {
+      errors.push(needsEndDateTime);
     }
   } else if (
     (userInput.endHour && !userInput.endDate) ||
@@ -105,24 +112,24 @@ export const validateUserInput = (userInput, options = {}) => {
       dataTableName !== lAttr &&
       dataTableName !== rDat)
   ) {
-    errors.push(needsEndDateTime)
+    errors.push(needsEndDateTime);
   }
 
   return errors;
-}
+};
 
 /**
  * Checks if begin date and hour exist as options in user input and are nonempty
  * for Formula table in MP
  */
 const checkFormulaBeginDateAndHour = (userInput, errors, dataTableName) => {
-  const [beginDate, beginHour] = ["beginDate", "beginHour"]
-  const needsBeginDateTime = 'Must enter in both Begin Date and Time';
+  const [beginDate, beginHour] = ["beginDate", "beginHour"];
+  const needsBeginDateTime = "Must enter in both Begin Date and Time";
 
   // skip validation if not Formula table
-  if (dataTableName !== 'Formula') return
+  if (dataTableName !== "Formula") return;
 
   if (userInput[beginDate] === null || userInput[beginHour] === null) {
-    errors.push(needsBeginDateTime)
+    errors.push(needsBeginDateTime);
   }
-}
+};
