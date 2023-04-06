@@ -63,6 +63,7 @@ const QATestSummaryDataTable = ({
   isCheckedOut,
   sectionSelect,
   selectedLocation,
+  orisCode,
   locations,
   updateTable,
   setUpdateTable
@@ -328,7 +329,7 @@ const QATestSummaryDataTable = ({
 
   const data = useMemo(() => {
     
-    return getTestSummary(qaTestSummary, columns);
+    return getTestSummary(qaTestSummary, columns, orisCode);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qaTestSummary]);
@@ -451,7 +452,7 @@ const QATestSummaryDataTable = ({
     setShow(false);
     removeChangeEventListeners('.modalUserInput');
 
-    const updatedData = getTestSummary(data ? data : [], columns);
+    const updatedData = getTestSummary(data ? data : [], columns, orisCode);
     const idx = updatedData.findIndex((d) => d.id === createdId);
 
     if (idx >= 0) {
