@@ -20,7 +20,7 @@ const formatDateTime = (date, hour, mins) =>{
   }
 };
 
-export const getTestSummary = (data, colTitles) => {
+export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -64,7 +64,7 @@ export const getTestSummary = (data, colTitles) => {
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
-            colValue = evalStatusContent(curData.evalStatusCode);
+            colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
         }

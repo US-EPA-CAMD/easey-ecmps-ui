@@ -63,6 +63,7 @@ export const QACertTestSummaryRender = ({
             stackPipeId: locations[locationSelect[0]]["stackPipeId"],
             unitId: locations[locationSelect[0]]["unitId"],
           }}
+          orisCode={orisCode}
           locations={locations}
           selectedTestCode={selectedTestCode}
           isCheckedOut={checkoutState}
