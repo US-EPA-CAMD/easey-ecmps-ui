@@ -26,6 +26,7 @@ const renderComponent = (props) => {
     selectedTestCode={null}
     isCheckedOut={props.isCheckedOut}
     sectionSelect={props.sectionSelect}
+    orisCode={props.orisCode}
     selectedLocation={props.selectedLocation}
     locations={[]}
     />
@@ -40,6 +41,7 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
         "stackPipeId": "string",
         "unitId": "string",
         "monitoringSystemID": "string",
+        "orisCode": "string",
         "componentID": "string",
         "qaCertEventCode": "string",
         "qaCertEventDate": "2023-01-25T19:16:06.399Z",
@@ -55,6 +57,7 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
         "stackPipeId": "string",
         "unitId": "string",
         "monitoringSystemID": "string",
+        "orisCode": "string",
         "componentID": "string",
         "qaCertEventCode": "string",
         "qaCertEventDate": "2023-01-25T19:16:06.399Z",

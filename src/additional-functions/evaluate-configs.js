@@ -1,4 +1,5 @@
 import React from "react";
+import { displayReport } from "../utils/functions";
 // chooses correctly styling for evaluation status label
 const evalStatusStyle = (status) => {
     switch (status) {
@@ -35,16 +36,20 @@ const evalStatusStyle = (status) => {
     return "Needs Evaluation";
   };
   
-  export const evalStatusContent = (status) => {
+  export const evalStatusContent = (status, orisCode, id) => {
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
       status
     )} margin-y-0`;
-  
+    const params = {
+      reportCode: "TEST_EVAL",
+      facilityId: orisCode,
+      testId: id
+    }
     const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          // onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
+          onClick={() => displayReport(params)}
         >
           {evalStatusText(status)}
         </button>

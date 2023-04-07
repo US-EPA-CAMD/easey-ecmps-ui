@@ -616,12 +616,16 @@ export const HeaderInfo = ({
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
       evalStatus
     )} margin-y-0`;
-
+    const params = {
+      reportCode: "MP_EVAL",
+      facilityId: orisCode,
+      monitorPlanId: selectedConfig.id
+    }
     const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport("MP_EVAL", orisCode, selectedConfig.id)}
+          onClick={() => displayReport(params)}
         >
           {evalStatusText(evalStatus)}
         </button>

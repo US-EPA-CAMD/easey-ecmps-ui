@@ -48,6 +48,7 @@ const QACertEventTestExmpDataTable = ({
   isCheckedOut,
   sectionSelect,
   selectedLocation,
+  orisCode,
   locations,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -332,9 +333,9 @@ const QACertEventTestExmpDataTable = ({
   const data = useMemo(() => {
     switch (sectionSelect[1]) {
       case "QA Certification Event":
-        return mapQaCertEventsDataToRows(qaTestSummary);
+        return mapQaCertEventsDataToRows(qaTestSummary, orisCode);
       case "Test Extension Exemption":
-        return mapQaExtensionsExemptionsDataToRows(qaTestSummary);
+        return mapQaExtensionsExemptionsDataToRows(qaTestSummary, orisCode);
       default:
         return [];
     }
@@ -417,9 +418,9 @@ const QACertEventTestExmpDataTable = ({
 
     switch (sectionSelect[1]) {
       case "QA Certification Event":
-        updatedData = mapQaCertEventsDataToRows(data ? data : []);
+        updatedData = mapQaCertEventsDataToRows(data ? data : [], orisCode);
       case "Test Exemptions and Exeptions":
-        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : []);
+        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : [], orisCode);
       default:
         break;
     }

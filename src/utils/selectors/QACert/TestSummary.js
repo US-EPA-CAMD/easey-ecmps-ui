@@ -3,14 +3,14 @@ import { evalStatusContent } from "../../../additional-functions/evaluate-config
 const validateDate = (date, hourMins) =>{
   if(date){
     return  formatStringToDate(date.toString())
-  }else if(hourMins){
+  }else if(hourMins || hourMins === 0){
     return ("0" + hourMins).slice(-2);;
   }
   return "";
 }
 const formatDateTime = (date, hour, mins) =>{
   if(date){
-    if(mins){
+    if(mins || mins === 0){
       return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
     }else{
       return `${validateDate(date, null)} ${validateDate(null, hour)}`;
@@ -20,7 +20,7 @@ const formatDateTime = (date, hour, mins) =>{
   }
 };
 
-export const getTestSummary = (data, colTitles) => {
+export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -64,7 +64,8 @@ export const getTestSummary = (data, colTitles) => {
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
-            colValue = evalStatusContent(curData.evalStatusCode);
+            console.log(id, curData)
+            colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
         }
@@ -190,31 +191,16 @@ export const mapRataSummaryToRows = (data) => {
 export const getRataRunDataRecords = (data) => {
   const records = [];
   data.forEach((el) => {
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
-
-    const endMinute = el.endMinute ? el.endMinute.toString() : "";
-
-    const beginDate = el.endDate
-      ? formatStringToDate(el.endDate.toString())
-      : "";
-    const beginHour = el.endHour ? el.endHour.toString() : "";
-
-    const beginMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
       id: el.id,
       rataSumId: el.rataSumId,
       col1: el.runNumber,
-      col2: beginDate,
-      col3: beginHour,
-      col4: beginMinute,
-      col5: endDate,
-      col6: endHour,
-      col7: endMinute,
-      col8: el.cemValue,
-      col9: el.rataReferenceValue,
-      col10: el.grossUnitLoad,
-      col11: el.runStatusCode,
+      col2: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col3: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col4: el.cemValue,
+      col5: el.rataReferenceValue,
+      col6: el.grossUnitLoad,
+      col7: el.runStatusCode,
     });
   });
   return records;
@@ -371,12 +357,8 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
       col3: el.hourlyHeatInputRate,
       col4: el.totalHeatInput,
       col5: el.responseTime,
-      col6: el.beginDate ? formatStringToDate(el.beginDate) : "",
-      col7: el.beginHour,
-      col8: el.beginMinute,
-      col9: el.endDate ? formatStringToDate(el.endDate) : "",
-      col10: el.endHour,
-      col11: el.endMinute,
+      col6: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col7: formatDateTime(el.endDate, el.endHour, el.endMinute),
     };
     records.push(row);
   }
@@ -596,15 +578,11 @@ export const mapUnitDefaultTestRunDataToRows = (data) => {
       id: el.id,
       col1: el.operatingLevelForRun,
       col2: el.runNumber,
-      col3: el.beginDate,
-      col4: el.beginHour,
-      col5: el.beginMinute,
-      col6: el.endDate,
-      col7: el.endHour,
-      col8: el.endMinute,
-      col9: el.responseTime,
-      col10: el.referenceValue,
-      col11: el.runUsedIndicator,
+      col3: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col4: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col5: el.responseTime,
+      col6: el.referenceValue,
+      col7: el.runUsedIndicator,
     };
     records.push(row);
   }
@@ -647,7 +625,7 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 };
 
-export const mapQaCertEventsDataToRows = (data) => {
+export const mapQaCertEventsDataToRows = (data, orisCode) => {
   const records = [];
   for (const el of data) {
     const row = {
@@ -660,21 +638,17 @@ export const mapQaCertEventsDataToRows = (data) => {
       col6: el.requiredTestCode,
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
-      col9: evalStatusContent(el.evalStatusCode),
+      col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     };
     records.push(row);
   }
   return records;
 };
 
-export const mapQaExtensionsExemptionsDataToRows = (data) => {
+export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
   const records = [];
 
   data.forEach((el) => {
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
-
-    const endMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
       id: el.id,
       locationId: el.locationId,
@@ -693,10 +667,41 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
-      col10: evalStatusContent(el.evalStatusCode),
+      col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     });
   });
 
+  return records;
+};
+
+export const mapCycleTimeInjectionsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.calibrationGasValue,
+      col3: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col4: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col5: el.injectionCycleTime,
+      col6: el.beginMonitorValue,
+      col7: el.endMonitorValue,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const getLinearityInjection = (totalData) => {
+  const records = [];
+  totalData.forEach((el) => {
+    records.push({
+      col1: formatDateTime(el.injectionDate, el.injectionHour, el.injectionMinute), 
+      col2: el.measuredValue,
+      col3: el.referenceValue,
+      id:el.id,
+    });
+  });
   return records;
 };
 
