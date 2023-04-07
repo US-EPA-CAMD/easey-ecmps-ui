@@ -64,6 +64,7 @@ export const getTestSummary = (data, colTitles, orisCode) => {
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
+            console.log(id, curData)
             colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
@@ -624,7 +625,7 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 };
 
-export const mapQaCertEventsDataToRows = (data) => {
+export const mapQaCertEventsDataToRows = (data, orisCode) => {
   const records = [];
   for (const el of data) {
     const row = {
@@ -637,14 +638,14 @@ export const mapQaCertEventsDataToRows = (data) => {
       col6: el.requiredTestCode,
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
-      col9: evalStatusContent(el.evalStatusCode),
+      col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     };
     records.push(row);
   }
   return records;
 };
 
-export const mapQaExtensionsExemptionsDataToRows = (data) => {
+export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
   const records = [];
 
   data.forEach((el) => {
@@ -666,7 +667,7 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
-      col10: evalStatusContent(el.evalStatusCode),
+      col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     });
   });
 
