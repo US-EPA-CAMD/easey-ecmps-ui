@@ -64,5 +64,5 @@ const evalStatusStyle = (status) => {
   };
   
   const showHyperLink = (status) => {
-    return status === "PASS" || status === "INFO" || status === "ERR" || status === "EVAL";
+    return status === "PASS" || status === "INFO" || status === "ERR";
   };

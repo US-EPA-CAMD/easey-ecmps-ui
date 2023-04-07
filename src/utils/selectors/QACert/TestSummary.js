@@ -64,7 +64,6 @@ export const getTestSummary = (data, colTitles, orisCode) => {
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
-            console.log(id, curData)
             colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
