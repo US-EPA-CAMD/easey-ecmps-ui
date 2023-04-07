@@ -15,6 +15,7 @@ import DataTable from "react-data-table-component";
 import {
   getEmptyRows,
   getTableRowActionAriaLabel,
+  qaCertEvtCustomSort,
 } from "../../utils/selectors/QACert/TestSummary";
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
@@ -267,6 +268,7 @@ const QADataTableRender = ({
         expandableRowExpanded={(row) => row.expanded}
         expandableRowsComponent={expandableRowComp}
         noDataComponent={noDataComp}
+        sortFunction={dataTableName === "QA Certification Event"? qaCertEvtCustomSort : null}
       />
     </div>
   );
