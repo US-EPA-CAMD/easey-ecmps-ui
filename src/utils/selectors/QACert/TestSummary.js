@@ -632,9 +632,9 @@ export const mapQaCertEventsDataToRows = (data) => {
       col1: el.unitId ? el.unitId : el.stackPipeId,
       col2: el.componentID,
       col3: el.monitoringSystemID,
-      col4: el.qaCertEventCode,
+      col4: isNaN(el.qaCertEventCode) ? el.qaCertEventCode : Number(el.qaCertEventCode),
       col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
-      col6: el.requiredTestCode,
+      col6: isNaN(el.requiredTestCode)? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
       col9: evalStatusContent(el.evalStatusCode),
@@ -732,3 +732,24 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   }
   return result;
 };
+//AG: needed to sort last column, i.e. evaulation status button link
+export const qaCertEvtCustomSort = (rows, field, direction) =>{
+  return rows.sort((a, b) => {
+    let aField = a[field];
+		let bField = b[field];
+    if(field === "col9"){
+      aField = aField.props?.children?.props?.children;
+      bField = bField.props?.children?.props?.children;
+    }
+		
+		let comparison = 0;
+
+		if (aField > bField) {
+			comparison = 1;
+		} else if (aField < bField) {
+			comparison = -1;
+		}
+
+		return direction === 'desc' ? comparison * -1 : comparison;
+	});
+}
