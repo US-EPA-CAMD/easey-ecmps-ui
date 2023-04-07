@@ -26,6 +26,7 @@ const renderComponent = (props) => {
     selectedTestCode={null}
     isCheckedOut={props.isCheckedOut}
     sectionSelect={props.sectionSelect}
+    orisCode={props.orisCode}
     selectedLocation={props.selectedLocation}
     locations={[]}
     />
