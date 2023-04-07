@@ -407,28 +407,7 @@ export const DataTableAssert = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
-    if (dataTableName === 'Unit Capacity' && create) {
-      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", ""];
-      controlInputs.operationDate = ["Operation Date", "date", "", ""];
-      controlInputs.boilerTurbineType = [
-        "Boiler/Turbine Type",
-        "input",
-        "",
-        "",
-      ];
-      controlInputs.boilerTurbineBeginDate = [
-        "Boiler/Turbine Begin Date",
-        "date",
-        "",
-        "",
-      ];
-      controlInputs.boilerTurbineEndDate = [
-        "Boiler/Turbine End Date",
-        "date",
-        "",
-        "",
-      ];
-    } else if (dataTableName === "Unit Capacity" && !create) {
+    if (dataTableName === 'Unit Capacity') {
       controlInputs.commercialOperationDate = [
         "Commercial Operation Date",
         "date",
