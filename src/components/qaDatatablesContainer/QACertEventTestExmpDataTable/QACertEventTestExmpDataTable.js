@@ -495,6 +495,7 @@ const QACertEventTestExmpDataTable = ({
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
