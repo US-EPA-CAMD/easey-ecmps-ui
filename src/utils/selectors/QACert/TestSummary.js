@@ -20,7 +20,7 @@ const formatDateTime = (date, hour, mins) =>{
   }
 };
 
-export const getTestSummary = (data, colTitles) => {
+export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -64,7 +64,7 @@ export const getTestSummary = (data, colTitles) => {
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
-            colValue = evalStatusContent(curData.evalStatusCode);
+            colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
         }
@@ -624,7 +624,7 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 };
 
-export const mapQaCertEventsDataToRows = (data) => {
+export const mapQaCertEventsDataToRows = (data, orisCode) => {
   const records = [];
   for (const el of data) {
     const row = {
@@ -632,19 +632,19 @@ export const mapQaCertEventsDataToRows = (data) => {
       col1: el.unitId ? el.unitId : el.stackPipeId,
       col2: el.componentID,
       col3: el.monitoringSystemID,
-      col4: el.qaCertEventCode,
+      col4: isNaN(el.qaCertEventCode) ? el.qaCertEventCode : Number(el.qaCertEventCode),
       col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
-      col6: el.requiredTestCode,
+      col6: isNaN(el.requiredTestCode)? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
-      col9: evalStatusContent(el.evalStatusCode),
+      col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     };
     records.push(row);
   }
   return records;
 };
 
-export const mapQaExtensionsExemptionsDataToRows = (data) => {
+export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
   const records = [];
 
   data.forEach((el) => {
@@ -666,7 +666,7 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
-      col10: evalStatusContent(el.evalStatusCode),
+      col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     });
   });
 
@@ -732,3 +732,24 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   }
   return result;
 };
+//AG: needed to sort last column, i.e. evaulation status button link
+export const qaCertEvtCustomSort = (rows, field, direction) =>{
+  return rows.sort((a, b) => {
+    let aField = a[field];
+		let bField = b[field];
+    if(field === "col9"){
+      aField = aField.props?.children?.props?.children;
+      bField = bField.props?.children?.props?.children;
+    }
+		
+		let comparison = 0;
+
+		if (aField > bField) {
+			comparison = 1;
+		} else if (aField < bField) {
+			comparison = -1;
+		}
+
+		return direction === 'desc' ? comparison * -1 : comparison;
+	});
+}
