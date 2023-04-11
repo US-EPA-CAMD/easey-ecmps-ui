@@ -483,9 +483,10 @@ const QATestSummaryDataTable = ({
     stackPipeId: null,
     unitId: null,
     testTypeCode: null,
-    componentID: null,
+    componentID: "string",
+    monitoringSystemID: "string",
     spanScaleCode: null,
-    testNumber: null,
+    testNumber: "string",
     testReasonCode: null,
     testResultCode: null,
     beginDate: null,
@@ -512,6 +513,9 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === '[object Array]') {
           alert(res[0]);
+          uiControls.componentID = "string";
+          uiControls.monitoringSystemID = "string";
+          uiControls.testNumber = "string";
         } else {
           setUpdateTable(true);
           executeOnClose();
@@ -554,6 +558,9 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === '[object Array]') {
           alert(res[0]);
+          uiControls.componentID = "string";
+          uiControls.monitoringSystemID = "string";
+          uiControls.testNumber = "string";
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
