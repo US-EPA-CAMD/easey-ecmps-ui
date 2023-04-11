@@ -66,7 +66,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       }
       // is a number
       else if (typeof item.value === "string" && !isNaN(item.value)) {
-        if (payload[item.name] === "string") {
+        if (payload[item.name] === "string" || (typeof payload[item.name]) === "string") {
           payload[item.name] =
             item.value.trim() === "" ? null : item.value.trim();
         }
