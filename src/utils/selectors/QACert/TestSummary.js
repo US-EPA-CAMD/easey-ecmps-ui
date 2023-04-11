@@ -738,8 +738,16 @@ export const qaCertEvtCustomSort = (rows, field, direction) =>{
     let aField = a[field];
 		let bField = b[field];
     if(field === "col9"){
-      aField = aField.props?.children?.props?.children;
-      bField = bField.props?.children?.props?.children;
+      if(aField.type === "div"){
+        aField = aField.props?.children?.props?.children;
+      }else if(aField.type === "p"){
+        aField = aField.props?.children;
+      }
+      if(bField.type === "div"){
+        bField = bField.props?.children?.props?.children;
+      }else if(bField.type === "p"){
+        bField = bField.props?.children;
+      }
     }
 		
 		let comparison = 0;
