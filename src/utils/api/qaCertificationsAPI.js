@@ -4,7 +4,7 @@ import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
-const getApiUrl = (path) => {
+const getApiUrl = (path = '') => {
   let url = config.services.qaCertification.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -210,13 +210,8 @@ export const exportQA = async (
     isHistoricalImport: Boolean,
   }
 ) => {
-  let url;
-
-  if (options.isOfficial) {
-    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
-  } else {
-    url = getApiUrl(`/export?facilityId=${facilityId}`);
-  }
+  const path = `/export?facilityId=${facilityId}`
+  let url = getApiUrl(path)
 
   if (options.isHistoricalImport) {
     url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`;
