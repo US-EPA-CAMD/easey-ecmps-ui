@@ -210,12 +210,8 @@ export const exportQA = async (
     isHistoricalImport: Boolean,
   }
 ) => {
-  let url = getApiUrl()
-  if (options.isOfficial) {
-    url = `${url}/export?facilityId=${facilityId}`
-  } else {
-    url = `${url}/export?facilityId=${facilityId}`
-  }
+  const path = `/export?facilityId=${facilityId}`
+  let url = getApiUrl(path)
 
   if (options.isHistoricalImport) {
     url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`;
