@@ -243,8 +243,8 @@ export const DataTableSystems = ({
     "System Type",
     "System Designation",
     "Fuel Code",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   /// handles blue stepper for system

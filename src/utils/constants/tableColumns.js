@@ -1,3 +1,5 @@
+import { formatDateTime } from '../functions'
+
 export const qaTestSummaryCols = [
 	{
 		name: "Unit or StackPipe ID",
@@ -34,28 +36,11 @@ export const qaTestSummaryCols = [
 		sortable: true,
 	},
 	{
-		name: "Begin Date/Hr/Min",
+		name: "End Date/Time",
 		selector: (row) =>
-			row.beginDate && row.beginHour && row.beginMinute
-				? `${row.beginDate} ${row.beginHour}:${row.beginMinute}`
-				: row.beginDate !== null && row.beginHour !== null
-					? `${row.beginDate} ${row.beginHour}`
-					: "",
+			formatDateTime(row.endDate, row.endHour, row.endMinute),
 		sortable: true,
-		wrap: true,
-		compact: true,
-	},
-	{
-		name: "End Date/Hr/Min",
-		selector: (row) =>
-			row.endDate && row.endHour && row.endMinute
-				? `${row.endDate} ${row.endHour}:${row.endMinute}`
-				: row.endDate !== null && row.endHour !== null
-					? `${row.endDate} ${row.endHour}`
-					: "",
-		sortable: true,
-		wrap: true,
-		compact: true,
+		wrap: true
 	},
 ];
 
@@ -78,13 +63,8 @@ export const qaCertificationEventDataCols = [
 		sortable: true,
 	},
 	{
-		name: "Event Date",
-		selector: (row) => row.qaCertEventDate,
-		sortable: true,
-	},
-	{
-		name: "Event Hour",
-		selector: (row) => row.qaCertEventHour,
+		name: "Event Date/Time",
+		selector: (row) => formatDateTime(row.qaCertEventDate, row.qaCertEventHour, null),
 		sortable: true,
 	},
 	{

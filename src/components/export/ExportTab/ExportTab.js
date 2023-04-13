@@ -70,10 +70,10 @@ export const ExportTab = ({
       workspaceSection
     );
 
-    if(e.target.name === qa && !dataTypesCopy[index].checked){
+    if (e.target.name === qa && !dataTypesCopy[index].checked) {
       setPreviewOptions(undefined);
     }
-      
+
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -173,7 +173,7 @@ export const ExportTab = ({
   return (
     <>
       {loading ? <Preloader /> : null}
-      <div className="margin-x-3 grid-container">
+      <div>
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           <div className="grid-row">
             <h3>

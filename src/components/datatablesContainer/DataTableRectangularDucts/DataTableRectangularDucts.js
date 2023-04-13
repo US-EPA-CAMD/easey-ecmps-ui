@@ -119,8 +119,8 @@ export const DataTableRectangularDucts = ({
   const columnNames = [
     "WAF Determination Date",
     "WAF Method",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   const payload = {

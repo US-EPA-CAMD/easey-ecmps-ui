@@ -171,13 +171,13 @@ export const qaTestSummaryColumns = [
     width: "200px",
   },
   {
-    name: "Begin Date/Hr/Min",
+    name: "Begin Date/Time",
     selector: "beginDate",
     sortable: true,
     sortFunction: sortByBeginDate,
   },
   {
-    name: "End Date/Hr/Min",
+    name: "End Date/Time",
     selector: "endDate",
     sortable: true,
     sortFunction: sortByEndDate,

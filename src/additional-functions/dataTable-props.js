@@ -33,8 +33,8 @@ export const defaultsDataTableProps = (location) => {
       "Fuel Code",
       "Operating Condition",
       "Source of Value",
-      "Begin Date and Time",
-      "End Date and Time",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       parameterCode: ["Parameter", "mainDropdown", "", ""],
@@ -74,8 +74,8 @@ export const formulasDataTableProps = (location) => {
       "Parameter",
       "Formula Code",
       "Formula",
-      "Begin Date and Time",
-      "End Date and Time",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       formulaId: ["Formula ID", "input", "", ""],
@@ -127,8 +127,8 @@ export const loadsDataTableProps = (location) => {
       "Second Level",
       "Second Normal Indicator",
       "Load Analysis Date",
-      "Begin Date and Time",
-      "End Date and Time",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       maximumLoadValue: ["Maximum Load Value", "input", "", ""],
@@ -180,8 +180,8 @@ export const rectWAFsDataTableProps = (location) => {
     columnNames: [
       "WAF Determination Date",
       "WAF Method",
-      "Begin Date and Time",
-      "End Date and Time",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       wafMethodCode: ["WAF Method", "dropdown", "", ""],
@@ -250,8 +250,8 @@ export const spanDataTableProps = (location) => {
       "Span Scale",
       "Span Method",
       "Span Units of Measure",
-      "Begin Date and Time",
-      "End Date and Time",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       componentTypeCode: ["Component Type", "mainDropdown", "", ""],

@@ -131,8 +131,8 @@ export const DataTableMats = ({
   const columnNames = [
     "Parameter",
     "Methodology",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   const payload = {
@@ -270,7 +270,7 @@ export const DataTableMats = ({
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
-          
+
           // Modal focus resets to close button on setState
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap

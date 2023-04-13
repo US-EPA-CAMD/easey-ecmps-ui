@@ -130,9 +130,9 @@ export const DataTableRender = ({
         .map((location) => location["monPlanId"])
         .indexOf(monitoringPlanId) > -1 &&
       checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(monitoringPlanId)
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(monitoringPlanId)
       ]["checkedOutBy"] === user["userId"]
     ) {
       result = true;
@@ -247,7 +247,7 @@ export const DataTableRender = ({
                       type="button"
                       unstyled="true"
                       epa-testid="btnOpen"
-                      className="cursor-pointer open-modal-button"
+                      className="cursor-pointer open-modal-button text-no-wrap"
                       id={
                         tableTitle
                           ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -262,21 +262,21 @@ export const DataTableRender = ({
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
                     {workspaceSection !== EXPORT_STORE_NAME &&
-                    isAnyLocationCheckedOutByUser() === false &&
-                    isLocationCheckedOut(row["facId"]) === false &&
-                    row["col2"] === "Active" ? (
+                      isAnyLocationCheckedOutByUser() === false &&
+                      isLocationCheckedOut(row["facId"]) === false &&
+                      row["col2"] === "Active" ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
                           type="button"
                           unstyled="true"
                           epa-testid="btnOpenAndCheckout"
-                          className="cursor-pointer open-modal-button"
+                          className="cursor-pointer open-modal-button text-no-wrap"
                           id={
                             tableTitle
                               ? `btnOpenAndCheckout${tableTitle
-                                  .split(" ")
-                                  .join("")}`
+                                .split(" ")
+                                .join("")}`
                               : `btnOpenAndCheckout`
                           }
                           onClick={() => openHandler(normalizedRow, true)}
@@ -286,31 +286,31 @@ export const DataTableRender = ({
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    workspaceSection !== EXPORT_STORE_NAME &&
-                      isCurrentlyCheckedOutByUser(row.col3) === true ? (
-                      <>
-                        <span className="margin-x-1">|</span>
-                        <Button
-                          type="button"
-                          unstyled="true"
-                          epa-testid="btnCheckBackIn"
-                          className="cursor-pointer open-modal-button"
-                          id={
-                            tableTitle
-                              ? `btnCheckBackIn${tableTitle
+                      workspaceSection !== EXPORT_STORE_NAME &&
+                        isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                        <>
+                          <span className="margin-x-1">|</span>
+                          <Button
+                            type="button"
+                            unstyled="true"
+                            epa-testid="btnCheckBackIn"
+                            className="cursor-pointer open-modal-button text-no-wrap"
+                            id={
+                              tableTitle
+                                ? `btnCheckBackIn${tableTitle
                                   .split(" ")
                                   .join("")}`
-                              : `btnCheckBackIn`
-                          }
-                          onClick={() =>
-                            openHandler(normalizedRow, false, true)
-                          }
-                          aria-label={`check back in ${row.col1} `}
-                        >
-                          {"Check Back In"}
-                        </Button>
-                      </>
-                    ) : null}
+                                : `btnCheckBackIn`
+                            }
+                            onClick={() =>
+                              openHandler(normalizedRow, false, true)
+                            }
+                            aria-label={`check back in ${row.col1} `}
+                          >
+                            {"Check Back In"}
+                          </Button>
+                        </>
+                      ) : null}
                   </div>
                 ) : (
                   <div></div>
@@ -326,7 +326,7 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button"
+                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
                     openHandler(normalizedRow, false);
                   }}
@@ -357,7 +357,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
-                  className="cursor-pointer open-modal-button"
+                  className="cursor-pointer open-modal-button text-no-wrap"
                   id={
                     // tableTitle
                     //   ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -387,7 +387,7 @@ export const DataTableRender = ({
                     // :
                     `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button"
+                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
                     openHandler(normalizedRow, false);
                   }}
@@ -479,11 +479,10 @@ export const DataTableRender = ({
           <div>
             {tableTitle ? (
               <h4
-                className={`margin-top-5 text-bold ${
-                  tableStyling
+                className={`margin-top-5 text-bold ${tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
                     : "mobile:font-body-xl mobile:text-bold"
-                }`}
+                  }`}
               >
                 {tableTitle}
               </h4>
@@ -558,11 +557,10 @@ export const DataTableRender = ({
         ) : dataLoaded && data.length === 0 ? (
           <div>
             <h4
-              className={`margin-top-5 text-bold ${
-                tableStyling
+              className={`margin-top-5 text-bold ${tableStyling
                   ? "mobile:font-body-md mobile:text-bold"
                   : "mobile:font-body-xl mobile:text-bold"
-              }`}
+                }`}
             >
               {tableTitle}
             </h4>
