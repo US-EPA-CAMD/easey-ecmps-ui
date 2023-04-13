@@ -266,16 +266,14 @@ export const getQuarter = (date = new Date(), inUtc = false) => {
   return inUtc ? Math.floor(date.getUTCMonth() / 3 + 1) : Math.floor(date.getMonth() / 3 + 1);
 }
 
-//resets focus to top of page on refresh
-export const resetTabOrder = (history) => {
-  if (history?.action === "POP") {
-    const skipNav = document.getElementById("skipNav");
-    if (skipNav){
+//resets focus to top of page
+export const resetTabOrder = () => {
+  const skipNav = document.getElementById("skipNav");
+  if (skipNav) {
     skipNav.tabIndex = 0;
     skipNav.focus({ preventScroll: true });
     skipNav.tabIndex = -1;
     document.activeElement.blur();
-    }
   }
 };
 
