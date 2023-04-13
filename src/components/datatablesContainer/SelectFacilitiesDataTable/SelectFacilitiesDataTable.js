@@ -37,13 +37,18 @@ export const SelectFacilitiesDataTable = ({
   const history = useHistory();
 
   useEffect(() => {
-    facilitiesApi.getAllFacilities().then((res) => {
-      setDataLoaded(true);
-      setFacilities(res.data);
-      resetTabOrder(history);
-    }).catch(error => {
-      console.error("Error getting facilities", error)}
-    )
+    facilitiesApi
+      .getAllFacilities()
+      .then((res) => {
+        setDataLoaded(true);
+        setFacilities(res.data);
+        if (history?.action === "POP") {
+          resetTabOrder();
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting facilities", error);
+      });
     return () => {
       setFacilities([]); // This worked for me
     };
