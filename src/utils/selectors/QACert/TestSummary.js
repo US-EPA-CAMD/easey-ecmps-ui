@@ -732,12 +732,21 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   }
   return result;
 };
-//AG: needed to sort last column, i.e. evaulation status button link
-export const qaCertEvtCustomSort = (rows, field, direction) =>{
+
+const findEvalStatusCol = (columns) =>{
+  return columns.find(col => col.name === "Eval Status")?.selector;
+}
+
+export const hasEvalStatusColumn = (dataTableName) => {
+  return dataTableName === "QA Certification Event" || dataTableName === "Test Extension Exemption" || dataTableName === "Test Summary Data";
+};
+//AG: needed to sort last column if data table type is satisfied on hasEvalStatusColumn
+export const customSort = (rows, field, direction, columns) =>{
+  const evalStatusCol = findEvalStatusCol(columns);
   return rows.sort((a, b) => {
     let aField = a[field];
 		let bField = b[field];
-    if(field === "col9"){
+    if(field === evalStatusCol){
       if(aField.type === "div"){
         aField = aField.props?.children?.props?.children;
       }else if(aField.type === "p"){
