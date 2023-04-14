@@ -176,9 +176,8 @@ export const getQASchema = async () => {
 };
 
 export const getReportingPeriod = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? "?export=true" : ""
-  }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
+    }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -210,8 +209,14 @@ export const exportQA = async (
     isHistoricalImport: Boolean,
   }
 ) => {
-  const path = `/export?facilityId=${facilityId}`
-  let url = getApiUrl(path)
+  const path = `/export?facilityId=${facilityId}`;
+  let url;
+  
+  if (options.isOfficial) {
+    url = `${config.services.qaCertification.uri}${path}`;
+  } else {
+    url = getApiUrl(path)
+  }
 
   if (options.isHistoricalImport) {
     url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`;
