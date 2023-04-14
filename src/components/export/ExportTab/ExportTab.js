@@ -182,7 +182,7 @@ export const ExportTab = ({
             </h3>{" "}
           </div>
         </div>
-        <div className="grid-row margin-y-3">
+        <div className="grid-row margin-y-3 maxw-desktop">
           <div className="grid-col-3">
             {dataTypes.map((d, i) => (
               <Checkbox
