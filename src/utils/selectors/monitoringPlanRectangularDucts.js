@@ -11,8 +11,8 @@ export const getMonitoringPlansRectangularDuctsTableRecords = (totalData) => {
     records.push({
       col1: wafDeterminationDate,
       col2: wafMethodCode,
-      col3: formatDateTime(el.beginDate, el.beginHour),
-      col4: formatDateTime(el.endDate, el.endHour),
+      col3: formatDateTime(el.wafBeginDate, el.wafBeginHour),
+      col4: formatDateTime(el.wafEndDate, el.wafEndHour),
       col5: el.id,
     });
   });
