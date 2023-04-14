@@ -66,8 +66,8 @@ describe("testing monitoring plan fuel data selectors", () => {
         col3: "No",
         col4: null,
         col5: null,
-        col6: "1995/01/01",
-        col7: "2015/08/24",
+        col6: "1995-01-01",
+        col7: "2015-08-24",
         col8: "8",
       },
       {
@@ -77,7 +77,7 @@ describe("testing monitoring plan fuel data selectors", () => {
         col4: null,
         col5: null,
         col6: "",
-        col7: "2015/08/24",
+        col7: "2015-08-24",
         col8: "9",
       },
       {
@@ -86,7 +86,7 @@ describe("testing monitoring plan fuel data selectors", () => {
         col3: "No",
         col4: null,
         col5: null,
-        col6: "1995/01/01",
+        col6: "1995-01-01",
         col7: "",
         col8: "7",
       },

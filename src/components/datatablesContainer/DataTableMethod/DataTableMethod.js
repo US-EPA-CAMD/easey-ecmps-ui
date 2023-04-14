@@ -152,8 +152,8 @@ export const DataTableMethod = ({
     "Methodology",
     "Substitute Data Approach",
     "Bypass Approach",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
   const payload = {
     locationId: locationSelectValue,
@@ -204,7 +204,7 @@ export const DataTableMethod = ({
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
-          
+
           // Modal focus resets to close button on setState
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap

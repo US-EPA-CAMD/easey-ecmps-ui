@@ -1,13 +1,12 @@
-import { formatDateString } from "../functions";
+import { validateDate } from "../functions";
 
 export const getMonitoringPlansLEEQualifications = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const testDate = formatDateString(el.qualificationTestDate)
     records.push({
-      col1: testDate,
+      col1: validateDate(el.qualificationTestDate),
       col2: el.parameterCode ? el.parameterCode : "",
       col3: el.qualificationTestType ? el.qualificationTestType : "",
       col4: el.potentialAnnualMassEmissions
