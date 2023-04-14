@@ -196,9 +196,9 @@ const Tabs = ({
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
-                    {workspaceSection !== EXPORT_STORE_NAME &&
+                    {(workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
-                    isCheckedOutByUser(el.props.locationId) ? (
+                    isCheckedOutByUser(el.props.locationId)) &&
                       <CreateSharp
                         role="img"
                         className="text-bold tab-icon margin-right-2 position-relative top-neg-1"
@@ -207,8 +207,8 @@ const Tabs = ({
                           .split("(")[1]
                           .replace(")", "")}`}
                       />
-                    ) : null}
-                    <span className="position-relative top-neg-105">
+                    }
+                    <span className="position-relative top-neg-105 locations-display">
                       {el.props.selectedConfigName}
                     </span>
                   </div>
