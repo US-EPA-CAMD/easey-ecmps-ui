@@ -93,7 +93,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 export const validateUserInput = (userInput, options = {}) => {
   const errors = [];
   const { dataTableName, lAttr, rDat } = options;
-  const needsEndDateTime = "Must enter in both End Date and Time";
+  const needsEndDateTime = "Must enter in both End Date/Time";
 
   checkFormulaBeginDateAndHour(userInput, errors, dataTableName);
 
@@ -126,7 +126,7 @@ export const validateUserInput = (userInput, options = {}) => {
  */
 const checkFormulaBeginDateAndHour = (userInput, errors, dataTableName) => {
   const [beginDate, beginHour] = ["beginDate", "beginHour"];
-  const needsBeginDateTime = "Must enter in both Begin Date and Time";
+  const needsBeginDateTime = "Must enter in both Begin Date/Time";
 
   // skip validation if not Formula table
   if (dataTableName !== "Formula") return;

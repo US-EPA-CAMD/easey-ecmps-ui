@@ -76,8 +76,8 @@ describe("testing monitoring plan data selectors", () => {
         col4: "NFS",
         col5: "A",
         col6: "DEF",
-        col7: "1995/01/01 00",
-        col8: "1995/01/01 00",
+        col7: "1995-01-01 00:00",
+        col8: "1995-01-01 00:00",
         col9: "TWCORNEL5-7C3E827D67CF418E84CC948BEB75B3A2",
       },
       {
@@ -87,8 +87,8 @@ describe("testing monitoring plan data selectors", () => {
         col4: "NFS",
         col5: "A",
         col6: "DATA",
-        col7: "2001/02/26 16",
-        col8: "",
+        col7: "2001-02-26 16:00",
+        col8: "2001-02-26 16:00",
         col9: "CAMD-E86CD02DFD9F417D8F8CA029A11DEE0B",
       },
       {
@@ -99,7 +99,7 @@ describe("testing monitoring plan data selectors", () => {
         col5: "A",
         col6: "DATA",
         col7: "",
-        col8: "2001/02/26 16",
+        col8: "",
         col9: "CAMD-E86CD02DFD9F417D8F8CA029A11DEE0B",
       },
     ];

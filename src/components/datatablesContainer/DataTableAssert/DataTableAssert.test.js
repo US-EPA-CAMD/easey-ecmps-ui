@@ -281,7 +281,7 @@ const props = {
     endHour: 0,
   },
   urlParameters: null,
-  columnNames: ["Begin Date and Time", "End Date and Time"],
+  columnNames: ["Begin Date/Time", "End Date/Time"],
   dropdownArray: [[]],
   dataTableName: "Span",
   selectedLocation: 5,
@@ -346,7 +346,7 @@ const conditionalProps = {
     endHour: 0,
   },
   urlParameters: null,
-  columnNames: ["Begin Date and Time", "End Date and Time"],
+  columnNames: ["Begin Date/Time", "End Date/Time"],
   dropdownArray: [[]],
   dataTableName: "Location Attribute", // different
   selectedLocation: 5,

@@ -1,4 +1,3 @@
-import { formatDate } from "../../utils/functions";
 
 export const sortByUpdateDate = (a, b) => {
   return new Date(a.updateDate) - new Date(b.updateDate);
@@ -130,7 +129,7 @@ export const monPlanColumns = [
   },
   {
     name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    selector: (row) => row.updateDate,
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
@@ -171,13 +170,13 @@ export const qaTestSummaryColumns = [
     width: "200px",
   },
   {
-    name: "Begin Date/Hr/Min",
+    name: "Begin Date/Time",
     selector: "beginDate",
     sortable: true,
     sortFunction: sortByBeginDate,
   },
   {
-    name: "End Date/Hr/Min",
+    name: "End Date/Time",
     selector: "endDate",
     sortable: true,
     sortFunction: sortByEndDate,
@@ -189,7 +188,7 @@ export const qaTestSummaryColumns = [
   },
   {
     name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    selector: (row) => row.updateDate,
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
@@ -254,7 +253,7 @@ export const qaCertEventColumns = [
   },
   {
     name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    selector: (row) => row.updateDate,
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
@@ -316,7 +315,7 @@ export const qaTeeColumns = [
   },
   {
     name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    selector: (row) => row.updateDate,
     sortable: true,
     sortFunction: sortByUpdateDate,
   },
@@ -352,7 +351,7 @@ export const emissionsColumns = [
   },
   {
     name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    selector: (row) => row.updateDate,
     sortable: true,
     sortFunction: sortByUpdateDate,
   },

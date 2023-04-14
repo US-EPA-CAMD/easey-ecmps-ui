@@ -1,24 +1,5 @@
 import { evalStatusContent } from "../../../additional-functions/evaluate-configs";
-
-const validateDate = (date, hourMins) =>{
-  if(date){
-    return  formatStringToDate(date.toString())
-  }else if(hourMins || hourMins === 0){
-    return ("0" + hourMins).slice(-2);;
-  }
-  return "";
-}
-const formatDateTime = (date, hour, mins) =>{
-  if(date){
-    if(mins || mins === 0){
-      return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
-    }else{
-      return `${validateDate(date, null)} ${validateDate(null, hour)}`;
-    }
-  }else{
-    return ""
-  }
-};
+import { formatDateTime } from '../../../utils/functions'
 
 export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
@@ -32,8 +13,8 @@ export const getTestSummary = (data, colTitles, orisCode) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-            ? el.unitId
-            : "",
+              ? el.unitId
+              : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -57,7 +38,7 @@ export const getTestSummary = (data, colTitles, orisCode) => {
         let colValue = curData[dtoKey];
         // special cases
         switch (colTitle) {
-          case "End Date":
+          case "End Date/Time":
             colValue = formatDateTime(curData.endDate, curData.endHour, curData.endMinute);
             break;
           case "Unit or Stack Pipe ID":
@@ -74,15 +55,6 @@ export const getTestSummary = (data, colTitles, orisCode) => {
     }
   }
   return records;
-};
-
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  let parts;
-
-  parts = date.split("-");
-
-  return `${parts[0]}/${parts[1]}/${parts[2]}`;
 };
 
 const colTitleToDtoKeyMap = {
@@ -146,7 +118,7 @@ export const getProtocolGasRecords = (data) => {
       col2: el.gasTypeCode,
       col3: el.cylinderIdentifier,
       col4: el.vendorIdentifier,
-      col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
+      col5: el.expirationDate ? el.expirationDate : "",
     });
   });
   return records;
@@ -281,8 +253,8 @@ export const mapTestQualificationToRows = (data) => {
       id: el.id,
       testSumId: el.testSumId,
       col1: el.testClaimCode,
-      col2: el.beginDate ? formatStringToDate(el.beginDate) : "",
-      col3: el.endDate ? formatStringToDate(el.endDate) : "",
+      col2: el.beginDate ? el.beginDate : "",
+      col3: el.endDate ? el.endDate : "",
       col4: el.highLoadPercentage,
       col5: el.midLoadPercentage,
       col6: el.lowLoadPercentage,
@@ -456,11 +428,7 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate
-        ? new Date(el.reinstallationDate).toLocaleDateString("en-US", {
-            timeZone: "UTC",
-          })
-        : el.reinstallationDate,
+      col5: el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);
@@ -611,8 +579,8 @@ export const mapHgInjectionDataToRows = (data) => {
       id: el.id,
       col1: el.injectionDate
         ? new Date(el.injectionDate).toLocaleDateString("en-US", {
-            timeZone: "UTC",
-          })
+          timeZone: "UTC",
+        })
         : el.injectionDate,
       col2: el.injectionHour,
       col3: el.injectionMinute,
@@ -634,7 +602,7 @@ export const mapQaCertEventsDataToRows = (data, orisCode) => {
       col3: el.monitoringSystemID,
       col4: isNaN(el.qaCertEventCode) ? el.qaCertEventCode : Number(el.qaCertEventCode),
       col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
-      col6: isNaN(el.requiredTestCode)? el.requiredTestCode : Number(el.requiredTestCode),
+      col6: isNaN(el.requiredTestCode) ? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
       col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
@@ -656,8 +624,8 @@ export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
         el.stackPipeId !== null
           ? el.stackPipeId
           : el.unitId !== null
-          ? el.unitId
-          : "",
+            ? el.unitId
+            : "",
       col2: el.year,
       col3: el.quarter,
       col4: el.componentID,
@@ -695,10 +663,10 @@ export const getLinearityInjection = (totalData) => {
   const records = [];
   totalData.forEach((el) => {
     records.push({
-      col1: formatDateTime(el.injectionDate, el.injectionHour, el.injectionMinute), 
+      col1: formatDateTime(el.injectionDate, el.injectionHour, el.injectionMinute),
       col2: el.measuredValue,
       col3: el.referenceValue,
-      id:el.id,
+      id: el.id,
     });
   });
   return records;
@@ -733,31 +701,31 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   return result;
 };
 //AG: needed to sort last column, i.e. evaulation status button link
-export const qaCertEvtCustomSort = (rows, field, direction) =>{
+export const qaCertEvtCustomSort = (rows, field, direction) => {
   return rows.sort((a, b) => {
     let aField = a[field];
-		let bField = b[field];
-    if(field === "col9"){
-      if(aField.type === "div"){
+    let bField = b[field];
+    if (field === "col9") {
+      if (aField.type === "div") {
         aField = aField.props?.children?.props?.children;
-      }else if(aField.type === "p"){
+      } else if (aField.type === "p") {
         aField = aField.props?.children;
       }
-      if(bField.type === "div"){
+      if (bField.type === "div") {
         bField = bField.props?.children?.props?.children;
-      }else if(bField.type === "p"){
+      } else if (bField.type === "p") {
         bField = bField.props?.children;
       }
     }
-		
-		let comparison = 0;
 
-		if (aField > bField) {
-			comparison = 1;
-		} else if (aField < bField) {
-			comparison = -1;
-		}
+    let comparison = 0;
 
-		return direction === 'desc' ? comparison * -1 : comparison;
-	});
+    if (aField > bField) {
+      comparison = 1;
+    } else if (aField < bField) {
+      comparison = -1;
+    }
+
+    return direction === 'desc' ? comparison * -1 : comparison;
+  });
 }
