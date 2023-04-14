@@ -318,7 +318,9 @@ export const EvaluateAndSubmit = ({
 
     callback(payload)
       .then(() => {
-        checkInAllCheckedOutLocations();
+        // why do we need to check back in all checkedout locations ? 
+        // does it cause an error in checking in 
+        //checkInAllCheckedOutLocations();
         setSubmitting(false);
         if (componentType === "Submission") {
           window.location.reload(false);

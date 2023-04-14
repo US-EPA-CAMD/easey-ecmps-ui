@@ -138,6 +138,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                 break;
             default:
         }
+         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values])
 
     // API Calls

@@ -59,7 +59,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
         (isNaN(item.value) ||
           (item.value.length > 1 &&
             item.value.charAt(0) === "0" &&
-            item.value.charAt(1) != "."))
+            item.value.charAt(1) !== "."))
       ) {
         payload[item.name] =
           item.value.trim() === "" ? null : item.value.trim();

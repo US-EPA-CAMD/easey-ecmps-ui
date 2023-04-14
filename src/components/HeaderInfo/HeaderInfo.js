@@ -11,7 +11,6 @@ import {
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
-import { triggerBulkEvaluation } from "../../utils/api/camdServices";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
@@ -233,6 +232,7 @@ export const HeaderInfo = ({
           enabled: true,
         };
       }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
   );
 
@@ -316,6 +316,7 @@ export const HeaderInfo = ({
         setViewTemplateSelect(data[0]);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setViewTemplateSelect]);
 
   useEffect(() => {
@@ -324,6 +325,7 @@ export const HeaderInfo = ({
     if (!currentTab?.TestDataOptionSelect && testData?.length > 0) {
       setTestDataOptionSelect(testData[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setTestDataOptionSelect]);
 
   const executeOnClose = () => {
@@ -745,31 +747,31 @@ export const HeaderInfo = ({
       importEmissionsFile(payload);
   };
 
-  const evaluate = () => {
-    triggerBulkEvaluation({
-      items: [
-        {
-          monPlanId: configID,
-          submitMonPlan: true,
-          testSumIds: [],
-          qceIds: [],
-          teeIds: [],
-          emissionsReportingPeriods: [],
-        },
-      ],
-      userId: user.userId,
-      userEmail: user.email,
-    })
-      .then(() => {
-        // Change front-end to display "In Queue" status after starting eval
-        setEvalStatus("INQ");
-        setDataLoaded(false);
-        setEvalStatusLoaded(true);
-      })
-      .catch((error) => {
-        console.log("Error occurred: ", error);
-      });
-  };
+  // const evaluate = () => {
+  //   triggerBulkEvaluation({
+  //     items: [
+  //       {
+  //         monPlanId: configID,
+  //         submitMonPlan: true,
+  //         testSumIds: [],
+  //         qceIds: [],
+  //         teeIds: [],
+  //         emissionsReportingPeriods: [],
+  //       },
+  //     ],
+  //     userId: user.userId,
+  //     userEmail: user.email,
+  //   })
+  //     .then(() => {
+  //       // Change front-end to display "In Queue" status after starting eval
+  //       setEvalStatus("INQ");
+  //       setDataLoaded(false);
+  //       setEvalStatusLoaded(true);
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error occurred: ", error);
+  //     });
+  // };
 
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
