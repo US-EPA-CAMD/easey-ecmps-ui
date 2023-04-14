@@ -584,7 +584,7 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -655,7 +655,7 @@ export const createRataRunData = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -742,7 +742,7 @@ export const createRataTraverse = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1030,7 +1030,7 @@ export const createAppendixECorrelationSummaryRecord = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1217,7 +1217,7 @@ export const createAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1254,7 +1254,7 @@ export const createAppendixEHeatInputGas = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1333,7 +1333,7 @@ export const createAppendixEHeatInputOil = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1399,7 +1399,7 @@ export const updateAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 export const deleteAppendixERun = async (
