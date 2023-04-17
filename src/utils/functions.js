@@ -37,7 +37,7 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
-export const formatDate = (dateString, delim="-") => {
+export const formatDate = (dateString, delim = "-") => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
@@ -144,9 +144,9 @@ export const reportWindowParams = [
 export const formatReportUrl = (params) => {
   const year = params.year ? `&year=${params.year}` : "";
   const tee = params.teeId ? `&teeId=${params.teeId}` : "";
-  const qce = params.qceId ? `&qceId=${params.qceId}` : "";  
+  const qce = params.qceId ? `&qceId=${params.qceId}` : "";
   const test = params.testId ? `&testId=${params.testId}` : "";
-  const quarter = params.quarter ? `&quarter=${params.quarter}` : "";  
+  const quarter = params.quarter ? `&quarter=${params.quarter}` : "";
   const facility = params.facilityId ? `&facilityId=${params.facilityId}` : "";
   const monitorPlan = params.monitorPlanId ? `&monitorPlanId=${params.monitorPlanId}` : "";
   let url = `/reports?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
@@ -262,31 +262,44 @@ export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
  * October 1st - December 31st = Fourth Quarter
  */
 export const getQuarter = (date = new Date(), inUtc = false) => {
-  
+
   return inUtc ? Math.floor(date.getUTCMonth() / 3 + 1) : Math.floor(date.getMonth() / 3 + 1);
 }
 
-//resets focus to top of page
-export const resetTabOrder = () => {
-  const skipNav = document.getElementById("skipNav");
-  if (skipNav) {
-    skipNav.tabIndex = 0;
-    skipNav.focus({ preventScroll: true });
-    skipNav.tabIndex = -1;
-    document.activeElement.blur();
+//resets focus to top of page on refresh
+export const resetTabOrder = (history) => {
+  if (history?.action === "POP") {
+    const skipNav = document.getElementById("skipNav");
+    if (skipNav) {
+      skipNav.tabIndex = 0;
+      skipNav.focus({ preventScroll: true });
+      skipNav.tabIndex = -1;
+      document.activeElement.blur();
+    }
   }
 };
 
-export const formatDateString = date => {
-  return date ? date.replaceAll('-', '/') : '';
-};
 
-export const formatHourString = hour => {
-  if (hour === null || hour === undefined) {
-    return ''
+export const validateDate = (date, hourMins) => {
+  if (date) {
+    return date.toString()
+  } else if (hourMins || hourMins === 0) {
+    return String(hourMins).padStart(2, '0');
   }
-  return String(hour).padStart(2, '0');
+  return "";
 }
+
+export const formatDateTime = (date, hour, mins) => {
+  if (date) {
+    if (mins || mins === 0) {
+      return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
+    } else {
+      return `${validateDate(date, null)} ${validateDate(null, hour)}:00`;
+    }
+  } else {
+    return ""
+  }
+};
 
 /**
  * Formats errored response into list of strings

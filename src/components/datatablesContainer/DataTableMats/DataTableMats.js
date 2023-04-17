@@ -128,8 +128,8 @@ export const DataTableMats = ({
   const columnNames = [
     "Parameter",
     "Methodology",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   const payload = {

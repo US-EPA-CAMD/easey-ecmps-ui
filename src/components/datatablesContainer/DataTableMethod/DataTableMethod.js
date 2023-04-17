@@ -151,8 +151,8 @@ export const DataTableMethod = ({
     "Methodology",
     "Substitute Data Approach",
     "Bypass Approach",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
   const payload = {
     locationId: locationSelectValue,
