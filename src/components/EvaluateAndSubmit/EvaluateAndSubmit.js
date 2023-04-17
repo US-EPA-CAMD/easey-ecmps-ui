@@ -163,7 +163,9 @@ export const EvaluateAndSubmit = ({
     }
     return () => {
       checkInAllCheckedOutLocations();
-    }; //eslint-disable-next-line
+    };
+
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -318,9 +320,7 @@ export const EvaluateAndSubmit = ({
 
     callback(payload)
       .then(() => {
-        // why do we need to check back in all checkedout locations ? 
-        // does it cause an error in checking in 
-        //checkInAllCheckedOutLocations();
+        checkInAllCheckedOutLocations();
         setSubmitting(false);
         if (componentType === "Submission") {
           window.location.reload(false);
@@ -343,7 +343,9 @@ export const EvaluateAndSubmit = ({
 
   const checkInAllCheckedOutLocations = () => {
     for (let [key, value] of monitorPlanIdToSelectedMap.current) {
-      if (value[1] > 0) {
+      getUserPlans();
+      // doesnt check in any configuration that the current user has checked out via UI 
+      if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
         checkoutAPI(false, value[0], key);
       }
     }
