@@ -15,7 +15,8 @@ import DataTable from "react-data-table-component";
 import {
   getEmptyRows,
   getTableRowActionAriaLabel,
-  qaCertEvtCustomSort,
+  customSort,
+  hasEvalStatusColumn
 } from "../../utils/selectors/QACert/TestSummary";
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
@@ -69,6 +70,7 @@ const QADataTableRender = ({
     return () => {
       cleanUp508();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
   const [totalExpand, setTotalExpand] = useState([]);
@@ -122,9 +124,8 @@ const QADataTableRender = ({
         }}
         title={`Click to expand row ${index + 1}`}
         name={`expand row ${index + 1}`}
-        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${
-          index + 1
-        }`}
+        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
+          }`}
         aria-expanded={false}
         role="button"
         tabIndex="0"
@@ -157,9 +158,8 @@ const QADataTableRender = ({
         }}
         title={`Click to collapse row ${index + 1}`}
         name={`collapse row ${index + 1}`}
-        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${
-          index + 1
-        }`}
+        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
+          }`}
         role="button"
         tabIndex="0"
         aria-expanded={true}
@@ -191,10 +191,9 @@ const QADataTableRender = ({
                       <Button
                         type="button"
                         epa-testid="btnOpen"
-                        className="cursor-pointer open-modal-button"
-                        id={`btnEditView${dataTableName.replaceAll(" ", "-")}${
-                          index + 1
-                        }`}
+                        className="cursor-pointer open-modal-button text-no-wrap"
+                        id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1
+                          }`}
                         onClick={() => {
                           openHandler(normalizedRow, false, null, index);
                         }}
@@ -223,16 +222,15 @@ const QADataTableRender = ({
                   <Button
                     type="button"
                     epa-testid="btnOpen"
-                    className="cursor-pointer open-modal-button"
+                    className="cursor-pointer open-modal-button text-no-wrap"
                     aria-label={getTableRowActionAriaLabel(
                       dataTableName,
                       row,
                       "View"
                     )}
                     outline={true}
-                    id={`btnEditView${dataTableName.replaceAll(" ", "-")}${
-                      index + 1
-                    }`}
+                    id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1
+                      }`}
                     onClick={() => {
                       openHandler(normalizedRow, false, null, index);
                     }}
@@ -251,7 +249,10 @@ const QADataTableRender = ({
   }
 
   return (
-    <div className="padding-3 qa-table-wrapper" id={dataTableName.replaceAll(" ", "-")}>
+    <div
+      className="padding-3 qa-table-wrapper"
+      id={dataTableName.replaceAll(" ", "-")}
+    >
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
@@ -260,15 +261,15 @@ const QADataTableRender = ({
           data.length > 0
             ? data
             : user && isCheckedOut
-            ? getEmptyRows(columns)
-            : []
+              ? getEmptyRows(columns)
+              : []
         }
         expandableRows={expandableRowComp}
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
         expandableRowsComponent={expandableRowComp}
         noDataComponent={noDataComp}
-        sortFunction={dataTableName === "QA Certification Event"? qaCertEvtCustomSort : null}
+        sortFunction={ hasEvalStatusColumn(dataTableName)? (rows, field, direction) => customSort(rows, field, direction, columns) : null}
       />
     </div>
   );

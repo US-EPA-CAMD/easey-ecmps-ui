@@ -461,6 +461,8 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
           monitoringSystemIDDescription: monitorCode.systemTypeCode,
         });
       }
+
+      return 1;
     })
     actualResponse.data = dataArray;
     return actualResponse

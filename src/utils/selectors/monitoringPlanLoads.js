@@ -1,15 +1,10 @@
-import { formatDateString, formatHourString } from "../functions";
+import { formatDateTime } from "../functions";
 
 export const getMonitoringPlansLoadsTableRecords = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = formatDateString(el.beginDate);
-    const beginHour = formatHourString(el.beginHour);
-    const endDate = formatDateString(el.endDate);
-    const endHour = formatHourString(el.endHour);
-
     let secondNormalIndicator;
     if (el.secondNormalIndicator || el.secondNormalIndicator === 0) {
       if (el.secondNormalIndicator === 1) {
@@ -48,7 +43,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
         secondLevelCode = el.secondLevelCode;
     }
 
-    const loadAnalysisDate = formatDateString(el.loadAnalysisDate);
+    const loadAnalysisDate = el.loadAnalysisDate;
 
     records.push({
       col1: el.maximumLoadValue,
@@ -59,8 +54,8 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
       col6: secondLevelCode,
       col7: secondNormalIndicator,
       col8: loadAnalysisDate,
-      col9: `${beginDate} ${beginHour}`.trim(),
-      col10: `${endDate} ${endHour}`.trim(),
+      col9: formatDateTime(el.beginDate, el.beginHour),
+      col10: formatDateTime(el.endDate, el.endHour),
       col11: el.id,
     });
   });
