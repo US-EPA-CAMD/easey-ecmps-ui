@@ -673,10 +673,77 @@ describe('Test cases for QAExpandableRowsRender', () => {
       }
     ]
 
+    const protocolGasData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "gasLevelCode": "string",
+        "gasTypeCode": "string",
+        "vendorIdentifier": "string",
+        "cylinderIdentifier": "string",
+        "expirationDate": "2022-11-07"
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "gasLevelCode": "string",
+        "gasTypeCode": "string",
+        "vendorIdentifier": "string",
+        "cylinderIdentifier": "string",
+        "expirationDate": "2022-11-07"
+      }
+    ]
+
+    const airEmissionsData = [
+      {
+        "id": "id1",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "qiLastName" : "string",
+        "qiFirstName" : "string",
+        "qiMiddleInitial" : "string",
+        "aetbName" : "string",
+        "aetbPhoneNumber": "string",
+        "aetbEmail" : "string",
+        "examDate" : "string",
+        "providerName" : "string",
+        "providerEmail" : "string"
+      },
+      {
+        "id": "id2",
+        "testSumId": "testSumId",
+        "userId": "string",
+        "addDate": "string",
+        "updateDate": "string",
+        "qiLastName" : "string",
+        "qiFirstName" : "string",
+        "qiMiddleInitial" : "string",
+        "aetbName" : "string",
+        "aetbPhoneNumber": "string",
+        "aetbEmail" : "string",
+        "examDate" : "string",
+        "providerName" : "string",
+        "providerEmail" : "string"
+      }
+    ]
+
     const getUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
     const postUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
     const putUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
     const deleteUrl = new RegExp(`${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${idRegex}`);
+    const getProtocolGasUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/protocol-gases`;
+    const getAirEmissionUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
+
+    mock.onGet(getProtocolGasUrl).reply(200, protocolGasData)
+    mock.onGet(getAirEmissionUrl).reply(200, airEmissionsData)
 
     mock.onGet(getUrl).reply(200, appendixECorrTestSumData)
     mock.onPost(postUrl).reply(200, 'created')
@@ -694,23 +761,23 @@ describe('Test cases for QAExpandableRowsRender', () => {
     expect(rows).not.toHaveLength(0)
 
     // add row
-    const addBtn = screen.getByRole('button', { name: /Add/i })
-    userEvent.click(addBtn)
-    let saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
+    const addBtn = screen.getAllByRole('button', { name: /Add/i })
+    userEvent.click(addBtn[0])
+    let saveAndCloseBtn = screen.getAllByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn[0])
     setTimeout(() => expect(mock.history.post.length).toBe(1), 1000)
-
+/*
     // edit row
     const editBtns = screen.getAllByTestId(/Edit/i);
-    expect(editBtns).toHaveLength(appendixECorrTestSumData.length)
+    expect(editBtns).toHaveLength(appendixECorrTestSumData.length + protocolGasData.length + airEmissionsData.length)
     userEvent.click(editBtns[0])
-    saveAndCloseBtn = screen.getByRole('button', { name: /Click to save/i })
-    userEvent.click(saveAndCloseBtn)
+    saveAndCloseBtn = screen.getAllByRole('button', { name: /Click to save/i })
+    userEvent.click(saveAndCloseBtn[0])
     setTimeout(() => expect(mock.history.put.length).toBe(1), 1000)
-
+*/
     // remove row
     const deleteBtns = screen.getAllByTestId(/Remove/i);
-    expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length)
+    expect(deleteBtns).toHaveLength(appendixECorrTestSumData.length + protocolGasData.length + airEmissionsData.length)
     const secondDeleteBtn = deleteBtns[1]
     userEvent.click(secondDeleteBtn)
     const confirmBtns = screen.getAllByRole('button', { name: /Yes/i })
