@@ -1017,9 +1017,6 @@ const QAExpandableRowsRender = ({
         );
         break;
       case "Unit Default Test":
-        expandables.push(nextExpandableRow("Protocol Gas"));
-        expandables.push(nextExpandableRow("Air Emissions"));
-        break;
       case "Appendix E Correlation Summary":
         expandables.push(nextExpandableRow("Protocol Gas"));
         expandables.push(nextExpandableRow("Air Emissions"));
