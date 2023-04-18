@@ -6,10 +6,7 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
+import { needEndDate } from "../../../additional-functions/app-error";
 import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
@@ -63,7 +60,7 @@ export const DataTableMethod = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
-  const [errorMsgs, setErrorMsgs] = useState([])
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const dropdownArray = [
     [
       "parameterCode",
@@ -104,18 +101,20 @@ export const DataTableMethod = ({
   useEffect(() => {
     const fetchMethods = async () => {
       try {
-        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
-        setMethods(methods.data)
-        setDataLoaded(true)
-        const matsMethods = await mpApi.getMonitoringMatsMethods(locationSelectValue)
-        setMatsMethods(matsMethods.data)
-        setUpdateTable(false)
-        setRevertedState(false)
-        setUpdateRelatedTables(false)
+        const methods = await mpApi.getMonitoringMethods(locationSelectValue);
+        setMethods(methods.data);
+        setDataLoaded(true);
+        const matsMethods = await mpApi.getMonitoringMatsMethods(
+          locationSelectValue
+        );
+        setMatsMethods(matsMethods.data);
+        setUpdateTable(false);
+        setRevertedState(false);
+        setUpdateRelatedTables(false);
       } catch (error) {
-        console.log('error fetching methods', error);
+        console.log("error fetching methods", error);
       }
-    }
+    };
     if (
       updateTable ||
       methods.length <= 0 ||
@@ -123,7 +122,7 @@ export const DataTableMethod = ({
       revertedState ||
       updateRelatedTables
     ) {
-      fetchMethods()
+      fetchMethods();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -209,11 +208,11 @@ export const DataTableMethod = ({
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             });
             // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             }, 1000);
           }
         }
@@ -308,7 +307,7 @@ export const DataTableMethod = ({
   };
 
   const executeOnClose = () => {
-    setErrorMsgs([])
+    setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
@@ -338,7 +337,9 @@ export const DataTableMethod = ({
       else {
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMethodsTableRecords(
-          tabs[currentTabIndex].inactive[0] === false ? getActiveData(methods) : methods
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(methods)
+            : methods
         );
       }
     } else {
@@ -360,7 +361,7 @@ export const DataTableMethod = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      setErrorMsgs([needEndDate])
+      setErrorMsgs([needEndDate]);
       return;
     }
     try {
@@ -374,7 +375,7 @@ export const DataTableMethod = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
@@ -384,7 +385,7 @@ export const DataTableMethod = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      setErrorMsgs([needEndDate])
+      setErrorMsgs([needEndDate]);
       return;
     }
     try {
@@ -398,7 +399,7 @@ export const DataTableMethod = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
@@ -481,9 +482,7 @@ const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[METHODS_STORE_NAME],
 
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 

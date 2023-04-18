@@ -71,6 +71,7 @@ const MultiSelectCombobox = ({
 
   // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce() 
   // to run every time MultiSelectComboBox rerenders
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS), [_items]);
 
   const updateListDataOnChange = useCallback(
@@ -158,6 +159,7 @@ const MultiSelectCombobox = ({
     }
     selectedItemsRef.current = _selectedItems;
     setSelectedItems(_selectedItems);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
