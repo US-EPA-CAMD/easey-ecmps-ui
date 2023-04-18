@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@trussworks/react-uswds";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import { checkoutAPI } from "../../additional-functions/checkout";

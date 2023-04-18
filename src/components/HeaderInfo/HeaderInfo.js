@@ -41,10 +41,6 @@ import {
 } from "../../additional-functions/manage-focus";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 import {
-  getViews,
-  exportEmissionsDataDownload,
-} from "../../utils/api/emissionsApi";
-import {
   getUser,
   displayReport,
   getPreviouslyFullSubmitedQuarter,
@@ -86,7 +82,7 @@ export const getReportingPeriods = (minYear = 2009) => {
 
   for (let year = maxYear; year >= minYear; year--) {
     for (const quarter of quarters) {
-      if( parseInt(`${year}${quarter}`) <= currentYearQuarter)
+      if (parseInt(`${year}${quarter}`) <= currentYearQuarter)
         reportingPeriods.push(`${year} Q${quarter}`);
     }
   }
@@ -308,15 +304,12 @@ export const HeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
+    console.log("selectedReportingPeriods, ", selectedReportingPeriods)
+    if (workspaceSection !== EMISSIONS_STORE_NAME)
+      return;
 
-    getViews().then(({ data }) => {
-      setViewTemplates(data);
-      if (!currentTab?.viewTemplateSelect && data?.length > 0) {
-        setViewTemplateSelect(data[0]);
-      }
-    });
-  }, [workspaceSection, setViewTemplateSelect]);
+    getEmissionsViewDropdownData();
+  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -325,6 +318,40 @@ export const HeaderInfo = ({
       setTestDataOptionSelect(testData[0]);
     }
   }, [workspaceSection, setTestDataOptionSelect]);
+
+  // gets the data required to build the emissions dropdown
+  const getEmissionsViewDropdownData = () => {
+
+    if (selectedReportingPeriods.length === 0) return;
+
+    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0)
+      return;
+
+    // First get view counts
+    emApi.getEmissionViewData(
+      'COUNTS',
+      configID,
+      selectedReportingPeriods,
+      selectedUnitId,
+      selectedStackPipeId,
+      inWorkspace
+    ).then(({ data: countData }) => {
+
+      console.log(countData)
+      console.log('unit', selectedUnitId)
+      console.log('stack', selectedStackPipeId)
+      console.log('selectedReportingPeriods: ', selectedReportingPeriods);
+
+      emApi.getViews().then(({ data }) => {
+        setViewTemplates(data);
+        if (!currentTab?.viewTemplateSelect && data?.length > 0) {
+          setViewTemplateSelect(data[0]);
+        }
+      });
+
+    })
+
+  }
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -367,7 +394,7 @@ export const HeaderInfo = ({
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       promises.push(
-        exportEmissionsDataDownload(
+        emApi.exportEmissionsDataDownload(
           facility,
           configID,
           selectedReportingPeriod.slice(0, 4),
@@ -553,9 +580,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -777,9 +804,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -836,13 +862,13 @@ export const HeaderInfo = ({
   };
 
   const handleExport = async () => {
-    try{
+    try {
       setDataLoaded(false);
       if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi.exportMonitoringPlanDownload(configID);
       setDataLoaded(true);
-    }catch(error){
+    } catch (error) {
       setDataLoaded(true);
       console.error(error)
     }
@@ -923,9 +949,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal &&
@@ -1185,7 +1210,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1234,7 +1259,7 @@ export const HeaderInfo = ({
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
