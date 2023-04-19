@@ -102,4 +102,14 @@ describe("validateUserInput", () => {
     const errors = validateUserInput(invalidInput, dataTableName)
     expect(errors).not.toHaveLength(0)
   })
+
+  test("given invalid data for WAF edge case then returns errors", () => {
+    const invalidInput = {
+      wafEndDate: null,
+      wafEndHour: 0,
+    };
+    const wafTableName = "Rectangular Duct WAF";
+    const errors = validateUserInput(invalidInput, wafTableName);
+    expect(errors).toHaveLength(1);
+  })
 })
