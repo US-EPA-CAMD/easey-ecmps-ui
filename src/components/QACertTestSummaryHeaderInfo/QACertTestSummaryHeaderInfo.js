@@ -90,6 +90,7 @@ export const QACertTestSummaryHeaderInfo = ({
     if (testTypeGroupOptions.length > 0 && testTypeGroupOptions[0]['name'] !== "Loading...") {
       setSectionSelect([sectionSelect[0], testTypeGroupOptions[sectionSelect[0]]['name']]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testTypeGroupOptions]);
 
   useEffect(() => {

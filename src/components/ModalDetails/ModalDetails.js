@@ -214,7 +214,7 @@ const ModalDetails = ({
       case "multiSelectDropdown":
         const items = [];
         for (let valueItem of value[6]){
-          if(valueItem.code != ""){
+          if(valueItem.code !== ""){
             let item = {
               id: "",
               label: "",

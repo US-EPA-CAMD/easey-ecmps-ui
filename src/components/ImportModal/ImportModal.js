@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
-import { checkingCorrectSchema, formatSchemaErrors } from "./import-functions";
+import { checkingCorrectSchema } from "./import-functions";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -186,7 +186,6 @@ const ImportModal = ({
         }
       </div>
     );
-    {/* need to center in modal */ }
   }
 
   return (

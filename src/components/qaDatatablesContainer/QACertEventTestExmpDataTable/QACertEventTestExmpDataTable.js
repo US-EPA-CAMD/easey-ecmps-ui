@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 
-import { createQaCertEvents } from "../../../utils/api/qaCertificationsAPI.js";
 import {
   mapQaCertEventsDataToRows,
   mapQaExtensionsExemptionsDataToRows,
@@ -10,8 +9,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
-  generateArrayOfYears,
-  getReportingPeriods,
+  generateArrayOfYears
 } from "../../HeaderInfo/HeaderInfo";
 import {
   qaCertEventsProps,
@@ -64,12 +62,7 @@ const QACertEventTestExmpDataTable = ({
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
-  const yearQuarters = getReportingPeriods().map((reportingPeriod, index) => {
-    return {
-      code: reportingPeriod,
-      name: reportingPeriod,
-    };
-  });
+
 
   const years = generateArrayOfYears(2009).map((year, index) => {
     return {
@@ -108,12 +101,14 @@ const QACertEventTestExmpDataTable = ({
     setUpdateTable(true);
     setDropdownsLoaded(false);
     setMdmData(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect, locationSelectValue]);
 
   useEffect(() => {
     if (mdmData === null && !dropdownsLoaded) {
       loadDropdownsData(dataTableName);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dropdownsLoaded, mdmData]);
 
   //**** */
@@ -224,11 +219,12 @@ const QACertEventTestExmpDataTable = ({
           });
         break;
       case "Test Extension Exemption":
+        // TODO: issues with ticket 5056
         const quarters = [
-          { code: "2", name: "1" },
-          { code: "3", name: "2" },
-          { code: "4", name: "3" },
-          { code: "5", name: "4" },
+          { code: "1", name: "1" },
+          { code: "2", name: "2" },
+          { code: "3", name: "3" },
+          { code: "4", name: "4" },
         ];
         allPromises.push([]);
         allPromises.push([]);
@@ -419,8 +415,10 @@ const QACertEventTestExmpDataTable = ({
     switch (sectionSelect[1]) {
       case "QA Certification Event":
         updatedData = mapQaCertEventsDataToRows(data ? data : [], orisCode);
+        break;
       case "Test Exemptions and Exeptions":
         updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : [], orisCode);
+        break;
       default:
         break;
     }
