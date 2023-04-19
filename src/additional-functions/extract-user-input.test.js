@@ -82,11 +82,7 @@ describe("extract user functions", () => {
 });
 
 describe("validateUserInput", () => {
-  const options = {
-    dataTableName: 'Formula',
-    lAttr: 'lAttr',
-    rDat: 'rDat'
-  }
+  const dataTableName = "Formula";
   test("given valid data then returns no errors", () => {
     const validInput = {
       beginDate: '03/22/2023',
@@ -94,7 +90,7 @@ describe("validateUserInput", () => {
       endDate: '03/23/2023',
       endHour: 0
     }
-    const errors = validateUserInput(validInput, options)
+    const errors = validateUserInput(validInput, dataTableName)
     expect(errors).toHaveLength(0)
   })
 
@@ -103,7 +99,7 @@ describe("validateUserInput", () => {
       beginDate: null,
       beginHour: 0
     }
-    const errors = validateUserInput(invalidInput, options)
+    const errors = validateUserInput(invalidInput, dataTableName)
     expect(errors).not.toHaveLength(0)
   })
 })
