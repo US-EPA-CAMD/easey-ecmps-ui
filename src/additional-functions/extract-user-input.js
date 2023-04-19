@@ -104,10 +104,19 @@ export const validateUserInput = (userInput, dataTableName) => {
  */
 const checkEndDateAndHour = (userInput, dataTableName, errors) => {
   const needsEndDateTimeMsg = "Must enter in both End Date/Time";
-  const hasOnlyEitherEndDateOrHour = (userInput.endDate === null) !== (userInput.endHour === null)
+  // cases where userInput.endDate/Hour isn't an input option and thus don't exist in userInput evaluate to undefined
+  const hasOnlyEitherEndDateOrHour = (userInput.endDate === null) !== (userInput.endHour === null);
 
+  // skips these tables b/c only have end date, no end hour
   const skipTables = ["Location Attribute", "Relationship Data"]
   if (skipTables.includes(dataTableName)) return;
+
+  // edge case for WAFs Rectangular Duct b/c properties are named wafEndDate/Hour
+  const wafOnlyEitherEndDateOrHour = (userInput.wafEndHour === null) !== (userInput.wafEndDate === null);
+  if (dataTableName === "Rectangular Duct WAF" && wafOnlyEitherEndDateOrHour) {
+    errors.push(needsEndDateTimeMsg);
+    return;
+  }
 
   if (hasOnlyEitherEndDateOrHour) {
     errors.push(needsEndDateTimeMsg);
