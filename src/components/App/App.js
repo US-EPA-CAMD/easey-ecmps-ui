@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
@@ -18,7 +18,6 @@ import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
 
 import HelpSupport from "../HelpSupport/HelpSupport";
-import "./App.scss";
 import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
 import {
@@ -45,8 +44,6 @@ const App = () => {
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
   const dispatch = useDispatch();
-
-  //useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {
@@ -135,82 +132,82 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
   );
+
   return (
     <div>
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
-      <Switch>
-      <Route
-          path="/reports"
-          exact
-          component={() => <ReportGenerator />}
-        />
-        <Route
-          path="/workspace/reports"
-          exact
-          component={() => <ReportGenerator requireAuth={true} user={user} />}
-        />
-        <Layout
-          user={user}
-          currentLink={currentLink}
-          setCurrentLink={setCurrentLink}
-        >
-          <Switch>
-            <Redirect from="/home" to="/" />
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <AboutHome user={user} setCurrentLink={setCurrentLink} />
-              )}
-            />
-            <Route path={`/faqs`} exact component={() => <FAQ />} />
-            <Route path="/login" exact component={Login} />
-            {!cdx_user && <Redirect from="/workspace/submit" to="/home" />}
-            <Route
-              path="/workspace/submit"
-              exact
-              component={() => (
-                <EvaluateAndSubmit user={user} componentType="Submission" />
-              )}
-            />
-
-            {!cdx_user && <Redirect from="/workspace/evaluate" to="/home" />}
-            <Route
-              path="/workspace/evaluate"
-              exact
-              component={() => (
-                <EvaluateAndSubmit user={user} componentType="Evaluate" />
-              )}
-            />
-
-            {user ? (
-              <Redirect
-                from="/monitoring-plans"
-                to="/workspace/monitoring-plans"
+      <Layout
+        user={user}
+        currentLink={currentLink}
+        setCurrentLink={setCurrentLink}
+      >
+        <Routes>
+          <Route
+            path="/reports"
+            element={user
+              ? <Navigate to="/workspace/reports" replace />
+              : <ReportGenerator />
+            }
+          />
+          <Route
+            path="/workspace/reports"
+            element={!user
+              ? <Navigate to="/reports" replace />
+              : <ReportGenerator requireAuth={true} user={user} />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <AboutHome
+                user={user}
+                setCurrentLink={setCurrentLink}
               />
-            ) : (
-              <Redirect
-                from="/workspace/monitoring-plans"
-                to="/monitoring-plans"
-              />
-            )}
-            <Route
-              path="/monitoring-plans"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/home"
+            element={<Navigate to="/" replace />}
+          />            
+          <Route path={`/faqs`} element={<FAQ />} />
+          <Route path="/login" element={Login} />
+          <Route
+            path="/workspace/submit"
+            element={!user
+              ? <Navigate to="/" replace />
+              : <EvaluateAndSubmit
+                  user={user}
+                  componentType="Submission"
+                />
+            }
+          />
+          <Route
+            path="/workspace/evaluate"
+            element={!user
+              ? <Navigate to="/" replace />
+              : <EvaluateAndSubmit
+                  user={user}
+                  componentType="Evaluate"
+                />
+            }
+          />
+          <Route
+            path="/monitoring-plans"
+            element={user
+              ? <Navigate to="/workspace/monitoring-plans" replace />
+              : <MonitoringPlanHome
                   user={false}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
                 />
-              )}
-            />
-            <Route
-              path="/workspace/monitoring-plans/"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/workspace/monitoring-plans"
+            element={!user
+              ? <Navigate to="/monitoring-plans" replace />
+              : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
                   resetTimerFlag={resetTimer}
@@ -219,29 +216,23 @@ const App = () => {
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
                   moduleName={modules.monitoring_plans_module}
                 />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/qa-test" to="/workspace/qa-test" />
-            ) : (
-              <Redirect from="/workspace/qa-test" to="/qa-test" />
-            )}
-            <Route
-              path="/qa-test"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/qa/tests"
+            element={user
+              ? <Navigate to="/workspace/qa/tests" replace />
+              : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
                 />
-              )}
-            />
-            <Route
-              path="/workspace/qa-test"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/workspace/qa/tests"
+            element={!user
+              ? <Navigate to="/qa/tests" replace />
+              : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
                   resetTimerFlag={resetTimer}
@@ -250,29 +241,23 @@ const App = () => {
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
                   moduleName={modules.qa_Certifications_Test_Summary_Module}
                 />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/qa-qce-tee" to="/workspace/qa-qce-tee" />
-            ) : (
-              <Redirect from="/workspace/qa-qce-tee" to="/qa-qce-tee" />
-            )}
-            <Route
-              path="/qa-cert-event"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/qa/qce-tee"
+            element={user
+              ? <Navigate to="/workspace/qa/qce-tee" replace />
+              : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
                 />
-              )}
-            />
-            <Route
-              path="/workspace/qa-cert-event"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/workspace/qa/qce-tee"
+            element={!user
+              ? <Navigate to="/qa/qce-tee" replace />
+              : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
                   resetTimerFlag={resetTimer}
@@ -281,89 +266,67 @@ const App = () => {
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
                   moduleName={modules.qa_Certifications_Event_Module}
                 />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/emissions" to="/workspace/emissions" />
-            ) : (
-              <Redirect from="/workspace/emissions" to="/emissions" />
-            )}
-            <Route
-              path="/emissions"
-              exact
-              component={() => {
-                return (
-                  <MonitoringPlanHome
-                    user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/workspace/emissions"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/emissions"
+            element={user
+              ? <Navigate to="/workspace/emissions" replace />
+              : <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={EMISSIONS_STORE_NAME}
+                />
+            }
+          />
+          <Route
+            path="/workspace/emissions"
+            element={!user
+              ? <Navigate to="/emissions" replace />
+              : <MonitoringPlanHome
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
-              )}
-            />
-
-            {user ? (
-              <Redirect from="/export" to="/workspace/export" />
-            ) : (
-              <Redirect from="/workspace/export" to="/export" />
-            )}
-            <Route
-              path="/export"
-              exact
-              component={() => (
-                <MonitoringPlanHome
+            }
+          />
+          <Route
+            path="/export"
+            element={user
+              ? <Navigate to="/workspace/export" replace />
+              : <MonitoringPlanHome
                   user={false}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
-              )}
-            />
-            <Route
-              path="/workspace/export"
-              exact
-              component={() => (
-                <MonitoringPlanHome
-                  user={user}
-                  workspaceSection={EXPORT_STORE_NAME}
-                />
-              )}
-            />
-
-            {!cdx_user && (
-              <Redirect from="/workspace/error-suppression" to="/home" />
-            )}
-            <Route
-              path="/workspace/error-suppression"
-              exact
-              component={() => <ErrorSuppression />}
-            />
-
-            <Route path="/tutorials" exact component={ComingSoon} />
-            <Route path="/cam-api" exact component={ComingSoon} />
-            <Route path="/glossary" exact component={ComingSoon} />
-
-            <Route
-              path="/reporting-instructions"
-              exact
-              component={ReportingInstructions}
-            />
-            <Route path={`/resources`} exact component={Resources} />
-            <Route path={`/help-support`} exact component={HelpSupport} />
-            <Route path="/admin/rules" exact component={RuleEditor} />
-
-            <Route path="*" component={NotFound} />
-          </Switch>
-        </Layout>
-      </Switch>
+            }
+          />
+          <Route
+            path="/workspace/export"
+            element={!user
+              ? <Navigate to="/export" replace />
+              : <MonitoringPlanHome
+                user={user}
+                workspaceSection={EXPORT_STORE_NAME}
+              />
+            }
+          />
+          <Route
+            path="/workspace/error-suppression"
+            element={!user
+              ? <Navigate to="/" />
+              : <ErrorSuppression />
+            }
+          />
+          <Route path="/tutorials" element={ComingSoon} />
+          <Route path="/cam-api" element={ComingSoon} />
+          <Route path="/glossary" element={ComingSoon} />
+          <Route
+            path="/reporting-instructions"
+            element={ReportingInstructions}
+          />
+          <Route path={`/resources`} element={Resources} />
+          <Route path={`/help-support`} element={HelpSupport} />
+          <Route path="*" element={NotFound} />
+        </Routes>
+      </Layout>      
     </div>
   );
 };

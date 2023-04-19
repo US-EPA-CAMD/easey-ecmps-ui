@@ -1,0 +1,21 @@
+// 1. Load USWDS settings
+@forward "uswds-theme.scss";
+
+// 2. Load USWDS source code
+@forward "uswds";
+
+// 3. Load your project's custom Sass
+
+/***** GLOBAL VARIABLES (scss values used througout the app) *****/
+@import "variables";
+
+/***** APP SCOPE main source overrides *****/
+@import "uswds-overrides";
+
+@import "react-datatable-overrides";
+
+@import "global-styles";
+
+@import "icons";
+
+@import "transitions";

@@ -4,6 +4,8 @@ import {
   EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
+const validate = require('jsonschema').validate;
+
 export const checkingCorrectSchema = (
   file,
   workspace,
@@ -14,18 +16,19 @@ export const checkingCorrectSchema = (
   emissionsSchema,
   setDisablePortBtn
 ) => {
-  var Validator = require("jsonschema").Validator;
-  var v = new Validator();
+  let results = null;
+
   switch (workspace) {
     case MONITORING_PLAN_STORE_NAME:
+      results = validate(file, mpSchema);
       // correct schema
-      if (v.validate(file, mpSchema).valid) {
+      if (results.valid) {
         errorChecks(false);
         // correct schema, just errors
       } else {
         errorChecks(true);
         formatSchemaErrors(
-          v.validate(file, mpSchema),
+          results,
           setSchemaErrors,
           setDisablePortBtn
         );
@@ -36,14 +39,15 @@ export const checkingCorrectSchema = (
       }
       break;
     case QA_CERT_TEST_SUMMARY_STORE_NAME:
+      results = validate(file, qaSchema);
       // correct schema
-      if (v.validate(file, qaSchema).valid) {
+      if (results.valid) {
         errorChecks(false);
         // correct schema, just errors
       } else {
         errorChecks(true);
         formatSchemaErrors(
-          v.validate(file, qaSchema),
+          results,
           setSchemaErrors,
           setDisablePortBtn
         );
@@ -54,14 +58,15 @@ export const checkingCorrectSchema = (
       }
       break;
     case EMISSIONS_STORE_NAME:
+      results = validate(file, emissionsSchema);
       // correct schema
-      if (v.validate(file, emissionsSchema).valid) {
+      if (results.valid) {
         errorChecks(false);
         // correct schema, just errors
       } else {
         errorChecks(true);
         formatSchemaErrors(
-          v.validate(file, emissionsSchema),
+          results,
           setSchemaErrors,
           setDisablePortBtn
         );
@@ -76,6 +81,7 @@ export const checkingCorrectSchema = (
       break;
   }
 };
+
 export const formatSchemaErrors = (
   errors,
   setSchemaErrors,

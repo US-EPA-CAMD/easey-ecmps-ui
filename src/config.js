@@ -4,8 +4,6 @@ import {
   getConfigValueBoolean,
 } from "./utils/functions";
 
-require("dotenv").config();
-
 export const oneSecond = 1000;
 export const fiveSeconds = 5000;
 export const oneMinute = 60 * oneSecond;
