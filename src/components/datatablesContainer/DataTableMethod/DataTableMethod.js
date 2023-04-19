@@ -6,7 +6,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { needEndDate } from "../../../additional-functions/app-error";
 import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
