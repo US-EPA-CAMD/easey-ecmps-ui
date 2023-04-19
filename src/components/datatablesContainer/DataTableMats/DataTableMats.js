@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
@@ -64,6 +64,8 @@ export const DataTableMats = ({
   const [errorMsgs, setErrorMsgs] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  const dataTableName = "Supplemental Methods";
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -187,11 +189,9 @@ export const DataTableMats = ({
 
   const saveMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {
@@ -210,11 +210,9 @@ export const DataTableMats = ({
   };
   const createMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {
