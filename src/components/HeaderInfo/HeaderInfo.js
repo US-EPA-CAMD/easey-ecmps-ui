@@ -9,7 +9,7 @@ import {
   GridContainer,
   Label,
 } from "@trussworks/react-uswds";
-import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import { CreateOutlined, LensOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 import { triggerBulkEvaluation } from "../../utils/api/camdServices";
 
@@ -114,6 +114,7 @@ export const HeaderInfo = ({
   updateRelatedTables,
   workspaceSection,
 }) => {
+
   //MP
   const sections = [
     { name: "Defaults" },
@@ -304,7 +305,7 @@ export const HeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    console.log("selectedReportingPeriods, ", selectedReportingPeriods)
+
     if (workspaceSection !== EMISSIONS_STORE_NAME)
       return;
 
@@ -320,36 +321,64 @@ export const HeaderInfo = ({
   }, [workspaceSection, setTestDataOptionSelect]);
 
   // gets the data required to build the emissions dropdown
-  const getEmissionsViewDropdownData = () => {
+  const getEmissionsViewDropdownData = async () => {
 
-    if (selectedReportingPeriods.length === 0) return;
-
-    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0)
+    if (selectedReportingPeriods.length === 0){
+      setViewTemplates([]);
       return;
+    }
+
+    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0){
+      setViewTemplates([]);
+      return;
+    }
 
     // First get view counts
-    emApi.getEmissionViewData(
-      'COUNTS',
-      configID,
-      selectedReportingPeriods,
-      selectedUnitId,
-      selectedStackPipeId,
-      inWorkspace
-    ).then(({ data: countData }) => {
-
-      console.log(countData)
+    try{
+      const { data: countData } = await emApi.getEmissionViewData(
+        'COUNTS',
+        configID,
+        selectedReportingPeriods,
+        selectedUnitId,
+        selectedStackPipeId,
+        inWorkspace
+      );
+      
+      const codesWithData = countData.filter(c => c.count > 0)
+                                      .map(c=> c.dataSetCode);
+      
+      console.log('locations', locations);
+      console.log('locationsSelect', locationSelect)
+      console.log('countData: ', countData)
+      console.log('codesWithData: ', codesWithData)
+  
       console.log('unit', selectedUnitId)
       console.log('stack', selectedStackPipeId)
       console.log('selectedReportingPeriods: ', selectedReportingPeriods);
+  
+      let { data: viewData } = await emApi.getViews();
+      console.log("views data")
+      console.log(viewData)
+      
+      // This will filter the dropdown values for the views by the ones that have a count > 0
+      viewData = viewData.filter(v => codesWithData.find(d => d === v.code) !== undefined)
+  
+      setViewTemplates(viewData);
+      if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
+        setViewTemplateSelect(viewData[0]);
+      }
+    } catch(e){
+      console.error(e);
 
-      emApi.getViews().then(({ data }) => {
-        setViewTemplates(data);
-        if (!currentTab?.viewTemplateSelect && data?.length > 0) {
-          setViewTemplateSelect(data[0]);
-        }
-      });
+    }
 
-    })
+    // emApi.getViews().then(({ data }) => {
+    //   setViewTemplates(data);
+    //   if (!currentTab?.viewTemplateSelect && data?.length > 0) {
+    //     setViewTemplateSelect(data[0]);
+    //   }
+    // });
+
 
   }
 
@@ -888,6 +917,7 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
+    console.log("applyFilters()")
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
@@ -1241,6 +1271,7 @@ export const HeaderInfo = ({
                     initialSelection={locationSelect[0]}
                     selectionHandler={setLocationSelect}
                     workspaceSection={workspaceSection}
+                    changeFunc={getEmissionsViewDropdownData}
                   />
                 </Grid>
                 <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
