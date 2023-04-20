@@ -554,18 +554,24 @@ export const DataTableSystems = ({
     endHour: 0,
     componentId: "string",
   };
+
+  /**
+   * Creates a component for a system
+   * @returns true if component created successfully, false otherwise
+   */
   const createComponent = async () => {
     const userInput = extractUserInput(componentPayload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+    const sysCompTable = "System Components";
+    const validationErrors = validateUserInput(userInput, sysCompTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
     }
     try {
       const resp = await mpApi.createSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id);
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -573,8 +579,13 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs(JSON.stringify(error))
     }
+    return false;
   };
 
+  /**
+   * Saves a component for a system
+   * @returns true if component saved successfully, false otherwise
+   */
   const saveComponent = async () => {
     const userInput = extractUserInput(componentPayload, ".modalUserInput");
 
@@ -584,16 +595,17 @@ export const DataTableSystems = ({
     userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode = selectedRangeInFirst.sampleAcquisitionMethodCode;
 
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+    const sysCompTable = "System Components";
+    const validationErrors = validateUserInput(userInput, sysCompTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
     }
     try {
       const resp = await mpApi.saveSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id, selectedRangeInFirst.id);
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -601,6 +613,7 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)])
     }
+    return false;
   };
 
   // from analyzer ranges view to components view
@@ -763,17 +776,19 @@ export const DataTableSystems = ({
                     : secondLevelName === "Component" && !createNewComponentFlag
                       ? // at system components
                       // need to hide analyzer range table on create
-                      () => {
-                        saveComponent();
-                        backToFirstLevelLevelBTN(false);
+                      async () => {
+                        const savedSuccessfully = await saveComponent();
+                        if (savedSuccessfully) { backToFirstLevelLevelBTN(false); }
                       }
                       : secondLevelName === "Component" && createNewComponentFlag
                         ? // at system components
-                        () => {
-                          setCreateNewComponentFlag(false);
-                          setAddComponentFlag(false);
-                          backToFirstLevelLevelBTN(false);
-                          createComponent();
+                        async () => {
+                          const createdSuccess = await createComponent();
+                          if (createdSuccess) {
+                            setCreateNewComponentFlag(false);
+                            setAddComponentFlag(false);
+                            backToFirstLevelLevelBTN(false);
+                          }
                         }
                         : // at add component level page
                         secondLevelName === "Add Component"
