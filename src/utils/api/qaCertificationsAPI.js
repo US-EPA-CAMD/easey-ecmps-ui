@@ -601,6 +601,7 @@ export const updateRataSummary = async (
   payload
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${id}`;
+  console.log(payload)
   try {
     return handleResponse(
       await secureAxios({

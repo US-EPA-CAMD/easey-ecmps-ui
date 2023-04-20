@@ -420,12 +420,12 @@ export const DataTableSystems = ({
     const payload = {
       locId: selectedRangeInFirst.locationId,
       compId: selectedRangeInFirst.componentRecordId,
-      id: null,
+      id: "string",
       analyzerRangeCode: "string",
-      dualRangeIndicator: "string",
-      beginDate: null,
+      dualRangeIndicator: 0,
+      beginDate: "string",
       beginHour: 0,
-      endDate: null,
+      endDate: "string",
       endHour: 0,
     };
     const userInput = extractUserInput(payload, ".modalUserInput", [

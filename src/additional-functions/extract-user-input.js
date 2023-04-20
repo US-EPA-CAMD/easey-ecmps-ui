@@ -1,4 +1,14 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
+  const userInputPayload = {...payload};
+
+  for (let userInputValue in userInputPayload) {
+    if (userInputPayload.hasOwnProperty(userInputValue)) {
+      if(userInputPayload[userInputValue] === "string" || userInputPayload[userInputValue] === 0){
+        userInputPayload[userInputValue] = null;
+      }
+    }
+  }
+
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -50,44 +60,33 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   for (const item of payloadArray) {
     if (item.value === null || item.value === "") {
-      payload[item.name] = null;
+      userInputPayload[item.name] = null;
       continue;
     }
     if (item.value !== undefined) {
-      if (
-        typeof item.value === "string" &&
-        (isNaN(item.value) ||
-          (item.value.length > 1 &&
-            item.value.charAt(0) === "0" &&
-            item.value.charAt(1) !== "."))
-      ) {
-        payload[item.name] =
-          item.value.trim() === "" ? null : item.value.trim();
-      }
-      // is a number
-      else if (typeof item.value === "string" && !isNaN(item.value)) {
-        if (payload[item.name] === "string" || (typeof payload[item.name]) === "string") {
-          payload[item.name] =
-            item.value.trim() === "" ? null : item.value.trim();
-        }
-        // not a decimal
-        else if (item.value.indexOf(".") === -1) {
-          payload[item.name] = parseInt(item.value);
+      if(payload[item.name] === 0) {
+        if(typeof item.value === "string"){
+          if (item.value.indexOf(".") === -1) {
+            userInputPayload[item.name] = parseInt(item.value);
+          } else {
+            userInputPayload[item.name] = parseFloat(item.value);
+          }
         } else {
-          payload[item.name] = parseFloat(item.value);
+          userInputPayload[item.name] = item.value
         }
       }
-      if (typeof item.value === "number") {
-        if (payload[item.name] === "string") {
-          payload[item.name] = item.value.toString();
-        } else {
-          payload[item.name] = item.value;
+      else {
+        if(typeof item.value === "string"){
+          userInputPayload[item.name] = item.value.trim() === "" ? null : item.value.trim();
         }
       }
     }
   }
+  // REMOVE THESE CONSOLE.LOGS BEFORE MERGING, THESE ARE DEBUG
+  console.log(payload)
+  console.log(userInputPayload)
 
-  return payload;
+  return userInputPayload;
 };
 
 export const validateUserInput = (userInput, options = {}) => {
