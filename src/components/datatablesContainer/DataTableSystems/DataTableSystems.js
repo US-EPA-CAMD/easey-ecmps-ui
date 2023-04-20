@@ -417,6 +417,10 @@ export const DataTableSystems = ({
     }
   };
 
+  /**
+   * Saves analyzer range for system component
+   * @returns true if saved successfully, false otherwise
+   */
   const saveAnalyzerRanges = async () => {
     const payload = {
       locId: selectedRangeInFirst.locationId,
@@ -436,12 +440,13 @@ export const DataTableSystems = ({
     const validationErrors = validateUserInput(userInput, analyzerRangesTable);
     if (validationErrors.length > 0) {
       setErrorMsgs(validationErrors);
-      return;
+      return false;
     }
     try {
       const resp = await mpApi.saveAnalyzerRanges(userInput);
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -449,8 +454,13 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)])
     }
+    return false;
   };
 
+  /**
+   * Create analyzer range for a system component
+   * @returns true if created successfully, false otherwise
+   */
   const createAnalyzerRange = async () => {
     const payload = {
       locId: selectedRangeInFirst.locationId,
@@ -470,12 +480,13 @@ export const DataTableSystems = ({
     const validationErrors = validateUserInput(userInput, analyzerRangesTable);
     if (validationErrors.length > 0) {
       setErrorMsgs(validationErrors);
-      return;
+      return false;
     }
     try {
       const resp = await mpApi.createAnalyzerRanges(userInput);
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -483,6 +494,7 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)])
     }
+    return false;
   };
 
   const [selectedFuelFlows, setSelectedFuelFlows] = useState("");
@@ -779,14 +791,14 @@ export const DataTableSystems = ({
                   secondLevelName === "Fuel Flow"
                     ? createFuelFlowFlag
                       ? async () => {
-                        const createdSuccess = await createFuelFlows();
-                        if (createdSuccess) {
+                        const createSuccess = await createFuelFlows();
+                        if (createSuccess) {
                           backToFirstLevelLevelBTN(false);
                           setOpenFuelFlowsView(false);
                         }
                       }
                       : async () => {
-                        const saveSuccess = saveFuelFlows();
+                        const saveSuccess = await saveFuelFlows();
                         if (saveSuccess) {
                           backToFirstLevelLevelBTN(false);
                           setOpenFuelFlowsView(false);
@@ -818,19 +830,23 @@ export const DataTableSystems = ({
                   : // at analyzer ranges in components at third level
                   createAnalyzerRangesFlag
                     ? // in creating a range
-                    () => {
-                      createAnalyzerRange();
-                      backToSecondLevelBTN(false);
-                      setCreateAnalyzerRangesFlag(false);
-                      setDisableExitBtn(false);
+                    async () => {
+                      const createSuccess = await createAnalyzerRange();
+                      if (createSuccess) {
+                        backToSecondLevelBTN(false);
+                        setCreateAnalyzerRangesFlag(false);
+                        setDisableExitBtn(false);
+                      }
+
                     }
                     : // in just editing a range
-                    () => {
-                      saveAnalyzerRanges();
-
-                      backToSecondLevelBTN(false);
-                      setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
-                      setDisableExitBtn(false);
+                    async () => {
+                      const saveSuccess = await saveAnalyzerRanges();
+                      if (saveSuccess) {
+                        backToSecondLevelBTN(false);
+                        setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
+                        setDisableExitBtn(false);
+                      }
                     }
             }
             close={closeModalHandler}
