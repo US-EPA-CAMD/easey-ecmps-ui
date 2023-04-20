@@ -90,41 +90,44 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   return payload;
 };
 
-export const validateUserInput = (userInput, options = {}) => {
+export const validateUserInput = (userInput, dataTableName) => {
   const errors = [];
-  const { dataTableName, lAttr, rDat } = options;
-  const needsEndDateTime = "Must enter in both End Date/Time";
 
-  checkFormulaBeginDateAndHour(userInput, errors, dataTableName);
-
-  // checks end date and hour for formula table
-  if (options.dataTableName === "Formula") {
-    if (
-      !(
-        (userInput.endHour !== null && userInput.endDate) ||
-        (userInput.endHour === null && !userInput.endDate)
-      )
-    ) {
-      errors.push(needsEndDateTime);
-    }
-  } else if (
-    (userInput.endHour && !userInput.endDate) ||
-    (!userInput.endHour &&
-      userInput.endDate &&
-      dataTableName !== lAttr &&
-      dataTableName !== rDat)
-  ) {
-    errors.push(needsEndDateTime);
-  }
+  checkFormulaBeginDateAndHour(userInput, dataTableName, errors);
+  checkEndDateAndHour(userInput, dataTableName, errors);
 
   return errors;
 };
 
 /**
+ * Checks if either end date or hour exists
+ */
+const checkEndDateAndHour = (userInput, dataTableName, errors) => {
+  const needsEndDateTimeMsg = "Must enter in both End Date/Time";
+  // cases where userInput.endDate/Hour isn't an input option and thus don't exist in userInput evaluate to undefined
+  const hasOnlyEitherEndDateOrHour = (userInput.endDate === null) !== (userInput.endHour === null);
+
+  // skips these tables b/c only have end date, no end hour
+  const skipTables = ["Location Attribute", "Relationship Data"]
+  if (skipTables.includes(dataTableName)) return;
+
+  // edge case for WAFs Rectangular Duct b/c properties are named wafEndDate/Hour
+  const wafOnlyEitherEndDateOrHour = (userInput.wafEndHour === null) !== (userInput.wafEndDate === null);
+  if (dataTableName === "Rectangular Duct WAF" && wafOnlyEitherEndDateOrHour) {
+    errors.push(needsEndDateTimeMsg);
+    return;
+  }
+
+  if (hasOnlyEitherEndDateOrHour) {
+    errors.push(needsEndDateTimeMsg);
+  }
+}
+
+/**
  * Checks if begin date and hour exist as options in user input and are nonempty
  * for Formula table in MP
  */
-const checkFormulaBeginDateAndHour = (userInput, errors, dataTableName) => {
+const checkFormulaBeginDateAndHour = (userInput, dataTableName, errors) => {
   const [beginDate, beginHour] = ["beginDate", "beginHour"];
   const needsBeginDateTime = "Must enter in both Begin Date/Time";
 
