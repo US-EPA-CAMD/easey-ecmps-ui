@@ -497,18 +497,24 @@ export const DataTableSystems = ({
     endDate: null,
     endHour: 0,
   };
+
+  /**
+   * Saves fuel flow for a system
+   * @returns true if saved successfully, false otherwise
+   */
   const saveFuelFlows = async () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+    const fuelFlowTable = "Fuel Flows";
+    const validationErrors = validateUserInput(userInput, fuelFlowTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
     }
     try {
       const resp = await mpApi.saveSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.locationId);
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -516,20 +522,26 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)])
     }
+    return false;
   };
 
+  /**
+   * Creates fuel flow for a system
+   * @returns true if created successfully, false otherwise
+   */
   const createFuelFlows = async () => {
     const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+    const fuelFlowsTable = "Fuel Flows";
+    const validationErrors = validateUserInput(userInput, fuelFlowsTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
     }
     try {
       const resp = await mpApi.createSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.id);
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
+        return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -537,6 +549,7 @@ export const DataTableSystems = ({
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)])
     }
+    return false;
   };
   // system components
 
@@ -765,28 +778,32 @@ export const DataTableSystems = ({
                   ? // at system fuel flows
                   secondLevelName === "Fuel Flow"
                     ? createFuelFlowFlag
-                      ? () => {
-                        createFuelFlows();
-                        backToFirstLevelLevelBTN(false);
-                        setOpenFuelFlowsView(false);
+                      ? async () => {
+                        const createdSuccess = await createFuelFlows();
+                        if (createdSuccess) {
+                          backToFirstLevelLevelBTN(false);
+                          setOpenFuelFlowsView(false);
+                        }
                       }
-                      : () => {
-                        saveFuelFlows();
-                        backToFirstLevelLevelBTN(false);
-                        setOpenFuelFlowsView(false);
+                      : async () => {
+                        const saveSuccess = saveFuelFlows();
+                        if (saveSuccess) {
+                          backToFirstLevelLevelBTN(false);
+                          setOpenFuelFlowsView(false);
+                        }
                       }
                     : secondLevelName === "Component" && !createNewComponentFlag
                       ? // at system components
                       // need to hide analyzer range table on create
                       async () => {
-                        const savedSuccessfully = await saveComponent();
-                        if (savedSuccessfully) { backToFirstLevelLevelBTN(false); }
+                        const saveSuccess = await saveComponent();
+                        if (saveSuccess) { backToFirstLevelLevelBTN(false); }
                       }
                       : secondLevelName === "Component" && createNewComponentFlag
                         ? // at system components
                         async () => {
-                          const createdSuccess = await createComponent();
-                          if (createdSuccess) {
+                          const createSuccess = await createComponent();
+                          if (createSuccess) {
                             setCreateNewComponentFlag(false);
                             setAddComponentFlag(false);
                             backToFirstLevelLevelBTN(false);
