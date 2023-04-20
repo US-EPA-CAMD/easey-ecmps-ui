@@ -406,6 +406,7 @@ export const HeaderInfo = ({
 
   const handleEmissionsExport = async () => {
     const promises = [];
+    
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       promises.push(
@@ -878,13 +879,17 @@ export const HeaderInfo = ({
 
   const handleExport = async () => {
     try {
+      setIsLoading(true)
       setDataLoaded(false);
       if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi.exportMonitoringPlanDownload(configID);
       setDataLoaded(true);
+      setIsLoading(false)
+
     } catch (error) {
       setDataLoaded(true);
+      setIsLoading(false)
       console.error(error)
     }
   };
