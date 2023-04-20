@@ -127,10 +127,10 @@ export const DataTableRectangularDucts = ({
     locationId: locationSelectValue,
     id: "string",
     userId: "string",
-    addDate: "2021-10-18T07:05:11.018Z",
-    updateDate: "2021-10-18T07:05:11.018Z",
-    wafDeterminationDate: "2021-10-18",
-    wafBeginDate: "2021-10-18",
+    addDate: "string",
+    updateDate: "string",
+    wafDeterminationDate: "string",
+    wafBeginDate: "string",
     wafBeginHour: 0,
     wafMethodCode: "string",
     wafValue: 0,
@@ -140,7 +140,7 @@ export const DataTableRectangularDucts = ({
     numberOfTraversePointsRef: 0,
     ductWidth: 0,
     ductDepth: 0,
-    wafEndDate: "2021-10-18",
+    wafEndDate: "string",
     wafEndHour: 0,
   };
 
