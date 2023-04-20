@@ -377,6 +377,10 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return;
     }
+
+    // TODO: remove
+    console.log('save systems, userInput', userInput)
+    return;
     try {
       const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id);
       if (successResponses.includes(resp.status)) {
@@ -428,11 +432,10 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(payload, ".modalUserInput", [
       "dualRangeIndicator",
     ]);
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const analyzerRangesTable = "Analyzer Ranges";
+    const validationErrors = validateUserInput(userInput, analyzerRangesTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {
@@ -463,12 +466,11 @@ export const DataTableSystems = ({
     const userInput = extractUserInput(payload, ".modalUserInput", [
       "dualRangeIndicator",
     ]);
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
-      return
+    const analyzerRangesTable = "Analyzer Ranges";
+    const validationErrors = validateUserInput(userInput, analyzerRangesTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
     }
     try {
       const resp = await mpApi.createAnalyzerRanges(userInput);
