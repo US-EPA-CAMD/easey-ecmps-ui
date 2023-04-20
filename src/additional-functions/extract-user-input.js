@@ -82,9 +82,6 @@ export const extractUserInput = (payload, inputSelector, radios) => {
       }
     }
   }
-  // REMOVE THESE CONSOLE.LOGS BEFORE MERGING, THESE ARE DEBUG
-  console.log(payload)
-  console.log(userInputPayload)
 
   return userInputPayload;
 };
