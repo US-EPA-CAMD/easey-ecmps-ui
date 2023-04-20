@@ -21,8 +21,6 @@ const ModalAddComponent = ({
 
   useEffect(() => {
     let main = [];
-
-    let options = [];
     if (comps.length < 1) {
       mpApi.getMonitoringComponents(locationId).then((res) => {
         setComps(res.data);
@@ -46,9 +44,7 @@ const ModalAddComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comps, sysComps]);
   useEffect(() => {
-
     let options = [];
-
 
     if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
       options = filteredComps.map((option) => {

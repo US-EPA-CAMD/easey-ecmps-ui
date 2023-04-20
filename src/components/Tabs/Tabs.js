@@ -5,11 +5,7 @@ import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
 import "./Tabs.scss";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
-import {
-  convertSectionToStoreName,
-  // QA_CERT_TEST_SUMMARY_STORE_NAME,
-  EXPORT_STORE_NAME
-} from "../../additional-functions/workspace-section-and-store-names";
+import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
 const Tabs = ({
   children,
@@ -24,9 +20,10 @@ const Tabs = ({
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
   useEffect(() => {
-    setCurrentTabIndex(activeTabIndex)
+    setCurrentTabIndex(activeTabIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTabIndex]);
-  
+
   const settingActiveTab = (index) => {
     setActiveTabIndex(index);
   };
@@ -36,7 +33,7 @@ const Tabs = ({
     if (activeTabIndex === children.length - 1) {
       setActiveTabIndex(index - 1);
     }
-  }
+  };
 
   const closeHandler = (event, index, configId) => {
     event.stopPropagation();
@@ -44,7 +41,9 @@ const Tabs = ({
     if (workspaceSection !== EXPORT_STORE_NAME) {
       mpApi.getCheckedOutLocations().then((resOne) => {
         const configs = resOne.data;
-        if (configs.some((plan) =>
+        if (
+          configs.some(
+            (plan) =>
               plan.monPlanId === configId &&
               plan.checkedOutBy === user["userId"]
           )
@@ -59,8 +58,7 @@ const Tabs = ({
           removeTab(index);
         }
       });
-    }
-    else {
+    } else {
       removeTab(index);
     }
   };
@@ -102,7 +100,7 @@ const Tabs = ({
   const updateTabBtnSelectorAndReturnAriaLabel = (arg) => {
     tabBtnSelector = `[aria-label="${arg}"]`;
     return arg;
-  }
+  };
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
@@ -143,27 +141,29 @@ const Tabs = ({
                       : "tab-button react-transition flip-in-y"
                   }
                   tabIndex="0"
-                  aria-label={updateTabBtnSelectorAndReturnAriaLabel(`open ${el.props.title.split("(")[0]}${
-                    user &&
-                    el.props.locationId &&
-                    el.props.facId &&
-                    workspaceSection !== EXPORT_STORE_NAME &&
-                    (isCheckedOut(el.props.locationId) ||
-                      checkedOutLocations.some(
-                        (loc) => loc.facId === parseInt(el.props.facId)
-                      ))
-                      ? "(locked)"
-                      : ""
-                  } ${el.props.title
-                    .split("(")[1]
-                    .replace(")", "")
-                    .replace("Inactive", "(Inactive)")
-                    .replace("Active", "(Active)")} ${
-                    el.props.locationId &&
-                    isCheckedOutByUser(el.props.locationId)
-                      ? "(checked-out)"
-                      : ""
-                  } tab`)}
+                  aria-label={updateTabBtnSelectorAndReturnAriaLabel(
+                    `open ${el.props.title.split("(")[0]}${
+                      user &&
+                      el.props.locationId &&
+                      el.props.facId &&
+                      workspaceSection !== EXPORT_STORE_NAME &&
+                      (isCheckedOut(el.props.locationId) ||
+                        checkedOutLocations.some(
+                          (loc) => loc.facId === parseInt(el.props.facId)
+                        ))
+                        ? "(locked)"
+                        : ""
+                    } ${el.props.title
+                      .split("(")[1]
+                      .replace(")", "")
+                      .replace("Inactive", "(Inactive)")
+                      .replace("Active", "(Active)")} ${
+                      el.props.locationId &&
+                      isCheckedOutByUser(el.props.locationId)
+                        ? "(checked-out)"
+                        : ""
+                    } tab`
+                  )}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
                     settingActiveTab(i);

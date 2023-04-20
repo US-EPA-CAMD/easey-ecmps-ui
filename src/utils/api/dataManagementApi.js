@@ -246,7 +246,7 @@ export const getAllProbeTypeCodes = async () => {
     .get(`${config.services.mdm.uri}/probe-type-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllQualificationTypeCodes = async () => {
   return axios
@@ -398,8 +398,8 @@ export const getAllTestTypeGroupCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/test-type-group-codes`)
     .then(handleResponse)
-    .catch(handleError)
-}
+    .catch(handleError);
+};
 export const getPrefilteredTestSummaries = async () => {
   return axios
     .get(`${config.services.mdm.uri}/relationships/test-summaries`)
@@ -419,31 +419,30 @@ export const getAllApsCodes = async () => {
     .get(`${config.services.mdm.uri}/aps-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllReferenceMethodCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/reference-method-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllRunStatusCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/run-status-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllPressureMeasureCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/pressure-measure-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllMonitoringSystemIDCodes = async (locationId) => {
-
   let url = config.services.monitorPlans.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -451,82 +450,105 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
   }
 
   let monitoringSystemUrl = `${url}/locations/${locationId}/systems`;
-  return secureAxios({method: "GET", url: monitoringSystemUrl}).then((response) => {
-    const actualResponse = response;
-    const dataArray = [];
-    response.data.map((monitorCode) => {
-      if (monitorCode.systemTypeCode === 'OILV' || monitorCode.systemTypeCode === 'OILM') {
-        dataArray.push({
-          monitoringSystemIDCode: monitorCode.monitoringSystemId,
-          monitoringSystemIDDescription: monitorCode.systemTypeCode,
-        });
-      }
+  return secureAxios({ method: "GET", url: monitoringSystemUrl })
+    .then((response) => {
+      const actualResponse = response;
+      const dataArray = [];
+      response.data.map((monitorCode) => {
+        if (
+          monitorCode.systemTypeCode === "OILV" ||
+          monitorCode.systemTypeCode === "OILM"
+        ) {
+          dataArray.push({
+            monitoringSystemIDCode: monitorCode.monitoringSystemId,
+            monitoringSystemIDDescription: monitorCode.systemTypeCode,
+          });
+        }
+
+        return 1;
+      });
+      actualResponse.data = dataArray;
+      return actualResponse;
     })
-    actualResponse.data = dataArray;
-    return actualResponse
-  }).catch(handleError);
-}
+    .catch(handleError);
+};
 
 export const getAllPointUsedIndicatorCodes = async () => {
   const data = [
     {
-      pointUsedIndicatorCode: '1',
-      pointUsedIndicatorDescription: '1'
-    }
-  ]
-  return Promise.resolve({ status: 200, data })
-}
+      pointUsedIndicatorCode: "1",
+      pointUsedIndicatorDescription: "1",
+    },
+  ];
+  return Promise.resolve({ status: 200, data });
+};
 
 export const getMdmDataByCodeTable = async (codeTable) => {
   return axios
     .get(`${config.services.mdm.uri}/${codeTable}`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllAccuracyTestMethodCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/accuracy-test-method-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllAccuracySpecCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/accuracy-spec-codes`)
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getAllCalculatedSeparateReferenceIndicatorCodes = async () => {
   const data = [
     {
-      calcSeparateReferenceIndicatorCode: '0',
-      calcSeparateReferenceIndicatorDescription: '0'
+      calcSeparateReferenceIndicatorCode: "0",
+      calcSeparateReferenceIndicatorDescription: "0",
     },
     {
-      calcSeparateReferenceIndicatorCode: '1',
-      calcSeparateReferenceIndicatorDescription: '1'
-    }
-  ]
-  return Promise.resolve({ status: 200, data })
-}
+      calcSeparateReferenceIndicatorCode: "1",
+      calcSeparateReferenceIndicatorDescription: "1",
+    },
+  ];
+  return Promise.resolve({ status: 200, data });
+};
 
 export const getRataTestNumber = async (locationId) => {
-  const testSummaryUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
-  const testSummaryWorkspaceUrl = `https://api.epa.gov/easey/dev/qa-certification-mgmt/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`
+  let testSummaryUrl = ``;
+  let testSummaryWorkspaceUrl = ``;
+
+  let url = `${config.services.qaCertification.uri}`;
+
+  // *** attach the rest of the url
+  testSummaryUrl = `${url}/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`;
+  testSummaryWorkspaceUrl = `${url}/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`;
   const testSummaries = await Promise.all([
     secureAxios({
       method: "GET",
       url: testSummaryUrl,
-    }), secureAxios({
+    })
+      .then(handleResponse)
+      .catch(handleError),
+    secureAxios({
       method: "GET",
       url: testSummaryWorkspaceUrl,
-    })])
-  const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data]
-  const rataTestNumbers = allTestSummaries.map(testSummary => {
-    const testNumber = testSummary.testNumber
-    return { rataTestNumberCode: testNumber, rataTestNumberDescription: testNumber }
-  })
-  return Promise.resolve({ status: 200, data: rataTestNumbers })
-}
+    })
+      .then(handleResponse)
+      .catch(handleError),
+  ]);
+  
+  const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data];
+  const rataTestNumbers = allTestSummaries.map((testSummary) => {
+    const testNumber = testSummary.testNumber;
+    return {
+      rataTestNumberCode: testNumber,
+      rataTestNumberDescription: testNumber,
+    };
+  });
+  return Promise.resolve({ status: 200, data: rataTestNumbers });
+};

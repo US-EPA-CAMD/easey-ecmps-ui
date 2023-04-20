@@ -70,6 +70,7 @@ const QADataTableRender = ({
     return () => {
       cleanUp508();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
   const [totalExpand, setTotalExpand] = useState([]);
@@ -248,7 +249,10 @@ const QADataTableRender = ({
   }
 
   return (
-    <div className="padding-3 qa-table-wrapper" id={dataTableName.replaceAll(" ", "-")}>
+    <div
+      className="padding-3 qa-table-wrapper"
+      id={dataTableName.replaceAll(" ", "-")}
+    >
       <DataTable
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}

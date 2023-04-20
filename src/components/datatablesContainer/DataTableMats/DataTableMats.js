@@ -7,10 +7,7 @@ import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
-import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
+import { needEndDate } from "../../../additional-functions/app-error";
 import {
   getActiveData,
   getInactiveData,
@@ -49,7 +46,7 @@ export const DataTableMats = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
-  tabs
+  tabs,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -64,7 +61,7 @@ export const DataTableMats = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const selectText = "-- Select a value --";
-  const [errorMsgs, setErrorMsgs] = useState([])
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
@@ -72,7 +69,7 @@ export const DataTableMats = ({
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
       assignFocusEventListeners();
-      ensure508()
+      ensure508();
     }
   }, [dataLoaded, dropdownsLoaded]);
 
@@ -80,7 +77,7 @@ export const DataTableMats = ({
   useEffect(() => {
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
-      ensure508()
+      ensure508();
     } else {
       assignFocusEventListeners();
     }
@@ -171,7 +168,9 @@ export const DataTableMats = ({
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMatsMethodsTableRecords(
-          tabs[currentTabIndex].inactive[0] === false ? getActiveData(matsMethods) : matsMethods
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(matsMethods)
+            : matsMethods
         );
       }
     }
@@ -192,7 +191,7 @@ export const DataTableMats = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      setErrorMsgs([needEndDate])
+      setErrorMsgs([needEndDate]);
       return;
     }
     try {
@@ -206,7 +205,7 @@ export const DataTableMats = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
   const createMats = async () => {
@@ -215,7 +214,7 @@ export const DataTableMats = ({
       (userInput.endHour && !userInput.endDate) ||
       (!userInput.endHour && userInput.endDate)
     ) {
-      setErrorMsgs([needEndDate])
+      setErrorMsgs([needEndDate]);
       return;
     }
     try {
@@ -229,7 +228,7 @@ export const DataTableMats = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
@@ -275,11 +274,11 @@ export const DataTableMats = ({
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             });
             // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             }, 1000);
           }
         }
@@ -352,7 +351,7 @@ export const DataTableMats = ({
   };
 
   const executeOnClose = () => {
-    setErrorMsgs([])
+    setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
@@ -416,9 +415,7 @@ export const DataTableMats = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 

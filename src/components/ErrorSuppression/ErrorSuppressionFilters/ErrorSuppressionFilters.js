@@ -159,6 +159,7 @@ export const ErrorSuppressionFilters = () => {
             setCheckTypeList([])
             setTransformedData([])
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onChangeOfLocationMultiSelect = (id, changeType) => {
@@ -406,7 +407,7 @@ export const ErrorSuppressionFilters = () => {
                     selectedCheckNumber &&
                     selectedCheckResult &&
                     selectedFacility &&
-                    selectedFacility != defaultDropdownText
+                    selectedFacility !== defaultDropdownText
                   )
                 }
               ></MultiSelectCombobox>
