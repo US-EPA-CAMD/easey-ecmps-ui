@@ -157,14 +157,14 @@ export const DataTableMethod = ({
   ];
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    parameterCode: null,
-    substituteDataCode: null,
-    bypassApproachCode: null,
-    monitoringMethodCode: null,
-    beginDate: null,
+    id: "string",
+    parameterCode: "string",
+    substituteDataCode: "string",
+    bypassApproachCode: "string",
+    monitoringMethodCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   // cant unit test properly

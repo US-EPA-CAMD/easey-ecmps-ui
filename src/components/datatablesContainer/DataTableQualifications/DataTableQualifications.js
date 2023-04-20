@@ -141,13 +141,43 @@ export const DataTableQualifications = ({
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Qualification Type Code", "Start Date", "End Date"];
 
-  const payload = {
+  const qualificationPercentPayload = {
     locationId: locationSelectValue,
-    id: null,
-    qualificationTypeCode: null,
-    beginDate: null,
-    endDate: null,
+    id: "string",
+    qualificationYear: 0,
+    averagePercentValue: 0,
+    yr1QualificationDataYear: 0,
+    yr1QualificationDataTypeCode: "string",
+    yr1PercentageValue: 0,
+    yr2QualificationDataYear: 0,
+    yr2QualificationDataTypeCode: "string",
+    yr2PercentageValue: 0,
+    yr3QualificationDataYear: 0,
+    yr3QualificationDataTypeCode: "string",
+    yr3PercentageValue: 0,
   };
+
+  const qualificationLeePayload = {
+    locationId: locationSelectValue,
+    id: "string",
+    qualificationTestDate: "string",
+    parameterCode: "string",
+    qualificationTestType: "string",
+    potentialAnnualMassEmissions: 0,
+    applicableEmissionStandard: 0,
+    unitsOfStandard: "string",
+    percentageOfEmissionStandard: 0,
+  }
+
+  const qualificationLmePayload = {
+    locationId: locationSelectValue,
+    id: "string",
+    qualificationDataYear: 0,
+    operatingHours: 0,
+    so2Tons: 0,
+    noxTons: 0,
+  }
+
   const data = useMemo(() => {
     if (qualificationData.length > 0) {
       const activeOnly = getActiveData(qualificationData);
@@ -189,6 +219,10 @@ export const DataTableQualifications = ({
     setOpenLEE(false);
     setOpenLME(false);
     buildBreadBar();
+    let payload = {}
+    if(openPCT){payload = {...qualificationPercentPayload}}
+    if(openLME){payload = {...qualificationLmePayload}}
+    if(openLEE){payload = {...qualificationLeePayload}}
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(
       {
@@ -252,6 +286,10 @@ export const DataTableQualifications = ({
     buildBreadBar();
   };
   const testingCreate = () => {
+    let payload = {}
+    if(openPCT){payload = {...qualificationPercentPayload}}
+    if(openLME){payload = {...qualificationLmePayload}}
+    if(openLEE){payload = {...qualificationLeePayload}}
     let userInput = extractUserInput(payload, ".modalUserInput");
     openQualificationDataModal(false, false, true);
     setCreating(true);
@@ -308,6 +346,10 @@ export const DataTableQualifications = ({
 
   // Manages SAVE button (either Parent, PCT, LME, or LEE)
   const manageSaveBtn = () => {
+    let payload = {}
+    if(openPCT){payload = {...qualificationPercentPayload}}
+    if(openLME){payload = {...qualificationLmePayload}}
+    if(openLEE){payload = {...qualificationLeePayload}}
     let userInput = extractUserInput(payload, ".modalUserInput");
 
     if (!creating) {

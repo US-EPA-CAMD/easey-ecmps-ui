@@ -495,24 +495,24 @@ const QATestSummaryDataTable = ({
   };
 
   const uiControls = {
-    stackPipeId: null,
-    unitId: null,
-    testTypeCode: null,
+    stackPipeId: "string",
+    unitId: "string",
+    testTypeCode: "string",
     componentID: "string",
     monitoringSystemID: "string",
-    spanScaleCode: null,
+    spanScaleCode: "string",
     testNumber: "string",
-    testReasonCode: null,
-    testResultCode: null,
-    beginDate: null,
-    beginHour: null,
-    beginMinute: null,
-    endDate: null,
-    endHour: null,
-    endMinute: null,
-    gracePeriodIndicator: null,
-    testComment: null,
-    injectionProtocolCode: null,
+    testReasonCode: "string",
+    testResultCode: "string",
+    beginDate: "string",
+    beginHour: 0,
+    beginMinute: 0,
+    endDate: "string",
+    endHour: 0,
+    endMinute: 0,
+    gracePeriodIndicator: 0,
+    testComment: "string",
+    injectionProtocolCode: "string",
   };
 
   const saveData = () => {
@@ -528,9 +528,6 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
-          uiControls.componentID = "string";
-          uiControls.monitoringSystemID = "string";
-          uiControls.testNumber = "string";
         } else {
           setUpdateTable(true);
           executeOnClose();
@@ -573,9 +570,6 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
-          uiControls.componentID = "string";
-          uiControls.monitoringSystemID = "string";
-          uiControls.testNumber = "string";
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);

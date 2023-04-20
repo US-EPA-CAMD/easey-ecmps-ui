@@ -135,12 +135,12 @@ export const DataTableMats = ({
 
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    supplementalMATSMonitoringMethodCode: null,
-    supplementalMATSParameterCode: null,
-    beginDate: null,
+    id: "string",
+    supplementalMATSMonitoringMethodCode: "string",
+    supplementalMATSParameterCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   const data = useMemo(() => {
