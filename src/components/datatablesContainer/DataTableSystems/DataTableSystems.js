@@ -620,11 +620,13 @@ export const DataTableSystems = ({
   const backToSecondLevelBTN = (mainLevel) => {
     setThirdLevel(mainLevel);
     setBread(true, "Components");
+    setErrorMsgs([]);
   };
 
   const backToFirstLevelLevelBTN = (mainLevel) => {
     setSecondLevel(mainLevel);
     setBread(false, "");
+    setErrorMsgs([]);
   };
   const data = useMemo(() => {
     if (monitoringSystems.length > 0) {
