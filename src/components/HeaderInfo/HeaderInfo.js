@@ -346,19 +346,8 @@ export const HeaderInfo = ({
       
       const codesWithData = countData.filter(c => c.count > 0)
                                       .map(c=> c.dataSetCode);
-      
-      console.log('locations', locations);
-      console.log('locationsSelect', locationSelect)
-      console.log('countData: ', countData)
-      console.log('codesWithData: ', codesWithData)
-  
-      console.log('unit', selectedUnitId)
-      console.log('stack', selectedStackPipeId)
-      console.log('selectedReportingPeriods: ', selectedReportingPeriods);
-  
+        
       let { data: viewData } = await emApi.getViews();
-      console.log("views data")
-      console.log(viewData)
       
       // This will filter the dropdown values for the views by the ones that have a count > 0
       viewData = viewData.filter(v => codesWithData.find(d => d === v.code) !== undefined)
@@ -371,15 +360,6 @@ export const HeaderInfo = ({
       console.error(e);
 
     }
-
-    // emApi.getViews().then(({ data }) => {
-    //   setViewTemplates(data);
-    //   if (!currentTab?.viewTemplateSelect && data?.length > 0) {
-    //     setViewTemplateSelect(data[0]);
-    //   }
-    // });
-
-
   }
 
   const executeOnClose = () => {
@@ -917,7 +897,6 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
-    console.log("applyFilters()")
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
