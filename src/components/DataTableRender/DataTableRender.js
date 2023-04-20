@@ -598,7 +598,7 @@ export const DataTableRender = ({
           </div>
         ) : (
           <div className="margin-y-3 padding-y-3 react-transition fade-in font-body-sm width-full">
-            {/* <Preloader /> */}
+            <Preloader />
           </div>
         )}
       </div>
