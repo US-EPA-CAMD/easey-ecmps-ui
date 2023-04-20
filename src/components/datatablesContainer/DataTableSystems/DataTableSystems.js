@@ -377,10 +377,6 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return;
     }
-
-    // TODO: remove
-    console.log('save systems, userInput', userInput)
-    return;
     try {
       const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id);
       if (successResponses.includes(resp.status)) {
