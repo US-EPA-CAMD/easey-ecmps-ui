@@ -6,7 +6,7 @@ import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableS
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import {
   needEndDate,
 } from "../../../additional-functions/app-error";
@@ -87,6 +87,7 @@ export const DataTableSystems = ({
     []
   );
   const [errorMsgs, setErrorMsgs] = useState([])
+  const dataTableName = "Systems";
 
   useEffect(() => {
     if (selectedUnlinkedComponent.length > 0) {
@@ -371,11 +372,9 @@ export const DataTableSystems = ({
 
   const saveSystems = async () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {
@@ -394,11 +393,9 @@ export const DataTableSystems = ({
 
   const createSystems = async () => {
     const userInput = extractUserInput(sysPayload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {

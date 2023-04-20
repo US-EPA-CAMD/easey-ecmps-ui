@@ -219,7 +219,6 @@ const QACertEventTestExmpDataTable = ({
           });
         break;
       case "Test Extension Exemption":
-        // TODO: issues with ticket 5056
         const quarters = [
           { code: "1", name: "1" },
           { code: "2", name: "2" },
