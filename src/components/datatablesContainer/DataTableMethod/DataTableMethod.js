@@ -6,7 +6,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { needEndDate } from "../../../additional-functions/app-error";
 import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
@@ -18,7 +17,7 @@ import {
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
 
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
@@ -61,6 +60,8 @@ export const DataTableMethod = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
+
+  const dataTableName = "Methods";
   const dropdownArray = [
     [
       "parameterCode",
@@ -357,16 +358,16 @@ export const DataTableMethod = ({
 
   const saveMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.saveMonitoringMethods(userInput);
-      if (resp.status === 200) {
+      if (resp.ok) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
@@ -381,16 +382,16 @@ export const DataTableMethod = ({
 
   const createMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.createMethods(userInput);
-      if (resp.status === 201) {
+      if (resp.ok) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
