@@ -4,7 +4,7 @@ import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
-const getApiUrl = (path) => {
+const getApiUrl = (path = '') => {
   let url = config.services.qaCertification.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -176,9 +176,8 @@ export const getQASchema = async () => {
 };
 
 export const getReportingPeriod = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? "?export=true" : ""
-  }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
+    }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -210,12 +209,13 @@ export const exportQA = async (
     isHistoricalImport: Boolean,
   }
 ) => {
+  const path = `/export?facilityId=${facilityId}`;
   let url;
-
+  
   if (options.isOfficial) {
-    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+    url = `${config.services.qaCertification.uri}${path}`;
   } else {
-    url = getApiUrl(`/export?facilityId=${facilityId}`);
+    url = getApiUrl(path)
   }
 
   if (options.isHistoricalImport) {
@@ -589,7 +589,7 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -660,7 +660,7 @@ export const createRataRunData = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -747,7 +747,7 @@ export const createRataTraverse = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1035,7 +1035,7 @@ export const createAppendixECorrelationSummaryRecord = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1222,7 +1222,7 @@ export const createAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1259,7 +1259,7 @@ export const createAppendixEHeatInputGas = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1338,7 +1338,7 @@ export const createAppendixEHeatInputOil = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1404,7 +1404,7 @@ export const updateAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 export const deleteAppendixERun = async (

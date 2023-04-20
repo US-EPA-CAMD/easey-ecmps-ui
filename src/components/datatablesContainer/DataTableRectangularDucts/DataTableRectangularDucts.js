@@ -119,8 +119,8 @@ export const DataTableRectangularDucts = ({
   const columnNames = [
     "WAF Determination Date",
     "WAF Method",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   const payload = {
@@ -129,8 +129,8 @@ export const DataTableRectangularDucts = ({
     userId: "string",
     addDate: "2021-10-18T07:05:11.018Z",
     updateDate: "2021-10-18T07:05:11.018Z",
-    wafDeterminationDate: "2021-10-18T07:05:11.018Z",
-    wafBeginDate: "2021-10-18T07:05:11.018Z",
+    wafDeterminationDate: "2021-10-18",
+    wafBeginDate: "2021-10-18",
     wafBeginHour: 0,
     wafMethodCode: "string",
     wafValue: 0,
@@ -140,7 +140,7 @@ export const DataTableRectangularDucts = ({
     numberOfTraversePointsRef: 0,
     ductWidth: 0,
     ductDepth: 0,
-    wafEndDate: "2021-10-18T07:05:11.018Z",
+    wafEndDate: "2021-10-18",
     wafEndHour: 0,
   };
 

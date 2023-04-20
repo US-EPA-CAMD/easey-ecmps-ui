@@ -24,12 +24,13 @@ export const QACertTestSummaryRender = ({
 
   useEffect(() => {
     setTimeout(() => {
-      const elem = document.querySelector(`[title="${currentTab.name}"]`)
+      const elem = document.querySelector(`[title="${currentTab.name}"]`);
       if (elem) {
-        elem.querySelector('#tabBtn').focus()
+        elem.querySelector("#tabBtn").focus();
       }
-    }, 1000)
-  }, [])
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className=" padding-top-0">

@@ -166,7 +166,7 @@ export const globalView = [
   },
   {
     name: 'Emissions',
-    url: '/workspace/emissions',
+    url: '/emissions',
   },
   { name: 'Export', url: '/export' },
 ];

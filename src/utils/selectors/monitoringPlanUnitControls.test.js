@@ -42,10 +42,10 @@ describe("testing unit controls data selectors", () => {
         col1: "NOX",
         col2: "SNCR",
         col3: "Yes",
-        col4: "2006/05/01",
-        col5: "2006/05/01",
+        col4: "2006-05-01",
+        col5: "2006-05-01",
         col6: "No",
-        col7: "2006/05/01",
+        col7: "2006-05-01",
         col8: "15829",
       },
       {

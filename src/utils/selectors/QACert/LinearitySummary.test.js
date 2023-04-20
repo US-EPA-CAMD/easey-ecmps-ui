@@ -11,7 +11,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Monitoring System ID",
       "Test Number",
       "Test Reason Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -25,7 +25,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "Test Result Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -57,7 +57,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Unit or Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -69,7 +69,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Unit or Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
-      "End Date",
+      "End Date/Time",
       //"End Hour",
     ];
 
@@ -82,7 +82,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "Test Result Code",
-      "End Date",
+      "End Date/Time",
       //"End Hour",
     ];
 
@@ -95,7 +95,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "Test Result Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -107,7 +107,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Unit or Stack Pipe ID",
       "Test Number",
       "Test Reason Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -122,7 +122,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "Test Result Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];
@@ -136,7 +136,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "Test Result Code",
-      "End Date",
+      "End Date/Time",
       // "End Hour",
       // "End Minute",
     ];

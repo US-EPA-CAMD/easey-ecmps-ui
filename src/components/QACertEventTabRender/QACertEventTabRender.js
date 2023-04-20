@@ -24,6 +24,7 @@ export const QACertEventTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   useEffect(() => {
     setSectionSelect([0, "QA Certification Event"]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className=" padding-top-0">

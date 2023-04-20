@@ -1,25 +1,15 @@
-import { formatDateString } from "../functions";
-
 export const getMonitoringPlansUnitCapacityRecords = (data) => {
   const records = [];
   data.forEach((el) => {
-    const beginDate = formatDateString(el.beginDate);
-    const endDate = formatDateString(el.endDate);
-
-    const commercialOperationDateString = formatDateString(el.commercialOperationDate)
-    const operationDateString = formatDateString(el.operationDate)
-    const boilerTurbineBeginDateString = formatDateString(el.boilerTurbineBeginDate)
-    const boilerTurbineEndDateString = formatDateString(el.boilerTurbineEndDate)
-
     records.push({
-      col1: commercialOperationDateString,
-      col2: operationDateString,
+      col1: el.commercialOperationDate ? el.commercialOperationDate : "",
+      col2: el.operationDate ? el.operationDate : "",
       col3: el.boilerTurbineType,
-      col4: boilerTurbineBeginDateString,
-      col5: boilerTurbineEndDateString,
+      col4: el.boilerTurbineBeginDate ? el.boilerTurbineBeginDate : "",
+      col5: el.boilerTurbineEndDate ? el.boilerTurbineEndDate : "",
       col6: el.maximumHourlyHeatInputCapacity,
-      col7: `${beginDate}`,
-      col8: `${endDate}`,
+      col7: el.beginDate ? el.beginDate : "",
+      col8: el.endDate ? el.endDate : "",
       col9: el.id,
     });
   });

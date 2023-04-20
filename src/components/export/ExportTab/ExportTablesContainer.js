@@ -8,6 +8,7 @@ import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QA
 import { addScreenReaderLabelForCollapses, assignAriaLabelsToDataTable, ensure508 } from "../../../additional-functions/ensure-508";
 import { getExportTableCols } from "../../../utils/selectors/QACert/assert-export";
 import { oneSecond } from "../../../config";
+import { getUser } from "../../../utils/functions";
 
 export const ExportTablesContainer = ({
   selectionData,
@@ -50,7 +51,7 @@ export const ExportTablesContainer = ({
           beginDate,
           endDate,
           {
-            isOfficial: true,
+            isOfficial: !getUser(),
             isHistoricalImport: false,
           }
         );

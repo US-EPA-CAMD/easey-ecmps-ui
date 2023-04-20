@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@trussworks/react-uswds";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import { checkoutAPI } from "../../additional-functions/checkout";
@@ -25,30 +24,38 @@ export const EmissionsTabRender = ({
   inactive,
   workspaceSection,
 }) => {
-  const currentTab = useSelector(state=>state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(t=>t.selectedConfig.id===configID));
-  
+  const currentTab = useSelector((state) =>
+    state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
+      (t) => t.selectedConfig.id === configID
+    )
+  );
+
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [viewColumns, setViewColumns] = useState();
   const [viewData, setViewData] = useState();
   const [isDataLoaded, setIsDataLoaded] = useState();
-  
+
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
-  useEffect(()=>{
-
+  useEffect(() => {
     setViewColumns(currentTab?.viewColumns || []);
     setViewData(currentTab?.viewData || []);
     setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
-    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null)
-  }, [currentTab])
-  
+    setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTab]);
+
   const handleDownload = async () => {
-    const selectedUnitId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.unitId)
-    const selectedStackPipeId  = selectedConfig?.locations?.filter(l=> l.id === locationSelect[1]).map(l => l.stackPipeId)
-  
+    const selectedUnitId = selectedConfig?.locations
+      ?.filter((l) => l.id === locationSelect[1])
+      .map((l) => l.unitId);
+    const selectedStackPipeId = selectedConfig?.locations
+      ?.filter((l) => l.id === locationSelect[1])
+      .map((l) => l.stackPipeId);
+
     getEmissionViewData(
       viewTemplateSelect.code,
       configID,
@@ -124,13 +131,12 @@ export const EmissionsTabRender = ({
                     headerButtonText
                   />,
                   viewTemplateSelect?.name ?? "",
-                ]
-              ]
-          }
+                ],
+              ]}
             ></CustomAccordion>
           </div>
         </div>
-    )}
+      )}
     </div>
   );
 };
