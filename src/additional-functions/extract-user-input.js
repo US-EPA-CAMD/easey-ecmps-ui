@@ -104,6 +104,8 @@ const checkEndDateAndHour = (userInput, dataTableName, errors) => {
   const hasOnlyEitherEndDateOrHour = (userInput.endDate === null) !== (userInput.endHour === null);
 
   // skips these tables b/c only have end date, no end hour
+  // currently doesn't do anything due to missing option evaluating to undefined
+  // and thus having hasOnlyEitherEndDateOrHour eval to false
   const skipTables = ["Location Attribute", "Relationship Data"]
   if (skipTables.includes(dataTableName)) return;
 
