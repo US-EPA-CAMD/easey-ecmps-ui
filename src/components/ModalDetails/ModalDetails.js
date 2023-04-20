@@ -105,13 +105,13 @@ const ModalDetails = ({
               <h3
                 className={
                   locked
-                    ? " margin-bottom-0 usa-label"
+                    ? "margin-bottom-0 usa-label"
                     : "text-bold margin-bottom-0 usa-label "
                 }
               >
                 {value[1]}
               </h3>
-              <div id={`${value[4] !== "skip" ? value[1] : ""}`}>
+              <div id={`${value[4] !== "skip" ? value[1] : ""}`} className="modalLockedInput" value={displayVal} epadataname={value[0]}>
                 {displayVal}
               </div>
             </FormGroup>

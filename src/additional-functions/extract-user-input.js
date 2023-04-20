@@ -10,7 +10,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   }
 
   // *** construct payload
-  const payloadInputs = document.querySelectorAll(inputSelector);
+  const payloadInputs = document.querySelectorAll(`${inputSelector},.modalLockedInput`);
   const datepickerPayloads = document.querySelectorAll(
     ".usa-date-picker__internal-input"
   );
