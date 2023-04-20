@@ -90,9 +90,9 @@ export const DataTableRender = ({
     };
   }, []);
 
-  const storeActiveElementAndCallOpenHandler = (args) => {
+  const storeActiveElementAndCallOpenHandler = (...args) => {
     window.openModalBtn = document.activeElement;
-    return openHandler(args);
+    return openHandler(...args);
   }
   useEffect(() => {
     if (openAndCheckoutBTNFocus) {
