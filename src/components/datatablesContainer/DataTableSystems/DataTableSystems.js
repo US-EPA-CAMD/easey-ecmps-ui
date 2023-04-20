@@ -7,9 +7,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
-import {
-  needEndDate,
-} from "../../../additional-functions/app-error";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
