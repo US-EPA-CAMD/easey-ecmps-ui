@@ -309,10 +309,14 @@ export const HeaderInfo = ({
     if (workspaceSection !== EMISSIONS_STORE_NAME)
       return;
 
-    getEmissionsViewDropdownData();
+    getEmissionsViewDropdownData().catch(e=>{console.log(e)});
+    return()=>{
+      setViewTemplates([]);
+      setViewTemplateSelect(null)
+    }
     // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods,]);
+  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods,configID, inWorkspace]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -346,7 +350,6 @@ export const HeaderInfo = ({
         selectedStackPipeId,
         inWorkspace
       );
-
       const codesWithData = countData.filter(c => c.count > 0)
         .map(c => c.dataSetCode);
 
