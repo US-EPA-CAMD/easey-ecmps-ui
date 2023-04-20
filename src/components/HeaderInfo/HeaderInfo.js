@@ -310,7 +310,9 @@ export const HeaderInfo = ({
       return;
 
     getEmissionsViewDropdownData();
-  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods]);
+    // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods,]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -323,18 +325,18 @@ export const HeaderInfo = ({
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
 
-    if (selectedReportingPeriods.length === 0){
+    if (selectedReportingPeriods.length === 0) {
       setViewTemplates([]);
       return;
     }
 
-    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0){
+    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0) {
       setViewTemplates([]);
       return;
     }
 
     // First get view counts
-    try{
+    try {
       const { data: countData } = await emApi.getEmissionViewData(
         'COUNTS',
         configID,
@@ -343,20 +345,20 @@ export const HeaderInfo = ({
         selectedStackPipeId,
         inWorkspace
       );
-      
+
       const codesWithData = countData.filter(c => c.count > 0)
-                                      .map(c=> c.dataSetCode);
-        
+        .map(c => c.dataSetCode);
+
       let { data: viewData } = await emApi.getViews();
-      
+
       // This will filter the dropdown values for the views by the ones that have a count > 0
       viewData = viewData.filter(v => codesWithData.find(d => d === v.code) !== undefined)
-  
+
       setViewTemplates(viewData);
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
         setViewTemplateSelect(viewData[0]);
       }
-    } catch(e){
+    } catch (e) {
       console.error(e);
 
     }
