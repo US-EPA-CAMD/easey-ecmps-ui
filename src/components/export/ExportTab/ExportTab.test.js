@@ -10,10 +10,12 @@ import config from "../../../config";
 
 const mock = new MockAdapter(axios);
 
+const idRegex = '[\\w\\-]+'
+
 const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods?export=true`;
 mock.onGet(getReportingPeriodUrl).reply(200, mockReportingPeriod);
 
-const exportQAUrl = `${config.services.qaCertification.uri}/export?facilityId=3&unitIds=1|2&stackPipeIds=CS0AAN&beginDate=1993-01-01&endDate=1993-03-31`;
+const exportQAUrl = new RegExp(`${config.services.qaCertification.uri}/export?facilityId=3&unitIds=1|2&stackPipeIds=CS0AAN&beginDate=${idRegex}&endDate=${idRegex}`);
 mock.onGet(exportQAUrl).reply(200, exportQAResponse)
 
 const exportEndpoint = `${config.services.monitorPlans.uri}/plans/export?planId=TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A`;
@@ -93,7 +95,7 @@ describe("ExportTab", function () {
       expect(exportButton).not.toBeEnabled();
     })
 
-    test("when qa&cert is checked and rows selected then export should be enabled", async function () {
+    test("when qa&cert is checked and rows selected then export should be enabled", async () => {
       await act(async () => {
         return render(
           <ExportTab
@@ -125,5 +127,34 @@ describe("ExportTab", function () {
       expect(firstCheckbox.checked).toBe(true);
       expect(exportButton).toBeEnabled();
     });
+
+    test("given qa&cert is checked when reporting period is changed then new data is loaded", async () => {
+      await act(async () => {
+        return render(
+          <ExportTab
+            orisCode={3}
+            exportState={EXPORT_TAB_TEST_EXPORT_STATE}
+            setExportState={() => null}
+            workspaceSection={"export"}
+            selectedConfig={selectedConfig}
+            facility={"Barry (1, 2, CS0AAN)"}
+          />
+        );
+      });
+      const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
+      await act(async () => {
+        userEvent.click(qaCertCheckbox);
+      });
+
+      const quarterDropdown = screen.getByLabelText(/quarter/i);
+      // select new quarter
+      await act(async () => {
+        userEvent.selectOptions(quarterDropdown, "2");
+      });
+
+      // rows are rendered
+      const qaRows = await screen.findAllByRole("row")
+      expect(qaRows).not.toHaveLength(0);
+    })
   })
 });
