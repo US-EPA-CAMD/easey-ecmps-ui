@@ -1,7 +1,16 @@
+const reportingPeriodId = 'reportingPeriodId'
+
+export const EXPORT_TAB_TEST_EXPORT_STATE = {
+  checkedDataTypes: [
+    'monitoring-plan'
+  ],
+  reportingPeriodId
+}
+
 export const getReportingPeriod = {
   data: [
     {
-      id: 1,
+      id: reportingPeriodId,
       calendarYear: 1993,
       quarter: 1,
       beginDate: "1993-01-01",
@@ -16,7 +25,7 @@ export const getReportingPeriod = {
 
 export const mockReportingPeriod = [
   {
-    id: 1,
+    id: reportingPeriodId,
     calendarYear: 1993,
     quarter: 1,
     beginDate: "1993-01-01",
