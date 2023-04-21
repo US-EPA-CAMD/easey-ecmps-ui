@@ -22,14 +22,12 @@ mock.onGet(exportEndpoint).reply(200, 'exported')
 describe("ExportTab", function () {
   let emissionsApi;
   let monitoringPlansApi;
-  let qaCertApi;
 
   beforeAll(async () => {
     emissionsApi = await import("../../../utils/api/emissionsApi");
     monitoringPlansApi = await import(
       "../../../utils/api/monitoringPlansApi"
     )
-    qaCertApi = await import("../../../utils/api/qaCertificationsAPI")
   });
 
   describe("Emissions Export", function () {
@@ -95,9 +93,7 @@ describe("ExportTab", function () {
       expect(exportButton).not.toBeEnabled();
     })
 
-    test.only("when qa&cert is checked and rows selected then export should be enabled and users can export", async function () {
-      // jest.spyOn(qaCertApi, "exportQA")
-      //   .mockResolvedValue(exportQAResponse);
+    test("when qa&cert is checked and rows selected then export should be enabled", async function () {
       await act(async () => {
         return render(
           <ExportTab
@@ -127,11 +123,7 @@ describe("ExportTab", function () {
       userEvent.click(firstCheckbox);
 
       expect(firstCheckbox.checked).toBe(true);
-
       expect(exportButton).toBeEnabled();
-
-      // userEvent.click(exportButton);
-      console.log(mock.history)
     });
   })
 });
