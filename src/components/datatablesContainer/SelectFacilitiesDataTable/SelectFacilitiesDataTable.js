@@ -176,7 +176,7 @@ export const SelectFacilitiesDataTable = ({
   };
 
   const data = useMemo(() => {
-    if (facilities.length != undefined && facilities.length > 0) {
+    if (facilities.length > 0) {
       return fs.getTableRecords(facilities).map((item) => {
         const disabled = false;
         let expanded = false;

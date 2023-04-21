@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@trussworks/react-uswds';
+import React, { useState, useEffect } from "react";
+import { Button } from "@trussworks/react-uswds";
 
-import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-import { Preloader } from '@us-epa-camd/easey-design-system';
-import { cleanupFocusEventListeners } from '../../additional-functions/manage-focus';
+import { Preloader } from "@us-epa-camd/easey-design-system";
+import { cleanupFocusEventListeners } from "../../additional-functions/manage-focus";
 import {
   removeChangeEventListeners,
   unsavedDataMessage,
-} from '../../additional-functions/prompt-to-save-unsaved-changes';
-import ImportModal from '../ImportModal/ImportModal';
-import UploadModal from '../UploadModal/UploadModal';
-import QAImportHistoricalDataPreview from '../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview';
-import Modal from '../Modal/Modal';
-import { importQA } from '../../utils/api/qaCertificationsAPI';
+} from "../../additional-functions/prompt-to-save-unsaved-changes";
+import ImportModal from "../ImportModal/ImportModal";
+import UploadModal from "../UploadModal/UploadModal";
+import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import Modal from "../Modal/Modal";
+import { importQA } from "../../utils/api/qaCertificationsAPI";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
-} from '../../utils/api/dataManagementApi';
-import { CreateOutlined, LockOpenSharp } from '@material-ui/icons';
-import * as mpApi from '../../utils/api/monitoringPlansApi';
-import { checkoutAPI } from '../../additional-functions/checkout';
-import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
-import QAImportModalSelect from '../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect';
-
+} from "../../utils/api/dataManagementApi";
+import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { checkoutAPI } from "../../additional-functions/checkout";
+import { QA_CERT_EVENT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import QAImportModalSelect from "../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect";
+import { successResponses } from "../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../utils/functions";
 export const QACertEventHeaderInfo = ({
   facility,
   selectedConfig,
@@ -41,22 +42,22 @@ export const QACertEventHeaderInfo = ({
   locations,
   setSelectedTestCode,
 }) => {
-  const importTestTitle = 'Import Data';
+  const importTestTitle = "Import Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
-  const facilityMainName = facility.split('(')[0];
+  const facilityMainName = facility.split("(")[0];
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [importTypeSelection, setImportTypeSelection] = useState('');
+  const [importTypeSelection, setImportTypeSelection] = useState("");
   const [usePortBtn, setUsePortBtn] = useState(false);
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
@@ -70,9 +71,9 @@ export const QACertEventHeaderInfo = ({
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
-  const qaCertEventOptions=[
-    { name: 'QA Certification Event' },
-    { name: 'Test Extension Exemption' },
+  const qaCertEventOptions = [
+    { name: "QA Certification Event" },
+    { name: "Test Extension Exemption" },
   ];
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([]);
@@ -135,7 +136,7 @@ export const QACertEventHeaderInfo = ({
       .getRefreshInfo(configID)
       .then((info) =>
         setRefresherInfo({
-          checkedOutBy: 'N/A',
+          checkedOutBy: "N/A",
           lastUpdatedBy: info.data.userId,
           updateDate: info.data.updateDate,
         })
@@ -155,26 +156,26 @@ export const QACertEventHeaderInfo = ({
   const isCheckedOutByUser = (configs) => {
     return (
       configs
-        .map((location) => location['monPlanId'])
+        .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
         configs
-          .map((location) => location['monPlanId'])
+          .map((location) => location["monPlanId"])
           .indexOf(selectedConfig.id)
-      ]['checkedOutBy'] === user['userId']
+      ]["checkedOutBy"] === user["userId"]
     );
   };
 
   useEffect(() => {
     if (checkedOutConfigs) {
       setUserHasCheckout(
-        checkedOutConfigs.some((plan) => plan['checkedOutBy'] === user.userId)
+        checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
       );
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
           checkedOutConfigs
-            .map((con) => con['monPlanId'])
+            .map((con) => con["monPlanId"])
             .indexOf(selectedConfig.id)
         ];
       if (result) {
@@ -186,7 +187,7 @@ export const QACertEventHeaderInfo = ({
   }, [checkedOutConfigs]);
 
   useEffect(() => {
-    if (importTypeSelection !== 'select' || importedFile.length !== 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -202,17 +203,17 @@ export const QACertEventHeaderInfo = ({
   }, [importedFile.length, showImportModal]);
 
   const closeImportModalHandler = () => {
-    const importBtn = document.querySelector('#importSelectionQAModal');
+    const importBtn = document.querySelector("#importSelectionQAModal");
 
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
-        removeChangeEventListeners('.modalUserInput');
+        removeChangeEventListeners(".modalUserInput");
         importBtn.focus();
       }
     } else {
       resetImportFlags();
-      removeChangeEventListeners('.modalUserInput');
+      removeChangeEventListeners(".modalUserInput");
       importBtn.focus();
     }
   };
@@ -227,7 +228,7 @@ export const QACertEventHeaderInfo = ({
     setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
-    setFileName('');
+    setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
   };
@@ -235,7 +236,7 @@ export const QACertEventHeaderInfo = ({
   const openModalType = (modalType) => {
     setShowSelectionTypeImportModal(false);
     setDisablePortBtn(false);
-    if (modalType === 'file') {
+    if (modalType === "file") {
       setShowImportModal(true);
     } else {
       setShowImportDataPreview(true);
@@ -248,8 +249,11 @@ export const QACertEventHeaderInfo = ({
       .then((response) => {
         setUsePortBtn(true);
         setIsLoading(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response);
+          setImportedFileErrorMsgs(errorMsgs);
+        } else {
+          setImportedFileErrorMsgs([]);
         }
       })
       .catch((err) => {
@@ -277,10 +281,10 @@ export const QACertEventHeaderInfo = ({
     return (
       (date.getMonth() > 8
         ? date.getMonth() + 1
-        : '0' + (date.getMonth() + 1)) +
-      '/' +
-      (day > 9 ? day : '0' + day) +
-      '/' +
+        : "0" + (date.getMonth() + 1)) +
+      "/" +
+      (day > 9 ? day : "0" + day) +
+      "/" +
       date.getFullYear()
     );
   };
@@ -293,8 +297,8 @@ export const QACertEventHeaderInfo = ({
         // when config is checked out by someone
         if (isCheckedOut) {
           return `Currently checked-out by: ${
-            currentConfig['checkedOutBy']
-          } ${formatDate(currentConfig['checkedOutOn'])}`;
+            currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -337,7 +341,7 @@ export const QACertEventHeaderInfo = ({
               {facilityMainName}
             </h3>
           </div>
-          {(user && isCheckedOut) &&
+          {user && isCheckedOut && (
             <Button
               type="button"
               outline={false}
@@ -346,7 +350,7 @@ export const QACertEventHeaderInfo = ({
             >
               {importTestTitle}
             </Button>
-          }
+          )}
         </div>
 
         <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
@@ -364,13 +368,13 @@ export const QACertEventHeaderInfo = ({
                   id="checkInBTN"
                   epa-testid="checkInBTN"
                 >
-                  <LockOpenSharp /> {'Check Back In'}
+                  <LockOpenSharp /> {"Check Back In"}
                 </Button>
               ) : !lockedFacility &&
                 !userHasCheckout &&
                 selectedConfig.active &&
                 checkedOutConfigs
-                  .map((location) => location['monPlanId'])
+                  .map((location) => location["monPlanId"])
                   .indexOf(selectedConfig.id) === -1 ? (
                 <Button
                   type="button"
@@ -382,7 +386,7 @@ export const QACertEventHeaderInfo = ({
                   id="checkOutBTN"
                   epa-testid="checkOutBTN"
                 >
-                  <CreateOutlined color="primary" /> {'Check Out'}
+                  <CreateOutlined color="primary" /> {"Check Out"}
                 </Button>
               ) : null}
               {/***  Un-comment this block once the button-click behavior is implemented ***
@@ -418,10 +422,9 @@ export const QACertEventHeaderInfo = ({
               orisCode={orisCode}
               workspaceSection={QA_CERT_EVENT_STORE_NAME}
             />
-          </div>{' '}
-          <div className="grid-col-3"></div>{' '}
+          </div>{" "}
+          <div className="grid-col-3"></div>{" "}
         </div>
-
       </div>
       <div
         className={`usa-overlay ${
@@ -429,8 +432,8 @@ export const QACertEventHeaderInfo = ({
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? 'is-visible'
-            : ''
+            ? "is-visible"
+            : ""
         }`}
       />
       {/* // selects either historical data or file data */}
@@ -442,7 +445,7 @@ export const QACertEventHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            mainBTN={'Continue'}
+            mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
             port={() => {
               openModalType(importTypeSelection);
@@ -464,7 +467,7 @@ export const QACertEventHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            exitBTN={'Import'}
+            exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
               importQABtn(importedFile);
@@ -488,8 +491,8 @@ export const QACertEventHeaderInfo = ({
       {/* while uploading, just shows preloader spinner  */}
       {isLoading && !finishedLoading ? (
         <UploadModal
-          width={'30%'}
-          left={'35%'}
+          width={"30%"}
+          left={"35%"}
           setFinishedLoading={setFinishedLoading}
           setShowImportModal={setShowImportModal}
           setIsLoading={setIsLoading}
@@ -501,7 +504,7 @@ export const QACertEventHeaderInfo = ({
           fileName={fileName}
         />
       ) : (
-        ''
+        ""
       )}
       {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
@@ -510,10 +513,10 @@ export const QACertEventHeaderInfo = ({
           close={closeImportModalHandler}
           showCancel={false}
           showSave={true}
-          exitBtn={'Ok'}
+          exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          successMsg={'QA Certification has been Successfully Imported.'}
+          successMsg={"QA Certification has been Successfully Imported."}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
@@ -525,14 +528,14 @@ export const QACertEventHeaderInfo = ({
           }
         />
       ) : (
-        ''
+        ""
       )}
       {showImportDataPreview && (
         <Modal
           show={showImportDataPreview}
           close={() => setShowImportDataPreview(false)}
           showSave={true}
-          exitBTN={'Import'}
+          exitBTN={"Import"}
           title="Import Historical Data"
           disableExitBtn={disablePortBtn}
           save={() => {
