@@ -275,6 +275,8 @@ export const QACertTestSummaryHeaderInfo = ({
         if (!successResponses.includes(response.status)) {
           const errorMsgs = formatErrorResponse(response)
           setImportedFileErrorMsgs(errorMsgs);
+        }else{
+          setImportedFileErrorMsgs([]);
         }
       })
       .catch((err) => {
