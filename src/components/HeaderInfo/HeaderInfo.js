@@ -9,7 +9,7 @@ import {
   GridContainer,
   Label,
 } from "@trussworks/react-uswds";
-import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import { CreateOutlined, LensOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
@@ -39,10 +39,6 @@ import {
   returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
-import {
-  getViews,
-  exportEmissionsDataDownload,
-} from "../../utils/api/emissionsApi";
 import {
   getUser,
   displayReport,
@@ -85,7 +81,7 @@ export const getReportingPeriods = (minYear = 2009) => {
 
   for (let year = maxYear; year >= minYear; year--) {
     for (const quarter of quarters) {
-      if( parseInt(`${year}${quarter}`) <= currentYearQuarter)
+      if (parseInt(`${year}${quarter}`) <= currentYearQuarter)
         reportingPeriods.push(`${year} Q${quarter}`);
     }
   }
@@ -117,6 +113,7 @@ export const HeaderInfo = ({
   updateRelatedTables,
   workspaceSection,
 }) => {
+
   //MP
   const sections = [
     { name: "Defaults" },
@@ -308,16 +305,18 @@ export const HeaderInfo = ({
   }, []);
 
   useEffect(() => {
-    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
 
-    getViews().then(({ data }) => {
-      setViewTemplates(data);
-      if (!currentTab?.viewTemplateSelect && data?.length > 0) {
-        setViewTemplateSelect(data[0]);
-      }
-    });
+    if (workspaceSection !== EMISSIONS_STORE_NAME)
+      return;
+
+    getEmissionsViewDropdownData().catch(e=>{console.log(e)});
+    return()=>{
+      setViewTemplates([]);
+      setViewTemplateSelect(null)
+    }
+    // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection, setViewTemplateSelect]);
+  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods,configID, inWorkspace]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -327,6 +326,47 @@ export const HeaderInfo = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setTestDataOptionSelect]);
+
+  // gets the data required to build the emissions dropdown
+  const getEmissionsViewDropdownData = async () => {
+
+    if (selectedReportingPeriods.length === 0) {
+      setViewTemplates([]);
+      return;
+    }
+
+    if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0) {
+      setViewTemplates([]);
+      return;
+    }
+
+    // First get view counts
+    try {
+      const { data: countData } = await emApi.getEmissionViewData(
+        'COUNTS',
+        configID,
+        selectedReportingPeriods,
+        selectedUnitId,
+        selectedStackPipeId,
+        inWorkspace
+      );
+      const codesWithData = countData.filter(c => c.count > 0)
+        .map(c => c.dataSetCode);
+
+      let { data: viewData } = await emApi.getViews();
+
+      // This will filter the dropdown values for the views by the ones that have a count > 0
+      viewData = viewData.filter(v => codesWithData.find(d => d === v.code) !== undefined)
+
+      setViewTemplates(viewData);
+      if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
+        setViewTemplateSelect(viewData[0]);
+      }
+    } catch (e) {
+      console.error(e);
+
+    }
+  }
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -366,10 +406,11 @@ export const HeaderInfo = ({
 
   const handleEmissionsExport = async () => {
     const promises = [];
+    
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       promises.push(
-        exportEmissionsDataDownload(
+        emApi.exportEmissionsDataDownload(
           facility,
           configID,
           selectedReportingPeriod.slice(0, 4),
@@ -555,9 +596,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -779,9 +820,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -838,14 +878,18 @@ export const HeaderInfo = ({
   };
 
   const handleExport = async () => {
-    try{
+    try {
+      setIsLoading(true)
       setDataLoaded(false);
       if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi.exportMonitoringPlanDownload(configID);
       setDataLoaded(true);
-    }catch(error){
+      setIsLoading(false)
+
+    } catch (error) {
       setDataLoaded(true);
+      setIsLoading(false)
       console.error(error)
     }
   };
@@ -925,9 +969,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal &&
@@ -1187,7 +1230,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1218,6 +1261,7 @@ export const HeaderInfo = ({
                     initialSelection={locationSelect[0]}
                     selectionHandler={setLocationSelect}
                     workspaceSection={workspaceSection}
+                    changeFunc={getEmissionsViewDropdownData}
                   />
                 </Grid>
                 <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
@@ -1236,7 +1280,7 @@ export const HeaderInfo = ({
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option

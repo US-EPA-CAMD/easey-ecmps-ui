@@ -1,4 +1,14 @@
 export const extractUserInput = (payload, inputSelector, radios) => {
+  const userInputPayload = {...payload};
+
+  for (let userInputValue in userInputPayload) {
+    if (userInputPayload.hasOwnProperty(userInputValue)) {
+      if(userInputPayload[userInputValue] === "string" || userInputPayload[userInputValue] === 0){
+        userInputPayload[userInputValue] = null;
+      }
+    }
+  }
+
   // *** construct payload
   const payloadInputs = document.querySelectorAll(inputSelector);
   const datepickerPayloads = document.querySelectorAll(
@@ -50,81 +60,72 @@ export const extractUserInput = (payload, inputSelector, radios) => {
 
   for (const item of payloadArray) {
     if (item.value === null || item.value === "") {
-      payload[item.name] = null;
+      userInputPayload[item.name] = null;
       continue;
     }
     if (item.value !== undefined) {
-      if (
-        typeof item.value === "string" &&
-        (isNaN(item.value) ||
-          (item.value.length > 1 &&
-            item.value.charAt(0) === "0" &&
-            item.value.charAt(1) !== "."))
-      ) {
-        payload[item.name] =
-          item.value.trim() === "" ? null : item.value.trim();
-      }
-      // is a number
-      else if (typeof item.value === "string" && !isNaN(item.value)) {
-        if (payload[item.name] === "string" || (typeof payload[item.name]) === "string") {
-          payload[item.name] =
-            item.value.trim() === "" ? null : item.value.trim();
-        }
-        // not a decimal
-        else if (item.value.indexOf(".") === -1) {
-          payload[item.name] = parseInt(item.value);
+      if(payload[item.name] === 0) {
+        if(typeof item.value === "string"){
+          if (item.value.indexOf(".") === -1) {
+            userInputPayload[item.name] = parseInt(item.value);
+          } else {
+            userInputPayload[item.name] = parseFloat(item.value);
+          }
         } else {
-          payload[item.name] = parseFloat(item.value);
+          userInputPayload[item.name] = item.value
         }
       }
-      if (typeof item.value === "number") {
-        if (payload[item.name] === "string") {
-          payload[item.name] = item.value.toString();
-        } else {
-          payload[item.name] = item.value;
+      else {
+        if(typeof item.value === "string"){
+          userInputPayload[item.name] = item.value.trim() === "" ? null : item.value.trim();
         }
       }
     }
   }
 
-  return payload;
+  return userInputPayload;
 };
 
-export const validateUserInput = (userInput, options = {}) => {
+export const validateUserInput = (userInput, dataTableName) => {
   const errors = [];
-  const { dataTableName, lAttr, rDat } = options;
-  const needsEndDateTime = "Must enter in both End Date/Time";
 
-  checkFormulaBeginDateAndHour(userInput, errors, dataTableName);
-
-  // checks end date and hour for formula table
-  if (options.dataTableName === "Formula") {
-    if (
-      !(
-        (userInput.endHour !== null && userInput.endDate) ||
-        (userInput.endHour === null && !userInput.endDate)
-      )
-    ) {
-      errors.push(needsEndDateTime);
-    }
-  } else if (
-    (userInput.endHour && !userInput.endDate) ||
-    (!userInput.endHour &&
-      userInput.endDate &&
-      dataTableName !== lAttr &&
-      dataTableName !== rDat)
-  ) {
-    errors.push(needsEndDateTime);
-  }
+  checkFormulaBeginDateAndHour(userInput, dataTableName, errors);
+  checkEndDateAndHour(userInput, dataTableName, errors);
 
   return errors;
 };
 
 /**
+ * Checks if either end date or hour exists
+ */
+const checkEndDateAndHour = (userInput, dataTableName, errors) => {
+  const needsEndDateTimeMsg = "Must enter in both End Date/Time";
+  // cases where userInput.endDate/Hour isn't an input option and thus don't exist in userInput evaluate to undefined
+  const hasOnlyEitherEndDateOrHour = (userInput.endDate === null) !== (userInput.endHour === null);
+
+  // skips these tables b/c only have end date, no end hour
+  // currently doesn't do anything due to missing option evaluating to undefined
+  // and thus having hasOnlyEitherEndDateOrHour eval to false
+  const skipTables = ["Location Attribute", "Relationship Data"]
+  if (skipTables.includes(dataTableName)) return;
+
+  // edge case for WAFs Rectangular Duct b/c properties are named wafEndDate/Hour
+  const wafOnlyEitherEndDateOrHour = (userInput.wafEndHour === null) !== (userInput.wafEndDate === null);
+  if (dataTableName === "Rectangular Duct WAF" && wafOnlyEitherEndDateOrHour) {
+    errors.push(needsEndDateTimeMsg);
+    return;
+  }
+
+  if (hasOnlyEitherEndDateOrHour) {
+    errors.push(needsEndDateTimeMsg);
+  }
+}
+
+/**
  * Checks if begin date and hour exist as options in user input and are nonempty
  * for Formula table in MP
  */
-const checkFormulaBeginDateAndHour = (userInput, errors, dataTableName) => {
+const checkFormulaBeginDateAndHour = (userInput, dataTableName, errors) => {
   const [beginDate, beginHour] = ["beginDate", "beginHour"];
   const needsBeginDateTime = "Must enter in both Begin Date/Time";
 

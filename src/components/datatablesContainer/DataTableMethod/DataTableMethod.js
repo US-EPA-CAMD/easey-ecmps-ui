@@ -6,7 +6,6 @@ import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import { needEndDate } from "../../../additional-functions/app-error";
 import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
@@ -18,7 +17,7 @@ import {
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
 
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
@@ -31,6 +30,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { successResponses } from "../../../utils/api/apiUtils";
 
 export const DataTableMethod = ({
   mdmData,
@@ -61,6 +61,8 @@ export const DataTableMethod = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
+
+  const dataTableName = "Methods";
   const dropdownArray = [
     [
       "parameterCode",
@@ -156,14 +158,14 @@ export const DataTableMethod = ({
   ];
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    parameterCode: null,
-    substituteDataCode: null,
-    bypassApproachCode: null,
-    monitoringMethodCode: null,
-    beginDate: null,
+    id: "string",
+    parameterCode: "string",
+    substituteDataCode: "string",
+    bypassApproachCode: "string",
+    monitoringMethodCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   // cant unit test properly
@@ -357,16 +359,16 @@ export const DataTableMethod = ({
 
   const saveMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.saveMonitoringMethods(userInput);
-      if (resp.status === 200) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
@@ -381,16 +383,16 @@ export const DataTableMethod = ({
 
   const createMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.createMethods(userInput);
-      if (resp.status === 201) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
