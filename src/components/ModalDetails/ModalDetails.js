@@ -343,7 +343,7 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            maxDate={`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`}
+            maxDate={title !== "Protocol Gas" ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}` : null}
           />
         );
         break;

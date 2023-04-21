@@ -30,6 +30,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { successResponses } from "../../../utils/api/apiUtils";
 
 export const DataTableMethod = ({
   mdmData,
@@ -367,7 +368,7 @@ export const DataTableMethod = ({
 
     try {
       const resp = await mpApi.saveMonitoringMethods(userInput);
-      if (resp.ok) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
@@ -391,7 +392,7 @@ export const DataTableMethod = ({
 
     try {
       const resp = await mpApi.createMethods(userInput);
-      if (resp.ok) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
