@@ -33,7 +33,7 @@ export const qaLinearitySummaryProps = (selectedRow) => {
   return {
     dataTableName: "Linearity Test",
     payload: {
-      // gasLevelCode: selectedRow.gasLevelCode,
+      gasLevelCode: "string",
       meanMeasuredValue: 0,
       meanReferenceValue: 0,
       percentError: 0,
