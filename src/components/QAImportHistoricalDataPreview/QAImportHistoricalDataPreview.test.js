@@ -194,7 +194,7 @@ const exportData = {
 const getExportQAUrl = `${config.services.qaCertification.uri}/export?testTypeCodes=${testSummaryData[0].testTypeCode, testSummaryData[1].testTypeCode}facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`
 const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods`
 const getReportingPeriodExportUrl = `${config.services.mdm.uri}/reporting-periods?export=true`
-const getHistoricalExportUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/export?facilityId=orisCode&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null&beginDate=1993-01-01&endDate=1993-03-31'
+const getHistoricalExportUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/export?facilityId=orisCode&beginDate=1993-01-01&endDate=1993-03-31'
 
 mock.onGet(getExportQAUrl).reply(200, exportData)
 mock.onGet(getHistoricalExportUrl).reply(200, exportData)
