@@ -219,7 +219,7 @@ export const exportQA = async (
   }
 
   if (options.isHistoricalImport) {
-    url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`;
+    url = `${url}`;
   }
 
   if (unitIds?.length > 0) {

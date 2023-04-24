@@ -23,7 +23,8 @@ import * as mpApi from '../../utils/api/monitoringPlansApi';
 import { checkoutAPI } from '../../additional-functions/checkout';
 import { QA_CERT_EVENT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
 import QAImportModalSelect from '../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect';
-
+import { successResponses } from "../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../utils/functions";
 export const QACertEventHeaderInfo = ({
   facility,
   selectedConfig,
@@ -40,6 +41,7 @@ export const QACertEventHeaderInfo = ({
   locationSelect,
   locations,
   setSelectedTestCode,
+  setUpdateRelatedTables
 }) => {
   const importTestTitle = 'Import Data';
   const [showImportModal, setShowImportModal] = useState(false);
@@ -242,14 +244,18 @@ export const QACertEventHeaderInfo = ({
       setShowSelectionTypeImportModal(false);
     }
   };
-
   const importQABtn = (payload) => {
+    setIsLoading(true);
+    setFinishedLoading(false);
     importQA(payload)
       .then((response) => {
+        setShowImportModal(true)
         setUsePortBtn(true);
-        setIsLoading(true);
-        if (response) {
-          setImportedFileErrorMsgs(response);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response)
+          setImportedFileErrorMsgs(errorMsgs);
+        }else{
+          setImportedFileErrorMsgs([]);
         }
       })
       .catch((err) => {
@@ -514,6 +520,7 @@ export const QACertEventHeaderInfo = ({
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
           successMsg={'QA Certification has been Successfully Imported.'}
+          setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
               setDisablePortBtn={setDisablePortBtn}
