@@ -9,6 +9,7 @@ import { addScreenReaderLabelForCollapses, assignAriaLabelsToDataTable, ensure50
 import { getExportTableCols } from "../../../utils/selectors/QACert/assert-export";
 import { oneSecond } from "../../../config";
 import { getUser } from "../../../utils/functions";
+import { successResponses } from "../../../utils/api/apiUtils";
 
 export const ExportTablesContainer = ({
   selectionData,
@@ -55,7 +56,7 @@ export const ExportTablesContainer = ({
             isHistoricalImport: false,
           }
         );
-        if (response) {
+        if (successResponses.includes(response.status)) {
           // add dataKey so selectedRow can be differentiated when exported
           const tableRows = response.data[dataKey].map(data => ({ ...data, dataKey }))
           setTableData(tableRows);
