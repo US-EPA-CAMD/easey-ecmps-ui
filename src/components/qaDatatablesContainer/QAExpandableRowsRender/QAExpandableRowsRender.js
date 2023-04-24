@@ -579,6 +579,32 @@ const QAExpandableRowsRender = ({
           })
           .catch((error) => console.log(error));
         break;
+      case "Appendix E Correlation Heat Input from Gas":
+        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
+        Promise.all(allPromises)
+          .then((responses) => {
+            responses.forEach((curResp, i) => {
+              let codeLabel;
+              let descriptionLabel;
+              switch (i) {
+                case 0:
+                  codeLabel = "monitoringSystemIDCode";
+                  descriptionLabel = "monitoringSystemIDDescription";
+                  break;
+                default:
+                  break;
+              }
+              dropdowns[dropdownArray[i]] = curResp.data.map((d) => {
+                return { code: d[codeLabel], name: d[descriptionLabel] };
+              });
+            });
+            for (const options of Object.values(dropdowns)) {
+              options.unshift({ code: "", name: "-- Select a value --" });
+            }
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
+        break;
       case "Appendix E Correlation Heat Input from Oil":
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());

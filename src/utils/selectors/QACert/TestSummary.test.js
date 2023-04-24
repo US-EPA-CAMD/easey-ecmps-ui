@@ -493,6 +493,27 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
   });
+  test("mapAppendixECorrHeatInputGasToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        monitoringSystemID: '100',
+        gasGCV: 1,
+        gasVolume: 1,
+        gasHeatInput: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: '100',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+      },
+    ];
+    expect(fs.mapAppendixECorrHeatInputGasToRows(data)).toEqual(records);
+  });
   test("mapFuelFlowmeterAccuracyDataToRows", () => {
     const data = [
       {

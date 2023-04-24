@@ -33,7 +33,7 @@ export const qaLinearitySummaryProps = (selectedRow) => {
   return {
     dataTableName: "Linearity Test",
     payload: {
-      // gasLevelCode: selectedRow.gasLevelCode,
+      gasLevelCode: "string",
       meanMeasuredValue: 0,
       meanReferenceValue: 0,
       percentError: 0,
@@ -507,9 +507,17 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       gasHeatInput: 0,
       monitoringSystemID: "string",
     },
-    dropdownArray: [],
-    columnNames: ["Gas GCV", "Gas Volume", "Gas Heat Input"],
+    dropdownArray: [
+      "monitoringSystemID",
+    ],
+    columnNames: [
+      "Monitoring System ID",
+      "Gas GCV", 
+      "Gas Volume", 
+      "Gas Heat Input",
+    ],
     controlInputs: {
+      monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
       gasGCV: ["Gas GCV", "input", "", ""],
       gasVolume: ["Gas Volume", "input", "", ""],
       gasHeatInput: ["Gas Heat Input", "input", "", ""],
