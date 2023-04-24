@@ -507,9 +507,17 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       gasHeatInput: 0,
       monitoringSystemID: "string",
     },
-    dropdownArray: [],
-    columnNames: ["Gas GCV", "Gas Volume", "Gas Heat Input"],
+    dropdownArray: [
+      "monitoringSystemID",
+    ],
+    columnNames: [
+      "Monitoring System ID",
+      "Gas GCV", 
+      "Gas Volume", 
+      "Gas Heat Input",
+    ],
     controlInputs: {
+      monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
       gasGCV: ["Gas GCV", "input", "", ""],
       gasVolume: ["Gas Volume", "input", "", ""],
       gasHeatInput: ["Gas Heat Input", "input", "", ""],
