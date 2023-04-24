@@ -1247,7 +1247,6 @@ export const createAppendixEHeatInputGas = async (
   payload
 ) => {
   const testSummary = await getQATestSummaryByID(locId, testSumId);
-  payload.monitoringSystemID = testSummary.data.monitoringSystemID;
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
   try {

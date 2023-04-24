@@ -341,9 +341,10 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.gasGCV === 0 ? "0" : el.gasGCV,
-      col2: el.gasVolume === 0 ? "0" : el.gasVolume,
-      col3: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
+      col1: el.monitoringSystemID,
+      col2: el.gasGCV === 0 ? "0" : el.gasGCV,
+      col3: el.gasVolume === 0 ? "0" : el.gasVolume,
+      col4: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
     };
     records.push(row);
   }
