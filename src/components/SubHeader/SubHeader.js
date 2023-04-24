@@ -151,11 +151,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
 
   const [show, setShow] = useState(false);
 
-  const [loginBtn, setLoginBtn] = useState(document.activeElement);
-
   const closeModalHandler = () => {
     setShow(false);
-    loginBtn.focus();
   };
 
   const openModal = (value) => {
@@ -319,7 +316,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   id="openModalBTN"
                   epa-testid="openModalBTN"
                   onClick={() => {
-                    setLoginBtn(document.activeElement);
+                    window.openModalBtn = document.activeElement;
                     openModal(true);
                   }}
                   className="text-white border-white text-no-wrap"
@@ -330,6 +327,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   <Modal
                     show={show}
                     close={closeModalHandler}
+                    returnFocus={true}
                     children={<Login isModal={true} />}
                   />
                 ) : null}
