@@ -26,6 +26,7 @@ export const Modal = ({
   disableExitBtn,
   showDarkBg,
   errorMsgs = [],
+  returnFocus,
 }) => {
   const modalRef = createRef();
   useEffect(() => {
@@ -50,6 +51,19 @@ export const Modal = ({
       document.removeEventListener("keydown", handleKeyPress);
     };
   }, [close]);
+
+  useEffect(
+    () => () => {
+      // * re-selecting the element because it is sometimes rerendered
+      const openModalBtn = document.querySelector(
+        `#${window.openModalBtn?.id}`
+      );
+      if (returnFocus && openModalBtn) {
+        openModalBtn.focus();
+      }
+    },
+    [returnFocus]
+  );
 
   let modalRoot = document.getElementById("portal");
   if (!modalRoot) {
