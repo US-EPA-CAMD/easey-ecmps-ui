@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen,act  } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -7,12 +7,12 @@ import MockAdapter from "axios-mock-adapter";
 import QAImportHistoricalDataPreview from "./QAImportHistoricalDataPreview";
 import config from "../../config";
 
-const facId = 'orisCode'
+const facId = "orisCode";
 
 const mock = new MockAdapter(axios);
 
-const beginDate = "1993-01-01"
-const endDate = "1993-03-31"
+const beginDate = "1993-01-01";
+const endDate = "1993-03-31";
 
 const testSummaryData = [
   {
@@ -63,7 +63,7 @@ const testSummaryData = [
     hgSummaryData: [],
     testQualificationData: [],
     protocolGasData: [],
-    airEmissionTestData: []
+    airEmissionTestData: [],
   },
   {
     id: "id2",
@@ -113,9 +113,9 @@ const testSummaryData = [
     hgSummaryData: [],
     testQualificationData: [],
     protocolGasData: [],
-    airEmissionTestData: []
-  }
-]
+    airEmissionTestData: [],
+  },
+];
 const certificationEventData = [
   {
     id: "string",
@@ -142,9 +142,9 @@ const certificationEventData = [
     conditionalBeginDate: "2023-02-28T18:47:35.811Z",
     conditionalBeginHour: 0,
     completionTestDate: "2023-02-28T18:47:35.811Z",
-    completionTestHour: 0
-  }
-]
+    completionTestHour: 0,
+  },
+];
 const testExtensionExemptionData = [
   {
     stackPipeId: "string",
@@ -167,9 +167,9 @@ const testExtensionExemptionData = [
     updateDate: "string",
     hoursUsed: 0,
     fuelCode: "string",
-    extensionOrExemptionCode: "string"
-  }
-]
+    extensionOrExemptionCode: "string",
+  },
+];
 const reportingPeriods = [
   {
     id: 1,
@@ -180,73 +180,101 @@ const reportingPeriods = [
     periodDescription: "1993 QTR 1",
     periodAbbreviation: "1993 Q1",
     archiveInd: 0,
-    selected: false
-  }
-]
+    selected: false,
+  },
+];
 
 const exportData = {
   orisCode: 0,
   testSummaryData,
   certificationEventData,
-  testExtensionExemptionData
-}
+  testExtensionExemptionData,
+};
 
-const getExportQAUrl = `${config.services.qaCertification.uri}/export?testTypeCodes=${testSummaryData[0].testTypeCode, testSummaryData[1].testTypeCode}facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`
-const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods`
-const getReportingPeriodExportUrl = `${config.services.mdm.uri}/reporting-periods?export=true`
-const getHistoricalExportUrl = 'https://api.epa.gov/easey/dev/qa-certification-mgmt/export?facilityId=orisCode&beginDate=1993-01-01&endDate=1993-03-31'
+const getExportQAUrl = `${
+  config.services.qaCertification.uri
+}/export?testTypeCodes=${
+  (testSummaryData[0].testTypeCode, testSummaryData[1].testTypeCode)
+}facilityId=${facId}&beginDate=${beginDate}&endDate=${endDate}`;
+const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods`;
+const getReportingPeriodExportUrl = `${config.services.mdm.uri}/reporting-periods?export=true`;
+const getHistoricalExportUrl =
+  "https://api.epa.gov/easey/dev/qa-certification-mgmt/export?facilityId=orisCode&beginDate=1993-01-01&endDate=1993-03-31";
 
-mock.onGet(getExportQAUrl).reply(200, exportData)
-mock.onGet(getHistoricalExportUrl).reply(200, exportData)
-mock.onGet(getReportingPeriodUrl).reply(200, reportingPeriods)
-mock.onGet(getReportingPeriodExportUrl).reply(200, reportingPeriods)
+mock.onGet(getExportQAUrl).reply(200, exportData);
+mock.onGet(getHistoricalExportUrl).reply(200, exportData);
+mock.onGet(getReportingPeriodUrl).reply(200, reportingPeriods);
+mock.onGet(getReportingPeriodExportUrl).reply(200, reportingPeriods);
 
-const setSelectedHistoricalData = jest.fn()
-const setFileName = jest.fn()
-const setDisablePortBtn = jest.fn()
+const setSelectedHistoricalData = jest.fn();
+const setFileName = jest.fn();
+const setDisablePortBtn = jest.fn();
 
 const props = {
   locations: [],
   setSelectedHistoricalData,
   setFileName,
   setDisablePortBtn,
-  orisCode: 'orisCode'
-}
+  orisCode: "orisCode",
+};
 
-test('renders QAImportHistoricalDataPreview', () => {
+test("renders QAImportHistoricalDataPreview", () => {
   // Arrange
-  const { container } = render(<QAImportHistoricalDataPreview {...props} />)
+  const { container } = render(<QAImportHistoricalDataPreview {...props} />);
 
   // Assert
-  expect(container).toBeDefined()
-})
+  expect(container).toBeDefined();
+});
 
-test('renders QAImportHistoricalDataPreview with cert event and test extension exemption tables', async () => {
+test("renders QAImportHistoricalDataPreview with cert event and test extension exemption tables", async () => {
   // Arrange
-  const { container } = render(<QAImportHistoricalDataPreview {...props} showTestSummaryTable={false} />)
+  const { container } = render(
+    <QAImportHistoricalDataPreview {...props} showTestSummaryTable={false} />
+  );
 
   // Act
-  const previewBtn = await screen.findByRole('button', { name: /Preview/i })
-  userEvent.click(previewBtn)
+  const previewBtn = await screen.findByRole("button", { name: /Preview/i });
+  userEvent.click(previewBtn);
 
-  const certEventTitle = await screen.findByText(/QA Certification Events/i)
-  const teeTitle = screen.getByText(/Test Extension Exemptions/i)
+  const certEventTitle = await screen.findByText(/QA Certification Events/i);
+  const teeTitle = screen.getByText(/Test Extension Exemptions/i);
 
   // Assert
-  expect(container).toBeDefined()
-  expect(certEventTitle).toBeInTheDocument()
-  expect(teeTitle).toBeInTheDocument()
-})
+  expect(container).toBeDefined();
+  expect(certEventTitle).toBeInTheDocument();
+  expect(teeTitle).toBeInTheDocument();
+});
 
-test('preview button can be clicked', async () => {
+test("preview button can be clicked", async () => {
   // Arrange
-  render(<QAImportHistoricalDataPreview {...props} />)
+  render(<QAImportHistoricalDataPreview {...props} />);
 
   // Act
-  const previewBtn = await screen.findByRole('button', { name: /Preview/i })
-  userEvent.click(previewBtn)
+  const previewBtn = await screen.findByRole("button", { name: /Preview/i });
+  userEvent.click(previewBtn);
 
   // Assert
-  expect(previewBtn).toBeInTheDocument()
-})
+  expect(previewBtn).toBeInTheDocument();
+});
 
+test("rows can be checked", async () => {
+  // Arrange
+  const { container } = render(<QAImportHistoricalDataPreview {...props} />);
+  // Act
+  const previewBtn = await screen.findByRole("button", { name: /Preview/i });
+
+  await act(async () => {
+   userEvent.click(previewBtn);
+  });
+  
+  const rows = await screen.getAllByRole("checkbox");
+  // Assert
+
+  rows.forEach((row) => {
+    if(row.checked === false){
+      userEvent.click(row);
+      expect(row.checked).toBe(true);
+    }
+    
+  });
+});

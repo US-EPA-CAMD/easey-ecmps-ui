@@ -68,6 +68,7 @@ export const QAImportHistoricalDataPreview = ({
         if (response) {
           setTableData(response.data);
           setPreviewData(true);
+          console.log('response',response.data)
           setLoading(false);
           const dataKeys = showTestSummaryTable
             ? [TEST_SUMMARY_KEY]
