@@ -51,7 +51,6 @@ export const ExportTab = ({
   const rowsData = useRef();
 
   const dataTypeSelectionHanlder = (e) => {
-
     const dataTypesCopy = [...dataTypes];
     const index = dataTypesCopy.findIndex((d) => d.name === e.target.name);
     if (index > -1) {
@@ -70,8 +69,10 @@ export const ExportTab = ({
       workspaceSection
     );
 
-    if (e.target.name === qa && !dataTypesCopy[index].checked) {
-      setPreviewOptions(undefined);
+    // qa checkbox checked/unchecked
+    if (e.target.name === qa) {
+      const options = dataTypesCopy[index].checked ? { ...reportingPeriod } : null;
+      setPreviewOptions(options);
     }
 
   };
@@ -88,6 +89,11 @@ export const ExportTab = ({
       },
       workspaceSection
     );
+    const isQaChecked = dataTypes.some(e => e.name === qa && e.checked)
+    // update preview options only if qa is checked
+    if (isQaChecked) {
+      setPreviewOptions({ beginDate, endDate });
+    }
   };
 
   const getInitSelection = (reportingPeriodObj) => {
@@ -110,12 +116,12 @@ export const ExportTab = ({
       promises.push(exportMonitoringPlanDownload(selectedConfig.id));
     }
     // export qa
-    if (dataTypes.find((e) => e.name === qa).checked) {
+    const selectedRowsObj = rowsData.current;
+    if (dataTypes.find((e) => e.name === qa).checked && selectedRowsObj) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = rowsData.current;
       const exportJson = {
         orisCode: orisCode,
-        ...selectedRows,
+        ...selectedRowsObj,
       };
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
@@ -164,15 +170,9 @@ export const ExportTab = ({
     );
   };
 
-  const isPreviewDisabled = () => {
-    const checkedDataTypes = dataTypes.filter(e => e.checked);
-    // if only qa is checked
-    return !(checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa);
-  }
-
   return (
     <>
-      {loading ? <Preloader /> : null}
+      {loading && <Preloader />}
       <div>
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           <div className="grid-row">
@@ -205,23 +205,18 @@ export const ExportTab = ({
               getInitSelection={getInitSelection}
             />
           </div>
-          <div className="grid-col-3 padding-left-8 padding-top-3">
+          <div className="grid-col-3">
             <Button
               type={"button"}
-              className="width-card"
-              disabled={isPreviewDisabled()}
-              onClick={() =>
-                setPreviewOptions({
-                  beginDate: reportingPeriod.beginDate,
-                  endDate: reportingPeriod.endDate,
-                })
-              }
+              className="float-right"
+              disabled={isExportDisabled()}
+              onClick={exportClickHandler}
             >
-              Preview
+              Export
             </Button>
           </div>
         </div>
-        {previewOptions ? (
+        {previewOptions && (
           <>
             <ExportTablesContainer
               tableTitle={'Test Summary'}
@@ -257,18 +252,7 @@ export const ExportTab = ({
               dataRef={rowsData}
             />
           </>
-
-        ) : null}
-        <div className="border-top-1px border-base-lighter padding-y-2">
-          <Button
-            type={"button"}
-            className="float-right margin-top-3"
-            disabled={isExportDisabled()}
-            onClick={exportClickHandler}
-          >
-            Export
-          </Button>
-        </div>
+        )}
       </div>
     </>
   );

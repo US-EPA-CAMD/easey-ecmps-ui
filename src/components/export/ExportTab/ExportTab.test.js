@@ -2,20 +2,24 @@ import React from "react";
 import ExportTab from "./ExportTab";
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { exportQAResponse, mockReportingPeriod, selectedConfig } from "./ExportTab.test.mocks";
+import { EXPORT_TAB_TEST_EXPORT_STATE, exportQAResponse, mockReportingPeriod, selectedConfig } from "./ExportTab.test.mocks";
 import userEvent from "@testing-library/user-event";
-import { fireEvent } from "@testing-library/react/dist/pure";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 
 const mock = new MockAdapter(axios);
 
+const idRegex = '[\\w\\-]+'
+
 const getReportingPeriodUrl = `${config.services.mdm.uri}/reporting-periods?export=true`;
 mock.onGet(getReportingPeriodUrl).reply(200, mockReportingPeriod);
 
-const exportQAUrl = `${config.services.qaCertification.uri}/export?facilityId=3&unitIds=1|2&stackPipeIds=CS0AAN&beginDate=1993-01-01&endDate=1993-03-31`;
+const exportQAUrl = new RegExp(`${config.services.qaCertification.uri}/export?facilityId=3&unitIds=1|2&stackPipeIds=CS0AAN&beginDate=${idRegex}&endDate=${idRegex}`);
 mock.onGet(exportQAUrl).reply(200, exportQAResponse)
+
+const exportEndpoint = `${config.services.monitorPlans.uri}/plans/export?planId=TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A`;
+mock.onGet(exportEndpoint).reply(200, 'exported')
 
 describe("ExportTab", function () {
   let emissionsApi;
@@ -66,65 +70,91 @@ describe("ExportTab", function () {
         )
       );
     });
-
-    describe("Testing Preview Button", () => {
-
-      let mpCheckboxElement;
-      let emissionsCheckboxElement;
-      let qaCheckboxElement;
-      let previewButtonElement;
-
-      beforeEach(async () => {
-        await act(async () => {
-          return render(
-            <ExportTab
-              orisCode={3}
-              exportState={null}
-              setExportState={() => null}
-              workspaceSection={"export"}
-              selectedConfig={selectedConfig}
-              facility={"Barry (1, 2, CS0AAN)"}
-            />
-          );
-        });
-
-        mpCheckboxElement = screen.getByLabelText("Monitoring Plan");
-        emissionsCheckboxElement = screen.getByLabelText("Emissions");
-        qaCheckboxElement = screen.getByLabelText("QA & Certification");
-        previewButtonElement = screen.getByRole("button", { name: "Preview" });
-      })
-
-      it("should render the component with the preview button disabled", () => {
-        expect(previewButtonElement.disabled).toBe(true)
-      })
-
-      it("should disable preview button when MP is checked", () => {
-        fireEvent.click(mpCheckboxElement)
-        expect(previewButtonElement.disabled).toBe(true)
-      })
-
-      it("should disable preview button when Emissions is checked", () => {
-        fireEvent.click(emissionsCheckboxElement)
-        expect(previewButtonElement.disabled).toBe(true)
-      })
-
-      it("should enable preview button when QA is checked", async () => {
-        fireEvent.click(qaCheckboxElement)
-        expect(previewButtonElement.disabled).toBe(false)
-        jest.setTimeout(5000);
-      })
-
-      it("should preview data when preview button is clicked", async () => {
-        fireEvent.click(qaCheckboxElement)
-        expect(previewButtonElement.disabled).toBe(false)
-        fireEvent.click(previewButtonElement);
-        const testSummaryTitle = await screen.findByText(/Test Summary/i);
-        const qaCertTitle = screen.getByText(/QA Certification Events/i);
-        const testExtExeTitle = screen.getByText(/Test Extension Exemptions/i);
-        expect(testSummaryTitle).toBeInTheDocument();
-        expect(qaCertTitle).toBeInTheDocument();
-        expect(testExtExeTitle).toBeInTheDocument();
-      })
-    })
   });
+
+  describe("QA & Cert Export", () => {
+    test("when qa&cert is checked and no rows are selected then export should be disabled", async () => {
+      await act(async () => {
+        return render(
+          <ExportTab
+            orisCode={3}
+            exportState={null}
+            setExportState={() => null}
+            workspaceSection={"export"}
+            selectedConfig={selectedConfig}
+            facility={"Barry (1, 2, CS0AAN)"}
+          />
+        );
+      });
+      const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
+      const exportButton = screen.getByRole("button", {
+        name: "Export",
+      });
+
+      userEvent.click(qaCertCheckbox);
+      expect(exportButton).not.toBeEnabled();
+    })
+
+    test("when qa&cert is checked and rows selected then export should be enabled", async () => {
+      await act(async () => {
+        return render(
+          <ExportTab
+            orisCode={3}
+            exportState={EXPORT_TAB_TEST_EXPORT_STATE}
+            setExportState={() => null}
+            workspaceSection={"export"}
+            selectedConfig={selectedConfig}
+            facility={"Barry (1, 2, CS0AAN)"}
+          />
+        );
+      });
+      const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
+      const exportButton = screen.getByRole("button", {
+        name: "Export",
+      });
+
+
+      await act(async () => {
+        userEvent.click(qaCertCheckbox);
+      });
+
+      const qaRows = await screen.findAllByRole("row")
+      const firstRow = qaRows[0]
+      const firstCheckbox = firstRow.querySelector('input[type="checkbox"]'); // Find the checkbox inside the row
+
+      userEvent.click(firstCheckbox);
+
+      expect(firstCheckbox.checked).toBe(true);
+      expect(exportButton).toBeEnabled();
+    });
+
+    test("given qa&cert is checked when reporting period is changed then new data is loaded", async () => {
+      await act(async () => {
+        return render(
+          <ExportTab
+            orisCode={3}
+            exportState={EXPORT_TAB_TEST_EXPORT_STATE}
+            setExportState={() => null}
+            workspaceSection={"export"}
+            selectedConfig={selectedConfig}
+            facility={"Barry (1, 2, CS0AAN)"}
+          />
+        );
+      });
+      const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
+      await act(async () => {
+        userEvent.click(qaCertCheckbox);
+      });
+
+      const quarterDropdown = screen.getByLabelText(/quarter/i);
+      // select new quarter
+      await act(async () => {
+        userEvent.selectOptions(quarterDropdown, "2");
+      });
+
+      // rows are rendered
+      const qaRows = await screen.findAllByRole("row")
+      expect(qaRows).not.toHaveLength(0);
+    })
+  })
 });
