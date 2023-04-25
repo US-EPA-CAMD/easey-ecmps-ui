@@ -9,7 +9,10 @@ import {
   GridContainer,
   Label,
 } from "@trussworks/react-uswds";
-import { CreateOutlined, LensOutlined, LockOpenSharp } from "@material-ui/icons";
+import {
+  CreateOutlined,
+  LockOpenSharp,
+} from "@material-ui/icons";
 import config from "../../config";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
@@ -113,7 +116,6 @@ export const HeaderInfo = ({
   updateRelatedTables,
   workspaceSection,
 }) => {
-
   //MP
   const sections = [
     { name: "Defaults" },
@@ -165,7 +167,7 @@ export const HeaderInfo = ({
     setShowRevertModal(false);
     const revertBtn = document.querySelector("#showRevertModal");
     revertBtn.focus();
-  }
+  };
   const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
@@ -229,7 +231,7 @@ export const HeaderInfo = ({
           enabled: true,
         };
       }),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
   );
 
@@ -305,18 +307,24 @@ export const HeaderInfo = ({
   }, []);
 
   useEffect(() => {
+    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
 
-    if (workspaceSection !== EMISSIONS_STORE_NAME)
-      return;
-
-    getEmissionsViewDropdownData().catch(e=>{console.log(e)});
-    return()=>{
+    getEmissionsViewDropdownData().catch((e) => {
+      console.log(e);
+    });
+    return () => {
       setViewTemplates([]);
-      setViewTemplateSelect(null)
-    }
+      setViewTemplateSelect(null);
+    };
     // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection, setViewTemplateSelect, selectedReportingPeriods,configID, inWorkspace]);
+  }, [
+    workspaceSection,
+    setViewTemplateSelect,
+    selectedReportingPeriods,
+    configID,
+    inWorkspace,
+  ]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -329,7 +337,6 @@ export const HeaderInfo = ({
 
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
-
     if (selectedReportingPeriods.length === 0) {
       setViewTemplates([]);
       return;
@@ -343,20 +350,23 @@ export const HeaderInfo = ({
     // First get view counts
     try {
       const { data: countData } = await emApi.getEmissionViewData(
-        'COUNTS',
+        "COUNTS",
         configID,
         selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
         inWorkspace
       );
-      const codesWithData = countData.filter(c => c.count > 0)
-        .map(c => c.dataSetCode);
+      const codesWithData = countData
+        .filter((c) => c.count > 0)
+        .map((c) => c.dataSetCode);
 
       let { data: viewData } = await emApi.getViews();
 
       // This will filter the dropdown values for the views by the ones that have a count > 0
-      viewData = viewData.filter(v => codesWithData.find(d => d === v.code) !== undefined)
+      viewData = viewData.filter(
+        (v) => codesWithData.find((d) => d === v.code) !== undefined
+      );
 
       setViewTemplates(viewData);
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
@@ -364,9 +374,8 @@ export const HeaderInfo = ({
       }
     } catch (e) {
       console.error(e);
-
     }
-  }
+  };
 
   const executeOnClose = () => {
     setShowCommentsModal(false);
@@ -406,7 +415,7 @@ export const HeaderInfo = ({
 
   const handleEmissionsExport = async () => {
     const promises = [];
-    
+
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       promises.push(
@@ -421,7 +430,6 @@ export const HeaderInfo = ({
     }
 
     await Promise.allSettled(promises);
-
   };
 
   const formatCommentsToTable = (data) => {
@@ -465,9 +473,11 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
       mpApi.getRefreshInfo(configID).then((res) => {
-        const status = res.data.evalStatusCode;
-        setEvalStatus(status);
-        setEvalStatusLoaded(true);
+        if (res.data.evalStatusCode) {
+          const status = res.data.evalStatusCode;
+          setEvalStatus(status);
+          setEvalStatusLoaded(true);
+        }
       });
     }
 
@@ -596,9 +606,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -662,8 +672,8 @@ export const HeaderInfo = ({
     const params = {
       reportCode: "MP_EVAL",
       facilityId: orisCode,
-      monitorPlanId: selectedConfig.id
-    }
+      monitorPlanId: selectedConfig.id,
+    };
     const evalStatusHyperlink = (
       <div className={alertStyle}>
         <button
@@ -731,7 +741,7 @@ export const HeaderInfo = ({
       .then((response) => {
         setIsLoading(true);
         if (!successResponses.includes(response.status)) {
-          const errorMsgs = formatErrorResponse(response)
+          const errorMsgs = formatErrorResponse(response);
           setImportedFileErrorMsgs(errorMsgs);
         }
       })
@@ -820,8 +830,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -879,18 +890,18 @@ export const HeaderInfo = ({
 
   const handleExport = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       setDataLoaded(false);
-      if (workspaceSection === EMISSIONS_STORE_NAME) await handleEmissionsExport();
+      if (workspaceSection === EMISSIONS_STORE_NAME)
+        await handleEmissionsExport();
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi.exportMonitoringPlanDownload(configID);
       setDataLoaded(true);
-      setIsLoading(false)
-
+      setIsLoading(false);
     } catch (error) {
       setDataLoaded(true);
-      setIsLoading(false)
-      console.error(error)
+      setIsLoading(false);
+      console.error(error);
     }
   };
 
@@ -969,11 +980,12 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
 
-      {showRevertModal &&
+      {showRevertModal && (
         <Modal
           show={showRevertModal}
           close={closeRevertModal}
@@ -988,8 +1000,8 @@ export const HeaderInfo = ({
             </div>
           }
         />
-      }
-      {showEvalReport &&
+      )}
+      {showEvalReport && (
         <Modal
           title="Monitoring Plan Evaluation Report"
           width="80%"
@@ -1000,7 +1012,7 @@ export const HeaderInfo = ({
           showCancel={true}
           children={<ReportGenerator user={user} />}
         />
-      }
+      )}
 
       {evalStatusLoaded && dataLoaded ? (
         <div>
@@ -1107,7 +1119,10 @@ export const HeaderInfo = ({
                   desktopLg={{ col: 7 }}
                   desktop={{ col: 8 }}
                 >
-                  <div className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0" aria-live="polite">
+                  <div
+                    className="display-flex desktop:margin-top-1 desktop-lg:margin-top-0"
+                    aria-live="polite"
+                  >
                     <label className="text-bold width-card desktop:width-10 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-4 widescreen:margin-top-2">
                       Evaluation Status:
                     </label>
@@ -1194,12 +1209,11 @@ export const HeaderInfo = ({
                   View Audit Report
                 </Button>
                 */}
-
               </Grid>
             </GridContainer>
           )}
 
-          {workspaceSection === QA_CERT_EVENT_STORE_NAME &&
+          {workspaceSection === QA_CERT_EVENT_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1230,7 +1244,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                    // className="mobile-lg:view-template-dropdown-maxw"
+                      // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1246,9 +1260,9 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
             </GridContainer>
-          }
+          )}
 
-          {workspaceSection === EMISSIONS_STORE_NAME &&
+          {workspaceSection === EMISSIONS_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
                 <Grid col={2}>
@@ -1280,7 +1294,7 @@ export const HeaderInfo = ({
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
                       }}
-                    // className="mobile-lg:view-template-dropdown-maxw"
+                      // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
@@ -1322,13 +1336,13 @@ export const HeaderInfo = ({
               </Grid>
               {/* ------------------------------------------------------------------------------- */}
             </GridContainer>
-          }
+          )}
         </div>
       ) : (
         <Preloader />
       )}
 
-      {(showImportModal && !finishedLoading && !isLoading) &&
+      {showImportModal && !finishedLoading && !isLoading && (
         <div>
           <UploadModal
             show={showImportModal}
@@ -1360,7 +1374,7 @@ export const HeaderInfo = ({
             }
           />
         </div>
-      }
+      )}
       {isReverting && (
         <UploadModal
           width={"30%"}

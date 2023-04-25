@@ -75,7 +75,6 @@ export const DataTableMethod = ({
 
   const selectText = "-- Select a value --";
 
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -83,15 +82,6 @@ export const DataTableMethod = ({
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
-
-  // *** Reassign handlers after pop-up modal is closed
-  useEffect(() => {
-    if (!returnedFocusToLast) {
-      setReturnedFocusToLast(true);
-    } else {
-      assignFocusEventListeners();
-    }
-  }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
   useEffect(() => {
@@ -312,7 +302,6 @@ export const DataTableMethod = ({
     setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    setReturnedFocusToLast(false);
   };
 
   const data = useMemo(() => {
@@ -455,6 +444,7 @@ export const DataTableMethod = ({
           title={createNewMethod ? "Create Method" : "Method"}
           exitBTN={createNewMethod ? "Create Method" : `Save and Close`}
           errorMsgs={errorMsgs}
+          returnFocus={true}
           children={
             dropdownsLoaded ? (
               <div>
