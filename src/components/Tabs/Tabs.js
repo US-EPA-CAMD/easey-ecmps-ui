@@ -175,7 +175,7 @@ const Tabs = ({
                     }
                   }}
                 >
-                  <div className="text-center tab-button-text-container ellipsis-text padding-2px position-relative top-neg-05">
+                  <div className="text-center tab-button-text-container ellipsis-text position-relative">
                     {user &&
                     workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
@@ -186,7 +186,7 @@ const Tabs = ({
                       )) ? (
                       <LockSharp
                         role="img"
-                        className="text-bold tab-icon margin-top-1 margin-right-2 position-relative top-2px"
+                        className="text-bold tab-icon margin-right-1"
                         aria-hidden="false"
                         title={`Locked Facility - ${
                           el.props.title.split("(")[0]
@@ -194,20 +194,20 @@ const Tabs = ({
                       />
                     ) : null}
                     {el.props.title.split("(")[0]}
-                  </div>
-                  <div className="text-center">
                     {(workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId)) &&
                       <CreateSharp
                         role="img"
-                        className="text-bold tab-icon margin-right-2 position-relative top-neg-1"
+                        className="text-bold tab-icon margin-left-1"
                         aria-hidden="false"
                         title={`Checked-out Configuration - ${el.props.title
                           .split("(")[1]
                           .replace(")", "")}`}
                       />
                     }
+                  </div>
+                  <div className="text-center">
                     <span className="position-relative top-neg-105 locations-display">
                       {el.props.selectedConfigName}
                     </span>
