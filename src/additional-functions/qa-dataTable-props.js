@@ -447,8 +447,8 @@ export const qaTestQualificationProps = (selectedRow) => {
     ],
     columnNames: [
       "Test Claim Code",
-      "Begin Date/Time",
-      "End Date/Time",
+      "Begin Date",
+      "End Date",
       "High Load Percentage",
       "Mid Load Percentage",
       "Low Load Percentage",

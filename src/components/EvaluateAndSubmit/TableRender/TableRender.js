@@ -112,9 +112,8 @@ const TableRender = forwardRef(
 
         const yearQuarter = row.periodAbbreviation.split(" ");
 
-        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${
-          yearQuarter[0]
-        }&quarter=${yearQuarter[1].charAt(1)}`;
+        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${yearQuarter[0]
+          }&quarter=${yearQuarter[1].charAt(1)}`;
       }
 
       url =
@@ -172,7 +171,7 @@ const TableRender = forwardRef(
       <div>
         {state && state.length > 0 && (
           <DataTable
-            className="data-display-table"
+            className="data-display-table maxh-mobile overflow-y-scroll evaluate-table"
             defaultSortField="orisCode"
             columns={mappings}
             data={state}
