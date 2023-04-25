@@ -193,19 +193,19 @@ const Tabs = ({
                         }`}
                       />
                     ) : null}
-                    {el.props.title.split("(")[0]}
                     {(workspaceSection !== EXPORT_STORE_NAME &&
                     el.props.locationId &&
                     isCheckedOutByUser(el.props.locationId)) &&
                       <CreateSharp
                         role="img"
-                        className="text-bold tab-icon margin-left-1"
+                        className="text-bold tab-icon margin-right-1"
                         aria-hidden="false"
                         title={`Checked-out Configuration - ${el.props.title
                           .split("(")[1]
                           .replace(")", "")}`}
                       />
                     }
+                    {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">
                     <span className="position-relative top-neg-105 locations-display">
