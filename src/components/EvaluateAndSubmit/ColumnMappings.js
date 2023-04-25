@@ -227,7 +227,7 @@ export const qaCertEventColumns = [
   },
   {
     name: "QA Cert Event Date/Time",
-    selector: (row) => `${row.eventDate.trim()}:00`,
+    selector: "eventDate",
     sortable: true,
     // sortFunction: sortByEventDate,
     wrap: true
@@ -239,14 +239,14 @@ export const qaCertEventColumns = [
   },
   {
     name: "Conditional Date/Time",
-    selector: (row) => `${row.conditionDate.trim()}:00`,
+    selector: "conditionDate",
     sortable: true,
     wrap: true
     // sortFunction: sortByConditionDateHour,
   },
   {
     name: "Completion Date/Time",
-    selector: (row) => `${row.lastCompletion.trim()}:00`,
+    selector: "lastCompletion",
     sortable: true,
     wrap: true
     // sortFunction: sortByCompletionDateHour,
