@@ -170,6 +170,13 @@ export const qaTestSummaryColumns = [
     name: "Test Number",
     selector: "testNum",
     sortable: true,
+    width: "200px",
+  },
+  {
+    name: "Year/Quarter",
+    selector: "periodAbbreviation",
+    sortFunction: sortByPeriodAbbreviation,
+    sortable: true,
   },
   {
     name: "Begin Date/Time",
