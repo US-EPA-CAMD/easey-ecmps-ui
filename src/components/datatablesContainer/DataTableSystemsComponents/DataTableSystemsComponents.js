@@ -200,6 +200,7 @@ export const DataTableSystemsComponents = ({
   }, [systemID]);
 
   useEffect(() => {
+  if(selected?.locationId && selected?.id){
     mpApi
       .getMonitoringSystemsComponents(selected.locationId, selected.id)
       .then((res) => {
@@ -215,6 +216,7 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
       });
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 

@@ -314,6 +314,7 @@ export const DataTableQualifications = ({
   //    - apiFunc: API function from imported utility
   //    - userInput: user-entered values (payload)
   const handleRequest = async (dataType, apiFunc, userInput) => {
+    userInput.locationId = locationSelectValue;
     try {
       const resp = await apiFunc(userInput);
       if (resp.status >= 200 && resp.status < 300) {
