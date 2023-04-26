@@ -38,9 +38,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedNotes, setSelectedNotes] = useState('');
 
     // Time Criteria
-    const [selectedBeginDate, setSelectedBeginDate] = useState();
+    const [, setSelectedBeginDate] = useState();
     const [selectedBeginHour, setSelectedBeginHour] = useState();
-    const [selectedEndDate, setSelectedEndDate] = useState();
+    const [, setSelectedEndDate] = useState();
     const [selectedEndHour, setSelectedEndHour] = useState();
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();

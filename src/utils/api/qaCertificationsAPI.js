@@ -4,7 +4,7 @@ import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
-const getApiUrl = (path = '') => {
+const getApiUrl = (path = "") => {
   let url = config.services.qaCertification.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -43,7 +43,7 @@ export const getQATestSummary = async (
   selectedTestCode,
   beginDate,
   endDate,
-  forWorkspace = false,
+  forWorkspace = false
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
@@ -176,8 +176,9 @@ export const getQASchema = async () => {
 };
 
 export const getReportingPeriod = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
-    }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${
+    isExport ? "?export=true" : ""
+  }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -211,11 +212,11 @@ export const exportQA = async (
 ) => {
   const path = `/export?facilityId=${facilityId}`;
   let url;
-  
+
   if (options.isOfficial) {
     url = `${config.services.qaCertification.uri}${path}`;
   } else {
-    url = getApiUrl(path)
+    url = getApiUrl(path);
   }
 
   if (options.isHistoricalImport) {
@@ -1246,7 +1247,6 @@ export const createAppendixEHeatInputGas = async (
   appECorrTestRunId,
   payload
 ) => {
-  const testSummary = await getQATestSummaryByID(locId, testSumId);
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
   try {
