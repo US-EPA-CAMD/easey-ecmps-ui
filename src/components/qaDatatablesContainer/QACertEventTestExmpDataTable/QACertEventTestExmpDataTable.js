@@ -48,6 +48,8 @@ const QACertEventTestExmpDataTable = ({
   selectedLocation,
   orisCode,
   locations,
+  updateTable,
+  setUpdateTable
 }) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
@@ -61,7 +63,6 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
 
 
   const years = generateArrayOfYears(2009).map((year, index) => {
