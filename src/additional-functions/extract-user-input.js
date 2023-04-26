@@ -30,7 +30,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
     const item = { name: "", value: "" };
     item.name = input.getAttribute("epadataname");
     item.value = input.value;
-    if (!item.value) {
+    if (!item.value && item.value !== "") {
       item.value = input.getAttribute("value");
     }
     payloadArray.push(item);
