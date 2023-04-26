@@ -170,7 +170,7 @@ export const qaTestSummaryColumns = [
     name: "Test Number",
     selector: "testNum",
     sortable: true,
-    width: "200px",
+    width: "180px",
   },
   {
     name: "Year/Quarter",
@@ -228,12 +228,12 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "QA Cert Event Code",
+    name: "Event Code",
     selector: "qaCertEventCode",
     sortable: true,
   },
   {
-    name: "QA Cert Event Date/Time",
+    name: "Event Date/Time",
     selector: "eventDate",
     sortable: true,
     // sortFunction: sortByEventDate,
