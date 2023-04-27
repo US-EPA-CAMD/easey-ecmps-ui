@@ -351,7 +351,7 @@ const QACertEventTestExmpDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -359,7 +359,7 @@ const QACertEventTestExmpDataTable = ({
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",

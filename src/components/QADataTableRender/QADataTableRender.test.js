@@ -16,7 +16,7 @@ beforeAll(() => {
     { name: "Facility", selector: "col5", sortable: true },
   ];
   columnNames = [
-    "Unit or Stack Pipe ID",
+    "Unit/Stack Pipe ID",
     "Test Type Code",
     "Monitoring System Code",
     "Component ID",

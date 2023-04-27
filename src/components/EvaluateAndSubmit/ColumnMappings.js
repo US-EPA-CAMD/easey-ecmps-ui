@@ -157,7 +157,7 @@ export const qaTestSummaryColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentId",
     sortable: true,
   },
@@ -170,7 +170,7 @@ export const qaTestSummaryColumns = [
     name: "Test Number",
     selector: "testNum",
     sortable: true,
-    width: "200px",
+    width: "180px",
   },
   {
     name: "Year/Quarter",
@@ -223,17 +223,17 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
   },
   {
-    name: "QA Cert Event Code",
+    name: "Event Code",
     selector: "qaCertEventCode",
     sortable: true,
   },
   {
-    name: "QA Cert Event Date/Time",
+    name: "Event Date/Time",
     selector: "eventDate",
     sortable: true,
     // sortFunction: sortByEventDate,
@@ -289,7 +289,7 @@ export const qaTeeColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
   },

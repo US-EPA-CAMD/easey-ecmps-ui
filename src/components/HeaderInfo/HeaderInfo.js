@@ -216,6 +216,9 @@ export const HeaderInfo = ({
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
+  const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
+  const workspaceSectionName = workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan" : "Test Data"
+
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
     "You can only select a maximum of four reporting periods";
@@ -482,7 +485,7 @@ export const HeaderInfo = ({
     }
 
     // then load the rest of the data
-    if (evalStatusLoaded && !dataLoaded) {
+    if (evalModuleLoadedStatus && !dataLoaded) {
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
         const configs = res.data;
@@ -1014,7 +1017,7 @@ export const HeaderInfo = ({
         />
       )}
 
-      {evalStatusLoaded && dataLoaded ? (
+      {evalModuleLoadedStatus && dataLoaded  ? (
         <div>
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
@@ -1349,11 +1352,7 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={
-              workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Import a Monitoring Plan to continue"
-                : "Import Data"
-            }
+            title={ `Import a ${workspaceSectionName} to continue.`}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
@@ -1416,11 +1415,7 @@ export const HeaderInfo = ({
             importApiErrors={importApiErrors}
             importedFileErrorMsgs={importedFileErrorMsgs}
             setUpdateRelatedTables={setUpdateRelatedTables}
-            successMsg={
-              workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Monitoring Plan has been Successfully Imported."
-                : "Test Data from File has been successfully imported."
-            }
+            successMsg={`${workspaceSectionName} has been Successfully Imported.`}
             children={
               <ImportModal
                 setDisablePortBtn={setDisablePortBtn}
