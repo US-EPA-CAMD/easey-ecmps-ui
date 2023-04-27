@@ -88,20 +88,6 @@ const ReportingPeriodSelector = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateReportingPeriod = (selectedObj) => {
-    setReportingPeriods(
-      [...reportingPeriods].map((e) => {
-        if (e.id === selectedObj.id) {
-          e.selected = true;
-        } else {
-          e.selected = false;
-        }
-        return e;
-      })
-    );
-    reportingPeriodSelectionHandler(selectedObj);
-  };
-
   const yearQuarterSelectionHandler = (event) => {
     const selectedId = Number(event.target.value)
     const newSelectedPeriod = reportingPeriods.find(period => period.id === selectedId)
