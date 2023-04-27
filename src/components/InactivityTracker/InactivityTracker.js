@@ -1,178 +1,203 @@
-import React, { useState, useEffect, createContext, useCallback, useRef } from "react";
-import { config } from "../../config";
-import { CountdownTimer } from "../CountdownTimer/CountdownTimer";
-import { useInterval } from "../../additional-functions/use-interval";
-import { logOut, refreshLastActivity } from "../../utils/api/easeyAuthApi";
-import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
-import { connect } from "react-redux";
-
+import React, { useRef, useEffect, useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import ReactDom from "react-dom";
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
-import "../Modal/Modal.scss";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import "./InactivityTracker.scss"
+import { config } from "../../config";
+import { logOut, refreshLastActivity } from "../../utils/api/easeyAuthApi";
+import "./InactivityTracker.scss";
 
-const modalClassName = "modal-wrapper bg-base-lightest radius-md";
-const modalContext = createContext(null);
-const widthPercent = 50;
-const showCancel = true;
+const inactiveDuration = config.app.inactivityDuration / 1000;
 
-export const InactivityTracker = ({ openedFacilityTabs, setCheckout }) => {
-  const [timeInactive, setTimeInactive] = useState(0);
-  const [showInactiveModal, setShowInactiveModal] = useState(false);
+const renderTime = ({ remainingTime }) => {
+  // Inner text for spinner
+  if (remainingTime === 0) {
+    return <div className="timer">Signing Out...</div>;
+  }
 
-  const wasActiveInWindow = useRef(false);
-
-  const isFacilityCheckedOut = useCallback(() => {
-    return openedFacilityTabs.find((element) => element.checkout === true);
-  }, [openedFacilityTabs]);
-
-  const resetUserInactivityTimer = () => {
-    wasActiveInWindow.current = true;
-    setTimeInactive(0);
-    setShowInactiveModal(false);
-    window.countdownInitiated = false;
-  };
-
-  useEffect(() => {
-    window.countdownInitiated = false;
-    config.app.activityEvents.forEach((activityEvent) => {
-      window.addEventListener(activityEvent, resetUserInactivityTimer);
-    });
-
-    // * clean up
-    return () => {
-      config.app.activityEvents.forEach((activityEvent) => {
-        window.removeEventListener(activityEvent, resetUserInactivityTimer);
-      });
-    };
-  }, []);
-
-  const handleInterval = useCallback(async () => {
-    const inactiveDuration = isFacilityCheckedOut()
-      ? config.app.inactivityDuration
-      : config.app.inactivityLogoutDuration;
-
-    // checkInactivity
-    if (timeInactive >= inactiveDuration) {
-      await logOut();
-      return;
-    }
-
-    if (
-      inactiveDuration - timeInactive <= config.app.countdownDuration &&
-      window.countdownInitiated === false
-    ) {
-      // display the countdown timer if not already initiated
-      window.countdownInitiated = true;
-      setShowInactiveModal(true);
-    }
-
-    setTimeInactive(
-      (prevTimeInactive) =>
-        prevTimeInactive + config.app.activityPollingFrequency
-    );
-  }, [isFacilityCheckedOut, timeInactive]);
-
-  const handleActivityRefresh = () => {
-    if (wasActiveInWindow.current) {
-      refreshLastActivity();
-    }
-
-    wasActiveInWindow.current = false;
-  };
-
-  useInterval(handleInterval, config.app.activityPollingFrequency);
-  useInterval(handleActivityRefresh, 10000);
+  const seconds = remainingTime % 60;
+  const minutes = Math.floor(remainingTime / 60);
+  const padMinutes = minutes.toString().padStart(2, "0");
+  const padSeconds = seconds.toString().padStart(2, "0");
 
   return (
-    // in order to allow screen reader accessibility, the "Modal" component had to be copied
-    // to create the inactivity timer modal inside of the aria-live region because
-    // the shared modal file places the component inside portal using ReactDom.createPortal()
-    <div>
-      <div className={`usa-overlay ${showInactiveModal ? "is-visible" : ""}`} />
-      {showInactiveModal && (
-        <div role="dialog" aria-modal="true">
-          <div>
-            <modalContext.Provider value={{ resetUserInactivityTimer }}>
-              <div
-                className={`${modalClassName} inactivity-modal react-transition flip-in-x`}
-                style={{
-                  width: `${widthPercent}%`,
-                  left: `${(100 - widthPercent) / 2}`,
-                }}
-              >
-                <div className="modal-content modal-color padding-y-3">
-                  <div className="modal-header modal-color  ">
-                    <ClearSharp
-                      className="position-absolute right-1 top-1 cursor-pointer text-bold"
-                      onClick={resetUserInactivityTimer}
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          resetUserInactivityTimer();
-                        }
-                      }}
-                      id="closeModalBtn"
-                      data-testid="closeModalBtn"
-                      title="Close Modal"
-                      epa-testid="closeXBtn"
-                      role="button"
-                      tabIndex="0"
-                      aria-hidden={false}
-                      aria-live="off"
-                    />
-                    <div className="left-0 bottom-0 padding-2" />
-                  </div>
-                  <span className="break-line" />
-                  <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto margin-top-2">
-                    <div>
-                      <CountdownTimer
-                        duration={config.app.countdownDuration / 1000}
-                        countdownExpired={async () => {
-                          resetUserInactivityTimer();
-                          await logOut();
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <span className="break-line" />
-                  <div className="modal-footer  ">
-                    {showCancel ? (
-                      <Button
-                        type="button"
-                        onClick={resetUserInactivityTimer}
-                        title="Click to close"
-                        epa-testid="closeBtn"
-                        className="float-left"
-                        aria-live="off"
-                      >
-                        {"Close"}
-                      </Button>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            </modalContext.Provider>
-          </div>
-        </div>
-      )}
+    <div className="timer">
+      <div className="text">Remaining</div>
+      <div className="value">
+        {padMinutes}:{padSeconds}
+      </div>
+      <div className="text">seconds</div>
     </div>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setCheckout: (value, configID) =>
-      dispatch(setCheckoutState(value, configID)),
-  };
-};
+export const InactivityTracker = () => {
+  const channel = new BroadcastChannel("inactivity-events"); //Broadcast activity events to other sessions
 
-const mapStateToProps = (state) => {
-  return {
-    openedFacilityTabs: state.openedFacilityTabs[MONITORING_PLAN_STORE_NAME],
-  };
-};
+  const timeInactive = useRef(0); //Keep track of current user inactivity
 
-export default connect(mapStateToProps, mapDispatchToProps)(InactivityTracker);
-export { mapStateToProps };
-export { mapDispatchToProps };
+  const signingOut = useRef(false); //Prevent double sign outs
+  const wasActiveInWindow = useRef(false); //Activity monitor
+
+  const showCountdownRef = useRef(false); //Use a ref that we can manipulate and set the showCountdown [avoids weird state behavior]
+  const [showCountdown, setShowCountdown] = useState(showCountdownRef.current); //State management determines when to show the countdown modal based on the corresponding ref
+
+  const resetUserInactivityTimer = () => {
+    wasActiveInWindow.current = true;
+    timeInactive.current = 0;
+    if (showCountdownRef.current) {
+      showCountdownRef.current = false;
+      setShowCountdown(showCountdownRef.current);
+    }
+  };
+
+  const extendSessionExpiration = () => {
+    //Extends user session expiration window every activity
+    const newExpiration = new Date();
+    newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration + 1);
+    localStorage.setItem("ecmps_session_expiration", newExpiration);
+  };
+
+  const handleUserActivity = () => {
+    extendSessionExpiration();
+    channel.postMessage("Event");
+    resetUserInactivityTimer();
+  };
+
+  const signOutUser = () => {
+    if (!signingOut.current) {
+      signingOut.current = true;
+      //Callback to sign user out when timer is finished
+      timeInactive.current = 0; //Debounce for sign out
+      logOut();
+    }
+  };
+
+  useEffect(() => {
+    extendSessionExpiration(); //Extend / Create our sliding session window
+    channel.addEventListener("message", (event) => {
+      resetUserInactivityTimer();
+    });
+    channel.postMessage("Event");
+
+    localStorage.setItem("signing_out", false); //Used as a debounce when we have multiple sessions all reaching their log out point
+
+    const interval = setInterval(() => {
+      //This checks the users activity status every second
+      timeInactive.current = timeInactive.current + 1;
+      if (
+        !showCountdownRef.current &&
+        timeInactive.current >= inactiveDuration / 2
+      ) {
+        //Show the timer if our inactivity window is at the start of the countdown window
+        showCountdownRef.current = true;
+        setShowCountdown(showCountdownRef.current);
+      }
+
+      if (timeInactive.current >= inactiveDuration) {
+        signOutUser();
+      }
+    }, 1000);
+
+    const activityInterval = setInterval(() => {
+      if (wasActiveInWindow.current) {
+        refreshLastActivity();
+      }
+
+      wasActiveInWindow.current = false;
+    }, config.app.refreshLastActivityInterval);
+
+    // Bind event listeners to user input, this drives the inactivity
+    config.app.activityEvents.forEach((activityEvent) => {
+      window.addEventListener(activityEvent, handleUserActivity);
+    });
+
+    window.addEventListener("visibilitychange", () => {
+      //Handle user leaving main page and returning
+      if (
+        document.visibilityState === "visible" &&
+        timeInactive.current >= inactiveDuration / 2
+      ) {
+        setShowCountdown(false);
+        setShowCountdown(true);
+      }
+    });
+
+    // * clean up
+    return () => {
+      clearInterval(interval);
+      clearInterval(activityInterval);
+      config.app.activityEvents.forEach((activityEvent) => {
+        window.removeEventListener(activityEvent, handleUserActivity);
+      });
+    };
+  }, []);
+
+  let modalRoot = document.getElementById("portal");
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "portal");
+    document.body.appendChild(modalRoot);
+  }
+
+  return ReactDom.createPortal(
+    <div className="modal-back">
+      {showCountdown && (
+        <div className="usa-overlay is-visible">
+          <div role="dialog" aria-modal="true">
+            <div
+              className="modal-wrapper react-transition flip-in-x"
+              style={{
+                width: "30%",
+                left: "35%",
+                top: "30%",
+              }}
+            >
+              <div className="modal-content modal-color padding-y-3">
+                <div className="modal-header modal-color padding-y-1 border-bottom-1px border-base-lighter">
+                  <ClearSharp className="position-absolute right-1 top-1 cursor-pointer text-bold" />
+                </div>
+
+                <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
+                  <h3 className="text-center">
+                    It looks like you have been inactive for a while. You will
+                    be logged out soon for inactivity. Click the 'Close' button
+                    to remain active.
+                  </h3>
+                  <div className="timer-wrapper">
+                    <CountdownCircleTimer
+                      duration={inactiveDuration / 2}
+                      initialRemainingTime={
+                        inactiveDuration - timeInactive.current - 1
+                      }
+                      colors={[
+                        ["#004777", 0.33],
+                        ["#F7B801", 0.33],
+                        ["#A30000"],
+                      ]}
+                      isPlaying
+                      onComplete={signOutUser}
+                    >
+                      {renderTime}
+                    </CountdownCircleTimer>
+                  </div>
+                </div>
+              </div>
+              <span className="break-line" />
+              <div className="modal-footer">
+                <Button
+                  type="button"
+                  title="Click to close"
+                  className="margin-right-2"
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>,
+    modalRoot
+  );
+};
