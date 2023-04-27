@@ -677,9 +677,9 @@ export const DataTableSystemsComponents = ({
                       title={
                         createNewComponentFlag
                           ? "Create Component"
-                          : user && checkout
-                          ? `Edit Component: ${selectedComponent["componentId"]}`
-                          : `Component: ${selectedComponent["componentId"]}`
+                          : user && checkout 
+                          ? `Edit Component`
+                          : `Component`
                       }
                       create={createNewComponentFlag}
                       setMainDropdownChange={
