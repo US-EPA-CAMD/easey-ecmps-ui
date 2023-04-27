@@ -331,6 +331,7 @@ describe('QA Cert API', function () {
         .onGet(getAppendixEHeatInputGasDataUrl)
         .reply(200, appendixEHeatInputGasData);
 
+        console.log('test ' ,getAppendixEHeatInputGasDataUrl)
       const resp = await qaCert.getAppendixEHeatInputGasData(
         locId,
         testSumId,

@@ -113,7 +113,7 @@ describe('Test cases for QACertEventTestExmpDataTable', () => {
     // renders rows
     const rows = await screen.findAllByRole('row')
     expect(mock.history.get.length).not.toBe(0)
-    expect(rows).toHaveLength(qaCertsEventsData.length +1)
+    expect(rows).toHaveLength(qaCertsEventsData.length)
 
     // add row
     const addBtn = screen.getByRole('button', { name: /Add/i })
