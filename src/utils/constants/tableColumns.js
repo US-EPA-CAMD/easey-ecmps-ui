@@ -3,7 +3,7 @@ import { sortByPeriodAbbreviation } from '../../components/EvaluateAndSubmit/Col
 
 export const qaTestSummaryCols = [
 	{
-		name: "Unit/ StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
@@ -60,7 +60,7 @@ export const qaTestSummaryCols = [
 
 export const qaCertificationEventDataCols = [
 	{
-		name: "Unit/ StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
@@ -89,7 +89,7 @@ export const qaCertificationEventDataCols = [
 
 export const qaTestExtensionExemptionDataCols = [
 	{
-		name: "Unit/ StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},

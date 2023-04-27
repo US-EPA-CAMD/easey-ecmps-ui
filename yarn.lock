@@ -1599,7 +1599,7 @@
 
 "@material-ui/system@^4.12.2":
   version "4.12.2"
-  resolved "https://registry.yarnpkg.com/@material-ui/system/-/system-4.12.2.tgz#f5c389adf3fce4146edd489bf4082d461d86aa8b"
+  resolved "https://registry.yarnpkg.com/@material-ui/System/ -/system-4.12.2.tgz#f5c389adf3fce4146edd489bf4082d461d86aa8b"
   integrity sha512-6CSKu2MtmiJgcCGf6nBQpM8fLkuB9F55EKfbdTC80NND5wpTmKzwdhLYLH3zL4cLlK0gVaaltW7/wMuyTnN0Lw==
   dependencies:
     "@babel/runtime" "^7.4.4"
@@ -1687,7 +1687,7 @@
 
 "@mui/system@^5.11.14":
   version "5.11.14"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.11.14.tgz#7e7489e5266b56a6890043c623fa91a850a6669a"
+  resolved "https://registry.yarnpkg.com/@mui/System/ -/system-5.11.14.tgz#7e7489e5266b56a6890043c623fa91a850a6669a"
   integrity sha512-/MBv5dUoijJNEKEGi5tppIszGN0o2uejmeISi5vl0CLcaQsI1cd+uBgK+JYUP1VWvI/MtkWRLVSWtF2FWhu5Nw==
   dependencies:
     "@babel/runtime" "^7.21.0"
@@ -2212,7 +2212,7 @@
 
 "@us-epa-camd/easey-design-system@1.34.5":
   version "1.34.5"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.34.5/9db44d5bd013b6814032d48fc2c5e5e995a9079e#9db44d5bd013b6814032d48fc2c5e5e995a9079e"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-System/ 1.34.5/9db44d5bd013b6814032d48fc2c5e5e995a9079e#9db44d5bd013b6814032d48fc2c5e5e995a9079e"
   integrity sha512-C6kfLPf0DIFZdvkS2f2veA8wkE3aiUXMuzE/ngbK4G0G8unrwd45kwUgB2TXTVlzxcmvbSWV6LE7c/yED4XCsQ==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
