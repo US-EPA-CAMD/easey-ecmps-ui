@@ -216,6 +216,8 @@ export const HeaderInfo = ({
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
+  const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
+
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
     "You can only select a maximum of four reporting periods";
@@ -482,7 +484,7 @@ export const HeaderInfo = ({
     }
 
     // then load the rest of the data
-    if ((evalStatusLoaded || !inWorkspace) && !dataLoaded) {
+    if (evalModuleLoadedStatus && !dataLoaded) {
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
         const configs = res.data;
@@ -1014,7 +1016,7 @@ export const HeaderInfo = ({
         />
       )}
 
-      {(evalStatusLoaded || !inWorkspace) && dataLoaded  ? (
+      {evalModuleLoadedStatus && dataLoaded  ? (
         <div>
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
