@@ -1160,7 +1160,7 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid col={2}>
+                <Grid col={4}>
                   <DropdownSelection
                     caption="Sections"
                     selectionHandler={setSectionSelect}
