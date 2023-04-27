@@ -29,6 +29,8 @@ const renderComponent = (props) => {
     orisCode={props.orisCode}
     selectedLocation={props.selectedLocation}
     locations={[]}
+    setUpdateTable={jest.fn()}
+    updateTable={false}
     />
   );
 };
