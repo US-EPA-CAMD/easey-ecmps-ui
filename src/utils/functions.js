@@ -11,11 +11,11 @@ export const debugLog = (message, object = null) => {
 };
 
 export const getUser = () => {
-  const cdxUser = sessionStorage.getItem("cdx_user")
-    ? JSON.parse(sessionStorage.getItem("cdx_user"))
+  const ecmpsUser = localStorage.getItem("ecmps_user")
+    ? JSON.parse(localStorage.getItem("ecmps_user"))
     : null;
 
-  return cdxUser && cdxUser.firstName ? cdxUser : null;
+  return ecmpsUser && ecmpsUser.firstName ? ecmpsUser : null;
 };
 
 export const parseBool = (value, defaultValue = false) => {
@@ -148,15 +148,17 @@ export const formatReportUrl = (params) => {
   const test = params.testId ? `&testId=${params.testId}` : "";
   const quarter = params.quarter ? `&quarter=${params.quarter}` : "";
   const facility = params.facilityId ? `&facilityId=${params.facilityId}` : "";
-  const monitorPlan = params.monitorPlanId ? `&monitorPlanId=${params.monitorPlanId}` : "";
+  const monitorPlan = params.monitorPlanId
+    ? `&monitorPlanId=${params.monitorPlanId}`
+    : "";
   let url = `/reports?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
 
-  if (window.location.href.includes('/workspace')) {
-    return url.replace('/reports', '/workspace/reports');
+  if (window.location.href.includes("/workspace")) {
+    return url.replace("/reports", "/workspace/reports");
   }
 
   return url;
-}
+};
 
 export const displayReport = (params) => {
   let reportTitle;
@@ -194,9 +196,9 @@ export const displayReport = (params) => {
       break;
   }
 
-  reportTitle += ' Report';
+  reportTitle += " Report";
   const url = formatReportUrl(params);
-  window.open(url, reportTitle ?? 'ECMPS Report', reportWindowParams);
+  window.open(url, reportTitle ?? "ECMPS Report", reportWindowParams);
 };
 
 export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);
@@ -262,9 +264,10 @@ export const getPreviouslyFullSubmitedQuarter = (dateString = null) => {
  * October 1st - December 31st = Fourth Quarter
  */
 export const getQuarter = (date = new Date(), inUtc = false) => {
-
-  return inUtc ? Math.floor(date.getUTCMonth() / 3 + 1) : Math.floor(date.getMonth() / 3 + 1);
-}
+  return inUtc
+    ? Math.floor(date.getUTCMonth() / 3 + 1)
+    : Math.floor(date.getMonth() / 3 + 1);
+};
 
 //resets focus to top of page on refresh
 export const resetTabOrder = (history) => {
@@ -279,34 +282,38 @@ export const resetTabOrder = (history) => {
   }
 };
 
-
 export const validateDate = (date, hourMins) => {
   if (date) {
-    return date.toString()
+    return date.toString();
   } else if (hourMins || hourMins === 0) {
-    return String(hourMins).padStart(2, '0');
+    return String(hourMins).padStart(2, "0");
   }
   return "";
-}
+};
 
 export const formatDateTime = (date, hour, mins) => {
   if (date) {
     if (mins || mins === 0) {
-      return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
+      return `${validateDate(date, null)} ${validateDate(
+        null,
+        hour
+      )}:${validateDate(null, mins)}`;
     } else {
       return `${validateDate(date, null)} ${validateDate(null, hour)}:00`;
     }
   } else {
-    return ""
+    return "";
   }
 };
 
 /**
  * Formats errored response into list of strings
- * @param {*} errorResp 
- * @returns 
+ * @param {*} errorResp
+ * @returns
  */
-export const formatErrorResponse = errorResp => {
-  const errorMsgs = Array.isArray(errorResp) ? errorResp : [JSON.stringify(errorResp)]
-  return errorMsgs
-}
+export const formatErrorResponse = (errorResp) => {
+  const errorMsgs = Array.isArray(errorResp)
+    ? errorResp
+    : [JSON.stringify(errorResp)];
+  return errorMsgs;
+};
