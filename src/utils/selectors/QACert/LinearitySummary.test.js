@@ -7,7 +7,7 @@ describe("testing getLinearitySummary data selectors", () => {
   test("getQAColsByTestCode", () => {
     const APPESUMCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
       "Test Reason Code",
@@ -20,7 +20,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const CALINJCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Test Number",
       "Test Reason Code",
@@ -40,7 +40,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const FLCCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
       "Test Reason Code",
@@ -54,7 +54,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const FLRCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
       "End Date/Time",
@@ -66,7 +66,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const FFLBCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
       "End Date/Time",
@@ -77,7 +77,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const OLOLCALCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Test Number",
       "Test Reason Code",
@@ -90,7 +90,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const RELACCCols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Test Number",
       "Test Reason Code",
@@ -104,7 +104,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const LMECols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Test Number",
       "Test Reason Code",
       "End Date/Time",
@@ -116,7 +116,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const MISC = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Monitoring System ID",
       "Component ID",
       "Test Number",
@@ -131,7 +131,7 @@ describe("testing getLinearitySummary data selectors", () => {
 
     const empty = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Test Number",
       "Test Reason Code",
@@ -144,7 +144,7 @@ describe("testing getLinearitySummary data selectors", () => {
   });
 
   test("getQAModalDetailsByTestCode", () => {
-    // const unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
+    // const unitId = ["Unit/Stack Pipe ID", "nonFilteredDropdown", "", ""]
     const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""];
     const monitoringSystemID = ["Monitoring System ID", "nonFilteredDropdown", "", ""];
     const componentID = ["Component ID", "nonFilteredDropdown", "", ""];
@@ -162,7 +162,7 @@ describe("testing getLinearitySummary data selectors", () => {
       "",
     ];
     const unitId = [
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "input",
       "",
       "",

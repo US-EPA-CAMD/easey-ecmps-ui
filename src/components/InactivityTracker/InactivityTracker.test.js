@@ -47,7 +47,37 @@ describe("InactivityTracker", () => {
     expect(container).not.toBeUndefined();
   });
 
+<<<<<<< HEAD
   test("tests InactivityTracker logs out user after expiration", async () => {
+=======
+  test("tests InactivityTracker with no checkout tabs", async () => {
+    const { container } = render(
+      <Provider store={store}>
+        <InactivityTracker {...noCheckoutProps} />{" "}
+      </Provider>
+    );
+    jest.advanceTimersByTime(3000);
+
+    const clickDiv = container.querySelector("div");
+    fireEvent.click(clickDiv);
+    expect(container).not.toBeUndefined();
+  });
+
+  test("tests InactivityTracker with no checkout tabs and not active", async () => {
+    const { container } = render(
+      <Provider store={store}>
+        <InactivityTracker {...noCheckoutProps} />{" "}
+      </Provider>
+    );
+
+    jest.advanceTimersByTime(100000);
+    expect(container).not.toBeUndefined();
+  });
+
+  test("tests InactivityTracker modal popup and close", async () => {
+    jest.setTimeout(10000);
+
+>>>>>>> 25d3ba56c18d06616548afe0e5b1558f01ee8ee1
     render(
       <Provider store={store}>
         <InactivityTracker />
