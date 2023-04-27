@@ -16,15 +16,6 @@ const ReportingPeriodSelector = ({
   const [reportingPeriods, setReportingPeriods] = useState(null);
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState({});
 
-  const state = useSelector(state => {
-    console.log('state', state)
-    return state;
-  })
-
-  console.log('state outside', state)
-
-  console.log('exportState', exportState)
-
   useEffect(() => {
 
     const fetchReportingPeriods = async () => {
