@@ -17,7 +17,6 @@ const ReportingPeriodSelector = ({
   useEffect(() => {
 
     const fetchReportingPeriods = async () => {
-      console.log('fetchRepPeriod called');
       try {
         setLoading(true);
         const resp = await getReportingPeriod(true);
@@ -66,7 +65,7 @@ const ReportingPeriodSelector = ({
         >
           <div>
             <Label className="inline-label" htmlFor="year-quarter-dropdown">
-              Rerporting Period
+              Reporting Periods
             </Label>
             <Dropdown
               id="year-quarter-dropdown"
