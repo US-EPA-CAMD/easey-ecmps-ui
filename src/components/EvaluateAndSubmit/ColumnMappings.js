@@ -157,7 +157,7 @@ export const qaTestSummaryColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentId",
     sortable: true,
   },
@@ -223,7 +223,7 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
   },
@@ -289,7 +289,7 @@ export const qaTeeColumns = [
     sortable: true,
   },
   {
-    name: "System/ Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
   },

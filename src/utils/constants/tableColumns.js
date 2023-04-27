@@ -8,7 +8,7 @@ export const qaTestSummaryCols = [
 		sortable: true,
 	},
 	{
-		name: "System/ Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,
@@ -65,7 +65,7 @@ export const qaCertificationEventDataCols = [
 		sortable: true,
 	},
 	{
-		name: "System/ Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,
@@ -94,7 +94,7 @@ export const qaTestExtensionExemptionDataCols = [
 		sortable: true,
 	},
 	{
-		name: "System/ Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,

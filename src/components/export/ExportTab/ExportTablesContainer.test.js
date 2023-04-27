@@ -29,6 +29,6 @@ test('renders QA Test Summary table', async () => {
   const columnheaders = await screen.findAllByRole('columnheader')
   expect(columnheaders.length).toBe(qaTestSummaryCols.length);
   expect(await screen.findByText('Unit/Stack Pipe ID')).toBeVisible();
-  expect(await screen.findByText('System/ Component ID')).toBeVisible();
+  expect(await screen.findByText('System/Component ID')).toBeVisible();
   expect(await screen.findByText('Test Type Code')).toBeVisible();
 })
