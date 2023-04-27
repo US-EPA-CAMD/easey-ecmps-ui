@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import ReactDom from "react-dom";
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import { config } from "../../config";
@@ -132,57 +133,71 @@ export const InactivityTracker = () => {
     };
   }, []);
 
-  return (
-    <div>
+  let modalRoot = document.getElementById("portal");
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.setAttribute("id", "portal");
+    document.body.appendChild(modalRoot);
+  }
+
+  return ReactDom.createPortal(
+    <div className="modal-back">
       {showCountdown && (
         <div className="usa-overlay is-visible">
-          <div
-            className="modal-wrapper react-transition flip-in-x"
-            style={{
-              width: "30%",
-              left: "35%",
-              top: "30%",
-            }}
-          >
-            <div className="modal-content modal-color padding-y-3">
-              <div className="modal-header modal-color padding-y-1 border-bottom-1px border-base-lighter">
-                <ClearSharp className="position-absolute right-1 top-1 cursor-pointer text-bold" />
-              </div>
+          <div role="dialog" aria-modal="true">
+            <div
+              className="modal-wrapper react-transition flip-in-x"
+              style={{
+                width: "30%",
+                left: "35%",
+                top: "30%",
+              }}
+            >
+              <div className="modal-content modal-color padding-y-3">
+                <div className="modal-header modal-color padding-y-1 border-bottom-1px border-base-lighter">
+                  <ClearSharp className="position-absolute right-1 top-1 cursor-pointer text-bold" />
+                </div>
 
-              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
-                <h3 className="text-center">
-                  It looks like you have been inactive for a while. You will be
-                  logged out soon for inactivity. Click the 'Close' button to
-                  remain active.
-                </h3>
-                <div className="timer-wrapper">
-                  <CountdownCircleTimer
-                    duration={inactiveDuration / 2}
-                    initialRemainingTime={
-                      inactiveDuration - timeInactive.current - 1
-                    }
-                    colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                    isPlaying
-                    onComplete={signOutUser}
-                  >
-                    {renderTime}
-                  </CountdownCircleTimer>
+                <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
+                  <h3 className="text-center">
+                    It looks like you have been inactive for a while. You will
+                    be logged out soon for inactivity. Click the 'Close' button
+                    to remain active.
+                  </h3>
+                  <div className="timer-wrapper">
+                    <CountdownCircleTimer
+                      duration={inactiveDuration / 2}
+                      initialRemainingTime={
+                        inactiveDuration - timeInactive.current - 1
+                      }
+                      colors={[
+                        ["#004777", 0.33],
+                        ["#F7B801", 0.33],
+                        ["#A30000"],
+                      ]}
+                      isPlaying
+                      onComplete={signOutUser}
+                    >
+                      {renderTime}
+                    </CountdownCircleTimer>
+                  </div>
                 </div>
               </div>
-            </div>
-            <span className="break-line" />
-            <div className="modal-footer">
-              <Button
-                type="button"
-                title="Click to close"
-                className="margin-right-2"
-              >
-                Close
-              </Button>
+              <span className="break-line" />
+              <div className="modal-footer">
+                <Button
+                  type="button"
+                  title="Click to close"
+                  className="margin-right-2"
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    modalRoot
   );
 };

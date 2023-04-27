@@ -32,3 +32,8 @@ h1 {
 .timer-wrapper {
   justify-content: center;
 }
+
+.modal-back {
+  z-index: 600;
+  position: fixed;
+}

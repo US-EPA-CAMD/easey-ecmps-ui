@@ -36,7 +36,7 @@ export const config = {
     inactivityDuration:
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES",
-        5
+        0.5
       ) * oneMinute,
     activityPollingFrequency:
       getConfigValueNumber(
