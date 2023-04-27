@@ -3,9 +3,9 @@ import config from "../../config";
 import { refreshClientToken } from "./easeyAuthApi";
 
 export const clientTokenAxios = async (options) => {
-  if (sessionStorage.getItem("client_token")) {
+  if (localStorage.getItem("client_token")) {
     if (
-      Date.now() > new Date(sessionStorage.getItem("client_token_expiration"))
+      Date.now() > new Date(localStorage.getItem("client_token_expiration"))
     ) {
       await refreshClientToken();
     }
@@ -14,7 +14,7 @@ export const clientTokenAxios = async (options) => {
   }
 
   options.headers = {
-    authorization: `Bearer ${sessionStorage.getItem("client_token")}`,
+    authorization: `Bearer ${localStorage.getItem("client_token")}`,
     "x-api-key": config.app.apiKey,
     "x-client-id": config.app.clientId,
   };
