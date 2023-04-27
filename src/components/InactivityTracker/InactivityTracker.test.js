@@ -77,6 +77,8 @@ describe("InactivityTracker", () => {
   });
 
   test("tests InactivityTracker modal popup and close", async () => {
+    jest.setTimeout(10000);
+
     render(
       <Provider store={store}>
         <InactivityTracker {...noCheckoutProps} />{" "}

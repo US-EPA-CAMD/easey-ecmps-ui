@@ -41,7 +41,7 @@ export const getTestSummary = (data, colTitles, orisCode) => {
           case "End Date/Time":
             colValue = formatDateTime(curData.endDate, curData.endHour, curData.endMinute);
             break;
-          case "Unit or Stack Pipe ID":
+          case "Unit/Stack Pipe ID":
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":

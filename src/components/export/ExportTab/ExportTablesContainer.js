@@ -11,6 +11,8 @@ import { oneSecond } from "../../../config";
 import { getUser } from "../../../utils/functions";
 import { successResponses } from "../../../utils/api/apiUtils";
 
+import "./ExportTablesContainer.scss";
+
 export const ExportTablesContainer = ({
   selectionData,
   selectedConfig,
@@ -105,9 +107,8 @@ export const ExportTablesContainer = ({
     <div className="margin-x-3 margin-y-4" id={divId}>
       <h4 className="margin-y-1">{tableTitle}</h4>
       <DataTable
-        className="data-display-table"
+        className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
         responsive={true}
-        fixedHeader={true}
         noHeader={true}
         striped={false}
         highlightOnHover={true}
