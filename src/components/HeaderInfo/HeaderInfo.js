@@ -482,7 +482,7 @@ export const HeaderInfo = ({
     }
 
     // then load the rest of the data
-    if (evalStatusLoaded && !dataLoaded) {
+    if ((evalStatusLoaded || !inWorkspace) && !dataLoaded) {
       mpApi.getCheckedOutLocations().then((res) => {
         // get info for current checked-out configs, checkout status, date
         const configs = res.data;
@@ -1014,7 +1014,7 @@ export const HeaderInfo = ({
         />
       )}
 
-      {evalStatusLoaded && dataLoaded ? (
+      {(evalStatusLoaded || !inWorkspace) && dataLoaded  ? (
         <div>
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
