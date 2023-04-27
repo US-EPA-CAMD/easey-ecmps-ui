@@ -13,8 +13,6 @@ const ReportingPeriodSelector = ({
   setLoading,
 }) => {
   const [reportingPeriods, setReportingPeriods] = useState(null);
-  const [years, setYears] = useState([]);
-  const [quarters, setQuarters] = useState([]);
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState(null);
 
   useEffect(() => {
@@ -22,18 +20,12 @@ const ReportingPeriodSelector = ({
     const fetchReportingPeriods = async () => {
       try {
         setLoading(true);
-        //
         const resp = await getReportingPeriod(true);
-        console.log('resp', resp);
 
         const periodsFromMostRecent = resp.data.reverse()
 
         const mostRecentPeriod = { ...periodsFromMostRecent[0] }
-        // mostRecentPeriod.selected = true
         setSelectedReportingPeriod(mostRecentPeriod)
-
-        console.log('periodsFromMostrecent', periodsFromMostRecent);
-
 
         setReportingPeriods(periodsFromMostRecent);
 
@@ -109,26 +101,6 @@ const ReportingPeriodSelector = ({
     );
     reportingPeriodSelectionHandler(selectedObj);
   };
-  const yearSelectionHandler = (event) => {
-    const selectedObj = reportingPeriods.find(
-      (e) =>
-        Number(e.calendarYear) === Number(event.target.value) && e.quarter === 1
-    );
-    updateReportingPeriod(selectedObj);
-    const quarterObjs = reportingPeriods.filter(
-      (e) => Number(e.calendarYear) === Number(event.target.value)
-    );
-    setQuarters(quarterObjs.map((e) => e.quarter));
-  };
-  const quarterSelectionHandler = (event) => {
-    const selectedYear = reportingPeriods.find((e) => e.selected).calendarYear;
-    const selectedObj = reportingPeriods.find(
-      (e) =>
-        Number(e.quarter) === Number(event.target.value) &&
-        e.calendarYear === selectedYear
-    );
-    updateReportingPeriod(selectedObj);
-  };
 
   const yearQuarterSelectionHandler = (event) => {
     const selectedId = Number(event.target.value)
@@ -137,18 +109,6 @@ const ReportingPeriodSelector = ({
     reportingPeriodSelectionHandler(newSelectedPeriod);
   }
 
-  const populateYears = () => {
-    const options = [];
-    years.forEach((year, i) => {
-      options.push(
-        <option key={i} value={year}>
-          {year}
-        </option>
-      );
-    });
-    return options;
-  };
-
   return (
     <>
       {reportingPeriods && (
@@ -156,48 +116,6 @@ const ReportingPeriodSelector = ({
           id="reporting-period-wrapper"
           className="display-flex flex-row flex-justify"
         >
-          {/* <div>
-            <Label className="inline-label" htmlFor="year-dropdown">
-              Year
-            </Label>
-            <Dropdown
-              id="year-dropdown"
-              name="year-dropdown"
-              className="width-15"
-              onChange={yearSelectionHandler}
-              value={reportingPeriods.find((e) => e.selected).calendarYear}
-              disabled={
-                isExport &&
-                dataTypes.filter((e) => e.checked).length === 1 &&
-                dataTypes.find((e) => e.name === "monitoring-plan")?.checked
-              }
-            >
-              {populateYears()}
-            </Dropdown>
-          </div> */}
-
-          {/* <div>
-            <Label className="inline-label" htmlFor="quarter-dropdown">
-              Quarter
-            </Label>
-            <Dropdown
-              id="quarter-dropdown"
-              name="quarter-dropdown"
-              className="width-15"
-              onChange={quarterSelectionHandler}
-              value={reportingPeriod.find((e) => e.selected).quarter}
-              disabled={
-                isExport &&
-                dataTypes.filter((e) => e.checked).length === 1 &&
-                dataTypes.find((e) => e.name === "monitoring-plan")?.checked
-              }
-            >
-              {quarters.map((quarter, i) => (
-                <option key={i} value={quarter}>{`Q${quarter}`}</option>
-              ))}
-            </Dropdown>
-          </div> */}
-
           <div>
             <Label className="inline-label" htmlFor="year-quarter-dropdown">
               Rerporting Period
