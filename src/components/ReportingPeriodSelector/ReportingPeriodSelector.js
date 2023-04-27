@@ -3,14 +3,12 @@ import { Dropdown, Label } from "@trussworks/react-uswds";
 import { getReportingPeriod } from "../../utils/api/qaCertificationsAPI";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
-import { useSelector } from "react-redux";
 
 const ReportingPeriodSelector = ({
   isExport,
   dataTypes,
   reportingPeriodSelectionHandler,
   exportState,
-  getInitSelection,
   setLoading = () => { },
 }) => {
   const [reportingPeriods, setReportingPeriods] = useState(null);
