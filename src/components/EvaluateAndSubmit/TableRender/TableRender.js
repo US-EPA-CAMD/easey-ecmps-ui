@@ -168,10 +168,9 @@ const TableRender = forwardRef(
     addEvalStatusCell(mappings, handleRowView);
 
     return (
-      <div>
-        {state && state.length > 0 && (
+      <>
           <DataTable
-            className="data-display-table maxh-mobile overflow-y-scroll evaluate-table"
+            className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
             defaultSortField="orisCode"
             columns={mappings}
             data={state}
@@ -185,9 +184,9 @@ const TableRender = forwardRef(
                 id="bdfSortIcon"
               />
             }
+            noDataComponent={<div aria-live="polite">There are no records to display</div>}
           />
-        )}
-      </div>
+      </>
     );
   }
 );

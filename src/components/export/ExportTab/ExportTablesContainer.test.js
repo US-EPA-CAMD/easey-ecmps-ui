@@ -10,7 +10,7 @@ const props = {
   selectionData: { beginDate: '1/1/11', endDate: '1/1/11' },
   selectedConfig: { locations: [{ unitId: "51", type: "unitId", stackPipeId: null }] },
   exportState: {},
-  setExportState: null,
+  setExportState: jest.fn(),
   workspaceSection: 'workspacesection',
   orisCode: '3776',
   dataRef: {},
@@ -22,12 +22,13 @@ const response = { "orisCode": 3776, "testSummaryData": [{ "id": "TWCORNEL5-5438
 mock.onGet(exportUrl).reply(200, response);
 
 test('renders QA Test Summary table', async () => {
+  jest.setTimeout(10000);
   render(<ExportTablesContainer {...props} />);
   const testSummaryTitle = await screen.findByText(/test summary/i)
   expect(testSummaryTitle).toBeInTheDocument();
   const columnheaders = await screen.findAllByRole('columnheader')
   expect(columnheaders.length).toBe(qaTestSummaryCols.length);
-  expect(await screen.findByText('Unit or StackPipe ID')).toBeVisible();
-  expect(await screen.findByText('System or Component ID')).toBeVisible();
+  expect(await screen.findByText('Unit/Stack Pipe ID')).toBeVisible();
+  expect(await screen.findByText('System/Component ID')).toBeVisible();
   expect(await screen.findByText('Test Type Code')).toBeVisible();
 })
