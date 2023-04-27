@@ -217,6 +217,7 @@ export const HeaderInfo = ({
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
+  const workspaceSectionName = workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan" : "Test Data"
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -1351,11 +1352,7 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={
-              workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Import a Monitoring Plan to continue"
-                : "Import Data"
-            }
+            title={ `Import a ${workspaceSectionName} to continue.`}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
@@ -1418,11 +1415,7 @@ export const HeaderInfo = ({
             importApiErrors={importApiErrors}
             importedFileErrorMsgs={importedFileErrorMsgs}
             setUpdateRelatedTables={setUpdateRelatedTables}
-            successMsg={
-              workspaceSection === MONITORING_PLAN_STORE_NAME
-                ? "Monitoring Plan has been Successfully Imported."
-                : "Test Data from File has been successfully imported."
-            }
+            successMsg={`${workspaceSectionName} has been Successfully Imported.`}
             children={
               <ImportModal
                 setDisablePortBtn={setDisablePortBtn}
