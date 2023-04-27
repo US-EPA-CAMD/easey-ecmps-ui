@@ -3,6 +3,7 @@ import { Dropdown, Label } from "@trussworks/react-uswds";
 import { getReportingPeriod } from "../../utils/api/qaCertificationsAPI";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
+import { useSelector } from "react-redux";
 
 const ReportingPeriodSelector = ({
   isExport,
@@ -10,83 +11,55 @@ const ReportingPeriodSelector = ({
   reportingPeriodSelectionHandler,
   exportState,
   getInitSelection,
-  setLoading,
+  setLoading = () => { },
 }) => {
   const [reportingPeriods, setReportingPeriods] = useState(null);
-  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState(null);
+  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState({});
+
+  const state = useSelector(state => {
+    console.log('state', state)
+    return state;
+  })
+
+  console.log('state outside', state)
+
+  console.log('exportState', exportState)
 
   useEffect(() => {
 
     const fetchReportingPeriods = async () => {
+      console.log('fetchRepPeriod called');
       try {
         setLoading(true);
         const resp = await getReportingPeriod(true);
 
+        if (!successResponses.includes(resp.status)) {
+          throw new Error(`Fetch reporting periods failed with status: ${resp.status}`)
+        }
+
         const periodsFromMostRecent = resp.data.reverse()
-
+        // if resp.data is empty this will evaluate to {}
         const mostRecentPeriod = { ...periodsFromMostRecent[0] }
-        setSelectedReportingPeriod(mostRecentPeriod)
+        let curSelectedPeriod = mostRecentPeriod
 
-        setReportingPeriods(periodsFromMostRecent);
+        // set selected period to one from export state if it exists
+        if (exportState?.reportingPeriodId) {
+          curSelectedPeriod = periodsFromMostRecent.find(period => period.id === exportState.reportingPeriodId)
+          // trigger rerender of parent component to load data tables when export state exists
+          reportingPeriodSelectionHandler(curSelectedPeriod)
+        }
 
+        setReportingPeriods(periodsFromMostRecent)
+        setSelectedReportingPeriod(curSelectedPeriod)
         setLoading(false);
       } catch (error) {
         console.log('error fetching reporting periods', error)
       }
     }
 
-    if (reportingPeriods === null) {
-      fetchReportingPeriods();
-    }
-
-    // OLD
-    // if (reportingPeriod === null) {
-    //   setLoading && setLoading(true);
-    //   getReportingPeriod(true).then((res) => {
-    //     if (exportState && exportState.reportingPeriodId) {
-    //       // retain state as tab is opened back
-    //       setReportingPeriod(
-    //         res.data.map((e) => {
-    //           e.selected = false;
-    //           if (exportState.reportingPeriodId === e.id) {
-    //             e.selected = true;
-    //           }
-    //           return e;
-    //         })
-    //       );
-    //     } else {
-    //       setReportingPeriod(
-    //         res.data.map((e, i) => {
-    //           e.selected = false;
-    //           if (i === res.data.length - 1) {
-    //             // tab is new so set the latest reporting period
-    //             e.selected = true;
-    //           }
-    //           return e;
-    //         })
-    //       );
-    //     }
-    //     setLoading && setLoading(false);
-    //   })
-    // } else if (years.length === 0 && quarters.length === 0) {
-    //   setYears(
-    //     new Set(
-    //       reportingPeriod
-    //         .map((e) => e.calendarYear)
-    //         .sort()
-    //         .reverse()
-    //     )
-    //   );
-    //   const selectedObj = reportingPeriod.find((e) => e.selected);
-    //   const quarterObjs = reportingPeriod.filter(
-    //     (e) => e.calendarYear === selectedObj.calendarYear
-    //   );
-    //   setQuarters(quarterObjs.map((e) => e.quarter));
-    //   getInitSelection(reportingPeriod.find((e) => e.selected));
-    // }
-
+    fetchReportingPeriods();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setLoading]);
 
   const yearQuarterSelectionHandler = (event) => {
     const selectedId = Number(event.target.value)
