@@ -61,24 +61,24 @@ describe("Easey Auth API", () => {
   });
 
   it("Can we authenticate", async () => {
-    const cdxUser = {
+    const ecmpsUser = {
       token: "xyz",
       userId: "jeff",
       tokenExpiration: new Date(),
     };
     mock
       .onPost(`${config.services.authApi.uri}/authentication/sign-in`)
-      .reply(200, cdxUser);
+      .reply(200, ecmpsUser);
 
     await authenticate({});
 
-    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe(
-      cdxUser.token
+    expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toBe(
+      ecmpsUser.token
     );
   });
 
   it("Can we authenticate with error ", async () => {
-    sessionStorage.clear();
+    localStorage.clear();
     mock
       .onPost(`${config.services.authApi.uri}/authentication/sign-in`)
       .reply(500, "some error");
@@ -88,7 +88,7 @@ describe("Easey Auth API", () => {
     } catch (e) {
       expect(e.response.data).toEqual("some error");
     }
-    expect(sessionStorage.getItem("cdx_user")).toEqual(null);
+    expect(localStorage.getItem("ecmps_user")).toEqual(null);
   });
 
   it("Can we refresh client Token", async () => {
@@ -101,8 +101,8 @@ describe("Easey Auth API", () => {
       .reply(200, data);
 
     await refreshClientToken();
-    expect(sessionStorage.getItem("client_token")).toBe(data.token);
-    expect(sessionStorage.getItem("client_token_expiration")).toBe(
+    expect(localStorage.getItem("client_token")).toBe(data.token);
+    expect(localStorage.getItem("client_token_expiration")).toBe(
       data.expiration
     );
   });
@@ -128,8 +128,8 @@ describe("Easey Auth API", () => {
   it("Can we refreshToken", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
-    sessionStorage.setItem(
-      "cdx_user",
+    localStorage.setItem(
+      "ecmps_user",
       JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
     );
 
@@ -139,7 +139,7 @@ describe("Easey Auth API", () => {
 
     const res = await refreshToken();
     expect(res).toEqual(data.token);
-    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toEqual(
+    expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toEqual(
       data.token
     );
   });
@@ -147,8 +147,8 @@ describe("Easey Auth API", () => {
   it("Can we refreshToken when refresh token expires in less or equal to 30 secs", async () => {
     const date = new Date();
     date.setSeconds(date.getSeconds() + 28);
-    sessionStorage.setItem(
-      "cdx_user",
+    localStorage.setItem(
+      "ecmps_user",
       JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
     );
 
@@ -158,7 +158,7 @@ describe("Easey Auth API", () => {
 
     const res = await refreshToken();
     expect(res).toEqual(data.token);
-    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toEqual(
+    expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toEqual(
       data.token
     );
   });
@@ -166,8 +166,8 @@ describe("Easey Auth API", () => {
   it("Can we refreshToken with error", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
-    sessionStorage.setItem(
-      "cdx_user",
+    localStorage.setItem(
+      "ecmps_user",
       JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
     );
 
@@ -176,12 +176,12 @@ describe("Easey Auth API", () => {
       .reply(500, "some error");
 
     await refreshToken();
-    expect(JSON.parse(sessionStorage.getItem("cdx_user")).token).toBe("xyz");
+    expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toBe("xyz");
   });
 
   it("Can we logOut", async () => {
-    sessionStorage.setItem(
-      "cdx_user",
+    localStorage.setItem(
+      "ecmps_user",
       JSON.stringify({
         token: "xyz",
         userId: "test",
@@ -189,12 +189,14 @@ describe("Easey Auth API", () => {
       })
     );
 
+    localStorage.setItem("signing_out", false);
+
     mock
       .onDelete(`${config.services.authApi.uri}/authentication/sign-out`)
       .reply(200, {});
 
     await logOut();
-    expect(sessionStorage.getItem("cdx_user")).toBe(null);
+    expect(localStorage.getItem("ecmps_user")).toBe(null);
   });
 
   /*

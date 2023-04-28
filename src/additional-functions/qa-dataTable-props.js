@@ -1610,7 +1610,7 @@ export const qaCertEventsProps = (selectedLocation) => {
       ],
     ],
     columns: [
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Monitoring System ID",
       "QA Cert Event Code",
@@ -1620,7 +1620,7 @@ export const qaCertEventsProps = (selectedLocation) => {
       "Completion Test Date/Time",
     ],
     controlInputs: {
-      //locId:["Unit or Stack Pipe ID", "input", "", ""],
+      //locId:["Unit/Stack Pipe ID", "input", "", ""],
       monitoringSystemID: [
         "Monitoring System ID",
         "nonFilteredDropdown",
@@ -1654,10 +1654,10 @@ export const qaCertEventsProps = (selectedLocation) => {
   };
   const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
   result.controlInputs = {
-    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    [locId]: ["Unit/Stack Pipe ID", "input", "", ""],
     ...result.controlInputs,
   };
-  //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  //result.controlInputs[locId] = ["Unit/Stack Pipe ID", "input", "", ""];
   return result;
 };
 
@@ -1688,7 +1688,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       ],
     ],
     columns: [
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
 
       "Year",
       "Quarter",
@@ -1726,7 +1726,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
 
   const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
   result.controlInputs = {
-    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    [locId]: ["Unit/Stack Pipe ID", "input", "", ""],
     ...result.controlInputs,
   };
   return result;

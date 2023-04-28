@@ -7,7 +7,7 @@ describe("testing TestSummary data selectors", () => {
   test("getTestSummary", () => {
     const cols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Test Number",
       "Test Reason Code",
