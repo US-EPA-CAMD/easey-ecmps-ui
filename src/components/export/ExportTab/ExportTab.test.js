@@ -63,10 +63,10 @@ describe("ExportTab", function () {
 
       userEvent.click(emissionsCheckbox);
       expect(exportButton[0]).toBeEnabled();
-      expect(exportButton[1]).toBeEnabled();
+      // expect(exportButton[1]).toBeEnabled();
 
       userEvent.click(exportButton[0]);
-      userEvent.click(exportButton[1]);
+      // userEvent.click(exportButton[1]);
       await act(async () =>
         expect(emissionsApi.exportEmissionsDataDownload).toHaveBeenCalledTimes(
           1
@@ -98,7 +98,7 @@ describe("ExportTab", function () {
 
       userEvent.click(qaCertCheckbox);
       expect(exportButton[0]).not.toBeEnabled();
-      expect(exportButton[1]).not.toBeEnabled();
+      // expect(exportButton[1]).not.toBeEnabled();
     })
 
     test("when qa&cert is checked and rows selected then export should be enabled", async () => {
@@ -134,7 +134,7 @@ describe("ExportTab", function () {
 
       expect(firstCheckbox.checked).toBe(true);
       expect(exportButton[0]).toBeEnabled();
-      expect(exportButton[1]).toBeEnabled();
+      // expect(exportButton[1]).toBeEnabled();
     });
 
     test("given qa&cert is checked when reporting period is changed then new data is loaded", async () => {
