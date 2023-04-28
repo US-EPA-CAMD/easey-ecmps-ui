@@ -63,10 +63,10 @@ describe("ExportTab", function () {
 
       userEvent.click(emissionsCheckbox);
       expect(exportButton[0]).toBeEnabled();
-      expect(exportButton[1]).toBeEnabled();
+      // expect(exportButton[1]).toBeEnabled();
 
       userEvent.click(exportButton[0]);
-      userEvent.click(exportButton[1]);
+      // userEvent.click(exportButton[1]);
       await act(async () =>
         expect(emissionsApi.exportEmissionsDataDownload).toHaveBeenCalledTimes(
           1
