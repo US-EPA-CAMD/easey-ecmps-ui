@@ -47,7 +47,7 @@ const ReportingPeriodSelector = ({
 
     fetchReportingPeriods();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setLoading]);
+  }, []);
 
   const yearQuarterSelectionHandler = (event) => {
     const selectedId = Number(event.target.value)
