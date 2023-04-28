@@ -34,7 +34,6 @@ describe("ExportTab", function () {
 
   describe("Emissions Export", function () {
     it("should enable export button when the emissions checkbox is checked, and download when export is clicked", async function () {
-      jest.setTimeout(10000);
       jest
         .spyOn(emissionsApi, "exportEmissionsDataDownload")
         .mockResolvedValue({});
@@ -57,16 +56,14 @@ describe("ExportTab", function () {
       const emissionsCheckbox = screen.getByRole("checkbox", {
         name: "Emissions",
       });
-      const exportButton = screen.getAllByRole("button", {
+      const exportButton = screen.getByRole("button", {
         name: "Export",
       });
 
       userEvent.click(emissionsCheckbox);
-      expect(exportButton[0]).toBeEnabled();
-      // expect(exportButton[1]).toBeEnabled();
+      expect(exportButton).toBeEnabled();
 
-      userEvent.click(exportButton[0]);
-      // userEvent.click(exportButton[1]);
+      userEvent.click(exportButton);
       await act(async () =>
         expect(emissionsApi.exportEmissionsDataDownload).toHaveBeenCalledTimes(
           1
@@ -77,8 +74,6 @@ describe("ExportTab", function () {
 
   describe("QA & Cert Export", () => {
     test("when qa&cert is checked and no rows are selected then export should be disabled", async () => {
-      jest.setTimeout(10000);
-
       await act(async () => {
         return render(
           <ExportTab
@@ -92,18 +87,15 @@ describe("ExportTab", function () {
         );
       });
       const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
-      const exportButton = screen.getAllByRole("button", {
+      const exportButton = screen.getByRole("button", {
         name: "Export",
       });
 
       userEvent.click(qaCertCheckbox);
-      expect(exportButton[0]).not.toBeEnabled();
-      // expect(exportButton[1]).not.toBeEnabled();
+      expect(exportButton).not.toBeEnabled();
     })
 
     test("when qa&cert is checked and rows selected then export should be enabled", async () => {
-      jest.setTimeout(10000);
-
       await act(async () => {
         return render(
           <ExportTab
@@ -117,7 +109,7 @@ describe("ExportTab", function () {
         );
       });
       const qaCertCheckbox = screen.getByRole("checkbox", { name: "QA & Certification" })
-      const exportButton = screen.getAllByRole("button", {
+      const exportButton = screen.getByRole("button", {
         name: "Export",
       });
 
@@ -133,13 +125,10 @@ describe("ExportTab", function () {
       userEvent.click(firstCheckbox);
 
       expect(firstCheckbox.checked).toBe(true);
-      expect(exportButton[0]).toBeEnabled();
-      // expect(exportButton[1]).toBeEnabled();
+      expect(exportButton).toBeEnabled();
     });
 
     test("given qa&cert is checked when reporting period is changed then new data is loaded", async () => {
-      jest.setTimeout(10000);
-
       await act(async () => {
         return render(
           <ExportTab
@@ -157,10 +146,11 @@ describe("ExportTab", function () {
         userEvent.click(qaCertCheckbox);
       });
 
-      const quarterDropdown = screen.getByLabelText(/quarter/i);
-      // select new quarter
+      const reportingPeriodDropdown = screen.getByLabelText(/Reporting Periods/i);
+      // select new reporting period
+      const selectedOptionId = "2";
       await act(async () => {
-        userEvent.selectOptions(quarterDropdown, "2");
+        userEvent.selectOptions(reportingPeriodDropdown, selectedOptionId);
       });
 
       // rows are rendered
