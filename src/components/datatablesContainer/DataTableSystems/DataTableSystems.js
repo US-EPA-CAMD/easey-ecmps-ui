@@ -61,7 +61,7 @@ export const DataTableSystems = ({
 }) => {
   const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
-  const [disableExitBtn, setDisableExitBtn] = useState(true);
+  const [, setDisableExitBtn] = useState(true);
 
   // for components/ fuel flow view
   const [secondLevel, setSecondLevel] = useState(false);
