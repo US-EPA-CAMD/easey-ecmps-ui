@@ -33,12 +33,12 @@ const ReportingPeriodSelector = ({
         // set selected period to one from export state if it exists
         if (exportState?.reportingPeriodId) {
           curSelectedPeriod = periodsFromMostRecent.find(period => period.id === exportState.reportingPeriodId)
-          // trigger rerender of parent component to load data tables when export state exists
-          reportingPeriodSelectionHandler(curSelectedPeriod)
         }
 
         setReportingPeriods(periodsFromMostRecent)
         setSelectedReportingPeriod(curSelectedPeriod)
+        // this reportingPeriodSelectionHandler call sets init selection from dropdown
+        reportingPeriodSelectionHandler(curSelectedPeriod)
         setLoading(false);
       } catch (error) {
         console.log('error fetching reporting periods', error)
