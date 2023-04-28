@@ -45,7 +45,7 @@ export const qaTestSummaryCols = [
 	{
 		name: "Begin Date/Time",
 		selector: (row) =>
-			formatDateTime(row.endDate, row.endHour, row.endMinute),
+			formatDateTime(row.beginDate, row.beginHour, row.beginMinute),
 		sortable: true,
 		wrap: true
 	},

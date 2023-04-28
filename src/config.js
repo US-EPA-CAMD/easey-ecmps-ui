@@ -35,23 +35,13 @@ export const config = {
     ),
     inactivityDuration:
       getConfigValueNumber(
-        "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_CHECKOUT_MINUTES",
-        5
-      ) * oneMinute,
-    inactivityLogoutDuration:
-      getConfigValueNumber(
-        "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_LOGOUT_MINUTES",
-        5
+        "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES",
+        0.5
       ) * oneMinute,
     activityPollingFrequency:
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS",
         5
-      ) * oneSecond,
-    countdownDuration:
-      getConfigValueNumber(
-        "REACT_APP_EASEY_ECMPS_UI_ACTIVITY_COUNTDOWN_DURATION_SECONDS",
-        30
       ) * oneSecond,
     paginationPerPage: getConfigValueNumber(
       "REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE",
@@ -110,7 +100,8 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS"
     ),
     enableSystemAdminModule: getConfigValueBoolean(
-      "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE", true
+      "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE",
+      true
     ),
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),

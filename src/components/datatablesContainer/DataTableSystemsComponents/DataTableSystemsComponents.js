@@ -229,9 +229,9 @@ export const DataTableSystemsComponents = ({
           data[prefilteredDataName] === mainSystemComponentDropdownChange
       );
       if (result.length > 0) {
+        const selectedCodes = result[0];
         for (const modalDetailData of selectedComponentsModalData) {
-          if (modalDetailData[4] === "dropdown") {
-            const selectedCodes = result[0];
+          if (modalDetailData[4] === "dropdown" && Object.keys(selectedCodes).includes(modalDetailData[0])) {        
             let filteredOutSubDropdownOptions = systemComponentsMdmData[
               modalDetailData[0]
             ] || [];
@@ -650,7 +650,7 @@ export const DataTableSystemsComponents = ({
                     mainDropdownChange={mainSystemComponentDropdownChange}
                     title={
                       selectedComponent !== null
-                        ? ` Add Component: ${selectedComponent["componentId"]}`
+                        ? ` Add Component: ${selectedComponent?.componentId}`
                         : "Create Component"
                     }
                     viewOnly={!(user && checkout)}
@@ -678,8 +678,8 @@ export const DataTableSystemsComponents = ({
                         createNewComponentFlag
                           ? "Create Component"
                           : user && checkout
-                          ? `Edit Component: ${selectedComponent["componentId"]}`
-                          : `Component: ${selectedComponent["componentId"]}`
+                          ? `Edit Component: ${selectedComponent?.componentId}`
+                          : `Component: ${selectedComponent?.componentId}`
                       }
                       create={createNewComponentFlag}
                       setMainDropdownChange={

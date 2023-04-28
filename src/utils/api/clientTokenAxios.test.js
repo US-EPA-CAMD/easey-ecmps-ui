@@ -17,7 +17,7 @@ describe("testing clientTokenAxios", () => {
     jest.mock("axios");
   });
   it("clientTokenAxios no client token", async () => {
-    sessionStorage.setItem(
+    localStorage.setItem(
       "client_token_expiration",
       JSON.stringify("11-21-3022")
     );
@@ -29,11 +29,11 @@ describe("testing clientTokenAxios", () => {
         errorMessage: "test msg",
       },
     });
-    expect(sessionStorage.getItem("cdx_user")).toBe(null);
+    expect(localStorage.getItem("ecmps_user")).toBe(null);
   });
   it("clientTokenAxios", async () => {
-    sessionStorage.setItem("client_token", JSON.stringify("11-21-2022"));
-    sessionStorage.setItem(
+    localStorage.setItem("client_token", JSON.stringify("11-21-2022"));
+    localStorage.setItem(
       "client_token_expiration",
       JSON.stringify("11-21-2022")
     );
@@ -45,12 +45,12 @@ describe("testing clientTokenAxios", () => {
         errorMessage: "test msg",
       },
     });
-    expect(sessionStorage.getItem("cdx_user")).toBe(null);
+    expect(localStorage.getItem("ecmps_user")).toBe(null);
   });
 
   it("clientTokenAxios future date", async () => {
-    sessionStorage.setItem("client_token", JSON.stringify("11-21-3022"));
-    sessionStorage.setItem(
+    localStorage.setItem("client_token", JSON.stringify("11-21-3022"));
+    localStorage.setItem(
       "client_token_expiration",
       JSON.stringify("11-21-3022")
     );
@@ -62,6 +62,6 @@ describe("testing clientTokenAxios", () => {
         errorMessage: "test msg",
       },
     });
-    expect(sessionStorage.getItem("cdx_user")).toBe(null);
+    expect(localStorage.getItem("ecmps_user")).toBe(null);
   });
 });

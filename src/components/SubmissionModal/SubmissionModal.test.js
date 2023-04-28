@@ -3,8 +3,8 @@ import { render, act, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SubmissionModal from "./SubmissionModal";
 
-sessionStorage.setItem(
-  "cdx_user",
+localStorage.setItem(
+  "ecmps_user",
   '{ "firstName": "mock", "lastName": "mock" }'
 );
 

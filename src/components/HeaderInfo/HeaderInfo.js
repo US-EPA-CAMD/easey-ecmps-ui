@@ -1160,7 +1160,7 @@ export const HeaderInfo = ({
                     workspaceSection={workspaceSection}
                   />
                 </Grid>
-                <Grid col={2}>
+                <Grid col={4}>
                   <DropdownSelection
                     caption="Sections"
                     selectionHandler={setSectionSelect}
@@ -1268,6 +1268,15 @@ export const HeaderInfo = ({
           {workspaceSection === EMISSIONS_STORE_NAME && (
             <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
               <Grid row={true}>
+                <Grid col={2} className="margin-top-3 margin-right-2">
+                  <MultiSelectCombobox
+                      items={reportingPeriods}
+                      label="Reporting Period(s)"
+                      entity="reportingPeriod"
+                      searchBy="contains"
+                      onChangeUpdate={handleSelectReportingPeriod}
+                  />
+                </Grid>
                 <Grid col={2}>
                   <DropdownSelection
                     caption="Locations"
@@ -1310,15 +1319,6 @@ export const HeaderInfo = ({
                       ))}
                     </Dropdown>
                   </FormGroup>
-                </Grid>
-                <Grid col={2} className="margin-top-3 margin-right-2">
-                  <MultiSelectCombobox
-                    items={reportingPeriods}
-                    label="Reporting Period(s)"
-                    entity="reportingPeriod"
-                    searchBy="contains"
-                    onChangeUpdate={handleSelectReportingPeriod}
-                  />
                 </Grid>
                 <Grid col={2} className="margin-top-3">
                   <Button
