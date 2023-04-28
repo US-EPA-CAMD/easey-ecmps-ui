@@ -78,7 +78,6 @@ export const ImportHistoricalDataModal = ({
       <ReportingPeriodSelector
         isExport={false}
         reportingPeriodSelectionHandler={setYearAndQuarter}
-        setLoading={false}
         getInitSelection={setYearAndQuarter}
       />
     </UploadModal>

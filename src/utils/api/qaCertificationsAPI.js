@@ -175,6 +175,11 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
+/**
+ * 
+ * @param {*} isExport if true excludes most recent/current reporting period
+ * @returns list of reporting periods
+ */
 export const getReportingPeriod = async (isExport) => {
   const url = `${config.services.mdm.uri}/reporting-periods${
     isExport ? "?export=true" : ""

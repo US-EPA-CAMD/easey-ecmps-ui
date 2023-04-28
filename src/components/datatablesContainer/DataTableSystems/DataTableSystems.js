@@ -777,7 +777,6 @@ export const DataTableSystems = ({
               !secondLevel && !thirdLevel // first level at systems
                 ? () => {
                   saveSystems();
-                  setShow(false);
                 }
                 : secondLevel && !thirdLevel // second level at components or fuel flows
                   ? // at system fuel flows
