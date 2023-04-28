@@ -1,13 +1,14 @@
 import { formatDateTime } from '../functions'
+import { sortByPeriodAbbreviation } from '../../components/EvaluateAndSubmit/ColumnMappings'
 
 export const qaTestSummaryCols = [
 	{
-		name: "Unit or StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System or Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,
@@ -21,9 +22,9 @@ export const qaTestSummaryCols = [
 		name: "Test Number",
 		selector: (row) => row.testNumber,
 		sortable: true,
-		wrap: true,
+		// wrap: true,
 		compact: true,
-		minWidth: '120px'
+		minWidth: '180px'
 	},
 	{
 		name: "Test Reason Code",
@@ -36,9 +37,15 @@ export const qaTestSummaryCols = [
 		sortable: true,
 	},
 	{
+		name: "Year/Quarter",
+		selector: (row) => row.year && row.quarter ? `${row.year} Q${row.quarter}` : "",
+		sortFunction: sortByPeriodAbbreviation,
+		sortable: true,
+	},
+	{
 		name: "Begin Date/Time",
 		selector: (row) =>
-			formatDateTime(row.endDate, row.endHour, row.endMinute),
+			formatDateTime(row.beginDate, row.beginHour, row.beginMinute),
 		sortable: true,
 		wrap: true
 	},
@@ -53,17 +60,16 @@ export const qaTestSummaryCols = [
 
 export const qaCertificationEventDataCols = [
 	{
-		name: "Unit or StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System or Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,
 	},
-
 	{
 		name: "Event Code",
 		selector: (row) => row.qaCertEventCode,
@@ -83,17 +89,16 @@ export const qaCertificationEventDataCols = [
 
 export const qaTestExtensionExemptionDataCols = [
 	{
-		name: "Unit or StackPipe ID",
+		name: "Unit/Stack Pipe ID",
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System or Component ID",
+		name: "System/Component ID",
 		selector: (row) =>
 			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
 		sortable: true,
 	},
-
 	{
 		name: "Submission Availability Code",
 		selector: (row) => row.submissionAvailabilityCode,
@@ -110,12 +115,18 @@ export const qaTestExtensionExemptionDataCols = [
 		sortable: true,
 	},
 	{
-		name: "fuelCode",
+		name: "Year/Quarter",
+		selector: (row) => row.year && row.quarter ? `${row.year} Q${row.quarter}` : "",
+		sortFunction: sortByPeriodAbbreviation,
+		sortable: true,
+	},
+	{
+		name: "Fuel Code",
 		selector: (row) => row.fuelCode,
 		sortable: true,
 	},
 	{
-		name: "Extension or Exemption Code",
+		name: "Extension/ Exemption Code",
 		selector: (row) => row.extensionOrExemptionCode,
 		sortable: true,
 	},

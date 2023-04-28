@@ -367,7 +367,7 @@ const QATestSummaryDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -375,7 +375,7 @@ const QATestSummaryDataTable = ({
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",

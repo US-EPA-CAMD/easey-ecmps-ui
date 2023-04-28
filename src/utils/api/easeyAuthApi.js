@@ -6,13 +6,15 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
 
+const inactiveDuration = config.app.inactivityDuration / 1000;
+
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
 export const secureAxios = async (options) => {
   try {
-    if (sessionStorage.getItem("cdx_user")) {
+    if (localStorage.getItem("ecmps_user")) {
       const token = await refreshToken();
 
       if (options["headers"]) {
@@ -63,8 +65,8 @@ export const refreshClientToken = async () => {
       { headers: { "x-api-key": config.app.apiKey } }
     );
 
-    sessionStorage.setItem("client_token", response.data.token);
-    sessionStorage.setItem("client_token_expiration", response.data.expiration);
+    localStorage.setItem("client_token", response.data.token);
+    localStorage.setItem("client_token_expiration", response.data.expiration);
   } catch (err) {
     displayAppError(err);
   }
@@ -88,7 +90,12 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
-      sessionStorage.setItem("cdx_user", JSON.stringify(response.data));
+      localStorage.setItem("ecmps_user", JSON.stringify(response.data));
+      const newExpiration = new Date();
+      newExpiration.setSeconds(
+        newExpiration.getSeconds() + inactiveDuration + 1
+      );
+      localStorage.setItem("ecmps_session_expiration", newExpiration);
 
       if (
         window.location.pathname.includes("/workspace") ||
@@ -106,37 +113,46 @@ export const authenticate = async (payload) => {
 };
 
 export const logOut = async () => {
-  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
-  const checkedOutLocationResult = await getCheckedOutLocations();
+  if (
+    localStorage.getItem("signing_out") &&
+    localStorage.getItem("signing_out") !== "true"
+  ) {
+    localStorage.setItem("signing_out", "true");
+    console.log("Signing Out");
+    const user = JSON.parse(localStorage.getItem("ecmps_user"));
+    console.log(user);
+    const checkedOutLocationResult = await getCheckedOutLocations();
 
-  if (checkedOutLocationResult.data.length > 0) {
-    for (const location of checkedOutLocationResult.data) {
-      if (location.checkedOutBy === user.userId) {
-        await checkoutAPI(false, location.facId, location.monPlanId);
+    if (checkedOutLocationResult.data.length > 0) {
+      for (const location of checkedOutLocationResult.data) {
+        if (location.checkedOutBy === user.userId) {
+          await checkoutAPI(false, location.facId, location.monPlanId);
+        }
       }
     }
-  }
 
-  await secureAxios({
-    method: "DELETE",
-    url: `${config.services.authApi.uri}/authentication/sign-out`,
-    data: {
-      userId: user.userId,
-    },
-  })
-    .then(() => {
-      sessionStorage.removeItem("cdx_user");
-      window.location = config.app.path;
+    await secureAxios({
+      method: "DELETE",
+      url: `${config.services.authApi.uri}/authentication/sign-out`,
+      data: {
+        userId: user.userId,
+      },
     })
-    .catch((e) => {
-      log.error({ error: e.message });
-    });
+      .then(() => {
+        localStorage.removeItem("ecmps_user");
+        localStorage.setItem("signing_out", "false");
+        window.location = config.app.path;
+      })
+      .catch((e) => {
+        log.error({ error: e.message });
+      });
+  }
 };
 
 export const refreshToken = async () => {
   try {
     let refreshToken = false;
-    const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+    const user = JSON.parse(localStorage.getItem("ecmps_user"));
     let tokenExp = new Date(user.tokenExpiration);
     debugLog("token expiration: ", tokenExp);
 
@@ -171,7 +187,7 @@ export const refreshToken = async () => {
 
       user.token = result.data.token;
       user.tokenExpiration = result.data.expiration;
-      sessionStorage.setItem("cdx_user", JSON.stringify(user));
+      localStorage.setItem("ecmps_user", JSON.stringify(user));
     }
 
     return user.token;

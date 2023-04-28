@@ -217,7 +217,7 @@ export const ExportTab = ({
           </div>
         </div>
         {previewOptions && (
-          <>
+          <div class="maxh-tablet overflow-y-auto">
             <ExportTablesContainer
               tableTitle={'Test Summary'}
               dataKey={'testSummaryData'}
@@ -251,8 +251,28 @@ export const ExportTab = ({
               orisCode={orisCode}
               dataRef={rowsData}
             />
-          </>
+          </div>
         )}
+        {
+          previewOptions && (
+            <div className="border-top-1px border-base-lighter">
+              <div className="grid-row margin-y-3 maxw-desktop padding-top-1">
+                <div className="grid-col-9">
+                </div>
+                <div className="grid-col-3">
+                  <Button
+                    type={"button"}
+                    className="float-right"
+                    disabled={isExportDisabled()}
+                    onClick={exportClickHandler}
+                  >
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );

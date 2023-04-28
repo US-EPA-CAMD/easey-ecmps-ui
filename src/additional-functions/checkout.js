@@ -7,7 +7,7 @@ export const checkoutAPI = (
   monitorPlanId,
   setCheckout
 ) => {
-  const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+  const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
   if (!direction) {
     return mpApi
