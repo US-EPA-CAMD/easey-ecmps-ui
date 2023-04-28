@@ -6,10 +6,8 @@ instances: 1
 environment: development
 host: ecmps-dev.app.cloud.gov
 apiHost: api.epa.gov/easey/dev
-inactivityDurationCheckoutMinutes: 5
+inactivityDurationMinutes: 5
 activityPollingFrequencySeconds: 5
-activityCountdownDurationSeconds: 30
-inactivityDurationLogoutMinutes: 5
 paginationPerPage: 100
 googleAnalyticsEnabled: false
 googleAnalyticsPublicContainerId: "GTM-W55ZK7"
