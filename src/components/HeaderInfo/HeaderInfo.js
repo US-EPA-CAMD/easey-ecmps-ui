@@ -884,7 +884,6 @@ export const HeaderInfo = ({
       ...cloneDeep(emissionDropdownState),
       selectedReportingPeriods,
     });
-    console.log('reportingPeriodOnChangeUpdate',{selectedReportingPeriods});
   };
 
   const handleExport = async () => {
