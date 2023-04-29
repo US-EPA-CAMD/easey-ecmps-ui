@@ -63,6 +63,7 @@ import {
   displayAppError,
   hideAppError,
 } from "../../additional-functions/app-error";
+import { cloneDeep } from "lodash";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -141,12 +142,6 @@ export const HeaderInfo = ({
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-  const selectedUnitId = selectedConfig?.locations
-    ?.filter((l) => l.id === locationSelect[1])
-    .map((l) => l.unitId);
-  const selectedStackPipeId = selectedConfig?.locations
-    ?.filter((l) => l.id === locationSelect[1])
-    .map((l) => l.stackPipeId);
 
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
@@ -212,7 +207,13 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-
+  const [emissionDropdownState, setEmissionDropdownState] = useState({locationSelect, selectedReportingPeriods})
+  const selectedUnitId = selectedConfig?.locations
+    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    .map((l) => l.unitId);
+  const selectedStackPipeId = selectedConfig?.locations
+    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    .map((l) => l.stackPipeId);
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
@@ -263,6 +264,7 @@ export const HeaderInfo = ({
     }
 
     setSelectedReportingPeriods(selectedRptPeriods);
+    setEmissionDropdownState({...emissionDropdownState, selectedReportingPeriods: selectedRptPeriods})
     dispatch(
       setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
@@ -340,7 +342,7 @@ export const HeaderInfo = ({
 
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
-    if (selectedReportingPeriods.length === 0) {
+    if (emissionDropdownState.selectedReportingPeriods.length === 0) {
       setViewTemplates([]);
       return;
     }
@@ -355,7 +357,7 @@ export const HeaderInfo = ({
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
-        selectedReportingPeriods,
+        emissionDropdownState.selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
         inWorkspace
@@ -852,43 +854,36 @@ export const HeaderInfo = ({
     )}`;
   };
 
-  const handleSelectReportingPeriod = (id, updateType) => {
+  const handleSelectReportingPeriod = () => {
+    if(!emissionDropdownState.selectedReportingPeriods.length) return
     const uniqueReportingPeriods = [
-      ...new Set([...selectedReportingPeriods, id]),
+      ...new Set([...emissionDropdownState.selectedReportingPeriods]),
     ];
 
     hideAppError();
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
-      const addedRp = reportingPeriods.find((rp) => rp.id === id);
-      addedRp.selected = false;
       reportingPeriods = [...reportingPeriods];
       return;
     }
+    setSelectedReportingPeriods(uniqueReportingPeriods);
+    dispatch(
+      setReportingPeriods(
+        uniqueReportingPeriods,
+        currentTab.name,
+        workspaceSection
+      )
+    );
+  };
 
-    if (updateType === "add") {
-      setSelectedReportingPeriods(uniqueReportingPeriods);
-      dispatch(
-        setReportingPeriods(
-          uniqueReportingPeriods,
-          currentTab.name,
-          workspaceSection
-        )
-      );
-    } else if (updateType === "remove") {
-      const selected = reportingPeriods
-        .filter((reportingPeriod) => {
-          return reportingPeriod.selected;
-        })
-        .map((reportingPeriod) => {
-          return reportingPeriod.id;
-        });
-
-      setSelectedReportingPeriods(selected);
-      dispatch(
-        setReportingPeriods(selected, currentTab.name, workspaceSection)
-      );
-    }
+  const reportingPeriodOnChangeUpdate = () => {
+    const selectedReportingPeriods = reportingPeriods.filter(
+      (el) => el.selected
+    ).map(rp => rp.id);
+    setEmissionDropdownState({
+      ...cloneDeep(emissionDropdownState),
+      selectedReportingPeriods,
+    });
   };
 
   const handleExport = async () => {
@@ -922,11 +917,13 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
+    handleSelectReportingPeriod();
+    setLocationSelect(emissionDropdownState.locationSelect)
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
-      selectedReportingPeriods,
+      emissionDropdownState.selectedReportingPeriods,
       unitIds,
       stackPipeIds,
       inWorkspace
@@ -1275,8 +1272,8 @@ export const HeaderInfo = ({
                     options={locations}
                     viewKey="name"
                     selectKey="id"
-                    initialSelection={locationSelect[0]}
-                    selectionHandler={setLocationSelect}
+                    initialSelection={emissionDropdownState.locationSelect[0]}
+                    selectionHandler={(location) => setEmissionDropdownState({...cloneDeep(emissionDropdownState), locationSelect: location})}
                     workspaceSection={workspaceSection}
                     changeFunc={getEmissionsViewDropdownData}
                   />
@@ -1317,7 +1314,7 @@ export const HeaderInfo = ({
                     label="Reporting Period(s)"
                     entity="reportingPeriod"
                     searchBy="contains"
-                    onChangeUpdate={handleSelectReportingPeriod}
+                    onChangeUpdate={reportingPeriodOnChangeUpdate}
                   />
                 </Grid>
                 <Grid col={2} className="margin-top-3">
