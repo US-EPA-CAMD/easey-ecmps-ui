@@ -181,7 +181,8 @@ const ImportModal = ({
     content = (
       <div className="overflow-y-auto maxh-mobile">
         <div className="padding-right-2 padding-left-3 " aria-live="polite">
-          {importedFileErrorMsgs.map((error, i) => (
+          {Array.isArray(importedFileErrorMsgs) ?
+          importedFileErrorMsgs.map((error, i) => (
             <Alert
               type="error"
               slim
@@ -191,7 +192,17 @@ const ImportModal = ({
             >
               {error}
             </Alert>
-          ))}
+          )):
+            <Alert
+              type="error"
+              slim
+              noIcon
+              key={`1-${importedFileErrorMsgs}`}
+              role="alert"
+            >
+              {importedFileErrorMsgs}
+            </Alert>
+          }
         </div>
       </div>
     );
