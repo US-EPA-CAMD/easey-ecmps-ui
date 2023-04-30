@@ -1100,7 +1100,7 @@ export const HeaderInfo = ({
                       <CreateOutlined color="primary" /> {"Check Out"}
                     </Button>
                   ) : null}
-                  {showRevert(evalStatus) && (
+                  {workspaceSection === MONITORING_PLAN_STORE_NAME && showRevert(evalStatus) && (
                     <Button
                       type="button"
                       id="showRevertModal"
