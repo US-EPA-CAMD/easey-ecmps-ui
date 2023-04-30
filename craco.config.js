@@ -11,4 +11,9 @@ module.exports = {
       },
     },
   },
+  webpack: {
+    alias: {
+      url: require.resolve('url'),
+    }
+  }
 };
