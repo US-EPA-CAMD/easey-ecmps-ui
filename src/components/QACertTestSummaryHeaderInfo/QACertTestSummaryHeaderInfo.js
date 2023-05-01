@@ -50,7 +50,7 @@ export const QACertTestSummaryHeaderInfo = ({
   ///
   setUpdateRelatedTables,
 }) => {
-  const importTestTitle = "Import Data";
+  const importTestTitle = "Import Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -371,7 +371,7 @@ export const QACertTestSummaryHeaderInfo = ({
               onClick={() => openSelectionTypeImportModal()}
               id="importSelectionQAModal"
             >
-              {importTestTitle}
+              Import Data
             </Button>
           }
         </div>
@@ -537,7 +537,7 @@ export const QACertTestSummaryHeaderInfo = ({
           exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          successMsg={`${selectedConfig.facilityName} Test Data has been Successfully Imported.`}
+          successMsg={`Test Data has been Successfully Imported.`}
           setUpdateRelatedTables={setUpdateRelatedTables}
           children={
             <ImportModal
@@ -558,7 +558,7 @@ export const QACertTestSummaryHeaderInfo = ({
           close={() => setShowImportDataPreview(false)}
           showSave={true}
           exitBTN={"Import"}
-          title="Import Historical Data"
+          title="Import Historical Test Data"
           disableExitBtn={disablePortBtn}
           save={() => {
             importHistoricalData();

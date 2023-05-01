@@ -218,7 +218,7 @@ export const HeaderInfo = ({
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
-  const workspaceSectionName = workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan" : "Test Data"
+  const workspaceSectionName = workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan" : workspaceSection === EMISSIONS_STORE_NAME ? "Emissions" : "Test"
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -1402,7 +1402,7 @@ export const HeaderInfo = ({
 
       {showEmissionsImportTypeModal && (
         <UploadModal
-          title="Import Data"
+          title={`Import ${workspaceSectionName} Data`}
           show={showEmissionsImportTypeModal}
           close={() => setShowEmissionsImportTypeModal(false)}
           showCancel={true}
@@ -1423,6 +1423,7 @@ export const HeaderInfo = ({
           finishedLoading={finishedLoading}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
+          workspaceSectionName={workspaceSectionName}
         />
       )}
 
