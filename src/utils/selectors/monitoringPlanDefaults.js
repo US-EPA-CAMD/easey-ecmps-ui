@@ -13,7 +13,7 @@ export const getMonitoringPlansDefaultsTableRecords = (totalData) => {
       col5: el.operatingConditionCode,
       col6: el.defaultSourceCode,
       col7: formatDateTime(el.beginDate, el.beginHour),
-      col8: formatDateTime(el.beginDate, el.beginHour),
+      col8: formatDateTime(el.endDate, el.endHour),
       col9: el.id,
     });
   });

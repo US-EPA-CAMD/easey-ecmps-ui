@@ -88,7 +88,7 @@ describe("testing monitoring plan data selectors", () => {
         col5: "A",
         col6: "DATA",
         col7: "2001-02-26 16:00",
-        col8: "2001-02-26 16:00",
+        col8: "",
         col9: "CAMD-E86CD02DFD9F417D8F8CA029A11DEE0B",
       },
       {
@@ -99,7 +99,7 @@ describe("testing monitoring plan data selectors", () => {
         col5: "A",
         col6: "DATA",
         col7: "",
-        col8: "",
+        col8: "2001-02-26 16:00",
         col9: "CAMD-E86CD02DFD9F417D8F8CA029A11DEE0B",
       },
     ];
