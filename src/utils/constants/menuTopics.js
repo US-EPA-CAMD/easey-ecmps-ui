@@ -160,7 +160,7 @@ export const globalView = [
       },
       {
         name: 'Cert Events, Extensions & Exemptions',
-        url: '/qa-cert-event',
+        url: '/qa-qce-tee',
       },
     ],
   },
@@ -187,7 +187,7 @@ export const getWorkspacePaths = () => {
         },
         {
           name: 'Cert Events, Extensions & Exemptions',
-          url: '/workspace/qa-cert-event',
+          url: '/workspace/qa-qce-tee',
         },
       ],
     },
