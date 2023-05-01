@@ -1241,7 +1241,6 @@ export const getAppendixEHeatInputGasData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
 
-  console.log('api',url)
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);

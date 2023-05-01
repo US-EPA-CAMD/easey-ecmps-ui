@@ -1,7 +1,6 @@
 import axios from "axios";
 import log from "loglevel";
 import config from "../../config";
-import { debugLog } from "../functions";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
@@ -14,9 +13,9 @@ axios.defaults.headers.common = {
 
 export const secureAxios = async (options) => {
   try {
-    if (localStorage.getItem("ecmps_user")) {
-      const token = await refreshToken();
+    const token = await refreshToken();
 
+    if (token) {
       if (options["headers"]) {
         options.headers = {
           ...options.headers,
@@ -113,14 +112,10 @@ export const authenticate = async (payload) => {
 };
 
 export const logOut = async () => {
-  if (
-    localStorage.getItem("signing_out") &&
-    localStorage.getItem("signing_out") !== "true"
-  ) {
+  const signingOut = localStorage.getItem("signing_out");
+  if (signingOut && signingOut !== "true") {
     localStorage.setItem("signing_out", "true");
-    console.log("Signing Out");
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
-    console.log(user);
     const checkedOutLocationResult = await getCheckedOutLocations();
 
     if (checkedOutLocationResult.data.length > 0) {
@@ -151,46 +146,37 @@ export const logOut = async () => {
 
 export const refreshToken = async () => {
   try {
-    let refreshToken = false;
-    const user = JSON.parse(localStorage.getItem("ecmps_user"));
-    let tokenExp = new Date(user.tokenExpiration);
-    debugLog("token expiration: ", tokenExp);
+    const ecmpsUser = localStorage.getItem("ecmps_user");
 
-    if (new Date() > tokenExp) {
-      refreshToken = true;
-      debugLog("User security token has expired");
-    } else {
-      tokenExp.setSeconds(tokenExp.getSeconds() - 30);
-      debugLog("token expiration (-30 seconds): ", tokenExp);
+    if (ecmpsUser) {
+      const user = JSON.parse(ecmpsUser);
+      const currDate = new Date(new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      }));
+      const tokenExp = new Date(user.tokenExpiration);
+      // set tokenExp back 60 seconds to ensure that we refresh token before expiring
+      tokenExp.setSeconds(tokenExp.getSeconds() - 60);
 
-      if (new Date() > tokenExp) {
-        refreshToken = true;
-        debugLog("User security token expires in 30 seconds or less");
+      if (currDate > tokenExp) {
+        const result = await axios({
+          method: "POST",
+          url: `${config.services.authApi.uri}/tokens`,
+          headers: {
+            authorization: `Bearer ${user.token}`,
+            "x-api-key": config.app.apiKey,
+          },
+          data: {
+            userId: user.userId,
+          },
+        });
+
+        user.token = result.data.token;
+        user.tokenExpiration = result.data.expiration;
+        localStorage.setItem("ecmps_user", JSON.stringify(user));
       }
+      return user.token;
     }
-
-    if (refreshToken) {
-      debugLog("Refreshing user security token");
-      const result = await axios({
-        method: "POST",
-        url: `${config.services.authApi.uri}/tokens`,
-        headers: {
-          authorization: `Bearer ${user.token}`,
-          "x-api-key": config.app.apiKey,
-        },
-        data: {
-          userId: user.userId,
-        },
-      });
-
-      debugLog("Refreshed token: ", result.data);
-
-      user.token = result.data.token;
-      user.tokenExpiration = result.data.expiration;
-      localStorage.setItem("ecmps_user", JSON.stringify(user));
-    }
-
-    return user.token;
+    return null;
   } catch (e) {
     displayAppError(e);
   }

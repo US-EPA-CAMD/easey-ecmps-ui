@@ -36,16 +36,13 @@ export const ImportHistoricalDataModal = ({
       })
       .then(({ data: importResponse, status }) => {
         if (status === 201) {
-          console.log("error here ", importResponse?.message);
           setImportedFileErrorMsgs([]);
         } else if (importResponse?.message) {
           setImportedFileErrorMsgs(
             importResponse?.message?.split(",") || [`HTTP ${status} Error`]
           );
-          console.log("error here ", importResponse?.message);
         } else {
           setImportedFileErrorMsgs([`HTTP ${status} Error`]);
-          console.log("error here ", importResponse?.message);
         }
       })
       .catch((err) => {
