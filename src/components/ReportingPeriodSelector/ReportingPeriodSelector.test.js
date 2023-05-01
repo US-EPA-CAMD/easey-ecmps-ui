@@ -4,14 +4,15 @@ import {
   screen,
   waitForElement,
   within,
-  queryByAttribute,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 
 import ReportingPeriodSelector from "./ReportingPeriodSelector";
+import config from "../../config";
 
 const props = {
-  getInitSelection: jest.fn(),
   setLoading: jest.fn(),
   reportingPeriodSelectionHandler: jest.fn(),
 };
@@ -52,166 +53,71 @@ const reportingPeriods = [
   },
 ];
 
-jest.mock("../../utils/api/easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({
-    status: 200,
-    data: [
-      {
-        id: 1,
-        calendarYear: 1993,
-        quarter: 1,
-        beginDate: "1993-01-01",
-        endDate: "1993-03-31",
-        periodDescription: "1993 QTR 1",
-        periodAbbreviation: "1993 Q1",
-        archiveInd: 0,
-        selected: false,
-      },
-      {
-        id: 5,
-        calendarYear: 1994,
-        quarter: 1,
-        beginDate: "1994-01-01",
-        endDate: "1994-03-31",
-        periodDescription: "1994 QTR 1",
-        periodAbbreviation: "1994 Q1",
-        archiveInd: 0,
-        selected: false,
-      },
-      {
-        id: 6,
-        calendarYear: 1994,
-        quarter: 2,
-        beginDate: "1994-04-01",
-        endDate: "1994-06-30",
-        periodDescription: "1994 QTR 2",
-        periodAbbreviation: "1994 Q2",
-        archiveInd: 0,
-        selected: false,
-      },
-    ],
-  }),
-}));
+const mock = new MockAdapter(axios);
 
-const yearLabelText = /year/i;
-const quarterLabelText = /quarter/i;
+const getReportingPeriodsUrl = `${config.services.mdm.uri}/reporting-periods?export=true`
 
-test("renders year/quarter/reporting period labels", async () => {
+mock.onGet(getReportingPeriodsUrl).reply(200, reportingPeriods);
+
+const reportingPeriodDropdownLabel = /Reporting Periods/i
+
+test("renders reporting period and dropdown label", async () => {
   // Arrange
   render(<ReportingPeriodSelector {...props} />);
-  const yearLabel = await screen.findByLabelText(/year/i);
-  const quarterLabel = screen.getByLabelText(/quarter/i);
-  const rpLabel = screen.getByLabelText(/reporting period/i);
+  const reportingPeriodsTitle = await screen.findByLabelText("Reporting Period", { exact: true });
+  const dropdownTitle = screen.getByLabelText(reportingPeriodDropdownLabel, { exact: true })
 
   // Assert
-  expect(yearLabel).toBeInTheDocument();
-  expect(quarterLabel).toBeInTheDocument();
-  expect(rpLabel).toBeInTheDocument();
+  expect(reportingPeriodsTitle).toBeInTheDocument();
+  expect(dropdownTitle).toBeInTheDocument();
 });
 
 test("renders correct number of options for year dropdown", async () => {
   // Arrange
-  const numYearOptions = new Set(reportingPeriods.map((rp) => rp.calendarYear));
+  const numOptions = reportingPeriods.length
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const yearDropdown = screen.getByLabelText(yearLabelText);
-  const yearOptions = within(yearDropdown).getAllByRole("option");
+  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const options = within(reportingPeriodDropdown).getAllByRole("option");
 
   // Assert
-  expect(yearOptions).toHaveLength(numYearOptions.size);
+  expect(options).toHaveLength(numOptions);
 });
 
-test("renders correct number of options for quarter dropdown", async () => {
-  // Arrange
-  const singleYearData = reportingPeriods.filter(
-    (rp) => rp.calendarYear === 1994
-  );
-  const numQuarterOptions = new Set(singleYearData.map((rp) => rp.quarter));
-  await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const quarterDropdown = screen.getByLabelText(quarterLabelText);
-  const quarterOptions = within(quarterDropdown).getAllByRole("option");
-
-  // Assert
-  expect(quarterOptions).toHaveLength(numQuarterOptions.size);
-});
-
-test("when a user selects a year from the dropdown then that element's selected value is truthy", async () => {
+test("when a user selects a reporting period from the dropdown then that element's selected value is truthy", async () => {
   // Arrange
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const yearDropdown = screen.getByLabelText(yearLabelText);
-  const selectedOption = within(yearDropdown).getByRole("option", {
-    name: /1994/i,
+  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const selectedOption = within(reportingPeriodDropdown).getByRole("option", {
+    name: /1994 Q1/i,
   });
-  const unselectedOption = within(yearDropdown).getByRole("option", {
-    name: /1994/i,
+  const unselectedOption = within(reportingPeriodDropdown).getByRole("option", {
+    name: /1994 Q2/i,
   });
 
   // Act
   // select earlier year, year option defaults to most recent year
-  userEvent.selectOptions(yearDropdown, "1993");
-
-  // Assert
-  expect(selectedOption.selected).toBeFalsy();
-  expect(unselectedOption.selected).toBeFalsy();
-});
-
-test("when a user selects a quarter from the dropdown then that element's selected value is truthy", async () => {
-  // Arrange
-  await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const quarterDropdown = screen.getByLabelText(quarterLabelText);
-  const selectedOption = within(quarterDropdown).getByRole("option", {
-    name: /Q1/i,
-  });
-  const unselectedOption = within(quarterDropdown).getByRole("option", {
-    name: /Q2/i,
-  });
-
-  // Act
-  // select earlier quarter, quarter option defaults to most recent quarter
-  userEvent.selectOptions(quarterDropdown, "1");
+  const selectedId = "5" // 1994 Q1
+  userEvent.selectOptions(reportingPeriodDropdown, selectedId)
 
   // Assert
   expect(selectedOption.selected).toBeTruthy();
   expect(unselectedOption.selected).toBeFalsy();
 });
 
-test("when a user selects a year from the dropdown then begin/end date reflect that change", async () => {
+test("when a user selects a reporting period from the dropdown then begin/end date reflect that change", async () => {
   // Arrange
-  const selectedYear = "1993";
+  const selectedId = "1";
   const selectedDataObj = reportingPeriods.find(
-    (reportingPeriod) => reportingPeriod.calendarYear === parseInt(selectedYear)
+    reportingPeriod => reportingPeriod.id === Number(selectedId)
   );
-  await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const yearDropdown = screen.getByLabelText(yearLabelText);
+  await waitForElement(async () => render(<ReportingPeriodSelector {...props} />));
+  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
 
   // Act
   // select a previous year, init selection is most recent year/quarter
-  userEvent.selectOptions(yearDropdown, selectedYear);
+  userEvent.selectOptions(reportingPeriodDropdown, selectedId)
 
-  const beginDate = screen.getByText(selectedDataObj.beginDate);
-  const endDate = screen.getByText(selectedDataObj.endDate);
-
-  // Assert
-  expect(beginDate).toBeInTheDocument();
-  expect(endDate).toBeInTheDocument();
-});
-
-test("when a user selects a quarter from the dropdown then begin/end date reflect that change", async () => {
-  // Arrange
-  const dataForSingleYear = reportingPeriods.filter(
-    (rp) => rp.calendarYear === 1994
-  );
-  const selectedQuarter = "1";
-  const selectedDataObj = dataForSingleYear.find(
-    (reportingPeriod) => reportingPeriod.quarter === parseInt(selectedQuarter)
-  );
-  await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const quarterDropdown = screen.getByLabelText(quarterLabelText);
-
-  // Act
-  // select a previous quarter, init selection is most recent year/quarter
-  userEvent.selectOptions(quarterDropdown, selectedQuarter);
-
-  const beginDate = screen.getByText(selectedDataObj.beginDate);
+  const beginDate = await screen.findByText(selectedDataObj.beginDate);
   const endDate = screen.getByText(selectedDataObj.endDate);
 
   // Assert
@@ -225,18 +131,13 @@ test("given an export state with reportingPeriodId exists then year/quarter drop
   await waitForElement(() =>
     render(<ReportingPeriodSelector {...{ ...props, exportState }} />)
   );
-  const yearDropdown = screen.getByLabelText(yearLabelText);
-  const quarterDropdown = screen.getByLabelText(quarterLabelText);
-  const selectedYear = within(yearDropdown).getByRole("option", {
-    name: /1993/i,
-  });
-  const selectedQuarter = within(quarterDropdown).getByRole("option", {
-    name: /Q1/i,
+  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const selectedYear = within(reportingPeriodDropdown).getByRole("option", {
+    name: /1993 Q1/i,
   });
 
   // Assert
   expect(selectedYear.selected).toBeTruthy();
-  expect(selectedQuarter.selected).toBeTruthy();
 });
 
 test("when only monitoring plan is checked then dropdowns are disabled", async () => {
@@ -247,10 +148,8 @@ test("when only monitoring plan is checked then dropdowns are disabled", async (
   await waitForElement(() =>
     render(<ReportingPeriodSelector {...{ ...props, isExport, dataTypes }} />)
   );
-  const yearDropdown = screen.getByLabelText(yearLabelText);
-  const quarterDropdown = screen.getByLabelText(quarterLabelText);
+  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
 
   // Assert
-  expect(yearDropdown).toHaveAttribute("disabled");
-  expect(quarterDropdown).toHaveAttribute("disabled");
+  expect(reportingPeriodDropdown).toHaveAttribute("disabled");
 });

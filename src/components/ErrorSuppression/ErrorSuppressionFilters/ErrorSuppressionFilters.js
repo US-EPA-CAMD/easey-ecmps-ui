@@ -124,7 +124,6 @@ export const ErrorSuppressionFilters = () => {
             const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
 
             setCheckTypeList(uniqueTypeCodeAndDesc);
-            console.log(_transformedData)
             setTransformedData(_transformedData);
         }).catch(error => {
             console.error("Error getting Check Catalog Results", error);

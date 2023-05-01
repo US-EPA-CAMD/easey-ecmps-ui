@@ -90,50 +90,6 @@ const ImportModal = ({
       setDisablePortBtn(false);
     }
   };
-  // const checkingCorrectSchema = (file,workspace ,errorChecks,setSchemaErrors) => {
-  //   var Validator = require("jsonschema").Validator;
-  //   var v = new Validator();
-  //   switch (workspace) {
-  //     case MONITORING_PLAN_STORE_NAME:
-  //       // correct schema
-  //       if (v.validate(file, mpSchema).valid) {
-  //         errorChecks(false);
-  //         // correct schema, just errors
-  //       } else {
-  //         errorChecks(true);
-  //         formatSchemaErrors(v.validate(file, mpSchema),setSchemaErrors);
-  //       } // incorrect schema with section
-  //       if (!file.unitStackConfigurations) {
-  //         errorChecks(true);
-  //         setSchemaErrors(["Only Monitoring Plan (MP) files may be imported"]);
-  //       }
-  //       break;
-  //     case QA_CERT_TEST_SUMMARY_STORE_NAME:
-  //       // correct schema
-  //       if (v.validate(file, qaSchema).valid) {
-  //         errorChecks(false);
-  //         // correct schema, just errors
-  //       } else {
-  //         errorChecks(true);
-  //         formatSchemaErrors(v.validate(file, qaSchema),setSchemaErrors);
-  //       } // incorrect schema with section
-  //       if (!file.testSummaryData) {
-  //         errorChecks(true);
-  //         setSchemaErrors(["Only QA Test Data files may be imported"]);
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
-  // const formatSchemaErrors = (errors,setSchemaErrors) => {
-  //   setDisablePortBtn(true);
-  //   const formattedErrors = errors.errors.map((error) => {
-  //     console.log(error, "file errors");
-  //     return error.stack;
-  //   });
-  //   setSchemaErrors(formattedErrors);
-  // };
   const readFile = (event) => {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
@@ -181,7 +137,8 @@ const ImportModal = ({
     content = (
       <div className="overflow-y-auto maxh-mobile">
         <div className="padding-right-2 padding-left-3 " aria-live="polite">
-          {importedFileErrorMsgs.map((error, i) => (
+          {Array.isArray(importedFileErrorMsgs) ?
+          importedFileErrorMsgs.map((error, i) => (
             <Alert
               type="error"
               slim
@@ -191,7 +148,17 @@ const ImportModal = ({
             >
               {error}
             </Alert>
-          ))}
+          )):
+            <Alert
+              type="error"
+              slim
+              noIcon
+              key={`1-${importedFileErrorMsgs}`}
+              role="alert"
+            >
+              {importedFileErrorMsgs}
+            </Alert>
+          }
         </div>
       </div>
     );

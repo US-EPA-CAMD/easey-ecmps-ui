@@ -5,13 +5,10 @@ import config from "../../config";
 
 import {
   authenticate,
-  credentialsAuth,
-  getCredentials,
   logOut,
   refreshClientToken,
   refreshToken,
   secureAxios,
-  verifyChallenge,
 } from "./easeyAuthApi";
 
 jest.mock("./monitoringPlansApi", () => ({
@@ -126,7 +123,9 @@ describe("Easey Auth API", () => {
   });
 
   it("Can we refreshToken", async () => {
-    const date = new Date();
+    const date = new Date(new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York",
+    }));
     date.setMinutes(date.getMinutes() - 15);
     localStorage.setItem(
       "ecmps_user",
@@ -134,7 +133,6 @@ describe("Easey Auth API", () => {
     );
 
     const data = { token: "refreshed token", expiration: "2022-11-23" };
-
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, data);
 
     const res = await refreshToken();
@@ -144,16 +142,17 @@ describe("Easey Auth API", () => {
     );
   });
 
-  it("Can we refreshToken when refresh token expires in less or equal to 30 secs", async () => {
-    const date = new Date();
-    date.setSeconds(date.getSeconds() + 28);
+  it("Can we refreshToken when refresh token expires in less or equal to 60 secs", async () => {
+    const date = new Date(new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York",
+    }));
+    date.setSeconds(date.getSeconds() + 50);
     localStorage.setItem(
       "ecmps_user",
       JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
     );
 
     const data = { token: "refreshed token", expiration: "2022-11-23" };
-
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, data);
 
     const res = await refreshToken();

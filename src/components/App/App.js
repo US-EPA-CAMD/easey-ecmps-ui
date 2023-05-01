@@ -327,6 +327,10 @@ const App = () => {
               exact
               component={() => (
                 <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -353,6 +357,10 @@ const App = () => {
               exact
               component={() => (
                 <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
