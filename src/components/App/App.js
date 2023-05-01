@@ -280,7 +280,7 @@ const App = () => {
               <Redirect from="/workspace/qa-qce-tee" to="/qa-qce-tee" />
             )}
             <Route
-              path="/qa-cert-event"
+              path="/qa-qce-tee"
               exact
               component={() => (
                 <MonitoringPlanHome
@@ -290,7 +290,7 @@ const App = () => {
               )}
             />
             <Route
-              path="/workspace/qa-cert-event"
+              path="/workspace/qa-qce-tee"
               exact
               component={() => (
                 <MonitoringPlanHome
