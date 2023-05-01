@@ -551,38 +551,42 @@ export const DataTableSystemsComponents = ({
       {(() => {
         if (!secondLevel) {
           return (
-            <div>
-              <DataTableRender
-                columnNames={columnNames}
-                data={data}
-                openHandler={openComponent}
-                tableTitle="System Components"
-                componentStyling="systemsCompTable"
-                dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
-                actionsBtn={"View"}
-                user={user}
-                checkout={checkout}
-                addBtn={openAddComponents}
-                addBtnName={"Add Component"}
-                show={true}
-                ariaLabel={"System Components"}
-              />
-              <DataTableRender
-                columnNames={fuelFlowsColumnNames}
-                data={fuelFlowsData}
-                openHandler={openFuelFlows}
-                tableTitle="Fuel Flows"
-                user={user}
-                checkout={checkout}
-                componentStyling="systemsCompTable"
-                dataLoaded={dataFuelLoaded && fuelFlowDropdownsLoaded}
-                actionsBtn={"View"}
-                addBtn={openFuelFlows}
-                addBtnName={"Create New Fuel Flow"}
-                show={true}
-                ariaLabel={"Fuel Flows"}
-              />
-            </div>
+            <>
+              <div style={{ marginBottom: '50px' }}>
+                <DataTableRender
+                  columnNames={columnNames}
+                  data={data}
+                  openHandler={openComponent}
+                  tableTitle="System Components"
+                  componentStyling="systemsCompTable"
+                  dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
+                  actionsBtn={"View"}
+                  user={user}
+                  checkout={checkout}
+                  addBtn={openAddComponents}
+                  addBtnName={"Add Component"}
+                  show={true}
+                  ariaLabel={"System Components"}
+                />
+              </div>
+              <div>
+                <DataTableRender
+                  columnNames={fuelFlowsColumnNames}
+                  data={fuelFlowsData}
+                  openHandler={openFuelFlows}
+                  tableTitle="Fuel Flows"
+                  user={user}
+                  checkout={checkout}
+                  componentStyling="systemsCompTable"
+                  dataLoaded={dataFuelLoaded && fuelFlowDropdownsLoaded}
+                  actionsBtn={"View"}
+                  addBtn={openFuelFlows}
+                  addBtnName={"Create New Fuel Flow"}
+                  show={true}
+                  ariaLabel={"Fuel Flows"}
+                />
+              </div>
+            </>
           );
         } else {
           //Second LEVEL
