@@ -803,32 +803,6 @@ export const HeaderInfo = ({
       importEmissionsFile(payload);
   };
 
-  // const evaluate = () => {
-  //   triggerBulkEvaluation({
-  //     items: [
-  //       {
-  //         monPlanId: configID,
-  //         submitMonPlan: true,
-  //         testSumIds: [],
-  //         qceIds: [],
-  //         teeIds: [],
-  //         emissionsReportingPeriods: [],
-  //       },
-  //     ],
-  //     userId: user.userId,
-  //     userEmail: user.email,
-  //   })
-  //     .then(() => {
-  //       // Change front-end to display "In Queue" status after starting eval
-  //       setEvalStatus("INQ");
-  //       setDataLoaded(false);
-  //       setEvalStatusLoaded(true);
-  //     })
-  //     .catch((error) => {
-  //       console.log("Error occurred: ", error);
-  //     });
-  // };
-
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
     // WORKSPACE view

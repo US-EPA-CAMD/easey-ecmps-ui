@@ -32,7 +32,6 @@ export async function logServerError(message, metadata = {}) {
 
 export function handleError(error) {
   let errorMessage = "";
-  console.log('handleError: ', error);
 
   if (error.response) {
     // client received an error response (5xx, 4xx)
