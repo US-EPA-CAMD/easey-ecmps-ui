@@ -211,10 +211,20 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
             getOptions(d, "componentId", "componentId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 6) {
           dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
             getOptions(d, "monitoringSystemId", "monitoringSystemId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
