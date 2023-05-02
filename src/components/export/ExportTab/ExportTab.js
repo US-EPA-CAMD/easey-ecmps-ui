@@ -113,7 +113,7 @@ export const ExportTab = ({
 
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
-      promises.push(exportMonitoringPlanDownload(selectedConfig.id));
+      await exportMonitoringPlanDownload(selectedConfig.id);
     }
     // export qa
     const selectedRowsObj = rowsData.current;
@@ -128,15 +128,13 @@ export const ExportTab = ({
 
     // export emissions
     if (dataTypes.find((e) => e.name === em).checked) {
-     
-       await exportEmissionsDataDownload(
-          facility,
-          selectedConfig.id,
-          reportingPeriod.calendarYear,
-          reportingPeriod.quarter,
-          getUser() !== null
-        )
-      
+      await exportEmissionsDataDownload(
+        facility,
+        selectedConfig.id,
+        reportingPeriod.calendarYear,
+        reportingPeriod.quarter,
+        getUser() !== null
+      );
     }
 
     // await Promise.all(promises);
