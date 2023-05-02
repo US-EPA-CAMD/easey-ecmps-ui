@@ -60,7 +60,7 @@ export const HelpSupport = () => {
   const schema = yup.object().shape({
     email: yup.string().email(),
   });
-  const onSubmitHandler = async() => {
+  const onSubmitHandler = () => {
     // form data selectors
     let subject = "";
     const message = document.querySelector("#txtComment").value;
@@ -68,7 +68,7 @@ export const HelpSupport = () => {
     const checkedSubjectId = document.querySelector(
       "fieldset div input[name='radioSubject']:checked"
     );
-    const isEmailValid = await schema.isValid({email: fromEmail});
+    const isEmailValid = schema.isValidSync({email: fromEmail});
 
     // Get label of selected radio button (comment types / subject)
     if (checkedSubjectId) {
