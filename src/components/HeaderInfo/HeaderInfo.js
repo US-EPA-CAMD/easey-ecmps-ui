@@ -427,22 +427,16 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    const promises = [];
-
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
-      promises.push(
-        emApi.exportEmissionsDataDownload(
-          facility,
-          configID,
-          selectedReportingPeriod.slice(0, 4),
-          selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
-          getUser() !== null
-        )
+      await emApi.exportEmissionsDataDownload(
+        facility,
+        configID,
+        selectedReportingPeriod.slice(0, 4),
+        selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
+        getUser() !== null
       );
     }
-
-    await Promise.allSettled(promises);
   };
 
   const formatCommentsToTable = (data) => {
