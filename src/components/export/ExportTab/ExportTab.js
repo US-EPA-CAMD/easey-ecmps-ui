@@ -109,7 +109,7 @@ export const ExportTab = ({
     setIsExporting(true);
     setLoading(true);
     let exportFileName;
-    const promises = [];
+    // const promises = [];
 
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
@@ -128,18 +128,18 @@ export const ExportTab = ({
 
     // export emissions
     if (dataTypes.find((e) => e.name === em).checked) {
-      promises.push(
-        exportEmissionsDataDownload(
+     
+       await exportEmissionsDataDownload(
           facility,
           selectedConfig.id,
           reportingPeriod.calendarYear,
           reportingPeriod.quarter,
           getUser() !== null
         )
-      );
+      
     }
 
-    await Promise.all(promises);
+    // await Promise.all(promises);
     setIsExporting(false);
     setLoading(false);
   };
@@ -212,7 +212,9 @@ export const ExportTab = ({
               type={"button"}
               className="float-right"
               disabled={isExportDisabled()}
-              onClick={exportClickHandler}
+              onClick={() => {
+                exportClickHandler();
+              }}
             >
               Export
             </Button>
@@ -264,7 +266,9 @@ export const ExportTab = ({
                   type={"button"}
                   className="float-right"
                   disabled={isExportDisabled()}
-                  onClick={exportClickHandler}
+                  onClick={() => {
+                    exportClickHandler();
+                  }}
                 >
                   Export
                 </Button>
