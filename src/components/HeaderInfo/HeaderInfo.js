@@ -474,12 +474,13 @@ export const HeaderInfo = ({
   const openViewComments = () => {
     mpApi
       .getMonitoringPlanComments(selectedConfig.id)
-      .catch((error) => {
-        console.error("Error during getting comments", error);
-      })
+
       .then((data) => {
         setCommentsData(formatCommentsToTable(data.data));
         setShowCommentsModal(true);
+      })
+      .catch((error) => {
+        console.error("Error during getting comments", error);
       });
 
     setTimeout(() => {
