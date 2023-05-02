@@ -166,7 +166,7 @@ export const HelpSupport = () => {
             You may also send an email directly to <a href='mailto:ecmps-beta@camdsupport.com'>ecmps-beta@camdsupport.com</a>.`
         )}
         subjects={commentTypes}
-        onSubmit={() => onSubmitHandler()}
+        onSubmit={onSubmitHandler}
         submitted={submitted}
         submitStatus={submitStatus}
         submitStatusText={
