@@ -113,7 +113,7 @@ export const ExportTab = ({
 
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
-      await exportMonitoringPlanDownload(selectedConfig.id);
+      promises.push(exportMonitoringPlanDownload(selectedConfig.id));
     }
     // export qa
     const selectedRowsObj = rowsData.current;
@@ -211,7 +211,10 @@ export const ExportTab = ({
               className="float-right"
               disabled={isExportDisabled()}
               onClick={() => {
-                exportClickHandler();
+                exportClickHandler().catch((error) => {
+                  console.error("Error during Export", error);
+                });
+                return;
               }}
             >
               Export
@@ -265,7 +268,10 @@ export const ExportTab = ({
                   className="float-right"
                   disabled={isExportDisabled()}
                   onClick={() => {
-                    exportClickHandler();
+                    exportClickHandler().catch((error) => {
+                      console.error("Error during export", error);
+                    });
+                    return;
                   }}
                 >
                   Export
