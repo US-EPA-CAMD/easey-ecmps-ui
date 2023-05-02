@@ -139,6 +139,11 @@ export const HeaderInfo = ({
     { name: "Test Extension Exemption" },
   ];
 
+  const defaultTemplateValue = {
+    code: "SELECT",
+    name: "--- select a view ---"
+  }
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -193,7 +198,7 @@ export const HeaderInfo = ({
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
-  const [viewTemplates, setViewTemplates] = useState([]);
+  const [viewTemplates, setViewTemplates] = useState([defaultTemplateValue]);
   const [testDataOptions, setTestDataOptions] = useState([]);
 
   const [importedFile, setImportedFile] = useState([]);
@@ -277,6 +282,20 @@ export const HeaderInfo = ({
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
+    if (currentTab?.reportingPeriods){
+      const selectedReportingPeriods = currentTab.reportingPeriods
+      for(const reportingPeriod of reportingPeriods) {
+        if(currentTab.reportingPeriods.includes(reportingPeriod.id)){
+          reportingPeriod.selected = true;
+        }
+      }
+      setEmissionDropdownState({
+        ...cloneDeep(emissionDropdownState),
+        selectedReportingPeriods,
+      });
+    }
+    if (currentTab?.locationSelect)
+      setLocationSelect(currentTab.locationSelect)
   }, [currentTab]);
 
   useEffect(() => {
@@ -318,7 +337,7 @@ export const HeaderInfo = ({
       console.log(e);
     });
     return () => {
-      setViewTemplates([]);
+      setViewTemplates([defaultTemplateValue]);
       setViewTemplateSelect(null);
     };
     // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
@@ -340,15 +359,21 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setTestDataOptionSelect]);
 
+  useEffect(() => {
+    getEmissionsViewDropdownData().catch((e) => {
+      console.log(e);
+    })
+  }, [emissionDropdownState]);
+
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
     if (emissionDropdownState.selectedReportingPeriods.length === 0) {
-      setViewTemplates([]);
+      setViewTemplates([defaultTemplateValue]);
       return;
     }
 
     if (selectedStackPipeId.length === 0 && selectedUnitId.length === 0) {
-      setViewTemplates([]);
+      setViewTemplates([defaultTemplateValue]);
       return;
     }
 
@@ -372,7 +397,13 @@ export const HeaderInfo = ({
       viewData = viewData.filter(
         (v) => codesWithData.find((d) => d === v.code) !== undefined
       );
-
+      if(viewData.length === 0){
+        viewData.push(defaultTemplateValue)
+        setViewTemplateSelect(null)
+      } else {
+        if(!viewTemplateSelect || viewTemplateSelect?.code === defaultTemplateValue.code)
+          setViewTemplateSelect(viewData[0])
+      }
       setViewTemplates(viewData);
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
         setViewTemplateSelect(viewData[0]);
@@ -1296,6 +1327,7 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
+                    disabled={locationSelect && emissionDropdownState.selectedReportingPeriods.length !== 0 && (viewTemplateSelect?.code !== defaultTemplateValue.code && viewTemplateSelect !== null) ? false : true}
                     onClick={() =>
                       applyFilters(
                         configID,
