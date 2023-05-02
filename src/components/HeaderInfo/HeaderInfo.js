@@ -871,7 +871,7 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = () => {
-    if (!emissionDropdownState.selectedReportingPeriods.length) return;
+    if (!emissionDropdownState.selectedReportingPeriods.length) return void;
     const uniqueReportingPeriods = [
       ...new Set([...emissionDropdownState.selectedReportingPeriods]),
     ];
@@ -880,7 +880,7 @@ export const HeaderInfo = ({
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       reportingPeriods = [...reportingPeriods];
-      return;
+      return void;
     }
     setSelectedReportingPeriods(uniqueReportingPeriods);
     dispatch(
@@ -1050,7 +1050,7 @@ export const HeaderInfo = ({
                 type="button"
                 className="margin-right-2 float-left margin-bottom-2"
                 outline={true}
-                onClick={handleExport}
+                onClick={() => handleExport()}
               >
                 Export Data
               </Button>
