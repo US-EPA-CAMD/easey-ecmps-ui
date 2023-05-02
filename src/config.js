@@ -144,12 +144,6 @@ export const config = {
         "https://api.epa.gov/easey/dev/auth-mgmt"
       ),
     },
-    quartz: {
-      uri: getConfigValue(
-        "REACT_APP_EASEY_QUARTZ_API",
-        "https://api.epa.gov/easey/dev/quartz-mgmt"
-      ),
-    },
     content: {
       uri: getConfigValue(
         "REACT_APP_EASEY_CONTENT_API",
