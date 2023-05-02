@@ -472,10 +472,15 @@ export const HeaderInfo = ({
     ];
   };
   const openViewComments = () => {
-    mpApi.getMonitoringPlanComments(selectedConfig.id).then((data) => {
-      setCommentsData(formatCommentsToTable(data.data));
-      setShowCommentsModal(true);
-    });
+    mpApi
+      .getMonitoringPlanComments(selectedConfig.id)
+      .catch((error) => {
+        console.error("Error during getting comments", error);
+      })
+      .then((data) => {
+        setCommentsData(formatCommentsToTable(data.data));
+        setShowCommentsModal(true);
+      });
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
