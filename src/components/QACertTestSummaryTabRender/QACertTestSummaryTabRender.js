@@ -24,12 +24,13 @@ export const QACertTestSummaryRender = ({
 
   useEffect(() => {
     setTimeout(() => {
-      const elem = document.querySelector(`[title="${currentTab.name}"]`)
+      const elem = document.querySelector(`[title="${currentTab.name}"]`);
       if (elem) {
-        elem.querySelector('#tabBtn').focus()
+        elem.querySelector("#tabBtn").focus();
       }
-    }, 1000)
-  }, [])
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className=" padding-top-0">
@@ -63,6 +64,7 @@ export const QACertTestSummaryRender = ({
             stackPipeId: locations[locationSelect[0]]["stackPipeId"],
             unitId: locations[locationSelect[0]]["unitId"],
           }}
+          orisCode={orisCode}
           locations={locations}
           selectedTestCode={selectedTestCode}
           isCheckedOut={checkoutState}

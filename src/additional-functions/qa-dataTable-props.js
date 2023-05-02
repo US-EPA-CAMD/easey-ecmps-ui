@@ -3,10 +3,10 @@ export const qaProtocalGasProps = (selectedRow) => {
     dataTableName: "Protocol Gas",
     payload: {
       gasLevelCode: selectedRow.gasLevelCode,
-      gasTypeCode: null,
-      cylinderIdentifier: null,
-      vendorIdentifier: null,
-      expirationDate: null,
+      gasTypeCode: "string",
+      cylinderIdentifier: "string",
+      vendorIdentifier: "string",
+      expirationDate: "string",
     },
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
     columnNames: [
@@ -33,7 +33,7 @@ export const qaLinearitySummaryProps = (selectedRow) => {
   return {
     dataTableName: "Linearity Test",
     payload: {
-      // gasLevelCode: selectedRow.gasLevelCode,
+      gasLevelCode: "string",
       meanMeasuredValue: 0,
       meanReferenceValue: 0,
       percentError: 0,
@@ -65,7 +65,7 @@ export const qaLinearityInjectionProps = () => {
   return {
     dataTableName: "Linearity Injection",
     payload: {
-      injectionDate: "",
+      injectionDate: "string",
       injectionHour: 0,
       injectionMinute: 0,
       measuredValue: 0,
@@ -74,8 +74,6 @@ export const qaLinearityInjectionProps = () => {
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
     columnNames: [
       "Injection Date",
-      "Injection Hour",
-      "Injection Minute",
       "Measured Value",
       "Reference Value",
     ],
@@ -96,7 +94,12 @@ export const qaLinearityInjectionProps = () => {
 export const qaRataDataProps = () => {
   return {
     dataTableName: "RATA Data",
-    payload: {},
+    payload: {
+      numberOfLoadLevels: 0,
+      relativeAccuracy: 0,
+      rataFrequencyCode: "string",
+      overallBiasAdjustmentFactor: 0,
+    },
     dropdownArray: ["rataFrequencyCode"],
     columnNames: [
       "Number of Load Levels",
@@ -123,16 +126,24 @@ export const qaRataDataProps = () => {
 export const qaRataRunDataProps = () => {
   return {
     dataTableName: "RATA Run Data",
-    payload: {},
+    payload: {
+      runNumber: 0,
+      beginDate: "string",
+      beginHour: 0,
+      beginMinute: 0,
+      endDate: "string",
+      endHour: 0,
+      endMinute: 0,
+      cemValue: 0,
+      rataReferenceValue: 0,
+      grossUnitLoad: 0,
+      runStatusCode: "string",
+    },
     dropdownArray: ["runStatusCode"],
     columnNames: [
       "Run Number",
-      "Begin Date ",
-      "Begin Hour",
-      "Begin Minute",
-      "End Date",
-      "End Hour ",
-      "End Minute",
+      "Begin Date/Time",
+      "End Date/Time",
       "CEM Value",
       "RATA Reference Value",
       "Gross Unit Load ",
@@ -236,7 +247,23 @@ export const qaRataSummaryProps = () => {
 export const qaRataTraverseProps = () => {
   return {
     dataTableName: "RATA Traverse Data",
-    payload: {},
+    payload: {
+      probeID: "string",
+      probeTypeCode: "string",
+      pressureMeasureCode: "string",
+      methodTraversePointID: "string",
+      velocityCalibrationCoefficient: 0,
+      lastProbeDate: "string",
+      avgVelDiffPressure: 0,
+      avgSquareVelDiffPressure: 0,
+      tStackTemperature: 0,
+      pointUsedIndicator: 0,
+      numberWallEffectsPoints: 0,
+      yawAngle: 0,
+      pitchAngle: 0,
+      calculatedVelocity: 0,
+      replacementVelocity: 0,
+    },
     dropdownArray: [
       "probeTypeCode",
       "pressureMeasureCode",
@@ -298,15 +325,15 @@ export const qaAirEmissionsProps = () => {
   return {
     dataTableName: "Air Emissions",
     payload: {
-      qiLastName: null,
-      qiFirstName: null,
-      qiMiddleInitial: null,
-      aetbName: null,
-      aetbPhoneNumber: null,
-      aetbEmail: null,
-      examDate: null,
-      providerName: null,
-      providerEmail: null,
+      qiLastName: "string",
+      qiFirstName: "string",
+      qiMiddleInitial: "string",
+      aetbName: "string",
+      aetbPhoneNumber: "string",
+      aetbEmail: "string",
+      examDate: "string",
+      providerName: "string",
+      providerEmail: "string",
     },
     dropdownArray: [],
     columnNames: [
@@ -340,18 +367,18 @@ export const qaFlowRataRunProps = () => {
   return {
     dataTableName: "Flow",
     payload: {
-      numberOfTraversePoints: null,
-      barometricPressure: null,
-      staticStackPressure: null,
-      percentCO2: null,
-      percentO2: null,
-      percentMoisture: null,
-      dryMolecularWeight: null,
-      wetMolecularWeight: null,
-      averageVelocityWithoutWallEffects: null,
-      averageVelocityWithWallEffects: null,
-      calculatedWAF: null,
-      averageStackFlowRate: null,
+      numberOfTraversePoints: 0,
+      barometricPressure: 0,
+      staticStackPressure: 0,
+      percentCO2: 0,
+      percentO2: 0,
+      percentMoisture: 0,
+      dryMolecularWeight: 0,
+      wetMolecularWeight: 0,
+      averageVelocityWithoutWallEffects: 0,
+      averageVelocityWithWallEffects: 0,
+      calculatedWAF: 0,
+      averageStackFlowRate: 0,
     },
     dropdownArray: [],
     columnNames: [
@@ -402,11 +429,11 @@ export const qaTestQualificationProps = (selectedRow) => {
     dataTableName: "Test Qualification",
     payload: {
       testClaimCode: selectedRow.testClaimCode,
-      beginDate: null,
-      endDate: null,
-      highLoadPercentage: null,
-      midLoadPercentage: null,
-      lowLoadPercentage: null,
+      beginDate: "string",
+      endDate: "string",
+      highLoadPercentage: 0,
+      midLoadPercentage: 0,
+      lowLoadPercentage: 0,
     },
     dropdownArray: ["testClaimCode"],
     mdmProps: [
@@ -480,9 +507,17 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       gasHeatInput: 0,
       monitoringSystemID: "string",
     },
-    dropdownArray: [],
-    columnNames: ["Gas GCV", "Gas Volume", "Gas Heat Input"],
+    dropdownArray: [
+      "monitoringSystemID",
+    ],
+    columnNames: [
+      "Monitoring System ID",
+      "Gas GCV", 
+      "Gas Volume", 
+      "Gas Heat Input",
+    ],
     controlInputs: {
+      monitoringSystemID: ["Monitoring System ID", "dropdown", "", ""],
       gasGCV: ["Gas GCV", "input", "", ""],
       gasVolume: ["Gas Volume", "input", "", ""],
       gasHeatInput: ["Gas Heat Input", "input", "", ""],
@@ -496,15 +531,15 @@ export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
   return {
     dataTableName: "Appendix E Correlation Heat Input from Oil",
     payload: {
-      monitoringSystemID: null,
-      oilMass: null,
-      oilGCV: null,
-      oilGCVUnitsOfMeasureCode: null,
-      oilHeatInput: null,
-      oilVolume: null,
-      oilVolumeUnitsOfMeasureCode: null,
-      oilDensity: null,
-      oilDensityUnitsOfMeasureCode: null,
+      monitoringSystemID: "string",
+      oilMass: 0,
+      oilGCV: 0,
+      oilGCVUnitsOfMeasureCode: "string",
+      oilHeatInput: 0,
+      oilVolume: 0,
+      oilVolumeUnitsOfMeasureCode: "string",
+      oilDensity: 0,
+      oilDensityUnitsOfMeasureCode: "string",
     },
     dropdownArray: [
       "monitoringSystemID",
@@ -557,7 +592,14 @@ export const qaAppendixECorrelationSummaryHeatInputOilProps = (selectedRow) => {
 export const qaFuelFlowToLoadProps = () => {
   return {
     dataTableName: "Fuel Flow to Load",
-    payload: {},
+    payload: {
+      testBasisCode: "string",
+      averageDifference: 0,
+      numberOfHoursUsed: 0,
+      numberOfHoursExcludedCofiring: 0,
+      numberOfHoursExcludedRamping: 0,
+      numberOfHoursExcludedLowRange: 0,
+    },
     dropdownArray: ["testBasisCode"],
     mdmProps: [
       {
@@ -605,7 +647,20 @@ export const qaFuelFlowToLoadProps = () => {
 export const qaFuelFlowToLoadBaselineProps = () => {
   return {
     dataTableName: "Fuel Flow to Load Baseline",
-    payload: {},
+    payload: {
+      accuracyTestNumber: 0,
+      peiTestNumber: 0,
+      averageFuelFlowRate: 0,
+      averageLoad: 0,
+      baselineFuelFlowToLoadRatio: 0,
+      fuelFlowToLoadUOMCode: "string",
+      averageHourlyHeatInputRate: 0,
+      baselineGHR: 0,
+      ghrUnitsOfMeasureCode: "string",
+      numberOfHoursExcludedCofiring: 0,
+      numberOfHoursExcludedRamping: 0,
+      numberOfHoursExcludedLowRange: 0,
+    },
     dropdownArray: ["fuelFlowToLoadUOMCode"],
     mdmProps: [
       {
@@ -675,7 +730,19 @@ export const qaFuelFlowToLoadBaselineProps = () => {
 export const qaAppendixECorrTestRunProps = () => {
   return {
     dataTableName: "Appendix E Correlation Run",
-    payload: {},
+    payload: {
+      runNumber: 0,
+      referenceValue: 0,
+      hourlyHeatInputRate: 0,
+      totalHeatInput: 0,
+      responseTime: 0,
+      beginDate: "string",
+      beginHour: 0,
+      beginMinute: 0,
+      endDate: "string",
+      endHour: 0,
+      endMinute: 0,
+    },
     dropdownArray: [],
     columnNames: [
       "Run Number",
@@ -683,12 +750,8 @@ export const qaAppendixECorrTestRunProps = () => {
       "Hourly Heat Input Rate",
       "Total Heat Input",
       "Response Time",
-      "Begin Date ",
-      "Begin Hour",
-      "Begin Minute",
-      "End Date",
-      "End Hour ",
-      "End Minute",
+      "Begin Date/Time",
+      "End Date/Time",
     ],
     controlInputs: {
       runNumber: ["Run Number", "input", "", ""],
@@ -712,7 +775,19 @@ export const qaAppendixECorrTestRunProps = () => {
 export const qaFlowToLoadCheckProps = () => {
   return {
     dataTableName: "Flow To Load Check",
-    payload: {},
+    payload: {
+      testBasisCode: "string",
+      biasAdjustedIndicator: 0,
+      avgAbsolutePercentDiff: 0,
+      numberOfHours: 0,
+      numberOfHoursExcludedForFuel: 0,
+      numberOfHoursExcludedRamping: 0,
+      numberOfHoursExcludedBypass: 0,
+      numberOfHoursExcludedPreRATA: 0,
+      numberOfHoursExcludedTest: 0,
+      numberOfHoursExcMainBypass: 0,
+      operatingLevelCode: "string",
+    },
     dropdownArray: [
       "testBasisCode",
       "operatingLevelCode",
@@ -801,7 +876,14 @@ export const qaFlowToLoadCheckProps = () => {
 export const qaFuelFlowmeterAccuracyDataProps = () => {
   return {
     dataTableName: "Fuel Flowmeter Accuracy Data",
-    payload: {},
+    payload: {
+      accuracyTestMethodCode: "string",
+      lowFuelAccuracy: 0,
+      midFuelAccuracy: 0,
+      highFuelAccuracy: 0,
+      reinstallationDate: "string",
+      reinstallationHour: 0,
+    },
     dropdownArray: ["accuracyTestMethodCode"],
     mdmProps: [
       {
@@ -836,7 +918,14 @@ export const qaFuelFlowmeterAccuracyDataProps = () => {
 export const qaTransmitterTransducerAccuracyDataProps = () => {
   return {
     dataTableName: "Transmitter Transducer Accuracy Data",
-    payload: {},
+    payload: {
+      lowLevelAccuracy: 0,
+      lowLevelAccuracySpecCode: "string",
+      midLevelAccuracy: 0,
+      midLevelAccuracySpecCode: "string",
+      highLevelAccuracy: 0,
+      highLevelAccuracySpecCode: "string",
+    },
     dropdownArray: [
       "lowLevelAccuracySpecCode",
       "midLevelAccuracySpecCode",
@@ -889,7 +978,33 @@ export const qaTransmitterTransducerAccuracyDataProps = () => {
 export const qaOnOffCalibrationProps = () => {
   return {
     dataTableName: "Online Offline Calibration",
-    payload: {},
+    payload: {
+      onlineZeroInjectionDate: "string",
+      onlineZeroInjectionHour: 0,
+      onlineZeroCalibrationError: 0,
+      onlineZeroAPSIndicator: 0,
+      onlineZeroMeasuredValue: 0,
+      onlineZeroReferenceValue: 0,
+      onlineUpscaleCalibrationError: 0,
+      onlineUpscaleAPSIndicator: 0,
+      onlineUpscaleInjectionDate: "string",
+      onlineUpscaleInjectionHour: 0,
+      onlineUpscaleMeasuredValue: 0,
+      onlineUpscaleReferenceValue: 0,
+      offlineZeroCalibrationError: 0,
+      offlineZeroAPSIndicator: 0,
+      offlineZeroInjectionDate: "string",
+      offlineZeroInjectionHour: 0,
+      offlineZeroMeasuredValue: 0,
+      offlineZeroReferenceValue: 0,
+      offlineUpscaleCalibrationError: 0,
+      offlineUpscaleAPSIndicator: 0,
+      offlineUpscaleInjectionDate: "string",
+      offlineUpscaleInjectionHour: 0,
+      offlineUpscaleMeasuredValue: 0,
+      offlineUpscaleReferenceValue: 0,
+      upscaleGasLevelCode: "string",
+    },
     dropdownArray: ["upscaleGasLevelCode"],
     mdmProps: [
       {
@@ -1074,7 +1189,24 @@ export const qaOnOffCalibrationProps = () => {
 export const qaCalibrationInjectionProps = () => {
   return {
     dataTableName: "Calibration Injection",
-    payload: {},
+    payload: {
+      onlineOfflineIndicator: 0,
+      upscaleGasLevelCode: "string",
+      zeroInjectionDate: "string",
+      zeroInjectionHour: 0,
+      zeroInjectionMinute: 0,
+      upscaleInjectionDate: "string",
+      upscaleInjectionHour: 0,
+      upscaleInjectionMinute: 0,
+      zeroMeasuredValue: 0,
+      upscaleMeasuredValue: 0,
+      zeroAPSIndicator: 0,
+      upscaleAPSIndicator: 0,
+      zeroCalibrationError: 0,
+      upscaleCalibrationError: 0,
+      zeroReferenceValue: 0,
+      upscaleReferenceValue: 0,
+    },
     dropdownArray: ["upscaleGasLevelCode"],
     mdmProps: [
       {
@@ -1104,7 +1236,7 @@ export const qaCalibrationInjectionProps = () => {
       "Upscale Reference Value",
     ],
     controlInputs: {
-      onLineOffLineIndicator: ["Online Offline Indicator", "radio", "", ""],
+      onlineOfflineIndicator: ["Online Offline Indicator", "radio", "", ""],
       upscaleGasLevelCode: ["Upscale Gas Level Code", "dropdown", "", ""],
       zeroMeasuredValue: ["Zero Measured Value", "input", "", ""],
       upscaleMeasuredValue: ["Upscale Measured Value", "input", "", ""],
@@ -1144,7 +1276,7 @@ export const qaCalibrationInjectionProps = () => {
       ],
     },
     radioBtnPayload: [
-      "onLineOffLineIndicator",
+      "onlineOfflineIndicator",
       "zeroAPSIndicator",
       "upscaleAPSIndicator",
     ],
@@ -1155,7 +1287,9 @@ export const qaCalibrationInjectionProps = () => {
 export const qaCycleTimeSummaryProps = () => {
   return {
     dataTableName: "Cycle Time Summary",
-    payload: {},
+    payload: {
+      totalTime: 0,
+    },
     dropdownArray: [],
     columnNames: ["Total Time"],
     controlInputs: {
@@ -1168,7 +1302,19 @@ export const qaCycleTimeSummaryProps = () => {
 export const qaCycleTimeInjectionProps = () => {
   return {
     dataTableName: "Cycle Time Injection",
-    payload: {},
+    payload: {
+      gasLevelCode: "string",
+      calibrationGasValue: 0,
+      beginDate: "string",
+      beginHour: 0,
+      beginMinute: 0,
+      endDate: "string",
+      endHour: 0,
+      endMinute: 0,
+      injectionCycleTime: 0,
+      beginMonitorValue: 0,
+      endMonitorValue: 0,
+    },
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
     mdmProps: [
       {
@@ -1182,12 +1328,8 @@ export const qaCycleTimeInjectionProps = () => {
     columnNames: [
       "Gas Level Code",
       "Calibration Gas Value",
-      "Begin Date",
-      "Begin Hour",
-      "Begin Minute",
-      "End Date",
-      "End Hour",
-      "End Minute",
+      "Begin Date/Time",
+      "End Date/Time",
       "Injection Cycle Time",
       "Begin Monitor Value",
       "End Monitor Value",
@@ -1216,7 +1358,16 @@ export const qaCycleTimeInjectionProps = () => {
 export const qaFlowToLoadReferenceProps = () => {
   return {
     dataTableName: "Flow To Load Reference",
-    payload: {},
+    payload: {
+      rataTestNumber: "string",
+      operatingLevelCode: "string",
+      averageGrossUnitLoad: 0,
+      averageReferenceMethodFlow: 0,
+      referenceFlowLoadRatio: 0,
+      averageHourlyHeatInputRate: 0,
+      referenceGrossHeatRate: 0,
+      calcSeparateReferenceIndicator: 0,
+    },
     dropdownArray: [
       "rataTestNumber",
       "operatingLevelCode",
@@ -1272,7 +1423,14 @@ export const qaFlowToLoadReferenceProps = () => {
 export const qaUnitDefaultTestDataProps = () => {
   return {
     dataTableName: "Unit Default Test",
-    payload: {},
+    payload: {
+      fuelCode: "string",
+      noxDefaultRate: 0,
+      operatingConditionCode: "string",
+      groupID: "string",
+      numberOfUnitsInGroup: 0,
+      numberOfTestsForGroup: 0,
+    },
     dropdownArray: ["fuelCode", "operatingConditionCode"],
     mdmProps: [
       {
@@ -1313,18 +1471,26 @@ export const qaUnitDefaultTestDataProps = () => {
 export const qaUnitDefaultTestRunDataProps = () => {
   return {
     dataTableName: "Unit Default Test Run",
-    payload: {},
+    payload: {
+      operatingLevelForRun: 0,
+      runNumber: 0,
+      beginDate: "string",
+      beginHour: 0,
+      beginMinute: 0,
+      endDate: "string",
+      endHour: 0,
+      endMinute: 0,
+      responseTime: 0,
+      referenceValue: 0,
+      runUsedIndicator: 0,
+    },
     dropdownArray: ["runUsedIndicator"],
     mdmProps: [],
     columnNames: [
       "Operating Level for Run",
       "Run Number",
-      "Begin Date",
-      "Begin Hour",
-      "Begin Minute",
-      "End Date",
-      "End Hour",
-      "End Minute",
+      "Begin Date/Time",
+      "End Date/Time",
       "Response Time",
       "Reference Value",
       "Run Used Indicator",
@@ -1350,7 +1516,13 @@ export const qaUnitDefaultTestRunDataProps = () => {
 export const qaHgSummaryDataProps = () => {
   return {
     dataTableName: "Hg Summary",
-    payload: {},
+    payload: {
+      gasLevelCode: "string",
+      meanMeasuredValue: 0,
+      meanReferenceValue: 0,
+      percentError: 0,
+      apsIndicator: 0,
+    },
     dropdownArray: ["gasLevelCode"],
     mdmProps: [
       {
@@ -1382,7 +1554,13 @@ export const qaHgSummaryDataProps = () => {
 export const qaHgInjectionDataProps = () => {
   return {
     dataTableName: "Hg Injection",
-    payload: {},
+    payload: {
+      injectionDate: "string",
+      injectionHour: 0,
+      injectionMinute: 0,
+      measuredValue: 0,
+      referenceValue: 0,
+    },
     dropdownArray: [],
     mdmProps: [],
     columnNames: [
@@ -1414,14 +1592,14 @@ export const qaCertEventsProps = (selectedLocation) => {
       unitId: null,
       monitoringSystemID: "string",
       componentID: "string",
-      qaCertEventCode: null,
-      requiredTestCode: null,
-      qaCertEventHour: null,
-      conditionalBeginHour: null,
-      completionTestHour: null,
-      qaCertEventDate: null,
-      conditionalBeginDate: null,
-      completionTestDate: null,
+      qaCertEventCode: "string",
+      requiredTestCode: "string",
+      qaCertEventHour: 0,
+      conditionalBeginHour: 0,
+      completionTestHour: 0,
+      qaCertEventDate: "string",
+      conditionalBeginDate: "string",
+      completionTestDate: "string",
     },
     dropdownArray: [
       [
@@ -1432,17 +1610,17 @@ export const qaCertEventsProps = (selectedLocation) => {
       ],
     ],
     columns: [
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Monitoring System ID",
       "QA Cert Event Code",
       "QA Cert Event Date",
       "Required Test Code",
-      "Conditional Begin Date",
-      "Completion Test Date",
+      "Conditional Begin Date/Time",
+      "Completion Test Date/Time",
     ],
     controlInputs: {
-      //locId:["Unit or Stack Pipe ID", "input", "", ""],
+      //locId:["Unit/Stack Pipe ID", "input", "", ""],
       monitoringSystemID: [
         "Monitoring System ID",
         "nonFilteredDropdown",
@@ -1476,10 +1654,10 @@ export const qaCertEventsProps = (selectedLocation) => {
   };
   const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
   result.controlInputs = {
-    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    [locId]: ["Unit/Stack Pipe ID", "input", "", ""],
     ...result.controlInputs,
   };
-  //result.controlInputs[locId] = ["Unit or Stack Pipe ID", "input", "", ""];
+  //result.controlInputs[locId] = ["Unit/Stack Pipe ID", "input", "", ""];
   return result;
 };
 
@@ -1491,12 +1669,12 @@ export const qaTestExemptionProps = (selectedLocation) => {
       unitId: null,
       monitoringSystemID: "string",
       componentID: "string",
-      year: null,
-      quarter: null,
-      hoursUsed: null,
-      spanScaleCode: null,
-      fuelCode: null,
-      extensionOrExemptionCode: "LOWSYTD",
+      year: 0,
+      quarter: 0,
+      hoursUsed: 0,
+      spanScaleCode: "string",
+      fuelCode: "string",
+      extensionOrExemptionCode: "string",
     },
     dropdownArray: [
       [
@@ -1510,7 +1688,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
       ],
     ],
     columns: [
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
 
       "Year",
       "Quarter",
@@ -1548,7 +1726,7 @@ export const qaTestExemptionProps = (selectedLocation) => {
 
   const locId = selectedLocation.unitId ? "unitId" : "stackPipeId";
   result.controlInputs = {
-    [locId]: ["Unit or Stack Pipe ID", "input", "", ""],
+    [locId]: ["Unit/Stack Pipe ID", "input", "", ""],
     ...result.controlInputs,
   };
   return result;

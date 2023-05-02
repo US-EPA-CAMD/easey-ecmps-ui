@@ -1,4 +1,3 @@
-import { formatDate } from "../../utils/functions";
 
 export const sortByUpdateDate = (a, b) => {
   return new Date(a.updateDate) - new Date(b.updateDate);
@@ -106,12 +105,16 @@ export const formatSubmissionWindow = (window) => {
   return "Closed";
 };
 
+export const formatTimeStamp = (timeStamp) => {
+  const date = new Date(timeStamp);
+  return `${date.getFullYear()}-${(date.getMonth()).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')} ${(date.getHours()).toString().padStart(2, '0')}:${(date.getMinutes()).toString().padStart(2, '0')}`
+}
+
 export const monPlanColumns = [
   {
     name: "ORIS Code",
     selector: "orisCode",
     sortable: true,
-    maxWidth: "100px",
   },
   {
     name: "Facility Name",
@@ -129,10 +132,11 @@ export const monPlanColumns = [
     sortable: true,
   },
   {
-    name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    sortFunction: sortByUpdateDate,
+    wrap: true
+    // sortFunction: sortByUpdateDate,
   },
 ];
 
@@ -141,7 +145,6 @@ export const qaTestSummaryColumns = [
     name: "ORIS Code",
     selector: "orisCode",
     sortable: true,
-    maxWidth: "100px",
   },
   {
     name: "Facility Name",
@@ -154,10 +157,9 @@ export const qaTestSummaryColumns = [
     sortable: true,
   },
   {
-    name: "System / Component ID",
-    selector: "systemComponentIdentifier",
+    name: "System/Component ID",
+    selector: "systemComponentId",
     sortable: true,
-    width: "100px",
   },
   {
     name: "Test Type",
@@ -168,19 +170,27 @@ export const qaTestSummaryColumns = [
     name: "Test Number",
     selector: "testNum",
     sortable: true,
-    width: "200px",
+    width: "180px",
   },
   {
-    name: "Begin Date/Hr/Min",
+    name: "Year/Quarter",
+    selector: "periodAbbreviation",
+    sortFunction: sortByPeriodAbbreviation,
+    sortable: true,
+  },
+  {
+    name: "Begin Date/Time",
     selector: "beginDate",
     sortable: true,
-    sortFunction: sortByBeginDate,
+    // sortFunction: sortByBeginDate,
+    wrap: true
   },
   {
-    name: "End Date/Hr/Min",
+    name: "End Date/Time",
     selector: "endDate",
     sortable: true,
-    sortFunction: sortByEndDate,
+    wrap: true
+    // sortFunction: sortByEndDate,
   },
   {
     name: "Last Modified By",
@@ -188,10 +198,11 @@ export const qaTestSummaryColumns = [
     sortable: true,
   },
   {
-    name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    sortFunction: sortByUpdateDate,
+    wrap: true
+    // sortFunction: sortByUpdateDate,
   },
 ];
 
@@ -200,7 +211,6 @@ export const qaCertEventColumns = [
     name: "ORIS Code",
     selector: "orisCode",
     sortable: true,
-    maxWidth: "100px",
   },
   {
     name: "Facility Name",
@@ -213,22 +223,21 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "System / Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
-    width: "100px",
   },
   {
-    name: "QA Cert Event Code",
+    name: "Event Code",
     selector: "qaCertEventCode",
     sortable: true,
   },
   {
-    name: "QA Cert Event Date/HR",
+    name: "Event Date/Time",
     selector: "eventDate",
     sortable: true,
-    sortFunction: sortByEventDate,
-    width: "200px",
+    // sortFunction: sortByEventDate,
+    wrap: true
   },
   {
     name: "Required Test Code",
@@ -236,16 +245,18 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "Conditional Date/HR",
+    name: "Conditional Date/Time",
     selector: "conditionDate",
     sortable: true,
-    sortFunction: sortByConditionDateHour,
+    wrap: true
+    // sortFunction: sortByConditionDateHour,
   },
   {
-    name: "Completion Date/HR",
+    name: "Completion Date/Time",
     selector: "lastCompletion",
     sortable: true,
-    sortFunction: sortByCompletionDateHour,
+    wrap: true
+    // sortFunction: sortByCompletionDateHour,
   },
   {
     name: "Last Modified By",
@@ -253,10 +264,11 @@ export const qaCertEventColumns = [
     sortable: true,
   },
   {
-    name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    sortFunction: sortByUpdateDate,
+    wrap: true
+    // sortFunction: sortByUpdateDate,
   },
 ];
 
@@ -265,7 +277,6 @@ export const qaTeeColumns = [
     name: "ORIS Code",
     selector: "orisCode",
     sortable: true,
-    maxWidth: "100px",
   },
   {
     name: "Facility Name",
@@ -278,13 +289,12 @@ export const qaTeeColumns = [
     sortable: true,
   },
   {
-    name: "System / Component ID",
+    name: "System/Component ID",
     selector: "systemComponentIdentifier",
     sortable: true,
-    width: "100px",
   },
   {
-    name: "Year / Quarter",
+    name: "Year/Quarter",
     selector: "periodAbbreviation",
     sortFunction: sortByPeriodAbbreviation,
     sortable: true,
@@ -295,7 +305,7 @@ export const qaTeeColumns = [
     sortable: true,
   },
   {
-    name: "Extension / Exemption Code",
+    name: "Extension/ Exemption Code",
     selector: "extensExemptCode",
     sortable: true,
   },
@@ -315,10 +325,11 @@ export const qaTeeColumns = [
     sortable: true,
   },
   {
-    name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    sortFunction: sortByUpdateDate,
+    wrap: true
+    // sortFunction: sortByUpdateDate,
   },
 ];
 
@@ -340,7 +351,7 @@ export const emissionsColumns = [
     sortable: true,
   },
   {
-    name: "Year / Quarter",
+    name: "Year/Quarter",
     selector: "periodAbbreviation",
     sortFunction: sortByPeriodAbbreviation,
     sortable: true,
@@ -351,10 +362,11 @@ export const emissionsColumns = [
     sortable: true,
   },
   {
-    name: "Last Modified Date",
-    selector: (row) => formatDate(row.updateDate),
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    sortFunction: sortByUpdateDate,
+    wrap: true
+    // sortFunction: sortByUpdateDate,
   },
   {
     name: "Submission Window",

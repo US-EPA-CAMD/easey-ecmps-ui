@@ -38,7 +38,9 @@ export const EvaluateAndSubmit = ({
   user,
   componentType,
 }) => {
-  const {content: waitTimeData} = useGetContent("/ecmps/workspace/evaluate-submit/wait-time.json");
+  const { content: waitTimeData } = useGetContent(
+    "/ecmps/workspace/evaluate-submit/wait-time.json"
+  );
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
@@ -149,7 +151,7 @@ export const EvaluateAndSubmit = ({
   };
 
   const idToPermissionsMap = useRef(new Map());
-  const userPermissions = user.permissions?.facilities || [];
+  const userPermissions = user.facilities || [];
   const populateDropdown = async () => {
     setDropdownFacilities(await getDropDownFacilities());
   };
@@ -157,11 +159,13 @@ export const EvaluateAndSubmit = ({
     // Get permissions from user object here
     populateDropdown();
     for (const p of userPermissions) {
-      idToPermissionsMap.current.set(p.id, p.permissions);
+      idToPermissionsMap.current.set(p.orisCode, p.permissions);
     }
     return () => {
       checkInAllCheckedOutLocations();
-    }; //eslint-disable-next-line
+    };
+
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -185,7 +189,7 @@ export const EvaluateAndSubmit = ({
         }
       }
       cat.setState(_.cloneDeep(cat.ref.current));
-    }//eslint-disable-next-line react-hooks/exhaustive-deps
+    } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedOutLocations, userId]);
 
   const filterClick = () => {
@@ -339,7 +343,9 @@ export const EvaluateAndSubmit = ({
 
   const checkInAllCheckedOutLocations = () => {
     for (let [key, value] of monitorPlanIdToSelectedMap.current) {
-      if (value[1] > 0) {
+      getUserPlans();
+      // doesnt check in any configuration that the current user has checked out via UI 
+      if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
         checkoutAPI(false, value[0], key);
       }
     }
@@ -411,7 +417,9 @@ export const EvaluateAndSubmit = ({
       }
 
       if (componentType === "Submission") {
-        data = data.filter(d => idToPermissionsMap.current.get(d.orisCode)?.includes("DS"+type))
+        data = data.filter((d) =>
+          idToPermissionsMap.current.get(d.orisCode)?.includes("DS" + type)
+        );
       }
       ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
       setState(data);
@@ -434,7 +442,14 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData?.displayAlert && <Alert className="margin-y-2" type="info" heading={waitTimeData?.title} children={waitTimeData?.content} />}
+      {waitTimeData?.displayAlert && (
+        <Alert
+          className="margin-y-2"
+          type="info"
+          heading={waitTimeData?.title}
+          children={waitTimeData?.content}
+        />
+      )}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">
@@ -517,7 +532,7 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {/* {finalSubmitStage && (
+        {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -527,7 +542,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )} */}
+        )}
       </div>
     </div>
   );

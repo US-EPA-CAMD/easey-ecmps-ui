@@ -19,7 +19,6 @@ import Resources from "../Resources/Resources";
 
 import HelpSupport from "../HelpSupport/HelpSupport";
 import "./App.scss";
-import InactivityTracker from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
 import {
   assignFocusEventListeners,
@@ -36,9 +35,10 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
+import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
 
-const cdx_user = sessionStorage.getItem("cdx_user");
+const ecmps_user = localStorage.getItem("ecmps_user");
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -69,7 +69,10 @@ const App = () => {
     if (user) {
       return setInterval(async () => {
         const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (checkedOutLocationResult && !isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
+        if (
+          checkedOutLocationResult &&
+          !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
+        ) {
           dispatch({
             type: types.SET_CHECKED_OUT_LOCATIONS,
             checkedOutLocations: checkedOutLocationResult,
@@ -82,10 +85,15 @@ const App = () => {
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
-    return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => clearInterval(interval); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
+    window.addEventListener("storage", (event) => {
+      if (event.key === "ecmps_user") {
+        window.location.reload();
+      }
+    });
     prepDocument();
   }, []);
 
@@ -104,11 +112,28 @@ const App = () => {
   });
 
   useEffect(() => {
-    const cdxUser = sessionStorage.getItem("cdx_user")
-      ? JSON.parse(sessionStorage.getItem("cdx_user"))
+    let ecmpsUser = localStorage.getItem("ecmps_user")
+      ? JSON.parse(localStorage.getItem("ecmps_user"))
       : false;
 
-    setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
+    if (ecmpsUser) {
+      //Determine if we still have a valid session given a user exists
+
+      if (localStorage.getItem("ecmps_session_expiration")) {
+        if (
+          new Date() >
+          new Date(localStorage.getItem("ecmps_session_expiration"))
+        ) {
+          localStorage.removeItem("ecmps_user");
+          ecmpsUser = false;
+        }
+      } else {
+        localStorage.removeItem("ecmps_user");
+        ecmpsUser = false;
+      }
+    }
+
+    setUser(ecmpsUser && ecmpsUser.firstName ? ecmpsUser : false);
 
     assignFocusEventListeners();
     handleActiveElementFocus();
@@ -141,11 +166,7 @@ const App = () => {
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
       <Switch>
-      <Route
-          path="/reports"
-          exact
-          component={() => <ReportGenerator />}
-        />
+        <Route path="/reports" exact component={() => <ReportGenerator />} />
         <Route
           path="/workspace/reports"
           exact
@@ -167,7 +188,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!cdx_user && <Redirect from="/workspace/submit" to="/home" />}
+            {!ecmps_user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
               path="/workspace/submit"
               exact
@@ -176,7 +197,7 @@ const App = () => {
               )}
             />
 
-            {!cdx_user && <Redirect from="/workspace/evaluate" to="/home" />}
+            {!ecmps_user && <Redirect from="/workspace/evaluate" to="/home" />}
             <Route
               path="/workspace/evaluate"
               exact
@@ -259,7 +280,7 @@ const App = () => {
               <Redirect from="/workspace/qa-qce-tee" to="/qa-qce-tee" />
             )}
             <Route
-              path="/qa-cert-event"
+              path="/qa-qce-tee"
               exact
               component={() => (
                 <MonitoringPlanHome
@@ -269,7 +290,7 @@ const App = () => {
               )}
             />
             <Route
-              path="/workspace/qa-cert-event"
+              path="/workspace/qa-qce-tee"
               exact
               component={() => (
                 <MonitoringPlanHome
@@ -306,6 +327,10 @@ const App = () => {
               exact
               component={() => (
                 <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
                 />
@@ -332,13 +357,17 @@ const App = () => {
               exact
               component={() => (
                 <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )}
             />
 
-            {!cdx_user && (
+            {!ecmps_user && (
               <Redirect from="/workspace/error-suppression" to="/home" />
             )}
             <Route

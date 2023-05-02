@@ -58,8 +58,8 @@ describe("testing monitoring plan data selectors", () => {
         col6: "RECT",
         col7: "600",
         col8: "517",
-        col9: "1995/01/01",
-        col10: "1995/01/01",
+        col9: "1995-01-01",
+        col10: "1995-01-01",
         col11: "MDC-B8C0FC059D434C1FB0878FF68505C406",
       },
       {
@@ -107,8 +107,8 @@ describe("testing monitoring plan data selectors", () => {
       {
         col1: "CS0AAN",
         col2: "1",
-        col3: "1995/01/01",
-        col4: "1995/01/01",
+        col3: "1995-01-01",
+        col4: "1995-01-01",
         col5: "CAMD-18DD175CE7EF4256B78469865D84F576",
       },
       {

@@ -116,13 +116,13 @@ describe("testing monitoring plan data selectors", () => {
       {
         col1: "PNG",
         col2: "GAS",
-        col3: "2019/07/01: 00 ➜ 2019/07/01: 00",
+        col3: "2019-07-01 00:00 ➜ 2019-07-01 00:00",
         col4: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
       },
       {
         col1: "PNG",
         col2: "GAS",
-        col3: ":  ➜ Present",
+        col3: "➜",
         col4: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
       },
     ];
@@ -130,13 +130,13 @@ describe("testing monitoring plan data selectors", () => {
       {
         col1: "AFA",
         col2: "GFFM",
-        col3: "2019/07/01: 00 ➜ 2019/07/01: 00",
+        col3: "2019-07-01 00:00 ➜ 2019-07-01 00:00",
         col4: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       },
       {
         col1: "AFA",
         col2: "GFFM",
-        col3: ":  ➜ Present",
+        col3: "➜",
         col4: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       },
     ];
@@ -146,8 +146,8 @@ describe("testing monitoring plan data selectors", () => {
         col2: "GAS",
         col3: "P",
         col4: "PNG",
-        col5: "2019/07/01 00",
-        col6: "2019/07/01 00",
+        col5: "2019-07-01 00:00",
+        col6: "2019-07-01 00:00",
         col7: "TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D",
       },
       {
@@ -187,12 +187,12 @@ describe("testing monitoring plan data selectors", () => {
   let monitoringSystemsRangesTableRecods = [
     {
       col1: "A",
-      col2: "2021/12/04: 01 ➜ 2021/12/18: 01",
+      col2: "2021-12-04 01:00 ➜ 2021-12-18 01:00",
       col3: "a2fe117e-bfa9-411e-9187-d16fcc09dfdd",
     },
     {
       col1: "A",
-      col2: ":  ➜ Present",
+      col2: "➜",
       col3: "db7f92f9-e79b-4a23-af83-8492a8d920cb",
     },
   ];

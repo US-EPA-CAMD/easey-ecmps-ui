@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react";
+import React from "react";
 
 import Modal from "../../Modal/Modal";
 import "./DeactivateNotificationModal.scss"

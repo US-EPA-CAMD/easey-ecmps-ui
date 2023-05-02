@@ -156,7 +156,7 @@ export const SubmissionModal = ({
       setLoading(true);
 
       try {
-        const user = JSON.parse(sessionStorage.getItem("cdx_user"));
+        const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
         const result = await credentialsAuth({
           userId: username,
@@ -400,7 +400,7 @@ export const SubmissionModal = ({
                           }}
                         />
 
-                        { enablePhoneVerification && (
+                        {enablePhoneVerification && (
                           <Radio
                             className="grid-col-12 margin-bottom-1"
                             id={`text-radio-button`}

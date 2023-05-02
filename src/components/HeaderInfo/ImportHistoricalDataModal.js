@@ -13,6 +13,7 @@ export const ImportHistoricalDataModal = ({
   setFinishedLoading,
   importedFileErrorMsgs,
   setImportedFileErrorMsgs,
+  workspaceSectionName
 }) => {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
@@ -37,11 +38,11 @@ export const ImportHistoricalDataModal = ({
       .then(({ data: importResponse, status }) => {
         if (status === 201) {
           setImportedFileErrorMsgs([]);
-        } else if (importResponse?.message)
+        } else if (importResponse?.message) {
           setImportedFileErrorMsgs(
             importResponse?.message?.split(",") || [`HTTP ${status} Error`]
           );
-        else {
+        } else {
           setImportedFileErrorMsgs([`HTTP ${status} Error`]);
         }
       })
@@ -64,18 +65,17 @@ export const ImportHistoricalDataModal = ({
     <UploadModal
       port={historicalImport}
       show={true}
-      title="Import Historical Data"
+      title={`Import Historical ${workspaceSectionName} Data`}
       close={closeModalHandler}
       showCancel={true}
       showSeparators={true}
       importedFileErrorMsgs={importedFileErrorMsgs}
-      successMsg={"Emissions historical Data has been successfully imported"}
+      successMsg={`${workspaceSectionName} historical Data has been successfully imported`}
       width={"600px"}
     >
       <ReportingPeriodSelector
         isExport={false}
         reportingPeriodSelectionHandler={setYearAndQuarter}
-        setLoading={false}
         getInitSelection={setYearAndQuarter}
       />
     </UploadModal>

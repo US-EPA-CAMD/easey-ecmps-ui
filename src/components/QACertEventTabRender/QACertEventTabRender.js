@@ -24,6 +24,7 @@ export const QACertEventTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
   useEffect(() => {
     setSectionSelect([0, "QA Certification Event"]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className=" padding-top-0">
@@ -56,9 +57,12 @@ export const QACertEventTabRender = ({
           stackPipeId: locations[locationSelect[0]]["stackPipeId"],
           unitId: locations[locationSelect[0]]["unitId"],
         }}
+        orisCode={orisCode}
         locations={locations}
         selectedTestCode={selectedTestCode}
         isCheckedOut={checkoutState}
+        updateTable={updateRelatedTables}
+        setUpdateTable={setUpdateRelatedTables}
       />
     </div>
   );

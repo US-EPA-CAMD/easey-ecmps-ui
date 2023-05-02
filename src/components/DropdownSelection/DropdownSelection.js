@@ -8,6 +8,7 @@ export const DropdownSelection = ({
   selectionHandler, // needs to setState with [0] for the index, to change dropdown
   initialSelection, // needs useState to change the dropdown
   workspaceSection,
+  changeFunc, // extra function that gets called inside handleChange, passing in the val of the dropdown
 }) => {
   const getIndex = (val) => {
     return options.findIndex((obj) => obj[selectKey] === val);
@@ -20,6 +21,9 @@ export const DropdownSelection = ({
           workspaceSection
         )
       : selectionHandler([getIndex(val.target.value), val.target.value]);
+
+    if( changeFunc && changeFunc instanceof Function)
+        changeFunc(val);
   };
 
   const populateOptions = (optionsList) => {

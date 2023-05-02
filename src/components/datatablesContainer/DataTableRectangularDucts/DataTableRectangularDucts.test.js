@@ -30,8 +30,8 @@ const payload = {
   userId: "string",
   addDate: "2021-10-18T07:24:08.777Z",
   updateDate: "2021-10-18T07:24:08.777Z",
-  wafDeterminationDate: "2021-10-18T07:24:08.777Z",
-  wafBeginDate: "2021-10-18T07:24:08.777Z",
+  wafDeterminationDate: "2021-10-18",
+  wafBeginDate: "2021-10-18",
   wafBeginHour: 0,
   wafMethodCode: "string",
   wafValue: 0,
@@ -41,7 +41,7 @@ const payload = {
   numberOfTraversePointsRef: 0,
   ductWidth: 0,
   ductDepth: 0,
-  wafEndDate: "2021-10-18T07:24:08.777Z",
+  wafEndDate: "2021-10-18",
   wafEndHour: 0,
 };
 

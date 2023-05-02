@@ -53,20 +53,20 @@ describe("testing monitoring plan data selectors", () => {
     monitoringQualificationsTableRecods = [
       {
         col1: "PK",
-        col2: "2006/01/01",
+        col2: "2006-01-01",
         col3: "",
         col4: "CAMD-543ABF5EB72647E5A693F99BF24D2FB9",
       },
       {
         col1: "GF",
         col2: "",
-        col3: "2009/01/01",
+        col3: "2009-01-01",
         col4: "EP-CONTROL-3AC36B6D87C34A01A07097FC611F020C",
       },
       {
         col1: "PK",
-        col2: "2000/01/01",
-        col3: "2005/12/31",
+        col2: "2000-01-01",
+        col3: "2005-12-31",
         col4: "EP-CONTROL-F9384183CDDF4104AEDEB1855D375ECD",
       },
     ];

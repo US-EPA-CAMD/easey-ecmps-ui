@@ -1,4 +1,4 @@
-import { formatDateString } from "../functions";
+import { validateDate } from "../functions";
 
 export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
   const data = totalData;
@@ -19,8 +19,8 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
       bypassIndicator = "No";
     }
 
-    const beginDate = formatDateString(el.beginDate);
-    const endDate = formatDateString(el.endDate);
+    const beginDate = validateDate(el.beginDate);
+    const endDate = validateDate(el.endDate);
     records.push({
       col1: ductIndicator,
       col2: bypassIndicator,
@@ -30,8 +30,8 @@ export const getMonitoringPlansLocationAttributeRecords = (totalData) => {
       col6: el.shapeCode,
       col7: el.crossAreaFlow,
       col8: el.crossAreaStackExit,
-      col9: `${beginDate}`,
-      col10: `${endDate}`,
+      col9: beginDate,
+      col10: endDate,
       col11: el.id,
     });
   });
@@ -44,14 +44,14 @@ export const getMonitoringPlansRelationshipsDataRecords = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = formatDateString(el.beginDate);
-    const endDate = formatDateString(el.endDate);
+    const beginDate = validateDate(el.beginDate);
+    const endDate = validateDate(el.endDate);
 
     records.push({
       col1: el.stackPipeId,
       col2: el.unitId,
-      col3: `${beginDate}`,
-      col4: `${endDate}`,
+      col3: beginDate,
+      col4: endDate,
       col5: el.id,
     });
   });

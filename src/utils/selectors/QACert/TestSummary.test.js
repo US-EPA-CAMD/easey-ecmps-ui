@@ -7,7 +7,7 @@ describe("testing TestSummary data selectors", () => {
   test("getTestSummary", () => {
     const cols = [
       "Test Type Code",
-      "Unit or Stack Pipe ID",
+      "Unit/Stack Pipe ID",
       "Component ID",
       "Test Number",
       "Test Reason Code",
@@ -30,7 +30,7 @@ describe("testing TestSummary data selectors", () => {
         testReasonCode: "DIAG",
         testDescription: null,
         testResultCode: "ABORTED",
-        endDate: "2022-10-01 2:2",
+        endDate: "2022-10-01 02:02",
         // endHour: 2,
         // endMinute: 2,
       },
@@ -47,7 +47,7 @@ describe("testing TestSummary data selectors", () => {
         testReasonCode: "DIAG",
         testDescription: null,
         testResultCode: "ABORTED",
-        endDate: "2022-10-01 2:2",
+        endDate: "2022-10-01 02:02",
         // endHour: 2,
         // endMinute: 2,
       },
@@ -77,7 +77,7 @@ describe("testing TestSummary data selectors", () => {
         col4: "412343",
         col5: "DIAG",
         col6: "ABORTED",
-        col7: "2022/10/01 2:2 ",
+        col7: "2022-10-01 02:02",
         // col8: 2,
         // col9: 2,
         id: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
@@ -90,7 +90,7 @@ describe("testing TestSummary data selectors", () => {
         col4: "412343",
         col5: "DIAG",
         col6: "ABORTED",
-        col7: "2022/10/01 2:2 ",
+        col7: "2022-10-01 02:02",
         // col8: 2,
         // col9: 2,
         id: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
@@ -103,7 +103,7 @@ describe("testing TestSummary data selectors", () => {
         col4: "412343",
         col5: "DIAG",
         col6: "ABORTED",
-        col7: "",
+        col7: null,
         // col8: "",
         // col9: "",
         id: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
@@ -200,7 +200,7 @@ describe("testing TestSummary data selectors", () => {
         col2: "ZERO",
         col3: "Cy",
         col4: "Ven",
-        col5: "2022/10/01",
+        col5: "2022-10-01",
         id: "a2a7f0ea-53af-46fd-8f1e-ca922b069aa5",
         testSumId: "3ee84634-7dc4-45c8-8eee-ca79e699893a",
       },
@@ -250,7 +250,7 @@ describe("testing TestSummary data selectors", () => {
         aetbName: "string",
         aetbPhoneNumber: "string",
         aetbEmail: "string",
-        examDate: "10/01/2022",
+        examDate: "10-01-2022",
         providerName: "testName",
         providerEmail: "string",
       },
@@ -263,7 +263,7 @@ describe("testing TestSummary data selectors", () => {
         col4: "string",
         col5: "string",
         col6: "string",
-        col7: "10/01/2022",
+        col7: "10-01-2022",
         col8: "testName",
         col9: "string",
         id: "2b2adedb-24eb-4325-8ad4-37c342f67a37",
@@ -288,8 +288,8 @@ describe("testing TestSummary data selectors", () => {
     const records = [
       {
         col1: "NLE",
-        col2: "2022/10/01",
-        col3: "2022/10/01",
+        col2: "2022-10-01",
+        col3: "2022-10-01",
         col4: 3,
         col5: 3,
         col6: 3,
@@ -493,6 +493,27 @@ describe("testing TestSummary data selectors", () => {
     ];
     expect(fs.mapAppendixECorrHeatInputOilToRows(data)).toEqual(records);
   });
+  test("mapAppendixECorrHeatInputGasToRows", () => {
+    const data = [
+      {
+        id: "0000120",
+        monitoringSystemID: '100',
+        gasGCV: 1,
+        gasVolume: 1,
+        gasHeatInput: 1,
+      },
+    ];
+    const records = [
+      {
+        id: '0000120',
+        col1: '100',
+        col2: 1,
+        col3: 1,
+        col4: 1,
+      },
+    ];
+    expect(fs.mapAppendixECorrHeatInputGasToRows(data)).toEqual(records);
+  });
   test("mapFuelFlowmeterAccuracyDataToRows", () => {
     const data = [
       {
@@ -501,7 +522,7 @@ describe("testing TestSummary data selectors", () => {
         lowFuelAccuracy: 1,
         midFuelAccuracy: 1,
         highFuelAccuracy: 1,
-        reinstallationDate: "2022-10-01",
+        reinstallationDate: "2022-01-10",
         reinstallationHour: 1,
       },
     ];
@@ -512,7 +533,7 @@ describe("testing TestSummary data selectors", () => {
         col2: 1,
         col3: 1,
         col4: 1,
-        col5: "10/1/2022",
+        col5: "2022-01-10",
         col6: 1,
       },
     ];
@@ -565,5 +586,58 @@ describe("testing TestSummary data selectors", () => {
       },
     ];
     expect(fs.mapHgSummaryDataToRows(data)).toEqual(records);
+  });
+  test("mapCycleTimeInjectionsToRows", () => {
+    const data = [
+      {
+        id: "ab681a06-0fd9-4d30-a208-421bcd62a554",
+        gasLevelCode: "HIGH",
+        calibrationGasValue: 1.000,
+        beginDate: "2008-10-14",
+        beginHour: 4,
+        beginMinute: 6,
+        endDate: "2008-10-14",
+        endHour: 8,
+        endMinute: 10,
+        injectionCycleTime: 12,
+        beginMonitorValue: 0.000,
+        endMonitorValue: 400.678
+      },
+    ];
+    const records = [
+      {
+        id: 'ab681a06-0fd9-4d30-a208-421bcd62a554',
+        col1: "HIGH",
+        col2: 1,
+        col3: "2008-10-14 04:06",
+        col4: "2008-10-14 08:10",
+        col5: 12,
+        col6: 0,
+        col7: 400.678
+      },
+    ];
+    expect(fs.mapCycleTimeInjectionsToRows(data)).toEqual(records);
+  });
+  test("getLinearityInjection", () => {
+    const data = [
+      {
+        id: "ab681a06-0fd9-4d30-a208-421bcd62a554",
+        linSumId: "668a63e8-6491-4d13-9594-e0e4ad830b82",
+        injectionDate: "2022-08-01",
+        injectionHour: 9,
+        injectionMinute: 9,
+        measuredValue: 1.001,
+        referenceValue: 1,
+      },
+    ];
+    const records = [
+      {
+        id: 'ab681a06-0fd9-4d30-a208-421bcd62a554',
+        col1: "2022-08-01 09:09",
+        col2:  1.001,
+        col3: 1,
+      },
+    ];
+    expect(fs.getLinearityInjection(data)).toEqual(records);
   });
 });

@@ -163,7 +163,7 @@ export const modalViewData = (
               labels,
               inputs[y][2] === "required" ? "required" : false,
               "nonFilteredDropdown",
-              createNew ? (!selected || selected === {} ? "select" : selected.locationName) : (selected ? selected[y] : ""),
+              createNew ? "select" : selected ? selected[y] : "",
               totalOptionsClone ? totalOptionsClone[y] : [],
             ]);
             break;

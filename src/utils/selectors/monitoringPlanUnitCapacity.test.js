@@ -33,14 +33,14 @@ describe("testing unit controls data selectors", () => {
 
     unitCapacitiesTableRecords = [
       {
-        col1: "1954/02/12",
-        col2: "1954/02/11",
+        col1: "1954-02-12",
+        col2: "1954-02-11",
         col3: "T",
-        col4: "1954/02/11",
-        col5: "1954/02/11",
+        col4: "1954-02-11",
+        col5: "1954-02-11",
         col6: "2322.0",
-        col7: "2002/10/31",
-        col8: "2002/10/31",
+        col7: "2002-10-31",
+        col8: "2002-10-31",
         col9: "30334",
       },
 

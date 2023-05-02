@@ -1,6 +1,6 @@
 /*********** FUNCTIONS / HOOKS / PLUGINS ***********/
 // *** 3rd party
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // *** local
 import { config, oneSecond } from "../../config";
@@ -89,6 +89,11 @@ export const DataTableRender = ({
       addScreenReaderLabelForCollapses();
     };
   }, []);
+
+  const storeActiveElementAndCallOpenHandler = (...args) => {
+    window.openModalBtn = document.activeElement;
+    return openHandler(...args);
+  }
   useEffect(() => {
     if (openAndCheckoutBTNFocus) {
       setTimeout(() => {
@@ -130,9 +135,9 @@ export const DataTableRender = ({
         .map((location) => location["monPlanId"])
         .indexOf(monitoringPlanId) > -1 &&
       checkedOutLocations[
-        checkedOutLocations
-          .map((location) => location["monPlanId"])
-          .indexOf(monitoringPlanId)
+      checkedOutLocations
+        .map((location) => location["monPlanId"])
+        .indexOf(monitoringPlanId)
       ]["checkedOutBy"] === user["userId"]
     ) {
       result = true;
@@ -247,13 +252,13 @@ export const DataTableRender = ({
                       type="button"
                       unstyled="true"
                       epa-testid="btnOpen"
-                      className="cursor-pointer open-modal-button"
+                      className="cursor-pointer open-modal-button text-no-wrap"
                       id={
                         tableTitle
                           ? `btnOpen${tableTitle.split(" ").join("")}`
                           : `btnOpen`
                       }
-                      onClick={() => openHandler(normalizedRow, false, false)}
+                      onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, false, false)}
                       aria-label={`open ${row["col1"]} in a new tab`}
                     >
                       {"Open"}
@@ -262,55 +267,55 @@ export const DataTableRender = ({
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
                     {workspaceSection !== EXPORT_STORE_NAME &&
-                    isAnyLocationCheckedOutByUser() === false &&
-                    isLocationCheckedOut(row["facId"]) === false &&
-                    row["col2"] === "Active" ? (
+                      isAnyLocationCheckedOutByUser() === false &&
+                      isLocationCheckedOut(row["facId"]) === false &&
+                      row["col2"] === "Active" ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
                           type="button"
                           unstyled="true"
                           epa-testid="btnOpenAndCheckout"
-                          className="cursor-pointer open-modal-button"
+                          className="cursor-pointer open-modal-button text-no-wrap"
                           id={
                             tableTitle
                               ? `btnOpenAndCheckout${tableTitle
-                                  .split(" ")
-                                  .join("")}`
+                                .split(" ")
+                                .join("")}`
                               : `btnOpenAndCheckout`
                           }
-                          onClick={() => openHandler(normalizedRow, true)}
+                          onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, true)}
                           aria-label={`open and checkout ${row.col1} in a new tab`}
                         >
                           {"Open & Checkout"}
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                    workspaceSection !== EXPORT_STORE_NAME &&
-                      isCurrentlyCheckedOutByUser(row.col3) === true ? (
-                      <>
-                        <span className="margin-x-1">|</span>
-                        <Button
-                          type="button"
-                          unstyled="true"
-                          epa-testid="btnCheckBackIn"
-                          className="cursor-pointer open-modal-button"
-                          id={
-                            tableTitle
-                              ? `btnCheckBackIn${tableTitle
+                      workspaceSection !== EXPORT_STORE_NAME &&
+                        isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                        <>
+                          <span className="margin-x-1">|</span>
+                          <Button
+                            type="button"
+                            unstyled="true"
+                            epa-testid="btnCheckBackIn"
+                            className="cursor-pointer open-modal-button text-no-wrap"
+                            id={
+                              tableTitle
+                                ? `btnCheckBackIn${tableTitle
                                   .split(" ")
                                   .join("")}`
-                              : `btnCheckBackIn`
-                          }
-                          onClick={() =>
-                            openHandler(normalizedRow, false, true)
-                          }
-                          aria-label={`check back in ${row.col1} `}
-                        >
-                          {"Check Back In"}
-                        </Button>
-                      </>
-                    ) : null}
+                                : `btnCheckBackIn`
+                            }
+                            onClick={() =>
+                              storeActiveElementAndCallOpenHandler(normalizedRow, false, true)
+                            }
+                            aria-label={`check back in ${row.col1} `}
+                          >
+                            {"Check Back In"}
+                          </Button>
+                        </>
+                      ) : null}
                   </div>
                 ) : (
                   <div></div>
@@ -326,9 +331,9 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button"
+                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={`Open ${row.col1} in a new tab`}
                 >
@@ -357,7 +362,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
-                  className="cursor-pointer open-modal-button"
+                  className="cursor-pointer open-modal-button text-no-wrap"
                   id={
                     // tableTitle
                     //   ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -365,7 +370,7 @@ export const DataTableRender = ({
                     `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={
                     checkout
@@ -387,9 +392,9 @@ export const DataTableRender = ({
                     // :
                     `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button"
+                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={`View ${row.col1}`}
                 >
@@ -479,11 +484,10 @@ export const DataTableRender = ({
           <div>
             {tableTitle ? (
               <h4
-                className={`margin-top-5 text-bold ${
-                  tableStyling
+                className={`margin-top-5 text-bold ${tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
                     : "mobile:font-body-xl mobile:text-bold"
-                }`}
+                  }`}
               >
                 {tableTitle}
               </h4>
@@ -558,11 +562,10 @@ export const DataTableRender = ({
         ) : dataLoaded && data.length === 0 ? (
           <div>
             <h4
-              className={`margin-top-5 text-bold ${
-                tableStyling
+              className={`margin-top-5 text-bold ${tableStyling
                   ? "mobile:font-body-md mobile:text-bold"
                   : "mobile:font-body-xl mobile:text-bold"
-              }`}
+                }`}
             >
               {tableTitle}
             </h4>

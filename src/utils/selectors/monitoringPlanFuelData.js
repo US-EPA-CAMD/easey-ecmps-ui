@@ -1,13 +1,10 @@
-import { formatDateString } from "../functions";
+import { validateDate } from "../functions";
 
 export const getMonitoringPlansFuelDataRecords = (totalData) => {
   const data = totalData;
   const records = [];
 
   data.forEach((el) => {
-    const beginDate = formatDateString(el.beginDate);
-    const endDate = formatDateString(el.endDate);
-
     const ozoneSeasonIndicator = el.ozoneSeasonIndicator === 1 ? "Yes" : "No";
 
     records.push({
@@ -16,8 +13,8 @@ export const getMonitoringPlansFuelDataRecords = (totalData) => {
       col3: `${ozoneSeasonIndicator}`,
       col4: el.demGCV,
       col5: el.demSO2,
-      col6: `${beginDate}`,
-      col7: `${endDate}`,
+      col6: validateDate(el.beginDate),
+      col7: validateDate(el.endDate),
       col8: el.id,
     });
   });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
-import { checkingCorrectSchema, formatSchemaErrors } from "./import-functions";
+import { checkingCorrectSchema } from "./import-functions";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
@@ -90,50 +90,6 @@ const ImportModal = ({
       setDisablePortBtn(false);
     }
   };
-  // const checkingCorrectSchema = (file,workspace ,errorChecks,setSchemaErrors) => {
-  //   var Validator = require("jsonschema").Validator;
-  //   var v = new Validator();
-  //   switch (workspace) {
-  //     case MONITORING_PLAN_STORE_NAME:
-  //       // correct schema
-  //       if (v.validate(file, mpSchema).valid) {
-  //         errorChecks(false);
-  //         // correct schema, just errors
-  //       } else {
-  //         errorChecks(true);
-  //         formatSchemaErrors(v.validate(file, mpSchema),setSchemaErrors);
-  //       } // incorrect schema with section
-  //       if (!file.unitStackConfigurations) {
-  //         errorChecks(true);
-  //         setSchemaErrors(["Only Monitoring Plan (MP) files may be imported"]);
-  //       }
-  //       break;
-  //     case QA_CERT_TEST_SUMMARY_STORE_NAME:
-  //       // correct schema
-  //       if (v.validate(file, qaSchema).valid) {
-  //         errorChecks(false);
-  //         // correct schema, just errors
-  //       } else {
-  //         errorChecks(true);
-  //         formatSchemaErrors(v.validate(file, qaSchema),setSchemaErrors);
-  //       } // incorrect schema with section
-  //       if (!file.testSummaryData) {
-  //         errorChecks(true);
-  //         setSchemaErrors(["Only QA Test Data files may be imported"]);
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
-  // const formatSchemaErrors = (errors,setSchemaErrors) => {
-  //   setDisablePortBtn(true);
-  //   const formattedErrors = errors.errors.map((error) => {
-  //     console.log(error, "file errors");
-  //     return error.stack;
-  //   });
-  //   setSchemaErrors(formattedErrors);
-  // };
   const readFile = (event) => {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
@@ -172,54 +128,62 @@ const ImportModal = ({
     }
   };
 
-  return (
-    <div className="import-modal-container">
-      {complete &&
-      importedFileErrorMsgs !== undefined &&
-      importedFileErrorMsgs !== null &&
-      successResponses.includes(importedFileErrorMsgs.status) ? (
-        <span id="fileName">{fileName}</span>
-      ) : complete && importedFileErrorMsgs?.length > 0 ? (
-        <div className="overflow-y-auto maxh-mobile">
-          <div className="padding-right-2 padding-left-3 " aria-live="polite">
-            {" "}
-            {importedFileErrorMsgs.map((error, i) => (
-              <Alert
-                type="error"
-                slim
-                noIcon
-                key={`${i}-${error}`}
-                role="alert"
-              >
-                {error}
-              </Alert>
-            ))}
-          </div>
+  let content;
+  if (complete && importedFileErrorMsgs !== undefined && importedFileErrorMsgs !== null && successResponses.includes(importedFileErrorMsgs.status)) {
+    // file import was successful
+    content = <span id="fileName">{fileName}</span>;
+  } else if (complete && importedFileErrorMsgs?.length > 0) {
+    // error importing file
+    content = (
+      <div className="overflow-y-auto maxh-mobile">
+        <div className="padding-right-2 padding-left-3 " aria-live="polite">
+          {Array.isArray(importedFileErrorMsgs) ?
+          importedFileErrorMsgs.map((error, i) => (
+            <Alert
+              type="error"
+              slim
+              noIcon
+              key={`${i}-${error}`}
+              role="alert"
+            >
+              {error}
+            </Alert>
+          )):
+            <Alert
+              type="error"
+              slim
+              noIcon
+              key={`1-${importedFileErrorMsgs}`}
+              role="alert"
+            >
+              {importedFileErrorMsgs}
+            </Alert>
+          }
         </div>
-      ) : (
-        <div>
-          {schemaErrors.length > 0 ? (
-            <div className="overflow-y-auto maxh-mobile">
-              <div
-                className="padding-right-2 padding-left-3 "
-                aria-live="polite"
-              >
-                {schemaErrors.map((error, i) => (
-                  <Alert
-                    type="error"
-                    slim
-                    noIcon
-                    key={`${i}-${error}`}
-                    role="alert"
-                  >
-                    {error}
-                  </Alert>
-                ))}
-              </div>
+      </div>
+    );
+  } else {
+    content = (
+      <div>
+        {schemaErrors.length > 0 &&
+          <div className="overflow-y-auto maxh-mobile">
+            <div className="padding-right-2 padding-left-3 " aria-live="polite">
+              {schemaErrors.map((error, i) => (
+                <Alert
+                  type="error"
+                  slim
+                  noIcon
+                  key={`${i}-${error}`}
+                  role="alert"
+                >
+                  {error}
+                </Alert>
+              ))}
             </div>
-          ) : (
-            ""
-          )}
+          </div>
+        }
+        {/* show file picker if import process not complete */}
+        {!complete &&
           <FormGroup>
             <Label htmlFor="file-input-single">{label}</Label>
             <FileInput
@@ -228,9 +192,14 @@ const ImportModal = ({
               onChange={onChangeHandler}
             />
           </FormGroup>
-        </div>
-      )}
-      {/* need to center in modal */}
+        }
+      </div>
+    );
+  }
+
+  return (
+    <div className="import-modal-container">
+      {content}
     </div>
   );
 };

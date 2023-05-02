@@ -7,6 +7,7 @@ import { getContent } from "../../utils/api/contentApi";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
+import { resetTabOrder } from "../../utils/functions";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
@@ -38,6 +39,10 @@ const AboutHome = ({ user, setCurrentLink }) => {
 
   const handleRouteChange = (event, url) => {
     setCurrentLink(url);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      resetTabOrder();
+    });
   };
 
   return (
@@ -107,14 +112,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
           className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
-          to="/qa_certifications"
+          to="/qa-test"
           role="link"
           exact="true"
           rel="QA & Certifications"
           title="Go to QA & Certifications page"
-          key="qa-certifications"
+          key="qa-test"
           id="qaCertificationsBtn"
-          onClick={(event) => handleRouteChange(event, "/qa_certifications")}
+          onClick={(event) => handleRouteChange(event, "/qa-test")}
         >
           View QA & Certifications
         </USWDSLink>
@@ -137,14 +142,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
           className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
-          to="/emission"
+          to="/emissions"
           role="link"
           exact="true"
           rel="Emissions"
           title="Go to Emissions page"
           key="emissions"
           id="emissionsBtn"
-          onClick={(event) => handleRouteChange(event, "/emission")}
+          onClick={(event) => handleRouteChange(event, "/emissions")}
         >
           View Emissions
         </USWDSLink>

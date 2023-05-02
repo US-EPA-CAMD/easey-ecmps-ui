@@ -7,10 +7,6 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { connect } from "react-redux";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
 import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
-import {
   convertSectionToStoreName,
   METHODS_SECTION_NAME,
   METHODS_STORE_NAME,
@@ -21,7 +17,7 @@ import {
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
 
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
@@ -34,6 +30,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { successResponses } from "../../../utils/api/apiUtils";
 
 export const DataTableMethod = ({
   mdmData,
@@ -63,7 +60,9 @@ export const DataTableMethod = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
-  const [errorMsgs, setErrorMsgs] = useState([])
+  const [errorMsgs, setErrorMsgs] = useState([]);
+
+  const dataTableName = "Methods";
   const dropdownArray = [
     [
       "parameterCode",
@@ -76,7 +75,6 @@ export const DataTableMethod = ({
 
   const selectText = "-- Select a value --";
 
-  const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -84,15 +82,6 @@ export const DataTableMethod = ({
       assignFocusEventListeners();
     }
   }, [dataLoaded, dropdownsLoaded]);
-
-  // *** Reassign handlers after pop-up modal is closed
-  useEffect(() => {
-    if (!returnedFocusToLast) {
-      setReturnedFocusToLast(true);
-    } else {
-      assignFocusEventListeners();
-    }
-  }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
   useEffect(() => {
@@ -104,18 +93,20 @@ export const DataTableMethod = ({
   useEffect(() => {
     const fetchMethods = async () => {
       try {
-        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
-        setMethods(methods.data)
-        setDataLoaded(true)
-        const matsMethods = await mpApi.getMonitoringMatsMethods(locationSelectValue)
-        setMatsMethods(matsMethods.data)
-        setUpdateTable(false)
-        setRevertedState(false)
-        setUpdateRelatedTables(false)
+        const methods = await mpApi.getMonitoringMethods(locationSelectValue);
+        setMethods(methods.data);
+        setDataLoaded(true);
+        const matsMethods = await mpApi.getMonitoringMatsMethods(
+          locationSelectValue
+        );
+        setMatsMethods(matsMethods.data);
+        setUpdateTable(false);
+        setRevertedState(false);
+        setUpdateRelatedTables(false);
       } catch (error) {
-        console.log('error fetching methods', error);
+        console.log("error fetching methods", error);
       }
-    }
+    };
     if (
       updateTable ||
       methods.length <= 0 ||
@@ -123,7 +114,7 @@ export const DataTableMethod = ({
       revertedState ||
       updateRelatedTables
     ) {
-      fetchMethods()
+      fetchMethods();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -152,19 +143,19 @@ export const DataTableMethod = ({
     "Methodology",
     "Substitute Data Approach",
     "Bypass Approach",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    parameterCode: null,
-    substituteDataCode: null,
-    bypassApproachCode: null,
-    monitoringMethodCode: null,
-    beginDate: null,
+    id: "string",
+    parameterCode: "string",
+    substituteDataCode: "string",
+    bypassApproachCode: "string",
+    monitoringMethodCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   // cant unit test properly
@@ -204,16 +195,16 @@ export const DataTableMethod = ({
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
-          
+
           // Modal focus resets to close button on setState
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             });
             // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             }, 1000);
           }
         }
@@ -308,10 +299,9 @@ export const DataTableMethod = ({
   };
 
   const executeOnClose = () => {
-    setErrorMsgs([])
+    setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
-    setReturnedFocusToLast(false);
   };
 
   const data = useMemo(() => {
@@ -338,7 +328,9 @@ export const DataTableMethod = ({
       else {
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMethodsTableRecords(
-          tabs[currentTabIndex].inactive[0] === false ? getActiveData(methods) : methods
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(methods)
+            : methods
         );
       }
     } else {
@@ -356,16 +348,16 @@ export const DataTableMethod = ({
 
   const saveMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.saveMonitoringMethods(userInput);
-      if (resp.status === 200) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
@@ -374,22 +366,22 @@ export const DataTableMethod = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
   const createMethods = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate])
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
+
     try {
       const resp = await mpApi.createMethods(userInput);
-      if (resp.status === 201) {
+      if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
@@ -398,7 +390,7 @@ export const DataTableMethod = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
@@ -452,6 +444,7 @@ export const DataTableMethod = ({
           title={createNewMethod ? "Create Method" : "Method"}
           exitBTN={createNewMethod ? "Create Method" : `Save and Close`}
           errorMsgs={errorMsgs}
+          returnFocus={true}
           children={
             dropdownsLoaded ? (
               <div>
@@ -481,9 +474,7 @@ const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[METHODS_STORE_NAME],
 
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 

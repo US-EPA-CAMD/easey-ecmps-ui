@@ -64,8 +64,8 @@ describe("testing monitoring plan fuel data selectors", () => {
         col2: "H",
         col3: "HD",
         col4: "PPM",
-        col5: "2017/09/20 13",
-        col6: "2017/09/20 13",
+        col5: "2017-09-20 13:00",
+        col6: "2017-09-20 13:00",
         col7: "TWCORNEL5-61DC7F93F3D84DD2B9A7CE94C5A9C185",
       },
       {

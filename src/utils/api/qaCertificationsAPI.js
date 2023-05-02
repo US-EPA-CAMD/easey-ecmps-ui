@@ -4,7 +4,7 @@ import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 
-const getApiUrl = (path) => {
+const getApiUrl = (path = "") => {
   let url = config.services.qaCertification.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -43,7 +43,7 @@ export const getQATestSummary = async (
   selectedTestCode,
   beginDate,
   endDate,
-  forWorkspace = false,
+  forWorkspace = false
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
@@ -175,6 +175,11 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
+/**
+ * 
+ * @param {*} isExport if true excludes most recent/current reporting period
+ * @returns list of reporting periods
+ */
 export const getReportingPeriod = async (isExport) => {
   const url = `${config.services.mdm.uri}/reporting-periods${
     isExport ? "?export=true" : ""
@@ -210,16 +215,17 @@ export const exportQA = async (
     isHistoricalImport: Boolean,
   }
 ) => {
+  const path = `/export?facilityId=${facilityId}`;
   let url;
 
   if (options.isOfficial) {
-    url = `${config.services.qaCertification.uri}/export?facilityId=${facilityId}`;
+    url = `${config.services.qaCertification.uri}${path}`;
   } else {
-    url = getApiUrl(`/export?facilityId=${facilityId}`);
+    url = getApiUrl(path);
   }
 
   if (options.isHistoricalImport) {
-    url = `${url}&qaTestExtensionExemptionIds=null&qaCertificationEventIds=null`;
+    url = `${url}`;
   }
 
   if (unitIds?.length > 0) {
@@ -589,7 +595,7 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -660,7 +666,7 @@ export const createRataRunData = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -747,7 +753,7 @@ export const createRataTraverse = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1035,7 +1041,7 @@ export const createAppendixECorrelationSummaryRecord = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1222,7 +1228,7 @@ export const createAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1234,6 +1240,7 @@ export const getAppendixEHeatInputGasData = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
+
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -1246,8 +1253,6 @@ export const createAppendixEHeatInputGas = async (
   appECorrTestRunId,
   payload
 ) => {
-  const testSummary = await getQATestSummaryByID(locId, testSumId);
-  payload.monitoringSystemID = testSummary.data.monitoringSystemID;
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
   try {
@@ -1259,7 +1264,7 @@ export const createAppendixEHeatInputGas = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1338,7 +1343,7 @@ export const createAppendixEHeatInputOil = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 
@@ -1404,7 +1409,7 @@ export const updateAppendixERun = async (
       })
     );
   } catch (error) {
-    return handleError(error);
+    return handleImportError(error);
   }
 };
 export const deleteAppendixERun = async (

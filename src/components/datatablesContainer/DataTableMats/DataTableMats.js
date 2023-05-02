@@ -1,16 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
-import {
-  displayAppError,
-  needEndDate,
-} from "../../../additional-functions/app-error";
 import {
   getActiveData,
   getInactiveData,
@@ -49,7 +45,7 @@ export const DataTableMats = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
-  tabs
+  tabs,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -64,14 +60,17 @@ export const DataTableMats = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const selectText = "-- Select a value --";
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  const dataTableName = "Supplemental Methods";
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
       assignFocusEventListeners();
-      ensure508()
+      ensure508();
     }
   }, [dataLoaded, dropdownsLoaded]);
 
@@ -79,7 +78,7 @@ export const DataTableMats = ({
   useEffect(() => {
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
-      ensure508()
+      ensure508();
     } else {
       assignFocusEventListeners();
     }
@@ -130,18 +129,18 @@ export const DataTableMats = ({
   const columnNames = [
     "Parameter",
     "Methodology",
-    "Begin Date and Time",
-    "End Date and Time",
+    "Begin Date/Time",
+    "End Date/Time",
   ];
 
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    supplementalMATSMonitoringMethodCode: null,
-    supplementalMATSParameterCode: null,
-    beginDate: null,
+    id: "string",
+    supplementalMATSMonitoringMethodCode: "string",
+    supplementalMATSParameterCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   const data = useMemo(() => {
@@ -170,7 +169,9 @@ export const DataTableMats = ({
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansMatsMethodsTableRecords(
-          tabs[currentTabIndex].inactive[0] === false ? getActiveData(matsMethods) : matsMethods
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(matsMethods)
+            : matsMethods
         );
       }
     }
@@ -185,46 +186,46 @@ export const DataTableMats = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 
-  const saveMats = () => {
+  const saveMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .saveMonitoringMats(userInput)
-        .then((result) => {
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          setShow(false);
-        });
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
+    }
+    try {
+      const resp = await mpApi.saveMonitoringMats(userInput);
+      if (resp.status === 200) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
-  const createMats = () => {
+  const createMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      displayAppError(needEndDate);
-      setShow(false);
-    } else {
-      mpApi
-        .createMats(userInput)
-        .then((result) => {
-          setShow(false);
-          setUpdateTable(true);
-          setUpdateRelatedTables(true);
-        })
-        .catch((error) => {
-          setShow(false);
-        });
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
+    }
+    try {
+      const resp = await mpApi.createMats(userInput);
+      if (resp.status === 201) {
+        setShow(false);
+        setUpdateTable(true);
+        setUpdateRelatedTables(true);
+      } else {
+        const errorResp = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorResp);
+      }
+    } catch (error) {
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
@@ -265,16 +266,16 @@ export const DataTableMats = ({
             // Load the filtered data into the dropdown
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
-          
+
           // Modal focus resets to close button on setState
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             });
             // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             }, 1000);
           }
         }
@@ -347,6 +348,7 @@ export const DataTableMats = ({
   };
 
   const executeOnClose = () => {
+    setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
@@ -381,6 +383,7 @@ export const DataTableMats = ({
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
           exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
@@ -409,9 +412,7 @@ export const DataTableMats = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[MATS_METHODS_STORE_NAME],
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 

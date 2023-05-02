@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 
-import { createQaCertEvents } from "../../../utils/api/qaCertificationsAPI.js";
 import {
   mapQaCertEventsDataToRows,
   mapQaExtensionsExemptionsDataToRows,
@@ -10,8 +9,7 @@ import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
-  generateArrayOfYears,
-  getReportingPeriods,
+  generateArrayOfYears
 } from "../../HeaderInfo/HeaderInfo";
 import {
   qaCertEventsProps,
@@ -48,7 +46,10 @@ const QACertEventTestExmpDataTable = ({
   isCheckedOut,
   sectionSelect,
   selectedLocation,
+  orisCode,
   locations,
+  updateTable,
+  setUpdateTable
 }) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
@@ -62,13 +63,7 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
-  const yearQuarters = getReportingPeriods().map((reportingPeriod, index) => {
-    return {
-      code: reportingPeriod,
-      name: reportingPeriod,
-    };
-  });
+
 
   const years = generateArrayOfYears(2009).map((year, index) => {
     return {
@@ -107,12 +102,14 @@ const QACertEventTestExmpDataTable = ({
     setUpdateTable(true);
     setDropdownsLoaded(false);
     setMdmData(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect, locationSelectValue]);
 
   useEffect(() => {
     if (mdmData === null && !dropdownsLoaded) {
       loadDropdownsData(dataTableName);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dropdownsLoaded, mdmData]);
 
   //**** */
@@ -332,9 +329,9 @@ const QACertEventTestExmpDataTable = ({
   const data = useMemo(() => {
     switch (sectionSelect[1]) {
       case "QA Certification Event":
-        return mapQaCertEventsDataToRows(qaTestSummary);
+        return mapQaCertEventsDataToRows(qaTestSummary, orisCode);
       case "Test Extension Exemption":
-        return mapQaExtensionsExemptionsDataToRows(qaTestSummary);
+        return mapQaExtensionsExemptionsDataToRows(qaTestSummary, orisCode);
       default:
         return [];
     }
@@ -354,7 +351,7 @@ const QACertEventTestExmpDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -362,7 +359,7 @@ const QACertEventTestExmpDataTable = ({
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -417,9 +414,11 @@ const QACertEventTestExmpDataTable = ({
 
     switch (sectionSelect[1]) {
       case "QA Certification Event":
-        updatedData = mapQaCertEventsDataToRows(data ? data : []);
+        updatedData = mapQaCertEventsDataToRows(data ? data : [], orisCode);
+        break;
       case "Test Exemptions and Exeptions":
-        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : []);
+        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : [], orisCode);
+        break;
       default:
         break;
     }
@@ -494,6 +493,7 @@ const QACertEventTestExmpDataTable = ({
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
+          executeOnClose();
         }
       })
       .catch((error) => {
@@ -516,17 +516,17 @@ const QACertEventTestExmpDataTable = ({
           dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
-              <>
-                <span className="padding-right-2">{dataTableName}</span>
+              <div className="display-table-row">
+                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
-                  className="text-white"
+                  className="text-white display-table-cell"
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-              </>
+              </div>
             ) : (
               dataTableName
             )

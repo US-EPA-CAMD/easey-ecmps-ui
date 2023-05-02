@@ -62,6 +62,7 @@ export const EvaluateRefresh = ({ dataList, storedFilters, lastEvalTime }) => {
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div></div>;

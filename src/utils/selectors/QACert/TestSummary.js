@@ -1,26 +1,7 @@
 import { evalStatusContent } from "../../../additional-functions/evaluate-configs";
+import { formatDateTime } from '../../../utils/functions'
 
-const validateDate = (date, hourMins) =>{
-  if(date){
-    return  formatStringToDate(date.toString())
-  }else if(hourMins){
-    return ("0" + hourMins).slice(-2);;
-  }
-  return "";
-}
-const formatDateTime = (date, hour, mins) =>{
-  if(date){
-    if(mins){
-      return `${validateDate(date, null)} ${validateDate(null, hour)}:${validateDate(null, mins)}`;
-    }else{
-      return `${validateDate(date, null)} ${validateDate(null, hour)}`;
-    }
-  }else{
-    return ""
-  }
-};
-
-export const getTestSummary = (data, colTitles) => {
+export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
   if (!colTitles) {
     data.forEach((el) => {
@@ -32,8 +13,8 @@ export const getTestSummary = (data, colTitles) => {
           el.stackPipeId !== null
             ? el.stackPipeId
             : el.unitId !== null
-            ? el.unitId
-            : "",
+              ? el.unitId
+              : "",
         col3: el.componentId,
         col4: el.testNumber,
         col5: el.testReasonCode,
@@ -57,14 +38,14 @@ export const getTestSummary = (data, colTitles) => {
         let colValue = curData[dtoKey];
         // special cases
         switch (colTitle) {
-          case "End Date":
+          case "End Date/Time":
             colValue = formatDateTime(curData.endDate, curData.endHour, curData.endMinute);
             break;
-          case "Unit or Stack Pipe ID":
+          case "Unit/Stack Pipe ID":
             colValue = curData.unitId ?? curData.stackPipeId;
             break;
           case "Eval Status":
-            colValue = evalStatusContent(curData.evalStatusCode);
+            colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
           default:
         }
@@ -74,15 +55,6 @@ export const getTestSummary = (data, colTitles) => {
     }
   }
   return records;
-};
-
-// year - month - day to  month / day/ year
-const formatStringToDate = (date) => {
-  let parts;
-
-  parts = date.split("-");
-
-  return `${parts[0]}/${parts[1]}/${parts[2]}`;
 };
 
 const colTitleToDtoKeyMap = {
@@ -146,7 +118,7 @@ export const getProtocolGasRecords = (data) => {
       col2: el.gasTypeCode,
       col3: el.cylinderIdentifier,
       col4: el.vendorIdentifier,
-      col5: el.expirationDate ? formatStringToDate(el.expirationDate) : "",
+      col5: el.expirationDate ? el.expirationDate : "",
     });
   });
   return records;
@@ -190,31 +162,16 @@ export const mapRataSummaryToRows = (data) => {
 export const getRataRunDataRecords = (data) => {
   const records = [];
   data.forEach((el) => {
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
-
-    const endMinute = el.endMinute ? el.endMinute.toString() : "";
-
-    const beginDate = el.endDate
-      ? formatStringToDate(el.endDate.toString())
-      : "";
-    const beginHour = el.endHour ? el.endHour.toString() : "";
-
-    const beginMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
       id: el.id,
       rataSumId: el.rataSumId,
       col1: el.runNumber,
-      col2: beginDate,
-      col3: beginHour,
-      col4: beginMinute,
-      col5: endDate,
-      col6: endHour,
-      col7: endMinute,
-      col8: el.cemValue,
-      col9: el.rataReferenceValue,
-      col10: el.grossUnitLoad,
-      col11: el.runStatusCode,
+      col2: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col3: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col4: el.cemValue,
+      col5: el.rataReferenceValue,
+      col6: el.grossUnitLoad,
+      col7: el.runStatusCode,
     });
   });
   return records;
@@ -296,8 +253,8 @@ export const mapTestQualificationToRows = (data) => {
       id: el.id,
       testSumId: el.testSumId,
       col1: el.testClaimCode,
-      col2: el.beginDate ? formatStringToDate(el.beginDate) : "",
-      col3: el.endDate ? formatStringToDate(el.endDate) : "",
+      col2: el.beginDate ? el.beginDate : "",
+      col3: el.endDate ? el.endDate : "",
       col4: el.highLoadPercentage,
       col5: el.midLoadPercentage,
       col6: el.lowLoadPercentage,
@@ -371,12 +328,8 @@ export const mapAppendixECorrTestRunsToRows = (data) => {
       col3: el.hourlyHeatInputRate,
       col4: el.totalHeatInput,
       col5: el.responseTime,
-      col6: el.beginDate ? formatStringToDate(el.beginDate) : "",
-      col7: el.beginHour,
-      col8: el.beginMinute,
-      col9: el.endDate ? formatStringToDate(el.endDate) : "",
-      col10: el.endHour,
-      col11: el.endMinute,
+      col6: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col7: formatDateTime(el.endDate, el.endHour, el.endMinute),
     };
     records.push(row);
   }
@@ -388,9 +341,10 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.gasGCV === 0 ? "0" : el.gasGCV,
-      col2: el.gasVolume === 0 ? "0" : el.gasVolume,
-      col3: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
+      col1: el.monitoringSystemID,
+      col2: el.gasGCV === 0 ? "0" : el.gasGCV,
+      col3: el.gasVolume === 0 ? "0" : el.gasVolume,
+      col4: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
     };
     records.push(row);
   }
@@ -444,7 +398,7 @@ export const mapCalibrationInjectionsToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.onLineOffLineIndicator === 1 ? "Yes" : "No",
+      col1: el.onlineOfflineIndicator === 1 ? "Yes" : "No",
       col2: el.upscaleGasLevelCode,
       col3: el.zeroInjectionDate,
       col4: el.zeroInjectionHour,
@@ -475,11 +429,7 @@ export const mapFuelFlowmeterAccuracyDataToRows = (data) => {
       col2: el.lowFuelAccuracy,
       col3: el.midFuelAccuracy,
       col4: el.highFuelAccuracy,
-      col5: el.reinstallationDate
-        ? new Date(el.reinstallationDate).toLocaleDateString("en-US", {
-            timeZone: "UTC",
-          })
-        : el.reinstallationDate,
+      col5: el.reinstallationDate,
       col6: el.reinstallationHour,
     };
     records.push(row);
@@ -596,15 +546,11 @@ export const mapUnitDefaultTestRunDataToRows = (data) => {
       id: el.id,
       col1: el.operatingLevelForRun,
       col2: el.runNumber,
-      col3: el.beginDate,
-      col4: el.beginHour,
-      col5: el.beginMinute,
-      col6: el.endDate,
-      col7: el.endHour,
-      col8: el.endMinute,
-      col9: el.responseTime,
-      col10: el.referenceValue,
-      col11: el.runUsedIndicator,
+      col3: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col4: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col5: el.responseTime,
+      col6: el.referenceValue,
+      col7: el.runUsedIndicator,
     };
     records.push(row);
   }
@@ -634,8 +580,8 @@ export const mapHgInjectionDataToRows = (data) => {
       id: el.id,
       col1: el.injectionDate
         ? new Date(el.injectionDate).toLocaleDateString("en-US", {
-            timeZone: "UTC",
-          })
+          timeZone: "UTC",
+        })
         : el.injectionDate,
       col2: el.injectionHour,
       col3: el.injectionMinute,
@@ -647,7 +593,7 @@ export const mapHgInjectionDataToRows = (data) => {
   return records;
 };
 
-export const mapQaCertEventsDataToRows = (data) => {
+export const mapQaCertEventsDataToRows = (data, orisCode) => {
   const records = [];
   for (const el of data) {
     const row = {
@@ -655,26 +601,22 @@ export const mapQaCertEventsDataToRows = (data) => {
       col1: el.unitId ? el.unitId : el.stackPipeId,
       col2: el.componentID,
       col3: el.monitoringSystemID,
-      col4: el.qaCertEventCode,
+      col4: isNaN(el.qaCertEventCode) ? el.qaCertEventCode : Number(el.qaCertEventCode),
       col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
-      col6: el.requiredTestCode,
+      col6: isNaN(el.requiredTestCode) ? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
-      col9: evalStatusContent(el.evalStatusCode),
+      col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     };
     records.push(row);
   }
   return records;
 };
 
-export const mapQaExtensionsExemptionsDataToRows = (data) => {
+export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
   const records = [];
 
   data.forEach((el) => {
-    const endDate = el.endDate ? formatStringToDate(el.endDate.toString()) : "";
-    const endHour = el.endHour ? el.endHour.toString() : "";
-
-    const endMinute = el.endMinute ? el.endMinute.toString() : "";
     records.push({
       id: el.id,
       locationId: el.locationId,
@@ -683,8 +625,8 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
         el.stackPipeId !== null
           ? el.stackPipeId
           : el.unitId !== null
-          ? el.unitId
-          : "",
+            ? el.unitId
+            : "",
       col2: el.year,
       col3: el.quarter,
       col4: el.componentID,
@@ -693,10 +635,41 @@ export const mapQaExtensionsExemptionsDataToRows = (data) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
-      col10: evalStatusContent(el.evalStatusCode),
+      col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
     });
   });
 
+  return records;
+};
+
+export const mapCycleTimeInjectionsToRows = (data) => {
+  const records = [];
+  for (const el of data) {
+    const row = {
+      id: el.id,
+      col1: el.gasLevelCode,
+      col2: el.calibrationGasValue,
+      col3: formatDateTime(el.beginDate, el.beginHour, el.beginMinute),
+      col4: formatDateTime(el.endDate, el.endHour, el.endMinute),
+      col5: el.injectionCycleTime,
+      col6: el.beginMonitorValue,
+      col7: el.endMonitorValue,
+    };
+    records.push(row);
+  }
+  return records;
+};
+
+export const getLinearityInjection = (totalData) => {
+  const records = [];
+  totalData.forEach((el) => {
+    records.push({
+      col1: formatDateTime(el.injectionDate, el.injectionHour, el.injectionMinute),
+      col2: el.measuredValue,
+      col3: el.referenceValue,
+      id: el.id,
+    });
+  });
   return records;
 };
 
@@ -728,3 +701,41 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   }
   return result;
 };
+
+const findEvalStatusCol = (columns) =>{
+  return columns.find(col => col.name === "Eval Status")?.selector;
+}
+
+export const hasEvalStatusColumn = (dataTableName) => {
+  return dataTableName === "QA Certification Event" || dataTableName === "Test Extension Exemption" || dataTableName === "Test Summary Data";
+};
+//AG: needed to sort last column if data table type is satisfied on hasEvalStatusColumn
+export const customSort = (rows, field, direction, columns) =>{
+  const evalStatusCol = findEvalStatusCol(columns);
+  return rows.sort((a, b) => {
+    let aField = a[field];
+		let bField = b[field];
+    if(field === evalStatusCol){
+      if(aField.type === "div"){
+        aField = aField.props?.children?.props?.children;
+      } else if (aField.type === "p") {
+        aField = aField.props?.children;
+      }
+      if (bField.type === "div") {
+        bField = bField.props?.children?.props?.children;
+      } else if (bField.type === "p") {
+        bField = bField.props?.children;
+      }
+    }
+
+    let comparison = 0;
+
+    if (aField > bField) {
+      comparison = 1;
+    } else if (aField < bField) {
+      comparison = -1;
+    }
+
+    return direction === 'desc' ? comparison * -1 : comparison;
+  });
+}

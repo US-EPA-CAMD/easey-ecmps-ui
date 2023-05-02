@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
-import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
+import {
+  extractUserInput,
+  validateUserInput,
+} from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as assertSelector from "../../../utils/selectors/assert";
 
@@ -69,7 +72,7 @@ export const DataTableAssert = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [complimentaryData, setComplimentaryData] = useState([]);
-  const [errorMsgs, setErrorMsgs] = useState([])
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
   // Unit Information variables
@@ -113,6 +116,9 @@ export const DataTableAssert = ({
     } else {
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
@@ -191,7 +197,7 @@ export const DataTableAssert = ({
     setRevertedState(false);
     setUpdateRelatedTables(false);
     addAriaLabelToDatatable();
-    ensure508()
+    ensure508();
   };
 
   useEffect(() => {
@@ -201,6 +207,7 @@ export const DataTableAssert = ({
     } else {
       setDropdownsLoaded(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
@@ -273,13 +280,18 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
-      setErrorMsgs(validationErrors)
-      return
+      setErrorMsgs(validationErrors);
+      return;
     }
     try {
-      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+      const resp = await assertSelector.saveDataSwitch(
+        userInput,
+        dataTableName,
+        locationSelectValue,
+        urlParameters
+      );
       if (resp.status === 200) {
         setShow(false);
         setDataLoaded(false);
@@ -290,9 +302,8 @@ export const DataTableAssert = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
-    
   };
 
   const createData = async () => {
@@ -301,14 +312,19 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    const validationErrors = validateUserInput(userInput, { dataTableName, lAttr, rDat })
+    const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
-      setErrorMsgs(validationErrors)
-      return
+      setErrorMsgs(validationErrors);
+      return;
     }
 
     try {
-      const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue, urlParameters);
+      const resp = await assertSelector.createDataSwitch(
+        userInput,
+        dataTableName,
+        locationSelectValue,
+        urlParameters
+      );
       if (resp.status === 201) {
         setShow(false);
         setDataLoaded(false);
@@ -348,16 +364,16 @@ export const DataTableAssert = ({
             });
             modalDetailData[6] = filteredOutSubDropdownOptions;
           }
-          
+
           // Modal focus resets to close button on setState
           if (modalDetailData[4] === "mainDropdown") {
             // Overrides the firstComponentFocusableElement.focus() in focus-trap
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             });
             // Overrides the document.querySelector("#closeModalBtn").focus() in Modal
             setTimeout(() => {
-              document.getElementById(modalDetailData[1]).focus()
+              document.getElementById(modalDetailData[1]).focus();
             }, 1000);
           }
         }
@@ -407,28 +423,7 @@ export const DataTableAssert = ({
       setPrefilteredMdmData(mdmData[prefilteredDataName]);
     }
 
-    if (dataTableName === 'Unit Capacity' && create) {
-      controlInputs.commercialOperationDate = ["Commercial Operation Date", "date", "", ""];
-      controlInputs.operationDate = ["Operation Date", "date", "", ""];
-      controlInputs.boilerTurbineType = [
-        "Boiler/Turbine Type",
-        "input",
-        "",
-        "",
-      ];
-      controlInputs.boilerTurbineBeginDate = [
-        "Boiler/Turbine Begin Date",
-        "date",
-        "",
-        "",
-      ];
-      controlInputs.boilerTurbineEndDate = [
-        "Boiler/Turbine End Date",
-        "date",
-        "",
-        "",
-      ];
-    } else if (dataTableName === "Unit Capacity" && !create) {
+    if (dataTableName === "Unit Capacity") {
       controlInputs.commercialOperationDate = [
         "Commercial Operation Date",
         "date",
@@ -489,7 +484,7 @@ export const DataTableAssert = ({
   };
   const executeOnClose = () => {
     setReturnedFocusToLast(false);
-    setErrorMsgs([])
+    setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
   };
@@ -508,15 +503,19 @@ export const DataTableAssert = ({
         onClick={() => {
           saveData();
           closeModalHandler();
-          openModal({
-            col1: "CO2",
-            col2: "H",
-            col3: "HD",
-            col4: "PCT",
-            col5: "09/20/2017 13",
-            col6: " ",
-            col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
-          }, false, false);
+          openModal(
+            {
+              col1: "CO2",
+              col2: "H",
+              col3: "HD",
+              col4: "PCT",
+              col5: "09/20/2017 13",
+              col6: " ",
+              col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
+            },
+            false,
+            false
+          );
         }}
       />
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -577,9 +576,7 @@ const mapStateToProps = (state, ownProps) => {
   const { dataTableName } = ownProps;
   return {
     mdmData: state.dropdowns[convertSectionToStoreName(dataTableName)],
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 

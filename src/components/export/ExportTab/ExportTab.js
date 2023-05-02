@@ -18,6 +18,7 @@ export const ExportTab = ({
   setExportState,
   workspaceSection,
 }) => {
+
   const [isExporting, setIsExporting] = useState(false);
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -68,10 +69,12 @@ export const ExportTab = ({
       workspaceSection
     );
 
-    if(previewOptions && !dataTypesCopy[index].checked){
-      setPreviewOptions(undefined);
+    // qa checkbox checked/unchecked
+    if (e.target.name === qa) {
+      const options = dataTypesCopy[index].checked ? { ...reportingPeriod } : null;
+      setPreviewOptions(options);
     }
-      
+
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -86,13 +89,18 @@ export const ExportTab = ({
       },
       workspaceSection
     );
+    const isQaChecked = dataTypes.some(e => e.name === qa && e.checked)
+    // update preview options only if qa is checked
+    if (isQaChecked) {
+      setPreviewOptions({ beginDate, endDate });
+    }
   };
 
   const getInitSelection = (reportingPeriodObj) => {
     const { id, beginDate, calendarYear, endDate, quarter } =
       reportingPeriodObj;
     setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
-    if (exportState) {
+    if (exportState && exportState?.checkedDataTypes.includes(qa)) {
       setPreviewOptions({ beginDate, endDate });
     }
   };
@@ -108,12 +116,12 @@ export const ExportTab = ({
       promises.push(exportMonitoringPlanDownload(selectedConfig.id));
     }
     // export qa
-    if (dataTypes.find((e) => e.name === qa).checked) {
+    const selectedRowsObj = rowsData.current;
+    if (dataTypes.find((e) => e.name === qa).checked && selectedRowsObj) {
       exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const selectedRows = rowsData.current;
       const exportJson = {
         orisCode: orisCode,
-        ...selectedRows,
+        ...selectedRowsObj,
       };
       download(JSON.stringify(exportJson, null, "\t"), exportFileName);
     }
@@ -162,16 +170,10 @@ export const ExportTab = ({
     );
   };
 
-  const isPreviewDisabled = () => {
-    const checkedDataTypes = dataTypes.filter(e => e.checked);
-    // if only qa is checked
-    return !(checkedDataTypes.length === 1 && checkedDataTypes[0].name === qa);
-  }
-
   return (
     <>
-      {loading ? <Preloader /> : null}
-      <div className="margin-x-3 grid-container">
+      {loading && <Preloader />}
+      <div>
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           <div className="grid-row">
             <h3>
@@ -180,7 +182,7 @@ export const ExportTab = ({
             </h3>{" "}
           </div>
         </div>
-        <div className="grid-row margin-y-3">
+        <div className="grid-row margin-y-3 maxw-desktop">
           <div className="grid-col-3">
             {dataTypes.map((d, i) => (
               <Checkbox
@@ -203,24 +205,19 @@ export const ExportTab = ({
               getInitSelection={getInitSelection}
             />
           </div>
-          <div className="grid-col-3 padding-left-8 padding-top-3">
+          <div className="grid-col-3">
             <Button
               type={"button"}
-              className="width-card"
-              disabled={isPreviewDisabled()}
-              onClick={() =>
-                setPreviewOptions({
-                  beginDate: reportingPeriod.beginDate,
-                  endDate: reportingPeriod.endDate,
-                })
-              }
+              className="float-right"
+              disabled={isExportDisabled()}
+              onClick={exportClickHandler}
             >
-              Preview
+              Export
             </Button>
           </div>
         </div>
         {previewOptions && (
-          <>
+          <div class="maxh-tablet overflow-y-auto">
             <ExportTablesContainer
               tableTitle={'Test Summary'}
               dataKey={'testSummaryData'}
@@ -254,19 +251,28 @@ export const ExportTab = ({
               orisCode={orisCode}
               dataRef={rowsData}
             />
-          </>
-
+          </div>
         )}
-        <div className="border-top-1px border-base-lighter padding-y-2">
-          <Button
-            type={"button"}
-            className="float-right margin-top-3"
-            disabled={isExportDisabled()}
-            onClick={exportClickHandler}
-          >
-            Export
-          </Button>
-        </div>
+        {
+          previewOptions && (
+            <div className="border-top-1px border-base-lighter">
+              <div className="grid-row margin-y-3 maxw-desktop padding-top-1">
+                <div className="grid-col-9">
+                </div>
+                <div className="grid-col-3">
+                  <Button
+                    type={"button"}
+                    className="float-right"
+                    disabled={isExportDisabled()}
+                    onClick={exportClickHandler}
+                  >
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );

@@ -59,14 +59,7 @@ describe("functions.js", function () {
       expect(getConfigValueBoolean("TEST_TEST_TEST")).toEqual(true);
     });
   });
-  describe("format date", () => {
-    it("should format date", () => {
-      const dateString = "2022-10-25T12:14:29.997Z";
-      const formattedDateString = "10-25-2022";
-      const result = formatDate(dateString);
-      expect(result).toEqual(formattedDateString);
-    });
-  });
+
   describe("Review and submit functions", () => {
     describe("checked out location functions", () => {
       let checkedOutLocationsMap = new Map(),

@@ -12,7 +12,7 @@ const ReviewCell = ({
   setSelectAllState,
   setSelectAllVisible,
 }) => {
-  const [cellState, setCellState] = useState(getRowState(row, type));
+  const [cellState, ] = useState(getRowState(row, type));
 
   useEffect(() => {
     if (cellState === "Checkbox" && !row.selected) {
@@ -21,6 +21,7 @@ const ReviewCell = ({
     if (row.viewOnly) {
       setSelectAllVisible(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cellState]);
 
   return (

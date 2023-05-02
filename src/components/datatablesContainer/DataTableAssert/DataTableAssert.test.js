@@ -16,17 +16,19 @@ import { authenticate } from "../../../utils/api/easeyAuthApi";
 import { act } from "react-dom/test-utils";
 import * as assertSelector from "../../../utils/selectors/assert";
 import { loadDropdowns } from "../../../store/actions/dropdowns";
-import {getMonitoringSpans, getLocationAttributes} from "../../../utils/api/monitoringPlansApi";
+import {
+  getMonitoringSpans,
+  getLocationAttributes,
+} from "../../../utils/api/monitoringPlansApi";
 import * as auth from "../../../utils/api/easeyAuthApi";
 
-
 // UseRetrieveDropdownApi()
-jest.mock("../../../additional-functions/retrieve-dropdown-api", ()=>({
+jest.mock("../../../additional-functions/retrieve-dropdown-api", () => ({
   ...jest.requireActual("../../../additional-functions/retrieve-dropdown-api"),
-  useRetrieveDropdownApi: jest.fn().mockResolvedValue({})
-}))
+  useRetrieveDropdownApi: jest.fn().mockResolvedValue({}),
+}));
 
-jest.mock('../../../utils/api/monitoringPlansApi', () => ({
+jest.mock("../../../utils/api/monitoringPlansApi", () => ({
   getMonitoringSpans: jest.fn(),
   getMonitoringSystems: jest.fn(),
   getLocationAttributes: jest.fn(),
@@ -39,15 +41,15 @@ jest.mock('../../../utils/api/monitoringPlansApi', () => ({
   createSystemsComponents: jest.fn(),
   saveSystemsComponents: jest.fn(),
 }));
-jest.mock('', () => ({
+jest.mock("", () => ({
   getDataTableApis: jest.fn(),
   getDataTableRecords: jest.fn(),
   saveDataSwitch: jest.fn(),
   createDataSwitch: jest.fn(),
-}))
+}));
 jest.mock("../../../utils/api/easeyAuthApi", () => ({
   authenticate: jest.fn(),
-}))
+}));
 const dropdownData = [
   {
     componentTypeCode: "BGFF",
@@ -281,7 +283,7 @@ const props = {
     endHour: 0,
   },
   urlParameters: null,
-  columnNames: ["Begin Date and Time", "End Date and Time"],
+  columnNames: ["Begin Date/Time", "End Date/Time"],
   dropdownArray: [[]],
   dataTableName: "Span",
   selectedLocation: 5,
@@ -346,7 +348,7 @@ const conditionalProps = {
     endHour: 0,
   },
   urlParameters: null,
-  columnNames: ["Begin Date and Time", "End Date and Time"],
+  columnNames: ["Begin Date/Time", "End Date/Time"],
   dropdownArray: [[]],
   dataTableName: "Location Attribute", // different
   selectedLocation: 5,
@@ -359,12 +361,10 @@ describe("DataTableAssert", () => {
     jest.clearAllMocks();
   });
 
-//   test("run without error", () => {
-//     // expect(true);
-//     render(<DataTableAssert {...props} />)
-// });
-
-
+  //   test("run without error", () => {
+  //     // expect(true);
+  //     render(<DataTableAssert {...props} />)
+  // });
 
   test("should fire test button", async () => {
     const spanData = [
@@ -420,8 +420,9 @@ describe("DataTableAssert", () => {
       },
     ];
 
-
-    const mockGetMonitoringSpans = jest.fn().mockResolvedValue({data: spanData});
+    const mockGetMonitoringSpans = jest
+      .fn()
+      .mockResolvedValue({ data: spanData });
     getMonitoringSpans.mockImplementation(() => mockGetMonitoringSpans());
 
     const spanDataReturned = await getMonitoringSpans(6);
@@ -431,9 +432,11 @@ describe("DataTableAssert", () => {
       render(<DataTableAssert {...props} />)
     );
     const btns = screen.getAllByText("View");
-    authenticate.mockImplementation(()=>sessionStorage.setItem("cdx_user", JSON.stringify({})))
+    authenticate.mockImplementation(() =>
+      localStorage.setItem("ecmps_user", JSON.stringify({}))
+    );
     await authenticate({});
-    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+    expect(localStorage.getItem("ecmps_user")).toBe("{}");
     window.isDataChanged = true;
     window.confirm(unsavedDataMessage);
     fireEvent.click(container.querySelector("#testingBtn2"));
@@ -476,9 +479,9 @@ describe("DataTableAssert", () => {
     );
     const btns = screen.queryAllByText("View");
     // fireEvent.click(btns[0]);
-    authenticate.mockImplementation(()=>sessionStorage.setItem("cdx_user", JSON.stringify({})));
+    authenticate.mockImplementation(()=>localStorage.setItem("ecmps_user", JSON.stringify({})));
     await authenticate({});
-    expect(sessionStorage.getItem("cdx_user")).toBe("{}");
+    expect(localStorage.getItem("ecmps_user")).toBe("{}");
 
     const val = 1;
     expect(val === 1);

@@ -1,22 +1,22 @@
 export const getQAColsByTestCode = (testCode, user = false) => {
   let cols = [
     "Test Type Code",
-    "Unit or Stack Pipe ID",
+    "Unit/Stack Pipe ID",
     "Component ID",
     "Test Number",
     "Test Reason Code",
     "Test Result Code",
-    "End Date",
+    "End Date/Time",
   ];
   switch (testCode) {
     case "APPESUM": // Appendix E Correlation Test Summary
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Test Number",
         "Test Reason Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "CALINJ": // Calibration Injection
@@ -28,19 +28,19 @@ export const getQAColsByTestCode = (testCode, user = false) => {
     case "TTACC": // Transmitter Transducer Accuracy
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Component ID",
         "Test Number",
         "Test Reason Code",
         "Test Result Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "FLC": // Flow to Load Check
     case "FFL": // Fuel Flow to Load
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Test Number",
         "Test Reason Code",
@@ -52,62 +52,62 @@ export const getQAColsByTestCode = (testCode, user = false) => {
     case "FLR": // Flow to Load Reference
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Test Number",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "FFLB": // Fuel Flow to Load Baseline
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Test Number",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "OLOLCAL": // Online Offline Calibration
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Component ID",
         "Test Number",
         "Test Reason Code",
         "Test Result Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "RELACC": // Relative Accuracy
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Test Number",
         "Test Reason Code",
         "Test Result Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "LME": // Unit Default
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Test Number",
         "Test Reason Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     case "MISC": // Miscellaneous
       cols = [
         "Test Type Code",
-        "Unit or Stack Pipe ID",
+        "Unit/Stack Pipe ID",
         "Monitoring System ID",
         "Component ID",
         "Test Number",
         "Test Reason Code",
         "Test Result Code",
-        "End Date",
+        "End Date/Time",
       ];
       break;
     default:
@@ -121,9 +121,9 @@ export const getQAColsByTestCode = (testCode, user = false) => {
 };
 
 export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
-  // const unitId = ["Unit or Stack Pipe ID", "nonFilteredDropdown", "", ""]
-  const unitId = ["Unit or Stack Pipe ID", "input", "", ""];
-  const stackPipeId = ["Unit or Stack Pipe ID", "input", "", ""];
+  // const unitId = ["Unit/Stack Pipe ID", "nonFilteredDropdown", "", ""]
+  const unitId = ["Unit/Stack Pipe ID", "input", "", ""];
+  const stackPipeId = ["Unit/Stack Pipe ID", "input", "", ""];
   const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""];
   const monitoringSystemID = [
     "Monitoring System ID",
