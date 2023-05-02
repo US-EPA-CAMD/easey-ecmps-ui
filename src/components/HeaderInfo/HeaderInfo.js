@@ -871,7 +871,7 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = () => {
-    if (!emissionDropdownState.selectedReportingPeriods.length) return void;
+    if (!emissionDropdownState.selectedReportingPeriods.length) return;
     const uniqueReportingPeriods = [
       ...new Set([...emissionDropdownState.selectedReportingPeriods]),
     ];
@@ -880,7 +880,7 @@ export const HeaderInfo = ({
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       reportingPeriods = [...reportingPeriods];
-      return void;
+      return;
     }
     setSelectedReportingPeriods(uniqueReportingPeriods);
     dispatch(
