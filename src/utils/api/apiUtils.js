@@ -57,9 +57,10 @@ export function handleError(error) {
     displayAppError(errorMessage);
   }
 
-  if (error.response) {
-    return error.response.data.message;
-  }
+  // sonarcloud doesnt want to return anything 
+  // if (error.response) {
+  //   return error.response.data.message;
+  // }
 }
 
 export function handleImportError(error) {
@@ -78,8 +79,8 @@ export function handleImportError(error) {
     // anything else
     log.error({ error: error.message });
   }
-
-  if (error.response) {
-    return error.response.data.message;
-  }
+  // sonarcloud doesnt want to return anything 
+  // if (error.response) {
+  //   return error.response.data.message;
+  // }
 }
