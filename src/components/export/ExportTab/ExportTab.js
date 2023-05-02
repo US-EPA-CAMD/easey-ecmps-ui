@@ -109,7 +109,7 @@ export const ExportTab = ({
     setIsExporting(true);
     setLoading(true);
     let exportFileName;
-    // const promises = [];
+    const promises = [];
 
     // export monitoring plan
     if (dataTypes.find((e) => e.name === mp).checked) {
@@ -137,7 +137,7 @@ export const ExportTab = ({
       );
     }
 
-    // await Promise.all(promises);
+    await Promise.all(promises);
     setIsExporting(false);
     setLoading(false);
   };
