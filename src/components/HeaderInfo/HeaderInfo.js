@@ -1323,7 +1323,7 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={ `Import a ${workspaceSectionName} to continue.`}
+            title={ `Import ${workspaceSectionName} Data`}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {

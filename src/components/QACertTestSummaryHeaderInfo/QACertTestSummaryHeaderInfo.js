@@ -50,7 +50,7 @@ export const QACertTestSummaryHeaderInfo = ({
   ///
   setUpdateRelatedTables,
 }) => {
-  const importTestTitle = "Import Test Data";
+  const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -558,7 +558,7 @@ export const QACertTestSummaryHeaderInfo = ({
           close={() => setShowImportDataPreview(false)}
           showSave={true}
           exitBTN={"Import"}
-          title="Import Historical Test Data"
+          title="Import Historical QA Test Data"
           disableExitBtn={disablePortBtn}
           save={() => {
             importHistoricalData();
