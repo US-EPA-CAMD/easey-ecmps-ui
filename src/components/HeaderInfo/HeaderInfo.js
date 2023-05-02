@@ -1045,7 +1045,10 @@ export const HeaderInfo = ({
                 type="button"
                 className="margin-right-2 float-left margin-bottom-2"
                 outline={true}
-                onClick={() => handleExport()}
+                onClick={() => {
+                  handleExport();
+                  return;
+                }}
               >
                 Export Data
               </Button>
