@@ -20,16 +20,16 @@ jest.mock("../../utils/api/contentApi", () => {
   };
 });
 
-jest.mock("../../utils/api/quartzApi", () => {
+jest.mock("../../utils/api/camdServices", () => {
   return {
-    sendNotificationEmail: jest
+    sendSupportEmail: jest
       .fn()
       .mockRejectedValueOnce(
         new Error(
           "Server error occurred while attempting to submit the contact form."
         )
       )
-      .mockResolvedValueOnce({}),
+      .mockResolvedValue({}),
   };
 });
 
@@ -71,14 +71,16 @@ describe("renders and tests HelpSupport component", () => {
     helpSupport = null;
   });
 
-  test("submit blank contact form and get validation error", () => {
+  test("submit blank contact form and get validation error", async() => {
     const blankFieldsMsg =
       "All fields are required. Please fill in the form completely and submit again.";
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
 
-    userEvent.click(submitBtn);
+    await wait(() => {
+      userEvent.click(submitBtn);
+    });
     expect(screen.getByText(blankFieldsMsg)).toBeInTheDocument();
   });
 
@@ -128,4 +130,41 @@ describe("renders and tests HelpSupport component", () => {
     });
     expect(screen.getByText(successMsg)).toBeInTheDocument();
   });
+
+  test("show error if email format is incorrect", async () => {
+    const emailInput = screen.getByLabelText("* Email");
+    userEvent.type(emailInput, "myInvalidEmail.com");
+    const commentTypeInput = screen.getByLabelText("Help using application");
+    userEvent.click(commentTypeInput);
+    const commentInput = screen.getByTestId("textarea");
+    userEvent.type(commentInput, "mycomment");
+    const submitBtn = helpSupport.container.querySelector(
+      "[data-testid='input-button-search']"
+    );
+    await wait(() => {
+      userEvent.click(submitBtn);
+    });
+    const invalidEmailErrorMsg =
+      "The email you provided is not a valid address. Please enter a valid email address.";
+    expect(screen.getByText(invalidEmailErrorMsg)).toBeInTheDocument();
+  });
+
+  test("does not show error if email format is correct", async () => {
+    const emailInput = screen.getByLabelText("* Email");
+    userEvent.type(emailInput, "my.email@test.com");
+    const commentTypeInput = screen.getByLabelText("Help using application");
+    userEvent.click(commentTypeInput);
+    const commentInput = screen.getByTestId("textarea");
+    userEvent.type(commentInput, "mycomment");
+    const submitBtn = helpSupport.container.querySelector(
+      "[data-testid='input-button-search']"
+    );
+    await wait(() => {
+      userEvent.click(submitBtn);
+    });
+    const invalidEmailErrorMsg =
+      "The email you provided is not a valid address. Please enter a valid email address.";
+    expect(screen.queryByText(invalidEmailErrorMsg)).not.toBeInTheDocument();
+  });
+
 });

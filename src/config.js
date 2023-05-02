@@ -37,12 +37,12 @@ export const config = {
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES",
         0.5
-      ) * oneMinute,
+      ) * oneMinute * 5,
     activityPollingFrequency:
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS",
         5
-      ) * oneSecond,
+      ) * oneSecond ,
     paginationPerPage: getConfigValueNumber(
       "REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE",
       100
@@ -142,12 +142,6 @@ export const config = {
       uri: getConfigValue(
         "REACT_APP_EASEY_AUTH_API",
         "https://api.epa.gov/easey/dev/auth-mgmt"
-      ),
-    },
-    quartz: {
-      uri: getConfigValue(
-        "REACT_APP_EASEY_QUARTZ_API",
-        "https://api.epa.gov/easey/dev/quartz-mgmt"
       ),
     },
     content: {
