@@ -260,6 +260,8 @@ const QATestSummaryDataTable = ({
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
+    }).catch(err => {
+      console.log("error", err)
     });
   };
   useEffect(() => {
