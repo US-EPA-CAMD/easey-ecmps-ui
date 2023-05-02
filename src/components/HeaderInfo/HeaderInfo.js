@@ -9,10 +9,7 @@ import {
   GridContainer,
   Label,
 } from "@trussworks/react-uswds";
-import {
-  CreateOutlined,
-  LockOpenSharp,
-} from "@material-ui/icons";
+import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 
 import * as mpApi from "../../utils/api/monitoringPlansApi";
@@ -212,7 +209,10 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-  const [emissionDropdownState, setEmissionDropdownState] = useState({locationSelect, selectedReportingPeriods})
+  const [emissionDropdownState, setEmissionDropdownState] = useState({
+    locationSelect,
+    selectedReportingPeriods,
+  });
   const selectedUnitId = selectedConfig?.locations
     ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
     .map((l) => l.unitId);
@@ -223,7 +223,12 @@ export const HeaderInfo = ({
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
 
   const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
-  const workspaceSectionName = workspaceSection === MONITORING_PLAN_STORE_NAME ? "Monitoring Plan" : workspaceSection === EMISSIONS_STORE_NAME ? "Emissions" : "Test"
+  const workspaceSectionName =
+    workspaceSection === MONITORING_PLAN_STORE_NAME
+      ? "Monitoring Plan"
+      : workspaceSection === EMISSIONS_STORE_NAME
+      ? "Emissions"
+      : "Test";
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -269,7 +274,10 @@ export const HeaderInfo = ({
     }
 
     setSelectedReportingPeriods(selectedRptPeriods);
-    setEmissionDropdownState({...cloneDeep(emissionDropdownState), selectedReportingPeriods: selectedRptPeriods})
+    setEmissionDropdownState({
+      ...cloneDeep(emissionDropdownState),
+      selectedReportingPeriods: selectedRptPeriods,
+    });
     dispatch(
       setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
@@ -450,22 +458,16 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    const promises = [];
-
     for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
-      promises.push(
-        emApi.exportEmissionsDataDownload(
-          facility,
-          configID,
-          selectedReportingPeriod.slice(0, 4),
-          selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
-          getUser() !== null
-        )
+      await emApi.exportEmissionsDataDownload(
+        facility,
+        configID,
+        selectedReportingPeriod.slice(0, 4),
+        selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
+        getUser() !== null
       );
     }
-
-    await Promise.allSettled(promises);
   };
 
   const formatCommentsToTable = (data) => {
@@ -495,10 +497,16 @@ export const HeaderInfo = ({
     ];
   };
   const openViewComments = () => {
-    mpApi.getMonitoringPlanComments(selectedConfig.id).then((data) => {
-      setCommentsData(formatCommentsToTable(data.data));
-      setShowCommentsModal(true);
-    });
+    mpApi
+      .getMonitoringPlanComments(selectedConfig.id)
+
+      .then((data) => {
+        setCommentsData(formatCommentsToTable(data.data));
+        setShowCommentsModal(true);
+      })
+      .catch((error) => {
+        console.error("Error during getting comments", error);
+      });
 
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
@@ -508,50 +516,67 @@ export const HeaderInfo = ({
   useEffect(() => {
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
-      mpApi.getRefreshInfo(configID).then((res) => {
-        if (res.data.evalStatusCode) {
-          const status = res.data.evalStatusCode;
-          setEvalStatus(status);
-          setEvalStatusLoaded(true);
-        }
-      });
+      mpApi
+        .getRefreshInfo(configID)
+        .then((res) => {
+          if (res.data.evalStatusCode) {
+            const status = res.data.evalStatusCode;
+            setEvalStatus(status);
+            setEvalStatusLoaded(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Error during evaluation", error);
+        });
     }
 
     // then load the rest of the data
     if (evalModuleLoadedStatus && !dataLoaded) {
-      mpApi.getCheckedOutLocations().then((res) => {
-        // get info for current checked-out configs, checkout status, date
-        const configs = res.data;
-        setCheckedOutConfigs(configs);
-        let currDate = new Date(Date.now());
-        currDate.setDate(currDate.getDate() - 1);
+      mpApi
+        .getCheckedOutLocations()
+        .then((res) => {
+          // get info for current checked-out configs, checkout status, date
+          const configs = res.data;
+          setCheckedOutConfigs(configs);
+          let currDate = new Date(Date.now());
+          currDate.setDate(currDate.getDate() - 1);
 
-        // get selected config information...
-        let currentConfig = findCurrentlyCheckedOutByInfo(configs);
+          // get selected config information...
+          let currentConfig = findCurrentlyCheckedOutByInfo(configs);
 
-        // from checkouts table (if available)
-        if (currentConfig) {
-          // set current facility as locked & render new data onto page
-          setLockedFacility(true);
-          renderWithNewData(configs, currentConfig, true);
-        }
-        // if not, obtain it from the database
-        else {
-          mpApi.getRefreshInfo(configID).then((info) => {
-            currentConfig = {
-              checkedOutBy: "N/A",
-              lastUpdatedBy: info.data.userId,
-              updateDate: info.data.updateDate,
-            };
+          // from checkouts table (if available)
+          if (currentConfig) {
+            // set current facility as locked & render new data onto page
+            setLockedFacility(true);
+            renderWithNewData(configs, currentConfig, true);
+          }
+          // if not, obtain it from the database
+          else {
+            mpApi
+              .getRefreshInfo(configID)
+              .then((info) => {
+                currentConfig = {
+                  checkedOutBy: "N/A",
+                  lastUpdatedBy: info.data.userId,
+                  updateDate: info.data.updateDate,
+                };
 
-            // update lock status of current facility & render new data onto page
-            setLockedFacility(
-              configs.some((plan) => plan.facId === parseInt(info.data.facId))
-            );
-            renderWithNewData(configs, currentConfig, false);
-          });
-        }
-      });
+                // update lock status of current facility & render new data onto page
+                setLockedFacility(
+                  configs.some(
+                    (plan) => plan.facId === parseInt(info.data.facId)
+                  )
+                );
+                renderWithNewData(configs, currentConfig, false);
+              })
+              .catch((error) => {
+                console.error("Error during refreshing", error);
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Error during getting checked out locations", error);
+        });
     }
 
     // clear open intervals when a different page is loaded
@@ -588,19 +613,24 @@ export const HeaderInfo = ({
           (currStatus === "INQ" || currStatus === "WIP")
         ) {
           // check database and update status
-          mpApi.getRefreshInfo(configID).then((res) => {
-            let databaseStatus = "";
-            if (res) {
-              databaseStatus = res.data.evalStatusCode;
-            }
+          mpApi
+            .getRefreshInfo(configID)
+            .then((res) => {
+              let databaseStatus = "";
+              if (res) {
+                databaseStatus = res.data.evalStatusCode;
+              }
 
-            // if database is different than current status, then update
-            if (currStatus !== databaseStatus) {
-              currStatus = databaseStatus;
-              setEvalStatus(databaseStatus);
-              setEvalStatusLoaded(true);
-            }
-          });
+              // if database is different than current status, then update
+              if (currStatus !== databaseStatus) {
+                currStatus = databaseStatus;
+                setEvalStatus(databaseStatus);
+                setEvalStatusLoaded(true);
+              }
+            })
+            .catch((error) => {
+              console.error("Error during getting refresh info", error);
+            });
         }
 
         // if refresh timeout is reached,
@@ -748,24 +778,31 @@ export const HeaderInfo = ({
     // trigger checkout API
     //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
     //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout).then(
-      () => {
+    checkoutAPI(direction, configID, selectedConfig.id, setCheckout)
+      .then(() => {
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
         // setCheckoutState(direction);
         setDataLoaded(false);
-      }
-    );
+      })
+      .catch((error) => {
+        console.error("Error during checking out api ", error);
+      });
   };
 
   const revert = () => {
-    mpApi.revertOfficialRecord(selectedConfig.id).then(() => {
-      setRevertedState(true);
-      setShowRevertModal(false);
-      setIsReverting(false);
-      setEvalStatusLoaded(false);
-      setDataLoaded(false);
-    });
+    mpApi
+      .revertOfficialRecord(selectedConfig.id)
+      .then(() => {
+        setRevertedState(true);
+        setShowRevertModal(false);
+        setIsReverting(false);
+        setEvalStatusLoaded(false);
+        setDataLoaded(false);
+      })
+      .catch((error) => {
+        console.error("Error during reverting to official record", error);
+      });
     // this code executes first while we wait for api to finish returning
     setIsReverting(true);
     setShowRevertModal(false);
@@ -860,7 +897,7 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = () => {
-    if(!emissionDropdownState.selectedReportingPeriods.length) return
+    if (!emissionDropdownState.selectedReportingPeriods.length) return;
     const uniqueReportingPeriods = [
       ...new Set([...emissionDropdownState.selectedReportingPeriods]),
     ];
@@ -882,9 +919,9 @@ export const HeaderInfo = ({
   };
 
   const reportingPeriodOnChangeUpdate = () => {
-    const selectedReportingPeriods = reportingPeriods.filter(
-      (el) => el.selected
-    ).map(rp => rp.id);
+    const selectedReportingPeriods = reportingPeriods
+      .filter((el) => el.selected)
+      .map((rp) => rp.id);
     setEmissionDropdownState({
       ...cloneDeep(emissionDropdownState),
       selectedReportingPeriods,
@@ -896,9 +933,13 @@ export const HeaderInfo = ({
       setIsLoading(true);
       setDataLoaded(false);
       if (workspaceSection === EMISSIONS_STORE_NAME)
-        await handleEmissionsExport();
+        await handleEmissionsExport().catch((error) => {
+          console.error("Error during exporting:", error);
+        });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-        await mpApi.exportMonitoringPlanDownload(configID);
+        await mpApi.exportMonitoringPlanDownload(configID).catch((error) => {
+          console.error("Error during exporting ", error);
+        });
       setDataLoaded(true);
       setIsLoading(false);
     } catch (error) {
@@ -923,7 +964,7 @@ export const HeaderInfo = ({
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
     handleSelectReportingPeriod();
-    setLocationSelect(emissionDropdownState.locationSelect)
+    setLocationSelect(emissionDropdownState.locationSelect);
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
@@ -1019,7 +1060,7 @@ export const HeaderInfo = ({
         />
       )}
 
-      {evalModuleLoadedStatus && dataLoaded  ? (
+      {evalModuleLoadedStatus && dataLoaded ? (
         <div>
           <div className="display-flex flex-row flex-justify flex-align-center height-2">
             <div className="grid-row">
@@ -1035,7 +1076,10 @@ export const HeaderInfo = ({
                 type="button"
                 className="margin-right-2 float-left margin-bottom-2"
                 outline={true}
-                onClick={handleExport}
+                onClick={() => {
+                  handleExport().catch(handleError);
+                  return;
+                }}
               >
                 Export Data
               </Button>
@@ -1102,18 +1146,19 @@ export const HeaderInfo = ({
                       <CreateOutlined color="primary" /> {"Check Out"}
                     </Button>
                   ) : null}
-                  {workspaceSection === MONITORING_PLAN_STORE_NAME && showRevert(evalStatus) && (
-                    <Button
-                      type="button"
-                      id="showRevertModal"
-                      tabIndex="0"
-                      onClick={() => setShowRevertModal(true)}
-                      outline={true}
-                      className="text-no-wrap height-6 position-relative bottom-1"
-                    >
-                      Revert to Official Record
-                    </Button>
-                  )}
+                  {workspaceSection === MONITORING_PLAN_STORE_NAME &&
+                    showRevert(evalStatus) && (
+                      <Button
+                        type="button"
+                        id="showRevertModal"
+                        tabIndex="0"
+                        onClick={() => setShowRevertModal(true)}
+                        outline={true}
+                        className="text-no-wrap height-6 position-relative bottom-1"
+                      >
+                        Revert to Official Record
+                      </Button>
+                    )}
                 </Grid>
               )}
 
@@ -1272,11 +1317,11 @@ export const HeaderInfo = ({
               <Grid row={true}>
                 <Grid col={2} className="margin-top-3 margin-right-2">
                   <MultiSelectCombobox
-                      items={reportingPeriods}
-                      label="Reporting Period(s)"
-                      entity="reportingPeriod"
-                      searchBy="contains"
-                      onChangeUpdate={reportingPeriodOnChangeUpdate}
+                    items={reportingPeriods}
+                    label="Reporting Period(s)"
+                    entity="reportingPeriod"
+                    searchBy="contains"
+                    onChangeUpdate={reportingPeriodOnChangeUpdate}
                   />
                 </Grid>
                 <Grid col={2}>
@@ -1287,7 +1332,12 @@ export const HeaderInfo = ({
                     viewKey="name"
                     selectKey="id"
                     initialSelection={emissionDropdownState.locationSelect[0]}
-                    selectionHandler={(location) => setEmissionDropdownState({...cloneDeep(emissionDropdownState), locationSelect: location})}
+                    selectionHandler={(location) =>
+                      setEmissionDropdownState({
+                        ...cloneDeep(emissionDropdownState),
+                        locationSelect: location,
+                      })
+                    }
                     workspaceSection={workspaceSection}
                     changeFunc={getEmissionsViewDropdownData}
                   />
@@ -1355,7 +1405,7 @@ export const HeaderInfo = ({
             close={closeImportModalHandler}
             showCancel={true}
             showSave={true}
-            title={ `Import a ${workspaceSectionName} to continue.`}
+            title={`Import ${workspaceSectionName} Data`}
             exitBTN={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
