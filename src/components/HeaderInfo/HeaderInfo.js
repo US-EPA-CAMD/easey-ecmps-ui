@@ -1046,7 +1046,7 @@ export const HeaderInfo = ({
                 className="margin-right-2 float-left margin-bottom-2"
                 outline={true}
                 onClick={() => {
-                  handleExport();
+                  handleExport().catch(handleError);
                   return;
                 }}
               >
