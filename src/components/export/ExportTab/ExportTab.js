@@ -9,7 +9,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
 import { getUser } from "../../../utils/functions";
-
+import UploadModal from "../../UploadModal/UploadModal";
 export const ExportTab = ({
   facility,
   selectedConfig,
@@ -18,7 +18,6 @@ export const ExportTab = ({
   setExportState,
   workspaceSection,
 }) => {
-
   const [isExporting, setIsExporting] = useState(false);
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -71,10 +70,11 @@ export const ExportTab = ({
 
     // qa checkbox checked/unchecked
     if (e.target.name === qa) {
-      const options = dataTypesCopy[index].checked ? { ...reportingPeriod } : null;
+      const options = dataTypesCopy[index].checked
+        ? { ...reportingPeriod }
+        : null;
       setPreviewOptions(options);
     }
-
   };
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -89,7 +89,7 @@ export const ExportTab = ({
       },
       workspaceSection
     );
-    const isQaChecked = dataTypes.some(e => e.name === qa && e.checked)
+    const isQaChecked = dataTypes.some((e) => e.name === qa && e.checked);
     // update preview options only if qa is checked
     if (isQaChecked) {
       setPreviewOptions({ beginDate, endDate });
@@ -162,7 +162,7 @@ export const ExportTab = ({
         }
       }
       return false;
-    }
+    };
 
     return (
       isExporting ||
@@ -178,7 +178,9 @@ export const ExportTab = ({
           <div className="grid-row">
             <h3>
               <span className="font-body-lg">{facilityMainName}</span>
-              <span className="text-bold font-body-xl display-block">{facilityAdditionalName}</span>
+              <span className="text-bold font-body-xl display-block">
+                {facilityAdditionalName}
+              </span>
             </h3>{" "}
           </div>
         </div>
@@ -219,8 +221,8 @@ export const ExportTab = ({
         {previewOptions && (
           <div class="maxh-tablet overflow-y-auto">
             <ExportTablesContainer
-              tableTitle={'Test Summary'}
-              dataKey={'testSummaryData'}
+              tableTitle={"Test Summary"}
+              dataKey={"testSummaryData"}
               selectionData={previewOptions}
               selectedConfig={selectedConfig}
               exportState={exportState}
@@ -230,8 +232,8 @@ export const ExportTab = ({
               dataRef={rowsData}
             />
             <ExportTablesContainer
-              tableTitle={'QA Certification Events'}
-              dataKey={'certificationEventData'}
+              tableTitle={"QA Certification Events"}
+              dataKey={"certificationEventData"}
               selectionData={previewOptions}
               selectedConfig={selectedConfig}
               exportState={exportState}
@@ -241,8 +243,8 @@ export const ExportTab = ({
               dataRef={rowsData}
             />
             <ExportTablesContainer
-              tableTitle={'Test Extension Exemptions'}
-              dataKey={'testExtensionExemptionData'}
+              tableTitle={"Test Extension Exemptions"}
+              dataKey={"testExtensionExemptionData"}
               selectionData={previewOptions}
               selectedConfig={selectedConfig}
               exportState={exportState}
@@ -253,26 +255,32 @@ export const ExportTab = ({
             />
           </div>
         )}
-        {
-          previewOptions && (
-            <div className="border-top-1px border-base-lighter">
-              <div className="grid-row margin-y-3 maxw-desktop padding-top-1">
-                <div className="grid-col-9">
-                </div>
-                <div className="grid-col-3">
-                  <Button
-                    type={"button"}
-                    className="float-right"
-                    disabled={isExportDisabled()}
-                    onClick={exportClickHandler}
-                  >
-                    Export
-                  </Button>
-                </div>
+        {previewOptions && (
+          <div className="border-top-1px border-base-lighter">
+            <div className="grid-row margin-y-3 maxw-desktop padding-top-1">
+              <div className="grid-col-9"></div>
+              <div className="grid-col-3">
+                <Button
+                  type={"button"}
+                  className="float-right"
+                  disabled={isExportDisabled()}
+                  onClick={exportClickHandler}
+                >
+                  Export
+                </Button>
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
+
+        {isExporting && (
+          <UploadModal
+            width={"30%"}
+            left={"35%"}
+            children={<Preloader />}
+            preloader
+          />
+        )}
       </div>
     </>
   );
