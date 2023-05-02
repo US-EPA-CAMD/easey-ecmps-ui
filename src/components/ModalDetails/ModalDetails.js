@@ -495,28 +495,15 @@ const ModalDetails = ({
     return (
       <div className="grid-col">
         <FormGroup className="margin-top-0 colMaxWidth">
-          {value[4] === "radio" ? (
-            ""
-          ) : (
+          {value[4] !== "radio" &&
             // For all inputs except for radio buttons:
             <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
               {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
-              {value[4] === "date" ? (
-                <span className="usa-hint d-block" id="appointment-date-hint">
-                  <span className="sr-only"> - </span>mm/dd/yyyy
-                </span>
-              ) : (
-                ""
-              )}
-              {value[4] === "time" ? (
-                <span className="usa-hint d-block" id="appointment-date-hint">
-                  <span className="sr-only"> - </span>hh
-                </span>
-              ) : (
-                ""
-              )}
-            </Label>
-          )}
+              {value[4] === "date" &&
+                <span className="usa-hint d-block" id="appointment-date-hint"> - mm/dd/yyyy</span>}
+              {value[4] === "time" &&
+                <span className="usa-hint d-block" id="appointment-date-hint"> - hh</span>}
+            </Label>}
           {comp}
         </FormGroup>
       </div>
