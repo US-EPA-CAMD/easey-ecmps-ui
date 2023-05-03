@@ -33,15 +33,22 @@ export const ImportHistoricalDataModal = ({
 
     exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
       .then(({ data: exportResponse }) => {
+        console.log(exportResponse)
         return importEmissionsData(exportResponse);
       })
       .then(({ data: importResponse, status }) => {
         if (status === 201) {
           setImportedFileErrorMsgs([]);
         } else if (importResponse?.message) {
-          setImportedFileErrorMsgs(
-            importResponse?.message?.split(",") || [`HTTP ${status} Error`]
-          );
+          if(Array.isArray(importResponse.message)) {
+            setImportedFileErrorMsgs(
+              importResponse?.message || [`HTTP ${status} Error`]
+            );
+          } else {
+            setImportedFileErrorMsgs(
+              importResponse?.message?.split(",") || [`HTTP ${status} Error`]
+            );
+          }
         } else {
           setImportedFileErrorMsgs([`HTTP ${status} Error`]);
         }
