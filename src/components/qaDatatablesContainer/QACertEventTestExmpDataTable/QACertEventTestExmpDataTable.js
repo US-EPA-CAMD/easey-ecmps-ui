@@ -516,17 +516,17 @@ const QACertEventTestExmpDataTable = ({
           dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
-              <>
-                <span className="padding-right-2">{dataTableName}</span>
+              <div className="display-table-row">
+                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
-                  className="text-white"
+                  className="text-white display-table-cell"
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-              </>
+              </div>
             ) : (
               dataTableName
             )

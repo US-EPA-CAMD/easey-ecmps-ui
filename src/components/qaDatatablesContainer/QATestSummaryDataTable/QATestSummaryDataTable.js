@@ -211,10 +211,20 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
             getOptions(d, "componentId", "componentId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 6) {
           dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
             getOptions(d, "monitoringSystemId", "monitoringSystemId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
@@ -250,6 +260,8 @@ const QATestSummaryDataTable = ({
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
+    }).catch(err => {
+      console.log("error", err)
     });
   };
   useEffect(() => {
@@ -894,17 +906,17 @@ const QATestSummaryDataTable = ({
           sectionSelect={sectionSelect}
           actionColumnName={
             user && isCheckedOut ? (
-              <>
-                <span className="padding-right-2">Test Data</span>
+              <div className="display-table-row">
+                <span className="padding-right-2  text-wrap display-table-cell">Test Data</span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
-                  className="text-white"
+                  className="text-white display-table-cell"
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-              </>
+              </div>
             ) : (
               "Test Data"
             )

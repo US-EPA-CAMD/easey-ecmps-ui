@@ -115,7 +115,18 @@ export const EmissionsTabRender = ({
         />
       </div>
       <hr />
-      {!isInitialLoadOfPage && (
+      {!isInitialLoadOfPage && 
+      viewTemplateSelect?.code === "SELECT" || !viewTemplateSelect ? (
+        <div>
+          <div className="grid-row overflow-x-auto">
+            {!user ? (
+              <p>There is either no data available for that configuration or you have not applied filters yet (2022 currently has the most data)</p>
+            ) : (
+              <p>Please import an emissions file for the selected year and quarter or apply filters to view data</p>
+            )}
+          </div>
+        </div>
+      ) : (
         <div>
           <div className="grid-row overflow-x-auto">
             <CustomAccordion
