@@ -33,7 +33,6 @@ export const ImportHistoricalDataModal = ({
 
     exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
       .then(({ data: exportResponse }) => {
-        console.log(exportResponse)
         return importEmissionsData(exportResponse);
       })
       .then(({ data: importResponse, status }) => {
