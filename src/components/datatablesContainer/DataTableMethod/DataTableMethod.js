@@ -390,7 +390,7 @@ export const DataTableMethod = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)]);
+      setErrorMsgs([JSON.stringify(error.message)]);
     }
   };
 
