@@ -32,7 +32,6 @@ export async function logServerError(message, metadata = {}) {
 
 export function handleError(error) {
   let errorMessage = "";
-  console.log('handleError: ', error);
 
   if (error.response) {
     // client received an error response (5xx, 4xx)
@@ -58,9 +57,10 @@ export function handleError(error) {
     displayAppError(errorMessage);
   }
 
-  if (error.response) {
-    return error.response.data.message;
-  }
+  // sonarcloud doesnt want to return anything 
+  // if (error.response) {
+  //   return error.response.data.message;
+  // }
 }
 
 export function handleImportError(error) {
@@ -79,8 +79,8 @@ export function handleImportError(error) {
     // anything else
     log.error({ error: error.message });
   }
-
-  if (error.response) {
-    return error.response.data.message;
-  }
+  // sonarcloud doesnt want to return anything 
+  // if (error.response) {
+  //   return error.response.data.message;
+  // }
 }

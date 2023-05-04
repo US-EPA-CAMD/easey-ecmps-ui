@@ -112,9 +112,8 @@ const TableRender = forwardRef(
 
         const yearQuarter = row.periodAbbreviation.split(" ");
 
-        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${
-          yearQuarter[0]
-        }&quarter=${yearQuarter[1].charAt(1)}`;
+        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${yearQuarter[0]
+          }&quarter=${yearQuarter[1].charAt(1)}`;
       }
 
       url =
@@ -169,10 +168,9 @@ const TableRender = forwardRef(
     addEvalStatusCell(mappings, handleRowView);
 
     return (
-      <div>
-        {state && state.length > 0 && (
+      <>
           <DataTable
-            className="data-display-table"
+            className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
             defaultSortField="orisCode"
             columns={mappings}
             data={state}
@@ -186,9 +184,9 @@ const TableRender = forwardRef(
                 id="bdfSortIcon"
               />
             }
+            noDataComponent={<div aria-live="polite">There are no records to display</div>}
           />
-        )}
-      </div>
+      </>
     );
   }
 );

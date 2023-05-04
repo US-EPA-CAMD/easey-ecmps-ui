@@ -61,6 +61,8 @@ export const QACertEventTabRender = ({
         locations={locations}
         selectedTestCode={selectedTestCode}
         isCheckedOut={checkoutState}
+        updateTable={updateRelatedTables}
+        setUpdateTable={setUpdateRelatedTables}
       />
     </div>
   );

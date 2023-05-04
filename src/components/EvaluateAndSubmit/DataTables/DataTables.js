@@ -205,7 +205,7 @@ const DataTables = ({
             <div
               className={
                 activeTables[name]
-                  ? "data-display-table maxh-mobile overflow-y-auto overflow-x-auto"
+                  ? "display-block"
                   : "display-none"
               }
             >

@@ -89,6 +89,11 @@ export const DataTableRender = ({
       addScreenReaderLabelForCollapses();
     };
   }, []);
+
+  const storeActiveElementAndCallOpenHandler = (...args) => {
+    window.openModalBtn = document.activeElement;
+    return openHandler(...args);
+  }
   useEffect(() => {
     if (openAndCheckoutBTNFocus) {
       setTimeout(() => {
@@ -253,7 +258,7 @@ export const DataTableRender = ({
                           ? `btnOpen${tableTitle.split(" ").join("")}`
                           : `btnOpen`
                       }
-                      onClick={() => openHandler(normalizedRow, false, false)}
+                      onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, false, false)}
                       aria-label={`open ${row["col1"]} in a new tab`}
                     >
                       {"Open"}
@@ -279,7 +284,7 @@ export const DataTableRender = ({
                                 .join("")}`
                               : `btnOpenAndCheckout`
                           }
-                          onClick={() => openHandler(normalizedRow, true)}
+                          onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, true)}
                           aria-label={`open and checkout ${row.col1} in a new tab`}
                         >
                           {"Open & Checkout"}
@@ -303,7 +308,7 @@ export const DataTableRender = ({
                                 : `btnCheckBackIn`
                             }
                             onClick={() =>
-                              openHandler(normalizedRow, false, true)
+                              storeActiveElementAndCallOpenHandler(normalizedRow, false, true)
                             }
                             aria-label={`check back in ${row.col1} `}
                           >
@@ -328,7 +333,7 @@ export const DataTableRender = ({
                   }
                   className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={`Open ${row.col1} in a new tab`}
                 >
@@ -365,7 +370,7 @@ export const DataTableRender = ({
                     `btnOpen${row[`col${Object.keys(row).length - 1}`]}`
                   }
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={
                     checkout
@@ -389,7 +394,7 @@ export const DataTableRender = ({
                   }
                   className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
                   onClick={() => {
-                    openHandler(normalizedRow, false);
+                    storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
                   aria-label={`View ${row.col1}`}
                 >

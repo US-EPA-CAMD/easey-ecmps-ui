@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
-import { needEndDate } from "../../../additional-functions/app-error";
 import {
   getActiveData,
   getInactiveData,
@@ -64,6 +63,8 @@ export const DataTableMats = ({
   const [errorMsgs, setErrorMsgs] = useState([]);
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
+
+  const dataTableName = "Supplemental Methods";
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -134,12 +135,12 @@ export const DataTableMats = ({
 
   const payload = {
     locationId: locationSelectValue,
-    id: null,
-    supplementalMATSMonitoringMethodCode: null,
-    supplementalMATSParameterCode: null,
-    beginDate: null,
+    id: "string",
+    supplementalMATSMonitoringMethodCode: "string",
+    supplementalMATSParameterCode: "string",
+    beginDate: "string",
     beginHour: 0,
-    endDate: null,
+    endDate: "string",
     endHour: 0,
   };
   const data = useMemo(() => {
@@ -187,11 +188,9 @@ export const DataTableMats = ({
 
   const saveMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {
@@ -210,11 +209,9 @@ export const DataTableMats = ({
   };
   const createMats = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    if (
-      (userInput.endHour && !userInput.endDate) ||
-      (!userInput.endHour && userInput.endDate)
-    ) {
-      setErrorMsgs([needEndDate]);
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
       return;
     }
     try {

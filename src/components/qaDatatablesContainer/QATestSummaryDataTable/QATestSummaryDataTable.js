@@ -211,10 +211,20 @@ const QATestSummaryDataTable = ({
           dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
             getOptions(d, "componentId", "componentId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 6) {
           dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
             getOptions(d, "monitoringSystemId", "monitoringSystemId")
           );
+          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
+            dropdowns[dropdownArray[0][i]].sort((a, b) => {
+              return a.code - b.code;
+            });
+          }
         } else if (i === 7) {
           let noDupesTestCodes = response[4].data.map((code) => {
             return code["testTypeCode"];
@@ -250,6 +260,8 @@ const QATestSummaryDataTable = ({
       setMdmData(dropdowns);
       setDropdownsLoaded(true);
       setDropdownsLoading(false);
+    }).catch(err => {
+      console.log("error", err)
     });
   };
   useEffect(() => {
@@ -367,7 +379,7 @@ const QATestSummaryDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -375,7 +387,7 @@ const QATestSummaryDataTable = ({
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -495,24 +507,24 @@ const QATestSummaryDataTable = ({
   };
 
   const uiControls = {
-    stackPipeId: null,
-    unitId: null,
-    testTypeCode: null,
+    stackPipeId: "string",
+    unitId: "string",
+    testTypeCode: "string",
     componentID: "string",
     monitoringSystemID: "string",
-    spanScaleCode: null,
+    spanScaleCode: "string",
     testNumber: "string",
-    testReasonCode: null,
-    testResultCode: null,
-    beginDate: null,
-    beginHour: null,
-    beginMinute: null,
-    endDate: null,
-    endHour: null,
-    endMinute: null,
-    gracePeriodIndicator: null,
-    testComment: null,
-    injectionProtocolCode: null,
+    testReasonCode: "string",
+    testResultCode: "string",
+    beginDate: "string",
+    beginHour: 0,
+    beginMinute: 0,
+    endDate: "string",
+    endHour: 0,
+    endMinute: 0,
+    gracePeriodIndicator: 0,
+    testComment: "string",
+    injectionProtocolCode: "string",
   };
 
   const saveData = () => {
@@ -528,9 +540,6 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
-          uiControls.componentID = "string";
-          uiControls.monitoringSystemID = "string";
-          uiControls.testNumber = "string";
         } else {
           setUpdateTable(true);
           executeOnClose();
@@ -573,9 +582,6 @@ const QATestSummaryDataTable = ({
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
           alert(res[0]);
-          uiControls.componentID = "string";
-          uiControls.monitoringSystemID = "string";
-          uiControls.testNumber = "string";
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
@@ -900,17 +906,17 @@ const QATestSummaryDataTable = ({
           sectionSelect={sectionSelect}
           actionColumnName={
             user && isCheckedOut ? (
-              <>
-                <span className="padding-right-2">Test Data</span>
+              <div className="display-table-row">
+                <span className="padding-right-2  text-wrap display-table-cell">Test Data</span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
-                  className="text-white"
+                  className="text-white display-table-cell"
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-              </>
+              </div>
             ) : (
               "Test Data"
             )

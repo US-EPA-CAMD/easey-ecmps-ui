@@ -176,9 +176,15 @@ export const UploadModal = ({
                               <h3 id="importErrorsHeading">
                                 File Import Error(s)
                               </h3>
-                              <p id="importErrorSubText">
-                                {`The file selected for import has ${importedFileErrorMsgs.length} error(s).`}
-                              </p>
+                              {Array.isArray(importedFileErrorMsgs) ? (
+                                <p id="importErrorSubText">
+                                  {`The file selected for import has ${importedFileErrorMsgs.length} error(s).`}
+                                </p>
+                              ) : (
+                                <p id="importErrorSubText">
+                                  {`The file selected for import has 1 error.`}
+                                </p>
+                              )}
                             </div>
                           ) : (
                             <div className="left-2 padding-x-5 padding-top-5 padding-bottom-1">

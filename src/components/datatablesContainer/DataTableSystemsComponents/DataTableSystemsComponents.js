@@ -200,6 +200,7 @@ export const DataTableSystemsComponents = ({
   }, [systemID]);
 
   useEffect(() => {
+  if(selected?.locationId && selected?.id){
     mpApi
       .getMonitoringSystemsComponents(selected.locationId, selected.id)
       .then((res) => {
@@ -215,6 +216,7 @@ export const DataTableSystemsComponents = ({
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
       });
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 
@@ -227,9 +229,9 @@ export const DataTableSystemsComponents = ({
           data[prefilteredDataName] === mainSystemComponentDropdownChange
       );
       if (result.length > 0) {
+        const selectedCodes = result[0];
         for (const modalDetailData of selectedComponentsModalData) {
-          if (modalDetailData[4] === "dropdown") {
-            const selectedCodes = result[0];
+          if (modalDetailData[4] === "dropdown" && Object.keys(selectedCodes).includes(modalDetailData[0])) {        
             let filteredOutSubDropdownOptions = systemComponentsMdmData[
               modalDetailData[0]
             ] || [];
@@ -549,38 +551,42 @@ export const DataTableSystemsComponents = ({
       {(() => {
         if (!secondLevel) {
           return (
-            <div>
-              <DataTableRender
-                columnNames={columnNames}
-                data={data}
-                openHandler={openComponent}
-                tableTitle="System Components"
-                componentStyling="systemsCompTable"
-                dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
-                actionsBtn={"View"}
-                user={user}
-                checkout={checkout}
-                addBtn={openAddComponents}
-                addBtnName={"Add Component"}
-                show={true}
-                ariaLabel={"System Components"}
-              />
-              <DataTableRender
-                columnNames={fuelFlowsColumnNames}
-                data={fuelFlowsData}
-                openHandler={openFuelFlows}
-                tableTitle="Fuel Flows"
-                user={user}
-                checkout={checkout}
-                componentStyling="systemsCompTable"
-                dataLoaded={dataFuelLoaded && fuelFlowDropdownsLoaded}
-                actionsBtn={"View"}
-                addBtn={openFuelFlows}
-                addBtnName={"Create New Fuel Flow"}
-                show={true}
-                ariaLabel={"Fuel Flows"}
-              />
-            </div>
+            <>
+              <div style={{ marginBottom: '50px' }}>
+                <DataTableRender
+                  columnNames={columnNames}
+                  data={data}
+                  openHandler={openComponent}
+                  tableTitle="System Components"
+                  componentStyling="systemsCompTable"
+                  dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
+                  actionsBtn={"View"}
+                  user={user}
+                  checkout={checkout}
+                  addBtn={openAddComponents}
+                  addBtnName={"Add Component"}
+                  show={true}
+                  ariaLabel={"System Components"}
+                />
+              </div>
+              <div>
+                <DataTableRender
+                  columnNames={fuelFlowsColumnNames}
+                  data={fuelFlowsData}
+                  openHandler={openFuelFlows}
+                  tableTitle="Fuel Flows"
+                  user={user}
+                  checkout={checkout}
+                  componentStyling="systemsCompTable"
+                  dataLoaded={dataFuelLoaded && fuelFlowDropdownsLoaded}
+                  actionsBtn={"View"}
+                  addBtn={openFuelFlows}
+                  addBtnName={"Create New Fuel Flow"}
+                  show={true}
+                  ariaLabel={"Fuel Flows"}
+                />
+              </div>
+            </>
           );
         } else {
           //Second LEVEL
@@ -648,7 +654,7 @@ export const DataTableSystemsComponents = ({
                     mainDropdownChange={mainSystemComponentDropdownChange}
                     title={
                       selectedComponent !== null
-                        ? ` Add Component: ${selectedComponent["componentId"]}`
+                        ? ` Add Component: ${selectedComponent?.componentId}`
                         : "Create Component"
                     }
                     viewOnly={!(user && checkout)}
@@ -676,8 +682,8 @@ export const DataTableSystemsComponents = ({
                         createNewComponentFlag
                           ? "Create Component"
                           : user && checkout
-                          ? `Edit Component: ${selectedComponent["componentId"]}`
-                          : `Component: ${selectedComponent["componentId"]}`
+                          ? `Edit Component: ${selectedComponent?.componentId}`
+                          : `Component: ${selectedComponent?.componentId}`
                       }
                       create={createNewComponentFlag}
                       setMainDropdownChange={

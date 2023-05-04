@@ -58,7 +58,7 @@ export const exportEmissionsDataDownload = async (
   quarter,
   isWorkspace = false
 ) => {
-  const fileName = `Emissions | Export - ${facility}.json`;
+  const fileName = `Emissions | Export - ${facility} - ${year} - Q${quarter}.json`;
   const response = await exportEmissionsData(
     monitorPlanId,
     year,

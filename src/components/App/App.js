@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -17,7 +18,7 @@ import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
 
 import HelpSupport from "../HelpSupport/HelpSupport";
-import InactivityTracker from "../InactivityTracker/InactivityTracker";
+import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
 import {
   assignFocusEventListeners,
@@ -34,9 +35,6 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
-import { isEqual } from "lodash";
-
-const cdx_user = sessionStorage.getItem("cdx_user");
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -65,7 +63,10 @@ const App = () => {
     if (user) {
       return setInterval(async () => {
         const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (checkedOutLocationResult && !isEqual(checkedOutLocationResult, checkedOutLocationsCache)) {
+        if (
+          checkedOutLocationResult &&
+          !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
+        ) {
           dispatch({
             type: types.SET_CHECKED_OUT_LOCATIONS,
             checkedOutLocations: checkedOutLocationResult,
@@ -78,10 +79,15 @@ const App = () => {
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
-    return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => clearInterval(interval); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
+    window.addEventListener("storage", (event) => {
+      if (event.key === "ecmps_user") {
+        window.location.reload();
+      }
+    });
     prepDocument();
   }, []);
 
@@ -100,11 +106,28 @@ const App = () => {
   });
 
   useEffect(() => {
-    const cdxUser = sessionStorage.getItem("cdx_user")
-      ? JSON.parse(sessionStorage.getItem("cdx_user"))
+    let ecmpsUser = localStorage.getItem("ecmps_user")
+      ? JSON.parse(localStorage.getItem("ecmps_user"))
       : false;
 
-    setUser(cdxUser && cdxUser.firstName ? cdxUser : false);
+    if (ecmpsUser) {
+      //Determine if we still have a valid session given a user exists
+
+      if (localStorage.getItem("ecmps_session_expiration")) {
+        if (
+          new Date() >
+          new Date(localStorage.getItem("ecmps_session_expiration"))
+        ) {
+          localStorage.removeItem("ecmps_user");
+          ecmpsUser = false;
+        }
+      } else {
+        localStorage.removeItem("ecmps_user");
+        ecmpsUser = false;
+      }
+    }
+
+    setUser(ecmpsUser && ecmpsUser.firstName ? ecmpsUser : false);
 
     assignFocusEventListeners();
     handleActiveElementFocus();
@@ -218,9 +241,9 @@ const App = () => {
             }
           />
           <Route
-            path="/qa/tests"
+            path="/qa-test"
             element={user
-              ? <Navigate to="/workspace/qa/tests" replace />
+              ? <Navigate to="/workspace/qa-test" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
@@ -228,9 +251,9 @@ const App = () => {
             }
           />
           <Route
-            path="/workspace/qa/tests"
+            path="/workspace/qa-test"
             element={!user
-              ? <Navigate to="/qa/tests" replace />
+              ? <Navigate to="/qa-test" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -243,9 +266,9 @@ const App = () => {
             }
           />
           <Route
-            path="/qa/qce-tee"
+            path="/qa-qce-tee"
             element={user
-              ? <Navigate to="/workspace/qa/qce-tee" replace />
+              ? <Navigate to="/workspace/qa-qce-tee" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
@@ -253,9 +276,9 @@ const App = () => {
             }
           />
           <Route
-            path="/workspace/qa/qce-tee"
+            path="/workspace/qa-qce-tee"
             element={!user
-              ? <Navigate to="/qa/qce-tee" replace />
+              ? <Navigate to="/qa-qce-tee" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -282,8 +305,13 @@ const App = () => {
             element={!user
               ? <Navigate to="/emissions" replace />
               : <MonitoringPlanHome
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
                   user={user}
                   workspaceSection={EMISSIONS_STORE_NAME}
+                  moduleName={modules.emissions_module}
                 />
             }
           />
@@ -302,8 +330,12 @@ const App = () => {
             element={!user
               ? <Navigate to="/export" replace />
               : <MonitoringPlanHome
-                user={user}
-                workspaceSection={EXPORT_STORE_NAME}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  user={user}   
+                  workspaceSection={EXPORT_STORE_NAME}
               />
             }
           />
@@ -314,16 +346,16 @@ const App = () => {
               : <ErrorSuppression />
             }
           />
-          <Route path="/tutorials" element={ComingSoon} />
-          <Route path="/cam-api" element={ComingSoon} />
-          <Route path="/glossary" element={ComingSoon} />
+          <Route path="/tutorials" element={<ComingSoon />} />
+          <Route path="/cam-api" element={<ComingSoon />} />
+          <Route path="/glossary" element={<ComingSoon />} />
           <Route
             path="/reporting-instructions"
-            element={ReportingInstructions}
+            element={<ReportingInstructions />}
           />
-          <Route path={`/resources`} element={Resources} />
-          <Route path={`/help-support`} element={HelpSupport} />
-          <Route path="*" element={NotFound} />
+          <Route path={`/resources`} element={<Resources />} />
+          <Route path={`/help-support`} element={<HelpSupport />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>      
     </div>

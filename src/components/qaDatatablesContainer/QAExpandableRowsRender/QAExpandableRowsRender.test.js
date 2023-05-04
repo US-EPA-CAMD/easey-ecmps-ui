@@ -1,7 +1,6 @@
 import React from "react";
 import {
   render,
-  waitForElement,
   screen,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

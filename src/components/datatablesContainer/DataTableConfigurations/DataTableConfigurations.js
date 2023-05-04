@@ -33,10 +33,14 @@ export const DataTableConfigurations = ({
   const findSelectedConfig = (configID) => {
     let val = 0;
     if (selectedMP.length > 0) {
-      for (const x of selectedMP[1]) {
-        if (x.id === configID) {
-          val = x;
-          break;
+      for (const currentMP of selectedMP){
+        if(currentMP !== undefined){
+          for (const x of currentMP[1]) {
+            if (x.id === configID) {
+              val = x;
+              break;
+            }
+          }
         }
       }
     }
@@ -130,7 +134,7 @@ export const DataTableConfigurations = ({
   }, []);
 
   useEffect(() => {
-    setSelectedMp(monitoringPlans[monitoringPlans.length - 1]);
+    setSelectedMp([...selectedMP, monitoringPlans[monitoringPlans.length - 1]])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans.length]);

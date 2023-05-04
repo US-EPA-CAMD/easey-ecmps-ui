@@ -184,7 +184,6 @@ describe("AddErrorSupressionModal component", () => {
         it('should display the proper time criteria row for timeTimeCode=QUARTER', async () => {
             const ctxVal = { ...contextMock };
             ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode = "QUARTER";
-            console.log(JSON.stringify(ctxVal))
             const row = { ...tableRow };
             row.matchTimeTypeCode = "QUARTER";
             row.matchHistoricalIndicator = true;
@@ -204,7 +203,6 @@ describe("AddErrorSupressionModal component", () => {
         it('should display the proper time criteria row for timeTimeCode=HOUR', async () => {
             const ctxVal = { ...contextMock };
             ctxVal["transformedData"]["LINEAR"]["12"][0].timeTypeCode = "HOUR";
-            console.log(JSON.stringify(ctxVal))
             const row = { ...tableRow };
             row.matchTimeTypeCode = "HOUR";
             row.matchHistoricalIndicator = true;

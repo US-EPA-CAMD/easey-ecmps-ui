@@ -280,11 +280,7 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    const validationErrors = validateUserInput(userInput, {
-      dataTableName,
-      lAttr,
-      rDat,
-    });
+    const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
       setErrorMsgs(validationErrors);
       return;
@@ -316,11 +312,7 @@ export const DataTableAssert = ({
       ".modalUserInput",
       radioNames ? radioNames : null
     );
-    const validationErrors = validateUserInput(userInput, {
-      dataTableName,
-      lAttr,
-      rDat,
-    });
+    const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
       setErrorMsgs(validationErrors);
       return;

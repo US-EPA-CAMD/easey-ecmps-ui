@@ -48,6 +48,8 @@ const QACertEventTestExmpDataTable = ({
   selectedLocation,
   orisCode,
   locations,
+  updateTable,
+  setUpdateTable
 }) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
@@ -61,7 +63,6 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
-  const [updateTable, setUpdateTable] = useState(false);
 
 
   const years = generateArrayOfYears(2009).map((year, index) => {
@@ -219,7 +220,6 @@ const QACertEventTestExmpDataTable = ({
           });
         break;
       case "Test Extension Exemption":
-        // TODO: issues with ticket 5056
         const quarters = [
           { code: "1", name: "1" },
           { code: "2", name: "2" },
@@ -351,7 +351,7 @@ const QACertEventTestExmpDataTable = ({
     if (create) {
       if (controlInputs?.unitId) {
         controlInputs.unitId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -359,7 +359,7 @@ const QACertEventTestExmpDataTable = ({
         selectedData.unitId = selectedLocation.name;
       } else {
         controlInputs.stackPipeId = [
-          "Unit or Stack Pipe ID",
+          "Unit/Stack Pipe ID",
           "input",
           selectedLocation.name,
           "fixed",
@@ -516,17 +516,17 @@ const QACertEventTestExmpDataTable = ({
           dataTableName={dataTableName}
           actionColumnName={
             user && isCheckedOut ? (
-              <>
-                <span className="padding-right-2">{dataTableName}</span>
+              <div className="display-table-row">
+                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
-                  className="text-white"
+                  className="text-white display-table-cell"
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
                 </Button>
-              </>
+              </div>
             ) : (
               dataTableName
             )
