@@ -7,8 +7,12 @@ import MockAdapter from "axios-mock-adapter";
 import QATestSummaryDataTable from "./QATestSummaryDataTable";
 import configureStore from "../../../store/configureStore.dev";
 import config from "../../../config";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
 
 const mock = new MockAdapter(axios);
+
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const idRegex = "[\\w\\-]+";
 const locId = "locId";
@@ -487,8 +491,8 @@ const componentRender = (show, testTypeGroupCodeValue) => {
   let updateRelatedTables = false;
 
   function setUpdateRelatedTables(update) {
-    updateRelatedTables = update; 
-  };
+    updateRelatedTables = update;
+  }
 
   return render(
     <QATestSummaryDataTable
@@ -551,8 +555,6 @@ test("testing component renders properly and functionlity for add/edit/remove", 
   // const confirmBtn = screen.getByRole("button", { name: /Yes/i });
   // userEvent.click(confirmBtn);
   // setTimeout(() => expect(mock.history.delete.length).toBe(1), 1000);
-
-
 });
 
 test("testing component renders properly with RELACC ", async () => {
@@ -574,12 +576,12 @@ test("testing component renders properly with FFLB ", async () => {
   expect(container).toBeDefined();
 });
 test("testing component renders properly with FLC ", async () => {
-  jest.setTimeout(10000)
+  jest.setTimeout(10000);
   const { container } = await waitForElement(() =>
     componentRender(true, "FLC")
   );
   expect(container).toBeDefined();
-  jest.setTimeout(5000)
+  jest.setTimeout(5000);
 });
 test("testing component renders properly with OLOLCAL ", async () => {
   const { container } = await waitForElement(() =>
@@ -594,12 +596,12 @@ test("testing component renders properly with CALINJ ", async () => {
   expect(container).toBeDefined();
 });
 test("testing component renders properly with FFACC ", async () => {
-  jest.setTimeout(10000)
+  jest.setTimeout(10000);
   const { container } = await waitForElement(() =>
     componentRender(true, "FFACC")
   );
   expect(container).toBeDefined();
-  jest.setTimeout(5000)
+  jest.setTimeout(5000);
 });
 test("testing component renders properly with CYCSUM ", async () => {
   const { container } = await waitForElement(() =>

@@ -6,6 +6,7 @@ import { ClearSharp } from "@material-ui/icons";
 import { config } from "../../config";
 import { logOut, refreshLastActivity } from "../../utils/api/easeyAuthApi";
 import "./InactivityTracker.scss";
+import { currentDateTime } from "../../utils/functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -53,7 +54,7 @@ export const InactivityTracker = () => {
 
   const extendSessionExpiration = () => {
     //Extends user session expiration window every activity
-    const newExpiration = new Date();
+    const newExpiration = currentDateTime();
     newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration + 1);
     localStorage.setItem("ecmps_session_expiration", newExpiration);
   };
