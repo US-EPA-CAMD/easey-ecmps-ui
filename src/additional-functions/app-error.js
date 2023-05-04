@@ -15,15 +15,11 @@ export const displayAppError = (error) => {
       .querySelectorAll("svg path")
       .forEach((element) => (element.tabIndex = -1));
 
-
-
     errorMsg.addEventListener("click", hideAppError);
-
-    errorMsg.setAttribute('aria-label', 'Click to close error message')
 
     const svgElements = document.querySelectorAll('#appErrorMessage .MuiSvgIcon-root');
     const xButtonSvg = svgElements[1];
-    xButtonSvg.setAttribute('aria-label', 'Close error message X ICON');
+    xButtonSvg.setAttribute('aria-label', 'Close error message');
   }
 };
 
