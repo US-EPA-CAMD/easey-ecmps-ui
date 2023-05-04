@@ -37,8 +37,7 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
-
-const ecmps_user = localStorage.getItem("ecmps_user");
+import { currentDateTime } from "../../utils/functions";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -121,14 +120,16 @@ const App = () => {
 
       if (localStorage.getItem("ecmps_session_expiration")) {
         if (
-          new Date() >
+          currentDateTime() >
           new Date(localStorage.getItem("ecmps_session_expiration"))
         ) {
           localStorage.removeItem("ecmps_user");
           ecmpsUser = false;
         }
       } else {
-        localStorage.removeItem("ecmps_user");
+        if (localStorage.getItem("ecmps_user")) {
+          localStorage.removeItem("ecmps_user");
+        }
         ecmpsUser = false;
       }
     }
@@ -188,7 +189,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!ecmps_user && <Redirect from="/workspace/submit" to="/home" />}
+            {!user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
               path="/workspace/submit"
               exact
@@ -197,7 +198,7 @@ const App = () => {
               )}
             />
 
-            {!ecmps_user && <Redirect from="/workspace/evaluate" to="/home" />}
+            {!user && <Redirect from="/workspace/evaluate" to="/home" />}
             <Route
               path="/workspace/evaluate"
               exact
@@ -367,7 +368,7 @@ const App = () => {
               )}
             />
 
-            {!ecmps_user && (
+            {!user && (
               <Redirect from="/workspace/error-suppression" to="/home" />
             )}
             <Route

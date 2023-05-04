@@ -6,195 +6,200 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import userEvent from "@testing-library/user-event";
-import * as context from '../context/error-suppression-context';
-import { ErrorSuppressionFiltersContext, useSuppressionFiltersStore } from "../context/error-suppression-context";
+import * as context from "../context/error-suppression-context";
+import {
+  ErrorSuppressionFiltersContext,
+  useSuppressionFiltersStore,
+} from "../context/error-suppression-context";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
+
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const ProviderForTest = ({ children }) => {
-
-    return (
-        <ErrorSuppressionFiltersContext.Provider value={useSuppressionFiltersStore()}>
-            {children}
-        </ErrorSuppressionFiltersContext.Provider>
-    )
-
-}
+  return (
+    <ErrorSuppressionFiltersContext.Provider
+      value={useSuppressionFiltersStore()}
+    >
+      {children}
+    </ErrorSuppressionFiltersContext.Provider>
+  );
+};
 describe("ErrorSuppressionDataContainer component", () => {
+  const mock = new MockAdapter(axios);
+  jest.spyOn(context, "useSuppressionFiltersStore").mockReturnValue({
+    checkType: 1,
+    checkNumber: 2,
+    checkResult: 3,
+  });
 
-    const mock = new MockAdapter(axios);
-    jest.spyOn(context, 'useSuppressionFiltersStore').mockReturnValue({
-        checkType: 1,
-        checkNumber: 2,
-        checkResult: 3
-    })
+  mock.onGet(`${config.services.camd.uri}/error-suppressions`).reply(200, [
+    {
+      id: 1031,
+      checkCatalogResultId: 3540,
+      checkTypeCode: "QUAL",
+      checkNumber: 23,
+      checkResultCode: "D",
+      severityCode: "NONE",
+      facilityId: 8331,
+      orisCode: 2271,
+      locations: "1A,1B",
+      matchDataTypeCode: "QUALTYP",
+      matchDataValue: "abc",
+      matchTimeTypeCode: "HISTIND",
+      matchTimeBeginValue: "",
+      matchTimeEndValue: null,
+      matchHistoricalIndicator: false,
+      reasonCode: "BUG",
+      note: "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+      active: false,
+      userId: "WorleyC",
+      addDate: "2011-01-25T11:26:32.000Z",
+      updateDate: "2011-12-21T15:15:06.000Z",
+    },
+    {
+      id: 1033,
+      checkCatalogResultId: 3540,
+      checkTypeCode: "QUAL",
+      checkNumber: 23,
+      checkResultCode: "D",
+      severityCode: "NONE",
+      facilityId: 262,
+      orisCode: 1305,
+      locations: "GT1,GT2,GT3",
+      matchDataTypeCode: "QUALTYP",
+      matchDataValue: null,
+      matchTimeTypeCode: "QUARTER",
+      matchTimeBeginValue: "2011-03-25T11:26:32.000Z",
+      matchTimeEndValue: "2011-11-25T11:26:32.000Z",
+      matchHistoricalIndicator: false,
+      reasonCode: "BUG",
+      note: "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+      active: false,
+      userId: "WorleyC",
+      addDate: "2011-01-25T11:46:37.000Z",
+      updateDate: "2011-12-21T15:15:40.000Z",
+    },
+    {
+      id: 1034,
+      checkCatalogResultId: 3540,
+      checkTypeCode: "QUAL",
+      checkNumber: 23,
+      checkResultCode: "D",
+      severityCode: "NONE",
+      facilityId: 262,
+      orisCode: 1305,
+      locations: "GT1,GT2,GT3",
+      matchDataTypeCode: "QUALTYP",
+      matchDataValue: null,
+      matchTimeTypeCode: "DATE",
+      matchTimeBeginValue: "2011-10-25T11:26:32.000Z",
+      matchTimeEndValue: "2011-11-25T11:26:32.000Z",
+      matchHistoricalIndicator: false,
+      reasonCode: "BUG",
+      note: "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+      active: false,
+      userId: "WorleyC",
+      addDate: "2011-01-25T11:46:37.000Z",
+      updateDate: "2011-12-21T15:15:40.000Z",
+    },
+    {
+      id: 1035,
+      checkCatalogResultId: 3540,
+      checkTypeCode: "QUAL",
+      checkNumber: 23,
+      checkResultCode: "D",
+      severityCode: "NONE",
+      facilityId: 262,
+      orisCode: 1305,
+      locations: "GT1,GT2,GT3",
+      matchDataTypeCode: "QUALTYP",
+      matchDataValue: null,
+      matchTimeTypeCode: "HOUR",
+      matchTimeBeginValue: "2011-10-25T11:26:32.000Z",
+      matchTimeEndValue: "2011-11-25T11:26:32.000Z",
+      matchHistoricalIndicator: false,
+      reasonCode: "BUG",
+      note: "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
+      active: false,
+      userId: "WorleyC",
+      addDate: "2011-01-25T11:46:37.000Z",
+      updateDate: "2011-12-21T15:15:40.000Z",
+    },
+  ]);
 
-    mock
-        .onGet(`${config.services.camd.uri}/error-suppressions`)
-        .reply(200, [{
-            "id": 1031,
-            "checkCatalogResultId": 3540,
-            "checkTypeCode": "QUAL",
-            "checkNumber": 23,
-            "checkResultCode": "D",
-            "severityCode": "NONE",
-            "facilityId": 8331,
-            "orisCode": 2271,
-            "locations": "1A,1B",
-            "matchDataTypeCode": "QUALTYP",
-            "matchDataValue": "abc",
-            "matchTimeTypeCode": "HISTIND",
-            "matchTimeBeginValue": "",
-            "matchTimeEndValue": null,
-            "matchHistoricalIndicator": false,
-            "reasonCode": "BUG",
-            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-            "active": false,
-            "userId": "WorleyC",
-            "addDate": "2011-01-25T11:26:32.000Z",
-            "updateDate": "2011-12-21T15:15:06.000Z"
-        },
-        {
-            "id": 1033,
-            "checkCatalogResultId": 3540,
-            "checkTypeCode": "QUAL",
-            "checkNumber": 23,
-            "checkResultCode": "D",
-            "severityCode": "NONE",
-            "facilityId": 262,
-            "orisCode": 1305,
-            "locations": "GT1,GT2,GT3",
-            "matchDataTypeCode": "QUALTYP",
-            "matchDataValue": null,
-            "matchTimeTypeCode": "QUARTER",
-            "matchTimeBeginValue": "2011-03-25T11:26:32.000Z",
-            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-            "matchHistoricalIndicator": false,
-            "reasonCode": "BUG",
-            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-            "active": false,
-            "userId": "WorleyC",
-            "addDate": "2011-01-25T11:46:37.000Z",
-            "updateDate": "2011-12-21T15:15:40.000Z"
-        },
-        {
-            "id": 1034,
-            "checkCatalogResultId": 3540,
-            "checkTypeCode": "QUAL",
-            "checkNumber": 23,
-            "checkResultCode": "D",
-            "severityCode": "NONE",
-            "facilityId": 262,
-            "orisCode": 1305,
-            "locations": "GT1,GT2,GT3",
-            "matchDataTypeCode": "QUALTYP",
-            "matchDataValue": null,
-            "matchTimeTypeCode": "DATE",
-            "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
-            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-            "matchHistoricalIndicator": false,
-            "reasonCode": "BUG",
-            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-            "active": false,
-            "userId": "WorleyC",
-            "addDate": "2011-01-25T11:46:37.000Z",
-            "updateDate": "2011-12-21T15:15:40.000Z"
-        },
-        {
-            "id": 1035,
-            "checkCatalogResultId": 3540,
-            "checkTypeCode": "QUAL",
-            "checkNumber": 23,
-            "checkResultCode": "D",
-            "severityCode": "NONE",
-            "facilityId": 262,
-            "orisCode": 1305,
-            "locations": "GT1,GT2,GT3",
-            "matchDataTypeCode": "QUALTYP",
-            "matchDataValue": null,
-            "matchTimeTypeCode": "HOUR",
-            "matchTimeBeginValue": "2011-10-25T11:26:32.000Z",
-            "matchTimeEndValue": "2011-11-25T11:26:32.000Z",
-            "matchHistoricalIndicator": false,
-            "reasonCode": "BUG",
-            "note": "This error suppression is to allow newly affected TR LME units to submit their MP data. BZ 10246  cjw 10-25-2011.",
-            "active": false,
-            "userId": "WorleyC",
-            "addDate": "2011-01-25T11:46:37.000Z",
-            "updateDate": "2011-12-21T15:15:40.000Z"
-        },
+  beforeEach(async () => {
+    await act(async () => {
+      return render(
+        <ProviderForTest>
+          <ErrorSuppressionDataContainer />
+        </ProviderForTest>
+      );
+    });
+  });
 
-        ]);
+  it("Renders table and the four rows", () => {
+    const cb0 = screen.getByTestId("select-cb-0");
+    const cb1 = screen.getByTestId("select-cb-1");
+    const cb2 = screen.getByTestId("select-cb-2");
+    const cb3 = screen.getByTestId("select-cb-3");
 
-    beforeEach(async () => {
+    expect(cb0).toBeDefined();
+    expect(cb1).toBeDefined();
+    expect(cb2).toBeDefined();
+    expect(cb3).toBeDefined();
+  });
 
-        await act(async () => {
-            return render(
-                (<ProviderForTest>
-                    <ErrorSuppressionDataContainer />
-                </ProviderForTest>)
-            );
-        })
-    })
+  it("disables clone button when two checkboxes are selected", async () => {
+    const cb0 = screen.getByTestId("select-cb-0");
+    const cb1 = screen.getByTestId("select-cb-1");
+    const cloneButton = screen.getByTestId("es-clone");
 
-    it("Renders table and the four rows", () => {
-        const cb0 = screen.getByTestId("select-cb-0");
-        const cb1 = screen.getByTestId("select-cb-1");
-        const cb2 = screen.getByTestId("select-cb-2");
-        const cb3 = screen.getByTestId("select-cb-3");
+    // Should be enabled after single checkbox clicked
+    await act(async () => {
+      userEvent.click(cb0);
+      userEvent.click(cb1);
+    });
 
-        expect(cb0).toBeDefined();
-        expect(cb1).toBeDefined();
-        expect(cb2).toBeDefined();
-        expect(cb3).toBeDefined();
-    })
+    // expect(cloneButton).toBeDisabled();
+    expect(cloneButton).toBeDisabled();
+  });
 
-    it("disables clone button when two checkboxes are selected", async () => {
-        const cb0 = screen.getByTestId("select-cb-0");
-        const cb1 = screen.getByTestId("select-cb-1");
-        const cloneButton = screen.getByTestId("es-clone")
+  it("Reenables clone button when two checkboxes are selected and then one of them is deselected again", async () => {
+    const cb0 = screen.getByTestId("select-cb-0");
+    const cb1 = screen.getByTestId("select-cb-1");
+    const cloneButton = screen.getByTestId("es-clone");
 
-        // Should be enabled after single checkbox clicked
-        await act(async () => {
-            userEvent.click(cb0);
-            userEvent.click(cb1)
-        })
+    // Should be enabled after single checkbox clicked
+    await userEvent.click(cb0);
+    await userEvent.dblClick(cb1);
 
-        // expect(cloneButton).toBeDisabled();
-        expect(cloneButton).toBeDisabled();
-    })
+    expect(cloneButton).not.toBeDisabled();
+  });
 
-    it("Reenables clone button when two checkboxes are selected and then one of them is deselected again", async () => {
-        const cb0 = screen.getByTestId("select-cb-0");
-        const cb1 = screen.getByTestId("select-cb-1");
-        const cloneButton = screen.getByTestId("es-clone")
+  it("Has the correctly formatted data for Match Time Criteria", () => {
+    // when matchTimeTypeCode=QUARTER
+    expect(screen.queryByText("2011 Q1 - 2011 Q4")).toBeDefined();
+    // when matchTimeTypeCode=DATE
+    expect(screen.queryByText("10/25/2011 - 11/25/2011")).toBeDefined();
+    // when matchTimeTypeCode=HOUR
+    expect(
+      screen.queryByText("10/25/2011 11:26:32 - 11/25/2011 11:26:32")
+    ).toBeDefined();
+    // when matchTimeTypeCode=HISTIND
+    expect(screen.queryByText("Historical")).toBeDefined();
+  });
 
-        // Should be enabled after single checkbox clicked
-        await userEvent.click(cb0);
-        await userEvent.dblClick(cb1)
+  it("Disables deactivate button when no checkboxes are selected and enabled when at least one chceckbox is selected", async () => {
+    const deactivateButton = screen.getByTestId("es-deactivate");
+    expect(deactivateButton).toBeDisabled();
 
-        expect(cloneButton).not.toBeDisabled();
-    })
+    const cb0 = screen.getByTestId("select-cb-0");
 
-    it("Has the correctly formatted data for Match Time Criteria", () => {
-        // when matchTimeTypeCode=QUARTER
-        expect(screen.queryByText("2011 Q1 - 2011 Q4")).toBeDefined();
-        // when matchTimeTypeCode=DATE
-        expect(screen.queryByText("10/25/2011 - 11/25/2011")).toBeDefined();
-        // when matchTimeTypeCode=HOUR
-        expect(screen.queryByText("10/25/2011 11:26:32 - 11/25/2011 11:26:32")).toBeDefined();
-        // when matchTimeTypeCode=HISTIND
-        expect(screen.queryByText("Historical")).toBeDefined();
-    })
+    await act(async () => {
+      userEvent.click(cb0);
+    });
 
-    it("Disables deactivate button when no checkboxes are selected and enabled when at least one chceckbox is selected", async () => {
-        const deactivateButton = screen.getByTestId("es-deactivate");
-        expect(deactivateButton).toBeDisabled();
-
-        const cb0 = screen.getByTestId("select-cb-0");
-
-        await act(async () => {
-            userEvent.click(cb0);
-        })
-
-        expect(deactivateButton).not.toBeDisabled();
-    })
-})
+    expect(deactivateButton).not.toBeDisabled();
+  });
+});

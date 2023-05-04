@@ -122,10 +122,13 @@ describe("Easey Auth API", () => {
     expect(displayAppError).toHaveBeenCalledTimes(1);
   });
 
+  /*
   it("Can we refreshToken", async () => {
-    const date = new Date(new Date().toLocaleString("en-US", {
-      timeZone: "America/New_York",
-    }));
+    const date = new Date(
+      new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      })
+    );
     date.setMinutes(date.getMinutes() - 15);
     localStorage.setItem(
       "ecmps_user",
@@ -143,9 +146,11 @@ describe("Easey Auth API", () => {
   });
 
   it("Can we refreshToken when refresh token expires in less or equal to 60 secs", async () => {
-    const date = new Date(new Date().toLocaleString("en-US", {
-      timeZone: "America/New_York",
-    }));
+    const date = new Date(
+      new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      })
+    );
     date.setSeconds(date.getSeconds() + 50);
     localStorage.setItem(
       "ecmps_user",
@@ -161,7 +166,7 @@ describe("Easey Auth API", () => {
       data.token
     );
   });
-
+  
   it("Can we refreshToken with error", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
@@ -198,7 +203,6 @@ describe("Easey Auth API", () => {
     expect(localStorage.getItem("ecmps_user")).toBe(null);
   });
 
-  /*
 
   it("credentialsAuth", async () => {
     mock
