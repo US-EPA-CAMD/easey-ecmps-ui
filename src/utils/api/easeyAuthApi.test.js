@@ -3,13 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 import { displayAppError } from "../../additional-functions/app-error";
 import config from "../../config";
 
-import {
-  authenticate,
-  logOut,
-  refreshClientToken,
-  refreshToken,
-  secureAxios,
-} from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios } from "./easeyAuthApi";
 
 jest.mock("./monitoringPlansApi", () => ({
   getCheckedOutLocations: jest.fn().mockResolvedValue({
