@@ -19,7 +19,9 @@ export const displayAppError = (error) => {
 
     const svgElements = document.querySelectorAll('#appErrorMessage .MuiSvgIcon-root');
     const xButtonSvg = svgElements[1];
-    xButtonSvg.setAttribute('aria-label', 'Close error message');
+    if (xButtonSvg) {
+      xButtonSvg.setAttribute('aria-label', 'Close error message');
+    }
   }
 };
 
