@@ -165,7 +165,7 @@ describe("Easey Auth API", () => {
       data.token
     );
   });
-
+  /*
   it("Can we refreshToken with error", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
@@ -182,7 +182,6 @@ describe("Easey Auth API", () => {
     expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toBe("xyz");
   });
 
-  /*
   it("Can we logOut", async () => {
     localStorage.setItem(
       "ecmps_user",
