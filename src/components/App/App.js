@@ -64,19 +64,40 @@ const App = () => {
   };
 
   let checkedOutLocationsCache = [];
+  const validCheckoutRefreshPaths = [
+    "workspace/monitoring-plans",
+    "workspace/qa-test",
+    "workspace/qa-qce-tee",
+    "workspace/emissions",
+    "workspace/export",
+    "workspace/evaluate",
+    "workspace/submit",
+  ];
+
   const refreshCheckoutInterval = () => {
-    if (user) {
+    if (localStorage.getItem("ecmps_user")) {
       return setInterval(async () => {
-        const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (
-          checkedOutLocationResult &&
-          !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
-        ) {
-          dispatch({
-            type: types.SET_CHECKED_OUT_LOCATIONS,
-            checkedOutLocations: checkedOutLocationResult,
-          });
-          checkedOutLocationsCache = checkedOutLocationResult;
+        let refreshCheckouts = false;
+
+        for (const loc of validCheckoutRefreshPaths) {
+          if (window.location.href.indexOf(loc) > -1) {
+            refreshCheckouts = true;
+            break;
+          }
+        }
+        if (refreshCheckouts) {
+          const checkedOutLocationResult = (await getCheckedOutLocations())
+            .data;
+          if (
+            checkedOutLocationResult &&
+            !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
+          ) {
+            dispatch({
+              type: types.SET_CHECKED_OUT_LOCATIONS,
+              checkedOutLocations: checkedOutLocationResult,
+            });
+            checkedOutLocationsCache = checkedOutLocationResult;
+          }
         }
       }, 10000);
     }
