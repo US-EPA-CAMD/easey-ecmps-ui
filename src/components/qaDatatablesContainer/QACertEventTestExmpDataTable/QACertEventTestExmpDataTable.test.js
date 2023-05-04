@@ -3,11 +3,14 @@ import { render, waitForElement, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
 
 import QACertEventTestExmpDataTable from "./QACertEventTestExmpDataTable";
 import config from "../../../config";
 
 const mock = new MockAdapter(axios);
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const qaCertBaseUrl = config.services.qaCertification.uri;
 const locId = "locId";

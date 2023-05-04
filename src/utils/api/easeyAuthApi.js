@@ -4,6 +4,7 @@ import config from "../../config";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
+import { currentDateTime } from "../functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -14,6 +15,7 @@ axios.defaults.headers.common = {
 export const secureAxios = async (options) => {
   try {
     const token = await refreshToken();
+    localStorage.setItem("refreshing_token", "false");
 
     if (token) {
       if (options["headers"]) {
@@ -90,11 +92,10 @@ export const authenticate = async (payload) => {
   })
     .then((response) => {
       localStorage.setItem("ecmps_user", JSON.stringify(response.data));
-      const newExpiration = new Date();
-      newExpiration.setSeconds(
-        newExpiration.getSeconds() + inactiveDuration + 1
-      );
-      localStorage.setItem("ecmps_session_expiration", newExpiration);
+
+      const currDate = currentDateTime();
+      currDate.setSeconds(currDate.getSeconds() + inactiveDuration + 1);
+      localStorage.setItem("ecmps_session_expiration", currDate);
 
       if (
         window.location.pathname.includes("/workspace") ||
@@ -146,18 +147,35 @@ export const logOut = async () => {
 
 export const refreshToken = async () => {
   try {
+    if (!localStorage.getItem("refreshing_token")) {
+      //Initialize token refresh variables responsbile for halting refresh if other calls are outgoing
+      localStorage.setItem("refreshing_token", "true");
+      localStorage.setItem("last_token_refresh_attempt", currentDateTime());
+    }
+
+    while (
+      //If other processes are refreshing token then wait to make our call
+      localStorage.getItem("refreshing_token") === "true" &&
+      currentDateTime().getTime() -
+        new Date(localStorage.getItem("last_token_refresh_attempt")).getTime() <
+        5000
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
     const ecmpsUser = localStorage.getItem("ecmps_user");
 
     if (ecmpsUser) {
       const user = JSON.parse(ecmpsUser);
-      const currDate = new Date(new Date().toLocaleString("en-US", {
-        timeZone: "America/New_York",
-      }));
+      const currDate = currentDateTime();
       const tokenExp = new Date(user.tokenExpiration);
       // set tokenExp back 60 seconds to ensure that we refresh token before expiring
       tokenExp.setSeconds(tokenExp.getSeconds() - 60);
 
       if (currDate > tokenExp) {
+        localStorage.setItem("refreshing_token", "true");
+        localStorage.setItem("last_token_refresh_attempt", currentDateTime());
+
         const result = await axios({
           method: "POST",
           url: `${config.services.authApi.uri}/tokens`,
@@ -176,6 +194,7 @@ export const refreshToken = async () => {
       }
       return user.token;
     }
+
     return null;
   } catch (e) {
     displayAppError(e);

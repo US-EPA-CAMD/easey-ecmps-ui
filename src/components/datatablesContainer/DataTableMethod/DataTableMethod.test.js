@@ -1,19 +1,34 @@
 import React from "react";
 import { render, waitForElement, screen } from "@testing-library/react";
-import { DataTableMethod, mapDispatchToProps, mapStateToProps } from "./DataTableMethod";
+import {
+  DataTableMethod,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableMethod";
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
-import { methodsActiveOnly, methodsInactiveOnly, methodsWithMats } from "./DataTableMethod.test.mocks";
+import {
+  methodsActiveOnly,
+  methodsInactiveOnly,
+  methodsWithMats,
+} from "./DataTableMethod.test.mocks";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
 
 const mock = new MockAdapter(axios);
-const idRegex = '[\\w\\-]+'
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
-const BASE_URL = config.services.monitorPlans.uri
-const getMonitoringMethodsUrl = new RegExp(`${BASE_URL}/locations/${idRegex}/methods`)
-const getMonitoringMatsMethodsUrl = new RegExp(`${BASE_URL}/locations/${idRegex}/mats-methods`)
+const idRegex = "[\\w\\-]+";
 
+const BASE_URL = config.services.monitorPlans.uri;
+const getMonitoringMethodsUrl = new RegExp(
+  `${BASE_URL}/locations/${idRegex}/methods`
+);
+const getMonitoringMatsMethodsUrl = new RegExp(
+  `${BASE_URL}/locations/${idRegex}/mats-methods`
+);
 
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (location, showModal) => {
@@ -485,29 +500,28 @@ const componentRendererNoData = (args) => {
 
   const props = { ...defualtProps, ...args };
   return render(<DataTableMethod {...props} />);
-}
-
+};
 
 test("configuration with only inactive methods", async () => {
-  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsInactiveOnly)
-  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsInactiveOnly)
+  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsInactiveOnly);
+  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsInactiveOnly);
   // let { container } = await waitForElement(() => componentRenderer(69, false));
-  componentRenderer(69, false)
-  const viewBtn = await screen.findByRole('button', { name: /View/i })
+  componentRenderer(69, false);
+  const viewBtn = await screen.findByRole("button", { name: /View/i });
   expect(viewBtn).toBeInTheDocument();
   // expect(container).toBeDefined();
 });
 
 test("configuration with both inactive and active methods and mats", async () => {
-  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsWithMats)
-  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsWithMats)
+  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsWithMats);
+  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsWithMats);
   let { container } = await waitForElement(() => componentRenderer(6));
   expect(container).toBeDefined();
 });
 
 test("configuration with only active methods", async () => {
-  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsActiveOnly)
-  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsActiveOnly)
+  mock.onGet(getMonitoringMethodsUrl).reply(200, methodsActiveOnly);
+  mock.onGet(getMonitoringMatsMethodsUrl).reply(200, methodsActiveOnly);
   let { container } = await waitForElement(() => componentRenderer(5894));
   expect(container).toBeDefined();
 });

@@ -37,6 +37,24 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
+export const dateToEstString = (value) => {
+  let date = new Date();
+
+  if (value) {
+    if (typeof value !== typeof Date) {
+      date = new Date(value);
+    }
+  }
+
+  return date.toLocaleString("en-US", {
+    timeZone: "America/New_York",
+  });
+};
+
+export const currentDateTime = () => {
+  return new Date(dateToEstString(new Date()));
+};
+
 export const formatDate = (dateString, delim = "-") => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();

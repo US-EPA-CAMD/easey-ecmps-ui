@@ -1,15 +1,18 @@
 import React from "react";
-import { render, screen,act  } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
 import QAImportHistoricalDataPreview from "./QAImportHistoricalDataPreview";
 import config from "../../config";
+import { secureAxios } from "../../utils/api/easeyAuthApi";
 
 const facId = "orisCode";
 
 const mock = new MockAdapter(axios);
+jest.mock("../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const beginDate = "1993-01-01";
 const endDate = "1993-03-31";
@@ -264,17 +267,16 @@ test("rows can be checked", async () => {
   const previewBtn = await screen.findByRole("button", { name: /Preview/i });
 
   await act(async () => {
-   userEvent.click(previewBtn);
+    userEvent.click(previewBtn);
   });
-  
+
   const rows = await screen.getAllByRole("checkbox");
   // Assert
 
   rows.forEach((row) => {
-    if(row.checked === false){
+    if (row.checked === false) {
       userEvent.click(row);
       expect(row.checked).toBe(true);
     }
-    
   });
 });

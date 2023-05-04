@@ -3,12 +3,19 @@ import { render, waitForElement, screen } from "@testing-library/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
-import { DataTableMats, mapDispatchToProps, mapStateToProps } from "./DataTableMats";
+import {
+  DataTableMats,
+  mapDispatchToProps,
+  mapStateToProps,
+} from "./DataTableMats";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import config from "../../../config";
 import userEvent from "@testing-library/user-event";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
 
 const mock = new MockAdapter(axios);
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const monitoringMatsMethods = [
   {
@@ -48,7 +55,7 @@ const monitoringMethods = [
     userId: "abcde",
     addDate: "2009-02-20",
     updateDate: "2009-02-20",
-    active: true
+    active: true,
   },
   {
     parameterCode: "SO2",
@@ -64,22 +71,30 @@ const monitoringMethods = [
     userId: "abcde",
     addDate: "2009-02-20",
     updateDate: "2009-02-20",
-    active: true
-  }
-]
+    active: true,
+  },
+];
 
-const idRegex = '[\\w\\-]+'
-const locationId = '5770'
+const idRegex = "[\\w\\-]+";
+const locationId = "5770";
 
-const getMonitoringMatsMethodsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locationId}/mats-methods`)
-const getMonitoringMethodsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${locationId}/methods`)
-const postUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods`)
-const putUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods/${idRegex}`)
+const getMonitoringMatsMethodsUrl = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${locationId}/mats-methods`
+);
+const getMonitoringMethodsUrl = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${locationId}/methods`
+);
+const postUrl = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods`
+);
+const putUrl = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${idRegex}/mats-methods/${idRegex}`
+);
 
-mock.onGet(getMonitoringMatsMethodsUrl).reply(200, monitoringMatsMethods)
-mock.onGet(getMonitoringMethodsUrl).reply(200, monitoringMethods)
-mock.onPost(postUrl).reply(200, 'created')
-mock.onPut(putUrl).reply(200, 'updated')
+mock.onGet(getMonitoringMatsMethodsUrl).reply(200, monitoringMatsMethods);
+mock.onGet(getMonitoringMethodsUrl).reply(200, monitoringMethods);
+mock.onPost(postUrl).reply(200, "created");
+mock.onPut(putUrl).reply(200, "updated");
 
 //testing redux connected component to mimic props passed as argument
 const componentRenderer = (location) => {
@@ -169,13 +184,13 @@ const componentRenderer = (location) => {
           name: "Quarterly Stack Testing",
         },
       ],
-      prefilteredMatsMethods: []
+      prefilteredMatsMethods: [],
     },
     loadDropdownsData: jest.fn(),
     settingInactiveCheckBox: jest.fn(),
     setUpdateRelatedTables: jest.fn(),
     updateRelatedTables: false,
-    currentTabIndex:0,
+    currentTabIndex: 0,
     tabs: [{ inactive: [{}] }],
   };
   return render(<DataTableMats {...props} />);
@@ -186,25 +201,29 @@ test("renders DataTableMats", async () => {
   expect(container).toBeDefined();
 });
 
-test('DataTableMats create', async () => {
-  await waitForElement(() => componentRenderer(locationId))
-  const addBtn = screen.getAllByRole('button', { name: /Create MATS/i })
-  userEvent.click(addBtn[0])
-  const saveAndCloseBtn = screen.getAllByRole('button', { name: /Create MATS/i })
-  userEvent.click(saveAndCloseBtn[0])
-  expect(addBtn[0]).toBeDefined()
+test("DataTableMats create", async () => {
+  await waitForElement(() => componentRenderer(locationId));
+  const addBtn = screen.getAllByRole("button", { name: /Create MATS/i });
+  userEvent.click(addBtn[0]);
+  const saveAndCloseBtn = screen.getAllByRole("button", {
+    name: /Create MATS/i,
+  });
+  userEvent.click(saveAndCloseBtn[0]);
+  expect(addBtn[0]).toBeDefined();
+});
 
-
-})
-
-test('DataTableMats edit', async () => {
-  await waitForElement(() => componentRenderer(locationId))
-  const editBtn = screen.getAllByRole('button', { name: 'view and/or edit TNHGM' })
-  userEvent.click(editBtn[0])
-  const saveAndCloseBtn = screen.getAllByRole('button', { name: /Click to save/i })
-  userEvent.click(saveAndCloseBtn[0])
-  expect(editBtn).toBeDefined()
-})
+test("DataTableMats edit", async () => {
+  await waitForElement(() => componentRenderer(locationId));
+  const editBtn = screen.getAllByRole("button", {
+    name: "view and/or edit TNHGM",
+  });
+  userEvent.click(editBtn[0]);
+  const saveAndCloseBtn = screen.getAllByRole("button", {
+    name: /Click to save/i,
+  });
+  userEvent.click(saveAndCloseBtn[0]);
+  expect(editBtn).toBeDefined();
+});
 
 test("mapStateToProps calls the appropriate state", async () => {
   // mock the 'dispatch' object

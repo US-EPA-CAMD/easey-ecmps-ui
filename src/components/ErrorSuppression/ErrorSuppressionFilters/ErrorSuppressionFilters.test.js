@@ -1,14 +1,19 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { ErrorSuppressionFilters, getLocations } from "./ErrorSuppressionFilters";
+import {
+  ErrorSuppressionFilters,
+  getLocations,
+} from "./ErrorSuppressionFilters";
 import { ErrorSuppressionFiltersContextProvider } from "../context/error-suppression-context";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import userEvent from "@testing-library/user-event";
-import { testtest } from "./ErrorSuppressionFilters";
-import { defaultDropdownText } from "../ErrorSuppression";
+import { secureAxios } from "../../../utils/api/easeyAuthApi";
+
+jest.mock("../../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const configurations = [
   {
@@ -19,19 +24,19 @@ const configurations = [
         id: "BZ5461",
         name: "1",
         type: "Unit",
-        unitId:"1"
+        unitId: "1",
       },
       {
         id: "CZ5461",
         name: "2",
         type: "Unit",
-        unitId:"2"
+        unitId: "2",
       },
       {
         id: "DA5461",
         name: "CS0AAN",
         type: "StackPipe",
-        stackPipeId:"CS0AAN"
+        stackPipeId: "CS0AAN",
       },
     ],
   },
@@ -54,28 +59,24 @@ mock.onGet(`${config.services.facilities.uri}/facilities`).reply(200, [
   },
 ]);
 
-mock
-  .onGet(`${config.services.mdm.uri}/es-check-catalog-results`)
-  .reply(200, [
-    {
-      id: "5003",
-      checkTypeCode: "ADESTAT",
-      checkTypeDescription: "Appendix D and E Status",
-      checkNumber: "6",
-      checkResult: "Accuracy Test Not Yet Evaluated",
-      locationTypeCode: "LOC",
-      timeTypeCode: "HOUR",
-      dataTypeCode: "FUELTYP",
-      dataTypeLabel: "Fuel Type",
-      dataTypeUrl: "/master-data-mgmt/fuel-type-codes",
-    },
-  ]);
+mock.onGet(`${config.services.mdm.uri}/es-check-catalog-results`).reply(200, [
+  {
+    id: "5003",
+    checkTypeCode: "ADESTAT",
+    checkTypeDescription: "Appendix D and E Status",
+    checkNumber: "6",
+    checkResult: "Accuracy Test Not Yet Evaluated",
+    locationTypeCode: "LOC",
+    timeTypeCode: "HOUR",
+    dataTypeCode: "FUELTYP",
+    dataTypeLabel: "Fuel Type",
+    dataTypeUrl: "/master-data-mgmt/fuel-type-codes",
+  },
+]);
 
 mock
   .onGet(
-    `${
-      config.services.monitorPlans.uri
-    }/configurations?orisCodes=${orisCode[0]}`
+    `${config.services.monitorPlans.uri}/configurations?orisCodes=${orisCode[0]}`
   )
   .reply(200, configurations);
 
@@ -85,7 +86,6 @@ describe("ErrorSuppressionFilters component", () => {
   //   mock.reset();
   // });
   beforeEach(async () => {
-
     await act(async () => {
       component = render(
         <ErrorSuppressionFiltersContextProvider>
@@ -142,15 +142,9 @@ describe("ErrorSuppressionFilters component", () => {
   it("clears all filters when clear button is selected", async () => {
     const clearButton = screen.getByTestId("clear-filters");
     await userEvent.click(clearButton);
-    expect(screen.getByTestId("check-number")).toHaveValue(
-      "false"
-    );
-    expect(screen.getByTestId("check-type")).toHaveValue(
-      "false"
-    );
-    expect(screen.getByTestId("check-result")).toHaveValue(
-      "false"
-    );
+    expect(screen.getByTestId("check-number")).toHaveValue("false");
+    expect(screen.getByTestId("check-type")).toHaveValue("false");
+    expect(screen.getByTestId("check-result")).toHaveValue("false");
 
     expect(screen.getByTestId("reason")).toHaveValue("false");
     expect(screen.getByTestId("is-active")).not.toBeChecked();
@@ -158,11 +152,11 @@ describe("ErrorSuppressionFilters component", () => {
   });
 
   it("calls onFacilityChange() when default dropdown text is selected", async () => {
-    await act(async ()=>{
-      await userEvent.click(screen.getByTestId("combo-box-toggle"))
+    await act(async () => {
+      await userEvent.click(screen.getByTestId("combo-box-toggle"));
       await userEvent.click(screen.getByTestId("combo-box-option-3"));
-    })
-    expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)")
+    });
+    expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)");
   });
 
   it("calls onCheckResultChange() when default dropdown text is selected", () => {
@@ -171,11 +165,10 @@ describe("ErrorSuppressionFilters component", () => {
   });
 });
 
-describe("getLocations()", ()=>{
-
-  it('tests that getLocations is returning the correct number of records', async()=>{
-    const checkResultObj={locationTypeCode:null};
+describe("getLocations()", () => {
+  it("tests that getLocations is returning the correct number of records", async () => {
+    const checkResultObj = { locationTypeCode: null };
     const availLoc = await getLocations(orisCode[0], checkResultObj);
     expect(availLoc.length).toBe(3);
-  })
-})
+  });
+});
