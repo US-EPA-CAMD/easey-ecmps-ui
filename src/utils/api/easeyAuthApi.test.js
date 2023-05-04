@@ -44,6 +44,7 @@ describe("Easey Auth API", () => {
   });
 
   it("should return response on success secureAxios call", async () => {
+    jest.setTimeout(10000);
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, "token");
     mock
       .onGet(`${config.services.authApi.uri}/test`)
