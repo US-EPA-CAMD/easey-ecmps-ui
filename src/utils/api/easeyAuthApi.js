@@ -15,7 +15,7 @@ axios.defaults.headers.common = {
 export const secureAxios = async (options) => {
   try {
     const token = await refreshToken();
-    localStorage.setItem("refreshing_token", "false");
+    localStorage.setItem("ecmps_refreshing_token", "false");
 
     if (token) {
       if (options["headers"]) {
@@ -91,11 +91,19 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
-      localStorage.setItem("ecmps_user", JSON.stringify(response.data));
+      localStorage.setItem(
+        "ecmps_user",
+        JSON.stringify(response.data)
+      );
 
       const currDate = currentDateTime();
-      currDate.setSeconds(currDate.getSeconds() + inactiveDuration + 1);
-      localStorage.setItem("ecmps_session_expiration", currDate);
+      currDate.setSeconds(
+        currDate.getSeconds() + inactiveDuration + 1
+      );
+      localStorage.setItem(
+        "ecmps_session_expiration",
+        currDate.toLocaleString()
+      );
 
       if (
         window.location.pathname.includes("/workspace") ||
@@ -113,9 +121,9 @@ export const authenticate = async (payload) => {
 };
 
 export const logOut = async () => {
-  const signingOut = localStorage.getItem("signing_out");
+  const signingOut = localStorage.getItem("ecmps_signing_out");
   if (signingOut && signingOut !== "true") {
-    localStorage.setItem("signing_out", "true");
+    localStorage.setItem("ecmps_signing_out", "true");
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
     const checkedOutLocationResult = await getCheckedOutLocations();
 
@@ -136,7 +144,7 @@ export const logOut = async () => {
     })
       .then(() => {
         localStorage.removeItem("ecmps_user");
-        localStorage.setItem("signing_out", "false");
+        localStorage.setItem("ecmps_signing_out", "false");
         window.location = config.app.path;
       })
       .catch((e) => {
@@ -147,18 +155,21 @@ export const logOut = async () => {
 
 export const refreshToken = async () => {
   try {
-    if (!localStorage.getItem("refreshing_token")) {
+    if (!localStorage.getItem("ecmps_refreshing_token")) {
       //Initialize token refresh variables responsbile for halting refresh if other calls are outgoing
-      localStorage.setItem("refreshing_token", "true");
-      localStorage.setItem("last_token_refresh_attempt", currentDateTime());
+      localStorage.setItem("ecmps_refreshing_token", "true");
+      localStorage.setItem(
+        "ecmps_last_token_refresh_attempt",
+        currentDateTime().toLocaleString()
+      );
     }
 
     while (
       //If other processes are refreshing token then wait to make our call
-      localStorage.getItem("refreshing_token") === "true" &&
+      localStorage.getItem("ecmps_refreshing_token") === "true" &&
       currentDateTime().getTime() -
-        new Date(localStorage.getItem("last_token_refresh_attempt")).getTime() <
-        5000
+        new Date(localStorage.getItem("ecmps_last_token_refresh_attempt")).getTime() <
+        1000
     ) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
@@ -173,8 +184,11 @@ export const refreshToken = async () => {
       tokenExp.setSeconds(tokenExp.getSeconds() - 60);
 
       if (currDate > tokenExp) {
-        localStorage.setItem("refreshing_token", "true");
-        localStorage.setItem("last_token_refresh_attempt", currentDateTime());
+        localStorage.setItem("ecmps_refreshing_token", "true");
+        localStorage.setItem(
+          "ecmps_last_token_refresh_attempt",
+          currentDateTime().toLocaleString()
+        );
 
         const result = await axios({
           method: "POST",
