@@ -138,8 +138,8 @@ export const HeaderInfo = ({
 
   const defaultTemplateValue = {
     code: "SELECT",
-    name: "--- select a view ---"
-  }
+    name: "--- select a view ---",
+  };
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
@@ -290,10 +290,10 @@ export const HeaderInfo = ({
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
-    if (currentTab?.reportingPeriods){
-      const selectedReportingPeriods = currentTab.reportingPeriods
-      for(const reportingPeriod of reportingPeriods) {
-        if(currentTab.reportingPeriods.includes(reportingPeriod.id)){
+    if (currentTab?.reportingPeriods) {
+      const selectedReportingPeriods = currentTab.reportingPeriods;
+      for (const reportingPeriod of reportingPeriods) {
+        if (currentTab.reportingPeriods.includes(reportingPeriod.id)) {
           reportingPeriod.selected = true;
         }
       }
@@ -303,7 +303,7 @@ export const HeaderInfo = ({
       });
     }
     if (currentTab?.locationSelect)
-      setLocationSelect(currentTab.locationSelect)
+      setLocationSelect(currentTab.locationSelect);
   }, [currentTab]);
 
   useEffect(() => {
@@ -370,7 +370,7 @@ export const HeaderInfo = ({
   useEffect(() => {
     getEmissionsViewDropdownData().catch((e) => {
       console.log(e);
-    })
+    });
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -405,12 +405,15 @@ export const HeaderInfo = ({
       viewData = viewData.filter(
         (v) => codesWithData.find((d) => d === v.code) !== undefined
       );
-      if(viewData.length === 0){
-        viewData.push(defaultTemplateValue)
-        setViewTemplateSelect(null)
+      if (viewData.length === 0) {
+        viewData.push(defaultTemplateValue);
+        setViewTemplateSelect(null);
       } else {
-        if(!viewTemplateSelect || viewTemplateSelect?.code === defaultTemplateValue.code)
-          setViewTemplateSelect(viewData[0])
+        if (
+          !viewTemplateSelect ||
+          viewTemplateSelect?.code === defaultTemplateValue.code
+        )
+          setViewTemplateSelect(viewData[0]);
       }
       setViewTemplates(viewData);
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
@@ -458,7 +461,7 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    for (const selectedReportingPeriod of selectedReportingPeriods) {
+    for (const selectedReportingPeriod of emissionDropdownState.selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
@@ -904,6 +907,7 @@ export const HeaderInfo = ({
 
     hideAppError();
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
+      console.log("errors displayed");
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       reportingPeriods = [...reportingPeriods];
       return;
@@ -929,6 +933,8 @@ export const HeaderInfo = ({
   };
 
   const handleExport = async () => {
+    // reportingPeriodOnChangeUpdate();
+    console.log("emissions", emissionDropdownState);
     try {
       setIsLoading(true);
       setDataLoaded(false);
@@ -1377,7 +1383,15 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    disabled={locationSelect && emissionDropdownState.selectedReportingPeriods.length !== 0 && (viewTemplateSelect?.code !== defaultTemplateValue.code && viewTemplateSelect !== null) ? false : true}
+                    disabled={
+                      locationSelect &&
+                      emissionDropdownState.selectedReportingPeriods.length !==
+                        0 &&
+                      viewTemplateSelect?.code !== defaultTemplateValue.code &&
+                      viewTemplateSelect !== null
+                        ? false
+                        : true
+                    }
                     onClick={() =>
                       applyFilters(
                         configID,
