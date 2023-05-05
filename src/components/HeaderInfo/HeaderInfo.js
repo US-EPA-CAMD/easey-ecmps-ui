@@ -138,8 +138,8 @@ export const HeaderInfo = ({
 
   const defaultTemplateValue = {
     code: "SELECT",
-    name: "--- select a view ---"
-  }
+    name: "--- select a view ---",
+  };
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
@@ -290,10 +290,10 @@ export const HeaderInfo = ({
   useEffect(() => {
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
-    if (currentTab?.reportingPeriods){
-      const selectedReportingPeriods = currentTab.reportingPeriods
-      for(const reportingPeriod of reportingPeriods) {
-        if(currentTab.reportingPeriods.includes(reportingPeriod.id)){
+    if (currentTab?.reportingPeriods) {
+      const selectedReportingPeriods = currentTab.reportingPeriods;
+      for (const reportingPeriod of reportingPeriods) {
+        if (currentTab.reportingPeriods.includes(reportingPeriod.id)) {
           reportingPeriod.selected = true;
         }
       }
@@ -303,7 +303,7 @@ export const HeaderInfo = ({
       });
     }
     if (currentTab?.locationSelect)
-      setLocationSelect(currentTab.locationSelect)
+      setLocationSelect(currentTab.locationSelect);
   }, [currentTab]);
 
   useEffect(() => {
@@ -370,7 +370,7 @@ export const HeaderInfo = ({
   useEffect(() => {
     getEmissionsViewDropdownData().catch((e) => {
       console.log(e);
-    })
+    });
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -405,12 +405,15 @@ export const HeaderInfo = ({
       viewData = viewData.filter(
         (v) => codesWithData.find((d) => d === v.code) !== undefined
       );
-      if(viewData.length === 0){
-        viewData.push(defaultTemplateValue)
-        setViewTemplateSelect(null)
+      if (viewData.length === 0) {
+        viewData.push(defaultTemplateValue);
+        setViewTemplateSelect(null);
       } else {
-        if(!viewTemplateSelect || viewTemplateSelect?.code === defaultTemplateValue.code)
-          setViewTemplateSelect(viewData[0])
+        if (
+          !viewTemplateSelect ||
+          viewTemplateSelect?.code === defaultTemplateValue.code
+        )
+          setViewTemplateSelect(viewData[0]);
       }
       setViewTemplates(viewData);
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
@@ -809,10 +812,11 @@ export const HeaderInfo = ({
   };
 
   const importMPFile = (payload) => {
+    setIsLoading(true);
+    setFinishedLoading(false);
     mpApi
       .importMP(payload)
       .then((response) => {
-        setIsLoading(true);
         if (!successResponses.includes(response.status)) {
           const errorMsgs = formatErrorResponse(response);
           setImportedFileErrorMsgs(errorMsgs);
@@ -1377,7 +1381,15 @@ export const HeaderInfo = ({
                     type="button"
                     title="Apply Filter(s)"
                     className="cursor-pointer text-no-wrap apply-filter-position"
-                    disabled={locationSelect && emissionDropdownState.selectedReportingPeriods.length !== 0 && (viewTemplateSelect?.code !== defaultTemplateValue.code && viewTemplateSelect !== null) ? false : true}
+                    disabled={
+                      locationSelect &&
+                      emissionDropdownState.selectedReportingPeriods.length !==
+                        0 &&
+                      viewTemplateSelect?.code !== defaultTemplateValue.code &&
+                      viewTemplateSelect !== null
+                        ? false
+                        : true
+                    }
                     onClick={() =>
                       applyFilters(
                         configID,
