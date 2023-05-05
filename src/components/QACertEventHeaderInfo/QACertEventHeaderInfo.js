@@ -478,6 +478,7 @@ export const QACertEventHeaderInfo = ({
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
+            label={"Upload QA JSON File"}
             children={
               <ImportModal
                 setDisablePortBtn={setDisablePortBtn}
