@@ -4,18 +4,25 @@ export const displayAppError = (error) => {
   const appearAnimation = "flip-in-x-reverse";
 
   if (document.querySelector("#appErrorMessageText")) {
-    document.querySelector("#appErrorMessageText").innerHTML = formattedError;  
-    document.querySelector("#appErrorMessage").classList.remove("display-none");
-    document
-      .querySelector("#appErrorMessage")
-      .classList.remove(appearAnimation);
-    document.querySelector("#appErrorMessage").classList.add(appearAnimation);
+    document.querySelector("#appErrorMessageText").innerHTML = formattedError;
+
+    const errorMsg = document.querySelector("#appErrorMessage")
+
+    errorMsg.classList.remove("display-none");
+    errorMsg.classList.remove(appearAnimation);
+    errorMsg.classList.add(appearAnimation);
     document
       .querySelectorAll("svg path")
       .forEach((element) => (element.tabIndex = -1));
-  
-      document.querySelector("#appErrorMessage").addEventListener("click", hideAppError);
+
+    errorMsg.addEventListener("click", hideAppError);
+
+    const svgElements = document.querySelectorAll('#appErrorMessage .MuiSvgIcon-root');
+    const xButtonSvg = svgElements[1];
+    if (xButtonSvg) {
+      xButtonSvg.setAttribute('aria-label', 'Close error message');
     }
+  }
 };
 
 export const hideAppError = () => {
