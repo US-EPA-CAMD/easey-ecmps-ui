@@ -138,11 +138,12 @@ const App = () => {
       //Determine if we still have a valid session given a user exists
       const sessionExp = localStorage.getItem("ecmps_session_expiration");
 
-      if (!sessionExp || (
-          sessionExp && (currentDateTime() > new Date(sessionExp))
-      )) {
-          localStorage.removeItem("ecmps_user");
-          ecmpsUser = false;
+      if (
+        !sessionExp ||
+        (sessionExp && currentDateTime() > new Date(sessionExp))
+      ) {
+        localStorage.removeItem("ecmps_user");
+        ecmpsUser = false;
       }
     }
 
