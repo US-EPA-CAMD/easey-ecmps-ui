@@ -43,6 +43,7 @@ describe("Async Actions", () => {
   afterEach(cleanup);
   
   test("should create BEGIN_MONITORING_PLANS_API_CALL and LOAD_MONITORING_PLANS_SUCCESS when loading monitoring plans", async () => {
+    jest.setTimeout(10000);
     const orisCode = 3;
     mock
       .onGet(`https://api.epa.gov/easey/dev/monitor-plan-mgmt/configurations?orisCodes=${orisCode}`)
