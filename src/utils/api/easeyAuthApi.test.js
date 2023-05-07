@@ -188,7 +188,7 @@ describe("Easey Auth API", () => {
       })
     );
 
-    localStorage.setItem("signing_out", false);
+    localStorage.setItem("ecmps_signing_out", false);
 
     mock
       .onDelete(`${config.services.authApi.uri}/authentication/sign-out`)
