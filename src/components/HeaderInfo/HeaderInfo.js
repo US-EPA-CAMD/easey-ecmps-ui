@@ -461,7 +461,7 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    for (const selectedReportingPeriod of selectedReportingPeriods) {
+    for (const selectedReportingPeriod of emissionDropdownState.selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
