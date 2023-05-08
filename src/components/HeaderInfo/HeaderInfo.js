@@ -234,7 +234,7 @@ export const HeaderInfo = ({
   const MAX_REPORTING_PERIODS_ERROR_MSG =
     "You can only select a maximum of four reporting periods";
 
-  const reportingPeriods = useMemo(
+  let reportingPeriods = useMemo(
     () =>
       getReportingPeriods().map((reportingPeriod, index) => {
         const noPrevSelection = currentTab?.reportingPeriods === undefined
