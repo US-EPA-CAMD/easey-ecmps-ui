@@ -281,7 +281,6 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
-          error => console.log('getMonitoringRectangularDucts failed', error)
           setShow(false);
         });
       setUpdateTable(true);
@@ -303,7 +302,6 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
-          error => console.log('getMonitoringRectangularDucts failed', error)
           setShow(false);
         });
       setUpdateTable(true);
