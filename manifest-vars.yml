@@ -23,4 +23,5 @@ cdxForgotPasswordPath: "/PasswordReset/GetResetCode"
 cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
 refreshLastActivityIntervalMinutes: 1
+tokenRefreshThresholdSeconds: 10
 enableSystemAdminstrationModule: true

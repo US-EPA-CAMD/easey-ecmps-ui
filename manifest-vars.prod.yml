@@ -9,3 +9,4 @@ cdxBaseUrl: cdx.epa.gov
 enableManageDelegations: true
 cbsBaseUrl: camd.epa.gov
 enableSystemAdminstrationModule: true
+tokenRefreshThresholdSeconds: 5
