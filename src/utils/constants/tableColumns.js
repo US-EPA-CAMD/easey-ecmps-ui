@@ -110,11 +110,6 @@ export const qaTestExtensionExemptionDataCols = [
 		sortable: true,
 	},
 	{
-		name: "Eval Status Code",
-		selector: (row) => row.evalStatusCode,
-		sortable: true,
-	},
-	{
 		name: "Year/Quarter",
 		selector: (row) => row.year && row.quarter ? `${row.year} Q${row.quarter}` : "",
 		sortFunction: sortByPeriodAbbreviation,

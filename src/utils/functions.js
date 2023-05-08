@@ -230,10 +230,10 @@ export const addEvalStatusCell = (columns, callback) =>
               className={"hyperlink-btn cursor-pointer"}
               onClick={() => callback(row, false)}
             >
-              {row.evalStatusCode}
+              {row.evalStatusCodeDescription}
             </button>
           ) : (
-            <button className={"unstyled-btn"}>{row.evalStatusCode}</button>
+            <button className={"unstyled-btn"}>{row.evalStatusCodeDescription}</button>
           )}
         </div>
       );

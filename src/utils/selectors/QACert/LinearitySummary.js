@@ -114,9 +114,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
     // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
 
-  if (user) {
-    cols.push("Eval Status");
-  }
   return cols;
 };
 

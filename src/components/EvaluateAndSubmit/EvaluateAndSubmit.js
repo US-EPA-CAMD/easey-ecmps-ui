@@ -416,11 +416,6 @@ export const EvaluateAndSubmit = ({
         data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
       }
 
-      if (componentType === "Submission") {
-        data = data.filter((d) =>
-          idToPermissionsMap.current.get(d.orisCode)?.includes("DS" + type)
-        );
-      }
       ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
       setState(data);
     }
