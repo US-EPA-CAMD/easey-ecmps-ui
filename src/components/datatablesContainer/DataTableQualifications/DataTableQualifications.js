@@ -119,7 +119,8 @@ export const DataTableQualifications = ({
         setUpdatePCT(false);
         setUpdateLEE(false);
         setUpdateLME(false);
-      });
+      })
+        .catch(error => console.log('getQualifications failed', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);

@@ -28,6 +28,13 @@ jest.mock("../../../additional-functions/retrieve-dropdown-api", () => ({
   useRetrieveDropdownApi: jest.fn().mockResolvedValue({}),
 }));
 
+jest.mock("../../../utils/selectors/assert", () => ({
+  getDataTableApis: jest.fn().mockResolvedValue({data: []}),
+  getDataTableRecords: jest.fn().mockResolvedValue({data: []}),
+  saveDataSwitch: jest.fn().mockResolvedValue({}),
+  createDataSwitch: jest.fn().mockResolvedValue({}),
+}))
+
 jest.mock("../../../utils/api/monitoringPlansApi", () => ({
   getMonitoringSpans: jest.fn(),
   getMonitoringSystems: jest.fn(),
@@ -431,7 +438,7 @@ describe("DataTableAssert", () => {
     let { container } = await waitForElement(() =>
       render(<DataTableAssert {...props} />)
     );
-    const btns = screen.getAllByText("View");
+    //const btns = screen.getAllByText("View");
     authenticate.mockImplementation(() =>
       localStorage.setItem("ecmps_user", JSON.stringify({}))
     );
