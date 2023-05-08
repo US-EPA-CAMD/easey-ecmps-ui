@@ -120,7 +120,7 @@ export const InactivityTracker = () => {
         document.visibilityState === "visible" &&
         currentSecondsTilInactive() <= inactiveDuration / 2
       ) {
-        setShowCountdown(false);
+        setShowCountdown(false); //Need these two lines to force a state change on the page becoming visible again
         setShowCountdown(true);
       }
     });
