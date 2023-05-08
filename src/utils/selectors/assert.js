@@ -26,32 +26,42 @@ const relationshipData = "Relationship Data";
 export const getDataTableApis = async (name, location, selectedLocation) => {
   switch (name) {
     case load:
-      return mpApi.getMonitoringLoads(location);
+      return mpApi.getMonitoringLoads(location)
+        .catch(error => console.log('getMonitoringLoads failed', error));
     case rectDuctWaf:
-      return mpApi.getMonitoringRectangularDucts(location);
+      return mpApi.getMonitoringRectangularDucts(location)
+        .catch(error => console.log('getMonitoringRectangularDucts failed', error));
     case span:
-      return mpApi.getMonitoringSpans(location);
+      return mpApi.getMonitoringSpans(location)
+        .catch(error => console.log('getMonitoringSpans failed', error));
     case form:
-      return mpApi.getMonitoringFormulas(location);
+      return mpApi.getMonitoringFormulas(location)
+        .catch(error => console.log('getMonitoringFormulas failed', error));
     case def:
-      return mpApi.getMonitoringDefaults(location);
+      return mpApi.getMonitoringDefaults(location)
+        .catch(error => console.log('getMonitoringDefaults failed', error));
     case unitFuel:
       return mpApi.getMonitoringPlansFuelDataRecords(
         selectedLocation ? selectedLocation : location
-      );
+      )
+        .catch(error => console.log('getMonitoringPlansFuelDataRecords failed', error));
     case unitCon:
       return mpApi.getMonitoringPlansUnitControlRecords(
         selectedLocation ? selectedLocation : location
-      );
+      )
+        .catch(error => console.log('getMonitoringPlansUnitControlRecords failed', error));
     case unitCap:
       return mpApi.getUnitCapacity(
         selectedLocation ? selectedLocation : location
-      );
+      )
+        .catch(error => console.log('getUnitCapacity failed', error));
 
     case locationAttribute:
-      return mpApi.getLocationAttributes(location);
+      return mpApi.getLocationAttributes(location)
+        .catch(error => console.log('getLocationAttributes failed', error));
     case relationshipData:
-      return mpApi.getRelationshipData(location);
+      return mpApi.getRelationshipData(location)
+        .catch(error => console.log('getRelationshipData failed', error));
 
     default:
       break;
@@ -64,31 +74,41 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
 export const getDataTableRecords = (dataIn, name) => {
   switch (name) {
     case load:
-      return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn);
+      return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansLoadsTableRecords failed', error));
     case rectDuctWaf:
-      return wafSelector.getMonitoringPlansRectangularDuctsTableRecords(dataIn);
+      return wafSelector.getMonitoringPlansRectangularDuctsTableRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansRectangularDuctsTableRecords failed', error));
     case span:
-      return spanSelector.getMonitoringPlansSpansTableRecords(dataIn);
+      return spanSelector.getMonitoringPlansSpansTableRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansSpansTableRecords failed', error));
     case form:
-      return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn);
+      return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansFormulasTableRecords failed', error));
     case def:
-      return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn);
+      return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansDefaultsTableRecords failed', error));
     case unitFuel:
-      return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn);
+      return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansFuelDataRecords failed', error));
     case unitCon:
-      return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn);
+      return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansUnitControlRecords failed', error));
     case unitCap:
-      return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn);
+      return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn)
+        .catch(error => console.log('getMonitoringPlansUnitCapacityRecords failed', error));
 
     case locationAttribute:
       return locationRelationshipsSelector.getMonitoringPlansLocationAttributeRecords(
         dataIn
-      );
+      )
+        .catch(error => console.log('getMonitoringPlansLocationAttributeRecords failed', error));
 
     case relationshipData:
       return locationRelationshipsSelector.getMonitoringPlansRelationshipsDataRecords(
         dataIn
-      );
+      )
+        .catch(error => console.log('getMonitoringPlansRelationshipsDataRecords failed', error));
     default:
       break;
   }
@@ -103,30 +123,39 @@ export const saveDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      return mpApi.saveMonitoringLoads(userInput, locationSelectValue);
+      return mpApi.saveMonitoringLoads(userInput, locationSelectValue)
+        .catch(error => console.log('saveMonitoringLoads failed', error));
     case rectDuctWaf:
-      return mpApi.saveMonitoringDuct(userInput);
+      return mpApi.saveMonitoringDuct(userInput)
+        .catch(error => console.log('saveMonitoringDuct failed', error));
     case span:
-      return mpApi.saveMonitoringSpans(userInput);
+      return mpApi.saveMonitoringSpans(userInput)
+        .catch(error => console.log('saveMonitoringSpans failed', error));
     case form:
-      return mpApi.saveMonitoringFormulas(userInput, locationSelectValue);
+      return mpApi.saveMonitoringFormulas(userInput, locationSelectValue)
+        .catch(error => console.log('saveMonitoringFormulas failed', error));
     case def:
-      return mpApi.saveMonitoringDefaults(userInput, locationSelectValue);
+      return mpApi.saveMonitoringDefaults(userInput, locationSelectValue)
+        .catch(error => console.log('saveMonitoringDefaults failed', error));
     case unitFuel:
-      return mpApi.saveMonitoringPlansFuelData(userInput);
+      return mpApi.saveMonitoringPlansFuelData(userInput)
+        .catch(error => console.log('saveMonitoringPlansFuelData failed', error));
     case unitCon:
       return mpApi.saveUnitControl(
         userInput,
         urlParameters ? urlParameters : null
-      );
+      )
+        .catch(error => console.log('saveUnitControl failed', error));
     case unitCap:
       return mpApi.saveUnitCapacity(
         userInput,
         urlParameters ? urlParameters : null
-      );
+      )
+        .catch(error => console.log('saveUnitCapacity failed', error));
 
     case locationAttribute:
-      return mpApi.saveLocationAttribute(userInput, locationSelectValue);
+      return mpApi.saveLocationAttribute(userInput, locationSelectValue)
+        .catch(error => console.log('saveLocationAttribute failed', error));
     default:
       break;
   }
@@ -142,29 +171,38 @@ export const createDataSwitch = (
 ) => {
   switch (dataTableName) {
     case load:
-      return mpApi.createMonitoringLoads(userInput, locationSelectValue);
+      return mpApi.createMonitoringLoads(userInput, locationSelectValue)
+        .catch(error => console.log('createMonitoringLoads failed', error));
     case rectDuctWaf:
-      return mpApi.createMonitoringDuct(userInput);
+      return mpApi.createMonitoringDuct(userInput)
+        .catch(error => console.log('createMonitoringDuct failed', error));
     case span:
-      return mpApi.createMonitoringSpans(userInput);
+      return mpApi.createMonitoringSpans(userInput)
+        .catch(error => console.log('createMonitoringSpans failed', error));
     case form:
-      return mpApi.createMonitoringFormulas(userInput, locationSelectValue);
+      return mpApi.createMonitoringFormulas(userInput, locationSelectValue)
+        .catch(error => console.log('createMonitoringFormulas failed', error));
     case def:
-      return mpApi.createMonitoringDefaults(userInput, locationSelectValue);
+      return mpApi.createMonitoringDefaults(userInput, locationSelectValue)
+        .catch(error => console.log('createMonitoringDefaults failed', error));
     case unitFuel:
-      return mpApi.createFuelData(userInput, locationSelectValue);
+      return mpApi.createFuelData(userInput, locationSelectValue)
+        .catch(error => console.log('createFuelData failed', error));
     case unitCon:
       return mpApi.createUnitControl(
         userInput,
         urlParameters ? urlParameters : null
-      );
+      )
+        .catch(error => console.log('createUnitControl failed', error));
     case unitCap:
       return mpApi.createUnitCapacity(
         userInput,
         urlParameters ? urlParameters : null
-      );
+      )
+        .catch(error => console.log('createUnitCapacity failed', error));
     case locationAttribute:
-      return mpApi.createLocationAttribute(userInput, locationSelectValue);
+      return mpApi.createLocationAttribute(userInput, locationSelectValue)
+        .catch(error => console.log('createLocationAttribute failed', error));
     default:
       break;
   }

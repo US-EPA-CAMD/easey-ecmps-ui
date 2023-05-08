@@ -104,7 +104,8 @@ export const MonitoringPlanHome = ({
         .deleteCheckInMonitoringPlanConfiguration(
           window.currentlyCheckedOutMonPlanId
         )
-        .then((res) => {});
+        .then((res) => {})
+        .catch(error => console.log('deleteCheckInMonitoringPlanConfiguration failed', error));
     }
   };
 
