@@ -908,7 +908,6 @@ export const HeaderInfo = ({
 
     hideAppError();
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
-      console.log("errors displayed");
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       reportingPeriods = [...reportingPeriods];
       return;
@@ -934,8 +933,6 @@ export const HeaderInfo = ({
   };
 
   const handleExport = async () => {
-    // reportingPeriodOnChangeUpdate();
-    console.log("emissions", emissionDropdownState);
     try {
       setIsLoading(true);
       setDataLoaded(false);
