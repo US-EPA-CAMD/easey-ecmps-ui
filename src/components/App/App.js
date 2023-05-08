@@ -40,12 +40,10 @@ import { isEqual } from "lodash";
 import { currentDateTime } from "../../utils/functions";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  const dispatch = useDispatch();
-
-  //useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {
@@ -138,19 +136,13 @@ const App = () => {
 
     if (ecmpsUser) {
       //Determine if we still have a valid session given a user exists
+      const sessionExp = localStorage.getItem("ecmps_session_expiration");
 
-      if (localStorage.getItem("ecmps_session_expiration")) {
-        if (
-          currentDateTime() >
-          new Date(localStorage.getItem("ecmps_session_expiration"))
-        ) {
-          localStorage.removeItem("ecmps_user");
-          ecmpsUser = false;
-        }
-      } else {
-        if (localStorage.getItem("ecmps_user")) {
-          localStorage.removeItem("ecmps_user");
-        }
+      if (
+        !sessionExp ||
+        (sessionExp && currentDateTime() > new Date(sessionExp))
+      ) {
+        localStorage.removeItem("ecmps_user");
         ecmpsUser = false;
       }
     }
