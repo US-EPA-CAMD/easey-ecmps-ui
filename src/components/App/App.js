@@ -67,7 +67,7 @@ const App = () => {
   const refreshCheckoutInterval = () => {
     if (user) {
       return setInterval(async () => {
-        const checkedOutLocationResult = (await getCheckedOutLocations()).data;
+        const checkedOutLocationResult = (await getCheckedOutLocations())?.data;
         if (
           checkedOutLocationResult &&
           !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
