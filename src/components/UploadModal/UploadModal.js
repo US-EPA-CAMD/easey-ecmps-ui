@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, createRef } from "react";
 import ReactDom from "react-dom";
 
-import { Button, Alert } from "@trussworks/react-uswds";
+import { Button, Alert, Label } from "@trussworks/react-uswds";
 
 import { ClearSharp } from "@material-ui/icons";
 
@@ -32,6 +32,7 @@ export const UploadModal = ({
   showTintedBg = true,
   showImport = true,
   showSeparators = false,
+  label = null,
 }) => {
   const hasErrors = importedFileErrorMsgs && importedFileErrorMsgs.length > 0;
 
@@ -165,6 +166,9 @@ export const UploadModal = ({
                           ) : (
                             <div className="left-2 bottom-0 padding-x-5 padding-top-2">
                               <h2 className="text-bold">{title}</h2>
+                              {label ?? (
+                                <Label htmlFor="file-input-single">{label}</Label>
+                              )}
                               {showSeparators && <hr />}
                             </div>
                           )}

@@ -2,7 +2,7 @@ instances: 1
 environment: testing
 host: ecmps-tst.app.cloud.gov
 apiHost: api.epa.gov/easey/test
-inactivityDurationMinutes: 10
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
 enableSystemAdminstrationModule: true
+tokenRefreshThresholdSeconds: 5

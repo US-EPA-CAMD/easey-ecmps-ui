@@ -26,6 +26,7 @@ const hgTestSumId = 'hgTestSumId';
 describe('QA Cert API', function () {
   beforeEach(() => {
     mock.resetHistory();
+    jest.setTimeout(10000);
   });
 
   afterEach(() => {

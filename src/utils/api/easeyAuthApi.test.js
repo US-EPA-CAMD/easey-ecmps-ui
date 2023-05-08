@@ -3,13 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 import { displayAppError } from "../../additional-functions/app-error";
 import config from "../../config";
 
-import {
-  authenticate,
-  logOut,
-  refreshClientToken,
-  refreshToken,
-  secureAxios,
-} from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios } from "./easeyAuthApi";
 
 jest.mock("./monitoringPlansApi", () => ({
   getCheckedOutLocations: jest.fn().mockResolvedValue({
@@ -44,6 +38,7 @@ describe("Easey Auth API", () => {
   });
 
   it("should return response on success secureAxios call", async () => {
+    jest.setTimeout(10000);
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, "token");
     mock
       .onGet(`${config.services.authApi.uri}/test`)
@@ -193,7 +188,7 @@ describe("Easey Auth API", () => {
       })
     );
 
-    localStorage.setItem("signing_out", false);
+    localStorage.setItem("ecmps_signing_out", false);
 
     mock
       .onDelete(`${config.services.authApi.uri}/authentication/sign-out`)

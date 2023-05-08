@@ -6,7 +6,7 @@ instances: 1
 environment: development
 host: ecmps-dev.app.cloud.gov
 apiHost: api.epa.gov/easey/dev
-inactivityDurationMinutes: 5
+inactivityDurationMinutes: 15
 activityPollingFrequencySeconds: 5
 paginationPerPage: 100
 googleAnalyticsEnabled: false
@@ -22,5 +22,6 @@ cdxForgotUserIdPath: "/AccountRecovery/ForgotUserId"
 cdxForgotPasswordPath: "/PasswordReset/GetResetCode"
 cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
-refreshLastActivityInterval: 1
+refreshLastActivityIntervalMinutes: 1
+tokenRefreshThresholdSeconds: 10
 enableSystemAdminstrationModule: true

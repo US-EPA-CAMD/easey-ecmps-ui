@@ -335,3 +335,12 @@ export const formatErrorResponse = (errorResp) => {
     : [JSON.stringify(errorResp)];
   return errorMsgs;
 };
+
+// Returns the amount of seconds until the users front-end session expires
+export const currentSecondsTilInactive = () => {
+  return (
+    (new Date(localStorage.getItem("ecmps_session_expiration")) -
+      currentDateTime()) /
+    1000
+  );
+};
