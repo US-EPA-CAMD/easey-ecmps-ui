@@ -712,6 +712,7 @@ describe("testing monitoring plans data fetching APIs", () => {
   });
 
   test("tests getCheckedOutLocations not secure", async () => {
+    localStorage.ecmps_user = {}
     const apiCall = await mpApi.getCheckedOutLocations(monitoringLocationId);
 
     expect(apiCall["data"]).toEqual({});

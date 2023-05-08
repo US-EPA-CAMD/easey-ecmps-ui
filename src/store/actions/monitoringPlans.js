@@ -23,7 +23,8 @@ export function loadMonitoringPlans(orisCode) {
       if (res) {
         dispatch(loadMonitoringPlansSuccess(res.data));
       }
-    });
+    })
+    .catch(error => console.log('getMonitoringPlans failed', error));
   };
 }
 
@@ -34,6 +35,7 @@ export function loadMonitoringPlansArray(orisCode) {
       if (res) {
         dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
       }
-    });
+    })
+    .catch(error => console.log('getMonitoringPlans failed', error));
   };
 }

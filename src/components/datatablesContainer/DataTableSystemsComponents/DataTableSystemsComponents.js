@@ -194,7 +194,8 @@ export const DataTableSystemsComponents = ({
           setSelected(value);
         }
       }
-    });
+    })
+    .catch(error => console.log('getMonitoringSystems failed', error));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -207,7 +208,8 @@ export const DataTableSystemsComponents = ({
         setMonitoringSystemsComponents(res.data);
         setDataLoaded(true);
         setupdateComponentTable(false);
-      });
+      })
+      .catch(error => console.log('getMonitoringSystemsComponents failed', error));
 
     mpApi
       .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
@@ -215,7 +217,8 @@ export const DataTableSystemsComponents = ({
         setMonitoringSystemsFuelFlows(res.data);
         setFuelDataLoaded(true);
         setUpdateFuelFlowTable(false);
-      });
+      })
+      .catch(error => console.log('getMonitoringSystemsFuelFlows failed', error));
   }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);

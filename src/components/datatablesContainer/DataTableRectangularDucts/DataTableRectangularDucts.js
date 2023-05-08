@@ -91,7 +91,8 @@ export const DataTableRectangularDucts = ({
               setDucts(res.data);
               setDataLoaded(true);
               setUpdateTable(false);
-            });
+            })
+            .catch(error => console.log('getMonitoringRectangularDucts failed', error));
 
           setRevertedState(false);
         }, [1000]);
@@ -101,7 +102,8 @@ export const DataTableRectangularDucts = ({
         setDucts(res.data);
         setDataLoaded(true);
         setUpdateTable(false);
-      });
+      })
+      .catch(error => console.log('getMonitoringRectangularDucts failed', error));
 
       UseRetrieveDropdownApi(["wafMethodCode"]).then(resp => {
         setTotalOptions(resp);
@@ -279,6 +281,7 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
+          error => console.log('getMonitoringRectangularDucts failed', error)
           setShow(false);
         });
       setUpdateTable(true);
@@ -300,6 +303,7 @@ export const DataTableRectangularDucts = ({
           setShow(false);
         })
         .catch((error) => {
+          error => console.log('getMonitoringRectangularDucts failed', error)
           setShow(false);
         });
       setUpdateTable(true);

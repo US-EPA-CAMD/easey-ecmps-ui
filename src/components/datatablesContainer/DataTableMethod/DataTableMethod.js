@@ -93,12 +93,13 @@ export const DataTableMethod = ({
   useEffect(() => {
     const fetchMethods = async () => {
       try {
-        const methods = await mpApi.getMonitoringMethods(locationSelectValue);
+        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
+          .catch(error => console.log('getMonitoringMethods failed', error));
         setMethods(methods.data);
         setDataLoaded(true);
         const matsMethods = await mpApi.getMonitoringMatsMethods(
           locationSelectValue
-        );
+        ).catch(error => console.log('getMonitoringMatsMethods failed', error));
         setMatsMethods(matsMethods.data);
         setUpdateTable(false);
         setRevertedState(false);
@@ -356,7 +357,8 @@ export const DataTableMethod = ({
     }
 
     try {
-      const resp = await mpApi.saveMonitoringMethods(userInput);
+      const resp = await mpApi.saveMonitoringMethods(userInput)
+        .catch(error => console.log('saveMonitoringMethods failed', error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
@@ -380,7 +382,8 @@ export const DataTableMethod = ({
     }
 
     try {
-      const resp = await mpApi.createMethods(userInput);
+      const resp = await mpApi.createMethods(userInput)
+        .catch(error => console.log('createMethods failed', error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
