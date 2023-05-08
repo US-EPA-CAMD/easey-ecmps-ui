@@ -526,23 +526,28 @@ export const getRataTestNumber = async (locationId) => {
 
   // *** attach the rest of the url
   testSummaryUrl = `${url}/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`;
-  testSummaryWorkspaceUrl = `${url}/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`;
-  const testSummaries = await Promise.all([
+  const allPromises = [
     secureAxios({
       method: "GET",
       url: testSummaryUrl,
     })
-      .then(handleResponse)
-      .catch(handleError),
-    secureAxios({
-      method: "GET",
-      url: testSummaryWorkspaceUrl,
-    })
-      .then(handleResponse)
-      .catch(handleError),
-  ]);
+    .then(handleResponse)
+    .catch(handleError)
+  ];
+  if (window.location.href.includes("/workspace")) {
+    testSummaryWorkspaceUrl = `${url}/workspace/locations/${locationId}/test-summary?testTypeCodes=RATA&systemTypeCodes=FLOW`;
+    allPromises.push(
+      secureAxios({
+        method: "GET",
+        url: testSummaryWorkspaceUrl,
+      })
+        .then(handleResponse)
+        .catch(handleError),
+    )
+  }
+  const testSummaries = await Promise.all(allPromises);
   
-  const allTestSummaries = [...testSummaries[0].data, ...testSummaries[1].data];
+  const allTestSummaries = allPromises.length >1 ? [...testSummaries[0].data, ...testSummaries[1].data] : testSummaries[0].data;
   const rataTestNumbers = allTestSummaries.map((testSummary) => {
     const testNumber = testSummary.testNumber;
     return {
