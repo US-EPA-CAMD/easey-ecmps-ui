@@ -812,10 +812,11 @@ export const HeaderInfo = ({
   };
 
   const importMPFile = (payload) => {
+    setIsLoading(true);
+    setFinishedLoading(false);
     mpApi
       .importMP(payload)
       .then((response) => {
-        setIsLoading(true);
         if (!successResponses.includes(response.status)) {
           const errorMsgs = formatErrorResponse(response);
           setImportedFileErrorMsgs(errorMsgs);

@@ -55,8 +55,11 @@ export const InactivityTracker = () => {
   const extendSessionExpiration = () => {
     //Extends user session expiration window every activity
     const newExpiration = currentDateTime();
-    newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration + 1);
-    localStorage.setItem("ecmps_session_expiration", newExpiration);
+    newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration);
+    localStorage.setItem(
+      "ecmps_session_expiration",
+      newExpiration.toLocaleString()
+    );
   };
 
   const handleUserActivity = () => {
@@ -81,7 +84,7 @@ export const InactivityTracker = () => {
     });
     channel.postMessage("Event");
 
-    localStorage.setItem("signing_out", false); //Used as a debounce when we have multiple sessions all reaching their log out point
+    localStorage.setItem("ecmps_signing_out", false); //Used as a debounce when we have multiple sessions all reaching their log out point
 
     const interval = setInterval(() => {
       //This checks the users activity status every second
@@ -147,7 +150,7 @@ export const InactivityTracker = () => {
         <div className="usa-overlay is-visible">
           <div role="dialog" aria-modal="true">
             <div
-              className="modal-wrapper react-transition flip-in-x"
+              className="modal-wrapper"
               style={{
                 width: "30%",
                 left: "35%",

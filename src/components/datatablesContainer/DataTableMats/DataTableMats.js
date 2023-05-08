@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
+import {
+  extractUserInput,
+  validateUserInput,
+} from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {

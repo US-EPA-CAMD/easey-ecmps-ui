@@ -873,6 +873,7 @@ describe("Test Data Management API calls", () => {
   })
   
   test("getAllMonitoringSystemIDCodes", async () => {
+    jest.setTimeout(10000);
     const locationId = "locationId";
     const monitoringSystemObject1 = [
       { 

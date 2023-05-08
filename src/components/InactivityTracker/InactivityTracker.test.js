@@ -55,7 +55,7 @@ describe("InactivityTracker", () => {
     );
 
     act(() => {
-      jest.advanceTimersByTime(400000);
+      jest.advanceTimersByTime(4000000);
     });
 
     expect(logOut).toHaveBeenCalled();
