@@ -94,9 +94,6 @@ const QACertEventTestExmpDataTable = ({
     controlDatePickerInputs,
     extraControlInputs,
   } = props;
-  if (user) {
-    columns.push("Eval Status");
-  }
   useEffect(() => {
     setQATestSummary([]);
     setUpdateTable(true);

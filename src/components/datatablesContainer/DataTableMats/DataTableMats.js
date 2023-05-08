@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
+import {
+  extractUserInput,
+  validateUserInput,
+} from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import {
@@ -100,13 +103,15 @@ export const DataTableMats = ({
       updateRelatedTables
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-        setMatsMethods(res.data);
-        mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
-          setMethods(mets.data);
-          setUpdateTable(false);
-          setDataLoaded(true);
-          setUpdateRelatedTables(false);
-        });
+        if(res?.data){
+          setMatsMethods(res.data);
+          mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
+            setMethods(mets.data);
+            setUpdateTable(false);
+            setDataLoaded(true);
+            setUpdateRelatedTables(false);
+          });
+        }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -194,7 +199,8 @@ export const DataTableMats = ({
       return;
     }
     try {
-      const resp = await mpApi.saveMonitoringMats(userInput);
+      const resp = await mpApi.saveMonitoringMats(userInput)
+        .catch(error => console.log('saveMonitoringMats failed', error));
       if (resp.status === 200) {
         setShow(false);
         setUpdateTable(true);
@@ -215,7 +221,8 @@ export const DataTableMats = ({
       return;
     }
     try {
-      const resp = await mpApi.createMats(userInput);
+      const resp = await mpApi.createMats(userInput)
+        .catch(error => console.log('createMats failed', error));
       if (resp.status === 201) {
         setShow(false);
         setUpdateTable(true);

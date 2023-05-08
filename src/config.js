@@ -24,6 +24,9 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_HOST",
       "ecmps-dev.app.cloud.gov"
     ),
+    tokenRefreshThresholdSeconds:
+      getConfigValueNumber("REACT_APP_TOKEN_REFRESH_THRESHOLD_SECONDS", 3) *
+      oneSecond,
     googleAnalyticsEnabled: getConfigValueBoolean(
       "REACT_APP_GOOGLE_ANALYTICS_ENABLED"
     ),
@@ -36,13 +39,13 @@ export const config = {
     inactivityDuration:
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES",
-        0.5
-      ) * oneMinute * 5,
+        15
+      ) * oneMinute,
     activityPollingFrequency:
       getConfigValueNumber(
         "REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS",
         5
-      ) * oneSecond ,
+      ) * oneSecond,
     paginationPerPage: getConfigValueNumber(
       "REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE",
       100
@@ -69,7 +72,7 @@ export const config = {
 
     refreshLastActivityInterval:
       getConfigValueNumber(
-        "REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL",
+        "REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL_MINUTES",
         1
       ) * oneMinute,
     cbsBaseUrl: getConfigValue(

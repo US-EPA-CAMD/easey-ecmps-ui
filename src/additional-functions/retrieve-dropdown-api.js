@@ -50,7 +50,8 @@ export const UseRetrieveDropdownApi = async (
             });
 
             setDefaultOptions(options, "supplementalMATSParameterCode");
-          });
+          })
+          .catch(error => console.log('getAllMatsParameterCodes failed', error));
         } else if (equipmentControl) {
           await dmApi
             .getAllControlEquipmentParameterCodes()
@@ -63,7 +64,8 @@ export const UseRetrieveDropdownApi = async (
               });
 
               setDefaultOptions(options, "parameterCode");
-            });
+            })
+            .catch(error => console.log('getAllControlEquipmentParameterCodes failed', error));
         } else {
           await dmApi.getAllParameterCodes().then((response) => {
             options = response.data.map((option) => {
@@ -74,7 +76,8 @@ export const UseRetrieveDropdownApi = async (
             });
 
             setDefaultOptions(options, fieldName);
-          });
+          })
+          .catch(error => console.log('getAllParameterCodes failed', error));
         }
         break;
 
@@ -89,7 +92,8 @@ export const UseRetrieveDropdownApi = async (
             });
 
             setDefaultOptions(options, "supplementalMATSMonitoringMethodCode");
-          });
+          })
+          .catch(error => console.log('getAllMatsMethodCodes failed', error));
         } else {
           await dmApi.getAllMethodCodes().then((response) => {
             options = response.data.map((option) => {
@@ -100,7 +104,8 @@ export const UseRetrieveDropdownApi = async (
             });
 
             setDefaultOptions(options, fieldName);
-          });
+          })
+          .catch(error => console.log('getAllMethodCodes failed', error));
         }
         break;
       case "substituteDataCode":
@@ -113,7 +118,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllSubstituteDataCodes failed', error));
         break;
 
       case "bypassApproachCode":
@@ -126,7 +132,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllBypassApproachCodes failed', error));
         break;
       //Analyzer Range
       case "analyzerRangeCode":
@@ -139,7 +146,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllRangeCodes failed', error));
         break;
       // System Fuel Flows
       case "maximumFuelFlowRateSourceCode":
@@ -152,7 +160,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllMaxRateSourceCodes failed', error));
         break;
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
@@ -168,7 +177,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllUnitsOfMeasureCodes failed', error));
         break;
 
       case "fuelType":
@@ -181,7 +191,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, "fuelCode");
-        });
+        })
+        .catch(error => console.log('getAllFuelTypes failed', error));
         break;
 
       case "fuelCode":
@@ -194,7 +205,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllFuelCodes failed', error));
         break;
       case "indicatorCode":
         await dmApi.getAllFuelIndicatorCodes().then((response) => {
@@ -206,7 +218,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllFuelIndicatorCodes failed', error));
         break;
         ///
       case "demGCV":
@@ -219,7 +232,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
         break;
         ///  same as above?
       case "demSO2":
@@ -232,7 +246,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
         break;
       case "systemTypeCode":
         await dmApi.getAllSystemTypeCodes().then((response) => {
@@ -244,7 +259,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllSystemTypeCodes failed', error));
         break;
       case "systemDesignationCode":
         await dmApi.getAllSystemDesignationCodes().then((response) => {
@@ -256,7 +272,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllSystemDesignationCodes failed', error));
         break;
 
       case "sampleAcquisitionMethodCode":
@@ -269,7 +286,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllAcquisitionMethodCodes failed', error));
         break;
       case "componentTypeCode":
         await dmApi.getAllComponentTypeCodes().then((response) => {
@@ -281,7 +299,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllComponentTypeCodes failed', error));
         break;
       case "basisCode":
         await dmApi.getAllBasisCodes().then((response) => {
@@ -293,7 +312,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllBasisCodes failed', error));
         break;
       // for spans
 
@@ -307,7 +327,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllSpanScaleCodes failed', error));
         break;
       case "spanMethodCode":
         await dmApi.getAllSpanMethodCodes().then((response) => {
@@ -319,7 +340,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllSpanMethodCodes failed', error));
         break;
       case "normalLevelCode":
       case "secondLevelCode":
@@ -333,7 +355,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllOperatingLevelCodes failed', error));
         break;
 
       // for defaults
@@ -348,7 +371,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllOperatingConditionCodes failed', error));
         break;
       case "defaultSourceCode":
         await dmApi.getAllDefaultSourceCodes().then((response) => {
@@ -360,7 +384,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllDefaultSourceCodes failed', error));
         break;
       case "defaultPurposeCode":
         await dmApi.getAllDefaultPurposeCodes().then((response) => {
@@ -372,7 +397,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllDefaultPurposeCodes failed', error));
         break;
       case "formulaCode":
         await dmApi.getAllFormulaCodes().then((response) => {
@@ -384,7 +410,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllFormulaCodes failed', error));
         break;
 
       case "wafMethodCode":
@@ -397,7 +424,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllRectangularDuctsCodes failed', error));
         break;
       case "controlCode":
         await dmApi.getAllControlTechnologies().then((response) => {
@@ -409,7 +437,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllControlTechnologies failed', error));
         break;
       case "qualificationTypeCode":
         await dmApi.getAllQualificationTypeCodes().then((response) => {
@@ -421,7 +450,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllQualificationTypeCodes failed', error));
         break;
       case "qualificationYear":
       case "yr1QualificationDataYear":
@@ -452,7 +482,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllQualificationDataTypeCodes failed', error));
         break;
       case "qualificationTestType":
         await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
@@ -464,7 +495,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllQualificationLEETestTypeCodes failed', error));
         break;
 
       case "materialCode":
@@ -477,7 +509,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllMaterialCodes failed', error));
         break;
 
       case "shapeCode":
@@ -490,7 +523,8 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        })
+        .catch(error => console.log('getAllShapeCodes failed', error));
         break;
 
       case "prefilteredMatsMethods":
@@ -515,7 +549,8 @@ export const UseRetrieveDropdownApi = async (
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredMatsMethods failed', error));
         break;
 
       case "prefilteredMethods":
@@ -540,7 +575,8 @@ export const UseRetrieveDropdownApi = async (
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredMethods failed', error));
         break;
 
       case "prefilteredFormulas":
@@ -565,7 +601,8 @@ export const UseRetrieveDropdownApi = async (
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredFormulas failed', error));
         break;
 
       case "prefilteredSpans":
@@ -584,7 +621,8 @@ export const UseRetrieveDropdownApi = async (
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredSpans failed', error));
         break;
       case "prefilteredDefaults":
         let noDupesDefaultCodes = [];
@@ -601,18 +639,21 @@ export const UseRetrieveDropdownApi = async (
             response.data
           );
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredDefaults failed', error));
         break;
 
       case "prefilteredLoads":
         await dmApi.getPrefilteredLoads().then((response) => {
           setStaticDropdown(response.data, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredLoads failed', error));
         break;
       case "prefilteredUnitFuels":
         await dmApi.getPrefilteredUnitFuels().then((response) => {
           setStaticDropdown(response.data, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredUnitFuels failed', error));
         break;
       case "prefilteredUnitControls":
         let noDupesFormCodesControls = [];
@@ -634,17 +675,20 @@ export const UseRetrieveDropdownApi = async (
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredUnitControls failed', error));
         break;
       case "prefilteredLEEQualifications":
         await dmApi.prefilteredLEEQualifications().then((response) => {
           setStaticDropdown(response.data, fieldName);
-        });
+        })
+        .catch(error => console.log('prefilteredLEEQualifications failed', error));
         break;
       case "prefilteredSystemFuelFlows":
         await dmApi.getPrefilteredSystemFuelFlows().then((response) => {
           setStaticDropdown(response.data, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredSystemFuelFlows failed', error));
         break;
 
       case "prefilteredSystemsComponents":
@@ -663,144 +707,9 @@ export const UseRetrieveDropdownApi = async (
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
-        });
+        })
+        .catch(error => console.log('getPrefilteredSystemComponents failed', error));
         break;
-      //// QA & cert
-
-      // case "testResultCode":
-      //   await dmApi.getAllTestResultCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["testResultCode"],
-      //         name: option["testResultDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-
-      // case "testReasonCode":
-      //   await dmApi.getAllTestReasonCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["testReasonCode"],
-      //         name: option["testReasonDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-
-      // case "testTypeCode":
-      //   await dmApi.getAllTestTypeCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["testTypeCode"],
-      //         name: option["testTypeDescription"],
-      //       };
-      //     });
-      //     options = options.filter((option) =>
-      //       selectedTestCode.testTypeCodes.includes(option.code)
-      //     );
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-
-      // case "gasLevelCode":
-      //   await dmApi.getAllGasLevelCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["gasLevelCode"],
-      //         name: option["gasLevelDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-      // case "gasTypeCode":
-      //   await dmApi.getAllGasTypeCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["gasTypeCode"],
-      //         name: option["gasTypeDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-
-      // case "prefilteredTestSummaries":
-      //   let noDupesTestCodes = [];
-      //   await dmApi.getPrefilteredTestSummaries().then((response) => {
-      //     noDupesTestCodes = response.data.map((code) => {
-      //       return code["testTypeCode"];
-      //     });
-
-      //     noDupesTestCodes = [...new Set(noDupesTestCodes)];
-
-      //     const prefilteredMdmOptions = organizePrefilterMDMData(
-      //       noDupesTestCodes,
-      //       "testTypeCode",
-      //       response.data
-      //     );
-
-      //     setDefaultOptions(prefilteredMdmOptions, fieldName);
-      //   });
-      //   break;
-
-      // case "rataFrequencyCode":
-      //   await dmApi.getAllRataFreqCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["rataFrequencyCode"],
-      //         name: option["rataFrequencyDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-      // case "apsCode":
-      //   await dmApi.getAllApsCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["apsCode"],
-      //         name: option["apsDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-      // case "runStatusCode":
-      //   await dmApi.getAllRunStatusCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["runStatusCode"],
-      //         name: option["runStatusDescription"],
-      //       };
-      //     });
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-      // case "referenceMethodCode":
-      // case "co2OrO2ReferenceMethodCode":
-      //   await dmApi.getAllReferenceMethodCodes().then((response) => {
-      //     options = response.data.map((option) => {
-      //       return {
-      //         code: option["referenceMethodCode"],
-      //         name: option["referenceMethodDescription"],
-      //       };
-      //     });
-
-      //     setDefaultOptions(options, fieldName);
-      //   });
-      //   break;
-
       default:
         break;
     }

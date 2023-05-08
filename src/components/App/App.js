@@ -37,16 +37,13 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
-
-const ecmps_user = localStorage.getItem("ecmps_user");
+import { currentDateTime } from "../../utils/functions";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  const dispatch = useDispatch();
-
-  //useGetCheckedOutLocations();
 
   const prepDocument = () => {
     setTimeout(() => {
@@ -65,19 +62,39 @@ const App = () => {
   };
 
   let checkedOutLocationsCache = [];
+  const validCheckoutRefreshPaths = [
+    "workspace/monitoring-plans",
+    "workspace/qa-test",
+    "workspace/qa-qce-tee",
+    "workspace/emissions",
+    "workspace/export",
+    "workspace/evaluate",
+    "workspace/submit",
+  ];
+
   const refreshCheckoutInterval = () => {
-    if (user) {
+    if (localStorage.getItem("ecmps_user")) {
       return setInterval(async () => {
-        const checkedOutLocationResult = (await getCheckedOutLocations()).data;
-        if (
-          checkedOutLocationResult &&
-          !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
-        ) {
-          dispatch({
-            type: types.SET_CHECKED_OUT_LOCATIONS,
-            checkedOutLocations: checkedOutLocationResult,
-          });
-          checkedOutLocationsCache = checkedOutLocationResult;
+        let refreshCheckouts = false;
+
+        for (const loc of validCheckoutRefreshPaths) {
+          if (window.location.href.indexOf(loc) > -1) {
+            refreshCheckouts = true;
+            break;
+          }
+        }
+        if (refreshCheckouts) {
+          const checkedOutLocationResult = (await getCheckedOutLocations())?.data;
+          if (
+            checkedOutLocationResult &&
+            !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
+          ) {
+            dispatch({
+              type: types.SET_CHECKED_OUT_LOCATIONS,
+              checkedOutLocations: checkedOutLocationResult,
+            });
+            checkedOutLocationsCache = checkedOutLocationResult;
+          }
         }
       }, 10000);
     }
@@ -118,16 +135,12 @@ const App = () => {
 
     if (ecmpsUser) {
       //Determine if we still have a valid session given a user exists
+      const sessionExp = localStorage.getItem("ecmps_session_expiration");
 
-      if (localStorage.getItem("ecmps_session_expiration")) {
-        if (
-          new Date() >
-          new Date(localStorage.getItem("ecmps_session_expiration"))
-        ) {
-          localStorage.removeItem("ecmps_user");
-          ecmpsUser = false;
-        }
-      } else {
+      if (
+        !sessionExp ||
+        (sessionExp && currentDateTime() > new Date(sessionExp))
+      ) {
         localStorage.removeItem("ecmps_user");
         ecmpsUser = false;
       }
@@ -188,7 +201,7 @@ const App = () => {
             />
             <Route path={`/faqs`} exact component={() => <FAQ />} />
             <Route path="/login" exact component={Login} />
-            {!ecmps_user && <Redirect from="/workspace/submit" to="/home" />}
+            {!user && <Redirect from="/workspace/submit" to="/home" />}
             <Route
               path="/workspace/submit"
               exact
@@ -197,7 +210,7 @@ const App = () => {
               )}
             />
 
-            {!ecmps_user && <Redirect from="/workspace/evaluate" to="/home" />}
+            {!user && <Redirect from="/workspace/evaluate" to="/home" />}
             <Route
               path="/workspace/evaluate"
               exact
@@ -367,7 +380,7 @@ const App = () => {
               )}
             />
 
-            {!ecmps_user && (
+            {!user && (
               <Redirect from="/workspace/error-suppression" to="/home" />
             )}
             <Route

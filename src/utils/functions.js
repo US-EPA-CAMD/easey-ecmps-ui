@@ -37,6 +37,24 @@ export const parseBool = (value, defaultValue = false) => {
   return defaultValue;
 };
 
+export const dateToEstString = (value) => {
+  let date = new Date();
+
+  if (value) {
+    if (typeof value !== typeof Date) {
+      date = new Date(value);
+    }
+  }
+
+  return date.toLocaleString("en-US", {
+    timeZone: "America/New_York",
+  });
+};
+
+export const currentDateTime = () => {
+  return new Date(dateToEstString(new Date()));
+};
+
 export const formatDate = (dateString, delim = "-") => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
@@ -212,10 +230,10 @@ export const addEvalStatusCell = (columns, callback) =>
               className={"hyperlink-btn cursor-pointer"}
               onClick={() => callback(row, false)}
             >
-              {row.evalStatusCode}
+              {row.evalStatusCodeDescription}
             </button>
           ) : (
-            <button className={"unstyled-btn"}>{row.evalStatusCode}</button>
+            <button className={"unstyled-btn"}>{row.evalStatusCodeDescription}</button>
           )}
         </div>
       );
@@ -316,4 +334,13 @@ export const formatErrorResponse = (errorResp) => {
     ? errorResp
     : [JSON.stringify(errorResp)];
   return errorMsgs;
+};
+
+// Returns the amount of seconds until the users front-end session expires
+export const currentSecondsTilInactive = () => {
+  return (
+    (new Date(localStorage.getItem("ecmps_session_expiration")) -
+      currentDateTime()) /
+    1000
+  );
 };

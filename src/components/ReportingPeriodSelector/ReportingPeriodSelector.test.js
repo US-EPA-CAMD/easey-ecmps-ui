@@ -1,16 +1,15 @@
 import React from "react";
-import {
-  render,
-  screen,
-  waitForElement,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitForElement, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
 import ReportingPeriodSelector from "./ReportingPeriodSelector";
 import config from "../../config";
+import { secureAxios } from "../../utils/api/easeyAuthApi";
+
+jest.mock("../../utils/api/easeyAuthApi");
+secureAxios.mockImplementation((options) => axios(options));
 
 const props = {
   setLoading: jest.fn(),
@@ -55,17 +54,22 @@ const reportingPeriods = [
 
 const mock = new MockAdapter(axios);
 
-const getReportingPeriodsUrl = `${config.services.mdm.uri}/reporting-periods?export=true`
+const getReportingPeriodsUrl = `${config.services.mdm.uri}/reporting-periods?export=true`;
 
 mock.onGet(getReportingPeriodsUrl).reply(200, reportingPeriods);
 
-const reportingPeriodDropdownLabel = /Reporting Periods/i
+const reportingPeriodDropdownLabel = /Reporting Periods/i;
 
 test("renders reporting period and dropdown label", async () => {
   // Arrange
   render(<ReportingPeriodSelector {...props} />);
-  const reportingPeriodsTitle = await screen.findByLabelText("Reporting Period", { exact: true });
-  const dropdownTitle = screen.getByLabelText(reportingPeriodDropdownLabel, { exact: true })
+  const reportingPeriodsTitle = await screen.findByLabelText(
+    "Reporting Period",
+    { exact: true }
+  );
+  const dropdownTitle = screen.getByLabelText(reportingPeriodDropdownLabel, {
+    exact: true,
+  });
 
   // Assert
   expect(reportingPeriodsTitle).toBeInTheDocument();
@@ -74,9 +78,11 @@ test("renders reporting period and dropdown label", async () => {
 
 test("renders correct number of options for year dropdown", async () => {
   // Arrange
-  const numOptions = reportingPeriods.length
+  const numOptions = reportingPeriods.length;
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const reportingPeriodDropdown = screen.getByLabelText(
+    reportingPeriodDropdownLabel
+  );
   const options = within(reportingPeriodDropdown).getAllByRole("option");
 
   // Assert
@@ -86,7 +92,9 @@ test("renders correct number of options for year dropdown", async () => {
 test("when a user selects a reporting period from the dropdown then that element's selected value is truthy", async () => {
   // Arrange
   await waitForElement(() => render(<ReportingPeriodSelector {...props} />));
-  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const reportingPeriodDropdown = screen.getByLabelText(
+    reportingPeriodDropdownLabel
+  );
   const selectedOption = within(reportingPeriodDropdown).getByRole("option", {
     name: /1994 Q1/i,
   });
@@ -96,8 +104,8 @@ test("when a user selects a reporting period from the dropdown then that element
 
   // Act
   // select earlier year, year option defaults to most recent year
-  const selectedId = "5" // 1994 Q1
-  userEvent.selectOptions(reportingPeriodDropdown, selectedId)
+  const selectedId = "5"; // 1994 Q1
+  userEvent.selectOptions(reportingPeriodDropdown, selectedId);
 
   // Assert
   expect(selectedOption.selected).toBeTruthy();
@@ -108,14 +116,18 @@ test("when a user selects a reporting period from the dropdown then begin/end da
   // Arrange
   const selectedId = "1";
   const selectedDataObj = reportingPeriods.find(
-    reportingPeriod => reportingPeriod.id === Number(selectedId)
+    (reportingPeriod) => reportingPeriod.id === Number(selectedId)
   );
-  await waitForElement(async () => render(<ReportingPeriodSelector {...props} />));
-  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  await waitForElement(async () =>
+    render(<ReportingPeriodSelector {...props} />)
+  );
+  const reportingPeriodDropdown = screen.getByLabelText(
+    reportingPeriodDropdownLabel
+  );
 
   // Act
   // select a previous year, init selection is most recent year/quarter
-  userEvent.selectOptions(reportingPeriodDropdown, selectedId)
+  userEvent.selectOptions(reportingPeriodDropdown, selectedId);
 
   const beginDate = await screen.findByText(selectedDataObj.beginDate);
   const endDate = screen.getByText(selectedDataObj.endDate);
@@ -131,7 +143,9 @@ test("given an export state with reportingPeriodId exists then year/quarter drop
   await waitForElement(() =>
     render(<ReportingPeriodSelector {...{ ...props, exportState }} />)
   );
-  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const reportingPeriodDropdown = screen.getByLabelText(
+    reportingPeriodDropdownLabel
+  );
   const selectedYear = within(reportingPeriodDropdown).getByRole("option", {
     name: /1993 Q1/i,
   });
@@ -148,7 +162,9 @@ test("when only monitoring plan is checked then dropdowns are disabled", async (
   await waitForElement(() =>
     render(<ReportingPeriodSelector {...{ ...props, isExport, dataTypes }} />)
   );
-  const reportingPeriodDropdown = screen.getByLabelText(reportingPeriodDropdownLabel);
+  const reportingPeriodDropdown = screen.getByLabelText(
+    reportingPeriodDropdownLabel
+  );
 
   // Assert
   expect(reportingPeriodDropdown).toHaveAttribute("disabled");

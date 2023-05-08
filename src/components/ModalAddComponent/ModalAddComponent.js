@@ -24,12 +24,14 @@ const ModalAddComponent = ({
     if (comps.length < 1) {
       mpApi.getMonitoringComponents(locationId).then((res) => {
         setComps(res.data);
-      });
+      })
+        .catch(error => console.log('getMonitoringComponents failed', error));
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
           setSysComps(ress.data);
-        });
+        })
+        .catch(error => console.log('getMonitoringSystemsComponents failed', error));
     } else {
       main = comps;
 

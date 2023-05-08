@@ -32,7 +32,8 @@ applications:
       REACT_APP_GOOGLE_ANALYTICS_ENABLED: ((googleAnalyticsEnabled))
       REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
       REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
-      REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL: ((refreshLastActivityInterval))
+      REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL_MINUTES: ((refreshLastActivityIntervalMinutes))
       REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE: ((enableSystemAdminstrationModule))
+      REACT_APP_TOKEN_REFRESH_THRESHOLD_SECONDS: ((tokenRefreshThresholdSeconds))
     routes:
       - route: ((host))

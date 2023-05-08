@@ -160,7 +160,7 @@ const TableRender = forwardRef(
       },
       {
         name: "Eval Status",
-        selector: "evalStatusCode",
+        selector: "evalStatusCodeDescription",
         sortable: true,
       },
     ];

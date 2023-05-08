@@ -80,7 +80,7 @@ export function handleImportError(error) {
     log.error({ error: error.message });
   }
   // sonarcloud doesnt want to return anything 
-  // if (error.response) {
-  //   return error.response.data.message;
-  // }
+  if (error.response) {
+    return error.response.data.message;
+  }
 }

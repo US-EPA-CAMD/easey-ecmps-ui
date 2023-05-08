@@ -270,6 +270,9 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
+  if(!localStorage.getItem("ecmps_user")){
+    return [];
+  }
   const url = getApiUrl(`/check-outs/plans`, true);
 
   return secureAxios({

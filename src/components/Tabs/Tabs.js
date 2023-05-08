@@ -53,11 +53,13 @@ const Tabs = ({
               setCheckout(false, configId, workspaceSection);
             }
             removeTab(index);
-          });
+          })
+          .catch(error => console.log('deleteCheckInMonitoringPlanConfiguration failed', error));
         } else {
           removeTab(index);
         }
-      });
+      })
+        .catch(error => console.log('getCheckedOutLocations failed', error));
     } else {
       removeTab(index);
     }

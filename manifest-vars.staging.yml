@@ -6,3 +6,4 @@ inactivityDurationMinutes: 15
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
 enableSystemAdminstrationModule: true
+tokenRefreshThresholdSeconds: 5

@@ -6,6 +6,10 @@ import { ClearSharp } from "@material-ui/icons";
 import { config } from "../../config";
 import { logOut, refreshLastActivity } from "../../utils/api/easeyAuthApi";
 import "./InactivityTracker.scss";
+import {
+  currentDateTime,
+  currentSecondsTilInactive,
+} from "../../utils/functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -32,19 +36,13 @@ const renderTime = ({ remainingTime }) => {
 };
 
 export const InactivityTracker = () => {
-  const channel = new BroadcastChannel("inactivity-events"); //Broadcast activity events to other sessions
-
-  const timeInactive = useRef(0); //Keep track of current user inactivity
-
   const signingOut = useRef(false); //Prevent double sign outs
   const wasActiveInWindow = useRef(false); //Activity monitor
 
   const showCountdownRef = useRef(false); //Use a ref that we can manipulate and set the showCountdown [avoids weird state behavior]
   const [showCountdown, setShowCountdown] = useState(showCountdownRef.current); //State management determines when to show the countdown modal based on the corresponding ref
 
-  const resetUserInactivityTimer = () => {
-    wasActiveInWindow.current = true;
-    timeInactive.current = 0;
+  const hideUserInactivityTimer = () => {
     if (showCountdownRef.current) {
       showCountdownRef.current = false;
       setShowCountdown(showCountdownRef.current);
@@ -53,48 +51,52 @@ export const InactivityTracker = () => {
 
   const extendSessionExpiration = () => {
     //Extends user session expiration window every activity
-    const newExpiration = new Date();
-    newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration + 1);
-    localStorage.setItem("ecmps_session_expiration", newExpiration);
+    const newExpiration = currentDateTime();
+    newExpiration.setSeconds(newExpiration.getSeconds() + inactiveDuration);
+    localStorage.setItem(
+      "ecmps_session_expiration",
+      newExpiration.toLocaleString()
+    );
   };
 
   const handleUserActivity = () => {
+    wasActiveInWindow.current = true;
     extendSessionExpiration();
-    channel.postMessage("Event");
-    resetUserInactivityTimer();
+    hideUserInactivityTimer();
   };
 
   const signOutUser = () => {
     if (!signingOut.current) {
       signingOut.current = true;
       //Callback to sign user out when timer is finished
-      timeInactive.current = 0; //Debounce for sign out
       logOut();
     }
   };
 
   useEffect(() => {
     extendSessionExpiration(); //Extend / Create our sliding session window
-    channel.addEventListener("message", (event) => {
-      resetUserInactivityTimer();
-    });
-    channel.postMessage("Event");
 
-    localStorage.setItem("signing_out", false); //Used as a debounce when we have multiple sessions all reaching their log out point
+    localStorage.setItem("ecmps_signing_out", false); //Used as a debounce when we have multiple sessions all reaching their log out point
 
     const interval = setInterval(() => {
       //This checks the users activity status every second
-      timeInactive.current = timeInactive.current + 1;
+      const timeTilInactive = currentSecondsTilInactive();
+
       if (
         !showCountdownRef.current &&
-        timeInactive.current >= inactiveDuration / 2
+        timeTilInactive <= inactiveDuration / 2
       ) {
         //Show the timer if our inactivity window is at the start of the countdown window
         showCountdownRef.current = true;
         setShowCountdown(showCountdownRef.current);
+      } else if (
+        showCountdownRef.current &&
+        timeTilInactive >= inactiveDuration / 2
+      ) {
+        hideUserInactivityTimer();
       }
 
-      if (timeInactive.current >= inactiveDuration) {
+      if (timeTilInactive <= 0) {
         signOutUser();
       }
     }, 1000);
@@ -116,9 +118,9 @@ export const InactivityTracker = () => {
       //Handle user leaving main page and returning
       if (
         document.visibilityState === "visible" &&
-        timeInactive.current >= inactiveDuration / 2
+        currentSecondsTilInactive() <= inactiveDuration / 2
       ) {
-        setShowCountdown(false);
+        setShowCountdown(false); //Need these two lines to force a state change on the page becoming visible again
         setShowCountdown(true);
       }
     });
@@ -146,7 +148,7 @@ export const InactivityTracker = () => {
         <div className="usa-overlay is-visible">
           <div role="dialog" aria-modal="true">
             <div
-              className="modal-wrapper react-transition flip-in-x"
+              className="modal-wrapper"
               style={{
                 width: "30%",
                 left: "35%",
@@ -167,9 +169,7 @@ export const InactivityTracker = () => {
                   <div className="timer-wrapper">
                     <CountdownCircleTimer
                       duration={inactiveDuration / 2}
-                      initialRemainingTime={
-                        inactiveDuration - timeInactive.current - 1
-                      }
+                      initialRemainingTime={currentSecondsTilInactive()}
                       colors={[
                         ["#004777", 0.33],
                         ["#F7B801", 0.33],
