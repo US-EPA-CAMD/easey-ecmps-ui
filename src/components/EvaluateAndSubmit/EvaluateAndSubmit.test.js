@@ -270,7 +270,7 @@ describe("Review and Submit component", () => {
       await getByText("FILTER").click();
     });
 
-    expect(queryByText("MON PLAN LENGTH: 1")).not.toBeInTheDocument();
+    expect(queryByText("MON PLAN LENGTH: 1")).toBeInTheDocument();
   });
 
   it("execute mocks to call submission function, and determine if UI changes as a result", async () => {

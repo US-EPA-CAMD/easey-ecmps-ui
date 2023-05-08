@@ -302,8 +302,13 @@ export const HeaderInfo = ({
         selectedReportingPeriods,
       });
     }
-    if (currentTab?.locationSelect)
+    if (currentTab?.locationSelect){
       setLocationSelect(currentTab.locationSelect);
+      setEmissionDropdownState({
+        ...cloneDeep(emissionDropdownState),
+        locationSelect: currentTab.locationSelect,
+      });
+    }
   }, [currentTab]);
 
   useEffect(() => {
@@ -1173,7 +1178,7 @@ export const HeaderInfo = ({
                 </Grid>
               )}
 
-              {user && (
+              {user && workspaceSection === MONITORING_PLAN_STORE_NAME && (
                 <Grid
                   col={7}
                   widescreen={{ col: 7 }}
