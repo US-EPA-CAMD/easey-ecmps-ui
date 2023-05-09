@@ -629,7 +629,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         id,
         userInput.id,
         userInput
-      );
+      )
+      .catch(error => console.log('updateTestQualification failed', error));
     case appendixECorrelationSummary:
       return qaApi
         .updateAppendixECorrelationSummaryRecord(
@@ -642,7 +643,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case fuelFlowToLoad:
-      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput);
+      return qaApi.updateFuelFlowToLoad(location, id, userInput.id, userInput)
+      .catch(error => console.log('updateFuelFlowToLoad failed', error));
     case fuelFlowToLoadBaseline:
       return qaApi
         .updateFuelFlowToLoadBaseline(location, id, userInput.id, userInput)
@@ -806,7 +808,8 @@ export const createDataSwitch = async (
           console.log("error", error);
         });
     case proGas:
-      return qaApi.createProtocolGas(location, id, userInput);
+      return qaApi.createProtocolGas(location, id, userInput)
+      .catch(error => console.log('createProtocolGas failed', error));
     case lineInjection:
       return qaApi
         .createQALinearityInjection(
@@ -878,13 +881,15 @@ export const createDataSwitch = async (
           console.log("error", error);
         });
     case testQualification:
-      return qaApi.createTestQualification(location, id, userInput);
+      return qaApi.createTestQualification(location, id, userInput)
+      .catch(error => console.log('createTestQualification failed', error));
     case appendixECorrelationSummary:
       return qaApi.createAppendixECorrelationSummaryRecord(
         location,
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createAppendixECorrelationSummaryRecord failed', error));
     case fuelFlowToLoad:
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
@@ -939,51 +944,65 @@ export const createDataSwitch = async (
         extraIdsArr[1],
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createCycleTimeInjection failed', error));
     case flowToLoadCheck:
-      return qaApi.createFlowToLoadCheckRecord(location, id, userInput);
+      return qaApi.createFlowToLoadCheckRecord(location, id, userInput)
+      .catch(error => console.log('createFlowToLoadCheckRecord failed', error));
     case onlineOfflineCalibration:
-      return qaApi.createOnlineOfflineCalibration(location, id, userInput);
+      return qaApi.createOnlineOfflineCalibration(location, id, userInput)
+      .catch(error => console.log('createOnlineOfflineCalibration failed', error));
     case calibrationInjections:
-      return qaApi.createCalibrationInjectionRecord(location, id, userInput);
+      return qaApi.createCalibrationInjectionRecord(location, id, userInput)
+      .catch(error => console.log('createCalibrationInjectionRecord failed', error));
     case fuelFlowmeterAccuracyData:
       return qaApi.createFuelFlowmeterAccuracyDataRecord(
         location,
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createFuelFlowmeterAccuracyDataRecord failed', error));
     case cycleTimeSummary:
-      return qaApi.createCycleTimeSummary(location, id, userInput);
+      return qaApi.createCycleTimeSummary(location, id, userInput)
+      .catch(error => console.log('createCycleTimeSummary failed', error));
     case transmitterTransducerAccuracyData:
       return qaApi.createTransmitterTransducerAccuracyDataRecord(
         location,
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createTransmitterTransducerAccuracyDataRecord failed', error));
     case flowToLoadReference:
-      return qaApi.createFlowToLoadReference(location, id, userInput);
+      return qaApi.createFlowToLoadReference(location, id, userInput)
+      .catch(error => console.log('createFlowToLoadReference failed', error));
     case unitDefualtTest:
-      return qaApi.createUnitDefaultTest(location, id, userInput);
+      return qaApi.createUnitDefaultTest(location, id, userInput)
+      .catch(error => console.log('createUnitDefaultTest failed', error));
     case unitDefaultTestRun:
       return qaApi.createUnitDefaultTestRun(
         extraIdsArr[0],
         extraIdsArr[1],
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createUnitDefaultTestRun failed', error));
     case hgSummary:
-      return qaApi.createHgSummary(location, id, userInput);
+      return qaApi.createHgSummary(location, id, userInput)
+      .catch(error => console.log('createHgSummary failed', error));
     case hgInjection:
       return qaApi.createHgInjection(
         extraIdsArr[0],
         extraIdsArr[1],
         id,
         userInput
-      );
+      )
+      .catch(error => console.log('createHgInjection failed', error));
     case qaCertEvent:
-      return qaApi.createQaCertEvents(location, userInput);
+      return qaApi.createQaCertEvents(location, userInput)
+      .catch(error => console.log('createQaCertEvents failed', error));
     case qaExeptions:
-      return qaApi.createTestExtension(location, userInput);
+      return qaApi.createTestExtension(location, userInput)
+      .catch(error => console.log('createTestExtension failed', error));
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

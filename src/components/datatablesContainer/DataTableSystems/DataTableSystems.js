@@ -127,7 +127,8 @@ export const DataTableSystems = ({
       mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
         setMonitoringSystems(res.data);
         setDataLoaded(true);
-      });
+      })
+      .catch(error => console.log('getMonitoringSystems failed', error));
       setUpdateSystemTable(false);
       setRevertedState(false);
     }
@@ -375,7 +376,8 @@ export const DataTableSystems = ({
       return;
     }
     try {
-      const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id);
+      const resp = await mpApi.saveSystems(userInput, locationSelectValue, selectedSystem.id)
+        .catch(error => console.log('saveSystems failed', error));
       if (successResponses.includes(resp.status)) {
         setUpdateSystemTable(true);
         executeOnClose();
@@ -396,7 +398,8 @@ export const DataTableSystems = ({
       return;
     }
     try {
-      const resp = await mpApi.createSystems(userInput, locationSelectValue);
+      const resp = await mpApi.createSystems(userInput, locationSelectValue)
+        .catch(error => console.log('createSystems failed', error));
       if (successResponses.includes(resp.status)) {
         setSecondLevel(false);
         setUpdateSystemTable(true);
@@ -436,7 +439,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.saveAnalyzerRanges(userInput);
+      const resp = await mpApi.saveAnalyzerRanges(userInput)
+        .catch(error => console.log('saveAnalyzerRanges failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         return true;
@@ -476,7 +480,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.createAnalyzerRanges(userInput);
+      const resp = await mpApi.createAnalyzerRanges(userInput)
+        .catch(error => console.log('createAnalyzerRanges failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         return true;
@@ -516,7 +521,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.saveSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.locationId);
+      const resp = await mpApi.saveSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.locationId)
+        .catch(error => console.log('saveSystemsFuelFlows failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
         return true;
@@ -543,7 +549,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.createSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.id);
+      const resp = await mpApi.createSystemsFuelFlows(userInput, selectedSystem.locationId, selectedSystem.id)
+        .catch(error => console.log('createSystemsFuelFlows failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
         return true;
@@ -586,7 +593,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.createSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id);
+      const resp = await mpApi.createSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id)
+        .catch(error => console.log('createSystemsComponents failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
         return true;
@@ -620,7 +628,8 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi.saveSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id, selectedRangeInFirst.id);
+      const resp = await mpApi.saveSystemsComponents(userInput, selectedSystem.locationId, selectedSystem.id, selectedRangeInFirst.id)
+        .catch(error => console.log('saveSystemsComponents failed', error));
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
         return true;

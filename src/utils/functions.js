@@ -230,10 +230,10 @@ export const addEvalStatusCell = (columns, callback) =>
               className={"hyperlink-btn cursor-pointer"}
               onClick={() => callback(row, false)}
             >
-              {row.evalStatusCode}
+              {row.evalStatusCodeDescription}
             </button>
           ) : (
-            <button className={"unstyled-btn"}>{row.evalStatusCode}</button>
+            <button className={"unstyled-btn"}>{row.evalStatusCodeDescription}</button>
           )}
         </div>
       );
@@ -334,4 +334,13 @@ export const formatErrorResponse = (errorResp) => {
     ? errorResp
     : [JSON.stringify(errorResp)];
   return errorMsgs;
+};
+
+// Returns the amount of seconds until the users front-end session expires
+export const currentSecondsTilInactive = () => {
+  return (
+    (new Date(localStorage.getItem("ecmps_session_expiration")) -
+      currentDateTime()) /
+    1000
+  );
 };

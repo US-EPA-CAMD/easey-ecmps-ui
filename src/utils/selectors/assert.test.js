@@ -19,6 +19,35 @@ const tableNames = [
   "Relationship Data",
 ];
 
+jest.mock("./monitoringPlanLoads", () => ({
+  getMonitoringPlansLoadsTableRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanRectangularDucts", () => ({
+  getMonitoringPlansRectangularDuctsTableRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanSpans", () => ({
+  getMonitoringPlansSpansTableRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanFormulas", () => ({
+  getMonitoringPlansFormulasTableRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanDefaults", () => ({
+  getMonitoringPlansDefaultsTableRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanFuelData", () => ({
+  getMonitoringPlansFuelDataRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanUnitControls", () => ({
+  getMonitoringPlansUnitControlRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanUnitCapacity", () => ({
+  getMonitoringPlansUnitCapacityRecords: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("./monitoringPlanLocationAttributes", () => ({
+  getMonitoringPlansLocationAttributeRecords: jest.fn().mockResolvedValue([]),
+  getMonitoringPlansRelationshipsDataRecords: jest.fn().mockResolvedValue([]),
+}));
+
 describe("assert", () => {
   it("tests getDataTableApis function", () => {
     for (const name of tableNames) {
