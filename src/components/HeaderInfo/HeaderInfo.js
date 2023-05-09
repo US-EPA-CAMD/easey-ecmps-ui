@@ -390,6 +390,7 @@ export const HeaderInfo = ({
 
     // First get view counts
     try {
+      setIsLoading(true)
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
@@ -420,8 +421,11 @@ export const HeaderInfo = ({
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
         setViewTemplateSelect(viewData[0]);
       }
+
+      setIsLoading(false)
     } catch (e) {
       console.error(e);
+      setIsLoading(false)
     }
   };
 
