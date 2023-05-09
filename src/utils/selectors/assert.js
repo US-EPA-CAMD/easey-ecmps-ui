@@ -70,45 +70,43 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
   return { data: [] };
 };
 
-// Selectors
+// Selectors for UI 
 export const getDataTableRecords = (dataIn, name) => {
   switch (name) {
     case load:
-      return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansLoadsTableRecords failed', error));
+      return loadSelector.getMonitoringPlansLoadsTableRecords(dataIn);
     case rectDuctWaf:
       return wafSelector.getMonitoringPlansRectangularDuctsTableRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansRectangularDuctsTableRecords failed', error));
+       
     case span:
       return spanSelector.getMonitoringPlansSpansTableRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansSpansTableRecords failed', error));
+        
     case form:
       return formulaSelector.getMonitoringPlansFormulasTableRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansFormulasTableRecords failed', error));
+       
     case def:
       return defaultSelector.getMonitoringPlansDefaultsTableRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansDefaultsTableRecords failed', error));
+      
     case unitFuel:
       return unitFuelSelector.getMonitoringPlansFuelDataRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansFuelDataRecords failed', error));
+      
     case unitCon:
       return unitControlSelector.getMonitoringPlansUnitControlRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansUnitControlRecords failed', error));
+        
     case unitCap:
       return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn)
-        .catch(error => console.log('getMonitoringPlansUnitCapacityRecords failed', error));
-
+      
     case locationAttribute:
       return locationRelationshipsSelector.getMonitoringPlansLocationAttributeRecords(
         dataIn
       )
-        .catch(error => console.log('getMonitoringPlansLocationAttributeRecords failed', error));
+      
 
     case relationshipData:
       return locationRelationshipsSelector.getMonitoringPlansRelationshipsDataRecords(
         dataIn
       )
-        .catch(error => console.log('getMonitoringPlansRelationshipsDataRecords failed', error));
+
     default:
       break;
   }
