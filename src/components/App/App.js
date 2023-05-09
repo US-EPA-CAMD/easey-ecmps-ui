@@ -84,7 +84,8 @@ const App = () => {
           }
         }
         if (refreshCheckouts) {
-          const checkedOutLocationResult = (await getCheckedOutLocations())?.data;
+          const checkedOutLocationResult = (await getCheckedOutLocations())
+            ?.data;
           if (
             checkedOutLocationResult &&
             !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
@@ -107,7 +108,13 @@ const App = () => {
 
   useEffect(() => {
     window.addEventListener("storage", (event) => {
-      if (event.key === "ecmps_user") {
+      if (event.key === null) {
+        window.location.reload();
+      }
+      if (
+        event.key === "ecmps_user" &&
+        (event.oldValue === null || event.newValue === null)
+      ) {
         window.location.reload();
       }
     });

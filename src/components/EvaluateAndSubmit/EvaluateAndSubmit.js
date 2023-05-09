@@ -239,6 +239,7 @@ export const EvaluateAndSubmit = ({
         if (chunk.selected) {
           if (componentType === "Evaluate") {
             chunk.evalStatusCode = "INQ";
+            chunk.evalStatusCodeDescription = "In Queue";
           }
           activeMPSet.add(chunk.monPlanId);
         }
@@ -344,7 +345,7 @@ export const EvaluateAndSubmit = ({
   const checkInAllCheckedOutLocations = () => {
     for (let [key, value] of monitorPlanIdToSelectedMap.current) {
       getUserPlans();
-      // doesnt check in any configuration that the current user has checked out via UI 
+      // doesnt check in any configuration that the current user has checked out via UI
       if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
         checkoutAPI(false, value[0], key);
       }
