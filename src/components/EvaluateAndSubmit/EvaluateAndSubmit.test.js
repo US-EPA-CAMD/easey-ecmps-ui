@@ -14,28 +14,32 @@ jest.mock("../../utils/api/camdServices", () => ({
     then: jest.fn().mockReturnValue({ catch: jest.fn() }),
   }),
 }));
-jest.mock('../../utils/api/facilityApi', () => ({
-  getFacilityById: jest.fn().mockResolvedValue({data: {facilityName: 'facName'}}),
-  getAllFacilities: jest.fn().mockResolvedValue({data: [
-    {
-      facilityRecordId: 1,
-      facilityId: "MOCK-1",
-      facilityName: 'Barry',
-      stateCode: 'AL',
-    },
-    {
-      facilityRecordId: 3,
-      facilityId: "MOCK-2",
-      facilityName: 'Barry',
-      stateCode: 'AL',
-    },
-    {
-      facilityRecordId: 5,
-      facilityId: "MOCK-3",
-      facilityName: 'Barry',
-      stateCode: 'AL',
-    },
-  ]}),
+jest.mock("../../utils/api/facilityApi", () => ({
+  getFacilityById: jest
+    .fn()
+    .mockResolvedValue({ data: { facilityName: "facName" } }),
+  getAllFacilities: jest.fn().mockResolvedValue({
+    data: [
+      {
+        facilityRecordId: 1,
+        facilityId: "MOCK-1",
+        facilityName: "Barry",
+        stateCode: "AL",
+      },
+      {
+        facilityRecordId: 3,
+        facilityId: "MOCK-2",
+        facilityName: "Barry",
+        stateCode: "AL",
+      },
+      {
+        facilityRecordId: 5,
+        facilityId: "MOCK-3",
+        facilityName: "Barry",
+        stateCode: "AL",
+      },
+    ],
+  }),
 }));
 
 jest.mock("react-redux", () => {
@@ -58,6 +62,7 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
         facilityName: "Barry",
         name: "1",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-2",
@@ -65,6 +70,7 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
         facilityName: "Barry",
         name: "2",
         evalStatusCode: "ERR",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-3",
@@ -72,6 +78,7 @@ jest.mock("../../utils/api/monitoringPlansApi", () => ({
         facilityName: "Barry",
         name: "3",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
     ],
   }),
@@ -88,18 +95,21 @@ jest.mock("../../utils/api/qaCertificationsAPI", () => ({
         facilityName: "Barry",
         name: "1",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-2",
         facilityName: "Barry",
         name: "2",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-3",
         facilityName: "Barry",
         name: "3",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
     ],
   }),
@@ -110,18 +120,21 @@ jest.mock("../../utils/api/qaCertificationsAPI", () => ({
         facilityName: "Barry",
         name: "1",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-2",
         facilityName: "Barry",
         name: "2",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-3",
         facilityName: "Barry",
         name: "3",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
     ],
   }),
@@ -132,18 +145,21 @@ jest.mock("../../utils/api/qaCertificationsAPI", () => ({
         facilityName: "Barry",
         name: "1",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-2",
         facilityName: "Barry",
         name: "2",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         id: "MOCK-3",
         facilityName: "Barry",
         name: "3",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
     ],
   }),
@@ -156,18 +172,21 @@ jest.mock("../../utils/api/emissionsApi", () => ({
         facilityName: "Barry",
         configuration: "1",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         orisCode: "MOCK-2",
         facilityName: "Barry",
         configuration: "2",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
       {
         orisCode: "MOCK-3",
         facilityName: "Barry",
         configuration: "3",
         evalStatusCode: "PASS",
+        evalStatusCodeDescription: "PASS",
       },
     ],
   }),
@@ -176,24 +195,29 @@ jest.mock("../../utils/api/emissionsApi", () => ({
 const mockUserPermissions = [
   {
     id: "MOCK-1",
-    facilityName: 'Barry',
+    facilityName: "Barry",
     permissions: [],
-
   },
   {
     id: "MOCK-2",
-    facilityName: 'Barry',
+    facilityName: "Barry",
     permissions: [],
   },
   {
     id: "MOCK-3",
-    facilityName: 'Barry',
+    facilityName: "Barry",
     permissions: [],
   },
-]
+];
 
-jest.mock('../../utils/api/contentApi', () => ({
-  getContent: jest.fn().mockResolvedValue({data: {title: 'Test Title', content: 'Test Content', displayAlert: true}})
+jest.mock("../../utils/api/contentApi", () => ({
+  getContent: jest.fn().mockResolvedValue({
+    data: {
+      title: "Test Title",
+      content: "Test Content",
+      displayAlert: true,
+    },
+  }),
 }));
 
 jest.mock(
@@ -245,9 +269,14 @@ const store = configureStore();
 describe("Review and Submit component", () => {
   let query, user;
   beforeEach(async () => {
-    user = { userId: "mock", firstName: "mock", lastName: "mock", permissions: {
-      facilities: mockUserPermissions
-    } };
+    user = {
+      userId: "mock",
+      firstName: "mock",
+      lastName: "mock",
+      permissions: {
+        facilities: mockUserPermissions,
+      },
+    };
     await act(async () => {
       query = render(
         <EvaluateAndSubmit
@@ -264,7 +293,7 @@ describe("Review and Submit component", () => {
   });
 
   it("execute mocks to call filter function, and determine if ReviewAndSubmit Table has correct data passed", async () => {
-    const { getByText,queryByText } = query;
+    const { getByText, queryByText } = query;
 
     await act(async () => {
       await getByText("FILTER").click();

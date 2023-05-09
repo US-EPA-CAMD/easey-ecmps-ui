@@ -47,6 +47,7 @@ export const EvaluateRefresh = ({ dataList, storedFilters, lastEvalTime }) => {
           ) {
             changes++;
             rowEntry.evalStatusCode = r.evalStatusCode;
+            rowEntry.evalStatusCodeDescription = r.evalStatusCodeDescription;
           }
         }
 

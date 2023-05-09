@@ -373,9 +373,11 @@ export const HeaderInfo = ({
   }, [workspaceSection, setTestDataOptionSelect]);
 
   useEffect(() => {
-    getEmissionsViewDropdownData().catch((e) => {
-      console.log(e);
-    });
+    if (workspaceSection === EMISSIONS_STORE_NAME) {
+      getEmissionsViewDropdownData().catch((e) => {
+        console.log(e);
+      });
+    }
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -390,6 +392,7 @@ export const HeaderInfo = ({
 
     // First get view counts
     try {
+      setIsLoading(true)
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
@@ -420,8 +423,11 @@ export const HeaderInfo = ({
       if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
         setViewTemplateSelect(viewData[0]);
       }
+
+      setIsLoading(false)
     } catch (e) {
       console.error(e);
+      setIsLoading(false)
     }
   };
 
