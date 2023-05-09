@@ -368,9 +368,11 @@ export const HeaderInfo = ({
   }, [workspaceSection, setTestDataOptionSelect]);
 
   useEffect(() => {
-    getEmissionsViewDropdownData().catch((e) => {
-      console.log(e);
-    });
+    if (workspaceSection === EMISSIONS_STORE_NAME) {
+      getEmissionsViewDropdownData().catch((e) => {
+        console.log(e);
+      });
+    }
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
