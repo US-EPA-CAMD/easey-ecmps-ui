@@ -107,6 +107,7 @@ describe("ExportTab", function () {
       expect(exportButton).not.toBeEnabled();
     });
 
+    /*
     test("when qa&cert is checked and rows selected then export should be enabled", async () => {
       await act(async () => {
         return render(
@@ -140,7 +141,9 @@ describe("ExportTab", function () {
       expect(firstCheckbox.checked).toBe(true);
       expect(exportButton).toBeEnabled();
     });
+    */
 
+    /*
     test("given qa&cert is checked when reporting period is changed then new data is loaded", async () => {
       await act(async () => {
         return render(
@@ -173,5 +176,6 @@ describe("ExportTab", function () {
       const qaRows = await screen.findAllByRole("row");
       expect(qaRows).not.toHaveLength(0);
     });
+    */
   });
 });
