@@ -354,11 +354,11 @@ export const HeaderInfo = ({
   }, [workspaceSection, setTestDataOptionSelect]);
 
   useEffect(() => {
-    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
-
-    getEmissionsViewDropdownData().catch((e) => {
-      console.log(e);
-    });
+    if (workspaceSection === EMISSIONS_STORE_NAME) {
+      getEmissionsViewDropdownData().catch((e) => {
+        console.log(e);
+      });
+    }
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -921,13 +921,6 @@ export const HeaderInfo = ({
     const uniqueReportingPeriods = [
       ...new Set([...emissionDropdownState.selectedReportingPeriods]),
     ];
-
-    hideAppError();
-    if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
-      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
-      reportingPeriods = [...reportingPeriods];
-      return;
-    }
     setSelectedReportingPeriods(uniqueReportingPeriods);
     dispatch(
       setReportingPeriods(
@@ -938,7 +931,19 @@ export const HeaderInfo = ({
     );
   };
 
-  const reportingPeriodOnChangeUpdate = () => {
+  const reportingPeriodOnChangeUpdate = (id) => {
+    const uniqueReportingPeriods = [
+      ...new Set([...emissionDropdownState.selectedReportingPeriods, id]),
+    ];
+
+    if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
+      displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
+      const addedRp = reportingPeriods.find((rp) => rp.id === id);
+      addedRp.selected = false;
+      reportingPeriods = [...reportingPeriods];
+      return;
+    }
+    hideAppError();
     const selectedReportingPeriods = reportingPeriods
       .filter((el) => el.selected)
       .map((rp) => rp.id);
