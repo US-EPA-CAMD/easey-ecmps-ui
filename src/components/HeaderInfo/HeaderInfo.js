@@ -343,25 +343,6 @@ export const HeaderInfo = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (workspaceSection !== EMISSIONS_STORE_NAME) return;
-
-    getEmissionsViewDropdownData().catch((e) => {
-      console.log(e);
-    });
-    return () => {
-      setViewTemplates([defaultTemplateValue]);
-      setViewTemplateSelect(null);
-    };
-    // Adding getEmissionsViewDropdownData to the dep array causes infinite rerenders so suppressing the warning below
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    workspaceSection,
-    setViewTemplateSelect,
-    selectedReportingPeriods,
-    configID,
-    inWorkspace,
-  ]);
 
   useEffect(() => {
     if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
@@ -839,8 +820,6 @@ export const HeaderInfo = ({
   };
 
   const importEmissionsFile = (payload) => {
-    const { year, quarter } = payload;
-    const importedReportingPeriod = `${year} Q${quarter}`
 
     setIsLoading(true);
     setFinishedLoading(false);
@@ -857,13 +836,17 @@ export const HeaderInfo = ({
 
         // set relevant reporting periods state to rerender which will call
         // getEmissionsViewDropdownData w/ new reporting periods state
+        const { year, quarter } = payload;
+        const importedReportingPeriod = `${year} Q${quarter}`;
+        // Select only the reporting period that was uploaded
+        reportingPeriods.forEach(rp=>{
+          rp.selected = rp.label === importedReportingPeriod;
+        })
+
         setSelectedReportingPeriods([importedReportingPeriod]);
         setEmissionDropdownState(prevEmissionDropdownState => {
           return { ...cloneDeep(prevEmissionDropdownState), selectedReportingPeriods: [importedReportingPeriod] }
         })
-        dispatch(
-          setReportingPeriods([importedReportingPeriod], currentTab.name, workspaceSection)
-        );
       })
       .catch((err) => {
         console.log(err);
@@ -894,6 +877,20 @@ export const HeaderInfo = ({
     else if (workspaceSection === EMISSIONS_STORE_NAME)
       importEmissionsFile(payload);
   };
+
+  const historicalImportCallback = (historicYear, historicQuarter)=>{
+    // set relevant reporting periods state to rerender which will call
+    // getEmissionsViewDropdownData w/ new reporting periods state
+    const importedReportingPeriod = `${historicYear} Q${historicQuarter}`;
+    // Select only the reporting period that was uploaded
+    reportingPeriods.forEach(rp=>{
+      rp.selected = rp.label === importedReportingPeriod;
+    })
+
+    setEmissionDropdownState(prevEmissionDropdownState => {
+      return { ...cloneDeep(prevEmissionDropdownState), selectedReportingPeriods: [importedReportingPeriod] }
+    })
+  }
 
   // Create audit message for header info
   const createAuditMessage = (checkedOut, currentConfig) => {
@@ -1541,6 +1538,7 @@ export const HeaderInfo = ({
           importedFileErrorMsgs={importedFileErrorMsgs}
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           workspaceSectionName={workspaceSectionName}
+          portCallback={historicalImportCallback}
         />
       )}
 

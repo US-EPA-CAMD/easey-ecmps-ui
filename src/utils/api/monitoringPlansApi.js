@@ -275,14 +275,11 @@ export const getCheckedOutLocations = async () => {
   }
   const url = getApiUrl(`/check-outs/plans`, true);
 
-  console.log("calling")
   return secureAxios({
     method: "GET",
     url: url,
   })
     .then((res)=>{
-      console.log("resp")
-console.log(res)
       return handleResponse(res);
     }
     )

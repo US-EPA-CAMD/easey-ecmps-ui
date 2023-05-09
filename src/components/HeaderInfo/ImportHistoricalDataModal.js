@@ -13,7 +13,8 @@ export const ImportHistoricalDataModal = ({
   setFinishedLoading,
   importedFileErrorMsgs,
   setImportedFileErrorMsgs,
-  workspaceSectionName
+  workspaceSectionName,
+  portCallback, // callback functiona after successful import
 }) => {
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedQuarter, setSelectedQuarter] = useState(null);
@@ -36,8 +37,10 @@ export const ImportHistoricalDataModal = ({
         return importEmissionsData(exportResponse);
       })
       .then(({ data: importResponse, status }) => {
+        
         if (status === 201) {
           setImportedFileErrorMsgs([]);
+          portCallback(selectedYear, selectedQuarter)
         } else if (importResponse?.message) {
           if(Array.isArray(importResponse.message)) {
             setImportedFileErrorMsgs(
