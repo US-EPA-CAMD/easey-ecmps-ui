@@ -939,8 +939,6 @@ export const HeaderInfo = ({
       ...new Set([...emissionDropdownState.selectedReportingPeriods, id]),
     ];
 
-    console.log(uniqueReportingPeriods.length);
-
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       const addedRp = reportingPeriods.find((rp) => rp.id === id);
