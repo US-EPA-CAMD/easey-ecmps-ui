@@ -106,7 +106,7 @@ const checkEndDateAndHour = (userInput, dataTableName, errors) => {
   // skips these tables b/c only have end date, no end hour
   // currently doesn't do anything due to missing option evaluating to undefined
   // and thus having hasOnlyEitherEndDateOrHour eval to false
-  const skipTables = ["Location Attribute", "Relationship Data"]
+  const skipTables = ["Location Attribute", "Relationship Data", "Unit Capacity", "Unit Fuel"]
   if (skipTables.includes(dataTableName)) return;
 
   // edge case for WAFs Rectangular Duct b/c properties are named wafEndDate/Hour
