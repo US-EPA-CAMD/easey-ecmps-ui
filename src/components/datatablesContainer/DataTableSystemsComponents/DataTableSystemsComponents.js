@@ -670,7 +670,6 @@ export const DataTableSystemsComponents = ({
           }
           // pressing view/edit a sys component directly
           else if (openComponentView && !addComponentFlag) {
-            // }else if (openAddComponent){
             // components
             return (
               <div>
