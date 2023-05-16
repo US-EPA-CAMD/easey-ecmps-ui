@@ -35,22 +35,16 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
-<<<<<<< HEAD
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
 import { currentDateTime } from "../../utils/functions";
-=======
->>>>>>> acb81daf78bb455fb6a0b9609510494bbc3bcc6e
 
 const App = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-<<<<<<< HEAD
-=======
   const dispatch = useDispatch();
->>>>>>> acb81daf78bb455fb6a0b9609510494bbc3bcc6e
 
   const prepDocument = () => {
     setTimeout(() => {
@@ -193,53 +187,6 @@ const App = () => {
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
-<<<<<<< HEAD
-      <Switch>
-        <Route path="/reports" exact component={() => <ReportGenerator />} />
-        <Route
-          path="/workspace/reports"
-          exact
-          component={() => <ReportGenerator requireAuth={true} user={user} />}
-        />
-        <Layout
-          user={user}
-          currentLink={currentLink}
-          setCurrentLink={setCurrentLink}
-        >
-          <Switch>
-            <Redirect from="/home" to="/" />
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <AboutHome user={user} setCurrentLink={setCurrentLink} />
-              )}
-            />
-            <Route path={`/faqs`} exact component={() => <FAQ />} />
-            <Route path="/login" exact component={Login} />
-            {!user && <Redirect from="/workspace/submit" to="/home" />}
-            <Route
-              path="/workspace/submit"
-              exact
-              component={() => (
-                <EvaluateAndSubmit user={user} componentType="Submission" />
-              )}
-            />
-
-            {!user && <Redirect from="/workspace/evaluate" to="/home" />}
-            <Route
-              path="/workspace/evaluate"
-              exact
-              component={() => (
-                <EvaluateAndSubmit user={user} componentType="Evaluate" />
-              )}
-            />
-
-            {user ? (
-              <Redirect
-                from="/monitoring-plans"
-                to="/workspace/monitoring-plans"
-=======
       <Layout
         user={user}
         currentLink={currentLink}
@@ -266,7 +213,6 @@ const App = () => {
               <AboutHome
                 user={user}
                 setCurrentLink={setCurrentLink}
->>>>>>> acb81daf78bb455fb6a0b9609510494bbc3bcc6e
               />
             }
           />
@@ -417,38 +363,6 @@ const App = () => {
                   callApiFlag={expired}
                   user={user}   
                   workspaceSection={EXPORT_STORE_NAME}
-<<<<<<< HEAD
-                />
-              )}
-            />
-
-            {!user && (
-              <Redirect from="/workspace/error-suppression" to="/home" />
-            )}
-            <Route
-              path="/workspace/error-suppression"
-              exact
-              component={() => <ErrorSuppression />}
-            />
-
-            <Route path="/tutorials" exact component={ComingSoon} />
-            <Route path="/cam-api" exact component={ComingSoon} />
-            <Route path="/glossary" exact component={ComingSoon} />
-
-            <Route
-              path="/reporting-instructions"
-              exact
-              component={ReportingInstructions}
-            />
-            <Route path={`/resources`} exact component={Resources} />
-            <Route path={`/help-support`} exact component={HelpSupport} />
-            <Route path="/admin/rules" exact component={RuleEditor} />
-
-            <Route path="*" component={NotFound} />
-          </Switch>
-        </Layout>
-      </Switch>
-=======
               />
             }
           />
@@ -471,7 +385,6 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>      
->>>>>>> acb81daf78bb455fb6a0b9609510494bbc3bcc6e
     </div>
   );
 };
