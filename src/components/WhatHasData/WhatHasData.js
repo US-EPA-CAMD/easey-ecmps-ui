@@ -222,7 +222,7 @@ export const WhatHasData = () => {
             }
           </Dropdown>
           <Button className="margin-left-1"
-            onClick={getDataHandler}
+            onClick={() => getDataHandler()}
           >
             Refresh
           </Button>
