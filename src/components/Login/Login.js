@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import React, { useState } from "react";
 import {
   Button,
   Label,
@@ -16,9 +15,7 @@ import config from "../../config";
 // *** validation
 import * as yup from "yup";
 
-const logged_in = Cookies.get("cdxToken");
-
-const Login = ({ isModal, source }) => {
+const Login = ({ isModal }) => {
   const standardFormErrorMessage = "Please enter your username and password";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -93,18 +90,6 @@ const Login = ({ isModal, source }) => {
     }
   };
 
-  useEffect(() => {
-    const checkLoggedIn = () => {
-      if (logged_in !== undefined) {
-        setShowError(true);
-        setFormErrorMessage(
-          "Session already exists in another tab. Close browser to start a new session."
-        );
-      }
-    };
-    checkLoggedIn();
-  }, [source]);
-
   return (
     <div className="" data-test="component-login">
       <div className="padding-1">
@@ -149,15 +134,13 @@ const Login = ({ isModal, source }) => {
               onChange={(event) => setPassword(event.target.value)}
             />
 
-            {!logged_in ? (
-              <Button
-                data-test="component-login-submit-button"
-                className="margin-bottom-2"
-                type="submit"
-              >
-                Log In
-              </Button>
-            ) : null}
+            <Button
+              data-test="component-login-submit-button"
+              className="margin-bottom-2"
+              type="submit"
+            >
+              Log In
+            </Button>
 
             <p className="usa-form__note">
               <Button
