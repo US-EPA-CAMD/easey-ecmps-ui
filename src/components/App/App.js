@@ -34,6 +34,7 @@ import {
 import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
+import WhatHasData from "../WhatHasData/WhatHasData";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
@@ -407,7 +408,7 @@ const App = () => {
             />
             <Route path={`/resources`} exact component={Resources} />
             <Route path={`/help-support`} exact component={HelpSupport} />
-            <Route path="/admin/rules" exact component={RuleEditor} />
+            <Route path="/what-has-data" exact component={() => <WhatHasData />} />
 
             <Route path="*" component={NotFound} />
           </Switch>

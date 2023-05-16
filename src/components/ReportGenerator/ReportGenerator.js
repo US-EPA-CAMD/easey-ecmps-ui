@@ -60,7 +60,7 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
     <div className="ReportGenerator">
       {requireAuth && !user ? (
         <div className="loginPanel react-transition delayed-fade-in">
-          <Login isModal={false} source="ReportGenerator" />
+          <Login isModal={false} />
         </div>
       ) : (
         <div className="padding-bottom-5">
