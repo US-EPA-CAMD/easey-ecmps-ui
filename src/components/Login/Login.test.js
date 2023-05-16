@@ -3,13 +3,6 @@ import userEvent from "@testing-library/user-event";
 import * as React from "react";
 import Login from "./Login";
 
-// mock get function to return a fa
-jest.mock("js-cookie", () => {
-  return {
-    get: jest.fn(() => false),
-  };
-});
-
 // mock authenticate method
 jest.mock("../../utils/api/easeyAuthApi", () => {
   const errorWithResponse = new Error("Error occurred while authenticating.");

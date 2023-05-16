@@ -8,7 +8,6 @@ import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
-import RuleEditor from "../RuleEditor/RuleEditor";
 import Login from "../Login/Login";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
@@ -38,6 +37,7 @@ import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import { isEqual } from "lodash";
 import { currentDateTime } from "../../utils/functions";
+import WhatHasData from "../WhatHasData/WhatHasData";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -407,7 +407,7 @@ const App = () => {
             />
             <Route path={`/resources`} exact component={Resources} />
             <Route path={`/help-support`} exact component={HelpSupport} />
-            <Route path="/admin/rules" exact component={RuleEditor} />
+            <Route path="/what-has-data" exact component={WhatHasData} />
 
             <Route path="*" component={NotFound} />
           </Switch>
