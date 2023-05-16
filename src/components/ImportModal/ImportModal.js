@@ -90,11 +90,13 @@ const ImportModal = ({
       setDisablePortBtn(false);
     }
   };
+
   const readFile = (event) => {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
   };
+  
   const onReaderLoad = (event) => {
     try {
       setSchemaErrors([]);

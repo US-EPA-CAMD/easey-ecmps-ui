@@ -4,8 +4,6 @@ import {
   getConfigValueBoolean,
 } from "./utils/functions";
 
-require("dotenv").config();
-
 export const oneSecond = 1000;
 export const fiveSeconds = 5000;
 export const oneMinute = 60 * oneSecond;
@@ -52,8 +50,8 @@ export const config = {
     ),
     path: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PATH", "/"),
     env: getConfigValue("REACT_APP_EASEY_ECMPS_UI_ENV", "local-dev"),
-    published: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PUBLISHED", "local"),
     version: getConfigValue("REACT_APP_EASEY_ECMPS_UI_VERSION", "v0.0.0"),
+    published: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PUBLISHED", "local"),
     title: getConfigValue("REACT_APP_EASEY_ECMPS_UI_TITLE", "ECMPS"),
     email: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL",

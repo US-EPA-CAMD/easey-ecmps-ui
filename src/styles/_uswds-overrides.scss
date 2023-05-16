@@ -1,4 +1,4 @@
-@import "/variables";
+@import "variables";
 
 .header-container {
   .usa-nav {
@@ -101,14 +101,14 @@
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("/images/icons/plus.svg"),
+    background-image: url("../../public/images/icons/plus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("/images/icons/minus.svg"),
+    background-image: url("../../public/images/icons/minus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;
@@ -191,14 +191,14 @@
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("/images/icons/menu-item-expand.svg"),
+    background-image: url("../../public/images/icons/menu-item-expand.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("/images/icons/menu-item-collapse.svg"),
+    background-image: url("../../public/images/icons/menu-item-collapse.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
@@ -243,14 +243,14 @@
   }
 
   .usa-accordion__button[aria-expanded="false"] {
-    background-image: url("/images/icons/menu-item-expand-black.svg"),
+    background-image: url("../../public/images/icons/menu-item-expand-black.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
   }
 
   .usa-accordion__button[aria-expanded="true"] {
-    background-image: url("/images/icons/menu-item-collapse-black.svg"),
+    background-image: url("../../public/images/icons/menu-item-collapse-black.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;

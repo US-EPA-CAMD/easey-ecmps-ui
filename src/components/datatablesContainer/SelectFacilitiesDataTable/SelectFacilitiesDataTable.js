@@ -17,7 +17,7 @@ import {
 } from '../../../additional-functions/workspace-section-and-store-names';
 import Export from '../../export/Export/Export';
 import EmissionsTab from '../../EmissionsTab/EmissionsTab';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { resetTabOrder } from "../../../utils/functions";
 
 export const SelectFacilitiesDataTable = ({
@@ -34,7 +34,7 @@ export const SelectFacilitiesDataTable = ({
     mostRecentlyCheckedInMonitorPlanId,
     setMostRecentlyCheckedInMonitorPlanId,
   ] = useState('');
-  const history = useHistory();
+  const history = useNavigate();
 
   useEffect(() => {
     facilitiesApi
