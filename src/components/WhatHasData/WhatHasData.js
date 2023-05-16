@@ -102,7 +102,7 @@ export const WhatHasData = () => {
     setSelectedOption(selectedOption);
   }
 
-  const getDataHandler = async () => {
+  const loadData = async () => {
     setLoading(true);
     let serviceUrl = `/what-has-data?dataType=${selectedOption.key}&workspace=${isWorkspace}`;
     switch(dataType) {
@@ -149,6 +149,10 @@ export const WhatHasData = () => {
       })
     );
     setLoading(false);
+  }  
+
+  const loadDataHandler = () => {
+    loadData();
   }
 
   return (
@@ -222,7 +226,7 @@ export const WhatHasData = () => {
             }
           </Dropdown>
           <Button className="margin-left-1"
-            onClick={() => getDataHandler()}
+            onClick={loadDataHandler}
           >
             Refresh
           </Button>
