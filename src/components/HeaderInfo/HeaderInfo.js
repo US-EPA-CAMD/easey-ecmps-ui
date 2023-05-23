@@ -670,16 +670,16 @@ export const HeaderInfo = ({
     );
   };
 
-  const formatDate = (dateString, isUTC = false) => {
-    const date = new Date(dateString);
-    //HANDLE -1 days from DB dates which are UTC
-    const day = isUTC ? date.getDate() + 1 : date.getDate();
+  const formatDate = (dateString) => {
+    const date = new Date((new Date(dateString))
+        .toLocaleString("en-us", { timeZone: "America/New_York"}));
+
     return (
       (date.getMonth() > 8
         ? date.getMonth() + 1
         : "0" + (date.getMonth() + 1)) +
       "/" +
-      (day > 9 ? day : "0" + day) +
+      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
       "/" +
       date.getFullYear()
     );
@@ -903,16 +903,14 @@ export const HeaderInfo = ({
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
-        currentConfig.updateDate,
-        true
+        currentConfig.updateDate
       )}`;
     }
     // GLOBAL view
     return `Last submitted by: ${selectedConfig.userId} ${formatDate(
       selectedConfig.updateDate
         ? selectedConfig.updateDate
-        : selectedConfig.addDate,
-      true
+        : selectedConfig.addDate
     )}`;
   };
 
