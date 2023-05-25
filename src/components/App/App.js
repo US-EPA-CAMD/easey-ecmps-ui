@@ -36,6 +36,7 @@ import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { currentDateTime } from "../../utils/functions";
+import WhatHasData from "../WhatHasData/WhatHasData";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -360,28 +361,36 @@ const App = () => {
                   callApiFlag={expired}
                   user={user}   
                   workspaceSection={EXPORT_STORE_NAME}
-              />
-            }
-          />
-          <Route
-            path="/workspace/error-suppression"
-            element={!user
-              ? <Navigate to="/" />
-              : <ErrorSuppression />
-            }
-          />
-          <Route path="/tutorials" element={<ComingSoon />} />
-          <Route path="/cam-api" element={<ComingSoon />} />
-          <Route path="/glossary" element={<ComingSoon />} />
-          <Route
-            path="/reporting-instructions"
-            element={<ReportingInstructions />}
-          />
-          <Route path={`/resources`} element={<Resources />} />
-          <Route path={`/help-support`} element={<HelpSupport />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>      
+                />
+              }
+            />
+
+            {!user && (
+              <Navigate from="/workspace/error-suppression" to="/home" />
+            )}
+            <Route
+              path="/workspace/error-suppression"
+              exact
+              component={() => <ErrorSuppression />}
+            />
+
+            <Route path="/tutorials" exact component={ComingSoon} />
+            <Route path="/cam-api" exact component={ComingSoon} />
+            <Route path="/glossary" exact component={ComingSoon} />
+
+            <Route
+              path="/reporting-instructions"
+              exact
+              component={ReportingInstructions}
+            />
+            <Route path={`/resources`} exact component={Resources} />
+            <Route path={`/help-support`} exact component={HelpSupport} />
+            <Route path="/what-has-data" exact component={WhatHasData} />
+
+            <Route path="*" component={NotFound} />
+          </Routes>
+        </Layout>
+     
     </div>
   );
 };
