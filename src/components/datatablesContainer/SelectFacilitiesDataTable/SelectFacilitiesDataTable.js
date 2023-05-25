@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
-import * as fs from '../../../utils/selectors/facilities';
-import MonitoringPlanTab from '../../MonitoringPlanTab/MonitoringPlanTab';
-import QACertTestSummaryTab from '../../QACertTestSummaryTab/QACertTestSummaryTab';
-import QACertEventTab from '../../QACertEventTab/QACertEventTab';
-import { DataTableRender } from '../../DataTableRender/DataTableRender';
-import './SelectFacilitiesDataTable.scss';
-import DataTableConfigurations from '../DataTableConfigurations/DataTableConfigurations';
-import * as facilitiesApi from '../../../utils/api/facilityApi';
-import { getCheckedOutLocations } from '../../../utils/api/monitoringPlansApi';
+import React, { useEffect, useMemo, useState } from "react";
+import { connect } from "react-redux";
+import * as fs from "../../../utils/selectors/facilities";
+import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
+import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
+import QACertEventTab from "../../QACertEventTab/QACertEventTab";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
+import "./SelectFacilitiesDataTable.scss";
+import { DataTableConfigurations } from "../DataTableConfigurations/DataTableConfigurations";
+import * as facilitiesApi from "../../../utils/api/facilityApi";
+import { getCheckedOutLocations } from "../../../utils/api/monitoringPlansApi";
 import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
-} from '../../../additional-functions/workspace-section-and-store-names';
-import Export from '../../export/Export/Export';
-import EmissionsTab from '../../EmissionsTab/EmissionsTab';
+} from "../../../additional-functions/workspace-section-and-store-names";
+import Export from "../../export/Export/Export";
+import EmissionsTab from "../../EmissionsTab/EmissionsTab";
 import { useNavigate } from "react-router-dom";
 import { resetTabOrder } from "../../../utils/functions";
 
@@ -27,13 +27,13 @@ export const SelectFacilitiesDataTable = ({
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
-  const [facilities, setFacilities] = useState('');
+  const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanId,
     setMostRecentlyCheckedInMonitorPlanId,
-  ] = useState('');
+  ] = useState("");
   const history = useNavigate();
 
   useEffect(() => {
@@ -75,25 +75,24 @@ export const SelectFacilitiesDataTable = ({
       setCheckedOutLocations([]); // This worked for me
     };
   };
-
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ['Facility', 'ORIS', 'State'];
+  const columnNames = ["Facility", "ORIS", "State"];
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
     const title = `${info[0].col1} (${info[1].name}) ${
-      info[1].active ? '' : 'Inactive'
+      info[1].active ? "" : "Inactive"
     }`;
 
     // if user has THIS plan checkedout
     const isCheckedOutByUser = (configs) => {
       return (
-        configs.map((location) => location['monPlanId']).indexOf(info[1].id) >
+        configs.map((location) => location["monPlanId"]).indexOf(info[1].id) >
           -1 &&
         configs[
-          configs.map((location) => location['monPlanId']).indexOf(info[1].id)
-        ]['checkedOutBy'] === user['userId']
+          configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
+        ]["checkedOutBy"] === user["userId"]
       );
     };
 
@@ -189,7 +188,7 @@ export const SelectFacilitiesDataTable = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
-
+  const ExpandedComponent = ({ data }) => <div>{JSON.stringify(data, null, 2)} {console.log('TEST',data)}</div>;
   return (
     <div className="tabsBox">
       <input
@@ -200,14 +199,14 @@ export const SelectFacilitiesDataTable = ({
         id="testingBtn"
         onClick={() => {
           selectedRowHandler([
-            { col1: '1', col2: '2' },
-            { id: 'test', name: 'testname', active: false },
+            { col1: "1", col2: "2" },
+            { id: "test", name: "testname", active: false },
             false,
           ]);
           // edge case
           selectedRowHandler([
-            { col1: '1', col2: '2' },
-            { id: 'test', name: 'testname', active: true },
+            { col1: "1", col2: "2" },
+            { id: "test", name: "testname", active: true },
             false,
           ]);
         }}
@@ -218,7 +217,7 @@ export const SelectFacilitiesDataTable = ({
         columnNames={columnNames}
         dataLoaded={dataLoaded}
         data={data}
-        defaultSort="col2"
+        // defaultSort="col2"
         openedFacilityTabs={openedFacilityTabs[workspaceSection]}
         user={user}
         pagination={true}
@@ -227,20 +226,24 @@ export const SelectFacilitiesDataTable = ({
         checkedOutLocations={checkedOutLocations}
         expandableRows={true}
         expandableRowComp={
-          <DataTableConfigurations
-            selectedRowHandler={selectedRowHandler}
-            user={user}
-            className="expand-row-data-table"
-            checkedOutLocations={checkedOutLocations}
-            actionsBtn={'Open'}
-            setMostRecentlyCheckedInMonitorPlanId={
-              setMostRecentlyCheckedInMonitorPlanId
-            }
-            setMostRecentlyCheckedInMonitorPlanIdForTab={
-              setMostRecentlyCheckedInMonitorPlanIdForTab
-            }
-            workspaceSection={workspaceSection}
-          />
+          DataTableConfigurations
+        
+        }
+        expandableRowProps = {{
+          'selectedRowHandler':selectedRowHandler,
+          'user':user,
+          'className':"expand-row-data-table",
+          'checkedOutLocations':checkedOutLocations,
+          'actionsBtn':"Open",
+          'setMostRecentlyCheckedInMonitorPlanId':
+            setMostRecentlyCheckedInMonitorPlanId,
+          
+          'setMostRecentlyCheckedInMonitorPlanIdForTab':
+            setMostRecentlyCheckedInMonitorPlanIdForTab,
+          
+          'workspaceSection':workspaceSection,
+
+        }
         }
         headerStyling="padding-top-0 padding-left-2"
         setShowInactive={() => {}}
@@ -250,7 +253,7 @@ export const SelectFacilitiesDataTable = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab={
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
-        ariaLabel={'Select Configurations'}
+        ariaLabel={"Select Configurations"}
         workspaceSection={workspaceSection}
       />
     </div>

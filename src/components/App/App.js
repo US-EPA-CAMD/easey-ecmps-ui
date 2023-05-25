@@ -35,8 +35,6 @@ import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
-import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
-import { isEqual } from "lodash";
 import { currentDateTime } from "../../utils/functions";
 
 const App = () => {
@@ -44,7 +42,6 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  const dispatch = useDispatch();
 
   const prepDocument = () => {
     setTimeout(() => {

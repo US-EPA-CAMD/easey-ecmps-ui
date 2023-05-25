@@ -18,7 +18,7 @@ import { Button } from "@trussworks/react-uswds";
 import DataTable from "react-data-table-component";
 
 // *** local
-import { FilterComponent } from "../ReactDataTablesFilter/ReactDataTablesFilter";
+import FilterComponent from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 /*********** LOOKS AND DECORATION (ICONS, SCSS, ETC.) ***********/
@@ -54,6 +54,7 @@ export const DataTableRender = ({
   pagination,
   filter,
   expandableRowComp,
+  expandableRowProps,
   defaultSort,
   expandableRows,
   headerStyling,
@@ -73,7 +74,7 @@ export const DataTableRender = ({
 
   // for 508
   openAndCheckoutBTNFocus,
-
+  onRowExpandToggled,
   workspaceSection,
 }) => {
   const ariaLabelProp = { "aria-label": ariaLabel };
@@ -93,7 +94,7 @@ export const DataTableRender = ({
   const storeActiveElementAndCallOpenHandler = (...args) => {
     window.openModalBtn = document.activeElement;
     return openHandler(...args);
-  }
+  };
   useEffect(() => {
     if (openAndCheckoutBTNFocus) {
       setTimeout(() => {
@@ -135,9 +136,9 @@ export const DataTableRender = ({
         .map((location) => location["monPlanId"])
         .indexOf(monitoringPlanId) > -1 &&
       checkedOutLocations[
-      checkedOutLocations
-        .map((location) => location["monPlanId"])
-        .indexOf(monitoringPlanId)
+        checkedOutLocations
+          .map((location) => location["monPlanId"])
+          .indexOf(monitoringPlanId)
       ]["checkedOutBy"] === user["userId"]
     ) {
       result = true;
@@ -196,7 +197,8 @@ export const DataTableRender = ({
       case "Facility":
         columns.push({
           name,
-          selector: `col${index + 1}`,
+          wrap: true,
+          selector: (row) => row[`col${index + 1}`],
           sortable: true,
           cell: (row) => <AddLock row={row} />,
         });
@@ -205,7 +207,8 @@ export const DataTableRender = ({
       case "Configurations":
         columns.push({
           name,
-          selector: `col${index + 1}`,
+          wrap: true,
+          selector: (row) => row[`col${index + 1}`],
           sortable: true,
           cell: (row) => <AddPencil row={row} />,
         });
@@ -214,18 +217,21 @@ export const DataTableRender = ({
       case "ORIS":
         columns.push({
           name,
-          selector: `col${index + 1}`,
+          wrap: true,
+          selector: (row) => row.col2,
           sortable: true,
           sortFunction: (a, b) =>
             parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
         });
         break;
+
       default:
         columns.push({
           name,
-          selector: `col${index + 1}`,
+
+          selector: (row) => row[`col${index + 1}`],
           sortable: true,
-          wrap: true,
+          style: { whiteSpace: "normal" },
         });
         break;
     }
@@ -258,7 +264,13 @@ export const DataTableRender = ({
                           ? `btnOpen${tableTitle.split(" ").join("")}`
                           : `btnOpen`
                       }
-                      onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, false, false)}
+                      onClick={() =>
+                        storeActiveElementAndCallOpenHandler(
+                          normalizedRow,
+                          false,
+                          false
+                        )
+                      }
                       aria-label={`open ${row["col1"]} in a new tab`}
                     >
                       {"Open"}
@@ -267,9 +279,9 @@ export const DataTableRender = ({
                     {/* display a checkout option only if no other locations are currently checked out by user */}
 
                     {workspaceSection !== EXPORT_STORE_NAME &&
-                      isAnyLocationCheckedOutByUser() === false &&
-                      isLocationCheckedOut(row["facId"]) === false &&
-                      row["col2"] === "Active" ? (
+                    isAnyLocationCheckedOutByUser() === false &&
+                    isLocationCheckedOut(row["facId"]) === false &&
+                    row["col2"] === "Active" ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
@@ -280,42 +292,51 @@ export const DataTableRender = ({
                           id={
                             tableTitle
                               ? `btnOpenAndCheckout${tableTitle
-                                .split(" ")
-                                .join("")}`
+                                  .split(" ")
+                                  .join("")}`
                               : `btnOpenAndCheckout`
                           }
-                          onClick={() => storeActiveElementAndCallOpenHandler(normalizedRow, true)}
+                          onClick={() =>
+                            storeActiveElementAndCallOpenHandler(
+                              normalizedRow,
+                              true
+                            )
+                          }
                           aria-label={`open and checkout ${row.col1} in a new tab`}
                         >
                           {"Open & Checkout"}
                         </Button>
                       </>
                     ) : /* display check in option only if THIS location is currently checked out by user */
-                      workspaceSection !== EXPORT_STORE_NAME &&
-                        isCurrentlyCheckedOutByUser(row.col3) === true ? (
-                        <>
-                          <span className="margin-x-1">|</span>
-                          <Button
-                            type="button"
-                            unstyled="true"
-                            epa-testid="btnCheckBackIn"
-                            className="cursor-pointer open-modal-button text-no-wrap"
-                            id={
-                              tableTitle
-                                ? `btnCheckBackIn${tableTitle
+                    workspaceSection !== EXPORT_STORE_NAME &&
+                      isCurrentlyCheckedOutByUser(row.col3) === true ? (
+                      <>
+                        <span className="margin-x-1">|</span>
+                        <Button
+                          type="button"
+                          unstyled="true"
+                          epa-testid="btnCheckBackIn"
+                          className="cursor-pointer open-modal-button text-no-wrap"
+                          id={
+                            tableTitle
+                              ? `btnCheckBackIn${tableTitle
                                   .split(" ")
                                   .join("")}`
-                                : `btnCheckBackIn`
-                            }
-                            onClick={() =>
-                              storeActiveElementAndCallOpenHandler(normalizedRow, false, true)
-                            }
-                            aria-label={`check back in ${row.col1} `}
-                          >
-                            {"Check Back In"}
-                          </Button>
-                        </>
-                      ) : null}
+                              : `btnCheckBackIn`
+                          }
+                          onClick={() =>
+                            storeActiveElementAndCallOpenHandler(
+                              normalizedRow,
+                              false,
+                              true
+                            )
+                          }
+                          aria-label={`check back in ${row.col1} `}
+                        >
+                          {"Check Back In"}
+                        </Button>
+                      </>
+                    ) : null}
                   </div>
                 ) : (
                   <div></div>
@@ -484,10 +505,11 @@ export const DataTableRender = ({
           <div>
             {tableTitle ? (
               <h4
-                className={`margin-top-5 text-bold ${tableStyling
+                className={`margin-top-5 text-bold ${
+                  tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
                     : "mobile:font-body-xl mobile:text-bold"
-                  }`}
+                }`}
               >
                 {tableTitle}
               </h4>
@@ -524,11 +546,12 @@ export const DataTableRender = ({
               paginationComponentOptions={{
                 rangeSeparatorText: config.app.paginationRangeSeparatorText,
               }}
-              onChangePage={() => {
-                resetExpandedRows();
-              }}
+              // onChangePage={() => {
+              //   resetExpandedRows();
+              // }}
               expandableRowDisabled={(row) => row.disabled}
               expandableRowsComponent={expandableRowComp}
+              expandableRowsComponentProps={expandableRowProps}
               expandableIcon={{
                 collapsed: <KeyboardArrowDownSharp />,
                 expanded: <KeyboardArrowUpSharp />,
@@ -562,10 +585,11 @@ export const DataTableRender = ({
         ) : dataLoaded && data.length === 0 ? (
           <div>
             <h4
-              className={`margin-top-5 text-bold ${tableStyling
+              className={`margin-top-5 text-bold ${
+                tableStyling
                   ? "mobile:font-body-md mobile:text-bold"
                   : "mobile:font-body-xl mobile:text-bold"
-                }`}
+              }`}
             >
               {tableTitle}
             </h4>
