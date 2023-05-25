@@ -2,16 +2,36 @@ import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
-import { globalView, getWorkspacePaths, home } from "../../utils/constants/menuTopics";
+import {
+  globalView,
+  getWorkspacePaths,
+  home,
+} from "../../utils/constants/menuTopics";
 
 const workSpace = getWorkspacePaths();
- 
+
 export const LeftNavigation = (props) => {
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
   };
 
   const makeHeader = (arr, noActive, isWorkspace) => {
+    // Filter workspace based on user roles
+    if (isWorkspace && props.user && props.user["roles"]) {
+      arr = arr.filter((row) => {
+        if (row["requiredRoles"]) {
+          for (const role of row.requiredRoles) {
+            if (props.user.roles.includes(role)) {
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return true; //Return true for all side menu items not requiring a certain role
+        }
+      });
+    }
+
     return arr.map((item) => {
       const workspaceText = isWorkspace ? "_wks" : "";
 
@@ -70,7 +90,10 @@ export const LeftNavigation = (props) => {
                 : "Go to Home page"
             }
             key={item.url}
-            id={`${item.name.split(" ").join("").replace("&","And")}${workspaceText}`}
+            id={`${item.name
+              .split(" ")
+              .join("")
+              .replace("&", "And")}${workspaceText}`}
             onClick={(event) => handleRouteChange(event, item.url)}
           >
             {item.name}
