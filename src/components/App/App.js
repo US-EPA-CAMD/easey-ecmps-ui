@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 import React, { useState, useEffect } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
@@ -194,14 +194,14 @@ const App = () => {
           <Route
             path="/reports"
             element={user
-              ? <Navigate to="/workspace/reports" replace />
+              ? <Route to="/workspace/reports" replace />
               : <ReportGenerator />
             }
           />
           <Route
             path="/workspace/reports"
             element={!user
-              ? <Navigate to="/reports" replace />
+              ? <Route to="/reports" replace />
               : <ReportGenerator requireAuth={true} user={user} />
             }
           />
@@ -216,14 +216,14 @@ const App = () => {
           />
           <Route
             path="/home"
-            element={<Navigate to="/" replace />}
+            element={<Route to="/" replace />}
           />            
           <Route path={`/faqs`} element={<FAQ />} />
           <Route path="/login" element={Login} />
           <Route
             path="/workspace/submit"
             element={!user
-              ? <Navigate to="/" replace />
+              ? <Route to="/" replace />
               : <EvaluateAndSubmit
                   user={user}
                   componentType="Submission"
@@ -233,7 +233,7 @@ const App = () => {
           <Route
             path="/workspace/evaluate"
             element={!user
-              ? <Navigate to="/" replace />
+              ? <Route to="/" replace />
               : <EvaluateAndSubmit
                   user={user}
                   componentType="Evaluate"
@@ -243,7 +243,7 @@ const App = () => {
           <Route
             path="/monitoring-plans"
             element={user
-              ? <Navigate to="/workspace/monitoring-plans" replace />
+              ? <Route to="/workspace/monitoring-plans" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
@@ -253,7 +253,7 @@ const App = () => {
           <Route
             path="/workspace/monitoring-plans"
             element={!user
-              ? <Navigate to="/monitoring-plans" replace />
+              ? <Route to="/monitoring-plans" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -268,7 +268,7 @@ const App = () => {
           <Route
             path="/qa-test"
             element={user
-              ? <Navigate to="/workspace/qa-test" replace />
+              ? <Route to="/workspace/qa-test" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
@@ -278,7 +278,7 @@ const App = () => {
           <Route
             path="/workspace/qa-test"
             element={!user
-              ? <Navigate to="/qa-test" replace />
+              ? <Route to="/qa-test" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -293,7 +293,7 @@ const App = () => {
           <Route
             path="/qa-qce-tee"
             element={user
-              ? <Navigate to="/workspace/qa-qce-tee" replace />
+              ? <Route to="/workspace/qa-qce-tee" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
@@ -303,7 +303,7 @@ const App = () => {
           <Route
             path="/workspace/qa-qce-tee"
             element={!user
-              ? <Navigate to="/qa-qce-tee" replace />
+              ? <Route to="/qa-qce-tee" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -318,7 +318,7 @@ const App = () => {
           <Route
             path="/emissions"
             element={user
-              ? <Navigate to="/workspace/emissions" replace />
+              ? <Route to="/workspace/emissions" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={EMISSIONS_STORE_NAME}
@@ -328,7 +328,7 @@ const App = () => {
           <Route
             path="/workspace/emissions"
             element={!user
-              ? <Navigate to="/emissions" replace />
+              ? <Route to="/emissions" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -343,7 +343,7 @@ const App = () => {
           <Route
             path="/export"
             element={user
-              ? <Navigate to="/workspace/export" replace />
+              ? <Route to="/workspace/export" replace />
               : <MonitoringPlanHome
                   user={false}
                   workspaceSection={EXPORT_STORE_NAME}
@@ -353,7 +353,7 @@ const App = () => {
           <Route
             path="/workspace/export"
             element={!user
-              ? <Navigate to="/export" replace />
+              ? <Route to="/export" replace />
               : <MonitoringPlanHome
                   resetTimer={setResetTimer}
                   setExpired={setExpired}
@@ -366,7 +366,7 @@ const App = () => {
             />
 
             {!user && (
-              <Navigate from="/workspace/error-suppression" to="/home" />
+              <Route from="/workspace/error-suppression" to="/home" />
             )}
             <Route
               path="/workspace/error-suppression"
