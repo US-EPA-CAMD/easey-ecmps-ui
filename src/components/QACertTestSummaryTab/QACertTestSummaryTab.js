@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 
-import { connect } from "react-redux";
 import QACertTestSummaryTabRender from "../QACertTestSummaryTabRender/QACertTestSummaryTabRender";
 import {
   convertSectionToStoreName,
@@ -9,7 +9,7 @@ import {
 import {
   setSectionSelectionState,
   setLocationSelectionState,
-  setCheckoutState
+  setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 export const QACertTestSummaryTab = ({
   resetTimer,
@@ -22,24 +22,37 @@ export const QACertTestSummaryTab = ({
   title,
   locations,
   user,
-  tabs,
+  // tabs,
   isCheckedOut,
 
   activeTab,
   setSection,
   setLocation,
-  setCheckout,
-  checkedOutLocations
+  // setCheckout,
+  checkedOutLocations,
 }) => {
-  const getCurrentTab = () =>{
-    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
-  }
-  const [sectionSelect, setSectionSelect] = useState(
-    getCurrentTab().section
+  const dispatch = useDispatch();
+
+  const tabs = useSelector(
+    (state) =>
+      state.openedFacilityTabs[
+        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+      ]
   );
+
+  const getCurrentTab = () => {
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+  };
+  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
-    setSection(sectionSelect, title);
-    
+    dispatch(
+      setSectionSelectionState(
+        sectionSelect,
+        title,
+        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+      )
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
@@ -51,9 +64,25 @@ export const QACertTestSummaryTab = ({
     testTypeCodes: [],
   });
   useEffect(() => {
-    setLocation(locationSelect, title);
+    dispatch(
+      setLocationSelectionState(
+        locationSelect,
+        title,
+        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+      )
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
+
+  const setCheckout = (value, configID, workspaceSection) => {
+    dispatch(
+      setCheckoutState(
+        value,
+        configID,
+        convertSectionToStoreName(workspaceSection)
+      )
+    );
+  };
   return (
     <div>
       <div>
@@ -82,32 +111,32 @@ export const QACertTestSummaryTab = ({
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    tabs: state.openedFacilityTabs[
-      convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-    ],
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     tabs: state.openedFacilityTabs[
+//       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+//     ],
+//   };
+// };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLocation: (location, title) =>
-      dispatch(
-        setLocationSelectionState(
-          location,
-          title,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-        )
-      ),
-    setSection: (section, title) =>
-      dispatch(
-        setSectionSelectionState(
-          section,
-          title,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-        )
-      ),
+    // setLocation: (location, title) =>
+    //   dispatch(
+    //     setLocationSelectionState(
+    //       location,
+    //       title,
+    //       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+    //     )
+    //   ),
+    // setSection: (section, title) =>
+    //   dispatch(
+    //     setSectionSelectionState(
+    //       section,
+    //       title,
+    //       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
+    //     )
+    //   ),
     updateTestTypeCodes: (section, title) =>
       dispatch(
         setSectionSelectionState(
@@ -116,19 +145,20 @@ const mapDispatchToProps = (dispatch) => {
           convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
         )
       ),
-    setCheckout: (value, configID, workspaceSection) =>
-      dispatch(
-        setCheckoutState(
-          value,
-          configID,
-          convertSectionToStoreName(workspaceSection)
-        )
-      ),
+    // setCheckout: (value, configID, workspaceSection) =>
+    //   dispatch(
+    //     setCheckoutState(
+    //       value,
+    //       configID,
+    //       convertSectionToStoreName(workspaceSection)
+    //     )
+    //   ),
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QACertTestSummaryTab);
-export { mapStateToProps };
-export { mapDispatchToProps };
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )
+export default QACertTestSummaryTab;
+// export { mapStateToProps };
+// export { mapDispatchToProps };

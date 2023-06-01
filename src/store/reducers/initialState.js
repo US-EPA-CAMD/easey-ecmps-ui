@@ -38,6 +38,7 @@ export default {
     analyzerRanges: [],
     matsMethods: [],
   },
-  currentSection: '',
+  currentSection: "",
+  workspaceState: "monitoringPlans",
   currentTabIndex: 0,
 };

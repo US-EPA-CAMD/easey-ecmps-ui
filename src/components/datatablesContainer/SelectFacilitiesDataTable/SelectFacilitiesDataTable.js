@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -23,10 +23,18 @@ import { resetTabOrder } from "../../../utils/functions";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
-  openedFacilityTabs,
+  // openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
+  // const workspaceSection = useSelector((state) => state.workspaceState);
+
+  const workspaceState = useSelector((state) => state.workspaceState);
+  console.log("workspaceSection in selectg", workspaceSection, workspaceState);
+  const openedFacilityTabs = useSelector(
+    (state) => state.openedFacilityTabs[workspaceState]
+  );
+
   const [facilities, setFacilities] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
@@ -53,7 +61,7 @@ export const SelectFacilitiesDataTable = ({
       setFacilities([]); // This worked for me
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [workspaceState]);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
@@ -102,7 +110,7 @@ export const SelectFacilitiesDataTable = ({
       {
         title,
         component:
-          workspaceSection === MONITORING_PLAN_STORE_NAME ? (
+        workspaceState === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
               <MonitoringPlanTab
                 orisCode={info[0].col2}
@@ -117,27 +125,27 @@ export const SelectFacilitiesDataTable = ({
                 setMostRecentlyCheckedInMonitorPlanIdForTab={
                   setMostRecentlyCheckedInMonitorPlanIdForTab
                 }
-                workspaceSection={workspaceSection}
+                workspaceSection={workspaceState}
               />
             </div>
-          ) : workspaceSection === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
+          ) : workspaceState === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspaceState}
               />
             </div>
-          ) : workspaceSection === QA_CERT_EVENT_STORE_NAME ? (
+          ) : workspaceState === QA_CERT_EVENT_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertEventTab
                 orisCode={info[0].col2}
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspaceState}
               />
             </div>
           ) : workspaceSection === EMISSIONS_STORE_NAME ? (
@@ -149,7 +157,7 @@ export const SelectFacilitiesDataTable = ({
                 user={user}
                 checkout={info[2] || checkedOutValue}
                 checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspaceState}
               />
             </div>
           ) : (
@@ -160,7 +168,7 @@ export const SelectFacilitiesDataTable = ({
                 selectedConfig={info[1]}
                 title={title}
                 user={user}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspaceState}
               />
             </div>
           ),
@@ -188,29 +196,13 @@ export const SelectFacilitiesDataTable = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
-  const ExpandedComponent = ({ data }) => <div>{JSON.stringify(data, null, 2)} {console.log('TEST',data)}</div>;
+  const ExpandedComponent = ({ data }) => (
+    <div>
+      {JSON.stringify(data, null, 2)} {console.log("TEST", data)}
+    </div>
+  );
   return (
     <div className="tabsBox">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => {
-          selectedRowHandler([
-            { col1: "1", col2: "2" },
-            { id: "test", name: "testname", active: false },
-            false,
-          ]);
-          // edge case
-          selectedRowHandler([
-            { col1: "1", col2: "2" },
-            { id: "test", name: "testname", active: true },
-            false,
-          ]);
-        }}
-      />
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
 
       <DataTableRender
@@ -218,33 +210,28 @@ export const SelectFacilitiesDataTable = ({
         dataLoaded={dataLoaded}
         data={data}
         // defaultSort="col2"
-        openedFacilityTabs={openedFacilityTabs[workspaceSection]}
+        openedFacilityTabs={openedFacilityTabs[workspaceState]}
         user={user}
         pagination={true}
         filter={true}
         sectionTitle="Select Configurations"
         checkedOutLocations={checkedOutLocations}
         expandableRows={true}
-        expandableRowComp={
-          DataTableConfigurations
-        
-        }
-        expandableRowProps = {{
-          'selectedRowHandler':selectedRowHandler,
-          'user':user,
-          'className':"expand-row-data-table",
-          'checkedOutLocations':checkedOutLocations,
-          'actionsBtn':"Open",
-          'setMostRecentlyCheckedInMonitorPlanId':
+        expandableRowComp={DataTableConfigurations}
+        expandableRowProps={{
+          selectedRowHandler: selectedRowHandler,
+          user: user,
+          className: "expand-row-data-table",
+          checkedOutLocations: checkedOutLocations,
+          actionsBtn: "Open",
+          setMostRecentlyCheckedInMonitorPlanId:
             setMostRecentlyCheckedInMonitorPlanId,
-          
-          'setMostRecentlyCheckedInMonitorPlanIdForTab':
-            setMostRecentlyCheckedInMonitorPlanIdForTab,
-          
-          'workspaceSection':workspaceSection,
 
-        }
-        }
+          setMostRecentlyCheckedInMonitorPlanIdForTab:
+            setMostRecentlyCheckedInMonitorPlanIdForTab,
+
+          workspaceSection: workspaceState,
+        }}
         headerStyling="padding-top-0 padding-left-2"
         setShowInactive={() => {}}
         setMostRecentlyCheckedInMonitorPlanId={
@@ -254,17 +241,17 @@ export const SelectFacilitiesDataTable = ({
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
         ariaLabel={"Select Configurations"}
-        workspaceSection={workspaceSection}
+        workspaceSection={workspaceState}
       />
     </div>
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
-  };
-};
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
+//   };
+// };
 
-export default connect(mapStateToProps, null)(SelectFacilitiesDataTable);
-export { mapStateToProps };
+export default SelectFacilitiesDataTable;
+// export { mapStateToProps };

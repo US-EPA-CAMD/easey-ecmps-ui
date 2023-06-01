@@ -20,7 +20,10 @@ const Tabs = ({
 }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
   useEffect(() => {
-    setCurrentTabIndex(activeTabIndex);
+    if (activeTabIndex != currentTabIndex) {
+      setCurrentTabIndex(activeTabIndex);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTabIndex]);
 
@@ -39,27 +42,36 @@ const Tabs = ({
     event.stopPropagation();
 
     if (workspaceSection !== EXPORT_STORE_NAME) {
-      mpApi.getCheckedOutLocations().then((resOne) => {
-        const configs = resOne.data;
-        if (
-          configs.some(
-            (plan) =>
-              plan.monPlanId === configId &&
-              plan.checkedOutBy === user["userId"]
-          )
-        ) {
-          mpApi.deleteCheckInMonitoringPlanConfiguration(configId).then(() => {
-            if (setCheckout) {
-              setCheckout(false, configId, workspaceSection);
-            }
+      mpApi
+        .getCheckedOutLocations()
+        .then((resOne) => {
+          const configs = resOne.data;
+          if (
+            configs.some(
+              (plan) =>
+                plan.monPlanId === configId &&
+                plan.checkedOutBy === user["userId"]
+            )
+          ) {
+            mpApi
+              .deleteCheckInMonitoringPlanConfiguration(configId)
+              .then(() => {
+                if (setCheckout) {
+                  setCheckout(false, configId, workspaceSection);
+                }
+                removeTab(index);
+              })
+              .catch((error) =>
+                console.log(
+                  "deleteCheckInMonitoringPlanConfiguration failed",
+                  error
+                )
+              );
+          } else {
             removeTab(index);
-          })
-          .catch(error => console.log('deleteCheckInMonitoringPlanConfiguration failed', error));
-        } else {
-          removeTab(index);
-        }
-      })
-        .catch(error => console.log('getCheckedOutLocations failed', error));
+          }
+        })
+        .catch((error) => console.log("getCheckedOutLocations failed", error));
     } else {
       removeTab(index);
     }
@@ -195,18 +207,18 @@ const Tabs = ({
                         }`}
                       />
                     ) : null}
-                    {(workspaceSection !== EXPORT_STORE_NAME &&
-                    el.props.locationId &&
-                    isCheckedOutByUser(el.props.locationId)) &&
-                      <CreateSharp
-                        role="img"
-                        className="text-bold tab-icon margin-right-1"
-                        aria-hidden="false"
-                        title={`Checked-out Configuration - ${el.props.title
-                          .split("(")[1]
-                          .replace(")", "")}`}
-                      />
-                    }
+                    {workspaceSection !== EXPORT_STORE_NAME &&
+                      el.props.locationId &&
+                      isCheckedOutByUser(el.props.locationId) && (
+                        <CreateSharp
+                          role="img"
+                          className="text-bold tab-icon margin-right-1"
+                          aria-hidden="false"
+                          title={`Checked-out Configuration - ${el.props.title
+                            .split("(")[1]
+                            .replace(")", "")}`}
+                        />
+                      )}
                     {el.props.title.split("(")[0]}
                   </div>
                   <div className="text-center">

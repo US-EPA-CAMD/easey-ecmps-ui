@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 
-import DataTable from '../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable';
-import MonitoringPlanTab from '../MonitoringPlanTab/MonitoringPlanTab';
-import QACertTestSummaryTab from '../QACertTestSummaryTab/QACertTestSummaryTab';
-import QACertEventTab from '../QACertEventTab/QACertEventTab';
-import EmissionsTab from '../EmissionsTab/EmissionsTab';
-import Export from '../export/Export/Export';
-import DynamicTabs from '../DynamicTabs/DynamicTabs';
+import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
+import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import EmissionsTab from "../EmissionsTab/EmissionsTab";
+import Export from "../export/Export/Export";
+import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
-import { getCheckedOutLocations } from '../../utils/api/monitoringPlansApi';
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 
-import * as mpApi from '../../utils/api/monitoringPlansApi';
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 
-import './MonitoringPlanHome.scss';
+import { setWorkspaceState } from "../../store/actions/workspace";
+import "./MonitoringPlanHome.scss";
 import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
-} from '../../additional-functions/workspace-section-and-store-names';
-import * as modules from '../../utils/constants/moduleTitles';
+} from "../../additional-functions/workspace-section-and-store-names";
+import * as modules from "../../utils/constants/moduleTitles";
 
 export const MonitoringPlanHome = ({
   user,
@@ -29,16 +30,26 @@ export const MonitoringPlanHome = ({
   setExpired,
   resetTimerFlag,
   callApiFlag,
-  openedFacilityTabs,
+  // openedFacilityTabs,
   workspaceSection,
 }) => {
+  const dispatch = useDispatch();
+  const openedFacilityTabs = useSelector(
+    (state) => state.openedFacilityTabs[workspaceSection]
+  );
+  const workspaceState = useSelector(
+    (state) => state.workspaceState
+  );
   const [titleName, setTitleName] = useState(document.title);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanIdForTab,
     setMostRecentlyCheckedInMonitorPlanIdForTab,
-  ] = useState('');
+  ] = useState("");
 
+  useEffect(() => {
+    dispatch(setWorkspaceState(workspaceSection));
+  }, []);
   useEffect(() => {
     obtainCheckedOutLocations().then();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,8 +80,9 @@ export const MonitoringPlanHome = ({
       default:
         break;
     }
+    dispatch(setWorkspaceState(workspaceSection));
     return () => {
-      setTitleName(''); // This worked for me
+      setTitleName(""); // This worked for me
     };
   }, [workspaceSection]);
 
@@ -84,11 +96,11 @@ export const MonitoringPlanHome = ({
       }
       // *** find locations currently checked out by the user
       const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
-        (element) => element['checkedOutBy'] === user.firstName
+        (element) => element["checkedOutBy"] === user.firstName
       )[0]
         ? checkedOutLocationList.filter(
-            (element) => element['checkedOutBy'] === user.firstName
-          )[0]['monPlanId']
+            (element) => element["checkedOutBy"] === user.firstName
+          )[0]["monPlanId"]
         : null;
 
       if (currentlyCheckedOutMonPlanId) {
@@ -105,22 +117,78 @@ export const MonitoringPlanHome = ({
           window.currentlyCheckedOutMonPlanId
         )
         .then((res) => {})
-        .catch(error => console.log('deleteCheckInMonitoringPlanConfiguration failed', error));
+        .catch((error) =>
+          console.log("deleteCheckInMonitoringPlanConfiguration failed", error)
+        );
     }
   };
 
   useEffect(() => {
-    window.addEventListener('beforeunload', checkInAll);
+    window.addEventListener("beforeunload", checkInAll);
 
     return () => {
-      window.removeEventListener('beforeunload', checkInAll);
+      window.removeEventListener("beforeunload", checkInAll);
     };
   }, []);
 
-  const handleTabState = () => {
+  const [currentTabsArr, setCurrentTabsArr] = useState([
+    {
+      title: "Select Configurations",
+      component: (
+        <DataTable
+          user={user}
+          keyField="col2"
+          openedFacilityTabs={openedFacilityTabs}
+          mostRecentlyCheckedInMonitorPlanIdForTab={
+            mostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          workspaceSection={workspaceSection}
+        />
+      ),
+    },
+  ]);
+
+  // const [tabArrr, setTabArrr] = useState([
+  //   {
+  //     title: "Select Configurations",
+  //     component: (
+  //       <DataTable
+  //         user={user}
+  //         keyField="col2"
+  //         openedFacilityTabs={openedFacilityTabs}
+  //         mostRecentlyCheckedInMonitorPlanIdForTab={
+  //           mostRecentlyCheckedInMonitorPlanIdForTab
+  //         }
+  //         setMostRecentlyCheckedInMonitorPlanIdForTab={
+  //           setMostRecentlyCheckedInMonitorPlanIdForTab
+  //         }
+  //         workspaceSection={workspaceSection}
+  //       />
+  //     ),
+  //   },
+  // ]);
+
+  const renderTabsUi = (workspace) => {
+console.log('renmdertabsUI',workspace)
+    return (
+      <div>
+      <DynamicTabs
+        tabsProps={() => handleTabState(workspace)}
+        checkedOutLocations={checkedOutLocations}
+        user={user}
+        workspaceSection={workspace}
+      />
+    </div>
+    )
+  }
+  const handleTabState = (workspace) => {
+    // issue is here, workspace section does not update in react 18
     const tabArr = [
       {
-        title: 'Select Configurations',
+        title: "Select Configurations",
         component: (
           <DataTable
             user={user}
@@ -132,13 +200,15 @@ export const MonitoringPlanHome = ({
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
-            workspaceSection={workspaceSection}
+            workspaceSection={workspace}
           />
         ),
       },
     ];
+
+    // const tabArr = [...tabArrr];
     // uses Redux to put the saved Tabs back in the UI if the user leaves the page
-    switch (workspaceSection) {
+    switch (workspace) {
       case MONITORING_PLAN_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
@@ -161,7 +231,7 @@ export const MonitoringPlanHome = ({
                 setMostRecentlyCheckedInMonitorPlanIdForTab={
                   setMostRecentlyCheckedInMonitorPlanIdForTab
                 }
-                workspaceSection={workspaceSection}
+                workspaceSection={workspace}
               />
             ),
             orisCode: row.orisCode,
@@ -210,7 +280,7 @@ export const MonitoringPlanHome = ({
                 user={user}
                 isCheckedOut={row.checkout}
                 checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspace}
               />
             ),
             orisCode: row.orisCode,
@@ -235,7 +305,7 @@ export const MonitoringPlanHome = ({
                 user={user}
                 checkout={row.checkout}
                 checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspaceSection}
+                workspaceSection={workspace}
               />
             ),
             orisCode: row.orisCode,
@@ -266,6 +336,8 @@ export const MonitoringPlanHome = ({
       default:
         break;
     }
+    // setTabArrr(tabArr);
+    // setCurrentTabsArr(tabArr);
     return tabArr;
   };
 
@@ -274,48 +346,30 @@ export const MonitoringPlanHome = ({
       <div className="text-black margin-top-1 display-none tablet:display-block">
         <h2
           className="display-inline-block page-header margin-top-2"
-          epa-testid={`${titleName.split(' ').join('')}Title`}
+          epa-testid={`${titleName.split(" ").join("")}Title`}
         >
           {titleName}
         </h2>
       </div>
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => {
-          obtainCheckedOutLocations();
-          checkInAll();
-        }}
-      />
       <div className="display-none mobile:display-block tablet:display-none">
         <h1
           className="display-inline-block font-body-xl text-bold margin-left-neg-2"
-          epa-testid={`${titleName.split(' ').join('')}Title`}
+          epa-testid={`${titleName.split(" ").join("")}Title`}
         >
           {titleName}
         </h1>
       </div>
-
-      <div>
-        <DynamicTabs
-          tabsProps={() => handleTabState()}
-          checkedOutLocations={checkedOutLocations}
-          user={user}
-          workspaceSection={workspaceSection}
-        />
-      </div>
+      {/* updates in react 18 redux properly  */}
+    {renderTabsUi(workspaceState)}
     </div>
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
-  };
-};
+// const mapStateToProps = (state, ownProps) => {
+//   return {
+//     openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
+//   };
+// };
 
-export default connect(mapStateToProps, null)(MonitoringPlanHome);
-export { mapStateToProps };
+export default MonitoringPlanHome;
+// export { mapStateToProps };
