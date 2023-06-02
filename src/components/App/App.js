@@ -21,7 +21,6 @@ import Resources from "../Resources/Resources";
 import HelpSupport from "../HelpSupport/HelpSupport";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
 import config from "../../config";
-import { setWorkspaceState } from "../../store/actions/workspace";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,

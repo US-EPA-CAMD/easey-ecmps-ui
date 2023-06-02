@@ -1,4 +1,4 @@
-export default {
+const initialState = {
   facilities: [],
   monitoringPlans: [],
   apiCallsInProgress: {
@@ -42,3 +42,4 @@ export default {
   workspaceState: "monitoringPlans",
   currentTabIndex: 0,
 };
+export default initialState;

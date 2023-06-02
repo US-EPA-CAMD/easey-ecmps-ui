@@ -23,7 +23,6 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
-import { Rowing } from "@material-ui/icons";
 
 export const DynamicTabs = ({
   tabsProps,
@@ -42,9 +41,7 @@ export const DynamicTabs = ({
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
-  console.log("tabs", tabs);
   const addTabsHandler = (newTabs) => {
-    // console.log('newtabs',newTabs)
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
         tabs.push(t);
@@ -65,7 +62,6 @@ export const DynamicTabs = ({
       }
     });
     setTabs([...tabs]);
-    console.log("tabsprops", tabs, workspaceSection);
     setTimeout(() => {
       const elems = document.querySelectorAll(".tab-button");
       if (elems.length > 0) {
@@ -188,7 +184,6 @@ export const DynamicTabs = ({
       }
     }
 
-    console.log("item", item);
     return item.component;
   };
   return (

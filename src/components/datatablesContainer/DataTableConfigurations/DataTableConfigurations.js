@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";

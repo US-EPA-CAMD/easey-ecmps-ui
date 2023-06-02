@@ -18,10 +18,9 @@ const Tabs = ({
   setCurrentTabIndex,
   currentTabIndex,
 }) => {
-  console.log('workspaceSection',workspaceSection,children)
   const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
   useEffect(() => {
-    if (activeTabIndex != currentTabIndex) {
+    if (activeTabIndex !== currentTabIndex) {
       setCurrentTabIndex(activeTabIndex);
     }
 

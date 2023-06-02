@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -30,7 +30,6 @@ export const SelectFacilitiesDataTable = ({
   // const workspaceSection = useSelector((state) => state.workspaceState);
 
   const workspaceState = useSelector((state) => state.workspaceState);
-  // console.log("workspaceSection in selectg", workspaceSection, workspaceState);
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceState]
   );
@@ -89,7 +88,6 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    console.log('info',info[1])
     const title = `${info[0].col1} (${info[1].name}) ${
       info[1].active ? "" : "Inactive"
     }`;
@@ -198,11 +196,7 @@ export const SelectFacilitiesDataTable = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
-  const ExpandedComponent = ({ data }) => (
-    <div>
-      {JSON.stringify(data, null, 2)} {console.log("TEST", data)}
-    </div>
-  );
+
   return (
     <div className="tabsBox">
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}

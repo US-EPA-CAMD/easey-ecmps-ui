@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import QACertTestSummaryTabRender from "../QACertTestSummaryTabRender/QACertTestSummaryTabRender";
 import {
@@ -111,54 +111,5 @@ export const QACertTestSummaryTab = ({
     </div>
   );
 };
-// const mapStateToProps = (state) => {
-//   return {
-//     tabs: state.openedFacilityTabs[
-//       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-//     ],
-//   };
-// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // setLocation: (location, title) =>
-    //   dispatch(
-    //     setLocationSelectionState(
-    //       location,
-    //       title,
-    //       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-    //     )
-    //   ),
-    // setSection: (section, title) =>
-    //   dispatch(
-    //     setSectionSelectionState(
-    //       section,
-    //       title,
-    //       convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-    //     )
-    //   ),
-    updateTestTypeCodes: (section, title) =>
-      dispatch(
-        setSectionSelectionState(
-          section,
-          title,
-          convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-        )
-      ),
-    // setCheckout: (value, configID, workspaceSection) =>
-    //   dispatch(
-    //     setCheckoutState(
-    //       value,
-    //       configID,
-    //       convertSectionToStoreName(workspaceSection)
-    //     )
-    //   ),
-  };
-};
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )
 export default QACertTestSummaryTab;
-// export { mapStateToProps };
-// export { mapDispatchToProps };
