@@ -31,7 +31,7 @@ export const SelectFacilitiesDataTable = ({
 
   const workspaceState = useSelector((state) => state.workspaceState);
   const openedFacilityTabs = useSelector(
-    (state) => state.openedFacilityTabs[workspaceState]
+    (state) => state.openedFacilityTabs[workspaceSection]
   );
 
   const [facilities, setFacilities] = useState("");
@@ -60,7 +60,7 @@ export const SelectFacilitiesDataTable = ({
       setFacilities([]); // This worked for me
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceState]);
+  }, []);
 
   useEffect(() => {
     obtainCheckedOutLocations().then();
@@ -237,7 +237,7 @@ export const SelectFacilitiesDataTable = ({
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
         ariaLabel={"Select Configurations"}
-        workspaceSection={workspaceState}
+        workspaceSection={workspaceSection}
       />
     </div>
   );

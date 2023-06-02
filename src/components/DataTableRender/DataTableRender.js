@@ -478,20 +478,23 @@ export const DataTableRender = ({
     };
 
     let title = tableTitle ? tableTitle : "";
-
+console.log('workspaceSection',workspaceSection)
     if (title === "") {
       title = sectionTitle ? sectionTitle : null;
     }
+    if (data.length >= 0) {
+      console.log('data.length',data.length)
+      return (
+        <FilterComponent
+          onSearch={handleSearch}
+          title={title}
+          setShowInactive={setShowInactive}
+        />
+      );
+    }
 
-    return (
-      <FilterComponent
-        onSearch={handleSearch}
-        title={title}
-        setShowInactive={setShowInactive}
-      />
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [workspaceSection]);
   return (
     <div className={`${componentStyling}`}>
       <div id="datatableFilterContainer" />
