@@ -114,6 +114,8 @@ export const HeaderInfo = ({
   updateRelatedTables,
   workspaceSection,
 }) => {
+
+  console.log('facility',facility)
   //MP
   const sections = [
     { name: "Defaults" },

@@ -191,7 +191,6 @@ const App = () => {
         currentLink={currentLink}
         setCurrentLink={setCurrentLink}
       >
-        <React.StrictMode>
           <Routes>
             <Route
               path="/reports"
@@ -419,7 +418,6 @@ const App = () => {
 
             <Route path="*" component={NotFound} />
           </Routes>
-        </React.StrictMode>
       </Layout>
     </div>
   );

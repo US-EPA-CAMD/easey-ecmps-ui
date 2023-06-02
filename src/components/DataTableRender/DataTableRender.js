@@ -65,8 +65,7 @@ export const DataTableRender = ({
   uniqueKey,
   setShowInactive,
   openedFacilityTabs,
-  // setMostRecentlyCheckedInMonitorPlanId,
-  // setMostRecentlyCheckedInMonitorPlanIdForTab,
+
   setCheckout,
   show = false,
   ariaLabel,

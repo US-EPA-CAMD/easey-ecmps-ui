@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -37,9 +37,9 @@ export const MonitoringPlanHome = ({
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceSection]
   );
-  const workspaceState = useSelector(
-    (state) => state.workspaceState
-  );
+  const workspaceState = useSelector((state) => state.workspaceState);
+  // console.log("workspaceSection in home", workspaceSection);
+
   const [titleName, setTitleName] = useState(document.title);
   const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
@@ -151,7 +151,8 @@ export const MonitoringPlanHome = ({
     },
   ]);
 
-  // const [tabArrr, setTabArrr] = useState([
+
+  // const [current, setCurrent] = useState([
   //   {
   //     title: "Select Configurations",
   //     component: (
@@ -170,21 +171,314 @@ export const MonitoringPlanHome = ({
   //     ),
   //   },
   // ]);
+  // useEffect(() => {
+  //   const newArray = [];
+  //   const originalArray = ["A", "B", "C"];
 
-  const renderTabsUi = (workspace) => {
-console.log('renmdertabsUI',workspace)
-    return (
-      <div>
-      <DynamicTabs
-        tabsProps={() => handleTabState(workspace)}
-        checkedOutLocations={checkedOutLocations}
-        user={user}
-        workspaceSection={workspace}
-      />
-    </div>
-    )
-  }
-  const handleTabState = (workspace) => {
+  //   openedFacilityTabs.forEach((row) => {
+  //     switch (workspaceState) {
+  //       case MONITORING_PLAN_STORE_NAME:
+  //         newArray.push({
+  //           title: workspaceState,
+  //           component: (
+  //             <MonitoringPlanTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               checkout={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               mostRecentlyCheckedInMonitorPlanIdForTab={
+  //                 mostRecentlyCheckedInMonitorPlanIdForTab
+  //               }
+  //               setMostRecentlyCheckedInMonitorPlanIdForTab={
+  //                 setMostRecentlyCheckedInMonitorPlanIdForTab
+  //               }
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //         break;
+
+  //       case QA_CERT_TEST_SUMMARY_STORE_NAME:
+  //         newArray.push({
+  //           title: workspaceState,
+  //           component: (
+  //             <QACertTestSummaryTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               isCheckedOut={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+
+  //         break;
+  //       case QA_CERT_EVENT_STORE_NAME:
+  //         newArray.push({
+  //           title: workspaceState,
+  //           component: (
+  //             <QACertEventTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               isCheckedOut={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+
+  //         break;
+  //       case EMISSIONS_STORE_NAME:
+  //         newArray.push({
+  //           title: row.name,
+  //           component: (
+  //             <EmissionsTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               checkout={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               workspaceSection={workspaceState}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+
+  //         break;
+  //       case EXPORT_STORE_NAME:
+  //         newArray.push({
+  //           title: row.name,
+  //           component: (
+  //             <Export
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+
+  //         break;
+  //       default:
+  //         break;
+  //     }
+
+  //   });
+
+  //   // Update the state with the new array
+  //   setCurrent([...newArray]);
+
+
+  //   console.log('workspace',workspaceSection,workspaceState,current)
+
+  //   return () => {
+  //     setCurrent([]); // This worked for me
+  //   };
+  // }, [workspaceState]);
+  // useEffect(() => {
+  //   const tabArr = [
+  //     {
+  //       title: "Select Configurations",
+  //       component: (
+  //         <DataTable
+  //           user={user}
+  //           keyField="col2"
+  //           openedFacilityTabs={openedFacilityTabs}
+  //           mostRecentlyCheckedInMonitorPlanIdForTab={
+  //             mostRecentlyCheckedInMonitorPlanIdForTab
+  //           }
+  //           setMostRecentlyCheckedInMonitorPlanIdForTab={
+  //             setMostRecentlyCheckedInMonitorPlanIdForTab
+  //           }
+  //           workspaceSection={workspaceSection}
+  //         />
+  //       ),
+  //     },
+  //   ];
+  //   switch (workspaceState) {
+  //     // console.log('WORKSPACE STATE IS NOT CHANGING',workspaceState)
+  //     case MONITORING_PLAN_STORE_NAME:
+  //       for (const row of openedFacilityTabs) {
+  //         tabArr.push({
+  //           title: row.name,
+  //           component: (
+  //             <MonitoringPlanTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               checkout={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               mostRecentlyCheckedInMonitorPlanIdForTab={
+  //                 mostRecentlyCheckedInMonitorPlanIdForTab
+  //               }
+  //               setMostRecentlyCheckedInMonitorPlanIdForTab={
+  //                 setMostRecentlyCheckedInMonitorPlanIdForTab
+  //               }
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //       }
+  //       break;
+  //     case QA_CERT_TEST_SUMMARY_STORE_NAME:
+  //       for (const row of openedFacilityTabs) {
+  //         tabArr.push({
+  //           title: workspaceSection,
+  //           component: (
+  //             <QACertTestSummaryTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               isCheckedOut={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //       }
+  //       break;
+  //     case QA_CERT_EVENT_STORE_NAME:
+  //       for (const row of openedFacilityTabs) {
+  //         tabArr.push({
+  //           title: workspaceSection,
+  //           component: (
+  //             <QACertEventTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               isCheckedOut={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //       }
+  //       break;
+  //     case EMISSIONS_STORE_NAME:
+  //       for (const row of openedFacilityTabs) {
+  //         tabArr.push({
+  //           title: row.name,
+  //           component: (
+  //             <EmissionsTab
+  //               resetTimer={resetTimer}
+  //               setExpired={setExpired}
+  //               resetTimerFlag={resetTimerFlag}
+  //               callApiFlag={callApiFlag}
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               checkout={row.checkout}
+  //               checkedOutLocations={checkedOutLocations}
+  //               workspaceSection={workspaceState}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //       }
+  //       break;
+  //     case EXPORT_STORE_NAME:
+  //       for (const row of openedFacilityTabs) {
+  //         tabArr.push({
+  //           title: row.name,
+  //           component: (
+  //             <Export
+  //               orisCode={row.orisCode}
+  //               selectedConfig={row.selectedConfig}
+  //               title={row.name}
+  //               user={user}
+  //               workspaceSection={workspaceSection}
+  //             />
+  //           ),
+  //           orisCode: row.orisCode,
+  //           selectedConfig: row.selectedConfig,
+  //           checkout: row.checkout,
+  //           workspace: workspaceState,
+  //         });
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   console.log("tabarry", tabArr);
+  //   setCurrent(tabArr);
+  // }, [workspaceState]);
+
+  // works if you go from modules to home back and then back 
+  const handleTabState = () => {
+    // console.log("workspace", workspaceSection);
     // issue is here, workspace section does not update in react 18
     const tabArr = [
       {
@@ -200,17 +494,17 @@ console.log('renmdertabsUI',workspace)
             setMostRecentlyCheckedInMonitorPlanIdForTab={
               setMostRecentlyCheckedInMonitorPlanIdForTab
             }
-            workspaceSection={workspace}
+            workspaceSection={workspaceSection}
           />
         ),
       },
     ];
-
-    // const tabArr = [...tabArrr];
     // uses Redux to put the saved Tabs back in the UI if the user leaves the page
-    switch (workspace) {
+    switch (workspaceState) {
+      // console.log('WORKSPACE STATE IS NOT CHANGING',workspaceState)
       case MONITORING_PLAN_STORE_NAME:
         for (const row of openedFacilityTabs) {
+          
           tabArr.push({
             title: row.name,
             component: (
@@ -225,18 +519,20 @@ console.log('renmdertabsUI',workspace)
                 user={user}
                 checkout={row.checkout}
                 checkedOutLocations={checkedOutLocations}
+
                 mostRecentlyCheckedInMonitorPlanIdForTab={
                   mostRecentlyCheckedInMonitorPlanIdForTab
                 }
                 setMostRecentlyCheckedInMonitorPlanIdForTab={
                   setMostRecentlyCheckedInMonitorPlanIdForTab
                 }
-                workspaceSection={workspace}
+                workspaceSection={workspaceSection}
               />
             ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
+            workspaceSection:workspaceSection
           });
         }
         break;
@@ -280,12 +576,13 @@ console.log('renmdertabsUI',workspace)
                 user={user}
                 isCheckedOut={row.checkout}
                 checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspace}
+                workspaceSection={workspaceSection}
               />
             ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
+            workspaceSection:workspaceSection
           });
         }
         break;
@@ -305,7 +602,7 @@ console.log('renmdertabsUI',workspace)
                 user={user}
                 checkout={row.checkout}
                 checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspace}
+                workspaceSection={workspaceState}
               />
             ),
             orisCode: row.orisCode,
@@ -336,8 +633,6 @@ console.log('renmdertabsUI',workspace)
       default:
         break;
     }
-    // setTabArrr(tabArr);
-    // setCurrentTabsArr(tabArr);
     return tabArr;
   };
 
@@ -360,16 +655,23 @@ console.log('renmdertabsUI',workspace)
         </h1>
       </div>
       {/* updates in react 18 redux properly  */}
-    {renderTabsUi(workspaceState)}
+      <div>
+        <DynamicTabs
+          tabsProps={()=>handleTabState()}
+          checkedOutLocations={checkedOutLocations}
+          user={user}
+          workspaceSection={workspaceSection}
+          mostRecentlyCheckedInMonitorPlanIdForTab={
+            mostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
+         
+        />
+      </div>
     </div>
   );
 };
 
-// const mapStateToProps = (state, ownProps) => {
-//   return {
-//     openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
-//   };
-// };
-
 export default MonitoringPlanHome;
-// export { mapStateToProps };

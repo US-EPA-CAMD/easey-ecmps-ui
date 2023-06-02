@@ -30,7 +30,7 @@ export const SelectFacilitiesDataTable = ({
   // const workspaceSection = useSelector((state) => state.workspaceState);
 
   const workspaceState = useSelector((state) => state.workspaceState);
-  console.log("workspaceSection in selectg", workspaceSection, workspaceState);
+  // console.log("workspaceSection in selectg", workspaceSection, workspaceState);
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceState]
   );
@@ -89,6 +89,7 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
+    console.log('info',info[1])
     const title = `${info[0].col1} (${info[1].name}) ${
       info[1].active ? "" : "Inactive"
     }`;
@@ -178,6 +179,7 @@ export const SelectFacilitiesDataTable = ({
         // info[2] shows true if "open and checkout" was click first time
         // checkedoutvalue shows true if user already had it checked out but navigates away
         checkout: info[2] || checkedOutValue,
+        workspaceSection:workspaceState
       },
     ]);
   };
