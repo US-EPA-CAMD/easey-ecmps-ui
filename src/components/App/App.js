@@ -244,7 +244,7 @@ const App = () => {
               path="/monitoring-plans"
               element={
                 user ? (
-                  <Route to="/workspace/monitoring-plans"  />
+                  <Route to="/workspace/monitoring-plans" replace />
                 ) : (
                   <MonitoringPlanHome
                     user={false}
