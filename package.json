@@ -9,8 +9,8 @@
     "url": "git+https://github.com/US-EPA-CAMD/easey-ecmps-ui.git"
   },
   "engines": {
-    "node": "16.x",
-    "yarn": "1.x"
+    "node": ">=16.20.0",
+    "yarn": ">=1.22.19"
   },
   "scripts": {
     "start": "craco start",

@@ -148,6 +148,8 @@ export const collapsableFooterTopics = [
   },
 ];
 
+export const home = [{ name: 'Home', url: '/' }];
+
 export const globalView = [
   { name: 'Monitoring Plans', url: '/monitoring-plans' },
   {
@@ -156,26 +158,38 @@ export const globalView = [
     children: [
       {
         name: 'Test Data',
-        url: '/qa-test',
+        url: '/qa/tests',
       },
       {
         name: 'Cert Events, Extensions & Exemptions',
-        url: '/qa-qce-tee',
+        url: '/qa/qce-tee',
       },
     ],
   },
-  {
-    name: 'Emissions',
-    url: '/emissions',
-  },
+  { name: 'Emissions', url: '/emissions' },
   { name: 'Export', url: '/export' },
+  {
+    name: 'System Administration',
+    url: '/admin',
+    children: [
+      {
+        name: 'QA Maintenance',
+        url: '/admin/qa-maintenance',
+      },
+      {
+        name: 'Error Suppression',
+        url: '/admin/error-suppression',
+      },
+      {
+        name: 'Emissions Submission Access',
+        url: '/admin/em-submission-access',
+      },
+    ],
+  }
 ];
 
-export const home = [{ name: 'Home', url: '/' }];
-
-
 export const getWorkspacePaths = () => {
-  const workSpace = [
+  return [
     { name: 'Monitoring Plans', url: '/workspace/monitoring-plans' },
     {
       name: 'QA & Certifications',
@@ -183,87 +197,28 @@ export const getWorkspacePaths = () => {
       children: [
         {
           name: 'Test Data',
-          url: '/workspace/qa-test',
+          url: '/workspace/qa/tests',
         },
         {
           name: 'Cert Events, Extensions & Exemptions',
-          url: '/workspace/qa-qce-tee',
+          url: '/workspace/qa/qce-tee',
         },
       ],
     },
-    {
-      name: 'Emissions',
-      url: '/workspace/emissions',
-    },
+    { name: 'Emissions', url: '/workspace/emissions' },
     { name: 'Export', url: '/workspace/export' },
-    {
-      name: 'Evaluate',
-      url: '/workspace/evaluate',
-    },
-    {
-      name: 'Submit',
-      url: '/workspace/submit',
-    },
+    { name: 'Evaluate', url: '/workspace/evaluate' },
+    { name: 'Submit', url: '/workspace/submit' },
   ];
-
-  if (config.app.enableSystemAdminModule) {
-    workSpace.push({
-      name: 'System Administration',
-      url: '/workspace/error-suppression',
-      children: [
-        {
-          name: 'Error Suppression',
-          url: '/workspace/error-suppression',
-        },
-      ],
-    },
-    )
-  }
-
-  return workSpace;
 }
 
-
-
-export const getAppNavItems   = ()=>{
-  const appNavItems = [
-    {
-      label: 'Home',
-      items: [],
-    },
-    {
-      label: 'Monitoring Plans',
-      items: [],
-    },
-    {
-      label: 'QA & Certifications',
-      items: [],
-    },
-    {
-      label: 'Emissions',
-      items: [],
-    },
+export const getAppNavItems = () => {
+  return [
+    { label: 'Home', items: [] },
+    { label: 'Monitoring Plans', items: [] },
+    { label: 'QA & Certifications', items: [] },
+    { label: 'Emissions', items: [] },
+    { label: 'Export', items: [] },
+    { label: 'System Administration', items: [] },
   ];
-
-  if (config.app.enableSystemAdminModule) {
-    appNavItems.push(
-      {
-        label: 'Error Suppression',
-        items: [],
-      }
-  
-    )
-  }
-  appNavItems.push(
-    {
-      label: 'Workspace',
-      items: [
-        { menu: 'DATA Overview', link: '/data' },
-        { menu: 'Custom Data Download', link: '/select-data-type' },
-        { menu: 'Bulk Data Files', link: '' },
-      ],
-    }
-  );
-  
-  return appNavItems;
 }
