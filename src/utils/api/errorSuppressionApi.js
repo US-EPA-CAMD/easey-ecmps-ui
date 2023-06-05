@@ -26,7 +26,7 @@ export const getErrorSuppressionRecords = ({
       checkNumber,
       checkResult,
       active,
-      facilityId: facility,
+      orisCode: facility,
       locations: pipeDelimitedLocations,
       reasonCode: reason,
       beginDateHrQtr: addDateAfter,
