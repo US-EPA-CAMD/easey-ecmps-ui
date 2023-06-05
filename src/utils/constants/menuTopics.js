@@ -158,11 +158,11 @@ export const globalView = [
     children: [
       {
         name: "Test Data",
-        url: "/qa-test",
+        url: "qa/tests",
       },
       {
         name: "Cert Events, Extensions & Exemptions",
-        url: "/qa-qce-tee",
+        url: "qa/qce-tee",
       },
     ],
   },
