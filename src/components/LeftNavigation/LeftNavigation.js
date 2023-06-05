@@ -6,7 +6,7 @@ import {
   globalView,
   getWorkspacePaths,
   home,
-  systemAdmin,
+  getSystemAdmin,
 } from "../../utils/constants/menuTopics";
 
 const workSpace = getWorkspacePaths();
@@ -17,6 +17,22 @@ export const LeftNavigation = (props) => {
   };
 
   const makeHeader = (arr, noActive, mainModule) => {
+    // Filter workspace based on user roles
+    if (mainModule=== "workspace" && props.user && props.user["roles"]) {
+      arr = arr.filter((row) => {
+        if (row["requiredRoles"]) {
+          for (const role of row.requiredRoles) {
+            if (props.user.roles.includes(role)) {
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return true; //Return true for all side menu items not requiring a certain role
+        }
+      });
+    }
+
     return arr.map((item) => {
       const workspaceText = props.user ? "_wks" : "";
 
@@ -127,7 +143,7 @@ export const LeftNavigation = (props) => {
           <SideNav items={makeHeader(home, true, "home")} />
           <SideNav items={makeWKspaceHeader()} />
           <SideNav
-            items={makeHeader(systemAdmin, true, "System Administration")}
+            items={makeHeader(getSystemAdmin(), true, "System Administration")}
           />
         </div>
       ) : (

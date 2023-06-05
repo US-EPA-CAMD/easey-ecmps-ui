@@ -158,11 +158,11 @@ export const globalView = [
     children: [
       {
         name: "Test Data",
-        url: "/qa/tests",
+        url: "/qa-test",
       },
       {
         name: "Cert Events, Extensions & Exemptions",
-        url: "/qa/qce-tee",
+        url: "/qa-qce-tee",
       },
     ],
   },
@@ -170,80 +170,125 @@ export const globalView = [
   { name: "Export", url: "/export" },
 ];
 
-export const systemAdmin = [
-  {
-    name: "System Administration",
-    url: "/admin",
-    children: [
+export const getSystemAdmin = () => {
+  if (config.app.enableSystemAdminModule) {
+    return [
       {
-        name: "QA Maintenance",
-        url: "/admin/qa-maintenance",
+        name: "System Administration",
+        url: "/workspace/error-suppression",
+        children: [
+          {
+            name: "Error Suppression",
+            url: "/workspace/error-suppression",
+          },
+        ],
+        requiredRoles: [config.app.adminRole],
       },
-      {
-        name: "Error Suppression",
-        url: "/admin/error-suppression",
-      },
-      {
-        name: "Emissions Submission Access",
-        url: "/admin/em-submission-access",
-      },
-    ],
-  },
-];
+    ];
+  }
+};
 
-export const getSystemAdminPaths = () => {
-  return [
+export const getWorkspacePaths = () => {
+  const workSpace = [
     {
-      name: "System Administration",
-      url: "/admin",
-      children: [
-        {
-          name: "QA Maintenance",
-          url: "/admin/qa-maintenance",
-        },
-        {
-          name: "Error Suppression",
-          url: "/admin/error-suppression",
-        },
-        {
-          name: "Emissions Submission Access",
-          url: "/admin/em-submission-access",
-        },
+      name: "Monitoring Plans",
+      url: "/workspace/monitoring-plans",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
       ],
     },
-  ];
-};
-export const getWorkspacePaths = () => {
-  return [
-    { name: "Monitoring Plans", url: "/workspace/monitoring-plans" },
     {
       name: "QA & Certifications",
       url: "/workspace/qa",
       children: [
         {
           name: "Test Data",
-          url: "/workspace/qa/tests",
+          url: "/workspace/qa-test",
         },
         {
           name: "Cert Events, Extensions & Exemptions",
-          url: "/workspace/qa/qce-tee",
+          url: "/workspace/qa-qce-tee",
         },
       ],
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
+      ],
     },
-    { name: "Emissions", url: "/workspace/emissions" },
-    { name: "Export", url: "/workspace/export" },
-    { name: "Evaluate", url: "/workspace/evaluate" },
-    { name: "Submit", url: "/workspace/submit" },
+    {
+      name: "Emissions",
+      url: "/workspace/emissions",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Export",
+      url: "/workspace/export",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Evaluate",
+      url: "/workspace/evaluate",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Submit",
+      url: "/workspace/submit",
+      requiredRoles: [config.app.submitterRole],
+    },
   ];
+
+  return workSpace;
 };
 
 export const getAppNavItems = () => {
-  return [
-    { label: "Home", items: [] },
-    { label: "Monitoring Plans", items: [] },
-    { label: "QA & Certifications", items: [] },
-    { label: "Emissions", items: [] },
-    { label: "Export", items: [] },
-    { label: "System Administration", items: [] },
+  const appNavItems = [
+    {
+      label: "Home",
+      items: [],
+    },
+    {
+      label: "Monitoring Plans",
+      items: [],
+    },
+    {
+      label: "QA & Certifications",
+      items: [],
+    },
+    {
+      label: "Emissions",
+      items: [],
+    },
   ];
+
+  if (config.app.enableSystemAdminModule) {
+    appNavItems.push({
+      label: "Error Suppression",
+      items: [],
+    });
+  }
+  appNavItems.push({
+    label: "Workspace",
+    items: [
+      { menu: "DATA Overview", link: "/data" },
+      { menu: "Custom Data Download", link: "/select-data-type" },
+      { menu: "Bulk Data Files", link: "" },
+    ],
+  });
+
+  return appNavItems;
 };

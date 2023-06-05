@@ -35,5 +35,10 @@ applications:
       REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL_MINUTES: ((refreshLastActivityIntervalMinutes))
       REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE: ((enableSystemAdminstrationModule))
       REACT_APP_TOKEN_REFRESH_THRESHOLD_SECONDS: ((tokenRefreshThresholdSeconds))
+      EASEY_AUTH_API_SPONSOR_ROLE: Sponsor
+      EASEY_AUTH_API_SUBMITTER_ROLE: Submitter
+      EASEY_AUTH_API_PREPARER_ROLE: Preparer
+      EASEY_AUTH_API_ANALYST_ROLE: ECMPS Analyst
+      EASEY_AUTH_API_ADMIN_ROLE: ECMPS Admin
     routes:
       - route: ((host))

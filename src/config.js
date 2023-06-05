@@ -107,6 +107,11 @@ export const config = {
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
     enableDebug: getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG"),
+    sponsorRole: getConfigValue("EASEY_AUTH_API_SPONSOR_ROLE", "Sponsor"),
+    submitterRole: getConfigValue("EASEY_AUTH_API_SUBMITTER_ROLE", "Submitter"),
+    preparerRole: getConfigValue("EASEY_AUTH_API_PREPARER_ROLE", "Preparer"),
+    analystRole: getConfigValue("EASEY_AUTH_API_ANALYST_ROLE", "ECMPS Analyst"),
+    adminRole: getConfigValue("EASEY_AUTH_API_ADMIN_ROLE", "ECMPS Admin"),
   },
   services: {
     mdm: {
