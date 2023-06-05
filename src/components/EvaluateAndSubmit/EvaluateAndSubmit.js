@@ -44,6 +44,12 @@ export const EvaluateAndSubmit = ({
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
+  console.log(
+    " checkedOutLocations, user, componentType,",
+    checkedOutLocations,
+    user,
+    componentType
+  );
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);

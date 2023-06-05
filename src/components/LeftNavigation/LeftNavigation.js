@@ -2,18 +2,23 @@ import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
-import { globalView, getWorkspacePaths, home } from "../../utils/constants/menuTopics";
+import {
+  globalView,
+  getWorkspacePaths,
+  home,
+  systemAdmin,
+} from "../../utils/constants/menuTopics";
 
 const workSpace = getWorkspacePaths();
- 
+
 export const LeftNavigation = (props) => {
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
   };
 
-  const makeHeader = (arr, noActive, isWorkspace) => {
+  const makeHeader = (arr, noActive, mainModule) => {
     return arr.map((item) => {
-      const workspaceText = isWorkspace ? "_wks" : "";
+      const workspaceText = props.user ? "_wks" : "";
 
       if (item.children) {
         return [
@@ -37,6 +42,30 @@ export const LeftNavigation = (props) => {
           />,
         ];
       } else {
+        let title = "Go to Home Page";
+        let ariaTitle = "Go to Home Page";
+
+        switch (mainModule) {
+          case "system admin":
+            title = ` Go to ${item.name} - system admin page`;
+            ariaTitle = `${item.name}`;
+            break;
+          case "workspace":
+            if (props.user) {
+              title = ` Go to ${item.name} - workspace page`;
+              ariaTitle = `${item.name} - Workspace`;
+            }
+            break;
+
+          case "global":
+            title = ` Go to ${item.name} - global-view page`;
+            ariaTitle = `${item.name} - Global-View`;
+
+            break;
+          default:
+            break;
+        }
+
         return (
           <USWDSLink
             className={
@@ -50,27 +79,18 @@ export const LeftNavigation = (props) => {
                 ? "emulateCurrentLink "
                 : "text-wrap "
             }
-            aria-label={
-              item.name !== "Home"
-                ? isWorkspace
-                  ? `${item.name} - Workspace`
-                  : `${item.name} - Global-View`
-                : "Go to Home"
-            }
+            aria-label={ariaTitle}
             variant="unstyled"
             asCustom={Link}
             to={item.url}
             exact="true"
             rel={item.name}
-            title={
-              item.name !== "Home"
-                ? isWorkspace
-                  ? ` Go to ${item.name} - Workspace page`
-                  : `Go to ${item.name} - Global-View page`
-                : "Go to Home page"
-            }
+            title={title}
             key={item.url}
-            id={`${item.name.split(" ").join("").replace("&","And")}${workspaceText}`}
+            id={`${item.name
+              .split(" ")
+              .join("")
+              .replace("&", "And")}${workspaceText}`}
             onClick={(event) => handleRouteChange(event, item.url)}
           >
             {item.name}
@@ -93,7 +113,7 @@ export const LeftNavigation = (props) => {
       [
         <SideNav
           key="sideNav"
-          items={makeHeader(workSpace, true, true)}
+          items={makeHeader(workSpace, true, "workspace")}
           isSubnav={true}
         />,
       ],
@@ -104,13 +124,16 @@ export const LeftNavigation = (props) => {
     <div className="minh-tablet font-body-sm padding-3 leftNav">
       {props.user ? (
         <div>
-          <SideNav items={makeHeader(home, true, true)} />
+          <SideNav items={makeHeader(home, true, "home")} />
           <SideNav items={makeWKspaceHeader()} />
+          <SideNav
+            items={makeHeader(systemAdmin, true, "System Administration")}
+          />
         </div>
       ) : (
         <div>
-          <SideNav items={makeHeader(home, true, false)} />
-          <SideNav items={makeHeader(globalView, true, false)} />
+          <SideNav items={makeHeader(home, true, "home")} />
+          <SideNav items={makeHeader(globalView, true, "global")} />
         </div>
       )}
     </div>
