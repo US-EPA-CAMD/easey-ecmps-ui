@@ -108,7 +108,7 @@ export const ContactUs = () => {
         </Button>
       </div>
       <div className="margin-top-2">
-        <Alert type="success" heading="Success">
+        <Alert type="success" heading="Success" headingLevel="h4">
           Thank you, your form has been submitted and an email confirmation will
           be sent to you shortly.
         </Alert>

@@ -108,7 +108,12 @@ const Login = ({ isModal }) => {
 
             <div aria-live="polite">
               {showError && (
-                <Alert type="error" heading="Log In Errors" role="alert">
+                <Alert
+                  type="error"
+                  heading="Log In Errors"
+                  headingLevel="h4"
+                  role="alert"
+                >
                   {formErrorMessage}
                 </Alert>
               )}

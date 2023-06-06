@@ -330,6 +330,7 @@ export const SubmissionModal = ({
                 <Alert
                   type="error"
                   heading="Authentication Errors"
+                  headingLevel="h4"
                   role="alert"
                 >
                   {formErrorMessage}
