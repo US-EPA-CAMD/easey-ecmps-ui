@@ -148,6 +148,8 @@ export const collapsableFooterTopics = [
   },
 ];
 
+export const home = [{ name: "Home", url: "/" }];
+
 export const globalView = [
   { name: "Monitoring Plans", url: "/monitoring-plans" },
   {
@@ -156,22 +158,30 @@ export const globalView = [
     children: [
       {
         name: "Test Data",
-        url: "/qa-test",
+        url: "qa/tests",
       },
       {
         name: "Cert Events, Extensions & Exemptions",
-        url: "/qa-qce-tee",
+        url: "qa/qce-tee",
       },
     ],
   },
-  {
-    name: "Emissions",
-    url: "/emissions",
-  },
+  { name: "Emissions", url: "/emissions" },
   { name: "Export", url: "/export" },
 ];
 
-export const home = [{ name: "Home", url: "/" }];
+export const systemAdmin = [
+  {
+    name: "System Administration",
+    url: "/workspace/error-suppression",
+    children: [
+      {
+        name: "Error Suppression",
+        url: "/workspace/error-suppression",
+      },
+    ],
+  },
+];
 
 export const getWorkspacePaths = () => {
   const workSpace = [
@@ -190,11 +200,11 @@ export const getWorkspacePaths = () => {
       children: [
         {
           name: "Test Data",
-          url: "/workspace/qa-test",
+          url: "/workspace/qa/tests",
         },
         {
           name: "Cert Events, Extensions & Exemptions",
-          url: "/workspace/qa-qce-tee",
+          url: "/workspace/qa/qce-tee",
         },
       ],
       requiredRoles: [
@@ -236,20 +246,6 @@ export const getWorkspacePaths = () => {
       requiredRoles: [config.app.submitterRole],
     },
   ];
-
-  if (config.app.enableSystemAdminModule) {
-    workSpace.push({
-      name: "System Administration",
-      url: "/workspace/error-suppression",
-      children: [
-        {
-          name: "Error Suppression",
-          url: "/workspace/error-suppression",
-        },
-      ],
-      requiredRoles: [config.app.adminRole],
-    });
-  }
 
   return workSpace;
 };

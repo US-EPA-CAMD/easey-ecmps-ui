@@ -1,11 +1,13 @@
 import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
+import config from "../../config";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
 import {
   globalView,
   getWorkspacePaths,
   home,
+  systemAdmin,
 } from "../../utils/constants/menuTopics";
 
 const workSpace = getWorkspacePaths();
@@ -104,23 +106,46 @@ export const LeftNavigation = (props) => {
   };
 
   const makeWKspaceHeader = () => {
-    return [
-      <USWDSLink
-        to="/workspace"
-        rel="workspace"
-        title="Go to the workspace page"
-        key="wsKey"
-      >
-        Workspace
-      </USWDSLink>,
-      [
+    let workspaceLinks = [];
+
+    if (
+      props.user?.roles?.includes(config.app.sponsorRole) ||
+      props.user?.roles?.includes(config.app.submitterRole) ||
+      props.user?.roles?.includes(config.app.preparerRole)
+    ) {
+      workspaceLinks = [
+        <USWDSLink
+          to="/workspace"
+          rel="workspace"
+          title="Go to the workspace page"
+          key="wsKey"
+        >
+          Workspace
+        </USWDSLink>,
+        [
+          <SideNav
+            key="sideNav"
+            items={makeHeader(workSpace, true, true)}
+            isSubnav={true}
+          />,
+        ],
+      ];
+    }
+
+    if (
+      //Include systemAdmin side panel if the user has the correct role
+      props.user?.roles?.includes(config.app.adminRole)
+    ) {
+      workspaceLinks.push([
         <SideNav
-          key="sideNav"
-          items={makeHeader(workSpace, true, true)}
-          isSubnav={true}
+          key="adminNav"
+          items={makeHeader(systemAdmin, true, true)}
+          isSubnav={false}
         />,
-      ],
-    ];
+      ]);
+    }
+
+    return workspaceLinks;
   };
 
   return (

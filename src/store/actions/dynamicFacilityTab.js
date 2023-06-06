@@ -116,5 +116,3 @@ export const setViewTemplateSelectionAction = (viewTemplateSelect, title, worksp
     viewTemplateSelect,
   };
 };
-
-

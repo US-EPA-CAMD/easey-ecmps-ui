@@ -36,6 +36,7 @@ export const MonitoringPlanTab = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
+
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
   };
@@ -51,6 +52,7 @@ export const MonitoringPlanTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConfig, checkout, currentTabIndex]);
 
+  // console.log('workspaceSection',workspaceSection)
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);

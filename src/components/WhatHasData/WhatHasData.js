@@ -1,12 +1,12 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import DataTable from 'react-data-table-component';
+import axios from "axios";
+import React, { useState } from "react";
+import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { Alert, Button, Dropdown, Radio } from "@trussworks/react-uswds";
 
-import config from '../../config';
-import LoadingModal from '../LoadingModal/LoadingModal';
-import { displayAppError } from '../../additional-functions/app-error';
+import config from "../../config";
+import LoadingModal from "../LoadingModal/LoadingModal";
+import { displayAppError } from "../../additional-functions/app-error";
 
 const mpOptions = [
   { key: "analyzer_range", value: "Analyzer Ranges" },
@@ -87,51 +87,67 @@ export const WhatHasData = () => {
   const [isWorkspace, setIsWorkspace] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState({
-    key: 'none',
-    value: 'none'
+    key: "none",
+    value: "none",
   });
 
   const [columnNames, setColumnNames] = useState([
-    { name: "Facility Id", selector: 'col1', sortable: true, wrap: false },
-    { name: "Facility Name", selector: 'col2', sortable: true, wrap: true },
-    { name: "Configuration", selector: 'col3', sortable: true, wrap: true },
+    { name: "Facility Id", selector: "col1", sortable: true, wrap: false },
+    { name: "Facility Name", selector: "col2", sortable: true, wrap: true },
+    { name: "Configuration", selector: "col3", sortable: true, wrap: true },
   ]);
 
   const dataTypeChangeHandler = (event) => {
     setData(null);
-    const selectedOption = options.find(i => i.key === event.target.value);
+    const selectedOption = options.find((i) => i.key === event.target.value);
     setSelectedOption(selectedOption);
-  }
+  };
 
   const loadDataHandler = () => {
     let serviceUrl = `/what-has-data?dataType=${selectedOption.key}&workspace=${isWorkspace}`;
-    switch(dataType) {
-      case 'QA':
-        serviceUrl = `${config.services.qaCertification.uri}${serviceUrl}`
+    switch (dataType) {
+      case "QA":
+        serviceUrl = `${config.services.qaCertification.uri}${serviceUrl}`;
         break;
-      case 'EM':
-        serviceUrl = `${config.services.emissions.uri}${serviceUrl}`
+      case "EM":
+        serviceUrl = `${config.services.emissions.uri}${serviceUrl}`;
         break;
       default:
-        serviceUrl = `${config.services.monitorPlans.uri}${serviceUrl}`
+        serviceUrl = `${config.services.monitorPlans.uri}${serviceUrl}`;
         break;
     }
     setLoading(true);
-    axios.get(serviceUrl)
-      .then(resp => {
+    axios
+      .get(serviceUrl)
+      .then((resp) => {
         const results = resp.data.map((i, index) => {
           if (index === 0) {
             const columns = columnNames.slice(0, 3);
             if (i.yearQuarter) {
-              columns.push({ name: "Year/Quarter", selector: `col4`, sortable: true, wrap: false });
+              columns.push({
+                name: "Year/Quarter",
+                selector: `col4`,
+                sortable: true,
+                wrap: false,
+              });
             } else if (i.componentId) {
-              columns.push({ name: "Component Id", selector: `col4`, sortable: true, wrap: false });
+              columns.push({
+                name: "Component Id",
+                selector: `col4`,
+                sortable: true,
+                wrap: false,
+              });
             } else if (i.systemId) {
-              columns.push({ name: "System Id", selector: `col4`, sortable: true, wrap: false });
+              columns.push({
+                name: "System Id",
+                selector: `col4`,
+                sortable: true,
+                wrap: false,
+              });
             }
             setColumnNames(columns);
           }
-  
+
           let col4Value;
           if (i.yearQuarter) {
             col4Value = i.yearQuarter;
@@ -140,30 +156,34 @@ export const WhatHasData = () => {
           } else if (i.systemId) {
             col4Value = i.systemId;
           }
-  
+
           return {
             col1: i.orisCode,
             col2: i.facilityName,
             col3: i.configuration,
             col4: col4Value,
           };
-        })
+        });
         setData(results);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false);
         displayAppError(err);
-      })
-  }  
+      });
+  };
 
   return (
     <div className="margin-2">
-      <Alert type="info" heading="What Has Data">
-        Choose between Monitor Plan, QA, or Emissions data and then select the type of data from the dropdown to see which Facilities & Configurations actually have the selected type of data. This can be done for either the officially submitted or workspace (logged in) data.
+      <Alert type="info" heading="What Has Data" headingLevel="h4">
+        Choose between Monitor Plan, QA, or Emissions data and then select the
+        type of data from the dropdown to see which Facilities & Configurations
+        actually have the selected type of data. This can be done for either the
+        officially submitted or workspace (logged in) data.
       </Alert>
       <div className="display-flex">
-        <Radio className="margin-1"
+        <Radio
+          className="margin-1"
           id="official"
           name="schema"
           defaultChecked
@@ -173,7 +193,8 @@ export const WhatHasData = () => {
             setIsWorkspace(false);
           }}
         />
-        <Radio className="margin-1"
+        <Radio
+          className="margin-1"
           id="workspace"
           name="schema"
           label="Workspace"
@@ -184,7 +205,8 @@ export const WhatHasData = () => {
         />
       </div>
       <div className="display-flex">
-        <Radio className="margin-1"
+        <Radio
+          className="margin-1"
           id="mpDataType"
           name="dataType"
           defaultChecked
@@ -195,7 +217,8 @@ export const WhatHasData = () => {
             setOptions(mpOptions);
           }}
         />
-        <Radio className="margin-1"
+        <Radio
+          className="margin-1"
           id="qaDataType"
           name="dataType"
           label="QA Certification"
@@ -205,7 +228,8 @@ export const WhatHasData = () => {
             setOptions(qaOptions);
           }}
         />
-        <Radio className="margin-1"
+        <Radio
+          className="margin-1"
           id="emDataType"
           name="dataType"
           label="Emissions"
@@ -222,28 +246,25 @@ export const WhatHasData = () => {
             <option key="none" value="none">
               --- select a value ---
             </option>
-            {
-              options.map(i =>
-                <option key={i.key} value={i.key}>
-                  {i.value}
-                </option>
-              )
-            }
+            {options.map((i) => (
+              <option key={i.key} value={i.key}>
+                {i.value}
+              </option>
+            ))}
           </Dropdown>
-          <Button className="margin-left-1"
-            onClick={loadDataHandler}
-          >
+          <Button className="margin-left-1" onClick={loadDataHandler}>
             Refresh
           </Button>
         </div>
       </div>
-      <hr className='margin-top-3' />
+      <hr className="margin-top-3" />
       {data && (
         <>
-          <h3>{selectedOption.value !== 'none'
-            ? `Monitor Plans with ${selectedOption.value}`
-            : ""
-          }</h3>
+          <h3>
+            {selectedOption.value !== "none"
+              ? `Monitor Plans with ${selectedOption.value}`
+              : ""}
+          </h3>
           <DataTable
             className={`margin-top-neg-8 data-display-table react-transition fade-in`}
             sortIcon={
@@ -266,6 +287,6 @@ export const WhatHasData = () => {
       <LoadingModal type="Loading" loading={loading} />
     </div>
   );
-}
+};
 
 export default WhatHasData;

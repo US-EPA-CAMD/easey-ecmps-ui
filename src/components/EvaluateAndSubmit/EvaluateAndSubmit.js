@@ -44,6 +44,12 @@ export const EvaluateAndSubmit = ({
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
+  console.log(
+    " checkedOutLocations, user, componentType,",
+    checkedOutLocations,
+    user,
+    componentType
+  );
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
@@ -443,17 +449,21 @@ export const EvaluateAndSubmit = ({
           className="margin-y-2"
           type="info"
           heading={waitTimeData?.title}
-          children={waitTimeData?.content}
-        />
+          headingLevel="h4"
+        >
+          {waitTimeData?.content}
+        </Alert>
       )}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">
-            <Alert type="warning" heading="Warning" headingLevel="h4">
-              The submission process is still under construction. The final sign
-              and submit, with files being loaded to the database is not yet
-              integrated.
-            </Alert>
+            {
+              <Alert type="warning" heading="Warning" headingLevel="h4">
+                The submission process is still under construction. The final
+                sign and submit, with files being loaded to the database is not
+                yet integrated.
+              </Alert>
+            }
           </div>
         )}
 

@@ -1,14 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
 import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import DataTableRender from "../../DataTableRender/DataTableRender";
+import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { setCheckoutState } from "../../../store/actions/dynamicFacilityTab";
-
 export const DataTableConfigurations = ({
-  loadMonitoringPlansData,
-  monitoringPlans,
+  // monitoringPlans,
   data,
   user,
   selectedRowHandler,
@@ -16,9 +14,11 @@ export const DataTableConfigurations = ({
   checkedOutLocations,
   setMostRecentlyCheckedInMonitorPlanId,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
-  setCheckout,
+
   workspaceSection,
 }) => {
+  const dispatch = useDispatch();
+  const monitoringPlans = useSelector((state) => state.monitoringPlans);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Configurations", "Status"];
@@ -33,8 +33,8 @@ export const DataTableConfigurations = ({
   const findSelectedConfig = (configID) => {
     let val = 0;
     if (selectedMP.length > 0) {
-      for (const currentMP of selectedMP){
-        if(currentMP !== undefined){
+      for (const currentMP of selectedMP) {
+        if (currentMP !== undefined) {
           for (const x of currentMP[1]) {
             if (x.id === configID) {
               val = x;
@@ -63,10 +63,10 @@ export const DataTableConfigurations = ({
         );
 
         try {
-          setCheckout(false, monitoringPlanId, workspaceSection);
+          dispatch(setCheckoutState(false, monitoringPlanId, workspaceSection));
 
           setTimeout(() => {
-            const elems = document.querySelectorAll(".tab-button")
+            const elems = document.querySelectorAll(".tab-button");
             if (elems.length > 0) {
               elems[elems.length - 1].focus();
             }
@@ -89,10 +89,10 @@ export const DataTableConfigurations = ({
             setSelectedConfig([data, selectedConfigData, checkout]);
 
             try {
-              setCheckout(true, selectedConfigData.id, workspaceSection);
-            } catch {
-
-            }
+              dispatch(
+                setCheckoutState(true, selectedConfigData.id, workspaceSection)
+              );
+            } catch {}
           });
       } else {
         setSelectedConfig([data, selectedConfigData, checkout]);
@@ -112,8 +112,8 @@ export const DataTableConfigurations = ({
 
       setOpenAndCheckoutBTNFocus(
         ariaLabel.substring(0, 4) +
-        " and checkout" +
-        ariaLabel.substring(4, ariaLabel.length)
+          " and checkout" +
+          ariaLabel.substring(4, ariaLabel.length)
       );
     }
   };
@@ -126,26 +126,38 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    loadMonitoringPlansData(data.col2).then(() => {
+    // cannot use .then() to call setDataLoaded with dispatch() in react 18 
+    const callbackFunction = () => {
       setDataLoaded(true);
-    });
+      dispatch(loadMonitoringPlansArray(data.col2));
+    };
+    // Call the callback function
+    callbackFunction();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    setSelectedMp([...selectedMP, monitoringPlans[monitoringPlans.length - 1]])
-
+    if (dataLoaded) {
+      setSelectedMp([
+        ...selectedMP,
+        monitoringPlans[monitoringPlans.length - 1],
+      ]);
+  
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringPlans.length]);
+  }, [monitoringPlans]);
 
   const records = useMemo(() => {
-    if (monitoringPlans.length >= 1) {
-      let index = 0;
-      for (const x of monitoringPlans) {
-        if (x[0] === data.col2) {
-          index = x[1];
-          return fs.getConfigurationNames(index);
+    if (dataLoaded) {
+      if (monitoringPlans.length >= 1) {
+        let index = 0;
+        for (const x of monitoringPlans) {
+          if (x[0] === data.col2) {
+            index = x[1];
+          
+            return fs.getConfigurationNames(index);
+          }
         }
       }
     }
@@ -161,7 +173,7 @@ export const DataTableConfigurations = ({
         data={records}
         dataLoaded={dataLoaded}
         tableStyling={"padding-left-4 padding-bottom-3"}
-        defaultSort={"col2"}
+        defaultSort="col2"
         className={className}
         openHandler={openConfig}
         actionsBtn="Open"
@@ -173,7 +185,7 @@ export const DataTableConfigurations = ({
         setMostRecentlyCheckedInMonitorPlanIdForTab={
           setMostRecentlyCheckedInMonitorPlanIdForTab
         }
-        setCheckBackInState={setCheckout}
+        setCheckBackInState={setCheckoutState}
         openAndCheckoutBTNFocus={openAndCheckoutBTNFocus}
         ariaLabel={`Configurations for ${facility}`}
         workspaceSection={workspaceSection}
@@ -182,24 +194,20 @@ export const DataTableConfigurations = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    monitoringPlans: state.monitoringPlans,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     monitoringPlans: state.monitoringPlans,
+//   };
+// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMonitoringPlansData: async (orisCode) => {
-      dispatch(loadMonitoringPlansArray(orisCode));
-    },
-    setCheckout: (value, configID, workspaceSection) =>
-      dispatch(setCheckoutState(value, configID, workspaceSection)),
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DataTableConfigurations);
-export { mapDispatchToProps };
-export { mapStateToProps };
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     loadMonitoringPlansData: async (orisCode) => {
+//       dispatch(loadMonitoringPlansArray(orisCode));
+//     },
+//     setCheckout: (value, configID, workspaceSection) =>
+//       dispatch(setCheckoutState(value, configID, workspaceSection)),
+//   };
+// };
+export default DataTableConfigurations;
+// export { mapStateToProps };

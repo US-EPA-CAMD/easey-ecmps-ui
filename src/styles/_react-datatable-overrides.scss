@@ -1,0 +1,128 @@
+@import "variables";
+
+.data-display-table {
+  .rdt_Table {
+    width: 99%;
+    margin: 0.5% 0.5%;
+  }
+  .rdt_TableCol_Sortable {
+    color: $epa-black !important;
+    /*white-space: nowrap !important;*/
+    margin-right: 1em !important;
+  }
+  .rdt_TableRow {
+    /**/
+  }
+  .rdt_TableHead {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableHeader {
+    display: none;
+  }
+  .rdt_TableHeadRow {
+    .rdt_TableCol {
+      @extend .font-heading-md;
+      background: $epa-white;
+      color: $epa-black !important;
+      font-weight: bold;
+      border: solid 1px $epa-white;
+      justify-content: left !important;
+      :focus {
+        outline: none;
+        border: solid 3.8px #2672de;
+        //color: $epa-black !important;
+      }
+      :focus {
+        .MuiSvgIcon-root {
+          opacity: 1;
+        }
+      }
+    }
+    border: none !important;
+  }
+
+  .rdt_TableBody {
+    // height: 400px;
+    // min-height: 400px;
+  }
+  .rdt_ExpanderRow {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableFooter {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableCell {
+    @extend .font-body-md;
+    font-size: 1.2em;
+  }
+  .__rdt_custom_sort_icon__ {
+    @extend .text-indigo;
+  }
+}
+
+.expand-row-data-table {
+  .rdt_TableBody {
+    height: auto;
+    padding-bottom: 2em;
+  }
+}
+
+.rdt_Pagination {
+  font-size: 16px !important;
+  font-style: italic;
+  select {
+    padding: 5px;
+    width: 100px !important;
+    border: solid 1px $epa-black;
+  }
+  span {
+    margin-left: 5em;
+  }
+  div {
+    margin-left: 5em;
+  }
+  svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+.rdt_TableHeader {
+  font-size: 25px !important;
+  color: $epa-navy !important;
+}
+
+.data-table-extensions > .data-table-extensions-filter {
+  float: right;
+  input.filter-text {
+    width: 300px;
+    border: solid 1px $epa-navy;
+    background: #f6fbfc;
+    margin-right: 50px;
+    padding: 10px 5px 10px 5px !important;
+  }
+  ::placeholder {
+    color: $epa-navy !important;
+  }
+}
+
+.modal-content,
+.expand-row-data-table {
+  .rdt_TableBody {
+    height: auto !important;
+    min-height: auto !important;
+    padding-bottom: 3em !important;
+  }
+
+  .rdt_TableHead {
+    padding: 0.5em 0;
+  }
+}
+
+.rdt_TableRow:nth-child(odd) {
+  background-color: $epa-off-white;
+  border: none !important;
+}
+.rdt_TableRow:nth-child(even) {
+  background-color: $epa-white !important;
+}

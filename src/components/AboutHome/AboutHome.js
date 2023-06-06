@@ -112,14 +112,14 @@ const AboutHome = ({ user, setCurrentLink }) => {
           className="usa-button bg-accent-cool margin-1"
           variant="unstyled"
           asCustom={Link}
-          to="/qa-test"
+          to="/qa/tests"
           role="link"
           exact="true"
           rel="QA & Certifications"
           title="Go to QA & Certifications page"
           key="qa-test"
           id="qaCertificationsBtn"
-          onClick={(event) => handleRouteChange(event, "/qa-test")}
+          onClick={(event) => handleRouteChange(event, "/qa/tests")}
         >
           View QA & Certifications
         </USWDSLink>

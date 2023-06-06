@@ -154,6 +154,7 @@ export const UploadModal = ({
                               <Alert
                                 type="error"
                                 heading="Import Monitoring Plan error"
+                                headingLevel="h4"
                                 slim
                                 noIcon
                                 role="alert"
@@ -167,7 +168,9 @@ export const UploadModal = ({
                             <div className="left-2 bottom-0 padding-x-5 padding-top-2">
                               <h2 className="text-bold">{title}</h2>
                               {label ?? (
-                                <Label htmlFor="file-input-single">{label}</Label>
+                                <Label htmlFor="file-input-single">
+                                  {label}
+                                </Label>
                               )}
                               {showSeparators && <hr />}
                             </div>
@@ -195,6 +198,7 @@ export const UploadModal = ({
                               <Alert
                                 type="success"
                                 heading="Success"
+                                headingLevel="h4"
                                 role="success"
                               >
                                 {successMsg}

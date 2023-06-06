@@ -8,10 +8,18 @@ import {
   setActiveTab,
   setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
-
+import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import EmissionsTab from "../EmissionsTab/EmissionsTab";
+import Export from "../export/Export/Export";
 import {
   convertSectionToStoreName,
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import "./DynamicTabs.scss";
 import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
@@ -28,6 +36,8 @@ export const DynamicTabs = ({
   setCurrentTabIndex,
   currentTabIndex,
   setCheckout,
+  mostRecentlyCheckedInMonitorPlanIdForTab,
+  setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
   const [tabs, setTabs] = useState(tabsProps);
 
@@ -43,7 +53,8 @@ export const DynamicTabs = ({
             location: [0, t.selectedConfig.locations[0].id ?? null],
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
-            facId: t.selectedConfig.locations[0].facId,
+            facId: t.selectedConfig.facId, // changed to id ??
+            // id: t.selectedConfig.locations[0].id,
             inactive: [false, false],
           },
           workspaceSection
@@ -51,9 +62,8 @@ export const DynamicTabs = ({
       }
     });
     setTabs([...tabs]);
-
     setTimeout(() => {
-      const elems = document.querySelectorAll(".tab-button")
+      const elems = document.querySelectorAll(".tab-button");
       if (elems.length > 0) {
         elems[elems.length - 1].focus();
       }
@@ -67,13 +77,114 @@ export const DynamicTabs = ({
     setTabs([...tabs]);
 
     setTimeout(() => {
-      const elems = document.querySelectorAll(".tab-button")
+      const elems = document.querySelectorAll(".tab-button");
       if (elems.length > 0) {
         elems[elems.length - 1].focus();
       }
     });
 
     // },100)
+  };
+
+  const getModule = (item) => {
+    if (tabs.length > 1 && item.title !== "Select Configurations") {
+      switch (workspaceSection) {
+        case MONITORING_PLAN_STORE_NAME:
+          item.component = (
+            <MonitoringPlanTab
+              resetTimer={item.component.resetTimer}
+              setExpired={item.component.setExpired}
+              resetTimerFlag={item.component.resetTimerFlag}
+              callApiFlag={item.component.callApiFlag}
+              orisCode={item.orisCode}
+              selectedConfig={item.selectedConfig}
+              title={item.title}
+              user={user}
+              checkout={item.checkout}
+              checkedOutLocations={checkedOutLocations}
+              mostRecentlyCheckedInMonitorPlanIdForTab={
+                mostRecentlyCheckedInMonitorPlanIdForTab
+              }
+              setMostRecentlyCheckedInMonitorPlanIdForTab={
+                setMostRecentlyCheckedInMonitorPlanIdForTab
+              }
+              workspaceSection={workspaceSection}
+            />
+          );
+          break;
+
+        case QA_CERT_TEST_SUMMARY_STORE_NAME:
+          item.component = (
+            <QACertTestSummaryTab
+              resetTimer={item.component.resetTimer}
+              setExpired={item.component.setExpired}
+              resetTimerFlag={item.component.resetTimerFlag}
+              callApiFlag={item.component.callApiFlag}
+              orisCode={item.orisCode}
+              selectedConfig={item.selectedConfig}
+              title={item.title}
+              user={user}
+              isCheckedOut={item.checkout}
+              checkedOutLocations={checkedOutLocations}
+            />
+          );
+
+          break;
+
+        case QA_CERT_EVENT_STORE_NAME:
+          item.component = (
+            <QACertEventTab
+              resetTimer={item.component.resetTimer}
+              setExpired={item.component.setExpired}
+              resetTimerFlag={item.component.resetTimerFlag}
+              callApiFlag={item.component.callApiFlag}
+              orisCode={item.orisCode}
+              selectedConfig={item.selectedConfig}
+              title={item.title}
+              user={user}
+              isCheckedOut={item.checkout}
+              checkedOutLocations={checkedOutLocations}
+              workspaceSection={workspaceSection}
+            />
+          );
+
+          break;
+        case EMISSIONS_STORE_NAME:
+          item.component = (
+            <EmissionsTab
+              resetTimer={item.component.resetTimer}
+              setExpired={item.component.setExpired}
+              resetTimerFlag={item.component.resetTimerFlag}
+              callApiFlag={item.component.callApiFlag}
+              orisCode={item.orisCode}
+              selectedConfig={item.selectedConfig}
+              title={item.title}
+              user={user}
+              checkout={item.checkout}
+              checkedOutLocations={checkedOutLocations}
+              workspaceSection={workspaceSection}
+            />
+          );
+
+          break;
+        case EXPORT_STORE_NAME:
+          item.component = (
+            <Export
+              orisCode={item.orisCode}
+              selectedConfig={item.selectedConfig}
+              title={item.title}
+              user={user}
+              workspaceSection={workspaceSection}
+            />
+          );
+
+          break;
+        default:
+          break;
+      }
+    }
+
+    return item.component;
   };
   return (
     <div>
@@ -101,7 +212,7 @@ export const DynamicTabs = ({
                 }
                 selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
-                {cloneElement(tab.component, {
+                {cloneElement(getModule(tab), {
                   addtabs: addTabsHandler,
                 })}
               </TabPane>
@@ -135,7 +246,7 @@ export const DynamicTabs = ({
                 }
                 selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
               >
-                {cloneElement(tab.component, {
+                {cloneElement(getModule(tab), {
                   addtabs: addTabsHandler,
                 })}
               </TabPane>
@@ -174,12 +285,7 @@ const mapDispatchToProps = (dispatch) => {
           convertSectionToStoreName(workspaceSection)
         )
       ),
-    setCurrentTabIndex: (value) => 
-      dispatch(
-        setCurrentTabIndex(
-          value
-        )
-      )
+    setCurrentTabIndex: (value) => dispatch(setCurrentTabIndex(value)),
   };
 };
 

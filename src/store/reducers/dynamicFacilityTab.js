@@ -1,15 +1,15 @@
-import * as types from '../actions/actionTypes';
-import initialState from './initialState';
+import * as types from "../actions/actionTypes";
+import initialState from "./initialState";
 
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
   const workspaceSections = [
-    'monitoringPlans',
-    'qaCertTestSummary',
-    'qaCertEvent',
-    'export',
-    'emissions',
+    "monitoringPlans",
+    "qaCertTestSummary",
+    "qaCertEvent",
+    "export",
+    "emissions",
   ];
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;
@@ -88,12 +88,13 @@ const reducer = (state, action) => {
       };
 
       break;
+
     case types.SET_CHECKOUT_STATE:
       returnObject = {
         ...currentState,
       };
       workspaceSections
-        .filter((s) => s !== 'export')
+        .filter((s) => s !== "export")
         .forEach(
           (section) =>
             (returnObject[section] = currentState[section].map((x) =>
