@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   dropdowns: dropdownsReducer,
   checkedOutLocations: checkedOutLocationsReducer,
   currentTabIndex: currentTabIndexReducer,
-  workspaceState:workspaceReducer
+  workspaceState: workspaceReducer,
 });
 
 export default rootReducer;

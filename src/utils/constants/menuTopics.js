@@ -170,23 +170,18 @@ export const globalView = [
   { name: "Export", url: "/export" },
 ];
 
-export const getSystemAdmin = () => {
-  if (config.app.enableSystemAdminModule) {
-    return [
+export const systemAdmin = [
+  {
+    name: "System Administration",
+    url: "/workspace/error-suppression",
+    children: [
       {
-        name: "System Administration",
+        name: "Error Suppression",
         url: "/workspace/error-suppression",
-        children: [
-          {
-            name: "Error Suppression",
-            url: "/workspace/error-suppression",
-          },
-        ],
-        requiredRoles: [config.app.adminRole],
       },
-    ];
-  }
-};
+    ],
+  },
+];
 
 export const getWorkspacePaths = () => {
   const workSpace = [
@@ -205,11 +200,11 @@ export const getWorkspacePaths = () => {
       children: [
         {
           name: "Test Data",
-          url: "/workspace/qa-test",
+          url: "/workspace/qa/tests",
         },
         {
           name: "Cert Events, Extensions & Exemptions",
-          url: "/workspace/qa-qce-tee",
+          url: "/workspace/qa/qce-tee",
         },
       ],
       requiredRoles: [

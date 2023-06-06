@@ -1,12 +1,13 @@
 import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
+import config from "../../config";
 import "./LeftNavigation.scss";
 import { Link } from "react-router-dom";
 import {
   globalView,
   getWorkspacePaths,
   home,
-  getSystemAdmin,
+  systemAdmin,
 } from "../../utils/constants/menuTopics";
 
 const workSpace = getWorkspacePaths();
@@ -16,9 +17,9 @@ export const LeftNavigation = (props) => {
     props.setCurrentLink(url);
   };
 
-  const makeHeader = (arr, noActive, mainModule) => {
+  const makeHeader = (arr, noActive, isWorkspace) => {
     // Filter workspace based on user roles
-    if (mainModule=== "workspace" && props.user && props.user["roles"]) {
+    if (isWorkspace && props.user && props.user["roles"]) {
       arr = arr.filter((row) => {
         if (row["requiredRoles"]) {
           for (const role of row.requiredRoles) {
@@ -34,7 +35,7 @@ export const LeftNavigation = (props) => {
     }
 
     return arr.map((item) => {
-      const workspaceText = props.user ? "_wks" : "";
+      const workspaceText = isWorkspace ? "_wks" : "";
 
       if (item.children) {
         return [
@@ -58,30 +59,6 @@ export const LeftNavigation = (props) => {
           />,
         ];
       } else {
-        let title = "Go to Home Page";
-        let ariaTitle = "Go to Home Page";
-
-        switch (mainModule) {
-          case "system admin":
-            title = ` Go to ${item.name} - system admin page`;
-            ariaTitle = `${item.name}`;
-            break;
-          case "workspace":
-            if (props.user) {
-              title = ` Go to ${item.name} - workspace page`;
-              ariaTitle = `${item.name} - Workspace`;
-            }
-            break;
-
-          case "global":
-            title = ` Go to ${item.name} - global-view page`;
-            ariaTitle = `${item.name} - Global-View`;
-
-            break;
-          default:
-            break;
-        }
-
         return (
           <USWDSLink
             className={
@@ -95,13 +72,25 @@ export const LeftNavigation = (props) => {
                 ? "emulateCurrentLink "
                 : "text-wrap "
             }
-            aria-label={ariaTitle}
+            aria-label={
+              item.name !== "Home"
+                ? isWorkspace
+                  ? `${item.name} - Workspace`
+                  : `${item.name} - Global-View`
+                : "Go to Home"
+            }
             variant="unstyled"
             asCustom={Link}
             to={item.url}
             exact="true"
             rel={item.name}
-            title={title}
+            title={
+              item.name !== "Home"
+                ? isWorkspace
+                  ? ` Go to ${item.name} - Workspace page`
+                  : `Go to ${item.name} - Global-View page`
+                : "Go to Home page"
+            }
             key={item.url}
             id={`${item.name
               .split(" ")
@@ -117,7 +106,7 @@ export const LeftNavigation = (props) => {
   };
 
   const makeWKspaceHeader = () => {
-    return [
+    const workspaceLinks = [
       <USWDSLink
         to="/workspace"
         rel="workspace"
@@ -129,27 +118,41 @@ export const LeftNavigation = (props) => {
       [
         <SideNav
           key="sideNav"
-          items={makeHeader(workSpace, true, "workspace")}
+          items={makeHeader(workSpace, true, true)}
           isSubnav={true}
         />,
       ],
     ];
+
+    if (
+      //Include systemAdmin side panel if the user has the correct role
+      props.user &&
+      props.user["roles"] &&
+      props.user["roles"].includes(config.app.adminRole)
+    ) {
+      workspaceLinks.push([
+        <SideNav
+          key="adminNav"
+          items={makeHeader(systemAdmin, true, true)}
+          isSubnav={true}
+        />,
+      ]);
+    }
+
+    return workspaceLinks;
   };
 
   return (
     <div className="minh-tablet font-body-sm padding-3 leftNav">
       {props.user ? (
         <div>
-          <SideNav items={makeHeader(home, true, "home")} />
+          <SideNav items={makeHeader(home, true, true)} />
           <SideNav items={makeWKspaceHeader()} />
-          <SideNav
-            items={makeHeader(getSystemAdmin(), true, "System Administration")}
-          />
         </div>
       ) : (
         <div>
-          <SideNav items={makeHeader(home, true, "home")} />
-          <SideNav items={makeHeader(globalView, true, "global")} />
+          <SideNav items={makeHeader(home, true, false)} />
+          <SideNav items={makeHeader(globalView, true, false)} />
         </div>
       )}
     </div>

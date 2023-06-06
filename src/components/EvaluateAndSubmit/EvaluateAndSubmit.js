@@ -444,22 +444,24 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData?.displayAlert && (
+      {/*waitTimeData?.displayAlert && (
         <Alert
           className="margin-y-2"
           type="info"
           heading={waitTimeData?.title}
           children={waitTimeData?.content}
         />
-      )}
+      )*/}
       <div className="text-black flex-justify margin-top-1 grid-row">
         {componentType === "Submission" && (
           <div className="grid-row">
+            {/*
             <Alert type="warning" heading="Warning" headingLevel="h4">
               The submission process is still under construction. The final sign
               and submit, with files being loaded to the database is not yet
               integrated.
             </Alert>
+            */}
           </div>
         )}
 

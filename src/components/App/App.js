@@ -190,229 +190,230 @@ const App = () => {
         currentLink={currentLink}
         setCurrentLink={setCurrentLink}
       >
-          <Routes>
-            <Route path="/home"
-              element={
+        <Routes>
+          <Route path="/home" element={<Navigate to="/" />} />
+          <Route
+            path="/"
+            element={<AboutHome user={user} setCurrentLink={setCurrentLink} />}
+          />
+          <Route
+            path="/monitoring-plans"
+            element={
+              user ? (
+                <Navigate to="/workspace/monitoring-plans" />
+              ) : (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/monitoring-plans"
+            element={
+              !user ? (
+                <Navigate to="/monitoring-plans" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  moduleName={modules.monitoring_plans_module}
+                />
+              )
+            }
+          />
+          <Route
+            path="/qa/tests"
+            element={
+              user ? (
+                <Navigate to="/workspace/qa/tests" />
+              ) : (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/qa/tests"
+            element={
+              !user ? (
+                <Navigate to="/qa/tests" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Test_Summary_Module}
+                />
+              )
+            }
+          />
+          <Route
+            path="/qa/qce-tee"
+            element={
+              user ? (
+                <Navigate to="/workspace/qa/qce-tee" />
+              ) : (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/qa/qce-tee"
+            element={
+              !user ? (
+                <Navigate to="/qa/qce-tee" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  workspaceSection={QA_CERT_EVENT_STORE_NAME}
+                  moduleName={modules.qa_Certifications_Event_Module}
+                />
+              )
+            }
+          />
+          <Route
+            path="/emissions"
+            element={
+              user ? (
+                <Navigate to="/workspace/emissions" />
+              ) : (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={EMISSIONS_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/emissions"
+            element={
+              !user ? (
+                <Navigate to="/emissions" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  workspaceSection={EMISSIONS_STORE_NAME}
+                  moduleName={modules.emissions_module}
+                />
+              )
+            }
+          />
+          <Route
+            path="/export"
+            element={
+              user ? (
+                <Navigate to="/workspace/export" />
+              ) : (
+                <MonitoringPlanHome
+                  user={false}
+                  workspaceSection={EXPORT_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/export"
+            user={user}
+            element={
+              !user ? (
+                <Navigate to="/export" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  resetTimer={setResetTimer}
+                  setExpired={setExpired}
+                  resetTimerFlag={resetTimer}
+                  callApiFlag={expired}
+                  workspaceSection={EXPORT_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/evaluate"
+            element={
+              !user ? (
                 <Navigate to="/" />
-              }
-            />
-            <Route path="/"
-              element={
-                <AboutHome user={user} setCurrentLink={setCurrentLink} />
-              }
-            />
-            <Route path="/monitoring-plans"
-              element={
-                user ? (
-                  <Navigate to="/workspace/monitoring-plans" />
-                ) : (
-                  <MonitoringPlanHome user={false}
-                    workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/monitoring-plans"
-              element={
-                !user ? (
-                  <Navigate to="/monitoring-plans" />
-                ) : (
-                  <MonitoringPlanHome user={user}
-                    resetTimer={setResetTimer}
-                    setExpired={setExpired}
-                    resetTimerFlag={resetTimer}
-                    callApiFlag={expired}
-                    workspaceSection={MONITORING_PLAN_STORE_NAME}
-                    moduleName={modules.monitoring_plans_module}
-                  />
-                )
-              }
-            />
-            <Route path="/qa/tests"
-              element={
-                user ? (
-                  <Navigate to="/workspace/qa/tests" />
-                ) : (
-                  <MonitoringPlanHome user={false}
-                    workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/qa/tests"
-              element={
-                !user ? (
-                  <Navigate to="/qa/tests" />
-                ) : (
-                  <MonitoringPlanHome user={user}
-                    resetTimer={setResetTimer}
-                    setExpired={setExpired}
-                    resetTimerFlag={resetTimer}
-                    callApiFlag={expired}
-                    workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-                    moduleName={modules.qa_Certifications_Test_Summary_Module}
-                  />
-                )
-              }
-            />
-            <Route path="/qa/qce-tee"
-              element={
-                user ? (
-                  <Navigate to="/workspace/qa/qce-tee" />
-                ) : (
-                  <MonitoringPlanHome user={false}
-                    workspaceSection={QA_CERT_EVENT_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/qa/qce-tee"
-              element={
-                !user ? (
-                  <Navigate to="/qa/qce-tee" />
-                ) : (
-                  <MonitoringPlanHome user={user}
-                    resetTimer={setResetTimer}
-                    setExpired={setExpired}
-                    resetTimerFlag={resetTimer}
-                    callApiFlag={expired}
-                    workspaceSection={QA_CERT_EVENT_STORE_NAME}
-                    moduleName={modules.qa_Certifications_Event_Module}
-                  />
-                )
-              }
-            />
-            <Route path="/emissions"
-              element={
-                user ? (
-                  <Navigate to="/workspace/emissions" />
-                ) : (
-                  <MonitoringPlanHome user={false}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/emissions"
-              element={
-                !user ? (
-                  <Navigate to="/emissions" />
-                ) : (
-                  <MonitoringPlanHome user={user}
-                    resetTimer={setResetTimer}
-                    setExpired={setExpired}
-                    resetTimerFlag={resetTimer}
-                    callApiFlag={expired}
-                    workspaceSection={EMISSIONS_STORE_NAME}
-                    moduleName={modules.emissions_module}
-                  />
-                )
-              }
-            />
-            <Route path="/export"
-              element={
-                user ? (
-                  <Navigate to="/workspace/export" />
-                ) : (
-                  <MonitoringPlanHome user={false}
-                    workspaceSection={EXPORT_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/export"
-              user={user}
-              element={
-                !user ? (
-                  <Navigate to="/export" />
-                ) : (
-                  <MonitoringPlanHome user={user}
-                    resetTimer={setResetTimer}
-                    setExpired={setExpired}
-                    resetTimerFlag={resetTimer}
-                    callApiFlag={expired}
-                    workspaceSection={EXPORT_STORE_NAME}
-                  />
-                )
-              }
-            />
-            <Route path="/workspace/evaluate"
-              element={
-                !user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <EvaluateAndSubmit user={user}
-                    componentType="Evaluate"
-                  />
-                )
-              }
-            />            
-            <Route path="/workspace/submit"
-              element={
-                !user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <EvaluateAndSubmit user={user}
-                    componentType="Submission"
-                  />
-                )
-              }
-            />
-            <Route path="/admin/qa-maintenance"
-              element={
-                !user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <ComingSoon />
-                )
-              }
-            />
-            <Route path="/admin/error-suppression"
-              element={
-                !user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <ErrorSuppression user={user} />
-                )
-              }
-            />
-            <Route path="/admin/em-submission-access"
-              element={
-                !user ? (
-                  <Navigate to="/" />
-                ) : (
-                  <ComingSoon />
-                )
-              }
-            />
-            <Route path="/reports"
-              element={
-                user ? (
-                  <Navigate to="/workspace/reports" />
-                ) : (
-                  <ReportGenerator />
-                )
-              }
-            />
-            <Route path="/workspace/reports"
-              element={
-                !user ? (
-                  <Navigate to="/reports" />
-                ) : (
-                  <ReportGenerator requireAuth={true} user={user} />
-                )
-              }
-            />
-            <Route path={`/faqs`} element={<FAQ />} />
-            <Route path="/tutorials" element={<ComingSoon />} />
-            <Route path="/cam-api" element={<ComingSoon />} />
-            <Route path="/glossary" element={<ComingSoon />} />
-            <Route path="/reporting-instructions" element={<ReportingInstructions />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/help-support" element={<HelpSupport />} />
-            <Route path="/what-has-data" element={<WhatHasData />} />
-            <Route path="*" element={<NotFound  />} />
-          </Routes>
+              ) : (
+                <EvaluateAndSubmit user={user} componentType="Evaluate" />
+              )
+            }
+          />
+          <Route
+            path="/workspace/submit"
+            element={
+              !user ? (
+                <Navigate to="/" />
+              ) : (
+                <EvaluateAndSubmit user={user} componentType="Submission" />
+              )
+            }
+          />
+          <Route
+            path="/admin/qa-maintenance"
+            element={!user ? <Navigate to="/" /> : <ComingSoon />}
+          />
+          <Route
+            path="/admin/error-suppression"
+            element={
+              !user ? <Navigate to="/" /> : <ErrorSuppression user={user} />
+            }
+          />
+          <Route
+            path="/admin/em-submission-access"
+            element={!user ? <Navigate to="/" /> : <ComingSoon />}
+          />
+          <Route
+            path="/reports"
+            element={
+              user ? <Navigate to="/workspace/reports" /> : <ReportGenerator />
+            }
+          />
+          <Route
+            path="/workspace/reports"
+            element={
+              !user ? (
+                <Navigate to="/reports" />
+              ) : (
+                <ReportGenerator requireAuth={true} user={user} />
+              )
+            }
+          />
+          <Route path={`/faqs`} element={<FAQ />} />
+          <Route path="/tutorials" element={<ComingSoon />} />
+          <Route path="/cam-api" element={<ComingSoon />} />
+          <Route path="/glossary" element={<ComingSoon />} />
+          <Route
+            path="/reporting-instructions"
+            element={<ReportingInstructions />}
+          />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/help-support" element={<HelpSupport />} />
+          <Route path="/what-has-data" element={<WhatHasData />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Layout>
     </div>
   );
