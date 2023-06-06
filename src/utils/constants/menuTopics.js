@@ -188,11 +188,6 @@ export const getWorkspacePaths = () => {
     {
       name: "Monitoring Plans",
       url: "/workspace/monitoring-plans",
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
     },
     {
       name: "QA & Certifications",
@@ -207,43 +202,22 @@ export const getWorkspacePaths = () => {
           url: "/workspace/qa/qce-tee",
         },
       ],
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
     },
     {
       name: "Emissions",
       url: "/workspace/emissions",
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
     },
     {
       name: "Export",
       url: "/workspace/export",
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
     },
     {
       name: "Evaluate",
       url: "/workspace/evaluate",
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
     },
     {
       name: "Submit",
       url: "/workspace/submit",
-      requiredRoles: [config.app.submitterRole],
     },
   ];
 

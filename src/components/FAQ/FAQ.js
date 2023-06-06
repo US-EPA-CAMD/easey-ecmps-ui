@@ -29,6 +29,7 @@ const FAQ = () => {
         key: index,
         title: element.question,
         content: element.answer,
+        headingLevel: "h3",
         expanded: false,
         id: `question_${keyCount++}_${name.split(" ").join("")}`,
       });
