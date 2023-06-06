@@ -106,35 +106,41 @@ export const LeftNavigation = (props) => {
   };
 
   const makeWKspaceHeader = () => {
-    const workspaceLinks = [
-      <USWDSLink
-        to="/workspace"
-        rel="workspace"
-        title="Go to the workspace page"
-        key="wsKey"
-      >
-        Workspace
-      </USWDSLink>,
-      [
-        <SideNav
-          key="sideNav"
-          items={makeHeader(workSpace, true, true)}
-          isSubnav={true}
-        />,
-      ],
-    ];
+    let workspaceLinks = [];
+
+    if (
+      props.user?.roles?.includes(config.app.sponsorRole) ||
+      props.user?.roles?.includes(config.app.submitterRole) ||
+      props.user?.roles?.includes(config.app.preparerRole)
+    ) {
+      workspaceLinks = [
+        <USWDSLink
+          to="/workspace"
+          rel="workspace"
+          title="Go to the workspace page"
+          key="wsKey"
+        >
+          Workspace
+        </USWDSLink>,
+        [
+          <SideNav
+            key="sideNav"
+            items={makeHeader(workSpace, true, true)}
+            isSubnav={true}
+          />,
+        ],
+      ];
+    }
 
     if (
       //Include systemAdmin side panel if the user has the correct role
-      props.user &&
-      props.user["roles"] &&
-      props.user["roles"].includes(config.app.adminRole)
+      props.user?.roles?.includes(config.app.adminRole)
     ) {
       workspaceLinks.push([
         <SideNav
           key="adminNav"
           items={makeHeader(systemAdmin, true, true)}
-          isSubnav={true}
+          isSubnav={false}
         />,
       ]);
     }
