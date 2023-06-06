@@ -140,7 +140,7 @@ export const LeftNavigation = (props) => {
         <SideNav
           key="adminNav"
           items={makeHeader(systemAdmin, true, true)}
-          isSubnav={true}
+          isSubnav={false}
         />,
       ]);
     }
