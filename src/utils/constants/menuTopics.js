@@ -173,11 +173,19 @@ export const globalView = [
 export const systemAdmin = [
   {
     name: "System Administration",
-    url: "/workspace/error-suppression",
+    url: "/admin",
     children: [
       {
+        name: "QA Maintenance",
+        url: "/admin/qa-maintenance",
+      },
+      {
         name: "Error Suppression",
-        url: "/workspace/error-suppression",
+        url: "/admin/error-suppression",
+      },
+      {
+        name: "Emission Submission Access",
+        url: "/admin/em-submission-access",
       },
     ],
   },
@@ -252,11 +260,7 @@ export const getAppNavItems = () => {
   }
   appNavItems.push({
     label: "Workspace",
-    items: [
-      { menu: "DATA Overview", link: "/data" },
-      { menu: "Custom Data Download", link: "/select-data-type" },
-      { menu: "Bulk Data Files", link: "" },
-    ],
+    items: [],
   });
 
   return appNavItems;
