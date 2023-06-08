@@ -31,7 +31,7 @@ jobs:
       # - name: Build
       #   run: devops/scripts/yarn/build.sh
       #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} write here see if changes stick
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       - name: Run Automated Tests
         uses: actions/checkout@v3
         with: 
