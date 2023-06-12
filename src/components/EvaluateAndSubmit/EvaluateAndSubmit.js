@@ -44,12 +44,6 @@ export const EvaluateAndSubmit = ({
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
-  console.log(
-    " checkedOutLocations, user, componentType,",
-    checkedOutLocations,
-    user,
-    componentType
-  );
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
@@ -234,7 +228,7 @@ export const EvaluateAndSubmit = ({
     }
   };
 
-  const finalSubmission = (callback) => {
+  const finalSubmission = async (callback) => {
     evalClickedAtTime.current = new Date().getTime();
     setSubmitting(true);
     const activeMPSet = new Set();
@@ -325,27 +319,26 @@ export const EvaluateAndSubmit = ({
       payload.items.push(newItem);
     }
 
-    callback(payload)
-      .then(() => {
-        checkInAllCheckedOutLocations();
-        setSubmitting(false);
-        if (componentType === "Submission") {
-          window.location.reload(false);
-        } else {
-          for (const value of dataList) {
-            const { ref } = value;
-            for (const chunk of ref.current) {
-              chunk.selected = false;
-            }
+    try {
+      await callback(payload);
+      checkInAllCheckedOutLocations();
+      setSubmitting(false);
+      if (componentType === "Submission") {
+        window.location.reload(false);
+      } else {
+        for (const value of dataList) {
+          const { ref } = value;
+          for (const chunk of ref.current) {
+            chunk.selected = false;
           }
-          monitorPlanIdToSelectedMap.current = new Map();
-          setNumFilesSelected(0);
         }
-      })
-      .catch((e) => {
-        handleError(e);
-        setSubmitting(false);
-      });
+        monitorPlanIdToSelectedMap.current = new Map();
+        setNumFilesSelected(0);
+      }
+    } catch (e) {
+      handleError(e);
+      setSubmitting(false);
+    }
   };
 
   const checkInAllCheckedOutLocations = () => {
@@ -467,7 +460,12 @@ export const EvaluateAndSubmit = ({
           </div>
         )}
 
-        <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
+        <h2
+          data-testid="page-title"
+          className="grid-col-9 page-header margin-top-2"
+        >
+          {title}
+        </h2>
         {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"

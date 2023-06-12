@@ -203,11 +203,7 @@ const DataTables = ({
               <h4 className="padding-x-3">{name}</h4>
             </div>
             <div
-              className={
-                activeTables[name]
-                  ? "display-block"
-                  : "display-none"
-              }
+              className={activeTables[name] ? "display-block" : "display-none"}
             >
               <TableRender
                 columns={columns}

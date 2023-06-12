@@ -270,8 +270,8 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
-  if(!localStorage.getItem("ecmps_user")){
-    return {data: []};
+  if (!localStorage.getItem("ecmps_user")) {
+    return { data: [] };
   }
   const url = getApiUrl(`/check-outs/plans`, true);
 
@@ -279,10 +279,9 @@ export const getCheckedOutLocations = async () => {
     method: "GET",
     url: url,
   })
-    .then((res)=>{
+    .then((res) => {
       return handleResponse(res);
-    }
-    )
+    })
     .catch(handleError);
 };
 
