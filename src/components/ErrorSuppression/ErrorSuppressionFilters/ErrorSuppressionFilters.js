@@ -419,31 +419,7 @@ export const ErrorSuppressionFilters = () => {
           </Grid>
         </Grid>
         <Grid row>
-          <Grid col={4}>
-            <Label test-id={"reason-label"} htmlFor={"reason"}>
-              Reason
-            </Label>
-            <Dropdown
-              id={"reason"}
-              name={"reason"}
-              epa-testid={"reason"}
-              data-testid={"reason"}
-              value={selectedReason}
-              onChange={(e) => setSelectedReason(e.target.value)}
-            >
-              <option>{defaultDropdownText}</option>
-              {reasonCodeList.map((d) => (
-                <option
-                  key={d.errorSuppressionReasonCode}
-                  value={d.errorSuppressionReasonCode}
-                  data-testid={d.errorSuppressionReasonCode}
-                >
-                  {d.errorSuppressionReasonCode}
-                </option>
-              ))}
-            </Dropdown>
-          </Grid>
-          <Grid col={3} className="margin-left-2">
+          <Grid col={3}>
             <Label test-id={"reason-label"} htmlFor={"reason"}>
               Status
             </Label>
@@ -473,6 +449,30 @@ export const ErrorSuppressionFilters = () => {
               ))}
             </Dropdown>
           </Grid>
+          <Grid col={3} className="margin-left-2">
+            <Label test-id={"reason-label"} htmlFor={"reason"}>
+              Reason
+            </Label>
+            <Dropdown
+              id={"reason"}
+              name={"reason"}
+              epa-testid={"reason"}
+              data-testid={"reason"}
+              value={selectedReason}
+              onChange={(e) => setSelectedReason(e.target.value)}
+            >
+              <option>{defaultDropdownText}</option>
+              {reasonCodeList.map((d) => (
+                <option
+                  key={d.errorSuppressionReasonCode}
+                  value={d.errorSuppressionReasonCode}
+                  data-testid={d.errorSuppressionReasonCode}
+                >
+                  {d.errorSuppressionReasonCode}
+                </option>
+              ))}
+            </Dropdown>
+          </Grid>
         </Grid>
         <Grid row className="margin-top-2">
           <Grid col={3}>
@@ -489,7 +489,7 @@ export const ErrorSuppressionFilters = () => {
             />
           </Grid>
           <Grid col={3}>
-            <div className="margin-left-4">
+            <div className="margin-left-2">
               <Label htmlFor="add-date-before" id="add-date-before-label">
                 Add Date Before
               </Label>
