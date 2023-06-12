@@ -8,7 +8,7 @@ export const useSuppressionFiltersStore = () => {
     const [facility, setFacility] = useState();
     const [locations, setLocations] = useState();
     const [active, setActive] = useState();
-    const [reason, setReason] = useState();
+    const [reasonCode, setReasonCode] = useState();
     const [addDateAfter, setAddDateAfter] = useState();
     const [addDateBefore, setAddDateBefore] = useState();
 
@@ -30,8 +30,8 @@ export const useSuppressionFiltersStore = () => {
         setLocations,
         active,
         setActive,
-        reason,
-        setReason,
+        reasonCode,
+        setReasonCode,
         addDateAfter,
         setAddDateAfter,
         addDateBefore,

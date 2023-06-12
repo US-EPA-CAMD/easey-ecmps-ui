@@ -11,7 +11,7 @@ export const getErrorSuppressionRecords = ({
   facility,
   locations,
   active,
-  reason,
+  reasonCode,
   addDateAfter,
   addDateBefore,
 }) => {
@@ -28,7 +28,7 @@ export const getErrorSuppressionRecords = ({
       active,
       orisCode: facility,
       locations: pipeDelimitedLocations,
-      reasonCode: reason,
+      reasonCode,
       beginDateHrQtr: addDateAfter,
       endDateHrQtr: addDateBefore,
     },
