@@ -2,7 +2,7 @@ name: Trigger Automated Tests on a CRON Schedule
 
 on:
   schedule:
-    # Runs "At 00:00, only on Friday and Tuesday" (see https://crontab.guru) push
+    # Runs "At 00:00, only on Friday and Tuesday" (see https://crontab.guru) 
     - cron: '0 0 * * 5,2'
 jobs:
   build:
