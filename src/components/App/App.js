@@ -12,7 +12,7 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
-
+import SubmissionAccess from "../SystemAdmin/SubmissionAccess/SubmissionAccess";
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
@@ -383,7 +383,7 @@ const App = () => {
           />
           <Route
             path="/admin/em-submission-access"
-            element={!user ? <Navigate to="/" /> : <ComingSoon />}
+            element={!user ? <Navigate to="/" /> : <SubmissionAccess user ={user}/>}
           />
           <Route
             path="/reports"

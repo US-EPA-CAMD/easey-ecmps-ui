@@ -3,7 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
-
+import DropdownSelection from "../../DropdownSelection/DropdownSelection";
+ 
 const FilterForm = ({
   facilities,
   queryCallback,
@@ -13,6 +14,7 @@ const FilterForm = ({
   buttonText,
   filterClick,
   componentType,
+  clearBtn,
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -24,6 +26,7 @@ const FilterForm = ({
   const selectedOrisCodes = useRef([]);
   const selectedReportingPeriods = useRef([]);
 
+  const [availStatus, setAvailStatus] = useState([{code: '',name:'test'}])
   async function fetchReportingPeriods() {
     const reportingPeriodList = (await getReportingPeriods()).data;
 
@@ -94,6 +97,8 @@ const FilterForm = ({
   }
 
   async function configurationFilterChange(id, action) {
+
+    console.log('id',id)
     const objectEntry = availableConfigurations.current.find(
       (item) => item.id === id
     );
@@ -107,6 +112,7 @@ const FilterForm = ({
   }
 
   async function facilityFilterChange(id, action) {
+    console.log('id',id,action)
     id = id.toString();
 
     let newState;
@@ -122,8 +128,11 @@ const FilterForm = ({
     }
     selectedOrisCodes.current = newState;
 
-    const configurationData = newState.length? (await getMonitoringPlans(newState)).data : [];
+    const configurationData = newState.length
+      ? (await getMonitoringPlans(newState)).data
+      : [];
 
+      console.log('configurationData',configurationData,newState)
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -230,21 +239,55 @@ const FilterForm = ({
             />
           </div>
         </div>
-        <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
+
+        {componentType === "SubmissionAccess" ? (
+          <div className="grid-col-2 desktop:grid-col-2 margin-top-2">
+            <div className="margin-right-2">
+              <DropdownSelection
+                selectKey={'code'}
+                viewKey={'name'}
+                options={availStatus}
+                caption={"Status"}
+                searchBy="contains"
+                selectionHandler={(option) => console.log('option',option)}
+                autoFocus={false}
+                iconAlignRight={3}
+              />
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="buttons grid-col-9 desktop:grid-col-2 padding-top-1">
           <div
             id="submit-button-group"
             className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
           >
+            {componentType === "SubmissionAccess" ? (
+              <Button
+                disabled={availableConfigState.length === 0}
+                onClick={applyFilters}
+                outline={true}
+              >
+                Clear
+              </Button>
+            ) : (
+              ""
+            )}
             <Button
               disabled={availableConfigState.length === 0}
               onClick={applyFilters}
-              outline={true}
+              outline={componentType === "SubmissionAccess" ? false : true}
             >
               Apply Filter(s)
             </Button>
-            <Button onClick={filterClick} disabled={filesSelected === 0}>
-              {buttonText}
-            </Button>
+            {componentType !== "SubmissionAccess" ? (
+              <Button onClick={filterClick} disabled={filesSelected === 0}>
+                {buttonText}
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
