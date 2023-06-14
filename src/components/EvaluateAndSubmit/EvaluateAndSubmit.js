@@ -89,6 +89,8 @@ export const EvaluateAndSubmit = ({
     } else if (!finalSubmitStage && componentType === "Submission") {
       setTitle("Submit");
       setButtonText("Sign & Submit");
+    } else if (componentType === "SubmissionAccess") {
+      setTitle("Maintain EM Submission Access");
     } else {
       setTitle("Evaluate");
       setButtonText("Evaluate");
@@ -444,7 +446,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData?.displayAlert && (
+      {waitTimeData?.displayAlert && componentType !== "SubmissionAccess" && (
         <Alert
           className="margin-y-2"
           type="info"
@@ -501,17 +503,22 @@ export const EvaluateAndSubmit = ({
           componentType={componentType}
         />
       )}
+      {componentType !== "SubmissionAccess" ? (
+        <div>
+          <DataTables
+            dataList={dataList}
+            permissions={idToPermissionsMap} //Map of oris codes to user permissions
+            updateFilesSelected={updateFilesSelected}
+            componentType={componentType}
+            monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
+            userCheckedOutPlans={userCheckedOutPlans}
+          />
 
-      <DataTables
-        dataList={dataList}
-        permissions={idToPermissionsMap} //Map of oris codes to user permissions
-        updateFilesSelected={updateFilesSelected}
-        componentType={componentType}
-        monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
-        userCheckedOutPlans={userCheckedOutPlans}
-      />
-
-      <LoadingModal type="Loading" loading={submitting} />
+          <LoadingModal type="Loading" loading={submitting} />
+        </div>
+      ) : (
+        ""
+      )}
 
       {showModal && (
         <SubmissionModal
@@ -524,7 +531,7 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      {!finalSubmitStage && (
+      {!finalSubmitStage && componentType !== "SubmissionAccess" && (
         <div className=" grid-row">
           <div className="grid-col-10"></div>
           <div className="grid-col-2">
