@@ -20,7 +20,7 @@ const SubmissionAccess = ({ user }) => {
     getAllFacilities()
       .then(({ data }) => {
         const formattedFacilities = data.map((f) => ({
-          value: f.orisCode ,
+          value: f.facilityId ,
           label: `${f.facilityName} (${f.facilityId})`,
         }));
         setFacilityList(formattedFacilities);
