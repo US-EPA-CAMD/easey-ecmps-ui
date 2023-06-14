@@ -18,7 +18,7 @@ export const ErrorSuppressionDataContainer = () => {
     facility,
     locations,
     active,
-    reason,
+    reasonCode,
     addDateAfter,
     addDateBefore,
   } = useContext(ErrorSuppressionFiltersContext);
@@ -43,7 +43,7 @@ export const ErrorSuppressionDataContainer = () => {
       facility,
       locations,
       active,
-      reason,
+      reasonCode,
       addDateAfter,
       addDateBefore,
     };
@@ -76,7 +76,7 @@ export const ErrorSuppressionDataContainer = () => {
     facility,
     locations,
     active,
-    reason,
+    reasonCode,
     addDateAfter,
     addDateBefore,
   ]);

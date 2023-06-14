@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GridContainer, Grid, Label, Dropdown, Checkbox, DatePicker, ButtonGroup, Button, ComboBox } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Label, Dropdown, DatePicker, ButtonGroup, Button, ComboBox } from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmApi";
@@ -89,7 +89,7 @@ export const ErrorSuppressionFilters = () => {
         setFacility,
         setLocations,
         setActive,
-        setReason,
+        setReasonCode,
         setAddDateAfter,
         setAddDateBefore,
     } = ctxFilters;
@@ -105,7 +105,7 @@ export const ErrorSuppressionFilters = () => {
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedIsActive, setSelectedIsActive] = useState(false);
+    const [selectedStatus, setSelectedStatus] = useState();
     const [selectedReason, setSelectedReason] = useState();
     const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
     const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
@@ -265,8 +265,8 @@ export const ErrorSuppressionFilters = () => {
         setCheckResult(selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null)
         setFacility(selectedFacility !== defaultDropdownText ? selectedFacility : null)
         setLocations(selectedLocations)
-        setActive(selectedIsActive)
-        setReason(selectedReason !== defaultDropdownText ? selectedReason : null)
+        setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null)
+        setReasonCode(selectedReason !== defaultDropdownText ? selectedReason : null)
         setAddDateAfter(selectedAddDateAfter)
         setAddDateBefore(selectedAddDateBefore)
     }
@@ -281,15 +281,15 @@ export const ErrorSuppressionFilters = () => {
       setSelectedFacility("");
       setSelectedLocations([]);
       setLocationData([]);
-      setSelectedIsActive(false);
-      setSelectedReason("");
+      setSelectedStatus(null);
+      setSelectedReason(null);
       setCheckType(null);
       setCheckNumber(null);
       setCheckResult(null);
       setFacility(null);
       setLocations(null);
-      setActive(true);
-      setReason(null);
+      setActive(null);
+      setReasonCode(null);
       setAddDateBefore(null);
       setSelectedAddDateAfter(null);
       setSelectedAddDateBefore(null);
@@ -417,20 +417,6 @@ export const ErrorSuppressionFilters = () => {
           <Grid col={3}>
             <h3>Active, Reason & Add Date</h3>
           </Grid>
-          <Grid col={3}>
-            <Checkbox
-              id="is-active"
-              data-testid="is-active"
-              name="is-active"
-              label="Active"
-              className="margin-top-2"
-              checked={selectedIsActive}
-              value={selectedIsActive}
-              onChange={() =>
-                setSelectedIsActive((previousVal) => !previousVal)
-              }
-            />
-          </Grid>
         </Grid>
         <Grid row>
           <Grid col={4}>
@@ -445,7 +431,7 @@ export const ErrorSuppressionFilters = () => {
               value={selectedReason}
               onChange={(e) => setSelectedReason(e.target.value)}
             >
-              <option value="false">{defaultDropdownText}</option>
+              <option>{defaultDropdownText}</option>
               {reasonCodeList.map((d) => (
                 <option
                   key={d.errorSuppressionReasonCode}
@@ -453,6 +439,36 @@ export const ErrorSuppressionFilters = () => {
                   data-testid={d.errorSuppressionReasonCode}
                 >
                   {d.errorSuppressionReasonCode}
+                </option>
+              ))}
+            </Dropdown>
+          </Grid>
+          <Grid col={3} className="margin-left-2">
+            <Label test-id={"reason-label"} htmlFor={"reason"}>
+              Status
+            </Label>
+            <Dropdown
+              id={"status"}
+              name={"status"}
+              epa-testid={"status"}
+              data-testid={"status"}
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+            >
+              <option>{defaultDropdownText}</option>
+              {[{
+                label: 'ACTIVE',
+                value: true
+              }, {
+                label: 'INACTIVE',
+                value: false
+              }].map((d) => (
+                <option
+                  key={d.label}
+                  value={d.value}
+                  data-testid={d.label}
+                >
+                  {d.label}
                 </option>
               ))}
             </Dropdown>
