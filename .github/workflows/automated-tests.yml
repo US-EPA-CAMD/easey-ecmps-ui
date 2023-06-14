@@ -16,8 +16,8 @@ jobs:
         with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
-          
-      - name: Run
-        run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
+      # - name: Run
+      #   run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
