@@ -130,7 +130,8 @@ export const ErrorSuppressionFilters = () => {
         })
 
         getAllFacilities().then(({ data }) => {
-          const formattedFacilities = data.map(f => ({ value: f.facilityId, label: `${f.facilityName} (${f.facilityId})` }))
+          console.log(data)
+          const formattedFacilities = data.map(f => ({ value: f.facilityRecordId, label: `${f.facilityName} (${f.facilityId})`, orisCode: f.facilityId }))
             setFacilityList(formattedFacilities);
 
             // The following lines of code are hacks to mitigate an issue with the ComboBox USWDS component.
@@ -178,7 +179,7 @@ export const ErrorSuppressionFilters = () => {
     }
    
     const onFacilityChange = (value) => {
-
+      console.log(value)
       setSelectedFacility(value);
       if (!value || value === defaultDropdownText) {
         setSelectedLocations([]);
@@ -188,7 +189,9 @@ export const ErrorSuppressionFilters = () => {
 
       if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === selectedCheckResult);
-        getLocations(value, checkResultObj).then(availLoc=>setLocationData([...availLoc]));
+        const facility = facilityList.find(f=>f.value === value);
+
+        getLocations(facility.orisCode, checkResultObj).then(availLoc=>setLocationData([...availLoc]));
       }
     };
 

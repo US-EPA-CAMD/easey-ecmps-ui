@@ -73,7 +73,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         if (!values)
             return;
 
-        const { checkTypeCode, checkNumber, checkResultCode, orisCode, matchDataTypeCode,
+        const { checkTypeCode, checkNumber, checkResultCode, facilityId, orisCode, matchDataTypeCode,
             locations, reasonCode, severityCode, note, matchTimeTypeCode,
             matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator } = values;
 
@@ -81,7 +81,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         onCheckTypeChange({ target: { value: checkTypeCode } });
         onCheckNumberChange({ target: { value: checkNumber } }, checkTypeCode);
         setSelectedCheckResult(checkResultCode);
-        setSelectedFacility(orisCode);
+        setSelectedFacility(facilityId);
         setSelectedReason(reasonCode);
         setSelectedSeverityCode(severityCode);
         setSelectedNotes(note);
@@ -230,7 +230,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
         if (selectedCheckType && selectedCheckNumber && value) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value)
-            getLocations(selectedFacility, checkResultObj).then(availLoc => {
+
+            const facility = facilityList.find(f => f.id === selectedFacility)
+            getLocations(facility.orisCode, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc])
             }).catch(err => {
                 console.log("error", err)
