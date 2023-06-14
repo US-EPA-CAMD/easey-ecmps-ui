@@ -112,6 +112,9 @@
       "!src/store/reducers/initialState.js",
       "!src/utils/api/axiosSetup.js",
       "!src/utils/api/setupTests.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }
