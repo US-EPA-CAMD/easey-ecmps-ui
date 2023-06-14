@@ -2,7 +2,7 @@ import config from "../../config";
 import { handleError, handleResponse } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 
-const url = `${config.services.camd.uri}/error-suppressions`;
+const url = `${config.services.camd.uri}/admin/error-suppressions`;
 
 export const getErrorSuppressionRecords = ({
   checkType,
@@ -11,7 +11,7 @@ export const getErrorSuppressionRecords = ({
   facility,
   locations,
   active,
-  reason,
+  reasonCode,
   addDateAfter,
   addDateBefore,
 }) => {
@@ -28,7 +28,7 @@ export const getErrorSuppressionRecords = ({
       active,
       orisCode: facility,
       locations: pipeDelimitedLocations,
-      reasonCode: reason,
+      reasonCode,
       beginDateHrQtr: addDateAfter,
       endDateHrQtr: addDateBefore,
     },

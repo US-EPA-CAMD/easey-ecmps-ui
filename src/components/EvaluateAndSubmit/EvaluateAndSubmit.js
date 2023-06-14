@@ -83,6 +83,8 @@ export const EvaluateAndSubmit = ({
     } else if (!finalSubmitStage && componentType === "Submission") {
       setTitle("Submit");
       setButtonText("Sign & Submit");
+    } else if (componentType === "SubmissionAccess") {
+      setTitle("Maintain EM Submission Access");
     } else {
       setTitle("Evaluate");
       setButtonText("Evaluate");
@@ -441,6 +443,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
+<<<<<<< HEAD
       <div className="text-black flex-justify margin-top-1 grid-row flex-column">
         {waitTimeData?.displayAlert && (
           <Alert
@@ -451,6 +454,29 @@ export const EvaluateAndSubmit = ({
           >
             {waitTimeData?.content}
           </Alert>
+=======
+      {waitTimeData?.displayAlert && componentType !== "SubmissionAccess" && (
+        <Alert
+          className="margin-y-2"
+          type="info"
+          heading={waitTimeData?.title}
+          headingLevel="h4"
+        >
+          {waitTimeData?.content}
+        </Alert>
+      )}
+      <div className="text-black flex-justify margin-top-1 grid-row">
+        {componentType === "Submission" && (
+          <div className="grid-row">
+            {
+              <Alert type="warning" heading="Warning" headingLevel="h4">
+                The submission process is still under construction. The final
+                sign and submit, with files being loaded to the database is not
+                yet integrated.
+              </Alert>
+            }
+          </div>
+>>>>>>> f3e507757b5ba450ac4f58231e5500c5d44a1c6f
         )}
 
         {componentType === "Submission" && (
@@ -500,17 +526,22 @@ export const EvaluateAndSubmit = ({
           componentType={componentType}
         />
       )}
+      {componentType !== "SubmissionAccess" ? (
+        <div>
+          <DataTables
+            dataList={dataList}
+            permissions={idToPermissionsMap} //Map of oris codes to user permissions
+            updateFilesSelected={updateFilesSelected}
+            componentType={componentType}
+            monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
+            userCheckedOutPlans={userCheckedOutPlans}
+          />
 
-      <DataTables
-        dataList={dataList}
-        permissions={idToPermissionsMap} //Map of oris codes to user permissions
-        updateFilesSelected={updateFilesSelected}
-        componentType={componentType}
-        monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
-        userCheckedOutPlans={userCheckedOutPlans}
-      />
-
-      <LoadingModal type="Loading" loading={submitting} />
+          <LoadingModal type="Loading" loading={submitting} />
+        </div>
+      ) : (
+        ""
+      )}
 
       {showModal && (
         <SubmissionModal
@@ -523,7 +554,7 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      {!finalSubmitStage && (
+      {!finalSubmitStage && componentType !== "SubmissionAccess" && (
         <div className=" grid-row">
           <div className="grid-col-10"></div>
           <div className="grid-col-2">

@@ -18,7 +18,7 @@ export const ErrorSuppressionDataContainer = () => {
     facility,
     locations,
     active,
-    reason,
+    reasonCode,
     addDateAfter,
     addDateBefore,
   } = useContext(ErrorSuppressionFiltersContext);
@@ -43,7 +43,7 @@ export const ErrorSuppressionDataContainer = () => {
       facility,
       locations,
       active,
-      reason,
+      reasonCode,
       addDateAfter,
       addDateBefore,
     };
@@ -76,7 +76,7 @@ export const ErrorSuppressionDataContainer = () => {
     facility,
     locations,
     active,
-    reason,
+    reasonCode,
     addDateAfter,
     addDateBefore,
   ]);
@@ -185,8 +185,10 @@ export const ErrorSuppressionDataContainer = () => {
       sortable: true,
     },
     {
-      name: "Facility Name/ID",
-      selector: (row) => row.orisCode,
+      name: "Facility Name (ID)",
+      selector: (row) =>
+          (row.facilityName ? row.facilityName : "") +
+          (row.orisCode ? " (" + row.orisCode + ")" : ""),
       sortable: true,
     },
     { name: "Locations", selector: (row) => row.locations, sortable: true },

@@ -12,8 +12,12 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
+<<<<<<< HEAD
 import { useLocation } from "react-router-dom";
 
+=======
+import SubmissionAccess from "../SystemAdmin/SubmissionAccess/SubmissionAccess";
+>>>>>>> f3e507757b5ba450ac4f58231e5500c5d44a1c6f
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
@@ -398,7 +402,7 @@ const App = () => {
           />
           <Route
             path="/admin/em-submission-access"
-            element={!user ? <Navigate to="/" /> : <ComingSoon />}
+            element={!user ? <Navigate to="/" /> : <SubmissionAccess user ={user}/>}
           />
 
           <Route path={`/faqs`} element={<FAQ />} />

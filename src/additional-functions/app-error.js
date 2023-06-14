@@ -3,7 +3,7 @@ export const displayAppError = (error) => {
   const formattedError = Array.isArray(error) ? error.join('\n') : error
   const appearAnimation = "flip-in-x-reverse";
 
-  if (document.querySelector("#appErrorMessageText")) {
+  if (typeof document !== 'undefined' && document.querySelector("#appErrorMessageText")) {
     document.querySelector("#appErrorMessageText").innerHTML = formattedError;
 
     const errorMsg = document.querySelector("#appErrorMessage")
@@ -26,7 +26,7 @@ export const displayAppError = (error) => {
 };
 
 export const hideAppError = () => {
-  if (document.querySelector("#appErrorMessageText")) {
+  if (typeof document !== 'undefined' && document.querySelector("#appErrorMessageText")) {
     document.querySelector("#appErrorMessageText").innerHTML = "";
     document.querySelector("#appErrorMessage").classList.add("display-none");
     window.removeEventListener("click", hideAppError);
