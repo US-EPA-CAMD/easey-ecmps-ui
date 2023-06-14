@@ -2,7 +2,7 @@ import config from "../../config";
 import { handleError, handleResponse } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 
-const url = `${config.services.camd.uri}/error-suppressions`;
+const url = `${config.services.camd.uri}/admin/error-suppressions`;
 
 export const getErrorSuppressionRecords = ({
   checkType,
