@@ -4,16 +4,19 @@ on:
   schedule:
     # Runs "At 00:00, only on Friday and Tuesday" (see https://crontab.guru) 
     - cron: '0 0 * * 5,2'
+
 jobs:
   build:
     name: Trigger Automated Tests
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
         with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
+          
       - name: Run
         run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
         env:
