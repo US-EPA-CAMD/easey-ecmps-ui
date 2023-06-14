@@ -113,9 +113,9 @@ const FilterFormAdmin = ({
     selectedReportingPeriods.current = newState;
   }
 
-  async function configurationFilterChange(id) {
+  const configurationFilterChange = (id) => {
     setSelectedLocation(id);
-  }
+  };
 
   const facilityFilterChange = async (id) => {
     let newState = [id];
@@ -178,75 +178,79 @@ const FilterFormAdmin = ({
   };
   return (
     <div className="container border-y-1px border-base-lighter padding-y-1 ">
-      <div className="dropdowns grid-row">
-        <div className="grid-col-6 desktop:grid-col-2 margin-top-2 padding-right-2">
-          <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
-            Facility Name/ID
-          </Label>
-          <ComboBox
-            id="facility-name"
-            name="facility-name"
-            epa-testid={"facility-name"}
-            data-testid={"facility-name"}
-            options={facilities}
-            onChange={onFacilityChange}
-            disableFiltering={true}
-          />
-        </div>
-        <div className="grid-col-6 desktop:grid-col-2 margin-top-2 padding-right-2">
-          <Label
-            test-id={"configuration-name-label"}
-            htmlFor={"configuration-name"}
-          >
-            Configurations
-          </Label>
-          <ComboBox
-            id="configuration-name"
-            name="configuration-name"
-            epa-testid={"configuration-name"}
-            data-testid={"configuration-name"}
-            options={availableConfigurations}
-            onChange={configurationFilterChange}
-            disableFiltering={true}
-          />
-        </div>
-        <div className="grid-col-3 desktop:grid-col-2 margin-top-2 padding-right-2">
-          <Label
-            test-id={"reporting-period-name-label"}
-            htmlFor={"reporting-period-name"}
-          >
-            Reporting Period
-          </Label>
-          <ComboBox
-            id="reporting-period-name"
-            name="reporting-period-name"
-            epa-testid={"reporting-period-name"}
-            data-testid={"reporting-period-name"}
-            options={availableReportingPeriods}
-            onChange={reportingPeriodFilterChange}
-            disableFiltering={true}
-          />
-        </div>
-        <div className="grid-col-3 desktop:grid-col-2 margin-top-2 padding-right-2">
-          <Label test-id={"status-name-label"} htmlFor={"status-name"}>
-            Status
-          </Label>
-          <ComboBox
-            id="status-name"
-            name="status-name"
-            epa-testid={"status-name"}
-            data-testid={"status-name"}
-            options={availStatus}
-            onChange={(option) => setSelectedStatus(option)}
-            disableFiltering={true}
-          />
-        </div>
+      <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
+        <Grid row>
+          <Grid col={6}>
+            <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
+              Facility Name/ID
+            </Label>
+            <ComboBox
+              id="facility-name"
+              name="facility-name"
+              epa-testid={"facility-name"}
+              data-testid={"facility-name"}
+              options={facilities}
+              onChange={onFacilityChange}
+              disableFiltering={true}
+            />
+          </Grid>
 
-        <div className="buttons grid-col-9 desktop:grid-col-2 padding-top-1">
-          <div
-            id="submit-button-group"
-            className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
-          >
+          <Grid col={4}>
+            <div className="margin-left-2 ">
+              <Label
+                test-id={"configuration-name-label"}
+                htmlFor={"configuration-name"}
+              >
+                Configurations
+              </Label>
+              <ComboBox
+                id="configuration-name"
+                name="configuration-name"
+                epa-testid={"configuration-name"}
+                data-testid={"configuration-name"}
+                options={availableConfigurations}
+                onChange={configurationFilterChange}
+                disableFiltering={true}
+              />
+            </div>
+          </Grid>
+        </Grid>
+        <Grid row className="margin-top-2">
+          <Grid col={2}  >
+            <Label
+              test-id={"reporting-period-name-label"}
+              htmlFor={"reporting-period-name"}
+            >
+              Reporting Period
+            </Label>
+            <ComboBox
+              id="reporting-period-name"
+              name="reporting-period-name"
+              epa-testid={"reporting-period-name"}
+              data-testid={"reporting-period-name"}
+              options={availableReportingPeriods}
+              onChange={reportingPeriodFilterChange}
+              disableFiltering={true}
+            />
+          </Grid>
+          <Grid col={3}>
+            <div className="margin-left-2">
+              <Label test-id={"status-name-label"} htmlFor={"status-name"}>
+                Status
+              </Label>
+              <ComboBox
+                id="status-name"
+                name="status-name"
+                epa-testid={"status-name"}
+                data-testid={"status-name"}
+                options={availStatus}
+                onChange={(option) => setSelectedStatus(option)}
+                disableFiltering={true}
+              />
+            </div>
+          </Grid>
+          <Grid col={4} className=" position-relative margin-top-3">
+            <div className="position-absolute right-0 bottom-0">
             <Button
               //   disabled={availableConfigState.length === 0}
               onClick={clearFilters}
@@ -261,10 +265,10 @@ const FilterFormAdmin = ({
               outline={false}
             >
               Apply Filter(s)
-            </Button>
-          </div>
-        </div>
-      </div>
+            </Button></div>
+          </Grid>
+        </Grid>
+      </GridContainer>
     </div>
   );
 };
