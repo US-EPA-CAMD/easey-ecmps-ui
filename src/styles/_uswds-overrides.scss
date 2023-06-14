@@ -445,3 +445,12 @@ button.usa-nav__close {
 .bg-primary {
   background-color: #005ea2 !important;
 }
+
+div.usa-alert::before {
+  content: none;
+}
+
+.usa-alert .usa-alert__body {
+  margin-left: 0%;
+  max-width: fit-content;
+}

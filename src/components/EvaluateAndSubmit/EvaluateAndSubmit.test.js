@@ -149,5 +149,21 @@ describe("- Evaluate And Submit -", () => {
     });
   });
 
-  describe("Submission", () => {});
+  describe("Submission", () => {
+    it("Should render the EvaluateAndSubmit [Submission] component without crashing", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <EvaluateAndSubmit
+              user={getMockEcmpsUser()}
+              componentType="Submission"
+              checkedOutLocations={[]}
+            />
+          </Provider>
+        );
+      });
+
+      expect(screen.getByTestId("page-title").innerHTML).toBe("Submit");
+    });
+  });
 });

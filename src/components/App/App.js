@@ -1,7 +1,7 @@
 import { isEqual } from "lodash";
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 
 import TagManager from "react-gtm-module";
 import ComingSoon from "../ComingSoon/ComingSoon";
@@ -12,6 +12,7 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
+import { useLocation } from "react-router-dom";
 
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
@@ -39,6 +40,8 @@ import { currentDateTime } from "../../utils/functions";
 import WhatHasData from "../WhatHasData/WhatHasData";
 
 const App = () => {
+  const queryParams = useLocation().search;
+
   const dispatch = useDispatch();
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
@@ -185,17 +188,25 @@ const App = () => {
       <div aria-live="polite" role="status" aria-atomic="true">
         <div>{user ? <InactivityTracker /> : ""}</div>
       </div>
-      <Layout
-        user={user}
-        currentLink={currentLink}
-        setCurrentLink={setCurrentLink}
-      >
-        <Routes>
+
+      <Routes>
+        <Route
+          element={
+            <Layout
+              user={user}
+              currentLink={currentLink}
+              setCurrentLink={setCurrentLink}
+            >
+              <Outlet />
+            </Layout>
+          }
+        >
           <Route path="/home" element={<Navigate to="/" />} />
           <Route
             path="/"
             element={<AboutHome user={user} setCurrentLink={setCurrentLink} />}
           />
+
           <Route
             path="/monitoring-plans"
             element={
@@ -357,7 +368,9 @@ const App = () => {
               !user ? (
                 <Navigate to="/" />
               ) : (
-                <EvaluateAndSubmit user={user} componentType="Evaluate" />
+                <div key={"Evaluate-Component"}>
+                  <EvaluateAndSubmit user={user} componentType="Evaluate" />
+                </div>
               )
             }
           />
@@ -367,7 +380,9 @@ const App = () => {
               !user ? (
                 <Navigate to="/" />
               ) : (
-                <EvaluateAndSubmit user={user} componentType="Submission" />
+                <div key={"Submit-Component"}>
+                  <EvaluateAndSubmit user={user} componentType="Submission" />
+                </div>
               )
             }
           />
@@ -385,22 +400,7 @@ const App = () => {
             path="/admin/em-submission-access"
             element={!user ? <Navigate to="/" /> : <ComingSoon />}
           />
-          <Route
-            path="/reports"
-            element={
-              user ? <Navigate to="/workspace/reports" /> : <ReportGenerator />
-            }
-          />
-          <Route
-            path="/workspace/reports"
-            element={
-              !user ? (
-                <Navigate to="/reports" />
-              ) : (
-                <ReportGenerator requireAuth={true} user={user} />
-              )
-            }
-          />
+
           <Route path={`/faqs`} element={<FAQ />} />
           <Route path="/tutorials" element={<ComingSoon />} />
           <Route path="/cam-api" element={<ComingSoon />} />
@@ -413,8 +413,28 @@ const App = () => {
           <Route path="/help-support" element={<HelpSupport />} />
           <Route path="/what-has-data" element={<WhatHasData />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
+        </Route>
+        <Route
+          path="/reports"
+          element={
+            user ? (
+              <Navigate to={`/workspace/reports${queryParams}`} />
+            ) : (
+              <ReportGenerator />
+            )
+          }
+        />
+        <Route
+          path="/workspace/reports"
+          element={
+            !user ? (
+              <Navigate to={`/reports${queryParams}`} />
+            ) : (
+              <ReportGenerator requireAuth={true} user={user} />
+            )
+          }
+        />
+      </Routes>
     </div>
   );
 };

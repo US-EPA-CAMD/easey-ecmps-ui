@@ -9,7 +9,7 @@ export async function getReport(params) {
   return secureAxios({
     method: "GET",
     url,
-  })
+  });
 }
 
 export async function submitData(payload) {
