@@ -134,7 +134,7 @@ const DataTables = ({
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
       ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
-      permissions.current[row.orisCode]?.includes(`DS${type}`)
+      permissions.current.get(row.orisCode)?.includes(`DS${type}`)
     ) {
       if (
         type === "EM" &&
@@ -203,11 +203,7 @@ const DataTables = ({
               <h4 className="padding-x-3">{name}</h4>
             </div>
             <div
-              className={
-                activeTables[name]
-                  ? "display-block"
-                  : "display-none"
-              }
+              className={activeTables[name] ? "display-block" : "display-none"}
             >
               <TableRender
                 columns={columns}
