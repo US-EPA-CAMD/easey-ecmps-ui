@@ -17,5 +17,5 @@ jobs:
 
       - name: Run
         run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
-        # env:
-        #   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
