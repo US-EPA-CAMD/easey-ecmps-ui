@@ -51,6 +51,7 @@ export const ErrorSuppressionDataContainer = () => {
 
     getErrorSuppressionRecords(params)
       .then(({ data }) => {
+        console.log(data)
         // getErrorSuppressionRecords('HOURGEN', '7', 'C').then(({ data }) => {
         data.forEach((d) => (d.selected = false));
         setTableData(data);

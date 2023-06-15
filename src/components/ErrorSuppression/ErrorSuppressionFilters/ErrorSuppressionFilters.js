@@ -130,7 +130,6 @@ export const ErrorSuppressionFilters = () => {
         })
 
         getAllFacilities().then(({ data }) => {
-          console.log(data)
           const formattedFacilities = data.map(f => ({ value: f.facilityRecordId, label: `${f.facilityName} (${f.facilityId})`, orisCode: f.facilityId }))
             setFacilityList(formattedFacilities);
 
@@ -241,9 +240,12 @@ export const ErrorSuppressionFilters = () => {
         return;
       }
 
-      if (selectedCheckType && selectedCheckNumber && value) {
+      const facility = facilityList.find(f=>f.value === selectedFacility);
+      
+      if (selectedCheckType && selectedCheckNumber && value && facility) {
         const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r=>r.checkResult === value);
-        getLocations(selectedFacility, checkResultObj).then((availLoc) =>
+
+        getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
           setLocationData([...availLoc])
         );
       }

@@ -32,15 +32,15 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedCheckResultObj, setSelectedCheckResultObj] = useState();
     const [selectedFacility, setSelectedFacility] = useState();
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [selectedReason, setSelectedReason] = useState();
-    const [selectedMatchDataType, setSelectedMatchDataType] = useState();
+    const [selectedReasonCode, setSelectedReasonCode] = useState();
+    const [selectedMatchDataValue, setSelectedMatchDataValue] = useState();
     const [selectedSeverityCode, setSelectedSeverityCode] = useState();
     const [selectedNotes, setSelectedNotes] = useState('');
 
     // Time Criteria
-    const [, setSelectedBeginDate] = useState();
+    const [selectedBeginDate, setSelectedBeginDate] = useState();
     const [selectedBeginHour, setSelectedBeginHour] = useState();
-    const [, setSelectedEndDate] = useState();
+    const [selectedEndDate, setSelectedEndDate] = useState();
     const [selectedEndHour, setSelectedEndHour] = useState();
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
@@ -82,7 +82,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         onCheckNumberChange({ target: { value: checkNumber } }, checkTypeCode);
         setSelectedCheckResult(checkResultCode);
         setSelectedFacility(facilityId);
-        setSelectedReason(reasonCode);
+        setSelectedReasonCode(reasonCode);
         setSelectedSeverityCode(severityCode);
         setSelectedNotes(note);
 
@@ -151,12 +151,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         });
     }, []);
 
-    const saveFunc = () => {
-        // Make api call here later on to save and create new ES
-        // Might move this to ErrorSuppressionDataContainer and pass in as prop
-        close();
-    }
-
     const onChangeOfLocationMultiSelect = (id, changeType) => {
         const uniqueLocations = [
             ...new Set([...selectedLocations, id]),
@@ -222,16 +216,18 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         // set the actual catalog result object
         const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
         const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
+        console.log(checkCatalogResult)
         setSelectedCheckResultObj(checkCatalogResult);
-
+        console.log(checkCatalogResult)
         createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
             setMatchDataList(universalMatchDataList)
         });
 
-        if (selectedCheckType && selectedCheckNumber && value) {
+        const facility = facilityList.find(f => f.value === selectedFacility)
+
+        if (selectedCheckType && selectedCheckNumber && value && facility) {
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value)
 
-            const facility = facilityList.find(f => f.id === selectedFacility)
             getLocations(facility.orisCode, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc])
             }).catch(err => {
@@ -251,9 +247,10 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             createMatchTypeDropdownLists(selectedCheckResultObj, value).then(universalMatchDataList => {
                 setMatchDataList(universalMatchDataList)
             });
+            const facility = facilityList.find(f=>f.value === value);
 
             const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult)
-            getLocations(value, checkResultObj).then(availLoc => {
+            getLocations(facility.orisCode, checkResultObj).then(availLoc => {
                 setLocationData([...availLoc]);
             });
         }
@@ -263,8 +260,29 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         let { value } = e.target;
         value = value === "false" ? false : value;
 
-        setSelectedMatchDataType(value);
+        setSelectedMatchDataValue(value);
     }
+
+    const saveFunc = () => {
+        // Make api call here later on to save and create new ES
+        // Might move this to ErrorSuppressionDataContainer and pass in as prop
+        const payload = {
+            checkCatalogResultId: selectedCheckResultObj.id,
+            severityCode: selectedSeverityCode,
+            facilityId: selectedFacility,
+            locations: selectedLocations,
+            matchDataTypeCode: selectedCheckResultObj.dataTypeCode,
+            matchDataValue: selectedMatchDataValue,
+            matchTimeTypeCode: selectedCheckResultObj.timeTypeCode,
+            matchTimeBeginValue: "2023-06-15T15:10:07.538Z",
+            matchTimeEndValue: "2023-06-15T15:10:07.538Z",
+            matchHistoricalIndicator: selectedIsHistorical,
+            reasonCode: selectedReasonCode,
+            note: selectedNotes,
+          }
+        close();
+    }
+
 
     return (
         <div>
@@ -364,8 +382,8 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                 name={"add-reason"}
                                 epa-testid={"add-reason"}
                                 data-testid={"add-reason"}
-                                value={selectedReason}
-                                onChange={(e) => setSelectedReason(e.target.value)}
+                                value={selectedReasonCode}
+                                onChange={(e) => setSelectedReasonCode(e.target.value)}
                             >
                                 <option value={"false"}>{defaultDropdownText}</option>
                                 {reasonCodeList.map((d) => (
@@ -432,7 +450,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     name={"add-fuel-type"}
                                     epa-testid={"add-fuel-type"}
                                     data-testid={"add-fuel-type"}
-                                    value={selectedMatchDataType}
+                                    value={selectedMatchDataValue}
                                     onChange={onMatchDataTypeChange}
                                 >
                                     <option value={"false"}>{defaultDropdownText}</option>
