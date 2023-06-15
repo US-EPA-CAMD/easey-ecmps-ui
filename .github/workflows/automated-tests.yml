@@ -1,4 +1,4 @@
-name: Trigger Automated Tests on a CRON Schedule
+name: Automated Tests-CRON
 
 on:
   schedule:
@@ -23,6 +23,13 @@ jobs:
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
           
+      - name: Setup & Configure Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com/
+          scope: '@us-epa-camd'
+
       - name: Run
         run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
         env:
