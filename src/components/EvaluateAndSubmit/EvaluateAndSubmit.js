@@ -44,12 +44,6 @@ export const EvaluateAndSubmit = ({
   const [title, setTitle] = useState("Submit");
   const [buttonText, setButtonText] = useState("Sign & Submit");
 
-  console.log(
-    " checkedOutLocations, user, componentType,",
-    checkedOutLocations,
-    user,
-    componentType
-  );
   const storedFilters = useRef(null);
 
   const evalClickedAtTime = useRef(0);
@@ -89,8 +83,6 @@ export const EvaluateAndSubmit = ({
     } else if (!finalSubmitStage && componentType === "Submission") {
       setTitle("Submit");
       setButtonText("Sign & Submit");
-    } else if (componentType === "SubmissionAccess") {
-      setTitle("Maintain EM Submission Access");
     } else {
       setTitle("Evaluate");
       setButtonText("Evaluate");
@@ -446,7 +438,7 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData?.displayAlert && componentType !== "SubmissionAccess" && (
+      {waitTimeData?.displayAlert && (
         <Alert
           className="margin-y-2"
           type="info"
@@ -503,22 +495,19 @@ export const EvaluateAndSubmit = ({
           componentType={componentType}
         />
       )}
-      {componentType !== "SubmissionAccess" ? (
-        <div>
-          <DataTables
-            dataList={dataList}
-            permissions={idToPermissionsMap} //Map of oris codes to user permissions
-            updateFilesSelected={updateFilesSelected}
-            componentType={componentType}
-            monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
-            userCheckedOutPlans={userCheckedOutPlans}
-          />
 
-          <LoadingModal type="Loading" loading={submitting} />
-        </div>
-      ) : (
-        ""
-      )}
+      <div>
+        <DataTables
+          dataList={dataList}
+          permissions={idToPermissionsMap} //Map of oris codes to user permissions
+          updateFilesSelected={updateFilesSelected}
+          componentType={componentType}
+          monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
+          userCheckedOutPlans={userCheckedOutPlans}
+        />
+
+        <LoadingModal type="Loading" loading={submitting} />
+      </div>
 
       {showModal && (
         <SubmissionModal
@@ -531,7 +520,7 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      {!finalSubmitStage && componentType !== "SubmissionAccess" && (
+      {!finalSubmitStage && (
         <div className=" grid-row">
           <div className="grid-col-10"></div>
           <div className="grid-col-2">

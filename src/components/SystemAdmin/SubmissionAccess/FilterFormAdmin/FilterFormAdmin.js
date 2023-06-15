@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { getMonitoringPlans } from "../../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../../utils/api/mdmApi";
 import DropdownSelection from "../../../DropdownSelection/DropdownSelection";
+import {
+  QA_CERT_DATA_MAINTENANCE_STORE_NAME,
+  SUBMISSION_ACCESS_STORE_NAME,
+} from "../../../../additional-functions/system-admin-section-and-store-names";
 
 import { getAllFacilities } from "../../../../utils/api/facilityApi";
 import {
@@ -23,6 +27,7 @@ const FilterFormAdmin = ({
   filesSelected,
   buttonText,
   filterClick,
+  section,
 }) => {
   const defaultDropdownText = "-- Select a value --";
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
@@ -214,58 +219,91 @@ const FilterFormAdmin = ({
               />
             </div>
           </Grid>
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
+            <Grid col={2}>
+              <div className="margin-left-3 ">
+                <Label test-id={"type-name-label"} htmlFor={"type-name"}>
+                  Type
+                </Label>
+                <ComboBox
+                  id="type-name"
+                  name="type-name"
+                  epa-testid={"type-name"}
+                  data-testid={"type-name"}
+                  options={availableConfigurations}
+                  onChange={configurationFilterChange}
+                  disableFiltering={true}
+                />
+              </div>
+            </Grid>
+          ) : (
+            ""
+          )}
         </Grid>
         <Grid row className="margin-top-2">
-          <Grid col={2}  >
-            <Label
-              test-id={"reporting-period-name-label"}
-              htmlFor={"reporting-period-name"}
-            >
-              Reporting Period
-            </Label>
-            <ComboBox
-              id="reporting-period-name"
-              name="reporting-period-name"
-              epa-testid={"reporting-period-name"}
-              data-testid={"reporting-period-name"}
-              options={availableReportingPeriods}
-              onChange={reportingPeriodFilterChange}
-              disableFiltering={true}
-            />
-          </Grid>
-          <Grid col={3}>
-            <div className="margin-left-2">
-              <Label test-id={"status-name-label"} htmlFor={"status-name"}>
-                Status
-              </Label>
-              <ComboBox
-                id="status-name"
-                name="status-name"
-                epa-testid={"status-name"}
-                data-testid={"status-name"}
-                options={availStatus}
-                onChange={(option) => setSelectedStatus(option)}
-                disableFiltering={true}
-              />
-            </div>
-          </Grid>
+          {section === SUBMISSION_ACCESS_STORE_NAME ? (
+            <>
+              <Grid col={2}>
+                <Label
+                  test-id={"reporting-period-name-label"}
+                  htmlFor={"reporting-period-name"}
+                >
+                  Reporting Period
+                </Label>
+                <ComboBox
+                  id="reporting-period-name"
+                  name="reporting-period-name"
+                  epa-testid={"reporting-period-name"}
+                  data-testid={"reporting-period-name"}
+                  options={availableReportingPeriods}
+                  onChange={reportingPeriodFilterChange}
+                  disableFiltering={true}
+                />
+              </Grid>
+              <Grid col={3}>
+                <div className="margin-left-2">
+                  <Label test-id={"status-name-label"} htmlFor={"status-name"}>
+                    Status
+                  </Label>
+                  <ComboBox
+                    id="status-name"
+                    name="status-name"
+                    epa-testid={"status-name"}
+                    data-testid={"status-name"}
+                    options={availStatus}
+                    onChange={(option) => setSelectedStatus(option)}
+                    disableFiltering={true}
+                  />
+                </div>
+              </Grid>{" "}
+            </>
+          ) : (
+            ""
+          )}
           <Grid col={4} className=" position-relative margin-top-3">
-            <div className="position-absolute right-0 bottom-0">
-            <Button
-              //   disabled={availableConfigState.length === 0}
-              onClick={clearFilters}
-              outline={true}
+            <div
+              className={
+                section === SUBMISSION_ACCESS_STORE_NAME
+                  ? "position-absolute right-0 bottom-0"
+                  : " "
+              }
             >
-              Clear
-            </Button>
+              <Button
+                //   disabled={availableConfigState.length === 0}
+                onClick={clearFilters}
+                outline={true}
+              >
+                Clear
+              </Button>
 
-            <Button
-              disabled={!(selectedFacility && selectedStatus)}
-              //   onClick={applyFilters}
-              outline={false}
-            >
-              Apply Filter(s)
-            </Button></div>
+              <Button
+                disabled={!(selectedFacility && selectedStatus)}
+                //   onClick={applyFilters}
+                outline={false}
+              >
+                Apply Filter(s)
+              </Button>
+            </div>
           </Grid>
         </Grid>
       </GridContainer>
