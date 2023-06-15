@@ -13,6 +13,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+    
+      - name: Setup & Configure Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com/
 
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -22,13 +28,7 @@ jobs:
         with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
-          
-      - name: Setup & Configure Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          registry-url: https://npm.pkg.github.com/
-          scope: '@us-epa-camd'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run
         run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
