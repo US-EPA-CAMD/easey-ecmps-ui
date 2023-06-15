@@ -1,4 +1,3 @@
-
 export const sortByUpdateDate = (a, b) => {
   return new Date(a.updateDate) - new Date(b.updateDate);
 };
@@ -107,35 +106,41 @@ export const formatSubmissionWindow = (window) => {
 
 export const formatTimeStamp = (timeStamp) => {
   const date = new Date(timeStamp);
-  return `${date.getFullYear()}-${(date.getMonth()).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')} ${(date.getHours()).toString().padStart(2, '0')}:${(date.getMinutes()).toString().padStart(2, '0')}`
-}
+  return `${date.getFullYear()}-${date
+    .getMonth()
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+};
 
 export const monPlanColumns = [
   {
     name: "ORIS Code",
-    selector: "orisCode",
+    selector: (row) => row.orisCode,
     sortable: true,
   },
   {
     name: "Facility Name",
-    selector: "facilityName",
+    selector: (row) => row.facilityName,
     sortable: true,
   },
   {
     name: "Configuration",
-    selector: "name",
+    selector: (row) => row.name,
     sortable: true,
   },
   {
     name: "Last Modified By",
-    selector: "userId",
+    selector: (row) => row.userId,
     sortable: true,
   },
   {
     name: "Last Modified Date/Time",
     selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByUpdateDate,
   },
 ];
@@ -143,65 +148,65 @@ export const monPlanColumns = [
 export const qaTestSummaryColumns = [
   {
     name: "ORIS Code",
-    selector: "orisCode",
+    selector: (row) => row.orisCode,
     sortable: true,
   },
   {
     name: "Facility Name",
-    selector: "facilityName",
+    selector: (row) => row.facilityName,
     sortable: true,
   },
   {
     name: "Location Info",
-    selector: "locationInfo",
+    selector: (row) => row.locationInfo,
     sortable: true,
   },
   {
     name: "System/Component ID",
-    selector: "systemComponentId",
+    selector: (row) => row.systemComponentId,
     sortable: true,
   },
   {
     name: "Test Type",
-    selector: "testTypeCode",
+    selector: (row) => row.testTypeCode,
     sortable: true,
   },
   {
     name: "Test Number",
-    selector: "testNum",
+    selector: (row) => row.testNum,
     sortable: true,
     width: "180px",
   },
   {
     name: "Year/Quarter",
-    selector: "periodAbbreviation",
+    selector: (row) => row.periodAbbreviation,
     sortFunction: sortByPeriodAbbreviation,
     sortable: true,
   },
   {
     name: "Begin Date/Time",
-    selector: "beginDate",
+    selector: (row) => row.beginDate,
     sortable: true,
     // sortFunction: sortByBeginDate,
-    wrap: true
+    wrap: true,
   },
   {
     name: "End Date/Time",
-    selector: "endDate",
+    selector: (row) => row.endDate,
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByEndDate,
   },
   {
     name: "Last Modified By",
-    selector: "userId",
+    selector: (row) => row.userId,
     sortable: true,
   },
   {
     name: "Last Modified Date/Time",
     selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByUpdateDate,
   },
 ];
@@ -209,65 +214,65 @@ export const qaTestSummaryColumns = [
 export const qaCertEventColumns = [
   {
     name: "ORIS Code",
-    selector: "orisCode",
+    selector: (row) => row.orisCode,
     sortable: true,
   },
   {
     name: "Facility Name",
-    selector: "facilityName",
+    selector: (row) => row.facilityName,
     sortable: true,
   },
   {
     name: "Location Info",
-    selector: "locationInfo",
+    selector: (row) => row.locationInfo,
     sortable: true,
   },
   {
     name: "System/Component ID",
-    selector: "systemComponentIdentifier",
+    selector: (row) => row.systemComponentIdentifier,
     sortable: true,
   },
   {
     name: "Event Code",
-    selector: "qaCertEventCode",
+    selector: (row) => row.qaCertEventCode,
     sortable: true,
   },
   {
     name: "Event Date/Time",
-    selector: "eventDate",
+    selector: (row) => row.eventDate,
     sortable: true,
     // sortFunction: sortByEventDate,
-    wrap: true
+    wrap: true,
   },
   {
     name: "Required Test Code",
-    selector: "requiredTestCode",
+    selector: (row) => row.requiredTestCode,
     sortable: true,
   },
   {
     name: "Conditional Date/Time",
-    selector: "conditionDate",
+    selector: (row) => row.conditionDate,
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByConditionDateHour,
   },
   {
     name: "Completion Date/Time",
-    selector: "lastCompletion",
+    selector: (row) => row.lastCompletion,
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByCompletionDateHour,
   },
   {
     name: "Last Modified By",
-    selector: "userid",
+    selector: (row) => row.userid,
     sortable: true,
   },
   {
     name: "Last Modified Date/Time",
     selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByUpdateDate,
   },
 ];
@@ -275,60 +280,60 @@ export const qaCertEventColumns = [
 export const qaTeeColumns = [
   {
     name: "ORIS Code",
-    selector: "orisCode",
+    selector: (row) => row.orisCode,
     sortable: true,
   },
   {
     name: "Facility Name",
-    selector: "facilityName",
+    selector: (row) => row.facilityName,
     sortable: true,
   },
   {
     name: "Location Info",
-    selector: "locationInfo",
+    selector: (row) => row.locationInfo,
     sortable: true,
   },
   {
     name: "System/Component ID",
-    selector: "systemComponentIdentifier",
+    selector: (row) => row.systemComponentIdentifier,
     sortable: true,
   },
   {
     name: "Year/Quarter",
-    selector: "periodAbbreviation",
+    selector: (row) => row.periodAbbreviation,
     sortFunction: sortByPeriodAbbreviation,
     sortable: true,
   },
   {
     name: "Fuel Code",
-    selector: "fuelCd",
+    selector: (row) => row.fuelCd,
     sortable: true,
   },
   {
     name: "Extension/ Exemption Code",
-    selector: "extensExemptCode",
+    selector: (row) => row.extensExemptCode,
     sortable: true,
   },
   {
     name: "Hours Used",
-    selector: "hoursUsed",
+    selector: (row) => row.hoursUsed,
     sortable: true,
   },
   {
     name: "Span Scale Code",
-    selector: "spanScaleCode",
+    selector: (row) => row.spanScaleCode,
     sortable: true,
   },
   {
     name: "Last Modified By",
-    selector: "userid",
+    selector: (row) => row.userid,
     sortable: true,
   },
   {
     name: "Last Modified Date/Time",
     selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByUpdateDate,
   },
 ];
@@ -336,36 +341,36 @@ export const qaTeeColumns = [
 export const emissionsColumns = [
   {
     name: "ORIS Code",
-    selector: "orisCode",
+    selector: (row) => row.orisCode,
     sortable: true,
     maxWidth: "100px",
   },
   {
     name: "Facility Name",
-    selector: "facilityName",
+    selector: (row) => row.facilityName,
     sortable: true,
   },
   {
     name: "Configuration",
-    selector: "configuration",
+    selector: (row) => row.configuration,
     sortable: true,
   },
   {
     name: "Year/Quarter",
-    selector: "periodAbbreviation",
+    selector: (row) => row.periodAbbreviation,
     sortFunction: sortByPeriodAbbreviation,
     sortable: true,
   },
   {
     name: "Last Modified By",
-    selector: "userid",
+    selector: (row) => row.userid,
     sortable: true,
   },
   {
     name: "Last Modified Date/Time",
     selector: (row) => formatTimeStamp(row.updateDate),
     sortable: true,
-    wrap: true
+    wrap: true,
     // sortFunction: sortByUpdateDate,
   },
   {

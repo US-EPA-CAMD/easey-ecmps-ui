@@ -3,12 +3,10 @@ import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
-import DropdownSelection from "../../DropdownSelection/DropdownSelection";
- 
+
 const FilterForm = ({
   facilities,
   queryCallback,
-  showModal,
   setExcludeErrors,
   filesSelected,
   buttonText,
@@ -26,7 +24,6 @@ const FilterForm = ({
   const selectedOrisCodes = useRef([]);
   const selectedReportingPeriods = useRef([]);
 
-  const [availStatus, setAvailStatus] = useState([{code: '',name:'test'}])
   async function fetchReportingPeriods() {
     const reportingPeriodList = (await getReportingPeriods()).data;
 
@@ -97,8 +94,6 @@ const FilterForm = ({
   }
 
   async function configurationFilterChange(id, action) {
-
-    console.log('id',id)
     const objectEntry = availableConfigurations.current.find(
       (item) => item.id === id
     );
@@ -112,7 +107,6 @@ const FilterForm = ({
   }
 
   async function facilityFilterChange(id, action) {
-    console.log('id',id,action)
     id = id.toString();
 
     let newState;
@@ -132,7 +126,6 @@ const FilterForm = ({
       ? (await getMonitoringPlans(newState)).data
       : [];
 
-      console.log('configurationData',configurationData,newState)
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -200,9 +193,10 @@ const FilterForm = ({
         <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="facility-dropdown"
               key={`facilities-${availableFacilities.length}`}
               items={availableFacilities}
-              entity={"Facilities"}
+              entity={"facilities"}
               label={"Facilities"}
               searchBy="contains"
               onChangeUpdate={facilityFilterChange}
@@ -214,9 +208,10 @@ const FilterForm = ({
         <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="configuration-dropdown"
               key={`configs-${availableConfigState.length}`}
               items={availableConfigurations.current}
-              entity={"Configurations"}
+              entity={"configurations"}
               label={"Configurations"}
               searchBy="contains"
               onChangeUpdate={configurationFilterChange}
@@ -228,9 +223,10 @@ const FilterForm = ({
         <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="reporting-period-dropdown"
               key={`periods-${availableReportingPeriods.length}`}
               items={availableReportingPeriods}
-              entity={"Reporting-Periods"}
+              entity={"reporting-periods"}
               label={"Reporting Periods"}
               searchBy="contains"
               onChangeUpdate={reportingPeriodFilterChange}
@@ -239,25 +235,6 @@ const FilterForm = ({
             />
           </div>
         </div>
-
-        {componentType === "SubmissionAccess" ? (
-          <div className="grid-col-2 desktop:grid-col-2 margin-top-2">
-            <div className="margin-right-2">
-              <DropdownSelection
-                selectKey={'code'}
-                viewKey={'name'}
-                options={availStatus}
-                caption={"Status"}
-                searchBy="contains"
-                selectionHandler={(option) => console.log('option',option)}
-                autoFocus={false}
-                iconAlignRight={3}
-              />
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
         <div className="buttons grid-col-9 desktop:grid-col-2 padding-top-1">
           <div
             id="submit-button-group"
@@ -275,19 +252,20 @@ const FilterForm = ({
               ""
             )}
             <Button
+              data-testid={"apply-filter"}
               disabled={availableConfigState.length === 0}
               onClick={applyFilters}
               outline={componentType === "SubmissionAccess" ? false : true}
             >
               Apply Filter(s)
             </Button>
-            {componentType !== "SubmissionAccess" ? (
-              <Button onClick={filterClick} disabled={filesSelected === 0}>
-                {buttonText}
-              </Button>
-            ) : (
-              ""
-            )}
+            <Button
+              data-testid="filter-callback-button"
+              onClick={filterClick}
+              disabled={filesSelected === 0}
+            >
+              {buttonText}
+            </Button>
           </div>
         </div>
       </div>
