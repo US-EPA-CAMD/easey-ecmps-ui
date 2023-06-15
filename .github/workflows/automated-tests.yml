@@ -30,7 +30,6 @@ jobs:
       with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
-          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build with Maven
       run: mvn test
