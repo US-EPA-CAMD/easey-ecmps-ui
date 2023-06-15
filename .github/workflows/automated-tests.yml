@@ -6,10 +6,8 @@ on:
     - cron: '0 0 * * 5,2'
 
 jobs:
-  build:
-    name: Trigger Automated Tests
+  Automated-Tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
