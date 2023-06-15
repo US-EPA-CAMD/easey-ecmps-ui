@@ -9,14 +9,13 @@ jobs:
   Automated-Tests:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello World"
-      # - name: Checkout Repo
-      #   uses: actions/checkout@v3
-      #   with: 
-      #     repository: US-EPA-CAMD/easey-testing
-      #     path: easey-testing
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with: 
+          repository: US-EPA-CAMD/easey-testing
+          path: easey-testing
 
-      # - name: Run
-      #   run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      - name: Run
+        run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
