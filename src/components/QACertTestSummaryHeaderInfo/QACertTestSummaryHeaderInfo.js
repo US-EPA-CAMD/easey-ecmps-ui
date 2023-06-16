@@ -50,7 +50,6 @@ export const QACertTestSummaryHeaderInfo = ({
   ///
   setUpdateRelatedTables,
 }) => {
-  console.log('sectionSelect',sectionSelect,configID)
   const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
