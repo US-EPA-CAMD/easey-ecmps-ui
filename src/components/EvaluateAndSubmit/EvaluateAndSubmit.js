@@ -228,7 +228,7 @@ export const EvaluateAndSubmit = ({
     }
   };
 
-  const finalSubmission = (callback) => {
+  const finalSubmission = async (callback) => {
     evalClickedAtTime.current = new Date().getTime();
     setSubmitting(true);
     const activeMPSet = new Set();
@@ -319,27 +319,26 @@ export const EvaluateAndSubmit = ({
       payload.items.push(newItem);
     }
 
-    callback(payload)
-      .then(() => {
-        checkInAllCheckedOutLocations();
-        setSubmitting(false);
-        if (componentType === "Submission") {
-          window.location.reload(false);
-        } else {
-          for (const value of dataList) {
-            const { ref } = value;
-            for (const chunk of ref.current) {
-              chunk.selected = false;
-            }
+    try {
+      await callback(payload);
+      checkInAllCheckedOutLocations();
+      setSubmitting(false);
+      if (componentType === "Submission") {
+        window.location.reload(false);
+      } else {
+        for (const value of dataList) {
+          const { ref } = value;
+          for (const chunk of ref.current) {
+            chunk.selected = false;
           }
-          monitorPlanIdToSelectedMap.current = new Map();
-          setNumFilesSelected(0);
         }
-      })
-      .catch((e) => {
-        handleError(e);
-        setSubmitting(false);
-      });
+        monitorPlanIdToSelectedMap.current = new Map();
+        setNumFilesSelected(0);
+      }
+    } catch (e) {
+      handleError(e);
+      setSubmitting(false);
+    }
   };
 
   const checkInAllCheckedOutLocations = () => {
@@ -373,6 +372,10 @@ export const EvaluateAndSubmit = ({
     };
 
     let activePlans = new Set();
+    const filterActive = (d) => {
+      return activePlans.has(d.monPlanId);
+    };
+
     for (const value of dataList) {
       const { ref, setState, call, type } = value;
 
@@ -409,7 +412,7 @@ export const EvaluateAndSubmit = ({
         data = data.filter((mpd) => mpd.active);
         activePlans = new Set(data.map((d) => d.monPlanId));
       } else {
-        data = data.filter((d) => activePlans.has(d.monPlanId));
+        data = data.filter(filterActive);
       }
 
       if (excludeErrors && componentType === "Submission") {
@@ -438,30 +441,32 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
-      {waitTimeData?.displayAlert && (
-        <Alert
-          className="margin-y-2"
-          type="info"
-          heading={waitTimeData?.title}
-          headingLevel="h4"
-        >
-          {waitTimeData?.content}
-        </Alert>
-      )}
-      <div className="text-black flex-justify margin-top-1 grid-row">
-        {componentType === "Submission" && (
-          <div className="grid-row">
-            {
-              <Alert type="warning" heading="Warning" headingLevel="h4">
-                The submission process is still under construction. The final
-                sign and submit, with files being loaded to the database is not
-                yet integrated.
-              </Alert>
-            }
-          </div>
+      <div className="text-black flex-justify margin-top-1 grid-row flex-column">
+        {waitTimeData?.displayAlert && (
+          <Alert
+            className="margin-y-2"
+            type="info"
+            heading={waitTimeData?.title}
+            headingLevel="h4"
+          >
+            {waitTimeData?.content}
+          </Alert>
         )}
 
-        <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
+        {componentType === "Submission" && (
+          <Alert type="warning" heading="Warning" headingLevel="h4">
+            The submission process is still under construction. The final sign
+            and submit, with files being loaded to the database is not yet
+            integrated.
+          </Alert>
+        )}
+
+        <h2
+          data-testid="page-title"
+          className="grid-col-9 page-header margin-top-2"
+        >
+          {title}
+        </h2>
         {/* {finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
@@ -496,18 +501,16 @@ export const EvaluateAndSubmit = ({
         />
       )}
 
-      <div>
-        <DataTables
-          dataList={dataList}
-          permissions={idToPermissionsMap} //Map of oris codes to user permissions
-          updateFilesSelected={updateFilesSelected}
-          componentType={componentType}
-          monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
-          userCheckedOutPlans={userCheckedOutPlans}
-        />
+      <DataTables
+        dataList={dataList}
+        permissions={idToPermissionsMap} //Map of oris codes to user permissions
+        updateFilesSelected={updateFilesSelected}
+        componentType={componentType}
+        monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
+        userCheckedOutPlans={userCheckedOutPlans}
+      />
 
-        <LoadingModal type="Loading" loading={submitting} />
-      </div>
+      <LoadingModal type="Loading" loading={submitting} />
 
       {showModal && (
         <SubmissionModal
@@ -534,7 +537,7 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {finalSubmitStage && (
+        {/*finalSubmitStage && (
           <Button
             className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
             size="big"
@@ -544,7 +547,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )}
+          )*/}
       </div>
     </div>
   );

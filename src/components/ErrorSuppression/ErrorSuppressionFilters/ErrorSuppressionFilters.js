@@ -388,7 +388,7 @@ export const ErrorSuppressionFilters = () => {
               data-testid={"facility-name"}
               options={facilityList}
               onChange={onFacilityChange}
-              disableFiltering={true}
+              disableFiltering={false}
             />
 
           </Grid>
