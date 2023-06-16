@@ -122,18 +122,18 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                 break;
             case ("HOUR"):
                 setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
-                setSelectedBeginHour(matchTimeBeginValue ? new Date(matchTimeBeginValue).getUTCHours() : undefined);
+                setSelectedBeginHour(matchTimeBeginValue ? new Date(matchTimeBeginValue).getHours() : undefined);
                 setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
-                setSelectedEndHour(matchTimeEndValue ? new Date(matchTimeEndValue).getUTCHours() : undefined);
+                setSelectedEndHour(matchTimeEndValue ? new Date(matchTimeEndValue).getHours() : undefined);
                 break;
             case ("DATE"):
                 setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
                 setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
                 break;
             case ("QUARTER"):
-                const beginYearQuarter = matchTimeBeginValue ? `${new Date(matchTimeBeginValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeBeginValue), true)}` : undefined;
+                const beginYearQuarter = matchTimeBeginValue ? `${new Date(matchTimeBeginValue).getFullYear()} Q${getQuarter(new Date(matchTimeBeginValue), true)}` : undefined;
                 setSelectedBeginQuarter(beginYearQuarter);
-                const endYearQuarter = matchTimeEndValue ? `${new Date(matchTimeEndValue).getUTCFullYear()} Q${getQuarter(new Date(matchTimeEndValue), true)}` : undefined;
+                const endYearQuarter = matchTimeEndValue ? `${new Date(matchTimeEndValue).getFullYear()} Q${getQuarter(new Date(matchTimeEndValue), true)}` : undefined;
                 setSelectedEndQuarter(endYearQuarter);
                 break;
             default:

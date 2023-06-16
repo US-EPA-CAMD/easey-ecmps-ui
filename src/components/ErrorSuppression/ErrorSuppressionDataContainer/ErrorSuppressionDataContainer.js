@@ -130,25 +130,25 @@ export const ErrorSuppressionDataContainer = () => {
         beginTime = `${formatDate(
           row.matchTimeBeginValue,
           "/"
-        )}  ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
+        )}  ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
       }
       if (row.matchTimeEndValue) {
         const d = new Date(row.matchTimeEndValue);
         endTime = `${formatDate(
           row.matchTimeEndValue,
           "/"
-        )}  ${d.getUTCHours()}:${d.getUTCMinutes()}:${d.getUTCSeconds()}`;
+        )}  ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
       }
     }
 
     if (row.matchTimeTypeCode === "QUARTER") {
       if (row.matchTimeBeginValue) {
         const d = new Date(row.matchTimeBeginValue);
-        beginTime = `${d.getUTCFullYear()} Q${getQuarter(d, true)}`;
+        beginTime = `${d.getFullYear()} Q${getQuarter(d, true)}`;
       }
       if (row.matchTimeEndValue) {
         const d = new Date(row.matchTimeEndValue);
-        endTime = `${d.getUTCFullYear()} Q${getQuarter(d, true)}`;
+        endTime = `${d.getFullYear()} Q${getQuarter(d, true)}`;
       }
     }
 
@@ -164,7 +164,7 @@ export const ErrorSuppressionDataContainer = () => {
     return `${formatDate(
       dateString,
       "/"
-    )} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCMinutes()}`;
+    )} ${date.getHours()}:${date.getMinutes()}:${date.getMinutes()}`;
   };
 
   const closeModal = () => {
