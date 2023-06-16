@@ -31,6 +31,12 @@ import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
+
+import {
+  QA_CERT_DATA_MAINTENANCE_STORE_NAME,
+  SUBMISSION_ACCESS_STORE_NAME,
+} from "../../additional-functions/system-admin-section-and-store-names";
+
 import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
@@ -387,7 +393,7 @@ const App = () => {
           />
           <Route
             path="/admin/qa-maintenance"
-            element={!user ? <Navigate to="/" /> : <ComingSoon />}
+            element={!user ? <Navigate to="/" /> :<SubmissionAccess user ={user} section={QA_CERT_DATA_MAINTENANCE_STORE_NAME} />}
           />
           <Route
             path="/admin/error-suppression"
@@ -397,6 +403,16 @@ const App = () => {
           />
           <Route
             path="/admin/em-submission-access"
+            element={!user ? <Navigate to="/" /> : <SubmissionAccess user ={user} section={SUBMISSION_ACCESS_STORE_NAME} />}
+          />
+          <Route
+            path="/reports"
+            element={
+              user ? <Navigate to="/workspace/reports" /> : <ReportGenerator />
+            }
+          />
+          <Route
+            path="/workspace/reports"
             element={
               !user ? <Navigate to="/" /> : <SubmissionAccess user={user} />
             }
