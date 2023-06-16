@@ -8,7 +8,8 @@ import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import { getUniqueCheckTypeDescription, getLocations } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { formatDate, getQuarter } from "../../../utils/functions";
-import { createMatchTypeDropdownLists } from "./esFunctions";
+import { convertYearQuarterToDateString, createMatchTypeDropdownLists } from "./esFunctions";
+import { createErrorSuppression } from "../../../utils/api/errorSuppressionApi";
 
 export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
@@ -263,30 +264,72 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         setSelectedMatchDataValue(value);
     }
 
-    const saveFunc = () => {
+    const saveFunc = async () => {
+
+        const {id, dataTypeCode, timeTypeCode} = selectedCheckResultObj;
+        let matchTimeBeginValue=null;
+        let matchTimeEndValue=null;
+
+        console.log(selectedBeginDate)
+        console.log(selectedEndDate)
+        if(selectedCheckResultObj.timeTypeCode === "DATE"){
+
+            matchTimeBeginValue = selectedBeginDate;
+            matchTimeEndValue = selectedEndDate;
+        }
+
+        if( selectedCheckResultObj.timeTypeCode === "HOUR"){
+            const beginDateObj = new Date(selectedBeginDate);
+            const endDateObj = new Date(selectedEndDate);
+            beginDateObj.setHours(selectedBeginHour);
+            endDateObj.setHours(selectedEndHour);
+
+            matchTimeBeginValue = beginDateObj.toISOString();
+            matchTimeEndValue = endDateObj.toISOString();
+        }
+
+        if( selectedCheckResultObj.timeTypeCode === "QUARTER"){
+            matchTimeBeginValue = convertYearQuarterToDateString(selectedBeginQuarter);
+            matchTimeEndValue = convertYearQuarterToDateString(selectedEndQuarter);
+        }
+
+        // selectedLocations is an array of location ids. For the creation API call, we actually need the unit/stack name which is the label of the MultiselectCombobox
+        const locationIds = selectedLocations.map(selectedId => locationData.find(ld => ld.id === selectedId)?.label)
+                                            .filter(loc=>loc!== null && loc !== undefined) // just sanity checking
+
         // Make api call here later on to save and create new ES
         // Might move this to ErrorSuppressionDataContainer and pass in as prop
         const payload = {
-            checkCatalogResultId: selectedCheckResultObj.id,
+            checkCatalogResultId: parseInt(id),
             severityCode: selectedSeverityCode,
             facilityId: selectedFacility,
-            locations: selectedLocations,
-            matchDataTypeCode: selectedCheckResultObj.dataTypeCode,
+            locations: locationIds.join(","),
+            matchDataTypeCode: dataTypeCode,
             matchDataValue: selectedMatchDataValue,
-            matchTimeTypeCode: selectedCheckResultObj.timeTypeCode,
-            matchTimeBeginValue: "2023-06-15T15:10:07.538Z",
-            matchTimeEndValue: "2023-06-15T15:10:07.538Z",
+            matchTimeTypeCode: timeTypeCode,
+            matchTimeBeginValue,
+            matchTimeEndValue,
             matchHistoricalIndicator: selectedIsHistorical,
             reasonCode: selectedReasonCode,
             note: selectedNotes,
           }
-        close();
+
+        try{
+            console.log("creating...")
+           const resp = await createErrorSuppression(payload)
+           console.log("finished...")
+           console.log(resp)
+        }catch(e){
+            console.error(e)
+        }finally{
+            close();
+        }
     }
 
 
     return (
         <div>
-            <Modal showDarkBg show={showModal} save={saveFunc} exitBTN={"Save and Close"} showSave title={"Add Error Suppression"} close={close} width={"1024px"}>
+            <Modal showDarkBg show={showModal} save={saveFunc} exitBTN={"Save and Close"} showSave title={"Add Error Suppression"} close={close} width={"1024px"}>   
                 <GridContainer className='margin-left-1'>
                     <Grid row gap={2}>
                         <h3>Check Result</h3>
@@ -483,6 +526,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     id="add-begin-date"
                                     name="add-begin-date"
                                     defaultValue={values?.matchTimeBeginValue}
+                                    onChange={(e)=>setSelectedBeginDate(new Date(e).toISOString())}
                                 />
                             </Grid>
                             <Grid col={2}>
@@ -516,6 +560,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     id="add-end-date"
                                     name="add-end-date"
                                     defaultValue={values?.matchTimeEndValue}
+                                    onChange={(e)=>setSelectedEndDate(new Date(e).toISOString())}
                                 />
                             </Grid>
                             <Grid col={3}>
@@ -553,6 +598,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     id="add-begin-date-2"
                                     name="add-begin-date-2"
                                     defaultValue={values?.matchTimeBeginValue}
+                                    onChange={(e)=>setSelectedBeginDate(new Date(e).toISOString())}
                                 />
                             </Grid>
                             <Grid col={3} >
@@ -567,6 +613,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     id="add-end-date-2"
                                     name="add-end-date-2"
                                     defaultValue={values?.matchTimeEndValue}
+                                    onChange={(e)=>setSelectedEndDate(new Date(e).toISOString())}
                                 />
                             </Grid>
                         </Grid> : null}
@@ -605,6 +652,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     value={selectedBeginQuarter}
                                     onChange={(e) => setSelectedBeginQuarter(e.target.value)}
                                 >
+                                    <option>{defaultDropdownText}</option>
                                     {yearQuarters.map((yearquarter) =>
                                         <option key={yearquarter} value={yearquarter}>{yearquarter}</option>
                                     )}
@@ -622,6 +670,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     value={selectedEndQuarter}
                                     onChange={(e) => setSelectedEndQuarter(e.target.value)}
                                 >
+                                    <option>{defaultDropdownText}</option>
                                     {yearQuarters.map((yearquarter) =>
                                         <option key={yearquarter} value={yearquarter}>{yearquarter}</option>
                                     )}

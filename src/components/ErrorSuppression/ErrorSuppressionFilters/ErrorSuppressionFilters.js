@@ -53,6 +53,7 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 export const getLocations = (facilityValue, checkResultObj) => {
       return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
           const locations = data.map((f) => f.locations).flat(1);
+
           let availLoc = locations?.map((l) => ({
               id: l.id,
               label: l.unitId,
@@ -69,10 +70,14 @@ export const getLocations = (facilityValue, checkResultObj) => {
               availLoc = [...availLoc, ...availStackPipe];
           }
           const locName = availLoc.map((l) => l.label);
-          return availLoc
+          const ll = availLoc
               .filter(({ label }, index) => !locName.includes(label, index + 1))
               .filter(({ label }) => label !== null)
               .sort((a, b) => a.label - b.label);
+
+              console.log("locationlist")
+              console.log(ll)
+          return ll;
       });
   };
 
@@ -178,7 +183,6 @@ export const ErrorSuppressionFilters = () => {
     }
    
     const onFacilityChange = (value) => {
-      console.log(value)
       setSelectedFacility(value);
       if (!value || value === defaultDropdownText) {
         setSelectedLocations([]);
