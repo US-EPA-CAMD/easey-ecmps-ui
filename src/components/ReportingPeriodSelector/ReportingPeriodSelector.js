@@ -9,6 +9,7 @@ const ReportingPeriodSelector = ({
   dataTypes,
   reportingPeriodSelectionHandler,
   exportState,
+  isQaCert = false,
   setLoading = () => { },
 }) => {
   const [reportingPeriods, setReportingPeriods] = useState(null);
@@ -19,7 +20,7 @@ const ReportingPeriodSelector = ({
     const fetchReportingPeriods = async () => {
       try {
         setLoading(true);
-        const resp = await getReportingPeriod(true);
+        const resp = await getReportingPeriod(isQaCert);
 
         if (!successResponses.includes(resp.status)) {
           throw new Error(`Fetch reporting periods failed with status: ${resp.status}`)
