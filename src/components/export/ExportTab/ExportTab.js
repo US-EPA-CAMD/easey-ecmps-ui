@@ -203,6 +203,7 @@ export const ExportTab = ({
               exportState={exportState}
               setLoading={setLoading}
               getInitSelection={getInitSelection}
+              isQaCert={true}
             />
           </div>
           <div className="grid-col-3">
