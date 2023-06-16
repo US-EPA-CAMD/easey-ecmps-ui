@@ -50,6 +50,7 @@ export const QACertTestSummaryHeaderInfo = ({
   ///
   setUpdateRelatedTables,
 }) => {
+  console.log('sectionSelect',sectionSelect,configID)
   const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
@@ -103,6 +104,7 @@ export const QACertTestSummaryHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
+          console.log('res.data',res.data)
           setAllTestTypeCodes(res.data);
         })
         .catch((error) => {
@@ -111,6 +113,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
       getAllTestTypeGroupCodes()
         .then((res) => {
+          console.log('res.data 2',res.data)
           const options = res.data
             .map((e) => {
               return {

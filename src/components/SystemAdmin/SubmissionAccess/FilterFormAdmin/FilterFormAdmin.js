@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { getMonitoringPlans } from "../../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../../utils/api/mdmApi";
-import DropdownSelection from "../../../DropdownSelection/DropdownSelection";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../../additional-functions/system-admin-section-and-store-names";
-
+import { DropdownSelection } from "../../../DropdownSelection/DropdownSelection";
+import {
+  getAllTestTypeCodes,
+  getAllTestTypeGroupCodes,
+} from "../../../../utils/api/dataManagementApi";
 import { getAllFacilities } from "../../../../utils/api/facilityApi";
 import {
   GridContainer,
@@ -18,6 +21,7 @@ import {
   ButtonGroup,
   ComboBox,
   Button,
+  FormGroup,
 } from "@trussworks/react-uswds";
 const FilterFormAdmin = ({
   facilities,
@@ -29,33 +33,81 @@ const FilterFormAdmin = ({
   filterClick,
   section,
 }) => {
-  const defaultDropdownText = "-- Select a value --";
+  const defaultDropdownText = "Select";
+  const initialSelectOption = { code: "", name: defaultDropdownText };
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
   );
   const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableConfigState, setAvailableConfigState] = useState([]);
 
-  const [availableConfigurations, setAvailableConfigurations] = useState([]);
+  const [availableConfigurations, setAvailableConfigurations] = useState([
+    initialSelectOption,
+  ]);
   const selectedOrisCodes = useRef([]);
   const selectedReportingPeriods = useRef([]);
 
   const [availStatus, setAvailStatus] = useState([
-    { value: "Open", label: "Open" },
-    { value: "Closed", label: "Closed" },
-    { value: "Pending", label: "Pending Approval" },
-    { value: "all", label: "Show All" },
+    initialSelectOption,
+    { code: "Open", name: "Open" },
+    { code: "Closed", name: "Closed" },
+    { code: "Pending", name: "Pending Approval" },
+    { code: "all", name: "Show All" },
   ]);
 
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState({
+    code: "",
+    name: defaultDropdownText,
+  });
   const [facility, setFacility] = useState([]);
   const [facilityList, setFacilityList] = useState([]);
   const [locations, setLocations] = useState([]);
   // Make all api calls that only need to happen once on page load here
 
   const [reset, setReset] = useState(false);
+
+  const [typeSelection, setTypeSelection] = useState([]);
+  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
+    { name: "Loading..." },
+  ]);
+
+  const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+
+  useEffect(() => {
+    const fetchTestTypeCodes = () => {
+      getAllTestTypeCodes()
+        .then((res) => {
+          setAllTestTypeCodes(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      getAllTestTypeGroupCodes()
+        .then((res) => {
+          const options = res.data
+            .map((e) => {
+              return {
+                name: e.testTypeGroupDescription,
+                code: e.testTypeGroupCode,
+              };
+            })
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+          options.unshift({
+            code: defaultDropdownText,
+            name: defaultDropdownText,
+          });
+          setTestTypeGroupOptions(options);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchTestTypeCodes();
+  }, []);
 
   async function fetchReportingPeriods() {
     const reportingPeriodList = (await getReportingPeriods()).data;
@@ -139,23 +191,16 @@ const FilterFormAdmin = ({
     }
     const availConfigs = [];
     for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      //Remove existing configurations that not longer have a monitor plan associated, or keep current ones selected
       const existingEntry = availableConfigurations.filter((item) => {
         return item.selected && item.label === name;
       });
-      let selected = false;
-      if (existingEntry.length > 0) {
-        selected = true;
-      }
 
       availConfigs.push({
-        id: name,
-        label: name,
-        selected: selected,
-        enabled: true,
-        monPlanId: monPlanId,
+        code: name,
+        name: name,
       });
     }
+    availConfigs.unshift(initialSelectOption);
     setAvailableConfigurations(availConfigs);
     setAvailableConfigState(availableConfigurations);
   };
@@ -179,7 +224,9 @@ const FilterFormAdmin = ({
       element.click();
     });
     setSelectedFacility(null);
+    setTypeSelection(null);
     setSelectedLocation(null);
+    setSelectedStatus(null);
   };
   return (
     <div className="container border-y-1px border-base-lighter padding-y-1 ">
@@ -200,39 +247,36 @@ const FilterFormAdmin = ({
             />
           </Grid>
 
-          <Grid col={4}>
+          <Grid col={3}>
             <div className="margin-left-2 ">
-              <Label
-                test-id={"configuration-name-label"}
-                htmlFor={"configuration-name"}
-              >
-                Configurations
-              </Label>
-              <ComboBox
-                id="configuration-name"
-                name="configuration-name"
-                epa-testid={"configuration-name"}
-                data-testid={"configuration-name"}
+              <DropdownSelection
+                caption=" Configurations"
+                selectionHandler={configurationFilterChange}
+                // options={sections}
                 options={availableConfigurations}
-                onChange={configurationFilterChange}
-                disableFiltering={true}
+                viewKey="name"
+                selectKey="name"
+                initialSelection={selectedLocation ? selectedLocation[0] : 0}
+                // orisCode={orisCode}
+                workspaceSection={section}
+                extraSpace
               />
             </div>
           </Grid>
           {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
-            <Grid col={2}>
+            <Grid col={3}>
               <div className="margin-left-3 ">
-                <Label test-id={"type-name-label"} htmlFor={"type-name"}>
-                  Type
-                </Label>
-                <ComboBox
-                  id="type-name"
-                  name="type-name"
-                  epa-testid={"type-name"}
-                  data-testid={"type-name"}
-                  options={availableConfigurations}
-                  onChange={configurationFilterChange}
-                  disableFiltering={true}
+                <DropdownSelection
+                  caption="Type"
+                  selectionHandler={setTypeSelection}
+                  // options={sections}
+                  options={testTypeGroupOptions}
+                  viewKey="name"
+                  selectKey="name"
+                  initialSelection={typeSelection ? typeSelection[0] : null}
+                  // orisCode={orisCode}
+                  workspaceSection={section}
+                  extraSpace
                 />
               </div>
             </Grid>
@@ -240,6 +284,7 @@ const FilterFormAdmin = ({
             ""
           )}
         </Grid>
+
         <Grid row className="margin-top-2">
           {section === SUBMISSION_ACCESS_STORE_NAME ? (
             <>
@@ -262,20 +307,18 @@ const FilterFormAdmin = ({
               </Grid>
               <Grid col={3}>
                 <div className="margin-left-2">
-                  <Label test-id={"status-name-label"} htmlFor={"status-name"}>
-                    Status
-                  </Label>
-                  <ComboBox
-                    id="status-name"
-                    name="status-name"
-                    epa-testid={"status-name"}
-                    data-testid={"status-name"}
+                  <DropdownSelection
+                    caption="Status"
+                    selectionHandler={(option) => setSelectedStatus(option)}
                     options={availStatus}
-                    onChange={(option) => setSelectedStatus(option)}
-                    disableFiltering={true}
+                    viewKey="name"
+                    selectKey="name"
+                    initialSelection={selectedStatus ? selectedStatus[0] : null}
+                    workspaceSection={section}
+                    extraSpace
                   />
                 </div>
-              </Grid>{" "}
+              </Grid>
             </>
           ) : (
             ""
@@ -289,7 +332,6 @@ const FilterFormAdmin = ({
               }
             >
               <Button
-                //   disabled={availableConfigState.length === 0}
                 onClick={clearFilters}
                 outline={true}
               >
@@ -297,7 +339,20 @@ const FilterFormAdmin = ({
               </Button>
 
               <Button
-                disabled={!(selectedFacility && selectedStatus)}
+                disabled={
+                  !(
+                    selectedFacility &&
+                    selectedFacility[0] !== "" &&
+                    selectedLocation &&
+                    selectedLocation[0] !== "" &&
+                    (section === SUBMISSION_ACCESS_STORE_NAME
+                      ? selectedStatus && selectedStatus[0] !== ""
+                      : true) &&
+                    (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
+                      ? typeSelection && typeSelection[0] !== ""
+                      : true)
+                  )
+                }
                 //   onClick={applyFilters}
                 outline={false}
               >

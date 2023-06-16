@@ -6,9 +6,10 @@ import {
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
 
-
+const submissionAccessTitle = "Maintain EM Submission Access";
+const qaCertDataMaintenanceTitle = "QA/Cert Data Maintenance";
 const SubmissionAccess = ({ user, section }) => {
-  const [title, setTitle] = useState("Maintain EM Submission Access");
+  const [title, setTitle] = useState("");
   const [dropdownFacilities, setDropdownFacilities] = useState([]);
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
@@ -20,10 +21,12 @@ const SubmissionAccess = ({ user, section }) => {
   useEffect(() => {
     switch (section) {
       case SUBMISSION_ACCESS_STORE_NAME:
-        setTitle("Maintain EM Submission Access");
+        document.title = submissionAccessTitle;
+        setTitle(submissionAccessTitle);
         break;
       case QA_CERT_DATA_MAINTENANCE_STORE_NAME:
-        setTitle("QA/Cert Data Maintenance");
+        document.title = qaCertDataMaintenanceTitle;
+        setTitle(qaCertDataMaintenanceTitle);
         break;
     }
   }, [section]);
@@ -61,7 +64,11 @@ const SubmissionAccess = ({ user, section }) => {
     <div className="react-transition fade-in padding-x-3">
       <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
 
-      <FilterFormAdmin filterClick={filterClick} facilities={facilityList} section ={section} />
+      <FilterFormAdmin
+        filterClick={filterClick}
+        facilities={facilityList}
+        section={section}
+      />
     </div>
   );
 };
