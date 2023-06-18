@@ -40,9 +40,9 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
 
     // Time Criteria
     const [selectedBeginDate, setSelectedBeginDate] = useState();
-    const [selectedBeginHour, setSelectedBeginHour] = useState();
+    const [selectedBeginHour, setSelectedBeginHour] = useState("0");
     const [selectedEndDate, setSelectedEndDate] = useState();
-    const [selectedEndHour, setSelectedEndHour] = useState();
+    const [selectedEndHour, setSelectedEndHour] = useState("0");
     const [selectedIsHistorical, setSelectedIsHistorical] = useState();
     const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
     const [selectedEndQuarter, setSelectedEndQuarter] = useState();
@@ -217,9 +217,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         // set the actual catalog result object
         const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
         const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
-        console.log(checkCatalogResult)
         setSelectedCheckResultObj(checkCatalogResult);
-        console.log(checkCatalogResult)
         createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
             setMatchDataList(universalMatchDataList)
         });
@@ -270,8 +268,6 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         let matchTimeBeginValue=null;
         let matchTimeEndValue=null;
 
-        console.log(selectedBeginDate)
-        console.log(selectedEndDate)
         if(selectedCheckResultObj.timeTypeCode === "DATE"){
 
             matchTimeBeginValue = selectedBeginDate;
@@ -315,10 +311,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
           }
 
         try{
-            console.log("creating...")
-           const resp = await createErrorSuppression(payload)
-           console.log("finished...")
-           console.log(resp)
+           await createErrorSuppression(payload)
         }catch(e){
             console.error(e)
         }finally{
@@ -540,10 +533,10 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     data-testid={"add-begin-hour"}
                                     value={selectedBeginHour}
                                     className="width-10"
-                                    onChange={(e) => setSelectedBeginHour(e.target.value)}
+                                    onChange={ (e) => setSelectedBeginHour(e.target.value) }
                                 >
                                     {hoursInADay.map((h, i) =>
-                                        <option key={i}>{h}</option>
+                                        <option key={i} value={h}>{h}</option>
                                     )}
                                 </Dropdown>
 
@@ -577,7 +570,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                     onChange={(e) => setSelectedEndHour(e.target.value)}
                                 >
                                     {hoursInADay.map((h, i) =>
-                                        <option key={i}>{h}</option>
+                                        <option key={i} value={h}>{h}</option>
                                     )}
                                 </Dropdown>
                             </Grid>

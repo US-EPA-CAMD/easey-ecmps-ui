@@ -276,8 +276,8 @@ export const ErrorSuppressionFilters = () => {
         setLocations(selectedLocations)
         setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null)
         setReasonCode(selectedReason !== defaultDropdownText ? selectedReason : null)
-        setAddDateAfter(selectedAddDateAfter)
-        setAddDateBefore(selectedAddDateBefore)
+        setAddDateAfter(apiFormattedDateAfter)
+        setAddDateBefore(apiFormattedDateBefore)
     }
 
     const clearFilters = () => {
