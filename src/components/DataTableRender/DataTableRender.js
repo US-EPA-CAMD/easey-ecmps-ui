@@ -586,15 +586,18 @@ console.log('workspaceSection',workspaceSection)
           </div>
         ) : dataLoaded && data.length === 0 ? (
           <div>
-            <h4
-              className={`margin-top-5 text-bold ${
-                tableStyling
-                  ? "mobile:font-body-md mobile:text-bold"
-                  : "mobile:font-body-xl mobile:text-bold"
-              }`}
-            >
-              {tableTitle}
-            </h4>
+            {tableTitle ? (
+              <h4
+                className={`margin-top-5 text-bold ${tableStyling
+                    ? "mobile:font-body-md mobile:text-bold"
+                    : "mobile:font-body-xl mobile:text-bold"
+                  }`}
+              >
+                {tableTitle}
+              </h4>
+            ) : (
+              ""
+            )}
             <div className="text-center">
               <p>{noDataString}</p>
             </div>
