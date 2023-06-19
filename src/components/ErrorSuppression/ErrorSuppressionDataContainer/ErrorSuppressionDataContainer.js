@@ -161,7 +161,7 @@ export const ErrorSuppressionDataContainer = () => {
 
     if( !dateString )
       return "";
-      
+
     const date = new Date(dateString);
     return `${formatDate(
       dateString,
@@ -177,26 +177,28 @@ export const ErrorSuppressionDataContainer = () => {
   const columns = [
     {
       name: "Select",
-      maxWidth: "100px",
+      width: "130px",
       cell: (row, idx) => getCheckbox(row, idx),
       sortable: true,
     },
     {
       name: "Severity",
-      maxWidth: "150px",
+      width: "200px",
       selector: (row) => row.severityCode,
       sortable: true,
     },
     {
       name: "Facility Name (ID)",
+      width:"210px",
       selector: (row) =>
           (row.facilityName ? row.facilityName : "") +
           (row.orisCode ? " (" + row.orisCode + ")" : ""),
       sortable: true,
     },
-    { name: "Locations", selector: (row) => row.locations, sortable: true },
+    { name: "Locations", width: '200px', selector: (row) => row.locations, sortable: true },
     {
       name: "Match Data Criteria",
+      width: "250px",
       selector: (row) =>
         "" +
         row.matchDataTypeCode +
@@ -211,30 +213,34 @@ export const ErrorSuppressionDataContainer = () => {
     },
     {
       name: "Reason",
+      width: "200px",
       maxWidth: "150px",
       selector: (row) => row.reasonCode,
       sortable: true,
     },
     {
       name: "Status",
-      maxWidth: "150px",
+      width: "150px",
       selector: (row) => (row.active ? "Active" : "Inactive"),
       sortable: true,
     },
     {
       name: "Note",
+      width: "200px",
       maxWidth: "1000px",
       selector: (row) => row.note,
       sortable: true,
     },
-    { name: "User", selector: (row) => row.userId, sortable: true },
+    { name: "User", selector: (row) => row.userId, sortable: true, width:"150px" },
     {
       name: "Add Date & Hour",
+      width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate),
       sortable: true,
     },
     {
       name: "Update Date",
+      width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
       sortable: true,
     },
@@ -296,7 +302,7 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div className=" ">
+        <div className="es-datatable">
           {isTableLoading ? (
             <Preloader />
           ) : (
