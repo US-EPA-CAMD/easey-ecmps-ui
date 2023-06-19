@@ -159,7 +159,7 @@ export const ErrorSuppressionDataContainer = () => {
 
   const formatDateWithHoursMinutesSeconds = (dateString) => {
 
-    if( !dateString )
+    if (!dateString)
       return "";
 
     const date = new Date(dateString);
@@ -189,10 +189,10 @@ export const ErrorSuppressionDataContainer = () => {
     },
     {
       name: "Facility Name (ID)",
-      width:"210px",
+      width: "210px",
       selector: (row) =>
-          (row.facilityName ? row.facilityName : "") +
-          (row.orisCode ? " (" + row.orisCode + ")" : ""),
+        (row.facilityName ? row.facilityName : "") +
+        (row.orisCode ? " (" + row.orisCode + ")" : ""),
       sortable: true,
     },
     { name: "Locations", width: '200px', selector: (row) => row.locations, sortable: true },
@@ -231,7 +231,7 @@ export const ErrorSuppressionDataContainer = () => {
       selector: (row) => row.note,
       sortable: true,
     },
-    { name: "User", selector: (row) => row.userId, sortable: true, width:"150px" },
+    { name: "User", selector: (row) => row.userId, sortable: true, width: "150px" },
     {
       name: "Add Date & Hour",
       width: "200px",
