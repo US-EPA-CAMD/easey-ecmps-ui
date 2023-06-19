@@ -251,9 +251,9 @@ const FilterFormAdmin = ({
             <div className="margin-left-2 ">
               <DropdownSelection
                 caption={
-                  section !== SUBMISSION_ACCESS_STORE_NAME
-                    ? " Configurations"
-                    : "Locations"
+                  section === SUBMISSION_ACCESS_STORE_NAME
+                    ? "Configuration"
+                    : "Location"
                 }
                 selectionHandler={configurationFilterChange}
                 // options={sections}
