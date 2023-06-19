@@ -268,11 +268,18 @@ export const ErrorSuppressionFilters = () => {
             apiFormattedDateBefore = new Date(selectedAddDateBefore).toISOString().split('T')[0];
         }
 
+        // selectedFacility is the facility record id so we need to use it with facilityList to find the facility orisCode
+        let orisCode = null;
+        if( selectedFacility && selectedFacility !== defaultDropdownText)
+          orisCode = facilityList.find(f=>f.value === selectedFacility)?.orisCode;
+
+          
+
         //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
         setCheckType(selectedCheckType !== defaultDropdownText ? selectedCheckType : null)
         setCheckNumber(selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null)
         setCheckResult(selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null)
-        setFacility(selectedFacility !== defaultDropdownText ? selectedFacility : null)
+        setFacility(orisCode)
         setLocations(selectedLocations)
         setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null)
         setReasonCode(selectedReason !== defaultDropdownText ? selectedReason : null)
