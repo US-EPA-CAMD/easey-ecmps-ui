@@ -10,9 +10,9 @@ describe("ErrorSuppression API", function () {
   beforeAll(() => {
     mock = new MockAdapter(axios);
   });
-
+  
   test("getErrorSuppressionRecords test", async () => {
-    const url = `${config.services.camd.uri}/error-suppressions`;
+    const url = `${config.services.camd.uri}/admin/error-suppressions`;
     mock.onGet(url).reply(200, "Mocked");
 
     const resp = await esApi.getErrorSuppressionRecords({checkTypeCode:"", checkNumber:"", active: false, checkResult:"", severityCode:"", orisCode:"", locationsList:[""], reasonCode:"", beginDateHrQtr:"", endDateHrQtr:""});
@@ -20,9 +20,9 @@ describe("ErrorSuppression API", function () {
     expect(resp.data).toEqual("Mocked");
   });
 
-  test("getErrorSuppressionRecords test", async () => {
+  test("deactivateErrorSuppression test", async () => {
     const id = 123;
-    const url = `${config.services.camd.uri}/error-suppressions/${id}`;
+    const url = `${config.services.camd.uri}/admin/error-suppressions/${id}`;
     mock.onPut(url).reply(200, "Mocked");
 
     const resp = await esApi.deactivateErrorSuppression(id);
@@ -40,4 +40,13 @@ describe("ErrorSuppression API", function () {
     resp = await esApi.getMdmData();
     expect(resp).not.toBeDefined();
   })
+
+  test("createErrorSuppression record test", async () => {
+    const url = `${config.services.camd.uri}/admin/error-suppressions`;
+    mock.onPost(url).reply(200, "Mocked");
+
+    const resp = await esApi.createErrorSuppression({});
+
+    expect(resp.data).toEqual("Mocked");
+  });
 });

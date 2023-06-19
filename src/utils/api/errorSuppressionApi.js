@@ -69,3 +69,18 @@ export const getMdmData = async (path)=>{
     return handleError(error);
   }
 }
+
+export const createErrorSuppression = async (payload)=>{
+  try{
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url,
+        data: payload,
+      })
+    );
+  }
+  catch(error){
+    return handleError(error)
+  }
+}
