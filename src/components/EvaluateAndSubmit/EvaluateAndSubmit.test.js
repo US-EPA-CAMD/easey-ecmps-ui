@@ -1,357 +1,169 @@
 import React from "react";
-import { render, act } from "@testing-library/react";
-import MockPermissions from "./MockPermissions";
-import { EvaluateAndSubmit } from "./EvaluateAndSubmit";
-import configureStore from "../../store/configureStore.dev";
+import { act, render, screen } from "@testing-library/react";
+import EvaluateAndSubmit from "./EvaluateAndSubmit";
 import { Provider } from "react-redux";
-import { getContent } from "../../utils/api/contentApi";
+import configureStore from "../../store/configureStore.dev";
 
-window.scrollTo = jest.fn();
-window.location.reload = jest.fn();
-
-jest.mock("../../utils/api/camdServices", () => ({
-  submitData: jest.fn().mockReturnValue({
-    then: jest.fn().mockReturnValue({ catch: jest.fn() }),
-  }),
-}));
-jest.mock("../../utils/api/facilityApi", () => ({
-  getFacilityById: jest
-    .fn()
-    .mockResolvedValue({ data: { facilityName: "facName" } }),
-  getAllFacilities: jest.fn().mockResolvedValue({
-    data: [
-      {
-        facilityRecordId: 1,
-        facilityId: "MOCK-1",
-        facilityName: "Barry",
-        stateCode: "AL",
-      },
-      {
-        facilityRecordId: 3,
-        facilityId: "MOCK-2",
-        facilityName: "Barry",
-        stateCode: "AL",
-      },
-      {
-        facilityRecordId: 5,
-        facilityId: "MOCK-3",
-        facilityName: "Barry",
-        stateCode: "AL",
-      },
-    ],
-  }),
-}));
-
-jest.mock("react-redux", () => {
-  return {
-    connect: (mapStateToProps, mapDispatchToProps) => (ReactComponent) => ({
-      mapStateToProps,
-      mapDispatchToProps,
-      ReactComponent,
-    }),
-    Provider: ({ children }) => children,
-  };
-});
-
-jest.mock("../../utils/api/monitoringPlansApi", () => ({
-  getMonitoringPlans: jest.fn().mockResolvedValue({
-    data: [
-      {
-        id: "MOCK-1",
-        active: true,
-        facilityName: "Barry",
-        name: "1",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-2",
-        active: true,
-        facilityName: "Barry",
-        name: "2",
-        evalStatusCode: "ERR",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-3",
-        active: false,
-        facilityName: "Barry",
-        name: "3",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-    ],
-  }),
-
-  getCheckedOutLocations: jest
-    .fn()
-    .mockImplementation(() => Promise.resolve({ data: [] })),
-}));
-jest.mock("../../utils/api/qaCertificationsAPI", () => ({
-  getQATestSummaryReviewSubmit: jest.fn().mockResolvedValue({
-    data: [
-      {
-        id: "MOCK-1",
-        facilityName: "Barry",
-        name: "1",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-2",
-        facilityName: "Barry",
-        name: "2",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-3",
-        facilityName: "Barry",
-        name: "3",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-    ],
-  }),
-  getQACertEventReviewSubmit: jest.fn().mockResolvedValue({
-    data: [
-      {
-        id: "MOCK-1",
-        facilityName: "Barry",
-        name: "1",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-2",
-        facilityName: "Barry",
-        name: "2",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-3",
-        facilityName: "Barry",
-        name: "3",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-    ],
-  }),
-  getQATeeReviewSubmit: jest.fn().mockResolvedValue({
-    data: [
-      {
-        id: "MOCK-1",
-        facilityName: "Barry",
-        name: "1",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-2",
-        facilityName: "Barry",
-        name: "2",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        id: "MOCK-3",
-        facilityName: "Barry",
-        name: "3",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-    ],
-  }),
-}));
-jest.mock("../../utils/api/emissionsApi", () => ({
-  getEmissionsReviewSubmit: jest.fn().mockResolvedValue({
-    data: [
-      {
-        orisCode: "MOCK-1",
-        facilityName: "Barry",
-        configuration: "1",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        orisCode: "MOCK-2",
-        facilityName: "Barry",
-        configuration: "2",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-      {
-        orisCode: "MOCK-3",
-        facilityName: "Barry",
-        configuration: "3",
-        evalStatusCode: "PASS",
-        evalStatusCodeDescription: "PASS",
-      },
-    ],
-  }),
-}));
-
-const mockUserPermissions = [
-  {
-    id: "MOCK-1",
-    facilityName: "Barry",
-    permissions: [],
-  },
-  {
-    id: "MOCK-2",
-    facilityName: "Barry",
-    permissions: [],
-  },
-  {
-    id: "MOCK-3",
-    facilityName: "Barry",
-    permissions: [],
-  },
-];
-
-jest.mock("../../utils/api/contentApi", () => ({
-  getContent: jest.fn().mockResolvedValue({
-    data: {
-      title: "Test Title",
-      content: "Test Content",
-      displayAlert: true,
-    },
-  }),
-}));
-
-jest.mock(
-  "./FilterForm/FilterForm",
-  () =>
-    ({ showModal, queryCallback, setExcludeErrors, facilities }) => {
-      return (
-        <div>
-          <button onClick={queryCallback}>FILTER</button>
-          <button
-            onClick={() => {
-              showModal(true);
-            }}
-          >
-            SUBMIT
-          </button>
-        </div>
-      );
-    }
-);
-
-jest.mock("./DataTables/DataTables", () => ({ dataList, permissions }) => {
-  return <div>{`MON PLAN LENGTH: ${dataList[0].state.length}`}</div>;
-});
+import * as monitorPlanApi from "../../utils/api/monitoringPlansApi";
+import * as qaApi from "../../utils/api/qaCertificationsAPI";
+import * as emissionsApi from "../../utils/api/emissionsApi";
+import * as mdmApi from "../../utils/api/mdmApi";
+import * as helperFunctions from "./utils/functions";
+import * as contentApi from "../../utils/api/contentApi";
+import * as camdServices from "../../utils/api/camdServices";
+import {
+  mockCertEventsEvalAndSubmit,
+  mockEmissionsEvalAndSubmit,
+  mockTestExtensionEvalAndSubmit,
+  mockTestSummaryEvalAndSubmit,
+} from "./mocks/mocks";
+import {
+  getMockMonitorPlanConfigurations,
+  getMockEcmpsUser,
+  getMockReportingPeriods,
+  getMockFacilityDropwdownList,
+} from "../../mocks/functions";
 
 jest.mock("../../additional-functions/checkout", () => ({
+  //Alternative way to mock modules, since there is just one function in this file it is simpler to mock this way
   checkoutAPI: jest.fn(),
 }));
 
-jest.mock(
-  "../SubmissionModal/SubmissionModal",
-  () =>
-    ({
-      show,
-      close,
-      submissionCallback,
-      monitorPlanIds,
-      activityId,
-      setActivityId,
-    }) => {
-      return (
-        <div>
-          <button onClick={submissionCallback}>SUBMIT MODAL</button>
-        </div>
-      );
-    }
-);
-const store = configureStore();
-describe("Review and Submit component", () => {
-  let query, user;
-  beforeEach(async () => {
-    user = {
-      userId: "mock",
-      firstName: "mock",
-      lastName: "mock",
-      permissions: {
-        facilities: mockUserPermissions,
-      },
-    };
-    await act(async () => {
-      query = render(
-        <EvaluateAndSubmit
-          componentType="Submission"
-          checkedOutLocations={[]}
-          user={user}
-        />
-      );
+const store = configureStore(); //Wrap the component with the redux store provider to simulate actual redux behavior [Redux should never be mocked!]
+
+//Identifies the test suite we are about to run, In this case it is End to End testing for the entire EvaluateAndSubmit pages
+describe("- Evaluate And Submit -", () => {
+  beforeEach(() => {
+    //Initialize our mocks before each test, using beforeAll with spyOn does not mock correctly
+    jest.spyOn(monitorPlanApi, "getMonitoringPlans").mockResolvedValue({
+      data: getMockMonitorPlanConfigurations(),
+    });
+    jest.spyOn(monitorPlanApi, "getCheckedOutLocations").mockResolvedValue({
+      data: [],
+    });
+    jest.spyOn(qaApi, "getQATestSummaryReviewSubmit").mockResolvedValue({
+      data: [...mockTestSummaryEvalAndSubmit],
+    });
+    jest.spyOn(qaApi, "getQACertEventReviewSubmit").mockResolvedValue({
+      data: [...mockCertEventsEvalAndSubmit],
+    });
+    jest.spyOn(qaApi, "getQATeeReviewSubmit").mockResolvedValue({
+      data: [...mockTestExtensionEvalAndSubmit],
+    });
+    jest.spyOn(emissionsApi, "getEmissionsReviewSubmit").mockResolvedValue({
+      data: [...mockEmissionsEvalAndSubmit],
+    });
+    jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValue({
+      data: getMockReportingPeriods(),
+    });
+    jest
+      .spyOn(helperFunctions, "getDropDownFacilities")
+      .mockResolvedValue(getMockFacilityDropwdownList());
+    jest.spyOn(contentApi, "getContent").mockResolvedValue({ data: "" });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  //Identifies a sub testing suite we are about to run within the larger testing suite [In this case there is one for Evaluate and one for Submission because this is a shared component that uses both]
+  describe("Evaluate", () => {
+    it("Should render the EvaluateAndSubmit [Evaluate] component without crashing", async () => {
+      await act(async () => {
+        //Wrap user interaction or rendering logic in an act whenever state changes or async actions in your component could be performed
+        //Wrapping the render of our component in an asynchronous act because the useEffects' of the component perform async actions, and we need to process all state changes the render could cause before proceeding
+        //For more information on when to use act() vs async act() see [https://medium.com/@bmb21/reacts-sync-and-async-act-caa297b658b0]
+        render(
+          <Provider store={store}>
+            <EvaluateAndSubmit
+              user={getMockEcmpsUser()}
+              componentType="Evaluate"
+              checkedOutLocations={[]}
+            />
+          </Provider>
+        );
+      });
+
+      expect(screen.getByTestId("page-title").innerHTML).toBe("Evaluate"); //Using a data-testid tag for html elements that we want to make assertions on [Should always use these to query for specific elements]
+      //Querying by data-testid over [tags / text / styling] is always preffered because [tags / text / styling] are changed frequently
+    });
+
+    it("Should click a facility, configuration, and reporting period and apply the filters successfully", async () => {
+      const mockEvalSubmission = jest.fn().mockResolvedValue({});
+
+      jest
+        .spyOn(camdServices, "triggerBulkEvaluation")
+        .mockImplementation(mockEvalSubmission); //Our final evaluation call that needs to be processed
+
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <EvaluateAndSubmit
+              user={getMockEcmpsUser()}
+              componentType="Evaluate"
+              checkedOutLocations={[]}
+            />
+          </Provider>
+        );
+      });
+
+      //Logic to handle selection of facilities
+      await act(() => {
+        screen.getByTestId("facilities-input-search").click(); //Click the facility search box
+      });
+      await act(async () => {
+        screen.getByTestId("facilities-multi-select-option-0").click(); //Then click the first dropdown option from it that is mocked
+      });
+
+      //Repeat this process for configurations and reporting periods
+
+      await act(async () => {
+        screen.getByTestId("configurations-input-search").click(); //Repeat this process for configurations and reporting periods
+      });
+      await act(async () => {
+        screen.getByTestId("configurations-multi-select-option-0").click();
+      });
+      await act(() => {
+        screen.getByTestId("reporting-periods-input-search").click();
+      });
+      await act(() => {
+        screen.getByTestId("reporting-periods-multi-select-option-0").click();
+      });
+      await act(() => {
+        screen.getByTestId("apply-filter").click();
+      });
+
+      await act(() => {
+        screen.getByTestId("MP-select-0").click(); //Select the monitor plan
+      });
+
+      await act(() => {
+        screen.getByTestId("EM-select-0").click(); //Also select the first emissions record
+      });
+
+      await act(() => {
+        screen.getByTestId("filter-callback-button").click(); //Click the evaluate button
+      });
+
+      expect(mockEvalSubmission).toHaveBeenCalled();
     });
   });
 
-  it("expect mock permissions to be defined", () => {
-    expect(MockPermissions).toBeDefined();
-  });
+  describe("Submission", () => {
+    it("Should render the EvaluateAndSubmit [Submission] component without crashing", async () => {
+      await act(async () => {
+        render(
+          <Provider store={store}>
+            <EvaluateAndSubmit
+              user={getMockEcmpsUser()}
+              componentType="Submission"
+              checkedOutLocations={[]}
+            />
+          </Provider>
+        );
+      });
 
-  it("execute mocks to call filter function, and determine if ReviewAndSubmit Table has correct data passed", async () => {
-    const { getByText, queryByText } = query;
-
-    await act(async () => {
-      await getByText("FILTER").click();
+      expect(screen.getByTestId("page-title").innerHTML).toBe("Submit");
     });
-
-    expect(queryByText("MON PLAN LENGTH: 1")).toBeInTheDocument();
-  });
-
-  it("execute mocks to call submission function, and determine if UI changes as a result", async () => {
-    const { getByText, queryByText, getAllByText } = query;
-
-    await act(async () => {
-      getAllByText("SUBMIT")[0].click();
-    });
-
-    await act(async () => {
-      getByText("SUBMIT MODAL").click();
-    });
-
-    expect(queryByText("SUBMIT")).not.toBeInTheDocument();
-  });
-
-  it("mock the final submission process", async () => {
-    //submit button is removed
-    const { getByText, getAllByText, queryAllByText } = query;
-
-    await act(async () => {
-      getAllByText("SUBMIT")[0].click();
-    });
-
-    await act(async () => {
-      getByText("SUBMIT MODAL").click();
-    });
-
-    // await act(async () => {
-    //   getAllByText("Submit")[0].click();
-    // });
-    // expect(queryAllByText("Submit").length).toBe(0);
-  });
-
-  it("mock an evaluation component instead of submission", async () => {
-    let query;
-
-    user = { userId: "mock", firstName: "mock", lastName: "mock" };
-    await act(async () => {
-      query = render(
-        <Provider store={store}>
-          <EvaluateAndSubmit
-            checkedOutLocations={[]}
-            user={user}
-            componentType="Evaluate"
-          />
-        </Provider>
-      );
-    });
-
-    const { getByText, getAllByText } = query;
-
-    expect(getAllByText("Evaluate")[0]).toBeInTheDocument();
   });
 });

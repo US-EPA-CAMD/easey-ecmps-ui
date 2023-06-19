@@ -139,6 +139,7 @@ export const QAImportHistoricalDataPreview = ({
             reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
             exportState={null}
             getInitSelection={getInitSelection}
+            isQaCert={true}
             setLoading={setLoading}
           />
         </div>
