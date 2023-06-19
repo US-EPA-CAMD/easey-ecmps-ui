@@ -151,4 +151,31 @@ export const createMatchTypeDropdownLists = async (
       return [];
     }
   }
+
 };
+
+export const convertYearQuarterToDateString = (yearQuarter) => {
+  const [year, quarter] = yearQuarter.split(' ');
+  let result;
+
+  switch (quarter) {
+    case ('Q1'):
+      result = new Date(`${year}/01/01`);
+      break;
+    case ('Q2'):
+      result = new Date(`${year}/04/01`);
+      break;
+    case ('Q3'):
+      result = new Date(`${year}/07/01`);
+      break;
+    case ('Q4'):
+      result = new Date(`${year}/10/01`);
+      break;
+    default:
+  }
+
+  if( !result )
+    return null;
+
+  return result.toISOString();
+}
