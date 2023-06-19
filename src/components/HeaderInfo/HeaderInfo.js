@@ -255,6 +255,7 @@ export const HeaderInfo = ({
     if (currentTab === undefined || currentTab?.reportingPeriods) {
       return;
     }
+    
     let selectedRptPeriods;
     if (inWorkspace) {
       selectedRptPeriods = reportingPeriods
