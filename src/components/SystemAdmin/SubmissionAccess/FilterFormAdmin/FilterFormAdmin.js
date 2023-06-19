@@ -250,7 +250,11 @@ const FilterFormAdmin = ({
           <Grid col={3}>
             <div className="margin-left-2 ">
               <DropdownSelection
-                caption=" Configurations"
+                caption={
+                  section !== SUBMISSION_ACCESS_STORE_NAME
+                    ? " Configurations"
+                    : "Locations"
+                }
                 selectionHandler={configurationFilterChange}
                 // options={sections}
                 options={availableConfigurations}
@@ -331,10 +335,7 @@ const FilterFormAdmin = ({
                   : " "
               }
             >
-              <Button
-                onClick={clearFilters}
-                outline={true}
-              >
+              <Button onClick={clearFilters} outline={true}>
                 Clear
               </Button>
 
