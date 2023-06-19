@@ -57,7 +57,8 @@ const QAExpandableRowsRender = ({
   mdmProps,
   sectionSelect = null,
 }) => {
-  const { locationId, id } = data;
+  const { locationId, id } = data ? data : 1;
+  console.log("locationId", locationId, "id", id);
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -1071,7 +1072,9 @@ const QAExpandableRowsRender = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
+                <span className="padding-right-2 text-wrap display-table-cell">
+                  {dataTableName}
+                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"

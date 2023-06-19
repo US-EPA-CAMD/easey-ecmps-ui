@@ -493,31 +493,7 @@ export const DataTableAssert = ({
   }
   return (
     <div className="methodTable">
-      {/* tests saving functionality */}
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => {
-          saveData();
-          closeModalHandler();
-          openModal(
-            {
-              col1: "CO2",
-              col2: "H",
-              col3: "HD",
-              col4: "PCT",
-              col5: "09/20/2017 13",
-              col6: " ",
-              col7: "TWCORNEL5-88E25998894F4859B9D03C49E8CBD66D",
-            },
-            false,
-            false
-          );
-        }}
-      />
+    
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
 
       <DataTableRender
