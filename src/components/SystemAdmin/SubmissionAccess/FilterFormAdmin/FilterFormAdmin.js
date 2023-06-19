@@ -335,7 +335,14 @@ const FilterFormAdmin = ({
                   : " "
               }
             >
+<<<<<<< HEAD
               <Button onClick={clearFilters} outline={true}>
+=======
+              <Button
+                onClick={clearFilters}
+                outline={true}
+              >
+>>>>>>> 7df9491faa092e703bab8c2a8bd2b853e46b598e
                 Clear
               </Button>
 
