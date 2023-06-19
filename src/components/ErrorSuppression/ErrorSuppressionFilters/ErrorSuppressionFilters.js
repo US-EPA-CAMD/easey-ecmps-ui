@@ -70,14 +70,10 @@ export const getLocations = (facilityValue, checkResultObj) => {
               availLoc = [...availLoc, ...availStackPipe];
           }
           const locName = availLoc.map((l) => l.label);
-          const ll = availLoc
+          return availLoc
               .filter(({ label }, index) => !locName.includes(label, index + 1))
               .filter(({ label }) => label !== null)
               .sort((a, b) => a.label - b.label);
-
-              console.log("locationlist")
-              console.log(ll)
-          return ll;
       });
   };
 
@@ -156,7 +152,7 @@ export const ErrorSuppressionFilters = () => {
         getReasonCodes().then(({ data }) => {
             setReasonCodeList(data)
         }).catch(error => {
-            console.log("Error getting reason codes", error)
+            console.error("Error getting reason codes", error)
         })
 
         return () => {
