@@ -112,8 +112,9 @@ const TableRender = forwardRef(
 
         const yearQuarter = row.periodAbbreviation.split(" ");
 
-        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${yearQuarter[0]
-          }&quarter=${yearQuarter[1].charAt(1)}`;
+        additionalParams = `&monitorPlanId=${row.monPlanId}&year=${
+          yearQuarter[0]
+        }&quarter=${yearQuarter[1].charAt(1)}`;
       }
 
       url =
@@ -138,8 +139,9 @@ const TableRender = forwardRef(
             )}
           </div>
         ),
-        cell: (row) => (
+        cell: (row, idx) => (
           <ReviewCell
+            idx={idx}
             row={row}
             handleRowSelection={selectIndividual}
             handleRowView={handleRowView}
@@ -155,12 +157,12 @@ const TableRender = forwardRef(
       ...columns,
       {
         name: "Submission Status",
-        selector: "submissionAvailabilityCode",
+        selector: (row) => row.submissionAvailabilityCode,
         sortable: true,
       },
       {
         name: "Eval Status",
-        selector: "evalStatusCodeDescription",
+        selector: (row) => row.evalStatusCodeDescription,
         sortable: true,
       },
     ];
@@ -169,23 +171,25 @@ const TableRender = forwardRef(
 
     return (
       <>
-          <DataTable
-            className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
-            defaultSortField="orisCode"
-            columns={mappings}
-            data={state}
-            noHeader={true}
-            highlightOnHover={true}
-            responsive={false}
-            persistTableHead={false}
-            sortIcon={
-              <ArrowDownwardSharp
-                className="margin-left-2 text-primary"
-                id="bdfSortIcon"
-              />
-            }
-            noDataComponent={<div aria-live="polite">There are no records to display</div>}
-          />
+        <DataTable
+          className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
+          defaultSortField="orisCode"
+          columns={mappings}
+          data={state}
+          noHeader={true}
+          highlightOnHover={true}
+          responsive={false}
+          persistTableHead={false}
+          sortIcon={
+            <ArrowDownwardSharp
+              className="margin-left-2 text-primary"
+              id="bdfSortIcon"
+            />
+          }
+          noDataComponent={
+            <div aria-live="polite">There are no records to display</div>
+          }
+        />
       </>
     );
   }

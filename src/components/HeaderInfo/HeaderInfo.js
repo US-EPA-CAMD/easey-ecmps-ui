@@ -255,7 +255,7 @@ export const HeaderInfo = ({
     if (currentTab === undefined || currentTab?.reportingPeriods) {
       return;
     }
-
+    
     let selectedRptPeriods;
     if (inWorkspace) {
       selectedRptPeriods = reportingPeriods
@@ -783,6 +783,7 @@ export const HeaderInfo = ({
     //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
     checkoutAPI(direction, configID, selectedConfig.id, setCheckout)
       .then(() => {
+        handleSelectReportingPeriod();
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
         // setCheckoutState(direction);

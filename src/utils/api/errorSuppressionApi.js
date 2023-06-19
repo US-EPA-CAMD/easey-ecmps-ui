@@ -11,7 +11,7 @@ export const getErrorSuppressionRecords = ({
   facility,
   locations,
   active,
-  reason,
+  reasonCode,
   addDateAfter,
   addDateBefore,
 }) => {
@@ -28,7 +28,7 @@ export const getErrorSuppressionRecords = ({
       active,
       orisCode: facility,
       locations: pipeDelimitedLocations,
-      reasonCode: reason,
+      reasonCode,
       beginDateHrQtr: addDateAfter,
       endDateHrQtr: addDateBefore,
     },
@@ -67,5 +67,20 @@ export const getMdmData = async (path)=>{
     );
   } catch (error) {
     return handleError(error);
+  }
+}
+
+export const createErrorSuppression = async (payload)=>{
+  try{
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url,
+        data: payload,
+      })
+    );
+  }
+  catch(error){
+    return handleError(error)
   }
 }

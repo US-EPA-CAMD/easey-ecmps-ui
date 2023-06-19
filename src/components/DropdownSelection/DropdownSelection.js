@@ -9,6 +9,7 @@ export const DropdownSelection = ({
   initialSelection, // needs useState to change the dropdown
   workspaceSection,
   changeFunc, // extra function that gets called inside handleChange, passing in the val of the dropdown
+  extraSpace,
 }) => {
   const getIndex = (val) => {
     return options.findIndex((obj) => obj[selectKey] === val);
@@ -22,8 +23,7 @@ export const DropdownSelection = ({
         )
       : selectionHandler([getIndex(val.target.value), val.target.value]);
 
-    if( changeFunc && changeFunc instanceof Function)
-        changeFunc(val);
+    if (changeFunc && changeFunc instanceof Function) changeFunc(val);
   };
 
   const populateOptions = (optionsList) => {
@@ -41,8 +41,30 @@ export const DropdownSelection = ({
   };
   return (
     <div>
-      <div>
-        <FormGroup className="margin-right-2 margin-bottom-1">
+      {!extraSpace ? (
+        <div>
+          <FormGroup className="margin-right-2 margin-bottom-1">
+            <Label test-id={caption} htmlFor={caption}>
+              {caption}
+            </Label>
+            <Dropdown
+              id={caption}
+              name={caption}
+              epa-testid={caption}
+              data-testid={caption}
+              value={
+                options[initialSelection]
+                  ? options[initialSelection][selectKey]
+                  : options[0][selectKey]
+              }
+              onChange={(e) => handleChange(e)}
+            >
+              {populateOptions(options)}
+            </Dropdown>
+          </FormGroup>
+        </div>
+      ) : (
+        <div>
           <Label test-id={caption} htmlFor={caption}>
             {caption}
           </Label>
@@ -60,8 +82,8 @@ export const DropdownSelection = ({
           >
             {populateOptions(options)}
           </Dropdown>
-        </FormGroup>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
