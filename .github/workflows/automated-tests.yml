@@ -34,7 +34,7 @@ jobs:
           path: easey-testing
 
     - name: Build with Maven
-      run: mvn test
+      run: mvn -B package --file pom.xml
 
     - name: Print
       run: echo "Hello World"
