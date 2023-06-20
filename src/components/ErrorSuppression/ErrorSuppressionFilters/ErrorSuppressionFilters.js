@@ -269,14 +269,16 @@ export const ErrorSuppressionFilters = () => {
     if (selectedFacility && selectedFacility !== defaultDropdownText)
       orisCode = facilityList.find(f => f.value === selectedFacility)?.orisCode;
 
-
+    // selectedLocations is an array of location ids. For the creation API call, we actually need the unit/stack name which is the label of the MultiselectCombobox
+    const unitStackNames = selectedLocations.map(selectedId => locationData.find(ld => ld.id === selectedId)?.label)
+        .filter(loc => loc !== null && loc !== undefined) // just sanity checking
 
     //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
     setCheckType(selectedCheckType !== defaultDropdownText ? selectedCheckType : null)
     setCheckNumber(selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null)
     setCheckResult(selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null)
     setFacility(orisCode)
-    setLocations(selectedLocations)
+    setLocations(unitStackNames)
     setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null)
     setReasonCode(selectedReason !== defaultDropdownText ? selectedReason : null)
     setAddDateAfter(apiFormattedDateAfter)
@@ -400,7 +402,7 @@ export const ErrorSuppressionFilters = () => {
             data-testid={"facility-name"}
             options={facilityList}
             onChange={onFacilityChange}
-            disableFiltering={true}
+            disableFiltering={false}
           />
 
         </Grid>
