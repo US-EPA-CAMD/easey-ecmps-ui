@@ -218,7 +218,7 @@ const FilterFormAdmin = ({
     setSelectedStatus(null);
   };
   return (
-    <div className="container border-y-1px border-base-lighter padding-y-1 ">
+    <div className="container padding-y-1 ">
       <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
         <Grid row>
           <Grid col={6}>

@@ -6,6 +6,7 @@ import {
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../additional-functions/system-admin-section-and-store-names";
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
+import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
@@ -61,14 +62,15 @@ export const AdminMaintenance = ({ section }) => {
   const filterClick = () => { };
   return (
     <div className="react-transition fade-in padding-x-3">
-      <h2 className="grid-col-9 page-header margin-top-2">{title}</h2>
-
+      <h2 className="page-header margin-top-2">{title}</h2>
+      <hr/>
       <FilterFormAdmin
         filterClick={filterClick}
         facilities={facilityList}
         section={section}
       />
-
+      <hr/>
+      <EmSubmissionData />
     </div>
   );
 };
