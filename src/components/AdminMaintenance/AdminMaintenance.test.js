@@ -1,16 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import SubmissionAccess from "./SubmissionAccess";
-import { getAllFacilities } from "../../../utils/api/facilityApi";
+import AdminMaintenance from "./AdminMaintenance";
 import axios from "axios";
 import "@testing-library/jest-dom/extend-expect";
 import MockAdapter from "axios-mock-adapter";
 
-describe("<SubmissionAccess />", () => {
+describe("<AdminMaintenance />", () => {
   test("renders component with correct title and facilities", async () => {
 
      const mock = new MockAdapter(axios);
-    render(<SubmissionAccess user="test" />);
+    render(<AdminMaintenance user="test" />);
    
     jest.mock("../../../utils/api/facilityApi", () => ({
       getAllFacilities: jest.fn().mockResolvedValue({

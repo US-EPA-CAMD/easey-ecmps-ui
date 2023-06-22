@@ -1,36 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
-import { getMonitoringPlans } from "../../../../utils/api/monitoringPlansApi";
-import { getReportingPeriods } from "../../../../utils/api/mdmApi";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
-} from "../../../../additional-functions/system-admin-section-and-store-names";
-import { DropdownSelection } from "../../../DropdownSelection/DropdownSelection";
+} from "../../../additional-functions/system-admin-section-and-store-names";
+import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
-} from "../../../../utils/api/dataManagementApi";
-import { getAllFacilities } from "../../../../utils/api/facilityApi";
+} from "../../../utils/api/dataManagementApi";
 import {
   GridContainer,
   Grid,
   Label,
-  Dropdown,
-  Checkbox,
-  DatePicker,
-  ButtonGroup,
   ComboBox,
   Button,
-  FormGroup,
 } from "@trussworks/react-uswds";
 const FilterFormAdmin = ({
   facilities,
   queryCallback,
-  showModal,
-  setExcludeErrors,
-  filesSelected,
-  buttonText,
-  filterClick,
   section,
 }) => {
   const defaultDropdownText = "Select";
@@ -38,8 +27,8 @@ const FilterFormAdmin = ({
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
   );
-  const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [availableConfigState, setAvailableConfigState] = useState([]);
+  // const [availableFacilities, setAvailableFacilities] = useState([]);
+  const [, setAvailableConfigState] = useState([]);
 
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
@@ -273,12 +262,10 @@ const FilterFormAdmin = ({
                 <DropdownSelection
                   caption="Type"
                   selectionHandler={setTypeSelection}
-                  // options={sections}
                   options={testTypeGroupOptions}
                   viewKey="name"
                   selectKey="name"
                   initialSelection={typeSelection ? typeSelection[0] : null}
-                  // orisCode={orisCode}
                   workspaceSection={section}
                   extraSpace
                 />
