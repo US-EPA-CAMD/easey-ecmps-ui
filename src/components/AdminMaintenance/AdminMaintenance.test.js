@@ -1,14 +1,11 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import AdminMaintenance from "./AdminMaintenance";
-import axios from "axios";
+import {AdminMaintenance} from "./AdminMaintenance";
 import "@testing-library/jest-dom/extend-expect";
-import MockAdapter from "axios-mock-adapter";
 
 describe("<AdminMaintenance />", () => {
   test("renders component with correct title and facilities", async () => {
 
-     const mock = new MockAdapter(axios);
     render(<AdminMaintenance user="test" />);
    
     jest.mock("../../../utils/api/facilityApi", () => ({

@@ -34,30 +34,6 @@ export const EmSubmissionData = ({ data=[], isLoading=false }) => {
         }
     };
 
-    const tempData = [
-        {
-            "id": 357579,
-            "facilityId": 1,
-            "orisCode": 3,
-            "monitorPlanId": "MDC-A89416B9A1414C1CADE050800574A24C",
-            "state": "AL",
-            "locations": "6B",
-            "reportingPeriodId": 77,
-            "reportingFrequencyCode": "Q",
-            "status": "PENDING",
-            "openDate": "2012-04-01",
-            "closeDate": "2012-05-01",
-            "emissionStatusCode": "PENDING",
-            "submissionAvailabilityCode": null,
-            "lastSubmissionId": null,
-            "submissionTypeCode": "INITIAL",
-            "severityLevel": null,
-            "resubExplanation": "Missing Rep for ARP,CAIRNOX,CAIROS,CAIRSO2,RGGI,SIPNOX",
-            "userid": "ECMPSOPN",
-            "addDate": "2023-05-30T18:36:30.301Z",
-            "updateDate": null
-          }
-    ]
     const columns = [
         {
             name: "Select",
@@ -186,7 +162,7 @@ export const EmSubmissionData = ({ data=[], isLoading=false }) => {
                         fixedHeader={true}
                         fixedHeaderScrollHeight="50vh"
                         columns={columns}
-                        data={tempData}
+                        data={data}
                         className={`data-display-table react-transition fade-in`}
                     />
                 )}
