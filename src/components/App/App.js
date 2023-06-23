@@ -12,7 +12,6 @@ import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
-import SubmissionAccess from "../SystemAdmin/SubmissionAccess/SubmissionAccess";
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
@@ -43,6 +42,7 @@ import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { currentDateTime } from "../../utils/functions";
 import WhatHasData from "../WhatHasData/WhatHasData";
+import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
 const App = () => {
   const queryParams = useLocation().search;
@@ -393,7 +393,7 @@ const App = () => {
           />
           <Route
             path="/admin/qa-maintenance"
-            element={!user ? <Navigate to="/" /> :<SubmissionAccess user ={user} section={QA_CERT_DATA_MAINTENANCE_STORE_NAME} />}
+            element={!user ? <Navigate to="/" /> :<AdminMaintenance user ={user} section={QA_CERT_DATA_MAINTENANCE_STORE_NAME} />}
           />
           <Route
             path="/admin/error-suppression"
@@ -403,7 +403,7 @@ const App = () => {
           />
           <Route
             path="/admin/em-submission-access"
-            element={!user ? <Navigate to="/" /> : <SubmissionAccess user ={user} section={SUBMISSION_ACCESS_STORE_NAME} />}
+            element={!user ? <Navigate to="/" /> : <AdminMaintenance user ={user} section={SUBMISSION_ACCESS_STORE_NAME} />}
           />
           <Route
             path="/reports"
@@ -414,7 +414,7 @@ const App = () => {
           <Route
             path="/workspace/reports"
             element={
-              !user ? <Navigate to="/" /> : <SubmissionAccess user={user} />
+              !user ? <Navigate to="/" /> : <ReportGenerator user={user} requireAuth={true}/>
             }
           />
 
