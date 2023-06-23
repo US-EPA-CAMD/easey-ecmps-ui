@@ -32,6 +32,8 @@ jobs:
         mvn clean install
 
     - name: Run Tests
-      run: mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
+      run: |
+        cd easey-testing
+        mvn clean test -Dname=Test_ECMPSUI_SMK_MonPlanPage
     
  
