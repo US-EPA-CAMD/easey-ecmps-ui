@@ -30,42 +30,47 @@ export const EmSubmissionData = ({ data }) => {
 
     return (
         <div className="padding-left-0 margin-left-0 padding-right-0" >
-            <div className="grid-row row-width" style={{backgroundColor:"blue"}}>
-                <div className="grid-col-6">
+            <div className="grid-row row-width" >
+                <div className="grid-col-4">
                     <span className="data-container-header">{submissionAccessTitle}</span>
                 </div>
-                <div className="grid-col-2">
-                    <Button
-                        aria-label="Add"
-                        data-testid="es-add"
-                        className="margin-left-1"
-                    >
-                        Open
-                    </Button>
-                </div>
-                <div className="grid-col-2">
-                    <Button
-                        aria-label="Clone"
-                        data-testid="es-clone"
-                    >
-                        Extend
-                    </Button>
-                </div>
-                <div className="grid-col-2">
-                    <Button
-                        aria-label="Deactivate"
-                        data-testid="es-deactivate"
-                    >
-                        Close
-                    </Button>
-                </div>
-                <div className="grid-col-2">
-                    <Button
-                        aria-label="Deactivate"
-                        data-testid="es-deactivate"
-                    >
-                        Approve
-                    </Button>
+                <div className="grid-col-8">
+                    <div className="grid-row margin-left-3 margin-top-2">
+                        <div className="grid-col-3">
+                            <Button
+                                aria-label="Add"
+                                data-testid="es-add"
+                            >
+                                Open
+                            </Button>
+                        </div>
+                        <div className="grid-col-3">
+                            <Button
+                                aria-label="Clone"
+                                data-testid="es-clone"
+                            >
+                                Extend
+                            </Button>
+                        </div>
+                        <div className="grid-col-3">
+                            <Button
+                                aria-label="Deactivate"
+                                data-testid="es-deactivate"
+                            >
+                                Close
+                            </Button>
+                        </div>
+                        <div className="grid-col-3">
+                            <Button
+                                aria-label="Deactivate"
+                                data-testid="es-deactivate"
+                            >
+                                Approve
+                            </Button>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
