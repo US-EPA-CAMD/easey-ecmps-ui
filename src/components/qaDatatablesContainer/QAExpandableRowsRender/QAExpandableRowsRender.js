@@ -58,7 +58,8 @@ const QAExpandableRowsRender = ({
   sectionSelect = null,
 }) => {
   const { locationId, id } = data ? data : 1;
-  console.log("locationId", locationId, "id", id);
+  console.log("locationId", locationId, "id", id,data,props.dataTableName);
+  console.log('user',)
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -106,8 +107,9 @@ const QAExpandableRowsRender = ({
   // const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
 
-  const dropdownArrayIsEmpty = dropdownArray.length === 0;
+  const dropdownArrayIsEmpty = dropdownArray ? dropdownArray.length === 0 : false;
   const nextExpandableRow = (name) => {
+    console.log('name',name)
     switch (name) {
       case "Protocol Gas":
         const objGas = qaProtocalGasProps(data);
@@ -407,6 +409,7 @@ const QAExpandableRowsRender = ({
   const loadDropdownsData = (name) => {
     let dropdowns = {};
     const allPromises = [];
+    console.log('name',name)
     switch (name) {
       case "Protocol Gas":
       case "Linearity Test":
@@ -1028,6 +1031,7 @@ const QAExpandableRowsRender = ({
   };
 
   const getFirstLevelExpandables = () => {
+    console.log('dataTableName',dataTableName)
     const expandables = [];
     switch (dataTableName) {
       case "Linearity Test":

@@ -17,6 +17,7 @@ export const DataTableConfigurations = ({
 
   workspaceSection,
 }) => {
+  console.log('user',user)
   const dispatch = useDispatch();
   const monitoringPlans = useSelector((state) => state.monitoringPlans);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object

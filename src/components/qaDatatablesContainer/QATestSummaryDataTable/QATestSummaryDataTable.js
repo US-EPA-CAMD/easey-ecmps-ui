@@ -185,84 +185,92 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getPrefilteredTestSummaries());
     allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
     allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
-    Promise.all(allPromises).then((response) => {
-      dropdownArray[0].forEach((val, i) => {
-        if (i === 0) {
-          const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeDescription")
-          );
-          setAllTestTypeCodes(options);
-          dropdowns[dropdownArray[0][i]] = options.filter((option) =>
-            selectedTestCode.testTypeCodes.includes(option.code)
-          );
-        } else if (i === 1) {
-          dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
-            getOptions(d, "spanScaleCode", "spanScaleDescription")
-          );
-        } else if (i === 2) {
-          dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
-            getOptions(d, "testReasonCode", "testReasonDescription")
-          );
-        } else if (i === 3) {
-          dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
-            getOptions(d, "testResultCode", "testResultDescription")
-          );
-        } else if (i === 5) {
-          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
-            getOptions(d, "componentId", "componentId")
-          );
-          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
-            dropdowns[dropdownArray[0][i]].sort((a, b) => {
-              return a.code - b.code;
-            });
-          }
-        } else if (i === 6) {
-          dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
-            getOptions(d, "monitoringSystemId", "monitoringSystemId")
-          );
-          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
-            dropdowns[dropdownArray[0][i]].sort((a, b) => {
-              return a.code - b.code;
-            });
-          }
-        } else if (i === 7) {
-          let noDupesTestCodes = response[4].data.map((code) => {
-            return code["testTypeCode"];
-          });
-          noDupesTestCodes = [...new Set(noDupesTestCodes)];
-          dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
-            noDupesTestCodes,
-            "testTypeCode",
-            response[4].data
-          );
-        } else if (i === 4) {
-          dropdowns[dropdownArray[0][i]] = locations.map((l) => {
-            if (l.type === "unit") {
-              return {
-                code: l.unitId,
-                name: l.unitId,
-              };
-            } else {
-              return {
-                code: l.stackPipeId,
-                name: l.stackPipeId,
-              };
+    Promise.all(allPromises)
+      .then((response) => {
+        dropdownArray[0].forEach((val, i) => {
+          if (i === 0) {
+            const options = response[0].data.map((d) =>
+              getOptions(d, "testTypeCode", "testTypeDescription")
+            );
+            setAllTestTypeCodes(options);
+            dropdowns[dropdownArray[0][i]] = options.filter((option) =>
+              selectedTestCode.testTypeCodes.includes(option.code)
+            );
+          } else if (i === 1) {
+            dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
+              getOptions(d, "spanScaleCode", "spanScaleDescription")
+            );
+          } else if (i === 2) {
+            dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
+              getOptions(d, "testReasonCode", "testReasonDescription")
+            );
+          } else if (i === 3) {
+            dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
+              getOptions(d, "testResultCode", "testResultDescription")
+            );
+          } else if (i === 5) {
+            dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+              getOptions(d, "componentId", "componentId")
+            );
+            if (
+              dropdowns[dropdownArray[0][i]].length > 0 &&
+              typeof dropdowns[dropdownArray[0][i]] === "object"
+            ) {
+              dropdowns[dropdownArray[0][i]].sort((a, b) => {
+                return a.code - b.code;
+              });
             }
-          });
-        }
-        if (i !== 0) {
-          dropdowns[dropdownArray[0][i]].unshift({
-            code: "",
-            name: "-- Select a value --",
-          });
-        }
+          } else if (i === 6) {
+            dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
+              getOptions(d, "monitoringSystemId", "monitoringSystemId")
+            );
+            if (
+              dropdowns[dropdownArray[0][i]].length > 0 &&
+              typeof dropdowns[dropdownArray[0][i]] === "object"
+            ) {
+              dropdowns[dropdownArray[0][i]].sort((a, b) => {
+                return a.code - b.code;
+              });
+            }
+          } else if (i === 7) {
+            let noDupesTestCodes = response[4].data.map((code) => {
+              return code["testTypeCode"];
+            });
+            noDupesTestCodes = [...new Set(noDupesTestCodes)];
+            dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
+              noDupesTestCodes,
+              "testTypeCode",
+              response[4].data
+            );
+          } else if (i === 4) {
+            dropdowns[dropdownArray[0][i]] = locations.map((l) => {
+              if (l.type === "unit") {
+                return {
+                  code: l.unitId,
+                  name: l.unitId,
+                };
+              } else {
+                return {
+                  code: l.stackPipeId,
+                  name: l.stackPipeId,
+                };
+              }
+            });
+          }
+          if (i !== 0) {
+            dropdowns[dropdownArray[0][i]].unshift({
+              code: "",
+              name: "-- Select a value --",
+            });
+          }
+        });
+        setMdmData(dropdowns);
+        setDropdownsLoaded(true);
+        setDropdownsLoading(false);
+      })
+      .catch((err) => {
+        console.log("error", err);
       });
-      setMdmData(dropdowns);
-      setDropdownsLoaded(true);
-      setDropdownsLoading(false);
-    }).catch(err => {
-      console.log("error", err)
-    });
   };
   useEffect(() => {
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
@@ -891,6 +899,76 @@ const QATestSummaryDataTable = ({
     }
   };
 
+  // add here for future test type code selection dts
+  const getExpandableComponentProps = (testTypeGroupCode, props) => {
+    let objProps = {};
+    switch (testTypeGroupCode) {
+      case "LINSUM":
+        objProps = qaLinearitySummaryProps();
+        break;
+      // return <QALinearitySummaryExpandableRows {...props} />;
+
+      case "RELACC":
+        objProps = qaRataDataProps();
+        break;
+      case "APPESUM":
+        objProps = qaAppendixECorrelationSummaryTestProps();
+        break;
+      case "FFL": // Fuel Flow to Load
+        objProps = qaFuelFlowToLoadProps();
+        break;
+      case "FFLB":
+        objProps = qaFuelFlowToLoadBaselineProps();
+        break;
+      case "FLC": // Flow to Load Check
+        objProps = qaFlowToLoadCheckProps();
+        break;
+      case "OLOLCAL": // Online Offline Calibration
+        objProps = qaOnOffCalibrationProps();
+        break;
+      case "CALINJ":
+        objProps = qaCalibrationInjectionProps();
+        break;
+      case "FFACC": // Fuel Flowmeter Accuracy
+        objProps = qaFuelFlowmeterAccuracyDataProps();
+        break;
+      case "CYCSUM": // Cycle Time Summary Nested Below Test Data
+        objProps = qaCycleTimeSummaryProps();
+        break;
+      case "TTACC":
+        objProps = qaTransmitterTransducerAccuracyDataProps();
+        return;
+        break;
+      case "FLR":
+        objProps = qaFlowToLoadReferenceProps();
+        break;
+      case "LME": //unit default test
+        objProps = qaUnitDefaultTestDataProps();
+        break;
+      case "HGL3LS": //Hg Linearity and 3-Level Summary
+        objProps = qaHgSummaryDataProps();
+        break;
+      default:
+        return null;
+    }
+
+    console.log('props',objProps["payload"])
+    return {
+      payload: objProps["payload"],
+      dropdownArray: objProps["dropdownArray"],
+      columns: objProps["columnNames"],
+      controlInputs: objProps["controlInputs"],
+      controlDatePickerInputs: objProps["controlDatePickerInputs"],
+      dataTableName: objProps["dataTableName"],
+      sectionSelect: sectionSelect,
+      extraControls: objProps["extraControls"],
+      radioBtnPayload: objProps["radioBtnPayload"],
+      expandable: true,
+      // {...props}
+      extraIDs: null,
+      isCheckedOut: isCheckedOut,
+    };
+  };
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -907,7 +985,9 @@ const QATestSummaryDataTable = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2  text-wrap display-table-cell">Test Data</span>
+                <span className="padding-right-2  text-wrap display-table-cell">
+                  Test Data
+                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
@@ -923,14 +1003,13 @@ const QATestSummaryDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={getExpandableComponent(
-            selectedTestCode.testTypeGroupCode,
+          expandableRowComp={QAExpandableRowsRender}
+          expandableRowProps={
             {
               user: user,
-              nonEditable: nonEditable,
-              locationSelectValue: locationSelectValue,
+            
             }
-          )}
+          }
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
