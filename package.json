@@ -37,6 +37,7 @@
     "@uswds/uswds": "^3.4.1",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "axios": "^1.4.0",
+    "axios-mock-adapter": "^1.21.5",
     "axios-retry": "^3.4.0",
     "downloadjs": "^1.4.7",
     "html-react-parser": "^3.0.15",
@@ -70,12 +71,12 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
     "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.37",
     "autoprefixer": "^10.4.14",
     "jest-sonar-reporter": "^2.0.0",

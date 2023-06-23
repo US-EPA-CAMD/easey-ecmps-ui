@@ -295,7 +295,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
         }
 
         // selectedLocations is an array of location ids. For the creation API call, we actually need the unit/stack name which is the label of the MultiselectCombobox
-        const locationIds = selectedLocations.map(selectedId => locationData.find(ld => ld.id === selectedId)?.label)
+        const unitStackNames = selectedLocations.map(selectedId => locationData.find(ld => ld.id === selectedId)?.label)
             .filter(loc => loc !== null && loc !== undefined) // just sanity checking
 
         // Make api call here later on to save and create new ES
@@ -304,7 +304,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
             checkCatalogResultId: parseInt(id),
             severityCode: selectedSeverityCode,
             facilityId: selectedFacility,
-            locations: locationIds.join(","),
+            locations: unitStackNames.join(","),
             matchDataTypeCode: dataTypeCode,
             matchDataValue: selectedMatchDataValue,
             matchTimeTypeCode: timeTypeCode,
@@ -458,6 +458,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                         data-testid={"facility-name"}
                                         options={facilityList}
                                         onChange={onFacilityChange}
+                                        disableFiltering={false}
                                     />
                                 </div>) : null}
                             </Grid>
