@@ -7,12 +7,12 @@ import { getReportingPeriods } from "../../../utils/api/mdmApi";
 const FilterForm = ({
   facilities,
   queryCallback,
-  showModal,
   setExcludeErrors,
   filesSelected,
   buttonText,
   filterClick,
   componentType,
+  clearBtn,
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -122,7 +122,9 @@ const FilterForm = ({
     }
     selectedOrisCodes.current = newState;
 
-    const configurationData = newState.length? (await getMonitoringPlans(newState)).data : [];
+    const configurationData = newState.length
+      ? (await getMonitoringPlans(newState)).data
+      : [];
 
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
@@ -191,9 +193,10 @@ const FilterForm = ({
         <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="facility-dropdown"
               key={`facilities-${availableFacilities.length}`}
               items={availableFacilities}
-              entity={"Facilities"}
+              entity={"facilities"}
               label={"Facilities"}
               searchBy="contains"
               onChangeUpdate={facilityFilterChange}
@@ -205,9 +208,10 @@ const FilterForm = ({
         <div className="grid-col-6 desktop:grid-col-3 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="configuration-dropdown"
               key={`configs-${availableConfigState.length}`}
               items={availableConfigurations.current}
-              entity={"Configurations"}
+              entity={"configurations"}
               label={"Configurations"}
               searchBy="contains"
               onChangeUpdate={configurationFilterChange}
@@ -219,9 +223,10 @@ const FilterForm = ({
         <div className="grid-col-3 desktop:grid-col-2 margin-top-2">
           <div className="margin-right-2">
             <MultiSelectCombobox
+              data-testid="reporting-period-dropdown"
               key={`periods-${availableReportingPeriods.length}`}
               items={availableReportingPeriods}
-              entity={"Reporting-Periods"}
+              entity={"reporting-periods"}
               label={"Reporting Periods"}
               searchBy="contains"
               onChangeUpdate={reportingPeriodFilterChange}
@@ -230,19 +235,35 @@ const FilterForm = ({
             />
           </div>
         </div>
-        <div className="buttons grid-col-9 desktop:grid-col-4 padding-top-1">
+        <div className="buttons grid-col-9 desktop:grid-col-2 padding-top-1">
           <div
             id="submit-button-group"
             className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
           >
+            {componentType === "SubmissionAccess" ? (
+              <Button
+                disabled={availableConfigState.length === 0}
+                onClick={applyFilters}
+                outline={true}
+              >
+                Clear
+              </Button>
+            ) : (
+              ""
+            )}
             <Button
+              data-testid={"apply-filter"}
               disabled={availableConfigState.length === 0}
               onClick={applyFilters}
-              outline={true}
+              outline={componentType === "SubmissionAccess" ? false : true}
             >
               Apply Filter(s)
             </Button>
-            <Button onClick={filterClick} disabled={filesSelected === 0}>
+            <Button
+              data-testid="filter-callback-button"
+              onClick={filterClick}
+              disabled={filesSelected === 0}
+            >
               {buttonText}
             </Button>
           </div>

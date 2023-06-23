@@ -12,33 +12,34 @@ import "./ReportGenerator.scss";
 
 export const ReportGenerator = ({ user, requireAuth = false }) => {
   const search = useLocation().search;
-  const searchParams = new URLSearchParams(search);
-
-  const year = searchParams.get("year");
-  const teeId = searchParams.get("teeId");
-  const qceId = searchParams.get("qceId");
-  const testId = searchParams.get("testId");
-  const quarter = searchParams.get("quarter");
-  const facilityId = searchParams.get("facilityId");
-  const reportCode = searchParams.get("reportCode");
-  const monitorPlanId = searchParams.get("monitorPlanId");
 
   const [error, setError] = useState();
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const params = {
-    reportCode,
-    facilityId,
-    monitorPlanId,
-    testId,
-    qceId,
-    teeId,
-    year,
-    quarter,
-  };
-
   useEffect(() => {
+    const searchParams = new URLSearchParams(search);
+
+    const year = searchParams.get("year");
+    const teeId = searchParams.get("teeId");
+    const qceId = searchParams.get("qceId");
+    const testId = searchParams.get("testId");
+    const quarter = searchParams.get("quarter");
+    const facilityId = searchParams.get("facilityId");
+    const reportCode = searchParams.get("reportCode");
+    const monitorPlanId = searchParams.get("monitorPlanId");
+
+    const params = {
+      reportCode,
+      facilityId,
+      monitorPlanId,
+      testId,
+      qceId,
+      teeId,
+      year,
+      quarter,
+    };
+
     if (((requireAuth && user) || !requireAuth) && !dataLoaded) {
       camdApi
         .getReport(params)
@@ -50,7 +51,7 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
           setError(error.response?.data?.message);
         });
     }
-  }, [user, requireAuth, dataLoaded, params]);
+  }, []);
 
   if (error) {
     return <ErrorMessage error={error} />;
