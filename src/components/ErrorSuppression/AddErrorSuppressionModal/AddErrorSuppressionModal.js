@@ -13,7 +13,7 @@ import { createErrorSuppression } from "../../../utils/api/errorSuppressionApi";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 
-export const AddErrorSupressionModal = ({ showModal, close, values }) => {
+export const AddErrorSupressionModal = ({ showModal, close, values, isClone }) => {
 
     // Values being used from context
     const {
@@ -33,7 +33,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const [selectedCheckNumber, setSelectedCheckNumber] = useState();
     const [selectedCheckResult, setSelectedCheckResult] = useState();
     const [selectedCheckResultObj, setSelectedCheckResultObj] = useState();
-    const [selectedFacility, setSelectedFacility] = useState();
+    const [selectedFacility, setSelectedFacility] = useState('');
     const [selectedLocations, setSelectedLocations] = useState([]);
     const [selectedReasonCode, setSelectedReasonCode] = useState();
     const [selectedMatchDataValue, setSelectedMatchDataValue] = useState();
@@ -242,11 +242,12 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
     const onFacilityChange = (value) => {
 
         value = value === "false" ? false : value;
+        let prevSelectedFacility = selectedFacility
 
         setSelectedFacility(value);
         if (!value) return;
 
-        if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
+        if (selectedCheckType && selectedCheckNumber && selectedCheckResult && prevSelectedFacility !== value) {
             createMatchTypeDropdownLists(selectedCheckResultObj, value).then(universalMatchDataList => {
                 setMatchDataList(universalMatchDataList)
             });
@@ -447,7 +448,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                         </Grid>
                         <Grid row gap={2}>
                             <Grid col={5}>
-                                {facilityList.length > 0 ? (<div>
+                                {(facilityList.length > 0 && !isClone) || (facilityList.length > 0 && selectedFacility) ? (<div>
                                     <Label test-id={"add-facility-name-label"} htmlFor={"add-facility-name"}>
                                         Facility Name
                                     </Label>
@@ -459,6 +460,7 @@ export const AddErrorSupressionModal = ({ showModal, close, values }) => {
                                         options={facilityList}
                                         onChange={onFacilityChange}
                                         disableFiltering={false}
+                                        defaultValue={parseInt(selectedFacility)}
                                     />
                                 </div>) : null}
                             </Grid>

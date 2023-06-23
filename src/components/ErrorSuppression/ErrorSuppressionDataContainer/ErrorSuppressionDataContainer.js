@@ -253,6 +253,7 @@ export const ErrorSuppressionDataContainer = () => {
           showAddModal={showAddModal || showCloneModal}
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
+          isClone={showCloneModal}
         />
       ) : null}
       {showDeactivateModal ? (
