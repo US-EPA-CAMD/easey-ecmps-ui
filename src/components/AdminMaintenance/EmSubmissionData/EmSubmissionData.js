@@ -8,8 +8,11 @@ import { EmSubmissionModal } from '../EmSubmissionPopOut/EmSubmissionPopout'
 import "./EmSubmissionData.scss";
 
 export const EmSubmissionData = ({ data = [], isLoading = false }) => {
-    
+
     const [showOpenModal, setShowOpenModal] = useState(false);
+    const [showExtendModal, setShowExtendModal] = useState(false);
+    const [showCloseModal, setShowCloseModal] = useState(false);
+    const [showApproveModal, setShowApproveModal] = useState(false);
 
 
     const [, setSelectedRows] = useState([]);
@@ -112,15 +115,23 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
 
     const closeModal = () => {
         setShowOpenModal(false);
+        setShowExtendModal(false);
+        setShowCloseModal(false);
+        setShowApproveModal(false);
     };
 
     return (
         <div>
-            {showOpenModal ? (
+            {showOpenModal || showExtendModal || showCloseModal || showApproveModal ? (
                 <EmSubmissionModal
-                    showModal={showOpenModal}
+                    showModal={showOpenModal || showExtendModal || showCloseModal || showApproveModal}
                     close={closeModal}
-                    isOpenModal={true}
+                    isOpenModal={showOpenModal}
+                    isExtendModal={showExtendModal}
+                    isCloseModal={showCloseModal}
+                    isApproveModal={showApproveModal}
+                    openDate={'06-01-2023'}
+                    closeDate={'06-30-2023'}
                 />
             ) : null}
             <div className="padding-left-0 margin-left-0 padding-right-0" >
@@ -144,6 +155,7 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                                     aria-label="Clone"
                                     data-testid="es-clone"
                                     className="usa-button usa-button--outline"
+                                    onClick={() => setShowExtendModal(true)}
                                 >
                                     Extend
                                 </Button>
@@ -153,6 +165,7 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                                     aria-label="Deactivate"
                                     data-testid="es-deactivate"
                                     className="usa-button usa-button--outline"
+                                    onClick={() => setShowCloseModal(true)}
                                 >
                                     Close
                                 </Button>
@@ -162,6 +175,7 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                                     aria-label="Deactivate"
                                     data-testid="es-deactivate"
                                     className="usa-button usa-button--outline"
+                                    onClick={() => setShowApproveModal(true)}
                                 >
                                     Approve
                                 </Button>

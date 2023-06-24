@@ -2,23 +2,45 @@ import React, { useState, useEffect } from "react";
 import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { currentDateTime, dateToEstString } from "../../../utils/functions";
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
 
+  const [title, setTitle] = useState('');
   const [reasonToOpen, setReasonToOpen] = useState('');
-  const [selectedOpenDate, setSelectedOpenDate] = useState(new Date().toISOString());
-  const [selectedCloseDate, setSelectedCloseDate] = useState(new Date(new Date().setDate(new Date().getDate() + 30)).toISOString());
+  const [selectedOpenDate, setSelectedOpenDate] = useState('');
+  const [selectedCloseDate, setSelectedCloseDate] = useState('');
 
   const [showLoader, setShowLoader] = useState(false);
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
 
-  const saveFunc = () => { }
+  const saveFunc = () => {/* */ }
 
   useEffect(() => {
-    let date = new Date(selectedOpenDate)
+    if (isOpenModal) {
+      setTitle("Open Submission Access")
+      let date = currentDateTime()
+      setSelectedOpenDate(date.toISOString())
+      date.setDate(date.getDate() + 30)
+      setSelectedCloseDate(date.toISOString())
+    } else if (isExtendModal) {
+      setTitle("Extend Submission Access")
+      setSelectedOpenDate(new Date(dateToEstString(openDate)).toISOString())
+      setSelectedCloseDate(new Date(dateToEstString(closeDate)).toISOString())
+    } else if (isCloseModal) {
+      setTitle("Close Submission Access")
+    } else if (isApproveModal) {
+      setTitle("Approve Submission Access")
+    }
+
+
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal])
+
+  useEffect(() => {
+    let date = currentDateTime(selectedOpenDate)
     date.setDate(date.getDate() + 30);
     setSelectedCloseDate(date.toISOString())
-  }, [selectedOpenDate, selectedCloseDate])
+  }, [selectedOpenDate])
 
   return (
     <div>
@@ -28,7 +50,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
         save={saveFunc}
         exitBTN={"Save and Close"}
         showSave
-        title={"Open Submission Access"}
+        title={title}
         close={close}
         width={"40%"}
       >
@@ -36,7 +58,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
           <Preloader />
           :
           <GridContainer className='margin-left-1'>
-            {isOpenModal ? <Grid row gap={2} className='maxw-mobile-lg'>
+            {isOpenModal || isExtendModal ? <Grid row gap={2} className='maxw-mobile-lg'>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
                   htmlFor="add-begin-date-2"
@@ -52,7 +74,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
                   defaultValue={selectedOpenDate}
                   value={selectedOpenDate}
                   minDate={new Date().toISOString()}
-                  onChange={(e) => setSelectedOpenDate(new Date(e).toISOString())}
+                  onChange={(e) => setSelectedOpenDate(new Date(dateToEstString(e)).toISOString())}
+                  disabled={isExtendModal}
                 />
               </Grid>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
@@ -69,15 +92,14 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
                   placeholder="Select Close Date"
                   defaultValue={selectedCloseDate}
                   value={selectedCloseDate}
-                  onChange={(e) => setSelectedCloseDate(new Date(e).toISOString())}
+                  onChange={(e) => setSelectedCloseDate(new Date(dateToEstString(e)).toISOString())}
                   disabled={isOpenModal}
-
                 />
               </Grid>
             </Grid> : null}
 
             {isOpenModal ?
-              <Grid row className='margin-bottom-2 margin-top-1'>
+              <Grid row className='margin-top-1'>
                 <Grid col={12}>
                   <Checkbox
                     id="add-require-sub-qtrs"
@@ -92,7 +114,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal }) => {
                 </Grid>
               </Grid> : null}
 
-            <Grid row>
+            <Grid row className={isOpenModal || isExtendModal ? "margin-top-2" : ""}>
               <Grid col={12}>
                 <Label htmlFor="reason-to-open" id="reason-to-open-label">Reason to Open</Label>
                 <Textarea
