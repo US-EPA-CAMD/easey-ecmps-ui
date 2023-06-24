@@ -4,37 +4,45 @@ import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, reasonToOpen }) => {
 
   const [title, setTitle] = useState('');
-  const [reasonToOpen, setReasonToOpen] = useState('');
+  const [txtBoxLabel, setTxtBoxLabel] = useState('');
+
+  const [selectedReasonToOpen, setSelectedReasonToOpen] = useState('');
   const [selectedOpenDate, setSelectedOpenDate] = useState('');
   const [selectedCloseDate, setSelectedCloseDate] = useState('');
-
-  const [showLoader, setShowLoader] = useState(false);
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
 
-  const saveFunc = () => {/* */ }
+  const [showLoader, setShowLoader] = useState(false);
+
+  const saveFunc = () => {/* 
+  TODO: CALL RESPECTIVE API TO UPDATE DATA
+  */}
 
   useEffect(() => {
     if (isOpenModal) {
       setTitle("Open Submission Access")
+      setTxtBoxLabel("Reason to Open")
       let date = currentDateTime()
       setSelectedOpenDate(date.toISOString())
       date.setDate(date.getDate() + 30)
       setSelectedCloseDate(date.toISOString())
     } else if (isExtendModal) {
       setTitle("Extend Submission Access")
+      setTxtBoxLabel("Reason to Extend")
       setSelectedOpenDate(new Date(dateToEstString(openDate)).toISOString())
       setSelectedCloseDate(new Date(dateToEstString(closeDate)).toISOString())
     } else if (isCloseModal) {
       setTitle("Close Submission Access")
+      setTxtBoxLabel("Reason to Close")
     } else if (isApproveModal) {
       setTitle("Approve Submission Access")
+      setTxtBoxLabel("Reason to Approve")
     }
 
 
-  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal])
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
 
   useEffect(() => {
     let date = currentDateTime(selectedOpenDate)
@@ -116,14 +124,14 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
             <Grid row className={isOpenModal || isExtendModal ? "margin-top-2" : ""}>
               <Grid col={12}>
-                <Label htmlFor="reason-to-open" id="reason-to-open-label">Reason to Open</Label>
+                <Label htmlFor="reason-to-open" id="reason-to-open-label">{txtBoxLabel}</Label>
                 <Textarea
                   className="maxw-full"
                   id="reason-to-open"
                   name="reason-to-open"
                   type="text"
-                  value={reasonToOpen}
-                  onChange={(e) => { setReasonToOpen(e.target.value) }}
+                  value={selectedReasonToOpen}
+                  onChange={(e) => { setSelectedReasonToOpen(e.target.value) }}
                 />
               </Grid>
             </Grid>
