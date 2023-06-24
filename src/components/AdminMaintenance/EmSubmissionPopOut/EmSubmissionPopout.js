@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox, TextInput } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { currentDateTime, dateToEstString } from "../../../utils/functions";
+import { currentDateTime, dateToEstString, formatDate } from "../../../utils/functions";
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, reasonToOpen }) => {
+const getDateString = (date) => {
+  let d = new Date(dateToEstString(date)).toISOString();
+  let dArr = d.split('T')
+
+  return dArr[0]
+}
+
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
 
   const [title, setTitle] = useState('');
-  const [txtBoxLabel, setTxtBoxLabel] = useState('');
 
   const [selectedReasonToOpen, setSelectedReasonToOpen] = useState('');
   const [selectedOpenDate, setSelectedOpenDate] = useState('');
@@ -16,39 +22,37 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
   const [showLoader, setShowLoader] = useState(false);
 
-  const saveFunc = () => {/* 
-  TODO: CALL RESPECTIVE API TO UPDATE DATA
-  */}
+  const saveFunc = () => {
+    close()
+    /* TODO: CALL RESPECTIVE API TO UPDATE DATA */
+  }
 
   useEffect(() => {
     if (isOpenModal) {
-      setTitle("Open Submission Access")
-      setTxtBoxLabel("Reason to Open")
+      setTitle("Open")
       let date = currentDateTime()
-      setSelectedOpenDate(date.toISOString())
+      setSelectedOpenDate(getDateString(date))
       date.setDate(date.getDate() + 30)
-      setSelectedCloseDate(date.toISOString())
+      setSelectedCloseDate(getDateString(date))
     } else if (isExtendModal) {
-      setTitle("Extend Submission Access")
-      setTxtBoxLabel("Reason to Extend")
-      setSelectedOpenDate(new Date(dateToEstString(openDate)).toISOString())
-      setSelectedCloseDate(new Date(dateToEstString(closeDate)).toISOString())
+      setTitle("Extend")
+      setSelectedOpenDate(getDateString(openDate))
+      setSelectedCloseDate(getDateString(closeDate))
     } else if (isCloseModal) {
-      setTitle("Close Submission Access")
-      setTxtBoxLabel("Reason to Close")
+      setTitle("Close")
     } else if (isApproveModal) {
-      setTitle("Approve Submission Access")
-      setTxtBoxLabel("Reason to Approve")
+      setTitle("Approve")
     }
 
 
   }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
 
-  useEffect(() => {
-    let date = currentDateTime(selectedOpenDate)
+  const updateDates = (e) => {
+    let date = new Date(e)
+    setSelectedOpenDate(getDateString(e))
     date.setDate(date.getDate() + 30);
-    setSelectedCloseDate(date.toISOString())
-  }, [selectedOpenDate])
+    setSelectedCloseDate(getDateString(date))
+  }
 
   return (
     <div>
@@ -58,7 +62,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
         save={saveFunc}
         exitBTN={"Save and Close"}
         showSave
-        title={title}
+        title={`${title} Submission Access`}
         close={close}
         width={"40%"}
       >
@@ -66,43 +70,65 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
           <Preloader />
           :
           <GridContainer className='margin-left-1'>
-            {isOpenModal || isExtendModal ? <Grid row gap={2} className='maxw-mobile-lg'>
+            {(isOpenModal || isExtendModal) && selectedOpenDate && selectedCloseDate ? <Grid row gap={2} className='maxw-mobile-lg'>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
-                  htmlFor="add-begin-date-2"
-                  id="add-begin-date-2"
+                  htmlFor="close-date-label"
                 >
                   Open Date
                 </Label>
-                <DatePicker
-                  aria-labelledby="add-begin-date-2"
-                  id="add-begin-date-2"
-                  name="add-begin-date-2"
-                  placeholder="Select Open Date"
-                  defaultValue={selectedOpenDate}
-                  value={selectedOpenDate}
-                  minDate={new Date().toISOString()}
-                  onChange={(e) => setSelectedOpenDate(new Date(dateToEstString(e)).toISOString())}
-                  disabled={isExtendModal}
-                />
+                {
+                  isExtendModal && selectedOpenDate ?
+                    <TextInput
+                      className="maxw-15"
+                      epadataname="openDate"
+                      aria-labelledby="open-date"
+                      id="open-date"
+                      name="open-date"
+                      value={formatDate(selectedOpenDate, '/')}
+                      disabled={isExtendModal}
+                    />
+                    :
+                    <DatePicker
+                      aria-labelledby="open-date"
+                      id="open-date"
+                      name="open-date"
+                      placeholder="Select Open Date"
+                      defaultValue={selectedOpenDate}
+                      minDate={new Date().toISOString()}
+                      onChange={updateDates}
+                      disabled={isExtendModal}
+                    />
+                }
               </Grid>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
-                  htmlFor="add-end-date-2"
-                  id="add-end-date-2"
+                  htmlFor="close-date-label"
                 >
                   Close Date
                 </Label>
-                <DatePicker
-                  aria-labelledby="add-end-date-2"
-                  id="add-end-date-2"
-                  name="add-end-date-2"
-                  placeholder="Select Close Date"
-                  defaultValue={selectedCloseDate}
-                  value={selectedCloseDate}
-                  onChange={(e) => setSelectedCloseDate(new Date(dateToEstString(e)).toISOString())}
-                  disabled={isOpenModal}
-                />
+                {
+                  isOpenModal && selectedCloseDate ?
+                    <TextInput
+                      className="maxw-15"
+                      epadataname="closeDate"
+                      aria-labelledby="close-date"
+                      id="close-date"
+                      name="close-date"
+                      value={formatDate(selectedCloseDate, '/')}
+                      disabled={isOpenModal}
+                    />
+                    :
+                    <DatePicker
+                      aria-labelledby="close-date"
+                      id="close-date"
+                      name="close-date"
+                      placeholder="Select Close Date"
+                      defaultValue={selectedCloseDate}
+                      onChange={(e) => setSelectedCloseDate(getDateString(e))}
+                      disabled={isOpenModal}
+                    />
+                }
               </Grid>
             </Grid> : null}
 
@@ -110,7 +136,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
               <Grid row className='margin-top-1'>
                 <Grid col={12}>
                   <Checkbox
-                    id="add-require-sub-qtrs"
+                    id="require-sub-qtrs"
                     name="require-sub-qtrs"
                     label="Require Subsequent Quarters"
                     checked={selectedRequireSubQtrs}
@@ -124,7 +150,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
             <Grid row className={isOpenModal || isExtendModal ? "margin-top-2" : ""}>
               <Grid col={12}>
-                <Label htmlFor="reason-to-open" id="reason-to-open-label">{txtBoxLabel}</Label>
+                <Label htmlFor="reason-to-open" id="reason-to-open-label">Reason to {title}</Label>
                 <Textarea
                   className="maxw-full"
                   id="reason-to-open"
