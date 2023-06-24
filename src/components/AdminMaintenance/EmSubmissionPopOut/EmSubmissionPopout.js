@@ -73,7 +73,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
             {(isOpenModal || isExtendModal) && selectedOpenDate && selectedCloseDate ? <Grid row gap={2} className='maxw-mobile-lg'>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
-                  htmlFor="close-date-label"
+                  htmlFor="open-date-label"
                 >
                   Open Date
                 </Label>
@@ -81,10 +81,11 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   isExtendModal && selectedOpenDate ?
                     <TextInput
                       className="maxw-15"
-                      epadataname="openDate"
                       aria-labelledby="open-date"
                       id="open-date"
                       name="open-date"
+                      epa-testid={"open-date"}
+                      data-testid={"open-date"}
                       value={formatDate(selectedOpenDate, '/')}
                       disabled={isExtendModal}
                     />
@@ -93,6 +94,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                       aria-labelledby="open-date"
                       id="open-date"
                       name="open-date"
+                      epa-testid={"open-date"}
+                      data-testid={"open-date"}
                       placeholder="Select Open Date"
                       defaultValue={selectedOpenDate}
                       minDate={new Date().toISOString()}
@@ -115,6 +118,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                       aria-labelledby="close-date"
                       id="close-date"
                       name="close-date"
+                      epa-testid={"close-date"}
+                      data-testid={"close-date"}
                       value={formatDate(selectedCloseDate, '/')}
                       disabled={isOpenModal}
                     />
@@ -125,6 +130,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                       name="close-date"
                       placeholder="Select Close Date"
                       defaultValue={selectedCloseDate}
+                      epa-testid={"close-date"}
+                      data-testid={"close-date"}
                       onChange={(e) => setSelectedCloseDate(getDateString(e))}
                       disabled={isOpenModal}
                     />
@@ -139,6 +146,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                     id="require-sub-qtrs"
                     name="require-sub-qtrs"
                     label="Require Subsequent Quarters"
+                    epa-testid={"require-sub-qtrs"}
+                    data-testid={"require-sub-qtrs"}
                     checked={selectedRequireSubQtrs}
                     value={selectedRequireSubQtrs}
                     onChange={() =>
@@ -156,6 +165,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   id="reason-to-open"
                   name="reason-to-open"
                   type="text"
+                  epa-testid={"reason-to-open"}
+                  data-testid={"reason-to-open"}
                   value={selectedReasonToOpen}
                   onChange={(e) => { setSelectedReasonToOpen(e.target.value) }}
                 />
