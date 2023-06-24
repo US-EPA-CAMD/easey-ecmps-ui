@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox, TextInput } from "@trussworks/react-uswds";
+import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { currentDateTime, dateToEstString, formatDate } from "../../../utils/functions";
+import { currentDateTime, dateToEstString } from "../../../utils/functions";
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -11,7 +11,7 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate }) => {
 
   const [title, setTitle] = useState('');
 
@@ -30,14 +30,20 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   useEffect(() => {
     if (isOpenModal) {
       setTitle("Open")
+
       let date = currentDateTime()
       setSelectedOpenDate(getDateString(date))
-      date.setDate(date.getDate() + 30)
-      setSelectedCloseDate(getDateString(date))
+      let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      setSelectedCloseDate(getDateString(lastDayOfMonth))
+
     } else if (isExtendModal) {
       setTitle("Extend")
+
       setSelectedOpenDate(getDateString(openDate))
-      setSelectedCloseDate(getDateString(closeDate))
+      let date = currentDateTime()
+      let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      setSelectedCloseDate(getDateString(lastDayOfMonth))
+
     } else if (isCloseModal) {
       setTitle("Close")
     } else if (isApproveModal) {
@@ -45,7 +51,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     }
 
 
-  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate])
 
   const updateDates = (e) => {
     let date = new Date(e)
@@ -77,32 +83,18 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                 >
                   Open Date
                 </Label>
-                {
-                  isExtendModal && selectedOpenDate ?
-                    <TextInput
-                      className="maxw-15"
-                      aria-labelledby="open-date"
-                      id="open-date"
-                      name="open-date"
-                      epa-testid={"open-date"}
-                      data-testid={"open-date"}
-                      value={formatDate(selectedOpenDate, '/')}
-                      disabled={isExtendModal}
-                    />
-                    :
-                    <DatePicker
-                      aria-labelledby="open-date"
-                      id="open-date"
-                      name="open-date"
-                      epa-testid={"open-date"}
-                      data-testid={"open-date"}
-                      placeholder="Select Open Date"
-                      defaultValue={selectedOpenDate}
-                      minDate={new Date().toISOString()}
-                      onChange={updateDates}
-                      disabled={isExtendModal}
-                    />
-                }
+                <DatePicker
+                  aria-labelledby="open-date"
+                  id="open-date"
+                  name="open-date"
+                  epa-testid={"open-date"}
+                  data-testid={"open-date"}
+                  placeholder="Select Open Date"
+                  defaultValue={selectedOpenDate}
+                  minDate={new Date().toISOString()}
+                  onChange={updateDates}
+                  disabled={isExtendModal}
+                />
               </Grid>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
@@ -110,32 +102,17 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                 >
                   Close Date
                 </Label>
-                {
-                  isOpenModal && selectedCloseDate ?
-                    <TextInput
-                      className="maxw-15"
-                      epadataname="closeDate"
-                      aria-labelledby="close-date"
-                      id="close-date"
-                      name="close-date"
-                      epa-testid={"close-date"}
-                      data-testid={"close-date"}
-                      value={formatDate(selectedCloseDate, '/')}
-                      disabled={isOpenModal}
-                    />
-                    :
-                    <DatePicker
-                      aria-labelledby="close-date"
-                      id="close-date"
-                      name="close-date"
-                      placeholder="Select Close Date"
-                      defaultValue={selectedCloseDate}
-                      epa-testid={"close-date"}
-                      data-testid={"close-date"}
-                      onChange={(e) => setSelectedCloseDate(getDateString(e))}
-                      disabled={isOpenModal}
-                    />
-                }
+                <DatePicker
+                  aria-labelledby="close-date"
+                  id="close-date"
+                  name="close-date"
+                  placeholder="Select Close Date"
+                  defaultValue={selectedCloseDate}
+                  epa-testid={"close-date"}
+                  data-testid={"close-date"}
+                  onChange={(e) => setSelectedCloseDate(getDateString(e))}
+                  disabled={isOpenModal}
+                />
               </Grid>
             </Grid> : null}
 
