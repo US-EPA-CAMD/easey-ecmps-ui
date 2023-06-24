@@ -130,7 +130,8 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                     isExtendModal={showExtendModal}
                     isCloseModal={showCloseModal}
                     isApproveModal={showApproveModal}
-                    openDate={'2023-06-01'}
+                    openDate={new Date().toISOString()}
+                    closeDate={'2023-07-30'}
                 />
             ) : null}
             <div className="padding-left-0 margin-left-0 padding-right-0" >

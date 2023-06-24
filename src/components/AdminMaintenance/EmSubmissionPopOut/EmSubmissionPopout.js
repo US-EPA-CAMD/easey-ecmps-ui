@@ -11,7 +11,7 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
 
   const [title, setTitle] = useState('');
 
@@ -40,9 +40,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       setTitle("Extend")
 
       setSelectedOpenDate(getDateString(openDate))
-      let date = currentDateTime()
-      let lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-      setSelectedCloseDate(getDateString(lastDayOfMonth))
+      setSelectedCloseDate(getDateString(closeDate))
 
     } else if (isCloseModal) {
       setTitle("Close")
@@ -51,7 +49,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     }
 
 
-  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate])
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
 
   const updateDates = (e) => {
     let date = new Date(e)
@@ -111,7 +109,6 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   epa-testid={"close-date"}
                   data-testid={"close-date"}
                   onChange={(e) => setSelectedCloseDate(getDateString(e))}
-                  disabled={isOpenModal}
                 />
               </Grid>
             </Grid> : null}
