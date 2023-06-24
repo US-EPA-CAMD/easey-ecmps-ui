@@ -145,6 +145,7 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                                 <Button
                                     aria-label="Add"
                                     data-testid="es-add"
+                                    className="usa-button usa-button--outline"
                                     onClick={() => setShowOpenModal(true)}
                                 >
                                     Open
