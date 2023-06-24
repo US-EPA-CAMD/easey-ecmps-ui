@@ -20,6 +20,7 @@ export const EmSubmissionData = ({
     // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
     const [selectedRows, setSelectedRows] = useState([]);
 
+    // @TODO: still need to add the View button here
     const getSelect = useCallback((row, idx) => {
         return (
             <div>
@@ -148,6 +149,7 @@ export const EmSubmissionData = ({
                     isApproveModal={showApproveModal}
                     openDate={new Date().toISOString()}
                     closeDate={'2023-07-30'}
+                    selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
                 />
             ) : null}
             <div className="padding-left-0 margin-left-0 padding-right-0" >
@@ -162,7 +164,12 @@ export const EmSubmissionData = ({
                                     aria-label="Add"
                                     data-testid="es-add"
                                     className="usa-button usa-button--outline"
-                                    onClick={() => setShowOpenModal(true)}
+                                    onClick={() => {
+                                        if (selectedRows.length === 1) {
+                                            setShowOpenModal(true)
+                                        }
+                                    }}
+                                    disabled={selectedRows.length > 1 ? true : false}
                                 >
                                     Open
                                 </Button>

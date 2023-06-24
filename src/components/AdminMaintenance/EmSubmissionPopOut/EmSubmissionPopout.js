@@ -3,6 +3,8 @@ import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox } from "@tru
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
+import * as emSubmissionApi from '../../../utils/api/adminManagementApi'
+import { getReportingPeriods } from '../../../utils/api/qaCertificationsAPI'
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -11,7 +13,7 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow }) => {
 
   const [title, setTitle] = useState('');
 
@@ -22,9 +24,35 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
   const [showLoader, setShowLoader] = useState(false);
 
-  const saveFunc = () => {
+  const saveFunc = async () => {
+    const reportingPeriods = (await getReportingPeriods()).data
+    const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
+
+    const postPayload = {
+      emissionStatusCode: selectedRow.emissionStatusCode,
+      submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
+      resubExplanation: selectedReasonToOpen,
+      closeDate: selectedOpenDate,
+      openDate: selectedCloseDate,
+      monitorPlanId: selectedRow.monitorPlanId,
+      reportingPeriodId: selectedRow.reportingPeriodId
+    }
+
+    if (isOpenModal) {
+      postPayload.reportingPeriodId = selectedRp.id;
+      emSubmissionApi.openEmSubmissionRecord(postPayload)
+
+      if (selectedRequireSubQtrs) {
+        for (let i = selectedRp.quarter + 1; i <= 4; i++) {
+          const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
+          postPayload.reportingPeriodId = filteredRp.id;
+
+          emSubmissionApi.openEmSubmissionRecord(postPayload)
+        }
+      }
+    }
+
     close()
-    /* TODO: CALL RESPECTIVE API TO UPDATE DATA */
   }
 
   useEffect(() => {
@@ -47,7 +75,6 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     } else if (isApproveModal) {
       setTitle("Approve")
     }
-
 
   }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
 
@@ -89,7 +116,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   data-testid={"open-date"}
                   placeholder="Select Open Date"
                   defaultValue={selectedOpenDate}
-                  minDate={new Date().toISOString()}
+                  minDate={selectedOpenDate}
                   onChange={updateDates}
                   disabled={isExtendModal}
                 />
@@ -108,6 +135,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   defaultValue={selectedCloseDate}
                   epa-testid={"close-date"}
                   data-testid={"close-date"}
+                  minDate={selectedCloseDate}
                   onChange={(e) => setSelectedCloseDate(getDateString(e))}
                 />
               </Grid>

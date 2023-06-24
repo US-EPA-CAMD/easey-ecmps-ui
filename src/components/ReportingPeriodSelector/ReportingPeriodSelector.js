@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, Label } from "@trussworks/react-uswds";
-import { getReportingPeriod } from "../../utils/api/qaCertificationsAPI";
+import { getReportingPeriods } from "../../utils/api/qaCertificationsAPI";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
 
@@ -20,7 +20,7 @@ const ReportingPeriodSelector = ({
     const fetchReportingPeriods = async () => {
       try {
         setLoading(true);
-        const resp = await getReportingPeriod(isQaCert);
+        const resp = await getReportingPeriods(isQaCert);
 
         if (!successResponses.includes(resp.status)) {
           throw new Error(`Fetch reporting periods failed with status: ${resp.status}`)
