@@ -13,7 +13,7 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow, setReloadTableData }) => {
 
   const [title, setTitle] = useState('');
 
@@ -39,20 +39,26 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     }
 
     if (isOpenModal) {
-      postPayload.reportingPeriodId = selectedRp.id;
-      emSubmissionApi.openEmSubmissionRecord(postPayload)
+      try {
+        postPayload.reportingPeriodId = selectedRp.id;
+        emSubmissionApi.openEmSubmissionRecord(postPayload)
 
-      if (selectedRequireSubQtrs) {
-        for (let i = selectedRp.quarter + 1; i <= 4; i++) {
-          const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
-          postPayload.reportingPeriodId = filteredRp.id;
+        if (selectedRequireSubQtrs) {
+          for (let i = selectedRp.quarter + 1; i <= 4; i++) {
+            const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
+            postPayload.reportingPeriodId = filteredRp.id;
 
-          emSubmissionApi.openEmSubmissionRecord(postPayload)
+            emSubmissionApi.openEmSubmissionRecord(postPayload)
+          }
         }
+        setReloadTableData(true)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        close()
       }
     }
 
-    close()
   }
 
   useEffect(() => {
