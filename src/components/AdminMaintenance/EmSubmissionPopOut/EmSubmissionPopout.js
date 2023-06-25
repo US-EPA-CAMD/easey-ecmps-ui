@@ -23,8 +23,11 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
 
   const [showLoader, setShowLoader] = useState(false);
+  const [disableSaveBtn, setDisableSaveBtn] = useState(false);
 
   const saveFunc = async () => {
+    setShowLoader(true)
+    setDisableSaveBtn(true)
     const reportingPeriods = (await getReportingPeriods()).data
     const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
 
@@ -41,14 +44,14 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     if (isOpenModal) {
       try {
         postPayload.reportingPeriodId = selectedRp.id;
-        emSubmissionApi.openEmSubmissionRecord(postPayload)
+        await emSubmissionApi.openEmSubmissionRecord(postPayload)
 
         if (selectedRequireSubQtrs) {
           for (let i = selectedRp.quarter + 1; i <= 4; i++) {
             const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
             postPayload.reportingPeriodId = filteredRp.id;
 
-            emSubmissionApi.openEmSubmissionRecord(postPayload)
+            await emSubmissionApi.openEmSubmissionRecord(postPayload)
           }
         }
         setReloadTableData(true)
@@ -99,6 +102,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
         save={saveFunc}
         exitBTN={"Save and Close"}
         showSave
+        disableExitBtn={disableSaveBtn}
         title={`${title} Submission Access`}
         close={close}
         width={"40%"}
