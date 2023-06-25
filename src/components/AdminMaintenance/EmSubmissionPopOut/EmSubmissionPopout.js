@@ -32,8 +32,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       emissionStatusCode: selectedRow.emissionStatusCode,
       submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
       resubExplanation: selectedReasonToOpen,
-      closeDate: selectedOpenDate,
-      openDate: selectedCloseDate,
+      closeDate: selectedCloseDate,
+      openDate: selectedOpenDate,
       monitorPlanId: selectedRow.monitorPlanId,
       reportingPeriodId: selectedRow.reportingPeriodId
     }
