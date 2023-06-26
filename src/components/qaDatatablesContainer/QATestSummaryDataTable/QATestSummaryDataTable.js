@@ -602,312 +602,12 @@ const QATestSummaryDataTable = ({
   };
 
   // add here for future test type code selection dts
-  const getExpandableComponent = (testTypeGroupCode, props) => {
-    switch (testTypeGroupCode) {
-      case "LINSUM":
-        const obj = qaLinearitySummaryProps();
-        return (
-          <QAExpandableRowsRender
-            payload={obj["payload"]}
-            dropdownArray={obj["dropdownArray"]}
-            columns={obj["columnNames"]}
-            controlInputs={obj["controlInputs"]}
-            controlDatePickerInputs={obj["controlDatePickerInputs"]}
-            dataTableName={obj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={obj["extraControls"]}
-            radioBtnPayload={obj["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      // return <QALinearitySummaryExpandableRows {...props} />;
-
-      case "RELACC":
-        const rataObj = qaRataDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={rataObj["payload"]}
-            dropdownArray={rataObj["dropdownArray"]}
-            columns={rataObj["columnNames"]}
-            controlInputs={rataObj["controlInputs"]}
-            controlDatePickerInputs={rataObj["controlDatePickerInputs"]}
-            dataTableName={rataObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={rataObj["extraControls"]}
-            radioBtnPayload={rataObj["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "APPESUM":
-        const appESum = qaAppendixECorrelationSummaryTestProps();
-        return (
-          <QAExpandableRowsRender
-            payload={appESum["payload"]}
-            dropdownArray={appESum["dropdownArray"]}
-            columns={appESum["columnNames"]}
-            controlInputs={appESum["controlInputs"]}
-            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
-            dataTableName={appESum["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={appESum["extraControls"]}
-            radioBtnPayload={appESum["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-
-      case "FFL": // Fuel Flow to Load
-        const fflProps = qaFuelFlowToLoadProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fflProps["payload"]}
-            dropdownArray={fflProps["dropdownArray"]}
-            mdmProps={fflProps["mdmProps"]}
-            columns={fflProps["columnNames"]}
-            controlInputs={fflProps["controlInputs"]}
-            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
-            dataTableName={fflProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fflProps["extraControls"]}
-            radioBtnPayload={fflProps["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "FFLB":
-        const fflbProps = qaFuelFlowToLoadBaselineProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fflbProps["payload"]}
-            dropdownArray={fflbProps["dropdownArray"]}
-            mdmProps={fflbProps["mdmProps"]}
-            columns={fflbProps["columnNames"]}
-            controlInputs={fflbProps["controlInputs"]}
-            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
-            dataTableName={fflbProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fflbProps["extraControls"]}
-            radioBtnPayload={fflbProps["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "FLC": // Flow to Load Check
-        const flcProps = qaFlowToLoadCheckProps();
-        return (
-          <QAExpandableRowsRender
-            payload={flcProps["payload"]}
-            dropdownArray={flcProps["dropdownArray"]}
-            mdmProps={flcProps["mdmProps"]}
-            columns={flcProps["columnNames"]}
-            controlInputs={flcProps["controlInputs"]}
-            dataTableName={flcProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "OLOLCAL": // Online Offline Calibration
-        const onOffCalProps = qaOnOffCalibrationProps();
-        return (
-          <QAExpandableRowsRender
-            payload={onOffCalProps["payload"]}
-            dropdownArray={onOffCalProps["dropdownArray"]}
-            mdmProps={onOffCalProps["mdmProps"]}
-            columns={onOffCalProps["columnNames"]}
-            controlInputs={onOffCalProps["controlInputs"]}
-            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
-            dataTableName={onOffCalProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "CALINJ":
-        const cjProps = qaCalibrationInjectionProps();
-        return (
-          <QAExpandableRowsRender
-            payload={cjProps["payload"]}
-            dropdownArray={cjProps["dropdownArray"]}
-            mdmProps={cjProps["mdmProps"]}
-            columns={cjProps["columnNames"]}
-            controlInputs={cjProps["controlInputs"]}
-            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
-            radioBtnPayload={cjProps["radioBtnPayload"]}
-            dataTableName={cjProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={cjProps["extraControls"]}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "FFACC": // Fuel Flowmeter Accuracy
-        const fuelFlowmeterAccuracyDataProps =
-          qaFuelFlowmeterAccuracyDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fuelFlowmeterAccuracyDataProps["payload"]}
-            dropdownArray={fuelFlowmeterAccuracyDataProps["dropdownArray"]}
-            mdmProps={fuelFlowmeterAccuracyDataProps["mdmProps"]}
-            columns={fuelFlowmeterAccuracyDataProps["columnNames"]}
-            controlInputs={fuelFlowmeterAccuracyDataProps["controlInputs"]}
-            controlDatePickerInputs={
-              fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
-            dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "CYCSUM": // Cycle Time Summary Nested Below Test Data
-        const cycleTimeSum = qaCycleTimeSummaryProps();
-        return (
-          <QAExpandableRowsRender
-            payload={cycleTimeSum["payload"]}
-            dropdownArray={cycleTimeSum["dropdownArray"]}
-            mdmProps={cycleTimeSum["mdmProps"]}
-            columns={cycleTimeSum["columnNames"]}
-            controlInputs={cycleTimeSum["controlInputs"]}
-            controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
-            radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
-            dataTableName={cycleTimeSum["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={cycleTimeSum["extraControls"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "TTACC":
-        const transmitterTransducerAccuracyDataProps =
-          qaTransmitterTransducerAccuracyDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={transmitterTransducerAccuracyDataProps["payload"]}
-            dropdownArray={
-              transmitterTransducerAccuracyDataProps["dropdownArray"]
-            }
-            mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
-            columns={transmitterTransducerAccuracyDataProps["columnNames"]}
-            controlInputs={
-              transmitterTransducerAccuracyDataProps["controlInputs"]
-            }
-            controlDatePickerInputs={
-              transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={
-              transmitterTransducerAccuracyDataProps["radioBtnPayload"]
-            }
-            dataTableName={
-              transmitterTransducerAccuracyDataProps["dataTableName"]
-            }
-            sectionSelect={sectionSelect}
-            extraControls={
-              transmitterTransducerAccuracyDataProps["extraControls"]
-            }
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "FLR":
-        const flowToLoadReferenceProps = qaFlowToLoadReferenceProps();
-        return (
-          <QAExpandableRowsRender
-            payload={flowToLoadReferenceProps["payload"]}
-            dropdownArray={flowToLoadReferenceProps["dropdownArray"]}
-            mdmProps={flowToLoadReferenceProps["mdmProps"]}
-            columns={flowToLoadReferenceProps["columnNames"]}
-            controlInputs={flowToLoadReferenceProps["controlInputs"]}
-            controlDatePickerInputs={
-              flowToLoadReferenceProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={flowToLoadReferenceProps["radioBtnPayload"]}
-            dataTableName={flowToLoadReferenceProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={flowToLoadReferenceProps["extraControls"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "LME": //unit default test
-        const unitDefaultTestDataProps = qaUnitDefaultTestDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={unitDefaultTestDataProps["payload"]}
-            dropdownArray={unitDefaultTestDataProps["dropdownArray"]}
-            mdmProps={unitDefaultTestDataProps["mdmProps"]}
-            columns={unitDefaultTestDataProps["columnNames"]}
-            controlInputs={unitDefaultTestDataProps["controlInputs"]}
-            dataTableName={unitDefaultTestDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      case "HGL3LS": //Hg Linearity and 3-Level Summary
-        const hgSummaryDataProps = qaHgSummaryDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={hgSummaryDataProps["payload"]}
-            dropdownArray={hgSummaryDataProps["dropdownArray"]}
-            mdmProps={hgSummaryDataProps["mdmProps"]}
-            columns={hgSummaryDataProps["columnNames"]}
-            controlInputs={hgSummaryDataProps["controlInputs"]}
-            dataTableName={hgSummaryDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
-  // add here for future test type code selection dts
   const getExpandableComponentProps = (testTypeGroupCode, props) => {
     let objProps = {};
     switch (testTypeGroupCode) {
       case "LINSUM":
         objProps = qaLinearitySummaryProps();
         break;
-      // return <QALinearitySummaryExpandableRows {...props} />;
-
       case "RELACC":
         objProps = qaRataDataProps();
         break;
@@ -937,7 +637,7 @@ const QATestSummaryDataTable = ({
         break;
       case "TTACC":
         objProps = qaTransmitterTransducerAccuracyDataProps();
-        return;
+
         break;
       case "FLR":
         objProps = qaFlowToLoadReferenceProps();
@@ -951,8 +651,6 @@ const QATestSummaryDataTable = ({
       default:
         return null;
     }
-
-    console.log('props',objProps["payload"])
     return {
       payload: objProps["payload"],
       dropdownArray: objProps["dropdownArray"],
@@ -964,7 +662,7 @@ const QATestSummaryDataTable = ({
       extraControls: objProps["extraControls"],
       radioBtnPayload: objProps["radioBtnPayload"],
       expandable: true,
-      // {...props}
+      ...props,
       extraIDs: null,
       isCheckedOut: isCheckedOut,
     };
@@ -1004,12 +702,14 @@ const QATestSummaryDataTable = ({
           actionsBtn={"View"}
           user={user}
           expandableRowComp={QAExpandableRowsRender}
-          expandableRowProps={
+          expandableRowProps={getExpandableComponentProps(
+            selectedTestCode.testTypeGroupCode,
             {
               user: user,
-            
+              nonEditable: nonEditable,
+              locationSelectValue: locationSelectValue,
             }
-          }
+          )}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
