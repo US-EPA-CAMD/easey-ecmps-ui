@@ -32,7 +32,7 @@ jobs:
         chmod +x install-browser-drivers.sh
         ./install-browser-drivers.sh
     
-    - name: Move Driver
+    - name: Move Drivers
       run: |
        mkdir -p /home/runner/drivers
        mv /user/local/bin/chromedriver home/runner/drivers/
