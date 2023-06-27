@@ -25,6 +25,14 @@ jobs:
       with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
+    
+    - name: Set Up ChromeDriver
+      uses: nanasess/setup-chromedriver@v2
+
+    - name: Install Browser Drivers
+      run: |
+        cd easey-testing/scripts
+        ./install-browser-drivers.sh
 
     - name: Build with Maven
       run: |
