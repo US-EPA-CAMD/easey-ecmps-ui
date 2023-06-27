@@ -108,8 +108,8 @@ export const Modal = ({
                   tabIndex="0"
                   aria-hidden={false}
                 />
-                <div className="left-2 bottom-0 padding-2">
-                  <h2 className="text-bold">{title}</h2>
+                <div className="left-2 bottom-0">
+                  <h2 className="text-bold padding-left-6">{title}</h2>
 
                   {breadCrumbBar ? breadCrumbBar : ""}
 

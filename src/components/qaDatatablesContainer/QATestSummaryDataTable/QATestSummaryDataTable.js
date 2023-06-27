@@ -185,84 +185,92 @@ const QATestSummaryDataTable = ({
     allPromises.push(dmApi.getPrefilteredTestSummaries());
     allPromises.push(mpApi.getMonitoringComponents(locationSelectValue));
     allPromises.push(mpApi.getMonitoringSystems(locationSelectValue));
-    Promise.all(allPromises).then((response) => {
-      dropdownArray[0].forEach((val, i) => {
-        if (i === 0) {
-          const options = response[0].data.map((d) =>
-            getOptions(d, "testTypeCode", "testTypeDescription")
-          );
-          setAllTestTypeCodes(options);
-          dropdowns[dropdownArray[0][i]] = options.filter((option) =>
-            selectedTestCode.testTypeCodes.includes(option.code)
-          );
-        } else if (i === 1) {
-          dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
-            getOptions(d, "spanScaleCode", "spanScaleDescription")
-          );
-        } else if (i === 2) {
-          dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
-            getOptions(d, "testReasonCode", "testReasonDescription")
-          );
-        } else if (i === 3) {
-          dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
-            getOptions(d, "testResultCode", "testResultDescription")
-          );
-        } else if (i === 5) {
-          dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
-            getOptions(d, "componentId", "componentId")
-          );
-          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
-            dropdowns[dropdownArray[0][i]].sort((a, b) => {
-              return a.code - b.code;
-            });
-          }
-        } else if (i === 6) {
-          dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
-            getOptions(d, "monitoringSystemId", "monitoringSystemId")
-          );
-          if(dropdowns[dropdownArray[0][i]].length > 0 && typeof dropdowns[dropdownArray[0][i]] === "object"){
-            dropdowns[dropdownArray[0][i]].sort((a, b) => {
-              return a.code - b.code;
-            });
-          }
-        } else if (i === 7) {
-          let noDupesTestCodes = response[4].data.map((code) => {
-            return code["testTypeCode"];
-          });
-          noDupesTestCodes = [...new Set(noDupesTestCodes)];
-          dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
-            noDupesTestCodes,
-            "testTypeCode",
-            response[4].data
-          );
-        } else if (i === 4) {
-          dropdowns[dropdownArray[0][i]] = locations.map((l) => {
-            if (l.type === "unit") {
-              return {
-                code: l.unitId,
-                name: l.unitId,
-              };
-            } else {
-              return {
-                code: l.stackPipeId,
-                name: l.stackPipeId,
-              };
+    Promise.all(allPromises)
+      .then((response) => {
+        dropdownArray[0].forEach((val, i) => {
+          if (i === 0) {
+            const options = response[0].data.map((d) =>
+              getOptions(d, "testTypeCode", "testTypeDescription")
+            );
+            setAllTestTypeCodes(options);
+            dropdowns[dropdownArray[0][i]] = options.filter((option) =>
+              selectedTestCode.testTypeCodes.includes(option.code)
+            );
+          } else if (i === 1) {
+            dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
+              getOptions(d, "spanScaleCode", "spanScaleDescription")
+            );
+          } else if (i === 2) {
+            dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
+              getOptions(d, "testReasonCode", "testReasonDescription")
+            );
+          } else if (i === 3) {
+            dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
+              getOptions(d, "testResultCode", "testResultDescription")
+            );
+          } else if (i === 5) {
+            dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+              getOptions(d, "componentId", "componentId")
+            );
+            if (
+              dropdowns[dropdownArray[0][i]].length > 0 &&
+              typeof dropdowns[dropdownArray[0][i]] === "object"
+            ) {
+              dropdowns[dropdownArray[0][i]].sort((a, b) => {
+                return a.code - b.code;
+              });
             }
-          });
-        }
-        if (i !== 0) {
-          dropdowns[dropdownArray[0][i]].unshift({
-            code: "",
-            name: "-- Select a value --",
-          });
-        }
+          } else if (i === 6) {
+            dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
+              getOptions(d, "monitoringSystemId", "monitoringSystemId")
+            );
+            if (
+              dropdowns[dropdownArray[0][i]].length > 0 &&
+              typeof dropdowns[dropdownArray[0][i]] === "object"
+            ) {
+              dropdowns[dropdownArray[0][i]].sort((a, b) => {
+                return a.code - b.code;
+              });
+            }
+          } else if (i === 7) {
+            let noDupesTestCodes = response[4].data.map((code) => {
+              return code["testTypeCode"];
+            });
+            noDupesTestCodes = [...new Set(noDupesTestCodes)];
+            dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
+              noDupesTestCodes,
+              "testTypeCode",
+              response[4].data
+            );
+          } else if (i === 4) {
+            dropdowns[dropdownArray[0][i]] = locations.map((l) => {
+              if (l.type === "unit") {
+                return {
+                  code: l.unitId,
+                  name: l.unitId,
+                };
+              } else {
+                return {
+                  code: l.stackPipeId,
+                  name: l.stackPipeId,
+                };
+              }
+            });
+          }
+          if (i !== 0) {
+            dropdowns[dropdownArray[0][i]].unshift({
+              code: "",
+              name: "-- Select a value --",
+            });
+          }
+        });
+        setMdmData(dropdowns);
+        setDropdownsLoaded(true);
+        setDropdownsLoading(false);
+      })
+      .catch((err) => {
+        console.log("error", err);
       });
-      setMdmData(dropdowns);
-      setDropdownsLoaded(true);
-      setDropdownsLoading(false);
-    }).catch(err => {
-      console.log("error", err)
-    });
   };
   useEffect(() => {
     const { testTypeCodes, testTypeGroupCode } = selectedTestCode;
@@ -594,303 +602,71 @@ const QATestSummaryDataTable = ({
   };
 
   // add here for future test type code selection dts
-  const getExpandableComponent = (testTypeGroupCode, props) => {
+  const getExpandableComponentProps = (testTypeGroupCode, props) => {
+    let objProps = {};
     switch (testTypeGroupCode) {
       case "LINSUM":
-        const obj = qaLinearitySummaryProps();
-        return (
-          <QAExpandableRowsRender
-            payload={obj["payload"]}
-            dropdownArray={obj["dropdownArray"]}
-            columns={obj["columnNames"]}
-            controlInputs={obj["controlInputs"]}
-            controlDatePickerInputs={obj["controlDatePickerInputs"]}
-            dataTableName={obj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={obj["extraControls"]}
-            radioBtnPayload={obj["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-      // return <QALinearitySummaryExpandableRows {...props} />;
-
+        objProps = qaLinearitySummaryProps();
+        break;
       case "RELACC":
-        const rataObj = qaRataDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={rataObj["payload"]}
-            dropdownArray={rataObj["dropdownArray"]}
-            columns={rataObj["columnNames"]}
-            controlInputs={rataObj["controlInputs"]}
-            controlDatePickerInputs={rataObj["controlDatePickerInputs"]}
-            dataTableName={rataObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={rataObj["extraControls"]}
-            radioBtnPayload={rataObj["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaRataDataProps();
+        break;
       case "APPESUM":
-        const appESum = qaAppendixECorrelationSummaryTestProps();
-        return (
-          <QAExpandableRowsRender
-            payload={appESum["payload"]}
-            dropdownArray={appESum["dropdownArray"]}
-            columns={appESum["columnNames"]}
-            controlInputs={appESum["controlInputs"]}
-            controlDatePickerInputs={appESum["controlDatePickerInputs"]}
-            dataTableName={appESum["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={appESum["extraControls"]}
-            radioBtnPayload={appESum["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
-
+        objProps = qaAppendixECorrelationSummaryTestProps();
+        break;
       case "FFL": // Fuel Flow to Load
-        const fflProps = qaFuelFlowToLoadProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fflProps["payload"]}
-            dropdownArray={fflProps["dropdownArray"]}
-            mdmProps={fflProps["mdmProps"]}
-            columns={fflProps["columnNames"]}
-            controlInputs={fflProps["controlInputs"]}
-            controlDatePickerInputs={fflProps["controlDatePickerInputs"]}
-            dataTableName={fflProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fflProps["extraControls"]}
-            radioBtnPayload={fflProps["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaFuelFlowToLoadProps();
+        break;
       case "FFLB":
-        const fflbProps = qaFuelFlowToLoadBaselineProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fflbProps["payload"]}
-            dropdownArray={fflbProps["dropdownArray"]}
-            mdmProps={fflbProps["mdmProps"]}
-            columns={fflbProps["columnNames"]}
-            controlInputs={fflbProps["controlInputs"]}
-            controlDatePickerInputs={fflbProps["controlDatePickerInputs"]}
-            dataTableName={fflbProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fflbProps["extraControls"]}
-            radioBtnPayload={fflbProps["radioBtnPayload"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaFuelFlowToLoadBaselineProps();
+        break;
       case "FLC": // Flow to Load Check
-        const flcProps = qaFlowToLoadCheckProps();
-        return (
-          <QAExpandableRowsRender
-            payload={flcProps["payload"]}
-            dropdownArray={flcProps["dropdownArray"]}
-            mdmProps={flcProps["mdmProps"]}
-            columns={flcProps["columnNames"]}
-            controlInputs={flcProps["controlInputs"]}
-            dataTableName={flcProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaFlowToLoadCheckProps();
+        break;
       case "OLOLCAL": // Online Offline Calibration
-        const onOffCalProps = qaOnOffCalibrationProps();
-        return (
-          <QAExpandableRowsRender
-            payload={onOffCalProps["payload"]}
-            dropdownArray={onOffCalProps["dropdownArray"]}
-            mdmProps={onOffCalProps["mdmProps"]}
-            columns={onOffCalProps["columnNames"]}
-            controlInputs={onOffCalProps["controlInputs"]}
-            controlDatePickerInputs={onOffCalProps["controlDatePickerInputs"]}
-            dataTableName={onOffCalProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaOnOffCalibrationProps();
+        break;
       case "CALINJ":
-        const cjProps = qaCalibrationInjectionProps();
-        return (
-          <QAExpandableRowsRender
-            payload={cjProps["payload"]}
-            dropdownArray={cjProps["dropdownArray"]}
-            mdmProps={cjProps["mdmProps"]}
-            columns={cjProps["columnNames"]}
-            controlInputs={cjProps["controlInputs"]}
-            controlDatePickerInputs={cjProps["controlDatePickerInputs"]}
-            radioBtnPayload={cjProps["radioBtnPayload"]}
-            dataTableName={cjProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={cjProps["extraControls"]}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaCalibrationInjectionProps();
+        break;
       case "FFACC": // Fuel Flowmeter Accuracy
-        const fuelFlowmeterAccuracyDataProps =
-          qaFuelFlowmeterAccuracyDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={fuelFlowmeterAccuracyDataProps["payload"]}
-            dropdownArray={fuelFlowmeterAccuracyDataProps["dropdownArray"]}
-            mdmProps={fuelFlowmeterAccuracyDataProps["mdmProps"]}
-            columns={fuelFlowmeterAccuracyDataProps["columnNames"]}
-            controlInputs={fuelFlowmeterAccuracyDataProps["controlInputs"]}
-            controlDatePickerInputs={
-              fuelFlowmeterAccuracyDataProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={fuelFlowmeterAccuracyDataProps["radioBtnPayload"]}
-            dataTableName={fuelFlowmeterAccuracyDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={fuelFlowmeterAccuracyDataProps["extraControls"]}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaFuelFlowmeterAccuracyDataProps();
+        break;
       case "CYCSUM": // Cycle Time Summary Nested Below Test Data
-        const cycleTimeSum = qaCycleTimeSummaryProps();
-        return (
-          <QAExpandableRowsRender
-            payload={cycleTimeSum["payload"]}
-            dropdownArray={cycleTimeSum["dropdownArray"]}
-            mdmProps={cycleTimeSum["mdmProps"]}
-            columns={cycleTimeSum["columnNames"]}
-            controlInputs={cycleTimeSum["controlInputs"]}
-            controlDatePickerInputs={cycleTimeSum["controlDatePickerInputs"]}
-            radioBtnPayload={cycleTimeSum["radioBtnPayload"]}
-            dataTableName={cycleTimeSum["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={cycleTimeSum["extraControls"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaCycleTimeSummaryProps();
+        break;
       case "TTACC":
-        const transmitterTransducerAccuracyDataProps =
-          qaTransmitterTransducerAccuracyDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={transmitterTransducerAccuracyDataProps["payload"]}
-            dropdownArray={
-              transmitterTransducerAccuracyDataProps["dropdownArray"]
-            }
-            mdmProps={transmitterTransducerAccuracyDataProps["mdmProps"]}
-            columns={transmitterTransducerAccuracyDataProps["columnNames"]}
-            controlInputs={
-              transmitterTransducerAccuracyDataProps["controlInputs"]
-            }
-            controlDatePickerInputs={
-              transmitterTransducerAccuracyDataProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={
-              transmitterTransducerAccuracyDataProps["radioBtnPayload"]
-            }
-            dataTableName={
-              transmitterTransducerAccuracyDataProps["dataTableName"]
-            }
-            sectionSelect={sectionSelect}
-            extraControls={
-              transmitterTransducerAccuracyDataProps["extraControls"]
-            }
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaTransmitterTransducerAccuracyDataProps();
+
+        break;
       case "FLR":
-        const flowToLoadReferenceProps = qaFlowToLoadReferenceProps();
-        return (
-          <QAExpandableRowsRender
-            payload={flowToLoadReferenceProps["payload"]}
-            dropdownArray={flowToLoadReferenceProps["dropdownArray"]}
-            mdmProps={flowToLoadReferenceProps["mdmProps"]}
-            columns={flowToLoadReferenceProps["columnNames"]}
-            controlInputs={flowToLoadReferenceProps["controlInputs"]}
-            controlDatePickerInputs={
-              flowToLoadReferenceProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={flowToLoadReferenceProps["radioBtnPayload"]}
-            dataTableName={flowToLoadReferenceProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={flowToLoadReferenceProps["extraControls"]}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaFlowToLoadReferenceProps();
+        break;
       case "LME": //unit default test
-        const unitDefaultTestDataProps = qaUnitDefaultTestDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={unitDefaultTestDataProps["payload"]}
-            dropdownArray={unitDefaultTestDataProps["dropdownArray"]}
-            mdmProps={unitDefaultTestDataProps["mdmProps"]}
-            columns={unitDefaultTestDataProps["columnNames"]}
-            controlInputs={unitDefaultTestDataProps["controlInputs"]}
-            dataTableName={unitDefaultTestDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaUnitDefaultTestDataProps();
+        break;
       case "HGL3LS": //Hg Linearity and 3-Level Summary
-        const hgSummaryDataProps = qaHgSummaryDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={hgSummaryDataProps["payload"]}
-            dropdownArray={hgSummaryDataProps["dropdownArray"]}
-            mdmProps={hgSummaryDataProps["mdmProps"]}
-            columns={hgSummaryDataProps["columnNames"]}
-            controlInputs={hgSummaryDataProps["controlInputs"]}
-            dataTableName={hgSummaryDataProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            expandable
-            {...props}
-            extraIDs={null}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaHgSummaryDataProps();
+        break;
       default:
         return null;
     }
+    return {
+      payload: objProps["payload"],
+      dropdownArray: objProps["dropdownArray"],
+      columns: objProps["columnNames"],
+      controlInputs: objProps["controlInputs"],
+      controlDatePickerInputs: objProps["controlDatePickerInputs"],
+      dataTableName: objProps["dataTableName"],
+      sectionSelect: sectionSelect,
+      extraControls: objProps["extraControls"],
+      radioBtnPayload: objProps["radioBtnPayload"],
+      expandable: true,
+      ...props,
+      extraIDs: null,
+      isCheckedOut: isCheckedOut,
+    };
   };
-
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -907,7 +683,9 @@ const QATestSummaryDataTable = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2  text-wrap display-table-cell">Test Data</span>
+                <span className="padding-right-2  text-wrap display-table-cell">
+                  Test Data
+                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
@@ -923,7 +701,8 @@ const QATestSummaryDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={getExpandableComponent(
+          expandableRowComp={QAExpandableRowsRender}
+          expandableRowProps={getExpandableComponentProps(
             selectedTestCode.testTypeGroupCode,
             {
               user: user,
