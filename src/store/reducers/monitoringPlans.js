@@ -13,3 +13,10 @@ const reducer = (state, action) => {
 };
 
 export default reducer;
+
+    // //fixes multiple calls adding same data to redux store
+    // const hasValue = currentState.some((row) => row.includes(action.orisCode));
+    // if (!hasValue) {
+    //   return [...currentState, [action.orisCode, action.monitoringPlans]];
+    // }
+    // return currentState;

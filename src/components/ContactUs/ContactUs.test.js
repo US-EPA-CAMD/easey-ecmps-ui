@@ -10,7 +10,7 @@ const store = configureStore();
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useHistory: () => ({
+  useNavigate : () => ({
     push: jest.fn(),
   }),
 }));
@@ -49,19 +49,19 @@ const commentTypes = [
 describe("ContactUs: ", () => {
   let query;
 
-  beforeEach(() => {
-    query = render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <ContactUs />
-        </MemoryRouter>
-      </Provider>
-    );
-  });
+  // beforeEach(() => {
+  //   query = render(
+  //     <Provider store={store}>
+  //       <MemoryRouter>
+  //         <ContactUs />
+  //       </MemoryRouter>
+  //     </Provider>
+  //   );
+  // });
 
-  afterEach(() => {
-    query = null;
-  });
+  // afterEach(() => {
+  //   query = null;
+  // });
 
   test("sections render without errors", () => {
     const { getByText } = query;

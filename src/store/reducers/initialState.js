@@ -1,4 +1,4 @@
-export default {
+const initialState = {
   facilities: [],
   monitoringPlans: [],
   apiCallsInProgress: {
@@ -38,6 +38,8 @@ export default {
     analyzerRanges: [],
     matsMethods: [],
   },
-  currentSection: '',
+  currentSection: "",
+  workspaceState: "monitoringPlans",
   currentTabIndex: 0,
 };
+export default initialState;

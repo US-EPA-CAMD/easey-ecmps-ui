@@ -57,7 +57,7 @@ const QAExpandableRowsRender = ({
   mdmProps,
   sectionSelect = null,
 }) => {
-  const { locationId, id } = data;
+  const { locationId, id } = data ? data : 1;
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -105,288 +105,101 @@ const QAExpandableRowsRender = ({
   // const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const selectText = "-- Select a value --";
 
-  const dropdownArrayIsEmpty = dropdownArray.length === 0;
+  const dropdownArrayIsEmpty = dropdownArray
+    ? dropdownArray.length === 0
+    : false;
   const nextExpandableRow = (name) => {
+    let objProps = {};
+    let extraIDsProps = null;
+    let expand = expandable ? expandable :false;
     switch (name) {
       case "Protocol Gas":
-        const objGas = qaProtocalGasProps(data);
-        return (
-          <QAExpandableRowsRender
-            payload={objGas["payload"]}
-            dropdownArray={objGas["dropdownArray"]}
-            columns={objGas["columnNames"]}
-            controlInputs={objGas["controlInputs"]}
-            controlDatePickerInputs={objGas["controlDatePickerInputs"]}
-            dataTableName={objGas["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={objGas["extraControls"]}
-            data={data}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaProtocalGasProps(data);
+        break;
       case "Air Emissions":
-        const airEmissionsIds = [locationId, id];
-        const objAirEms = qaAirEmissionsProps(data);
-        return (
-          <QAExpandableRowsRender
-            payload={objAirEms["payload"]}
-            dropdownArray={objAirEms["dropdownArray"]}
-            columns={objAirEms["columnNames"]}
-            controlInputs={objAirEms["controlInputs"]}
-            controlDatePickerInputs={objAirEms["controlDatePickerInputs"]}
-            dataTableName={objAirEms["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={objAirEms["extraControls"]}
-            data={data}
-            extraIDs={airEmissionsIds}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaAirEmissionsProps(data);
+        break;
       case "Test Qualification":
-        const objTestQa = qaTestQualificationProps(data);
-        return (
-          <QAExpandableRowsRender
-            payload={objTestQa["payload"]}
-            dropdownArray={objTestQa["dropdownArray"]}
-            mdmProps={objTestQa["mdmProps"]}
-            columns={objTestQa["columnNames"]}
-            controlInputs={objTestQa["controlInputs"]}
-            controlDatePickerInputs={objTestQa["controlDatePickerInputs"]}
-            dataTableName={objTestQa["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={objTestQa["extraControls"]}
-            data={data}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        objProps = qaTestQualificationProps(data);
+        break;
       // test  > injections
       case "Linearity Test":
-        const idArr = [locationId, id];
-        const obj = qaLinearityInjectionProps();
-        return (
-          <QAExpandableRowsRender
-            payload={obj["payload"]}
-            dropdownArray={obj["dropdownArray"]}
-            columns={obj["columnNames"]}
-            controlInputs={obj["controlInputs"]}
-            controlDatePickerInputs={obj["controlDatePickerInputs"]}
-            dataTableName={obj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={obj["extraControls"]}
-            extraIDs={idArr}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaLinearityInjectionProps();
+        break;
       // rata data > rata summary > rata run
       case "RATA Data":
-        const rataIdArray = [locationId, id];
-        const rataSumObj = qaRataSummaryProps();
-        return (
-          <QAExpandableRowsRender
-            payload={rataSumObj["payload"]}
-            dropdownArray={rataSumObj["dropdownArray"]}
-            columns={rataSumObj["columnNames"]}
-            controlInputs={rataSumObj["controlInputs"]}
-            controlDatePickerInputs={rataSumObj["controlDatePickerInputs"]}
-            dataTableName={rataSumObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={rataSumObj["extraControls"]}
-            extraIDs={rataIdArray}
-            expandable
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        expand = true;
+        objProps = qaRataSummaryProps();
+        break;
 
       case "RATA Summary": // 3rd level
-        const rataRunIdArray = [...extraIDs, id];
-        const rataRunObj = qaRataRunDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={rataRunObj["payload"]}
-            dropdownArray={rataRunObj["dropdownArray"]}
-            columns={rataRunObj["columnNames"]}
-            controlInputs={rataRunObj["controlInputs"]}
-            controlDatePickerInputs={rataRunObj["controlDatePickerInputs"]}
-            dataTableName={rataRunObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={rataRunObj["extraControls"]}
-            extraIDs={rataRunIdArray}
-            expandable
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [...extraIDs, id];
+        expand = true;
+        objProps = qaRataRunDataProps();
+        break;
 
       case "RATA Run Data":
-        const flowIdArray = [...extraIDs, id];
-        const flowObj = qaFlowRataRunProps();
-        return (
-          <QAExpandableRowsRender
-            payload={flowObj["payload"]}
-            dropdownArray={flowObj["dropdownArray"]}
-            columns={flowObj["columnNames"]}
-            controlInputs={flowObj["controlInputs"]}
-            controlDatePickerInputs={flowObj["controlDatePickerInputs"]}
-            dataTableName={flowObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={flowObj["extraControls"]}
-            extraIDs={flowIdArray}
-            expandable
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [...extraIDs, id];
+        expand = true;
+        objProps = qaFlowRataRunProps();
+        break;
       case "Flow":
-        const traverseIdArray = [...extraIDs, id];
-        const traverseObj = qaRataTraverseProps();
-        return (
-          <QAExpandableRowsRender
-            payload={traverseObj["payload"]}
-            dropdownArray={traverseObj["dropdownArray"]}
-            columns={traverseObj["columnNames"]}
-            controlInputs={traverseObj["controlInputs"]}
-            controlDatePickerInputs={traverseObj["controlDatePickerInputs"]}
-            dataTableName={traverseObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={traverseObj["extraControls"]}
-            extraIDs={traverseIdArray}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [...extraIDs, id];
+        objProps = qaRataTraverseProps();
+        break;
       // appendix E correlation test summary  > run
       case "Appendix E Correlation Summary":
-        const parentIds = [locationId, id];
-        const propsObj = qaAppendixECorrTestRunProps();
-        return (
-          <QAExpandableRowsRender
-            payload={propsObj["payload"]}
-            dropdownArray={propsObj["dropdownArray"]}
-            columns={propsObj["columnNames"]}
-            controlInputs={propsObj["controlInputs"]}
-            controlDatePickerInputs={propsObj["controlDatePickerInputs"]}
-            dataTableName={propsObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={propsObj["extraControls"]}
-            extraIDs={parentIds}
-            expandable
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaAppendixECorrTestRunProps();
+        break;
       // run >>> heat input from gas
       case "Appendix E Correlation Run":
-        const heatInputIdArray = [...extraIDs, id];
-        const heatInputGasObj =
-          qaAppendixECorrelationSummaryHeatInputGasProps();
-        return (
-          <QAExpandableRowsRender
-            payload={heatInputGasObj["payload"]}
-            dropdownArray={heatInputGasObj["dropdownArray"]}
-            columns={heatInputGasObj["columnNames"]}
-            controlInputs={heatInputGasObj["controlInputs"]}
-            controlDatePickerInputs={heatInputGasObj["controlDatePickerInputs"]}
-            dataTableName={heatInputGasObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={heatInputGasObj["extraControls"]}
-            extraIDs={heatInputIdArray}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [...extraIDs, id];
+        objProps = qaAppendixECorrelationSummaryHeatInputGasProps();
+        break;
       case "Appendix E Correlation Heat Input from Oil":
-        const heatInputOilIdArray = [...extraIDs, id];
-        const heatInputOilObj =
-          qaAppendixECorrelationSummaryHeatInputOilProps(data);
-        return (
-          <QAExpandableRowsRender
-            payload={heatInputOilObj["payload"]}
-            dropdownArray={heatInputOilObj["dropdownArray"]}
-            mdmProps={heatInputOilObj["mdmProps"]}
-            columns={heatInputOilObj["columnNames"]}
-            controlInputs={heatInputOilObj["controlInputs"]}
-            controlDatePickerInputs={heatInputOilObj["controlDatePickerInputs"]}
-            dataTableName={heatInputOilObj["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={heatInputOilObj["extraControls"]}
-            extraIDs={heatInputOilIdArray}
-            data={data}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [...extraIDs, id];
+        expand = true;
+        objProps = qaAppendixECorrelationSummaryHeatInputOilProps(data);
+        break;
       // Test Data --> Cycle Time Summary --> Cycle Time Injection
       case "Cycle Time Summary":
-        const cycleTimeInjectionIdArray = [locationId, id];
-        const cycleTimeInjec = qaCycleTimeInjectionProps();
-        return (
-          <QAExpandableRowsRender
-            payload={cycleTimeInjec["payload"]}
-            dropdownArray={cycleTimeInjec["dropdownArray"]}
-            mdmProps={cycleTimeInjec["mdmProps"]}
-            columns={cycleTimeInjec["columnNames"]}
-            controlInputs={cycleTimeInjec["controlInputs"]}
-            controlDatePickerInputs={cycleTimeInjec["controlDatePickerInputs"]}
-            radioBtnPayload={cycleTimeInjec["radioBtnPayload"]}
-            dataTableName={cycleTimeInjec["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={cycleTimeInjec["extraControls"]}
-            extraIDs={cycleTimeInjectionIdArray}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaCycleTimeInjectionProps();
+        break;
       case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
-        const extraIds = [locationId, id];
-        const unitDefaultTestRunProps = qaUnitDefaultTestRunDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={unitDefaultTestRunProps["payload"]}
-            dropdownArray={unitDefaultTestRunProps["dropdownArray"]}
-            mdmProps={unitDefaultTestRunProps["mdmProps"]}
-            columns={unitDefaultTestRunProps["columnNames"]}
-            controlInputs={unitDefaultTestRunProps["controlInputs"]}
-            controlDatePickerInputs={
-              unitDefaultTestRunProps["controlDatePickerInputs"]
-            }
-            dataTableName={unitDefaultTestRunProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraIDs={extraIds}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaUnitDefaultTestRunDataProps();
+        break;
       case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
-        const hgInjectionIdArr = [locationId, id];
-        const hgInjectionProps = qaHgInjectionDataProps();
-        return (
-          <QAExpandableRowsRender
-            payload={hgInjectionProps["payload"]}
-            dropdownArray={hgInjectionProps["dropdownArray"]}
-            mdmProps={hgInjectionProps["mdmProps"]}
-            columns={hgInjectionProps["columnNames"]}
-            controlInputs={hgInjectionProps["controlInputs"]}
-            controlDatePickerInputs={
-              hgInjectionProps["controlDatePickerInputs"]
-            }
-            radioBtnPayload={hgInjectionProps["radioBtnPayload"]}
-            dataTableName={hgInjectionProps["dataTableName"]}
-            sectionSelect={sectionSelect}
-            extraControls={hgInjectionProps["extraControls"]}
-            extraIDs={hgInjectionIdArr}
-            user={user}
-            isCheckedOut={isCheckedOut}
-          />
-        );
+        extraIDsProps = [locationId, id];
+        objProps = qaHgInjectionDataProps();
+        break;
       default:
         break;
     }
+
+    return {
+      payload: objProps["payload"],
+      dropdownArray: objProps["dropdownArray"],
+      mdmProps: objProps["mdmProps"],
+      columns: objProps["columnNames"],
+      controlInputs: objProps["controlInputs"],
+      controlDatePickerInputs: objProps["controlDatePickerInputs"],
+      dataTableName: objProps["dataTableName"],
+      sectionSelect: sectionSelect,
+      extraControls: objProps["extraControls"],
+      radioBtnPayload: objProps["radioBtnPayload"],
+      extraIDs: extraIDsProps,
+      expandable :expand,
+      user: user,
+      isCheckedOut: isCheckedOut,
+    };
   };
+
 
   const populateStaticDropdowns = (tableName, dropdowns) => {
     if (tableName === "Flow To Load Check") {
@@ -1030,22 +843,39 @@ const QAExpandableRowsRender = ({
     const expandables = [];
     switch (dataTableName) {
       case "Linearity Test":
-        expandables.push(nextExpandableRow("Protocol Gas"));
+        expandables.push(
+          <QAExpandableRowsRender {...nextExpandableRow("Protocol Gas")} />
+        );
         break;
       case "RATA Data":
-        expandables.push(nextExpandableRow("Test Qualification"));
-        expandables.push(nextExpandableRow("Protocol Gas"));
-        expandables.push(nextExpandableRow("Air Emissions"));
+        expandables.push(
+          <QAExpandableRowsRender
+            {...nextExpandableRow("Test Qualification")}
+          />
+        );
+        expandables.push(
+          <QAExpandableRowsRender {...nextExpandableRow("Protocol Gas")} />
+        );
+        expandables.push(
+          <QAExpandableRowsRender {...nextExpandableRow("Air Emissions")} />
+        );
         break;
       case "Appendix E Correlation Heat Input from Gas":
         expandables.push(
-          nextExpandableRow("Appendix E Correlation Heat Input from Oil")
+          <QAExpandableRowsRender
+            {...nextExpandableRow("Appendix E Correlation Heat Input from Oil")}
+          />
         );
+
         break;
       case "Unit Default Test":
       case "Appendix E Correlation Summary":
-        expandables.push(nextExpandableRow("Protocol Gas"));
-        expandables.push(nextExpandableRow("Air Emissions"));
+        expandables.push(
+          <QAExpandableRowsRender {...nextExpandableRow("Protocol Gas")} />
+        );
+        expandables.push(
+          <QAExpandableRowsRender {...nextExpandableRow("Air Emissions")} />
+        );
         break;
       default:
         break;
@@ -1071,7 +901,9 @@ const QAExpandableRowsRender = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
+                <span className="padding-right-2 text-wrap display-table-cell">
+                  {dataTableName}
+                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
@@ -1086,8 +918,9 @@ const QAExpandableRowsRender = ({
             )
           }
           expandableRowComp={
-            expandable ? nextExpandableRow(dataTableName) : false
+            expandable ? QAExpandableRowsRender : false
           }
+          expandableRowProps= { nextExpandableRow(dataTableName)}
           // shows empty table with add if user is logged in
           noDataComp={
             user && isCheckedOut ? (

@@ -31,6 +31,7 @@ const QADataTableRender = ({
   user,
   actionsBtn,
   expandableRowComp,
+  expandableRowProps,
   onRemoveHandler,
   noDataComp,
   isCheckedOut,
@@ -267,7 +268,8 @@ const QADataTableRender = ({
         expandableRows={expandableRowComp}
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
-        expandableRowsComponent={expandableRowComp}
+        expandableRowsComponent={ expandableRowComp}
+        expandableRowsComponentProps= {expandableRowProps}
         noDataComponent={noDataComp}
         sortFunction={ hasEvalStatusColumn(dataTableName)? (rows, field, direction) => customSort(rows, field, direction, columns) : null}
       />

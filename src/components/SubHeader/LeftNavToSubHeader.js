@@ -16,18 +16,6 @@ export const LeftNavToSubHeader = () => {
     false,
     false,
   ]);
-  // const [categorySelected, setCategorySelected] = useState([
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  // ]);
-
-  // useEffect(() => {
-  //   setCategorySelected([false, false, false, false, false]);
-  // }, []);
 
   const handleToggleNavDropdown = (column) => {
     setNavDropdownOpen((prevNavDropdownOpen) => {
@@ -39,8 +27,6 @@ export const LeftNavToSubHeader = () => {
 
   const handleSubMenuClick = (column) => {
     handleToggleNavDropdown(column);
-
-    // setCategorySelected([false, false, false, false, false]);
   };
 
   return (

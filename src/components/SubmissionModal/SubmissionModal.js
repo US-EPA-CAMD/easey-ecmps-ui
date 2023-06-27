@@ -9,9 +9,6 @@ import {
   TextInput,
   Alert,
   Checkbox,
-  Fieldset,
-  Radio,
-  ComboBox,
 } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 import * as yup from "yup";
@@ -21,10 +18,8 @@ import { SelectableAccordion } from "../SelectableAccordion/SelectableAccordion.
 import {
   credentialsAuth,
   getCredentials,
-  sendPin,
   verifyChallenge,
 } from "../../utils/api/easeyAuthApi";
-import { useRef } from "react";
 
 export const SubmissionModal = ({
   show,
@@ -37,12 +32,7 @@ export const SubmissionModal = ({
   setActivityId,
 }) => {
   const modalRef = createRef();
-  const selectedNumber = useRef(null);
-  const enablePhoneVerification = false;
   const [submissionActionLog, setSubmissionActionLog] = useState({});
-  const [verifyMethod, setVerifyMethod] = useState("Question");
-  const [numbers, setNumbers] = useState([]);
-  const [pinVisible, setPinVisible] = useState(false);
   const [questionId, setQuestionId] = useState(false);
   const [canCheck, setCanCheck] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -51,7 +41,6 @@ export const SubmissionModal = ({
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [pin, setPin] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
   const [question, setQuestion] = useState(
     "What is the city you were born in?"
@@ -72,10 +61,6 @@ export const SubmissionModal = ({
     answer: yup.string().required("Answer is required"),
   });
 
-  const pinFormSchema = yup.object().shape({
-    pin: yup.string().required("Pin is required"),
-  });
-
   let modalRoot = document.getElementById("portal");
   if (!modalRoot) {
     modalRoot = document.createElement("div");
@@ -88,8 +73,6 @@ export const SubmissionModal = ({
   const usernameText = "username";
   const passwordText = "password";
   const answerText = "answer";
-  const pinText = "pin";
-  const numberText = "number";
 
   const handleUserKeyPress = useCallback((event) => {
     const { key } = event;
@@ -106,23 +89,6 @@ export const SubmissionModal = ({
       window.removeEventListener("keydown", handleUserKeyPress);
     };
   }, [handleUserKeyPress]);
-
-  const sendPinToNumber = async () => {
-    if (
-      selectedNumber.current !== null &&
-      selectedNumber.current !== undefined
-    ) {
-      const numberFull = numbers.find(
-        (n) => n.value === selectedNumber.current
-      ).actual;
-      setPinVisible(true);
-      await sendPin({
-        activityId: activityId,
-        userId: username,
-        number: numberFull,
-      });
-    }
-  };
 
   const verifyClicked = (event) => {
     if (stage === 1) {
@@ -169,16 +135,6 @@ export const SubmissionModal = ({
         setQuestionId(result.data.questionId);
         setQuestion(result.data.question);
 
-        setNumbers(
-          result.data.mobileNumbers.map((n, idx) => {
-            return {
-              value: idx.toString(),
-              label: `(***)***-${n.substr(n.length - 4)}`,
-              actual: n,
-            };
-          })
-        );
-
         setStage(2);
         setShowError(false);
       } catch (e) {
@@ -199,23 +155,12 @@ export const SubmissionModal = ({
       activityId: activityId,
     };
 
-    let isFormValid;
-    if (verifyMethod === "Question") {
-      isFormValid = await answerFormSchema.isValid(
-        { answer },
-        {
-          abortEarly: false,
-        }
-      );
-    } else {
-      isFormValid = await pinFormSchema.isValid(
-        { pin },
-        {
-          abortEarly: false,
-        }
-      );
-      payload = { ...payload, pin: pin };
-    }
+    const isFormValid = await answerFormSchema.isValid(
+      { answer },
+      {
+        abortEarly: false,
+      }
+    );
 
     // *** display clientside errors
     if (!isFormValid) {
@@ -330,6 +275,7 @@ export const SubmissionModal = ({
                 <Alert
                   type="error"
                   heading="Authentication Errors"
+                  headingLevel="h4"
                   role="alert"
                 >
                   {formErrorMessage}
@@ -384,132 +330,42 @@ export const SubmissionModal = ({
                 <div>
                   <h2>Verification</h2>
                   <div className="grid-row">
-                    <div className="grid-col-4">
-                      <Fieldset id="unique" className="grid-row margin-top-1">
-                        <Radio
-                          className="grid-col-12 margin-bottom-1"
-                          id={`verify-radio-button`}
-                          defaultChecked
-                          name="verify-method"
-                          label={"Verification/Challenge Question"}
-                          key={2}
-                          data-testid="radio-question"
-                          onClick={() => {
-                            setPinVisible(false);
-                            setVerifyMethod("Question");
-                          }}
-                        />
+                    <div className="grid-col-8"></div>
 
-                        {enablePhoneVerification && (
-                          <Radio
-                            className="grid-col-12 margin-bottom-1"
-                            id={`text-radio-button`}
-                            name="verify-method"
-                            label={"Send Text Message"}
-                            key={3}
-                            data-testid="radio-text"
-                            onClick={() => {
-                              setVerifyMethod("Text");
-                            }}
+                    <div className="grid-col-4">
+                      <div>
+                        <Label className="" htmlFor={answerText}>
+                          <h3 className="challenge-question margin-top-0">
+                            {question}
+                          </h3>
+                          Answer
+                        </Label>
+                        <form>
+                          <TextInput
+                            data-testid="component-answer"
+                            id={answerText}
+                            autoComplete="on"
+                            name={answerText}
+                            type={showAnswer ? "text" : "password"}
+                            value={answer}
+                            className=""
+                            onChange={(event) => setAnswer(event.target.value)}
                           />
-                        )}
-                      </Fieldset>
-                    </div>
-
-                    <div className="grid-col-4"></div>
-
-                    <div className="grid-col-4">
-                      {verifyMethod === "Question" && (
-                        <div>
-                          <Label className="" htmlFor={answerText}>
-                            <h3 className="challenge-question margin-top-0">
-                              {question}
-                            </h3>
-                            Answer
-                          </Label>
-                          <form>
-                            <TextInput
-                              data-testid="component-answer"
-                              id={answerText}
-                              autoComplete="on"
-                              name={answerText}
-                              type={showAnswer ? "text" : "password"}
-                              value={answer}
-                              className=""
-                              onChange={(event) =>
-                                setAnswer(event.target.value)
-                              }
-                            />
-                          </form>
-                          <p className="usa-form__note">
-                            <Button
-                              type="button"
-                              unstyled="true"
-                              title="Show answer"
-                              href=""
-                              className="usa-show-password margin-right-auto"
-                              aria-controls={answerText}
-                              onClick={() => setShowAnswer(!showAnswer)}
-                            >
-                              {showAnswer ? "Hide answer" : "Show answer"}
-                            </Button>
-                          </p>
-                        </div>
-                      )}
-
-                      {verifyMethod === "Text" && (
-                        <div>
-                          <Label className="" htmlFor={numberText}>
-                            <h3 className="challenge-question margin-top-0 margin-bottom-0">
-                              Text message will be sent to:
-                            </h3>
-                          </Label>
-                          <div className="grid-row">
-                            <ComboBox
-                              data-testid="number-dropwdown"
-                              id={numberText}
-                              name={numberText}
-                              className=" margin-right-2 grid-col-8"
-                              defaultValue={"0"}
-                              options={numbers}
-                              onChange={(value) => {
-                                selectedNumber.current = value;
-                              }}
-                            />
-                            <Button
-                              onClick={sendPinToNumber}
-                              className="grid-col-3"
-                              data-testid="phone-send"
-                            >
-                              {!pinVisible ? "Send" : "Resend"}
-                            </Button>
-                          </div>
-                          <p className="margin-top-0 text-italic">
-                            Text or data rates may apply
-                          </p>
-                          {pinVisible && (
-                            <div>
-                              <Label className="" htmlFor={pinText}>
-                                <h3 className="challenge-question margin-top-2 margin-bottom-0">
-                                  Enter Pin:
-                                </h3>
-                              </Label>
-                              <div className="grid-row">
-                                <TextInput
-                                  data-testid="pin-answer"
-                                  id={pinText}
-                                  name={pinText}
-                                  value={pin}
-                                  className="grid-col-8"
-                                  onChange={(event) =>
-                                    setPin(event.target.value)
-                                  }
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                        </form>
+                        <p className="usa-form__note">
+                          <Button
+                            type="button"
+                            unstyled="true"
+                            title="Show answer"
+                            href=""
+                            className="usa-show-password margin-right-auto"
+                            aria-controls={answerText}
+                            onClick={() => setShowAnswer(!showAnswer)}
+                          >
+                            {showAnswer ? "Hide answer" : "Show answer"}
+                          </Button>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

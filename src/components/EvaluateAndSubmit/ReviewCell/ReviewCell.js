@@ -4,6 +4,7 @@ import { LockSharp } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 
 const ReviewCell = ({
+  idx,
   row,
   handleRowSelection,
   handleRowView,
@@ -12,7 +13,7 @@ const ReviewCell = ({
   setSelectAllState,
   setSelectAllVisible,
 }) => {
-  const [cellState, ] = useState(getRowState(row, type));
+  const [cellState] = useState(getRowState(row, type));
 
   useEffect(() => {
     if (cellState === "Checkbox" && !row.selected) {
@@ -30,7 +31,7 @@ const ReviewCell = ({
         {cellState === "Lock" && <LockSharp data-testid="Lock" />}
         {cellState === "Checkbox" && (
           <Checkbox
-            data-testid="Checkbox"
+            data-testid={`${type}-select-${idx}`}
             className="margin-bottom-5"
             id={`${uuidv4()}`}
             onChange={(e) => {

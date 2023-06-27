@@ -1,0 +1,22 @@
+@use "uswds-core" with (
+  $theme-image-path: "../../../../../../dist/img",
+  $theme-font-path: "../../../../../../dist/fonts",
+  $theme-hero-image: '../../../../dist/img/hero.jpg',
+  //$theme-show-compile-warnings: true,
+  $theme-show-notifications: false,
+  //$theme-focus-color: "blue-50v",
+  //$theme-global-paragraph-styles: true,
+  //$theme-global-link-styles: true,
+  //$theme-global-content-styles: true,
+  $theme-utility-breakpoints: (
+    "card": false, // 160px
+    "card-lg": false, // 240px
+    "mobile": true, // 320px
+    "mobile-lg": true, // 480px
+    "tablet": true, // 640px
+    "tablet-lg": true, // 800px
+    "desktop": true, // 1024px
+    "desktop-lg": true, // 1200px
+    "widescreen": true, // 1400px
+  ),
+);

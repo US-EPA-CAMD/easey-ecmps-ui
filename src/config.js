@@ -4,8 +4,6 @@ import {
   getConfigValueBoolean,
 } from "./utils/functions";
 
-require("dotenv").config();
-
 export const oneSecond = 1000;
 export const fiveSeconds = 5000;
 export const oneMinute = 60 * oneSecond;
@@ -52,8 +50,8 @@ export const config = {
     ),
     path: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PATH", "/"),
     env: getConfigValue("REACT_APP_EASEY_ECMPS_UI_ENV", "local-dev"),
-    published: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PUBLISHED", "local"),
     version: getConfigValue("REACT_APP_EASEY_ECMPS_UI_VERSION", "v0.0.0"),
+    published: getConfigValue("REACT_APP_EASEY_ECMPS_UI_PUBLISHED", "local"),
     title: getConfigValue("REACT_APP_EASEY_ECMPS_UI_TITLE", "ECMPS"),
     email: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL",
@@ -109,6 +107,11 @@ export const config = {
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
     enableDebug: getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG"),
+    sponsorRole: getConfigValue("EASEY_AUTH_API_SPONSOR_ROLE", "Sponsor"),
+    submitterRole: getConfigValue("EASEY_AUTH_API_SUBMITTER_ROLE", "Submitter"),
+    preparerRole: getConfigValue("EASEY_AUTH_API_PREPARER_ROLE", "Preparer"),
+    analystRole: getConfigValue("EASEY_AUTH_API_ANALYST_ROLE", "ECMPS Analyst"),
+    adminRole: getConfigValue("EASEY_AUTH_API_ADMIN_ROLE", "ECMPS Admin"),
   },
   services: {
     mdm: {

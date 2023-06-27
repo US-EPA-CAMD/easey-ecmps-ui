@@ -6,6 +6,7 @@ import dynamicFacilityTabReducer from "./dynamicFacilityTab";
 import dropdownsReducer from "./dropdowns";
 import checkedOutLocationsReducer from "./checkedOutLocations";
 import currentTabIndexReducer from "./currentTabIndex";
+import workspaceReducer from "./workspace";
 const rootReducer = combineReducers({
   facilities: facilitiesReducer,
   apiCallsInProgress: apiStatusReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   dropdowns: dropdownsReducer,
   checkedOutLocations: checkedOutLocationsReducer,
   currentTabIndex: currentTabIndexReducer,
+  workspaceState: workspaceReducer,
 });
 
 export default rootReducer;

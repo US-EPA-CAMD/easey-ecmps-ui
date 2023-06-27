@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import { Label } from "@trussworks/react-uswds";
 import PillButton from "../PillButton/PillButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,19 +34,20 @@ const MultiSelectCombobox = ({
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(items.filter((e) => e.enabled));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(getComboboxEnabledItems(items))));
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
+  );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const selectedItemsRef = useRef(selectedItems);
   const inputRef = useRef(null);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     const enabledItems = getComboboxEnabledItems(items);
     setData([...enabledItems]);
     _setItems(enabledItems);
   }, [items]);
-  
+
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
       `multi-select-combobox-${entity}`
@@ -69,10 +76,13 @@ const MultiSelectCombobox = ({
     setShowListBox(true);
   };
 
-  // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce() 
+  // using useMemo here instead of useCallback will make this faster since useCallback will cause lodash's debounce()
   // to run every time MultiSelectComboBox rerenders
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedOnSearchHandler = useMemo(() => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS), [_items]);
+  const debouncedOnSearchHandler = useMemo(
+    () => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS),
+    [_items]
+  );
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
@@ -101,9 +111,8 @@ const MultiSelectCombobox = ({
         setSelectedItems(itemsCopy);
         updateListDataOnChange(id, "remove");
         onChangeUpdate(id, "remove");
-        inputRef.current.focus()
+        inputRef.current.focus();
       }
-
     },
     [selectedItemsRef, onChangeUpdate, updateListDataOnChange]
   );
@@ -126,7 +135,6 @@ const MultiSelectCombobox = ({
               label={optionLabel}
               onRemove={onRemoveHanlder}
               disableButton={true}
-
             />
           ),
         },
@@ -192,7 +200,7 @@ const MultiSelectCombobox = ({
   return (
     <>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
-        {label} 
+        {label}
       </Label>
       <div
         role="combobox"
@@ -213,7 +221,7 @@ const MultiSelectCombobox = ({
         {hideInput ? null : (
           <>
             <input
-              disabled = {disabled}
+              disabled={disabled}
               autoFocus={autoFocus}
               id={`${entity}-searchbox`}
               type="text"
@@ -233,14 +241,15 @@ const MultiSelectCombobox = ({
               onClick={() => setShowListBox(true)}
               onKeyDown={(e) => handleKeyDown(e)}
             />
-            {favicon ? 
+            {favicon ? (
               <FontAwesomeIcon
                 icon={faCaretDown}
                 className={`pin-right margin-right-${iconAlignRight} padding-top-05`}
                 onClick={() => !disabled && setShowListBox(true)}
-              /> : 
+              />
+            ) : (
               <></>
-            }
+            )}
           </>
         )}
         {showListBox || hideInput ? (
@@ -249,7 +258,6 @@ const MultiSelectCombobox = ({
             role="listbox"
             aria-labelledby={`${entity}-label`}
             id={`${entity}-listbox`}
-            data-testid="multi-select-listbox"
             tabIndex="-1"
             className={
               styling?.listbox ||
@@ -265,7 +273,7 @@ const MultiSelectCombobox = ({
                   data-id={item.id}
                   tabIndex="0"
                   data-label={item.label}
-                  data-testid="multi-select-option"
+                  data-testid={`${entity}-multi-select-option-${i}`}
                   className={
                     item.selected
                       ? "item selected padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify"

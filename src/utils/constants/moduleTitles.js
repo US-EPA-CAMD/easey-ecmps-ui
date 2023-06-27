@@ -6,3 +6,5 @@ export const qa_Certifications_Event_Module =
 export const export_Module = 'Export Data';
 export const emissions_module = 'Emissions';
 export const error_supression_module = 'Error Suppression';
+export const submissionAccessTitle = 'Maintain EM Submission Access';
+export const qaCertDataMaintenanceTitle = 'QA/Cert Data Maintenance';
