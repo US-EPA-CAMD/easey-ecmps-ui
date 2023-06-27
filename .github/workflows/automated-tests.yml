@@ -33,7 +33,7 @@ jobs:
     - name: Install Browser Drivers
       run: |
         cd easey-testing/scripts
-        chmod +x ./scripts/install_chrome.sh
+        chmod +x install_chrome.sh
         ./install-browser-drivers.sh
 
     - name: Build with Maven
