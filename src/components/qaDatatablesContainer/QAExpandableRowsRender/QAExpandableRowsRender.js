@@ -840,7 +840,6 @@ const QAExpandableRowsRender = ({
   };
 
   const getFirstLevelExpandables = () => {
-    console.log("dataTableName", dataTableName);
     const expandables = [];
     switch (dataTableName) {
       case "Linearity Test":
