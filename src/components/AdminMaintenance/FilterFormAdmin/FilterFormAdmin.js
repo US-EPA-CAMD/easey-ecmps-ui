@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
@@ -7,7 +7,6 @@ import {
 } from "../../../additional-functions/system-admin-section-and-store-names";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
-  getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../../utils/api/dataManagementApi";
 import {
@@ -17,63 +16,45 @@ import {
   ComboBox,
   Button,
 } from "@trussworks/react-uswds";
+import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
+
 const FilterFormAdmin = ({
   facilities,
-  queryCallback,
   section,
+  setTableData,
+  setIsTableDataLoading,
+  setCurrentFilters,
 }) => {
+
   const defaultDropdownText = "Select";
   const initialSelectOption = { code: "", name: defaultDropdownText };
-  const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
-    []
-  );
+  const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
+    initialSelectOption
+  ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [, setAvailableConfigState] = useState([]);
-
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
   ]);
-  const selectedOrisCodes = useRef([]);
-  const selectedReportingPeriods = useRef([]);
 
   const [availStatus, setAvailStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
-    { code: "all", name: "Show All" },
   ]);
 
+  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState({
-    code: "",
-    name: defaultDropdownText,
-  });
-  const [facility, setFacility] = useState([]);
-  const [facilityList, setFacilityList] = useState([]);
-  const [locations, setLocations] = useState([]);
-  // Make all api calls that only need to happen once on page load here
-
-  const [reset, setReset] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState();
 
   const [typeSelection, setTypeSelection] = useState([]);
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
   ]);
 
-  const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-
   useEffect(() => {
     const fetchTestTypeCodes = () => {
-      getAllTestTypeCodes()
-        .then((res) => {
-          setAllTestTypeCodes(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
       getAllTestTypeGroupCodes()
         .then((res) => {
           const options = res.data
@@ -95,80 +76,75 @@ const FilterFormAdmin = ({
           console.log(error);
         });
     };
-    fetchTestTypeCodes();
+
+    if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME)
+      fetchTestTypeCodes();
   }, []);
 
-  async function fetchReportingPeriods() {
+  const fetchReportingPeriods = async () => {
     const reportingPeriodList = (await getReportingPeriods()).data;
 
-    const availReportingPeriods = [];
-
-    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
-      const period = reportingPeriodList[i];
-      const objectMapping = {
-        id: period.periodAbbreviation,
-        label: period.periodAbbreviation,
-        selected: false,
-        enabled: true,
-      };
-
-      if (i === reportingPeriodList.length - 1) {
-        objectMapping.selected = true;
-        selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
+    const availReportingPeriods = reportingPeriodList.map(rp => {
+      return {
+        code: rp.periodAbbreviation,
+        name: rp.periodAbbreviation,
       }
+    });
+    const reversed = availReportingPeriods.sort().toReversed()
+    reversed.unshift(initialSelectOption);
 
-      availReportingPeriods.push(objectMapping);
-    }
-
-    setAvailableReportingPeriods(availReportingPeriods);
+    setAvailableReportingPeriods(reversed);
   }
 
   useEffect(() => {
     fetchReportingPeriods();
-  }, [facilities]);
+  }, []);
 
-  const applyFilters = () => {
-    const selectedEntries = availableConfigurations.filter((item) => {
-      return item.selected;
-    });
+  const applyFilters = async () => {
 
-    let monPlanIds = [];
-    if (selectedEntries) {
-      monPlanIds = selectedEntries.map((entry) => entry.monPlanId);
+    let monitorPlanId;
+    let year;
+    let quarter;
+    let status;
+
+    if (selectedLocation) {
+      const locationIdx = selectedLocation[0];
+      monitorPlanId = availableConfigurations[locationIdx].code;
     }
 
-    queryCallback(
-      selectedOrisCodes.current,
-      monPlanIds,
-      selectedReportingPeriods.current
-    );
+    if (selectedReportingPeriod?.length > 0 && selectedReportingPeriod[1] !== defaultDropdownText) {
+      const rpString = selectedReportingPeriod[1];
+      year = rpString.split(" ")[0];
+      quarter = rpString.slice(-1);
+    }
+
+    if (selectedStatus?.length > 0 && selectedStatus[1] !== defaultDropdownText) {
+      status = selectedStatus[1].toUpperCase()
+    }
+
+    setCurrentFilters({ facility: selectedFacility, monitorPlanId, year, quarter, status })
+
+    if (section === SUBMISSION_ACCESS_STORE_NAME) {
+      try {
+        setIsTableDataLoading(true)
+        const { data } = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
+        data.forEach((d) => (d.selected = false));
+
+        setTableData(data);
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setIsTableDataLoading(false);
+      }
+    }
   };
-
-  async function reportingPeriodFilterChange(id, action) {
-    let newState;
-    if (action === "add") {
-      newState = [...selectedReportingPeriods.current, id];
-    } else {
-      newState = [];
-      selectedReportingPeriods.current.forEach((item) => {
-        if (item !== id) {
-          newState.push(item);
-        }
-      });
-    }
-    selectedReportingPeriods.current = newState;
-  }
 
   const configurationFilterChange = (id) => {
     setSelectedLocation(id);
   };
 
   const facilityFilterChange = async (id) => {
-    let newState = [id];
-    const configurationData = newState.length
-      ? (await getMonitoringPlans(newState)).data
-      : [];
-
+    const configurationData = (await getMonitoringPlans([id])).data
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -180,18 +156,14 @@ const FilterFormAdmin = ({
     }
     const availConfigs = [];
     for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      const existingEntry = availableConfigurations.filter((item) => {
-        return item.selected && item.label === name;
-      });
 
       availConfigs.push({
-        code: name,
+        code: monPlanId,
         name: name,
       });
     }
     availConfigs.unshift(initialSelectOption);
     setAvailableConfigurations(availConfigs);
-    setAvailableConfigState(availableConfigurations);
   };
 
   const onFacilityChange = (value) => {
@@ -245,12 +217,10 @@ const FilterFormAdmin = ({
                     : "Location"
                 }
                 selectionHandler={configurationFilterChange}
-                // options={sections}
                 options={availableConfigurations}
                 viewKey="name"
-                selectKey="name"
+                selectKey="code"
                 initialSelection={selectedLocation ? selectedLocation[0] : 0}
-                // orisCode={orisCode}
                 workspaceSection={section}
                 extraSpace
               />
@@ -280,21 +250,16 @@ const FilterFormAdmin = ({
           {section === SUBMISSION_ACCESS_STORE_NAME ? (
             <>
               <Grid col={2}>
-                <Label
-                  test-id={"reporting-period-name-label"}
-                  htmlFor={"reporting-period-name"}
-                >
-                  Reporting Period
-                </Label>
-                <ComboBox
-                  id="reporting-period-name"
-                  name="reporting-period-name"
-                  epa-testid={"reporting-period-name"}
-                  data-testid={"reporting-period-name"}
+                <DropdownSelection
+                  caption="Reporting Period"
+                  selectionHandler={setSelectedReportingPeriod}
                   options={availableReportingPeriods}
-                  onChange={reportingPeriodFilterChange}
-                  disableFiltering={true}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedReportingPeriod ? selectedReportingPeriod[0] : null}
+                  extraSpace
                 />
+
               </Grid>
               <Grid col={3}>
                 <div className="margin-left-2">
@@ -303,7 +268,7 @@ const FilterFormAdmin = ({
                     selectionHandler={(option) => setSelectedStatus(option)}
                     options={availStatus}
                     viewKey="name"
-                    selectKey="name"
+                    selectKey="code"
                     initialSelection={selectedStatus ? selectedStatus[0] : null}
                     workspaceSection={section}
                     extraSpace
@@ -328,20 +293,23 @@ const FilterFormAdmin = ({
 
               <Button
                 disabled={
-                  !(
-                    selectedFacility &&
-                    selectedFacility[0] !== "" &&
-                    selectedLocation &&
-                    selectedLocation[0] !== "" &&
-                    (section === SUBMISSION_ACCESS_STORE_NAME
-                      ? selectedStatus && selectedStatus[0] !== ""
-                      : true) &&
-                    (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                      ? typeSelection && typeSelection[0] !== ""
-                      : true)
-                  )
+                  false
+                  // There is currently a BUG in the API where sending facility id does not return data so 
+                  // commenting this out until that bug is fixed.
+                  // !(
+                  //   selectedFacility &&
+                  //   selectedFacility[0] !== "" &&
+                  //   selectedLocation &&
+                  //   selectedLocation[0] !== "" &&
+                  //   (section === SUBMISSION_ACCESS_STORE_NAME
+                  //     ? selectedStatus && selectedStatus[0] !== ""
+                  //     : true) &&
+                  //   (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
+                  //     ? typeSelection && typeSelection[0] !== ""
+                  //     : true)
+                  // )
                 }
-                //   onClick={applyFilters}
+                onClick={applyFilters}
                 outline={false}
               >
                 Apply Filter(s)
