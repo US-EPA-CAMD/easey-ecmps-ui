@@ -25,6 +25,17 @@ jobs:
       with: 
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
+    
+    - name: Install Browser Drivers
+      run: |
+        cd easey-testing/scripts
+        chmod +x install-browser-drivers.sh
+        ./install-browser-drivers.sh
+    
+    - name: Move Drivers
+      run: |
+       mkdir -p /home/runner/drivers
+       mv /user/local/bin/chromedriver home/runner/drivers/
 
     - name: Build with Maven
       run: |

@@ -4,9 +4,16 @@ import { Preloader } from '@us-epa-camd/easey-design-system';
 import { Button } from '@trussworks/react-uswds';
 import { ArrowDownwardSharp } from '@material-ui/icons';
 import { submissionAccessTitle } from '../../../utils/constants/moduleTitles';
+import { EmSubmissionModal } from '../EmSubmissionPopOut/EmSubmissionPopout'
 import "./EmSubmissionData.scss";
 
-export const EmSubmissionData = ({ data=[], isLoading=false }) => {
+export const EmSubmissionData = ({ data = [], isLoading = false }) => {
+
+    const [showOpenModal, setShowOpenModal] = useState(false);
+    const [showExtendModal, setShowExtendModal] = useState(false);
+    const [showCloseModal, setShowCloseModal] = useState(false);
+    const [showApproveModal, setShowApproveModal] = useState(false);
+
 
     const [, setSelectedRows] = useState([]);
 
@@ -106,66 +113,94 @@ export const EmSubmissionData = ({ data=[], isLoading=false }) => {
         },
     ];
 
+    const closeModal = () => {
+        setShowOpenModal(false);
+        setShowExtendModal(false);
+        setShowCloseModal(false);
+        setShowApproveModal(false);
+    };
 
     return (
-        <div className="padding-left-0 margin-left-0 padding-right-0" >
-            <div className="grid-row row-width" >
-                <div className="grid-col-4">
-                    <span className="data-container-header">{submissionAccessTitle}</span>
-                </div>
-                <div className="grid-col-8">
-                    <div className="grid-row margin-left-3 margin-top-2">
-                        <div className="grid-col-3">
-                            <Button
-                                aria-label="Add"
-                                data-testid="es-add"
-                            >
-                                Open
-                            </Button>
-                        </div>
-                        <div className="grid-col-3">
-                            <Button
-                                aria-label="Clone"
-                                data-testid="es-clone"
-                            >
-                                Extend
-                            </Button>
-                        </div>
-                        <div className="grid-col-3">
-                            <Button
-                                aria-label="Deactivate"
-                                data-testid="es-deactivate"
-                            >
-                                Close
-                            </Button>
-                        </div>
-                        <div className="grid-col-3">
-                            <Button
-                                aria-label="Deactivate"
-                                data-testid="es-deactivate"
-                            >
-                                Approve
-                            </Button>
+        <div>
+            {showOpenModal || showExtendModal || showCloseModal || showApproveModal ? (
+                <EmSubmissionModal
+                    showModal={showOpenModal || showExtendModal || showCloseModal || showApproveModal}
+                    close={closeModal}
+                    isOpenModal={showOpenModal}
+                    isExtendModal={showExtendModal}
+                    isCloseModal={showCloseModal}
+                    isApproveModal={showApproveModal}
+                    openDate={new Date().toISOString()}
+                    closeDate={'2023-07-30'}
+                />
+            ) : null}
+            <div className="padding-left-0 margin-left-0 padding-right-0" >
+                <div className="grid-row row-width" >
+                    <div className="grid-col-4">
+                        <span className="data-container-header">{submissionAccessTitle}</span>
+                    </div>
+                    <div className="grid-col-8">
+                        <div className="grid-row margin-left-3 margin-top-2">
+                            <div className="grid-col-3">
+                                <Button
+                                    aria-label="Add"
+                                    data-testid="es-add"
+                                    className="usa-button usa-button--outline"
+                                    onClick={() => setShowOpenModal(true)}
+                                >
+                                    Open
+                                </Button>
+                            </div>
+                            <div className="grid-col-3">
+                                <Button
+                                    aria-label="Clone"
+                                    data-testid="es-clone"
+                                    className="usa-button usa-button--outline"
+                                    onClick={() => setShowExtendModal(true)}
+                                >
+                                    Extend
+                                </Button>
+                            </div>
+                            <div className="grid-col-3">
+                                <Button
+                                    aria-label="Deactivate"
+                                    data-testid="es-deactivate"
+                                    className="usa-button usa-button--outline"
+                                    onClick={() => setShowCloseModal(true)}
+                                >
+                                    Close
+                                </Button>
+                            </div>
+                            <div className="grid-col-3">
+                                <Button
+                                    aria-label="Deactivate"
+                                    data-testid="es-deactivate"
+                                    className="usa-button usa-button--outline"
+                                    onClick={() => setShowApproveModal(true)}
+                                >
+                                    Approve
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="es-datatable margin-top-5">
-                {isLoading ? (
-                    <Preloader />
-                ) : (
-                    <DataTable
-                        sortIcon={
-                            <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                        }
-                        noHeader={true}
-                        fixedHeader={true}
-                        fixedHeaderScrollHeight="50vh"
-                        columns={columns}
-                        data={data}
-                        className={`data-display-table react-transition fade-in`}
-                    />
-                )}
+                <div className="es-datatable margin-top-5">
+                    {isLoading ? (
+                        <Preloader />
+                    ) : (
+                        <DataTable
+                            sortIcon={
+                                <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                            }
+                            noHeader={true}
+                            fixedHeader={true}
+                            fixedHeaderScrollHeight="50vh"
+                            columns={columns}
+                            data={data}
+                            className={`data-display-table react-transition fade-in`}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     )
