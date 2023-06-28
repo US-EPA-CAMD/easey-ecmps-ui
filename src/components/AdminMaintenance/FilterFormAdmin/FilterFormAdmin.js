@@ -93,7 +93,6 @@ const FilterFormAdmin = ({
     const reversed = availReportingPeriods.sort().toReversed()
     reversed.unshift(initialSelectOption);
 
-    console.log(reversed)
     setAvailableReportingPeriods(reversed);
   }
 
@@ -114,7 +113,6 @@ const FilterFormAdmin = ({
     }
 
     if (selectedReportingPeriod?.length > 0 && selectedReportingPeriod[1] !== defaultDropdownText) {
-      console.log(selectedReportingPeriod)
       const rpString = selectedReportingPeriod[1];
       year = rpString.split(" ")[0];
       quarter = rpString.slice(-1);
@@ -141,10 +139,6 @@ const FilterFormAdmin = ({
     }
   };
 
-  const reportingPeriodFilterChange = (value) => {
-    setSelectedReportingPeriod(value)
-  }
-
   const configurationFilterChange = (id) => {
     setSelectedLocation(id);
   };
@@ -162,9 +156,6 @@ const FilterFormAdmin = ({
     }
     const availConfigs = [];
     for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      // const existingEntry = availableConfigurations.filter((item) => {
-      //   return item.selected && item.label === name;
-      // });
 
       availConfigs.push({
         code: monPlanId,
@@ -226,12 +217,10 @@ const FilterFormAdmin = ({
                     : "Location"
                 }
                 selectionHandler={configurationFilterChange}
-                // options={sections}
                 options={availableConfigurations}
                 viewKey="name"
                 selectKey="code"
                 initialSelection={selectedLocation ? selectedLocation[0] : 0}
-                // orisCode={orisCode}
                 workspaceSection={section}
                 extraSpace
               />
