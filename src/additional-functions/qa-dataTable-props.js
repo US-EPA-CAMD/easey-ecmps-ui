@@ -2,7 +2,7 @@ export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
     payload: {
-      gasLevelCode: selectedRow.gasLevelCode,
+      gasLevelCode: selectedRow ? selectedRow.gasLevelCode: '',
       gasTypeCode: "string",
       cylinderIdentifier: "string",
       vendorIdentifier: "string",
@@ -428,7 +428,7 @@ export const qaTestQualificationProps = (selectedRow) => {
   return {
     dataTableName: "Test Qualification",
     payload: {
-      testClaimCode: selectedRow.testClaimCode,
+      testClaimCode: selectedRow? selectedRow.testClaimCode: '',
       beginDate: "string",
       endDate: "string",
       highLoadPercentage: 0,
