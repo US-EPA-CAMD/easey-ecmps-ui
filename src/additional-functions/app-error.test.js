@@ -1,66 +1,54 @@
 import { displayAppError, hideAppError } from "./app-error";
 import React from "react";
-import { render } from "@testing-library/react";
+import {act, fireEvent, render, screen} from "@testing-library/react";
 
-class Valid extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1 id="appErrorMessageText"></h1>;
-        <svg tabIndex={-1} />
-        <h1 id="appErrorMessage"></h1>;
-      </div>
-    );
-  }
+const ErrorContainer = () =>  {
+  return (
+    <div data-testid="appErrorMessage" id="appErrorMessage" className="display-none">
+      <div data-testid="appErrorMessageText" id="appErrorMessageText"></div>
+    </div>
+  );
 }
 
-class Conditional extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1 id=""></h1>;<h1 id=""></h1>;
-      </div>
-    );
-  }
+const NoErrorContainer = () => {
+  return (
+    <div>
+      <h1 id="NOT-AppErrorMessage"></h1>
+    </div>
+  );
 }
-describe("app error functions", () => {
-  it("should test with a valid query", () => {
-    const { container } = render(<Valid />);
 
-    displayAppError("test");
+describe("Test displayAppError", () => {
+  it("Should show AppErrorMessage with Error(s) Text", async () => {
 
-    hideAppError();
+    await act(async () => {
+      render(<ErrorContainer />);
+    })
 
-    const test = container.querySelector("#appErrorMessageText");
+    const appErrorMessage = screen.getByTestId("appErrorMessage");
+    const appErrorMessageText = screen.getByTestId("appErrorMessageText");
 
-    expect(test).toBeDefined();
+    displayAppError("Some Error");
+
+    expect(appErrorMessage.classList).not.toContain('display-none');
+    expect(appErrorMessageText.innerHTML).toBe("Some Error");
+
+    // Clicking on the appErrorMessage container should fire hideAppError
+    // and close it (display: none, empty error text)
+    fireEvent.click(appErrorMessage);
+
+    expect(appErrorMessage.classList).toContain('display-none');
+    expect(appErrorMessageText.innerHTML).toBe("");
   });
 
-  test('displays list of errors', () => {
-    const { container } = render(<Valid />);
-    const appErrorMessageTextEle = container.querySelector("#appErrorMessageText");
-    const errorMsgs = ['error1', 'error2', 'error3']
+  it("Should not error if called when there is no appErrorMessage container",
+      async () => {
 
-    displayAppError(errorMsgs);
+    await act(async () => {
+      render(<NoErrorContainer />);
+    })
 
-    for (const msg of errorMsgs) {
-      expect(appErrorMessageTextEle).toHaveTextContent(msg);
-    }
-
-    hideAppError();
-
-    expect(appErrorMessageTextEle).toBeDefined();
+    displayAppError("Some Error");
   })
 
-  it("should test without a valid query", () => {
-    const { container } = render(<Conditional />);
-
-    displayAppError("test");
-
-    hideAppError();
-
-    const test = container.querySelector("h1");
-
-    expect(test).toBeDefined();
-  });
 });
