@@ -28,28 +28,25 @@ const FilterFormAdmin = ({
 
   const defaultDropdownText = "Select";
   const initialSelectOption = { code: "", name: defaultDropdownText };
-  const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
-    []
-  );
+  const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
+    initialSelectOption
+  ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
   ]);
-  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
-
+  
   const [availStatus, setAvailStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
   ]);
-
+  
+  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState({
-    code: "",
-    name: defaultDropdownText,
-  });
+  const [selectedStatus, setSelectedStatus] = useState();
 
   const [typeSelection, setTypeSelection] = useState([]);
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
@@ -80,7 +77,7 @@ const FilterFormAdmin = ({
         });
     };
 
-    if( section === QA_CERT_DATA_MAINTENANCE_STORE_NAME)
+    if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME)
       fetchTestTypeCodes();
   }, []);
 
@@ -89,17 +86,20 @@ const FilterFormAdmin = ({
 
     const availReportingPeriods = reportingPeriodList.map(rp => {
       return {
-        label: rp.periodAbbreviation,
-        value: rp.periodAbbreviation,
+        code: rp.periodAbbreviation,
+        name: rp.periodAbbreviation,
       }
     });
+    const reversed = availReportingPeriods.sort().toReversed()
+    reversed.unshift(initialSelectOption);
 
-    setAvailableReportingPeriods(availReportingPeriods.sort().toReversed());
+    console.log(reversed)
+    setAvailableReportingPeriods(reversed);
   }
 
   useEffect(() => {
     fetchReportingPeriods();
-  }, [facilities]);
+  }, []);
 
   const applyFilters = async () => {
 
@@ -108,38 +108,40 @@ const FilterFormAdmin = ({
     let quarter;
     let status;
 
-    if(selectedLocation){
+    if (selectedLocation) {
       const locationIdx = selectedLocation[0];
       monitorPlanId = availableConfigurations[locationIdx].code;
     }
 
-    if( selectedReportingPeriod ){
-      year = selectedReportingPeriod.split(" ")[0];
-      quarter = selectedReportingPeriod.slice(-1);
+    if (selectedReportingPeriod?.length > 0 && selectedReportingPeriod[1] !== defaultDropdownText) {
+      console.log(selectedReportingPeriod)
+      const rpString = selectedReportingPeriod[1];
+      year = rpString.split(" ")[0];
+      quarter = rpString.slice(-1);
     }
 
-    if( selectedStatus?.length > 0 && selectedStatus[1] !== 'Select' ){
+    if (selectedStatus?.length > 0 && selectedStatus[1] !== defaultDropdownText) {
       status = selectedStatus[1].toUpperCase()
     }
 
-    setCurrentFilters({facility: selectedFacility, monitorPlanId, year, quarter, status})
+    setCurrentFilters({ facility: selectedFacility, monitorPlanId, year, quarter, status })
 
-    if(section === SUBMISSION_ACCESS_STORE_NAME){
-      try{
+    if (section === SUBMISSION_ACCESS_STORE_NAME) {
+      try {
         setIsTableDataLoading(true)
-        const {data} = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
+        const { data } = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
         data.forEach((d) => (d.selected = false));
 
         setTableData(data);
-      }catch(e){
+      } catch (e) {
         console.error(e)
-      }finally{
+      } finally {
         setIsTableDataLoading(false);
       }
     }
   };
 
-  const reportingPeriodFilterChange  = (value) => {
+  const reportingPeriodFilterChange = (value) => {
     setSelectedReportingPeriod(value)
   }
 
@@ -259,21 +261,16 @@ const FilterFormAdmin = ({
           {section === SUBMISSION_ACCESS_STORE_NAME ? (
             <>
               <Grid col={2}>
-                <Label
-                  test-id={"reporting-period-name-label"}
-                  htmlFor={"reporting-period-name"}
-                >
-                  Reporting Period
-                </Label>
-                <ComboBox
-                  id="reporting-period-name"
-                  name="reporting-period-name"
-                  epa-testid={"reporting-period-name"}
-                  data-testid={"reporting-period-name"}
+                <DropdownSelection
+                  caption="Reporting Period"
+                  selectionHandler={setSelectedReportingPeriod}
                   options={availableReportingPeriods}
-                  onChange={reportingPeriodFilterChange}
-                  disableFiltering={true}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedReportingPeriod ? selectedReportingPeriod[0] : null}
+                  extraSpace
                 />
+
               </Grid>
               <Grid col={3}>
                 <div className="margin-left-2">
@@ -306,7 +303,7 @@ const FilterFormAdmin = ({
               </Button>
 
               <Button
-                disabled={ 
+                disabled={
                   false
                   // There is currently a BUG in the API where sending facility id does not return data so 
                   // commenting this out until that bug is fixed.
