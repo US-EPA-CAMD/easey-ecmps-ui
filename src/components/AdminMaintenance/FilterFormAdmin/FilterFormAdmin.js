@@ -35,14 +35,14 @@ const FilterFormAdmin = ({
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
   ]);
-  
+
   const [availStatus, setAvailStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
   ]);
-  
+
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);

@@ -59,7 +59,7 @@ export const AdminMaintenance = ({ section }) => {
   return (
     <div className="react-transition fade-in padding-x-3">
       <h2 className="page-header margin-top-2">{title}</h2>
-      <hr/>
+      <hr />
       <FilterFormAdmin
         facilities={facilityList}
         section={section}
@@ -67,8 +67,8 @@ export const AdminMaintenance = ({ section }) => {
         setIsTableDataLoading={setIsTableDataLoading}
         setCurrentFilters={setCurrentFilters}
       />
-      <hr/>
-      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters}/>
+      <hr />
+      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters} />
     </div>
   );
 };
