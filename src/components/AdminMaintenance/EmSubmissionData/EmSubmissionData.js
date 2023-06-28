@@ -20,62 +20,12 @@ export const EmSubmissionData = ({
     const [showExtendModal, setShowExtendModal] = useState(false);
     const [showCloseModal, setShowCloseModal] = useState(false);
     const [showApproveModal, setShowApproveModal] = useState(false);
+    const [showViewEditModal, setShowViewEditModal] = useState(false);
     // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
     const [selectedRows, setSelectedRows] = useState([]);
 
     const [selectedModalData, setSelectedModalData] = useState(null);
-    const [selectedRowData, setSelectedRowData] = useState(null)
-
-    // TODO, temp remove later
-    // check out qa expandable rows render to see how modals and view buttons are displayed
-    // maybe make a E
-    // qa expandabla rows uses qa data table render which has cell: (row, index) => return element to render
-    data = [
-        {
-            emissionStatusCode: "emissionStatusCode",
-            submissionAvailabilityCode: "submissionAvailabilityCode",
-            resubExplanation: "resubExplanation",
-            closeDate: "2023-06-28T14:17:05.648Z",
-            openDate: "2023-06-28T14:17:05.648Z",
-            monitorPlanId: "monitorPlanId",
-            reportingPeriodId: 1,
-            id: 2,
-            facilityId: 3,
-            orisCode: 4,
-            state: "state",
-            locations: "locations",
-            reportingFrequencyCode: "reportingFrequencyCode",
-            submissionTypeCode: "submissionTypeCode",
-            status: "status",
-            lastSubmissionId: 5,
-            severityLevel: "severityLevel",
-            userid: "userid",
-            addDate: "2023-06-28T14:17:05.648Z",
-            updateDate: "2023-06-28T14:17:05.648Z"
-        },
-        {
-            emissionStatusCode: "emissionStatusCode2",
-            submissionAvailabilityCode: "submissionAvailabilityCode2",
-            resubExplanation: "resubExplanation2",
-            closeDate: "2023-06-28T14:17:05.648Z",
-            openDate: "2023-06-28T14:17:05.648Z",
-            monitorPlanId: "monitorPlanId2",
-            reportingPeriodId: 11,
-            id: 22,
-            facilityId: 33,
-            orisCode: 44,
-            state: "state2",
-            locations: "locations2",
-            reportingFrequencyCode: "reportingFrequencyCode2",
-            submissionTypeCode: "submissionTypeCode2",
-            status: "status2",
-            lastSubmissionId: 55,
-            severityLevel: "severityLevel2",
-            userid: "userid2",
-            addDate: "2023-06-28T14:17:05.648Z",
-            updateDate: "2023-06-28T14:17:05.648Z"
-        }
-    ]
+    const [modalDataSelections, setModalDataSelections] = useState(null)
 
     const getSelect = useCallback((row, idx) => {
         return (
@@ -89,41 +39,25 @@ export const EmSubmissionData = ({
                     aria-label="Select"
                     onChange={(e) => onRowSelection(row, e.target.checked)}
                 />
-                <Button className="margin-left-2 usa-button usa-button--outline">View</Button>
+                <Button
+                    className="margin-left-2 usa-button usa-button--outline"
+                    onClick={() => openViewEditModalHandler(row, idx, false)}
+                >
+                    View
+                </Button>
             </div>
         );
     }, []);
 
-    const openModalHandler = (row, index, isCreate) => {
-        console.log({ row, index });
-        let selectedData = null;
-
-        selectedData = data[1]
-
-        setSelectedRowData(data[0])
-
-        // const controlInputs = {
-        //     parameterCode: ["Parameter", "mainDropdown", ""],
-        //     name: ["Name", "input", ""],
-        //     email: ["Email", "input", ""],
-        //     bypassApproachCode: ["Bypass Approach", "dropdown", ""],
-        // }
-
-        // const controlDatePickerInputs = {
-        //     beginDate: ["Start Date", "date", ""],
-        //     beginHour: ["Start Time", "hourDropdown", ""],
-        //     endDate: ["End Date", "date", ""],
-        //     endHour: ["End Time", "hourDropdown", ""],
-        // }
-        const controlDatePickerInputs = null
+    const openViewEditModalHandler = (row, index, isCreate = false) => {
+        const selectedData = data[index]
 
         const mdmData = {}
-
         const prefilteredDataName = false
-
         const mainDropdownName = null
         const mainDropdownResult = []
-        const prefilteredTotalName = 'prefilteredTotalName'
+        const hasMainDropdown = false;
+        const prefilteredTotalName = null
         const extraControls = false
 
         setSelectedModalData(
@@ -136,16 +70,12 @@ export const EmSubmissionData = ({
                 prefilteredDataName ? mdmData[prefilteredDataName] : "",
                 mainDropdownName,
                 mainDropdownResult,
-                true,
+                hasMainDropdown,
                 prefilteredTotalName,
                 extraControls
             )
         )
-        // setShowModal(true);
-    }
-
-    const closeModalHandler = () => {
-        // setShowModal(false);
+        setShowViewEditModal(true);
     }
 
     const onRowSelection = (row, checked) => {
@@ -245,6 +175,7 @@ export const EmSubmissionData = ({
         setShowExtendModal(false);
         setShowCloseModal(false);
         setShowApproveModal(false);
+        setShowViewEditModal(false);
     };
 
     return (
@@ -328,19 +259,18 @@ export const EmSubmissionData = ({
                     }
                 </div>
             </div>
-            {false &&
+            {showViewEditModal &&
                 <Modal
-                    show={() => { }}
-                    close={closeModalHandler}
+                    show={showViewEditModal}
+                    close={closeModal}
                 >
                     <ModalDetails
-                        modalData={selectedRowData}
+                        modalData={modalDataSelections}
                         data={selectedModalData}
                         cols={3}
                         title={'TEMP em submission data title'}
-                        // viewOnly={!user || (user && !isCheckedOut)}
                         viewOnly={true}
-                    // create={createNewData}
+                        // create={createNewData}
                     />
                 </Modal>
             }
@@ -349,23 +279,25 @@ export const EmSubmissionData = ({
 }
 
 const controlInputs = {
-    // cols usese .orisCode for fac name/id
+    // TODO: facilityName isn't in api response and will have to be added
     facilityId: ["Facility Name/ID", "input", ""],
     state: ["State", "input", ""],
     locations: ["MP Location(s)", "input", ""],
     reportingPeriodId: ["Reporting Period", "input", ""],
     reportingFrequencyCode: ["Reporting Frequency", "input", ""],
     status: ["Status", "input", ""],
-    lastWindowField: ["Last Window", "input", ""],
+    lastWindow: ["Last Window", "input", ""],
     openDate: ["Open Date", "date", ""],
     closeDate: ["Close Date", "date", ""],
     emissionStatusCode: ["Emission Status", "input", ""],
     submissionAvailabilityCode: ["Submission Availability", "input", ""],
-    submissionStatusField: ["Submission Status", "input", ""],
+    submissionStatus: ["Submission Status", "input", ""],
     lastSubmissionId: ["Last Submission ID", "input", ""],
-    submissionDateTimeField: ["Submission Date/Time", "input", ""],
+    submissionDateTime: ["Submission Date/Time", "input", ""],
     submissionTypeCode: ["Submission Type", "input", ""],
     severityLevel: ["Severity Level", "input", ""],
-    representativeField: ["Representative", "input", ""],
-    analystField: ["Analyst", "input", ""],
+    representative: ["Representative", "input", ""],
+    analyst: ["Analyst", "input", ""],
 }
+
+const controlDatePickerInputs = {}
