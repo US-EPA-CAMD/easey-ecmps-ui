@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
@@ -7,7 +7,6 @@ import {
 } from "../../../additional-functions/system-admin-section-and-store-names";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
-  getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../../utils/api/dataManagementApi";
 import {
@@ -24,6 +23,7 @@ const FilterFormAdmin = ({
   section,
   setTableData,
   setIsTableDataLoading,
+  setCurrentFilters,
 }) => {
 
   const defaultDropdownText = "Select";
@@ -50,30 +50,14 @@ const FilterFormAdmin = ({
     code: "",
     name: defaultDropdownText,
   });
-  const [facility, setFacility] = useState([]);
-  const [facilityList, setFacilityList] = useState([]);
-  const [locations, setLocations] = useState([]);
-  // Make all api calls that only need to happen once on page load here
-
-  const [reset, setReset] = useState(false);
 
   const [typeSelection, setTypeSelection] = useState([]);
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
   ]);
 
-  const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
-
   useEffect(() => {
     const fetchTestTypeCodes = () => {
-      getAllTestTypeCodes()
-        .then((res) => {
-          setAllTestTypeCodes(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
       getAllTestTypeGroupCodes()
         .then((res) => {
           const options = res.data
@@ -95,7 +79,9 @@ const FilterFormAdmin = ({
           console.log(error);
         });
     };
-    fetchTestTypeCodes();
+
+    if( section === QA_CERT_DATA_MAINTENANCE_STORE_NAME)
+      fetchTestTypeCodes();
   }, []);
 
   const fetchReportingPeriods = async () => {
@@ -120,6 +106,7 @@ const FilterFormAdmin = ({
     let monitorPlanId;
     let year;
     let quarter;
+    let status;
 
     if(selectedLocation){
       const locationIdx = selectedLocation[0];
@@ -130,18 +117,19 @@ const FilterFormAdmin = ({
       year = selectedReportingPeriod.split(" ")[0];
       quarter = selectedReportingPeriod.slice(-1);
     }
-    console.log(selectedFacility)
-    console.log(selectedLocation)
-    console.log(selectedReportingPeriod)
-    console.log(year);
-    console.log("quarter", quarter)
+
+    if( selectedStatus?.length > 0 && selectedStatus[1] !== 'Select' ){
+      status = selectedStatus[1].toUpperCase()
+    }
+
+    setCurrentFilters({facility: selectedFacility, monitorPlanId, year, quarter, status})
 
     if(section === SUBMISSION_ACCESS_STORE_NAME){
       try{
         setIsTableDataLoading(true)
-        const {data} = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, selectedStatus[1].toUpperCase());
+        const {data} = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
         data.forEach((d) => (d.selected = false));
-        console.log(data)
+
         setTableData(data);
       }catch(e){
         console.error(e)
@@ -161,7 +149,6 @@ const FilterFormAdmin = ({
 
   const facilityFilterChange = async (id) => {
     const configurationData = (await getMonitoringPlans([id])).data
-    console.log(configurationData)
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -295,7 +282,7 @@ const FilterFormAdmin = ({
                     selectionHandler={(option) => setSelectedStatus(option)}
                     options={availStatus}
                     viewKey="name"
-                    selectKey="name"
+                    selectKey="code"
                     initialSelection={selectedStatus ? selectedStatus[0] : null}
                     workspaceSection={section}
                     extraSpace

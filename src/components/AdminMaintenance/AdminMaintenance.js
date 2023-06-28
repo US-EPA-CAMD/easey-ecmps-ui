@@ -12,13 +12,7 @@ export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
   const [tableData, setTableData] = useState([]);
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
-  // const [dropdownFacilities, setDropdownFacilities] = useState([]);
-  // const [activityId, setActivityId] = useState("");
-  // const [excludeErrors, setExcludeErrors] = useState(true);
-  // const [showModal, setShowModal] = useState(false);
-  // const [submitting, setSubmitting] = useState(false);
-  // const [numFilesSelected, setNumFilesSelected] = useState(0);
-  // const filesSelected = useRef(0);
+  const [currentFilters, setCurrentFilters] = useState();
 
   useEffect(() => {
     switch (section) {
@@ -71,9 +65,10 @@ export const AdminMaintenance = ({ section }) => {
         section={section}
         setTableData={setTableData}
         setIsTableDataLoading={setIsTableDataLoading}
+        setCurrentFilters={setCurrentFilters}
       />
       <hr/>
-      <EmSubmissionData data={tableData} isLoading={isTableDataLoading}/>
+      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters}/>
     </div>
   );
 };

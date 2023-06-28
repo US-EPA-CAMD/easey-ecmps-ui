@@ -7,7 +7,11 @@ import { submissionAccessTitle } from '../../../utils/constants/moduleTitles';
 import { EmSubmissionModal } from '../EmSubmissionPopOut/EmSubmissionPopout'
 import "./EmSubmissionData.scss";
 
-export const EmSubmissionData = ({ data = [], isLoading = false,}) => {
+export const EmSubmissionData = ({
+    data = [],
+    isLoading = false,
+    currentFilters, // current set of filters chosen by the filter compopnent. Use to make api calls to refresh table. Remove if table refresh isn't required
+}) => {
 
     const [showOpenModal, setShowOpenModal] = useState(false);
     const [showExtendModal, setShowExtendModal] = useState(false);
@@ -19,16 +23,16 @@ export const EmSubmissionData = ({ data = [], isLoading = false,}) => {
     const getSelect = useCallback((row, idx) => {
         return (
             <div>
-            <input
-                checked={row.selected}
-                key={idx}
-                data-testid={`select-cb-${idx}`}
-                type="checkbox"
-                className="usa-checkbox"
-                aria-label="Select"
-                onChange={(e) => onRowSelection(row, e.target.checked)}
-            />
-            <Button className="margin-left-2">View</Button>
+                <input
+                    checked={row.selected}
+                    key={idx}
+                    data-testid={`select-cb-${idx}`}
+                    type="checkbox"
+                    className="usa-checkbox"
+                    aria-label="Select"
+                    onChange={(e) => onRowSelection(row, e.target.checked)}
+                />
+                <Button className="margin-left-2 usa-button usa-button--outline">View</Button>
             </div>
         );
     }, []);

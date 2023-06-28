@@ -4,18 +4,22 @@ import { secureAxios } from "./easeyAuthApi";
 
 const url = `${config.services.camd.uri}/admin/em-submission-access`;
 
-export const getEmSubmissionRecords = (orisCode, monitorPlanId, year, quarter, status)=>{
+export const getEmSubmissionRecords = async (orisCode, monitorPlanId, year, quarter, status) => {
 
-    return secureAxios({
-        url: url,
-        params: {
-          facilityId: orisCode,
-          monitorPlanId,
-          year,
-          quarter,
-          status,
-        },
-      })
-        .then(handleResponse)
-        .catch(handleError);
+  // At least some kind of filtering is required
+  if( !orisCode && !monitorPlanId && !year && !quarter && !status )
+    return []
+
+  return secureAxios({
+    url: url,
+    params: {
+      facilityId: orisCode,
+      monitorPlanId,
+      year,
+      quarter,
+      status,
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
 }
