@@ -10,6 +10,8 @@ import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
+  const [tableData, setTableData] = useState([]);
+  const [isTableDataLoading, setIsTableDataLoading] = useState(false);
   // const [dropdownFacilities, setDropdownFacilities] = useState([]);
   // const [activityId, setActivityId] = useState("");
   // const [excludeErrors, setExcludeErrors] = useState(true);
@@ -31,7 +33,7 @@ export const AdminMaintenance = ({ section }) => {
     }
   }, [section]);
   const [facilityList, setFacilityList] = useState([]);
-  const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => { };
+
   useEffect(() => {
     getAllFacilities()
       .then(({ data }) => {
@@ -59,18 +61,19 @@ export const AdminMaintenance = ({ section }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const filterClick = () => { };
+
   return (
     <div className="react-transition fade-in padding-x-3">
       <h2 className="page-header margin-top-2">{title}</h2>
       <hr/>
       <FilterFormAdmin
-        filterClick={filterClick}
         facilities={facilityList}
         section={section}
+        setTableData={setTableData}
+        setIsTableDataLoading={setIsTableDataLoading}
       />
       <hr/>
-      <EmSubmissionData />
+      <EmSubmissionData data={tableData} isLoading={isTableDataLoading}/>
     </div>
   );
 };

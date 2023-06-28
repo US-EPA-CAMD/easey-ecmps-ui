@@ -7,19 +7,18 @@ import { submissionAccessTitle } from '../../../utils/constants/moduleTitles';
 import { EmSubmissionModal } from '../EmSubmissionPopOut/EmSubmissionPopout'
 import "./EmSubmissionData.scss";
 
-export const EmSubmissionData = ({ data = [], isLoading = false }) => {
+export const EmSubmissionData = ({ data = [], isLoading = false,}) => {
 
     const [showOpenModal, setShowOpenModal] = useState(false);
     const [showExtendModal, setShowExtendModal] = useState(false);
     const [showCloseModal, setShowCloseModal] = useState(false);
     const [showApproveModal, setShowApproveModal] = useState(false);
+    // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
+    const [selectedRows, setSelectedRows] = useState([]);
 
-
-    const [, setSelectedRows] = useState([]);
-
-    // @TODO: still need to add the View button here
     const getSelect = useCallback((row, idx) => {
         return (
+            <div>
             <input
                 checked={row.selected}
                 key={idx}
@@ -29,6 +28,8 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
                 aria-label="Select"
                 onChange={(e) => onRowSelection(row, e.target.checked)}
             />
+            <Button className="margin-left-2">View</Button>
+            </div>
         );
     }, []);
 
@@ -44,70 +45,81 @@ export const EmSubmissionData = ({ data = [], isLoading = false }) => {
     const columns = [
         {
             name: "Select",
+            width: "150px",
             cell: (row, idx) => getSelect(row, idx),
         },
         {
             name: "Facility Name / ID",
-            selector: (row) => row.orisCode,
+            width: "210px",
             // facilityName isn't in api response and will have to be added
-            // (row.facilityName ? row.facilityName : "") +
-            // (row.orisCode ? " (" + row.orisCode + ")" : ""),
+            selector: (row) => row.facilityName ? `${row.facilityName} (${row.orisCode})` : row.orisCode,
             sortable: true,
         },
         {
             name: "State",
+            width: "150px",
             selector: (row) => row.state,
             sortable: true
         },
         {
             name: "MP Location(s)",
+            width: "200px",
             selector: (row) => row.locations,
             sortable: true
         },
         {
             name: "Reporting Period",
+            width: "210px",
             // We need to add reporting period to the api response. 
             selector: (row) => row.reportingPeriodId,
             sortable: true,
         },
         {
             name: "Reporting Frequency",
+            width: "230px",
             // We need to add reporting period to the api response. 
             selector: (row) => row.reportingFrequencyCode,
             sortable: true,
         },
         {
             name: "Status",
+            width: "150px",
             selector: (row) => row.status,
             sortable: true,
         },
         {
             name: "Open Date",
+            width: "200px",
             selector: (row) => row.openDate,
             sortable: true,
         },
         {
             name: "Close Date",
+            width: "200px",
             selector: (row) => row.closeDate,
             sortable: true,
         },
         {
             name: "Emission Status",
+            width: "200px",
             selector: (row) => row.emissionStatusCode,
             sortable: true,
         },
         {
             name: "Submission Availability",
+            width: "250px",
             selector: (row) => row.submissionAvailabilityCode,
             sortable: true,
         },
         {
             name: "Last Submission ID",
+            width: "220px",
             selector: (row) => row.lastSubmissionId,
             sortable: true,
         },
         {
             name: "Severity Level",
+            width: "200px",
             selector: (row) => row.severityLevel,
             sortable: true,
         },
