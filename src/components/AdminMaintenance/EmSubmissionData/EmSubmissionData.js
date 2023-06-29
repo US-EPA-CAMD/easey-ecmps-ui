@@ -273,6 +273,7 @@ export const EmSubmissionData = ({
                 <Modal
                     show={showViewEditModal}
                     close={closeModal}
+                    showDarkBg
                 >
                     <ModalDetails
                         modalData={modalDataSelections}
