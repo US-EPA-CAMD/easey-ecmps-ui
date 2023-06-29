@@ -208,6 +208,7 @@ export const EmSubmissionData = ({
     setShowExtendModal(false);
     setShowCloseModal(false);
     setShowApproveModal(false);
+    setShowViewEditModal(false);
   };
 
   return (
