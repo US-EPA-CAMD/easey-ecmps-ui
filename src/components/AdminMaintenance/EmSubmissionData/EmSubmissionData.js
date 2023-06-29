@@ -216,10 +216,7 @@ export const EmSubmissionData = ({
 
   return (
     <div>
-      {showOpenModal ||
-        showExtendModal ||
-        showCloseModal ||
-        showApproveModal ? (
+      {(showOpenModal || showExtendModal || showCloseModal || showApproveModal) &&
         <EmSubmissionModal
           showModal={
             showOpenModal ||
@@ -237,7 +234,7 @@ export const EmSubmissionData = ({
           selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
           setReloadTableData={setReloadTableData}
         />
-      ) : null}
+      }
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-4">
