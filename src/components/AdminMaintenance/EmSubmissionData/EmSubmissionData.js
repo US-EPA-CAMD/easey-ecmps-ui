@@ -230,7 +230,7 @@ export const EmSubmissionData = ({
           isApproveModal={showApproveModal}
           openDate={new Date().toISOString()}
           closeDate={"2023-07-30"}
-          selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
+          selectedRows={selectedRows}
           setReloadTableData={setReloadTableData}
         />
       }
