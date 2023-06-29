@@ -12,7 +12,11 @@ export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
   const [tableData, setTableData] = useState([]);
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
+  const [reloadTableData, setReloadTableData] = useState(false);
   const [currentFilters, setCurrentFilters] = useState();
+
+  // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
+  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     switch (section) {
@@ -23,6 +27,8 @@ export const AdminMaintenance = ({ section }) => {
       case QA_CERT_DATA_MAINTENANCE_STORE_NAME:
         document.title = qaCertDataMaintenanceTitle;
         setTitle(qaCertDataMaintenanceTitle);
+        break;
+      default:
         break;
     }
   }, [section]);
@@ -66,9 +72,12 @@ export const AdminMaintenance = ({ section }) => {
         setTableData={setTableData}
         setIsTableDataLoading={setIsTableDataLoading}
         setCurrentFilters={setCurrentFilters}
+        reloadTableData={reloadTableData}
+        setReloadTableData={setReloadTableData}
+        setSelectedRows={setSelectedRows}
       />
       <hr />
-      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters} />
+      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters} setReloadTableData={setReloadTableData} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
     </div>
   );
 };

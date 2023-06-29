@@ -24,6 +24,9 @@ const FilterFormAdmin = ({
   setTableData,
   setIsTableDataLoading,
   setCurrentFilters,
+  reloadTableData,
+  setReloadTableData,
+  setSelectedRows
 }) => {
 
   const defaultDropdownText = "Select";
@@ -135,9 +138,17 @@ const FilterFormAdmin = ({
         console.error(e)
       } finally {
         setIsTableDataLoading(false);
+        setSelectedRows([])
       }
     }
   };
+
+  useEffect(() => {
+    if (reloadTableData) {
+      applyFilters()
+      setReloadTableData(false)
+    }
+  }, [reloadTableData, setReloadTableData, applyFilters]);
 
   const configurationFilterChange = (id) => {
     setSelectedLocation(id);
