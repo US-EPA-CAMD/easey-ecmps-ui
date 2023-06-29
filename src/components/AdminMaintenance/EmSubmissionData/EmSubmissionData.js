@@ -79,13 +79,9 @@ export const EmSubmissionData = ({
     }
   };
 
+  // returns true if any row in list has status of closed
   const checkClosedStatus = (list) => {
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].status === closedTxt) {
-        return true;
-      }
-      return false;
-    }
+    return list.some(row => row.status === closedTxt)
   };
 
   const columns = [
