@@ -30,6 +30,17 @@ export const openEmSubmissionRecord = async (payload) => {
     method: "POST",
     url: url,
     data: payload,
+})
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const updateEmSubmissionRecord = async (payload, id) => {
+
+  return secureAxios({
+    method: "PUT",
+    url: `${url}/${id}`,
+    data: payload,
   })
     .then(handleResponse)
     .catch(handleError);

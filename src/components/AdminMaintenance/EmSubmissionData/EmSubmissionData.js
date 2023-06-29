@@ -17,7 +17,7 @@ export const EmSubmissionData = ({
   setReloadTableData,
   selectedRows,
   setSelectedRows,
-  currentFilters, // current set of filters chosen by the filter compopnent. Use to make api calls to refresh table. Remove if table refresh isn't required
+  reportingPeriods,
 }) => {
   const closedTxt = "CLOSED";
   const [showOpenModal, setShowOpenModal] = useState(false);
@@ -126,22 +126,6 @@ export const EmSubmissionData = ({
       ),
     },
     {
-      name: "Facility Name / ID",
-      width: "210px",
-      // facilityName isn't in api response and will have to be added
-      selector: (row) =>
-        row.facilityName
-          ? `${row.facilityName} (${row.orisCode})`
-          : row.orisCode,
-      sortable: true,
-    },
-    {
-      name: "State",
-      width: "150px",
-      selector: (row) => row.state,
-      sortable: true,
-    },
-    {
       name: "MP Location(s)",
       width: "200px",
       selector: (row) => row.locations,
@@ -151,7 +135,7 @@ export const EmSubmissionData = ({
       name: "Reporting Period",
       width: "210px",
       // We need to add reporting period to the api response.
-      selector: (row) => row.reportingPeriodId,
+      selector: (row) => row.reportingPeriodAbbreviation,
       sortable: true,
     },
     {
@@ -230,8 +214,9 @@ export const EmSubmissionData = ({
           isApproveModal={showApproveModal}
           openDate={new Date().toISOString()}
           closeDate={"2023-07-30"}
-          selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
+          selectedRows={selectedRows}
           setReloadTableData={setReloadTableData}
+          reportingPeriods={reportingPeriods}
         />
       }
       <div className="padding-left-0 margin-left-0 padding-right-0">
