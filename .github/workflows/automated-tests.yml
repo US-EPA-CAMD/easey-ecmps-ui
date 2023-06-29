@@ -29,7 +29,6 @@ jobs:
     - name: Install Browser Drivers
       run: |
         cd easey-testing/scripts
-        chmod +x install-browser-drivers.sh
         ./install-browser-drivers.sh
     
     # - name: Move Drivers
