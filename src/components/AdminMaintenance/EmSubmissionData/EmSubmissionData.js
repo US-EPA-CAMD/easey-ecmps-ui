@@ -334,7 +334,7 @@ const controlInputs = {
   facilityId: ["Facility Name/ID", "input", ""],
   state: ["State", "input", ""],
   locations: ["MP Location(s)", "input", ""],
-  reportingPeriodId: ["Reporting Period", "input", ""],
+  reportingPeriodAbbreviation: ["Reporting Period", "input", ""],
   reportingFrequencyCode: ["Reporting Frequency", "input", ""],
   status: ["Status", "input", ""],
   openDate: ["Open Date", "date", ""],
