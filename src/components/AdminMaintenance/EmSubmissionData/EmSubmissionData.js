@@ -13,6 +13,9 @@ import { modalViewData } from '../../../additional-functions/create-modal-input-
 export const EmSubmissionData = ({
     data = [],
     isLoading = false,
+    setReloadTableData,
+    selectedRows,
+    setSelectedRows,
     currentFilters, // current set of filters chosen by the filter compopnent. Use to make api calls to refresh table. Remove if table refresh isn't required
 }) => {
 
@@ -190,6 +193,8 @@ export const EmSubmissionData = ({
                     isApproveModal={showApproveModal}
                     openDate={new Date().toISOString()}
                     closeDate={'2023-07-30'}
+                    selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
+                    setReloadTableData={setReloadTableData}
                 />
             ) : null}
             <div className="padding-left-0 margin-left-0 padding-right-0" >
@@ -204,7 +209,12 @@ export const EmSubmissionData = ({
                                     aria-label="Add"
                                     data-testid="es-add"
                                     className="usa-button usa-button--outline"
-                                    onClick={() => setShowOpenModal(true)}
+                                    onClick={() => {
+                                        if (selectedRows.length === 1) {
+                                            setShowOpenModal(true)
+                                        }
+                                    }}
+                                    disabled={selectedRows.length !== 1 ? true : false}
                                 >
                                     Open
                                 </Button>

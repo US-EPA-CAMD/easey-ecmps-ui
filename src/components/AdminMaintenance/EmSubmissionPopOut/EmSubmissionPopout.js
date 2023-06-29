@@ -3,6 +3,8 @@ import { GridContainer, Grid, Label, DatePicker, Textarea, Checkbox } from "@tru
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
+import * as emSubmissionApi from '../../../utils/api/adminManagementApi'
+import { getReportingPeriods } from '../../../utils/api/qaCertificationsAPI'
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -11,7 +13,7 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow, setReloadTableData }) => {
 
   const [title, setTitle] = useState('');
 
@@ -21,10 +23,45 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
 
   const [showLoader, setShowLoader] = useState(false);
+  const [disableSaveBtn, setDisableSaveBtn] = useState(false);
 
-  const saveFunc = () => {
-    close()
-    /* TODO: CALL RESPECTIVE API TO UPDATE DATA */
+  const saveFunc = async () => {
+    setShowLoader(true)
+    setDisableSaveBtn(true)
+    const reportingPeriods = (await getReportingPeriods()).data
+    const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
+
+    const postPayload = {
+      emissionStatusCode: selectedRow.emissionStatusCode,
+      submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
+      resubExplanation: selectedReasonToOpen,
+      closeDate: selectedCloseDate,
+      openDate: selectedOpenDate,
+      monitorPlanId: selectedRow.monitorPlanId,
+      reportingPeriodId: selectedRow.reportingPeriodId
+    }
+
+    if (isOpenModal) {
+      try {
+        postPayload.reportingPeriodId = selectedRp.id;
+        await emSubmissionApi.openEmSubmissionRecord(postPayload)
+
+        if (selectedRequireSubQtrs) {
+          for (let i = selectedRp.quarter + 1; i <= 4; i++) {
+            const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
+            postPayload.reportingPeriodId = filteredRp.id;
+
+            await emSubmissionApi.openEmSubmissionRecord(postPayload)
+          }
+        }
+        setReloadTableData(true)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        close()
+      }
+    }
+
   }
 
   useEffect(() => {
@@ -48,7 +85,6 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       setTitle("Approve")
     }
 
-
   }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
 
   const updateDates = (e) => {
@@ -66,6 +102,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
         save={saveFunc}
         exitBTN={"Save and Close"}
         showSave
+        disableExitBtn={disableSaveBtn}
         title={`${title} Submission Access`}
         close={close}
         width={"40%"}
@@ -89,7 +126,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   data-testid={"open-date"}
                   placeholder="Select Open Date"
                   defaultValue={selectedOpenDate}
-                  minDate={new Date().toISOString()}
+                  minDate={selectedOpenDate}
                   onChange={updateDates}
                   disabled={isExtendModal}
                 />
@@ -108,6 +145,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   defaultValue={selectedCloseDate}
                   epa-testid={"close-date"}
                   data-testid={"close-date"}
+                  minDate={selectedCloseDate}
                   onChange={(e) => setSelectedCloseDate(getDateString(e))}
                 />
               </Grid>

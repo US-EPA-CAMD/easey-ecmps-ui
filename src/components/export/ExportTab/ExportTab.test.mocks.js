@@ -7,7 +7,7 @@ export const EXPORT_TAB_TEST_EXPORT_STATE = {
   reportingPeriodId
 }
 
-export const getReportingPeriod = {
+export const getReportingPeriods = {
   data: [
     {
       id: reportingPeriodId,
