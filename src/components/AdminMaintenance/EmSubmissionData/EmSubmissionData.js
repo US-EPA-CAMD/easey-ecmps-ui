@@ -268,9 +268,11 @@ export const EmSubmissionData = ({
             </div>
             {showViewEditModal &&
                 <Modal
+                    title={"Maintain EM Submission Access"}
                     show={showViewEditModal}
                     close={closeModal}
                     showDarkBg
+                    showCancel
                 >
                     <ModalDetails
                         modalData={modalDataSelections}
