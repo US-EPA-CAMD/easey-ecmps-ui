@@ -78,6 +78,26 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
         
       }
       
+      if (isExtendModal) {
+        const putPayloads = selectedRows.map(row => {
+          // append reason if it exists
+          const resubExplanation = selectedReasonForAction ? `${row.resubExplanation}, ${selectedReasonForAction}` : row.resubExplanation
+          const payload = {
+            id: row.id,
+            emissionStatusCode: row.emissionStatusCode,
+            submissionAvailabilityCode: row.submissionAvailabilityCode,
+            resubExplanation,
+            closeDate: selectedCloseDate
+          }
+          return payload
+        })
+        const promises = putPayloads.map(payload => {
+          const id = payload.id
+          delete payload.id
+          return emSubmissionApi.updateEmSubmissionRecord(payload, id)
+        })
+        await Promise.all(promises)
+      }
       setReloadTableData(true)
     }catch(e){
       console.error(e);
