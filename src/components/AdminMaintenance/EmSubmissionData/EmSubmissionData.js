@@ -6,6 +6,10 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionAccessTitle } from "../../../utils/constants/moduleTitles";
 import { EmSubmissionModal } from "../EmSubmissionPopOut/EmSubmissionPopout";
 import "./EmSubmissionData.scss";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+
 
 export const EmSubmissionData = ({
   data = [],
@@ -20,11 +24,47 @@ export const EmSubmissionData = ({
   const [showExtendModal, setShowExtendModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showViewEditModal, setShowViewEditModal] = useState(false);
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
   //   const [selectedRows, setSelectedRows] = useState([]);
 
+  const [selectedModalData, setSelectedModalData] = useState(null);
+  const [modalDataSelections, setModalDataSelections] = useState(null)
+
   const [disableApproveBtn, setDisableApproveBtn] = useState(false);
   const [disableOpenBtn, setDisableOpenBtn] = useState(false);
+
+
+  const openViewEditModalHandler = useCallback((row, index, isCreate = false) => {
+    const selectedData = data[index]
+    const { facilityName, facilityId } = selectedData
+    selectedData.facilityNameAndId = `${facilityName} (${facilityId})`
+
+    const mdmData = {}
+    const prefilteredDataName = false
+    const mainDropdownName = null
+    const mainDropdownResult = []
+    const hasMainDropdown = false;
+    const prefilteredTotalName = null
+    const extraControls = false
+
+    setSelectedModalData(
+      modalViewData(
+        selectedData,
+        controlInputs,
+        controlDatePickerInputs,
+        isCreate,
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        hasMainDropdown,
+        prefilteredTotalName,
+        extraControls
+      )
+    )
+    setShowViewEditModal(true);
+  }, [data])
 
   const onRowSelection = (row, checked) => {
     row.selected = checked;
@@ -41,13 +81,9 @@ export const EmSubmissionData = ({
     }
   };
 
+  // returns true if any row in list has status of closed
   const checkClosedStatus = (list) => {
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].status === closedTxt) {
-        return true;
-      }
-      return false;
-    }
+    return list.some(row => row.status === closedTxt)
   };
 
   const columns = [
@@ -75,13 +111,17 @@ export const EmSubmissionData = ({
         </div>
       ),
     },
-
     {
       name: "",
       width: "135px",
       cell: (row, idx) => (
         <div>
-          <Button className=" usa-button usa-button--outline">View</Button>
+          <Button
+            className=" usa-button usa-button--outline"
+            onClick={() => openViewEditModalHandler(row, idx, false)}
+          >
+            View
+          </Button>
         </div>
       ),
     },
@@ -170,14 +210,12 @@ export const EmSubmissionData = ({
     setShowExtendModal(false);
     setShowCloseModal(false);
     setShowApproveModal(false);
+    setShowViewEditModal(false);
   };
 
   return (
     <div>
-      {showOpenModal ||
-      showExtendModal ||
-      showCloseModal ||
-      showApproveModal ? (
+      {(showOpenModal || showExtendModal || showCloseModal || showApproveModal) &&
         <EmSubmissionModal
           showModal={
             showOpenModal ||
@@ -195,7 +233,7 @@ export const EmSubmissionData = ({
           selectedRow={selectedRows.length > 0 ? selectedRows[0] : null}
           setReloadTableData={setReloadTableData}
         />
-      ) : null}
+      }
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-4">
@@ -255,9 +293,8 @@ export const EmSubmissionData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
-          {isLoading ? (
-            <Preloader />
-          ) : (
+          {isLoading && <Preloader />}
+          {!isLoading &&
             <DataTable
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
@@ -269,9 +306,46 @@ export const EmSubmissionData = ({
               data={data}
               className={`data-display-table react-transition fade-in`}
             />
-          )}
+          }
         </div>
+        {showViewEditModal &&
+          <Modal
+            title={"Maintain EM Submission Access"}
+            show={showViewEditModal}
+            close={closeModal}
+            showDarkBg
+            showCancel
+          >
+            <ModalDetails
+              modalData={modalDataSelections}
+              data={selectedModalData}
+              cols={3}
+              title={'TEMP em submission data title'}
+              viewOnly={true}
+            // create={createNewData}
+            />
+          </Modal>
+        }
       </div>
     </div>
   );
 };
+
+const controlInputs = {
+  // TODO: facilityName isn't in api response and will have to be added
+  facilityNameAndId: ["Facility Name/ID", "input", ""],
+  state: ["State", "input", ""],
+  locations: ["MP Location(s)", "input", ""],
+  reportingPeriodAbbreviation: ["Reporting Period", "input", ""],
+  reportingFrequencyCode: ["Reporting Frequency", "input", ""],
+  status: ["Status", "input", ""],
+  openDate: ["Open Date", "date", ""],
+  closeDate: ["Close Date", "date", ""],
+  emissionStatusCode: ["Emission Status", "input", ""],
+  submissionAvailabilityCode: ["Submission Availability", "input", ""],
+  lastSubmissionId: ["Last Submission ID", "input", ""],
+  submissionTypeDescription: ["Submission Type", "input", ""],
+  severityLevel: ["Severity Level", "input", ""],
+}
+
+const controlDatePickerInputs = {}
