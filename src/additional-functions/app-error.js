@@ -21,7 +21,7 @@ export const displayAppError = (error) => {
     const xButtonSvg = svgElements[1];
     if (xButtonSvg) {
       xButtonSvg.setAttribute('aria-label', 'Close error message');
-    }
+       }
   }
 };
 
