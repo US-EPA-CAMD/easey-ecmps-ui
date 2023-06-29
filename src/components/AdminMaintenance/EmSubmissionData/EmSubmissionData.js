@@ -6,6 +6,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionAccessTitle } from "../../../utils/constants/moduleTitles";
 import { EmSubmissionModal } from "../EmSubmissionPopOut/EmSubmissionPopout";
 import "./EmSubmissionData.scss";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 
 export const EmSubmissionData = ({
   data = [],
@@ -20,11 +21,45 @@ export const EmSubmissionData = ({
   const [showExtendModal, setShowExtendModal] = useState(false);
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showViewEditModal, setShowViewEditModal] = useState(false);
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
   //   const [selectedRows, setSelectedRows] = useState([]);
 
+  const [selectedModalData, setSelectedModalData] = useState(null);
+  const [modalDataSelections, setModalDataSelections] = useState(null)
+
   const [disableApproveBtn, setDisableApproveBtn] = useState(false);
   const [disableOpenBtn, setDisableOpenBtn] = useState(false);
+
+
+  const openViewEditModalHandler = useCallback((row, index, isCreate = false) => {
+    const selectedData = data[index]
+
+    const mdmData = {}
+    const prefilteredDataName = false
+    const mainDropdownName = null
+    const mainDropdownResult = []
+    const hasMainDropdown = false;
+    const prefilteredTotalName = null
+    const extraControls = false
+
+    setSelectedModalData(
+      modalViewData(
+        selectedData,
+        controlInputs,
+        controlDatePickerInputs,
+        isCreate,
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        hasMainDropdown,
+        prefilteredTotalName,
+        extraControls
+      )
+    )
+    setShowViewEditModal(true);
+  }, [data])
 
   const onRowSelection = (row, checked) => {
     row.selected = checked;
@@ -75,13 +110,17 @@ export const EmSubmissionData = ({
         </div>
       ),
     },
-
     {
       name: "",
       width: "135px",
       cell: (row, idx) => (
         <div>
-          <Button className=" usa-button usa-button--outline">View</Button>
+          <Button
+            className=" usa-button usa-button--outline"
+            onClick={() => openViewEditModalHandler(row, idx, false)}
+            >
+            View
+          </Button>
         </div>
       ),
     },
@@ -175,9 +214,9 @@ export const EmSubmissionData = ({
   return (
     <div>
       {showOpenModal ||
-      showExtendModal ||
-      showCloseModal ||
-      showApproveModal ? (
+        showExtendModal ||
+        showCloseModal ||
+        showApproveModal ? (
         <EmSubmissionModal
           showModal={
             showOpenModal ||
