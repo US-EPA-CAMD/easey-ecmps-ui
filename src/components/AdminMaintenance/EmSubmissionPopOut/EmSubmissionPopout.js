@@ -26,53 +26,9 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const [disableSaveBtn, setDisableSaveBtn] = useState(false);
 
   const saveFunc = async () => {
-
-
-    // setShowLoader(true)
-    // setDisableSaveBtn(true)
-    // const reportingPeriods = (await getReportingPeriods()).data
-    // const firstSelectedRow = selectedRows[0]
-    // const selectedRp = reportingPeriods.find(rp => rp.id === firstSelectedRow.reportingPeriodId)
-
-    // const postPayload = {
-    //   emissionStatusCode: selectedRow.emissionStatusCode,
-    //   submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
-    //   resubExplanation: selectedReasonToOpen,
-    //   closeDate: selectedCloseDate,
-    //   openDate: selectedOpenDate,
-    //   monitorPlanId: selectedRow.monitorPlanId,
-    //   reportingPeriodId: selectedRow.reportingPeriodId
-    // }
-
-    // if (isOpenModal) {
-    //   try {
-    //     postPayload.reportingPeriodId = selectedRp.id;
-    //     await emSubmissionApi.openEmSubmissionRecord(postPayload)
-
-    //     if (selectedRequireSubQtrs) {
-    //       for (let i = selectedRp.quarter + 1; i <= 4; i++) {
-    //         const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
-    //         postPayload.reportingPeriodId = filteredRp.id;
-
-    //         await emSubmissionApi.openEmSubmissionRecord(postPayload)
-    //       }
-    //     }
-    //     setReloadTableData(true)
-    //   } catch (e) {
-    //     console.error(e)
-    //   } finally {
-    //     close()
-    //   }
-    // } else if (isExtendModal) {
-    //   console.log('extend modal request');
-    //   // get ids from alls selected rows then make put request to each endpoint/id
-
-    // }
-
-    // --- refactor ---
-
     setShowLoader(true)
     setDisableSaveBtn(true)
+
     try {
       if (isOpenModal) {
         const reportingPeriods = (await getReportingPeriods()).data
@@ -122,7 +78,6 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     } finally {
       close()
     }
-
   }
 
   useEffect(() => {
