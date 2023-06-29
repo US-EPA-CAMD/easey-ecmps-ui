@@ -342,6 +342,7 @@ const controlInputs = {
   emissionStatusCode: ["Emission Status", "input", ""],
   submissionAvailabilityCode: ["Submission Availability", "input", ""],
   lastSubmissionId: ["Last Submission ID", "input", ""],
+  submissionTypeDescription: ["Submission Type", "input", ""],
   severityLevel: ["Severity Level", "input", ""],
 }
 
