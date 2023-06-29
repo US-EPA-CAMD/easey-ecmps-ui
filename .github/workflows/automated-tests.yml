@@ -32,10 +32,10 @@ jobs:
         chmod +x install-browser-drivers.sh
         ./install-browser-drivers.sh
     
-    - name: Move Drivers
-      run: |
-       mkdir -p /home/runner/drivers
-       mv /usr/local/bin/chromedriver /home/runner/drivers/
+    # - name: Move Drivers
+    #   run: |
+    #    mkdir -p /home/runner/drivers
+    #    mv /usr/local/bin/chromedriver /home/runner/drivers/
 
     - name: Build with Maven
       run: |
