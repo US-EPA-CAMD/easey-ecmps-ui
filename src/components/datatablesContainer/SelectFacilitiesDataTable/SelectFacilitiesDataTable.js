@@ -197,6 +197,7 @@ export const SelectFacilitiesDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
 
+  console.log("column")
   return (
     <div className="tabsBox">
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
@@ -205,7 +206,8 @@ export const SelectFacilitiesDataTable = ({
         columnNames={columnNames}
         dataLoaded={dataLoaded}
         data={data}
-        // defaultSort="col2"
+        defaultSort="col2"
+        defaultSortDir="asc"
         openedFacilityTabs={openedFacilityTabs[workspaceState]}
         user={user}
         pagination={true}
