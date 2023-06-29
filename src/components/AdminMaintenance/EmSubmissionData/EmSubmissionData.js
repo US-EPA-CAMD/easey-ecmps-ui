@@ -275,3 +275,21 @@ export const EmSubmissionData = ({
     </div>
   );
 };
+
+const controlInputs = {
+  // TODO: facilityName isn't in api response and will have to be added
+  facilityId: ["Facility Name/ID", "input", ""],
+  state: ["State", "input", ""],
+  locations: ["MP Location(s)", "input", ""],
+  reportingPeriodId: ["Reporting Period", "input", ""],
+  reportingFrequencyCode: ["Reporting Frequency", "input", ""],
+  status: ["Status", "input", ""],
+  openDate: ["Open Date", "date", ""],
+  closeDate: ["Close Date", "date", ""],
+  emissionStatusCode: ["Emission Status", "input", ""],
+  submissionAvailabilityCode: ["Submission Availability", "input", ""],
+  lastSubmissionId: ["Last Submission ID", "input", ""],
+  severityLevel: ["Severity Level", "input", ""],
+}
+
+const controlDatePickerInputs = {}
