@@ -18,7 +18,6 @@ export const EmSubmissionData = ({
     setSelectedRows,
     currentFilters, // current set of filters chosen by the filter compopnent. Use to make api calls to refresh table. Remove if table refresh isn't required
 }) => {
-
     const [showOpenModal, setShowOpenModal] = useState(false);
     const [showExtendModal, setShowExtendModal] = useState(false);
     const [showCloseModal, setShowCloseModal] = useState(false);
@@ -28,32 +27,8 @@ export const EmSubmissionData = ({
     const [selectedModalData, setSelectedModalData] = useState(null);
     const [modalDataSelections, setModalDataSelections] = useState(null)
 
-    const getSelect = useCallback((row, idx) => {
-        return (
-            <div>
-                <input
-                    checked={row.selected}
-                    key={idx}
-                    data-testid={`select-cb-${idx}`}
-                    type="checkbox"
-                    className="usa-checkbox"
-                    aria-label="Select"
-                    onChange={(e) => onRowSelection(row, e.target.checked)}
-                />
-                <Button
-                    className="margin-left-2 usa-button usa-button--outline"
-                    onClick={() => openViewEditModalHandler(row, idx, false)}
-                >
-                    View
-                </Button>
-            </div>
-        );
-    }, []);
-
-    const openViewEditModalHandler = (row, index, isCreate = false) => {
-        console.log('data', data);
+    const openViewEditModalHandler = useCallback((row, index, isCreate = false) => {
         const selectedData = data[index]
-        console.log('selected data', selectedData);
 
         const mdmData = {}
         const prefilteredDataName = false
@@ -79,16 +54,38 @@ export const EmSubmissionData = ({
             )
         )
         setShowViewEditModal(true);
-    }
+    }, [data])
 
-    const onRowSelection = (row, checked) => {
+    const onRowSelection = useCallback((row, checked) => {
         row.selected = checked;
         if (checked) {
             setSelectedRows((prev) => [...prev, row]);
         } else {
             setSelectedRows((prev) => prev.filter((r) => r.id !== row.id));
         }
-    };
+    }, [setSelectedRows]);
+
+    const getSelect = useCallback((row, idx) => {
+        return (
+            <div>
+                <input
+                    checked={row.selected}
+                    key={idx}
+                    data-testid={`select-cb-${idx}`}
+                    type="checkbox"
+                    className="usa-checkbox"
+                    aria-label="Select"
+                    onChange={(e) => onRowSelection(row, e.target.checked)}
+                />
+                <Button
+                    className="margin-left-2 usa-button usa-button--outline"
+                    onClick={() => openViewEditModalHandler(row, idx, false)}
+                >
+                    View
+                </Button>
+            </div>
+        );
+    }, [onRowSelection, openViewEditModalHandler]);
 
     const columns = [
         {
@@ -281,7 +278,7 @@ export const EmSubmissionData = ({
                         cols={3}
                         title={'TEMP em submission data title'}
                         viewOnly={true}
-                        // create={createNewData}
+                    // create={createNewData}
                     />
                 </Modal>
             }
@@ -301,7 +298,6 @@ const controlInputs = {
     closeDate: ["Close Date", "date", ""],
     emissionStatusCode: ["Emission Status", "input", ""],
     submissionAvailabilityCode: ["Submission Availability", "input", ""],
-    submissionStatus: ["Submission Status", "input", ""],
     lastSubmissionId: ["Last Submission ID", "input", ""],
     severityLevel: ["Severity Level", "input", ""],
 }
