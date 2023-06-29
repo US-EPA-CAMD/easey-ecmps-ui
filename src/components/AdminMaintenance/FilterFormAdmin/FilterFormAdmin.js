@@ -26,7 +26,8 @@ const FilterFormAdmin = ({
   setCurrentFilters,
   reloadTableData,
   setReloadTableData,
-  setSelectedRows
+  setSelectedRows,
+  reportingPeriods,
 }) => {
 
   const defaultDropdownText = "Select";
@@ -84,10 +85,8 @@ const FilterFormAdmin = ({
       fetchTestTypeCodes();
   }, []);
 
-  const fetchReportingPeriods = async () => {
-    const reportingPeriodList = (await getReportingPeriods()).data;
-
-    const availReportingPeriods = reportingPeriodList.map(rp => {
+  const processReportingPeriods = async () => {
+    const availReportingPeriods = reportingPeriods.map(rp => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -100,8 +99,8 @@ const FilterFormAdmin = ({
   }
 
   useEffect(() => {
-    fetchReportingPeriods();
-  }, []);
+    processReportingPeriods();
+  }, [reportingPeriods]);
 
   const applyFilters = async () => {
 
