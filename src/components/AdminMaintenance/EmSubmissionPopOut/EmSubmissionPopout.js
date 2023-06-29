@@ -13,11 +13,11 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow, setReloadTableData }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRows, setReloadTableData }) => {
 
   const [title, setTitle] = useState('');
 
-  const [selectedReasonToOpen, setSelectedReasonToOpen] = useState('');
+  const [selectedReasonForAction, setSelectedReasonForAction] = useState('');
   const [selectedOpenDate, setSelectedOpenDate] = useState('');
   const [selectedCloseDate, setSelectedCloseDate] = useState('');
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
@@ -28,21 +28,24 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const saveFunc = async () => {
     setShowLoader(true)
     setDisableSaveBtn(true)
-    const reportingPeriods = (await getReportingPeriods()).data
-    const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
 
-    const postPayload = {
-      emissionStatusCode: selectedRow.emissionStatusCode,
-      submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
-      resubExplanation: selectedReasonToOpen,
-      closeDate: selectedCloseDate,
-      openDate: selectedOpenDate,
-      monitorPlanId: selectedRow.monitorPlanId,
-      reportingPeriodId: selectedRow.reportingPeriodId
-    }
+    try {
+      if (isOpenModal) {
+        const reportingPeriods = (await getReportingPeriods()).data
+        const firstSelectedRow = selectedRows[0]
+        const selectedRp = reportingPeriods.find(rp => rp.id === firstSelectedRow.reportingPeriodId)
 
-    if (isOpenModal) {
-      try {
+        const { emissionStatusCode, submissionAvailabilityCode, monitorPlanId, reportingPeriodId } = selectedRows[0]
+        const postPayload = {
+          emissionStatusCode,
+          submissionAvailabilityCode,
+          resubExplanation: selectedReasonForAction,
+          closeDate: selectedCloseDate,
+          openDate: selectedOpenDate,
+          monitorPlanId,
+          reportingPeriodId
+        }
+
         postPayload.reportingPeriodId = selectedRp.id;
         await emSubmissionApi.openEmSubmissionRecord(postPayload)
 
@@ -54,14 +57,32 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
             await emSubmissionApi.openEmSubmissionRecord(postPayload)
           }
         }
-        setReloadTableData(true)
-      } catch (e) {
-        console.error(e)
-      } finally {
-        close()
+      } else if (isExtendModal) {
+        const putPayloads = selectedRows.map(row => {
+          // append reason if it exists
+          const resubExplanation = selectedReasonForAction ? `${row.resubExplanation}, ${selectedReasonForAction}` : row.resubExplanation
+          const payload = {
+            id: row.id,
+            emissionStatusCode: row.emissionStatusCode,
+            submissionAvailabilityCode: row.submissionAvailabilityCode,
+            resubExplanation,
+            closeDate: selectedCloseDate
+          }
+          return payload
+        })
+        const promises = putPayloads.map(payload => {
+          const id = payload.id
+          delete payload.id
+          return emSubmissionApi.updateEmSubmissionRecord(payload, id)
+        })
+        await Promise.all(promises)
       }
+      setReloadTableData(true)
+    } catch (e) {
+      console.log(e);
+    } finally {
+      close()
     }
-
   }
 
   useEffect(() => {
@@ -179,8 +200,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   type="text"
                   epa-testid={"reason-to-open"}
                   data-testid={"reason-to-open"}
-                  value={selectedReasonToOpen}
-                  onChange={(e) => { setSelectedReasonToOpen(e.target.value) }}
+                  value={selectedReasonForAction}
+                  onChange={(e) => { setSelectedReasonForAction(e.target.value) }}
                 />
               </Grid>
             </Grid>
