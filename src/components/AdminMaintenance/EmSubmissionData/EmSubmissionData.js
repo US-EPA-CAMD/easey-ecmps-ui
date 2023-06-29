@@ -24,8 +24,6 @@ export const EmSubmissionData = ({
     const [showCloseModal, setShowCloseModal] = useState(false);
     const [showApproveModal, setShowApproveModal] = useState(false);
     const [showViewEditModal, setShowViewEditModal] = useState(false);
-    // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
-    const [selectedRows, setSelectedRows] = useState([]);
 
     const [selectedModalData, setSelectedModalData] = useState(null);
     const [modalDataSelections, setModalDataSelections] = useState(null)
@@ -53,7 +51,9 @@ export const EmSubmissionData = ({
     }, []);
 
     const openViewEditModalHandler = (row, index, isCreate = false) => {
+        console.log('data', data);
         const selectedData = data[index]
+        console.log('selected data', selectedData);
 
         const mdmData = {}
         const prefilteredDataName = false
@@ -296,18 +296,13 @@ const controlInputs = {
     reportingPeriodId: ["Reporting Period", "input", ""],
     reportingFrequencyCode: ["Reporting Frequency", "input", ""],
     status: ["Status", "input", ""],
-    lastWindow: ["Last Window", "input", ""],
     openDate: ["Open Date", "date", ""],
     closeDate: ["Close Date", "date", ""],
     emissionStatusCode: ["Emission Status", "input", ""],
     submissionAvailabilityCode: ["Submission Availability", "input", ""],
     submissionStatus: ["Submission Status", "input", ""],
     lastSubmissionId: ["Last Submission ID", "input", ""],
-    submissionDateTime: ["Submission Date/Time", "input", ""],
-    submissionTypeCode: ["Submission Type", "input", ""],
     severityLevel: ["Severity Level", "input", ""],
-    representative: ["Representative", "input", ""],
-    analyst: ["Analyst", "input", ""],
 }
 
 const controlDatePickerInputs = {}
