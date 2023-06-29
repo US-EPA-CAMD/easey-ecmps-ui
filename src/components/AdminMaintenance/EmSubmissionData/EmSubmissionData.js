@@ -37,6 +37,8 @@ export const EmSubmissionData = ({
 
   const openViewEditModalHandler = useCallback((row, index, isCreate = false) => {
     const selectedData = data[index]
+    const { facilityName, facilityId } = selectedData
+    selectedData.facilityNameAndId = `${facilityName} (${facilityId})`
 
     const mdmData = {}
     const prefilteredDataName = false
@@ -331,7 +333,7 @@ export const EmSubmissionData = ({
 
 const controlInputs = {
   // TODO: facilityName isn't in api response and will have to be added
-  facilityId: ["Facility Name/ID", "input", ""],
+  facilityNameAndId: ["Facility Name/ID", "input", ""],
   state: ["State", "input", ""],
   locations: ["MP Location(s)", "input", ""],
   reportingPeriodAbbreviation: ["Reporting Period", "input", ""],
