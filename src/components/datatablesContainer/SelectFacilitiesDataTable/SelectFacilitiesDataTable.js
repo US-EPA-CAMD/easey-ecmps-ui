@@ -197,7 +197,6 @@ export const SelectFacilitiesDataTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilities]);
 
-  console.log("column")
   return (
     <div className="tabsBox">
       {/* {workspaceSection === MONITORING_PLAN_STORE_NAME ? ( */}
