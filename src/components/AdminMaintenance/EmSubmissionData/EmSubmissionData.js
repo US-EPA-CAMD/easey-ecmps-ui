@@ -6,7 +6,10 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionAccessTitle } from "../../../utils/constants/moduleTitles";
 import { EmSubmissionModal } from "../EmSubmissionPopOut/EmSubmissionPopout";
 import "./EmSubmissionData.scss";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+
 
 export const EmSubmissionData = ({
   data = [],
@@ -118,7 +121,7 @@ export const EmSubmissionData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewEditModalHandler(row, idx, false)}
-            >
+          >
             View
           </Button>
         </div>
@@ -294,9 +297,8 @@ export const EmSubmissionData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
-          {isLoading ? (
-            <Preloader />
-          ) : (
+          {isLoading && <Preloader />}
+          {!isLoading &&
             <DataTable
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
@@ -308,8 +310,26 @@ export const EmSubmissionData = ({
               data={data}
               className={`data-display-table react-transition fade-in`}
             />
-          )}
+          }
         </div>
+        {showViewEditModal &&
+          <Modal
+            title={"Maintain EM Submission Access"}
+            show={showViewEditModal}
+            close={closeModal}
+            showDarkBg
+            showCancel
+          >
+            <ModalDetails
+              modalData={modalDataSelections}
+              data={selectedModalData}
+              cols={3}
+              title={'TEMP em submission data title'}
+              viewOnly={true}
+            // create={createNewData}
+            />
+          </Modal>
+        }
       </div>
     </div>
   );
