@@ -25,11 +25,11 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const [showLoader, setShowLoader] = useState(false);
   const [disableSaveBtn, setDisableSaveBtn] = useState(false);
 
-  const openEmSubmissionRecord = async ()=>{
+  const openEmSubmissionRecord = async () => {
     const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
     const selectedRow = selectedRows[0];
 
-    if( !selectedRow )
+    if (!selectedRow)
       return;
 
     const postPayload = {
@@ -55,33 +55,74 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     }
   }
 
-  const closeEmSubmissionRecord = async ()=>{
-    const payload = selectedRows.map(row => ({
+  const extendSubmissionRecord = async ()=>{
+    const putPayloads = selectedRows.map(row => {
+      // append reason if it exists
+      let resubExplanation;
+
+      const isCurrentResubExplEmpty = (row.resubExplanation === null || row.resubExplanation === '')
+      if (isCurrentResubExplEmpty)
+        resubExplanation = "";
+
+      if (isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+        resubExplanation = selectedReasonForAction
+
+      if (!isCurrentResubExplEmpty && selectedReasonForAction.length === 0)
+        resubExplanation = row.resubExplanation;
+
+      if (!isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+        resubExplanation = `${row.resubExplanation}, ${selectedReasonForAction}`;
+        
+      const payload = {
+        id: row.id,
+        emissionStatusCode: row.emissionStatusCode,
+        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        resubExplanation,
+        closeDate: selectedCloseDate
+      }
+      return payload
+    })
+    const promises = putPayloads.map(payload => {
+      const id = payload.id
+      return emSubmissionApi.updateEmSubmissionRecord(payload, id)
+    })
+    await Promise.all(promises)
+  }
+
+  const closeEmSubmissionRecord = async () => {
+    const putPayloads = selectedRows.map(row => ({
       id: row.id,
       emissionStatusCode: row.emissionStatusCode,
       submissionAvailabilityCode: "DELETE",
       resubExplanation: selectedReasonForAction,
       closeDate: row.closeDate
     }))
+
+    const promises = putPayloads.map(payload => emSubmissionApi.updateEmSubmissionRecord(payload, payload.id));
+
+    await Promise.all(promises);
   }
- 
+
   const saveFunc = async () => {
     setShowLoader(true)
     setDisableSaveBtn(true)
 
-    try{
+    try {
       if (isOpenModal) {
         await openEmSubmissionRecord();
       }
-  
-      if(isCloseModal){
-        
+
+      if (isCloseModal) {
+        await closeEmSubmissionRecord();
       }
-      
+
+      if (isExtendModal) {
+        await extendSubmissionRecord();
+      }
       setReloadTableData(true)
-    }catch(e){
+    } catch (e) {
       console.error(e);
-    }finally{
+    } finally {
       close();
     }
   }
