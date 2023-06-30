@@ -14,7 +14,6 @@ export const AdminMaintenance = ({ section }) => {
   const [tableData, setTableData] = useState([]);
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
   const [reloadTableData, setReloadTableData] = useState(false);
-  const [currentFilters, setCurrentFilters] = useState();
   const [reportingPeriods, setReportingPeriods] = useState([]);
 
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
@@ -82,7 +81,6 @@ export const AdminMaintenance = ({ section }) => {
         section={section}
         setTableData={setTableData}
         setIsTableDataLoading={setIsTableDataLoading}
-        setCurrentFilters={setCurrentFilters}
         reloadTableData={reloadTableData}
         setReloadTableData={setReloadTableData}
         setSelectedRows={setSelectedRows}
@@ -92,7 +90,6 @@ export const AdminMaintenance = ({ section }) => {
       <EmSubmissionData 
         data={tableData} 
         isLoading={isTableDataLoading} 
-        currentFilters={currentFilters} 
         setReloadTableData={setReloadTableData} 
         selectedRows={selectedRows} 
         setSelectedRows={setSelectedRows} 

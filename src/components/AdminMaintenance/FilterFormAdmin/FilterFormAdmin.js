@@ -23,7 +23,6 @@ const FilterFormAdmin = ({
   section,
   setTableData,
   setIsTableDataLoading,
-  setCurrentFilters,
   reloadTableData,
   setReloadTableData,
   setSelectedRows,
@@ -123,8 +122,6 @@ const FilterFormAdmin = ({
     if (selectedStatus?.length > 0 && selectedStatus[1] !== defaultDropdownText) {
       status = selectedStatus[1].toUpperCase()
     }
-
-    setCurrentFilters({ facility: selectedFacility, monitorPlanId, year, quarter, status })
 
     if (section === SUBMISSION_ACCESS_STORE_NAME) {
       try {
