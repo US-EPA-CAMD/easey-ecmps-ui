@@ -4,7 +4,6 @@ import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
 import * as emSubmissionApi from '../../../utils/api/adminManagementApi'
-import { getReportingPeriods } from '../../../utils/api/qaCertificationsAPI'
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -50,7 +49,6 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       
       for (let i = selectedRp.quarter + 1; i <= 4; i++) {
         const filteredRp = reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
-        console.log(filteredRp);
         postPayload.reportingPeriodId = filteredRp.id;
 
         await emSubmissionApi.openEmSubmissionRecord(postPayload)
