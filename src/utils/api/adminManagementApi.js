@@ -30,7 +30,7 @@ export const openEmSubmissionRecord = async (payload) => {
     method: "POST",
     url: url,
     data: payload,
-  })
+})
     .then(handleResponse)
     .catch(handleError);
 }

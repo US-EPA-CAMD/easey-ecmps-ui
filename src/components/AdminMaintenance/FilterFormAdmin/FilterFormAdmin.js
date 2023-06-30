@@ -23,10 +23,10 @@ const FilterFormAdmin = ({
   section,
   setTableData,
   setIsTableDataLoading,
-  setCurrentFilters,
   reloadTableData,
   setReloadTableData,
-  setSelectedRows
+  setSelectedRows,
+  reportingPeriods,
 }) => {
 
   const defaultDropdownText = "Select";
@@ -84,10 +84,8 @@ const FilterFormAdmin = ({
       fetchTestTypeCodes();
   }, []);
 
-  const fetchReportingPeriods = async () => {
-    const reportingPeriodList = (await getReportingPeriods()).data;
-
-    const availReportingPeriods = reportingPeriodList.map(rp => {
+  const processReportingPeriods = async () => {
+    const availReportingPeriods = reportingPeriods.map(rp => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -100,8 +98,8 @@ const FilterFormAdmin = ({
   }
 
   useEffect(() => {
-    fetchReportingPeriods();
-  }, []);
+    processReportingPeriods();
+  }, [reportingPeriods]);
 
   const applyFilters = async () => {
 
@@ -124,8 +122,6 @@ const FilterFormAdmin = ({
     if (selectedStatus?.length > 0 && selectedStatus[1] !== defaultDropdownText) {
       status = selectedStatus[1].toUpperCase()
     }
-
-    setCurrentFilters({ facility: selectedFacility, monitorPlanId, year, quarter, status })
 
     if (section === SUBMISSION_ACCESS_STORE_NAME) {
       try {
