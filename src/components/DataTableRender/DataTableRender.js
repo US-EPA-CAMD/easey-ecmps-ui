@@ -56,6 +56,7 @@ export const DataTableRender = ({
   expandableRowComp,
   expandableRowProps,
   defaultSort,
+  defaultSortDir, // can be either "asc" for ascending or any other value for descending
   expandableRows,
   headerStyling,
   tableStyling,
@@ -195,6 +196,7 @@ export const DataTableRender = ({
     switch (name) {
       case "Facility":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
@@ -205,6 +207,7 @@ export const DataTableRender = ({
 
       case "Configurations":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
@@ -215,6 +218,7 @@ export const DataTableRender = ({
 
       case "ORIS":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row.col2,
@@ -226,8 +230,8 @@ export const DataTableRender = ({
 
       default:
         columns.push({
+          id: `col${index + 1}`,
           name,
-
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           style: { whiteSpace: "normal" },
@@ -235,6 +239,7 @@ export const DataTableRender = ({
         break;
     }
   });
+
   if (actionsBtn) {
     if (actionsBtn === "Open") {
       columns.push({
@@ -490,9 +495,10 @@ export const DataTableRender = ({
         />
       );
     }
-
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection]);
+
   return (
     <div className={`${componentStyling}`}>
       <div id="datatableFilterContainer" />
@@ -524,7 +530,8 @@ export const DataTableRender = ({
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
               }
               // props
-              defaultSortField={defaultSort ? defaultSort : "col1"}
+              defaultSortFieldId={defaultSort ? defaultSort : "col1"}
+              defaultSortAsc={defaultSortDir === 'asc'}
               expandableRows={expandableRows}
               pagination={pagination}
               columns={columns}
