@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button, Checkbox } from "@trussworks/react-uswds";
@@ -17,7 +17,7 @@ export const EmSubmissionData = ({
   setReloadTableData,
   selectedRows,
   setSelectedRows,
-  currentFilters, // current set of filters chosen by the filter compopnent. Use to make api calls to refresh table. Remove if table refresh isn't required
+  reportingPeriods,
 }) => {
   const closedTxt = "CLOSED";
   const [showOpenModal, setShowOpenModal] = useState(false);
@@ -151,7 +151,7 @@ export const EmSubmissionData = ({
       name: "Reporting Period",
       width: "210px",
       // We need to add reporting period to the api response.
-      selector: (row) => row.reportingPeriodId,
+      selector: (row) => row.reportingPeriodAbbreviation,
       sortable: true,
     },
     {
@@ -228,10 +228,9 @@ export const EmSubmissionData = ({
           isExtendModal={showExtendModal}
           isCloseModal={showCloseModal}
           isApproveModal={showApproveModal}
-          openDate={new Date().toISOString()}
-          closeDate={"2023-07-30"}
           selectedRows={selectedRows}
           setReloadTableData={setReloadTableData}
+          reportingPeriods={reportingPeriods}
         />
       }
       <div className="padding-left-0 margin-left-0 padding-right-0">

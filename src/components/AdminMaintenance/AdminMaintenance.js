@@ -7,13 +7,14 @@ import {
 } from "../../additional-functions/system-admin-section-and-store-names";
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
 import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
+import { getReportingPeriods } from "../../utils/api/mdmApi";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
   const [tableData, setTableData] = useState([]);
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
   const [reloadTableData, setReloadTableData] = useState(false);
-  const [currentFilters, setCurrentFilters] = useState();
+  const [reportingPeriods, setReportingPeriods] = useState([]);
 
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
   const [selectedRows, setSelectedRows] = useState([]);
@@ -33,6 +34,7 @@ export const AdminMaintenance = ({ section }) => {
     }
   }, [section]);
   const [facilityList, setFacilityList] = useState([]);
+
 
   useEffect(() => {
     getAllFacilities()
@@ -59,6 +61,14 @@ export const AdminMaintenance = ({ section }) => {
         console.error("Error getting facilities", error);
       });
 
+      getReportingPeriods()
+        .then(({data})=>{
+          setReportingPeriods(data);
+        })
+        .catch(error=>{
+          console.error("Error getting reporting periods", error);
+        })
+      
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -71,13 +81,20 @@ export const AdminMaintenance = ({ section }) => {
         section={section}
         setTableData={setTableData}
         setIsTableDataLoading={setIsTableDataLoading}
-        setCurrentFilters={setCurrentFilters}
         reloadTableData={reloadTableData}
         setReloadTableData={setReloadTableData}
         setSelectedRows={setSelectedRows}
+        reportingPeriods={reportingPeriods}
       />
       <hr />
-      <EmSubmissionData data={tableData} isLoading={isTableDataLoading} currentFilters={currentFilters} setReloadTableData={setReloadTableData} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
+      <EmSubmissionData 
+        data={tableData} 
+        isLoading={isTableDataLoading} 
+        setReloadTableData={setReloadTableData} 
+        selectedRows={selectedRows} 
+        setSelectedRows={setSelectedRows} 
+        reportingPeriods={reportingPeriods}
+      />
     </div>
   );
 };
