@@ -23,7 +23,10 @@ const FilterFormAdmin = ({
   section,
   setTableData,
   setIsTableDataLoading,
-  setCurrentFilters,
+  reloadTableData,
+  setReloadTableData,
+  setSelectedRows,
+  reportingPeriods,
 }) => {
 
   const defaultDropdownText = "Select";
@@ -81,10 +84,8 @@ const FilterFormAdmin = ({
       fetchTestTypeCodes();
   }, []);
 
-  const fetchReportingPeriods = async () => {
-    const reportingPeriodList = (await getReportingPeriods()).data;
-
-    const availReportingPeriods = reportingPeriodList.map(rp => {
+  const processReportingPeriods = async () => {
+    const availReportingPeriods = reportingPeriods.map(rp => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -97,8 +98,8 @@ const FilterFormAdmin = ({
   }
 
   useEffect(() => {
-    fetchReportingPeriods();
-  }, []);
+    processReportingPeriods();
+  }, [reportingPeriods]);
 
   const applyFilters = async () => {
 
@@ -122,8 +123,6 @@ const FilterFormAdmin = ({
       status = selectedStatus[1].toUpperCase()
     }
 
-    setCurrentFilters({ facility: selectedFacility, monitorPlanId, year, quarter, status })
-
     if (section === SUBMISSION_ACCESS_STORE_NAME) {
       try {
         setIsTableDataLoading(true)
@@ -135,9 +134,17 @@ const FilterFormAdmin = ({
         console.error(e)
       } finally {
         setIsTableDataLoading(false);
+        setSelectedRows([])
       }
     }
   };
+
+  useEffect(() => {
+    if (reloadTableData) {
+      applyFilters()
+      setReloadTableData(false)
+    }
+  }, [reloadTableData, setReloadTableData, applyFilters]);
 
   const configurationFilterChange = (id) => {
     setSelectedLocation(id);
