@@ -1,13 +1,13 @@
 import { renderHook } from '@testing-library/react-hooks';
 import useGetCheckedOutLocations, { obtainCheckedOutLocations } from './useGetCheckedOutLocations';
 
-jest.useFakeTimers();
-jest.spyOn(global, 'setInterval');
 const mockDispatch = jest.fn();
+
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
   useDispatch: () => mockDispatch,
 }));
+
 const data = [
   {
     facId: 946,
@@ -17,38 +17,51 @@ const data = [
     lastActivity: '2022-12-08T14:54:31.881Z',
   },
 ]
-const mockApiCall = jest.fn().mockResolvedValue({
-  data,
-});
+
+const mockApiCall = jest.fn().mockResolvedValue({ data });
+
 jest.mock('../utils/api/monitoringPlansApi', () => ({
   getCheckedOutLocations: () => mockApiCall(),
 }));
 
 describe('useGetCheckedOutLocations', () => {
   beforeEach(() => {
-    jest.resetModules();
+    jest.useFakeTimers();
+    jest.spyOn(global, 'setInterval');
+    mockApiCall.mockClear();
+    mockDispatch.mockClear();
   });
-  it('should make api call', () => {
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('should make an API call upon execution', () => {
     renderHook(useGetCheckedOutLocations);
     expect(mockApiCall).toHaveBeenCalled();
   });
-  it('should should update redux state if new data is received', () => {
+
+  it('should update redux state with new data after the specified time interval', () => {
     renderHook(useGetCheckedOutLocations);
     jest.advanceTimersByTime(10000);
     expect(mockDispatch).toHaveBeenCalled();
+    expect(global.setInterval).toHaveBeenCalledTimes(1);
   });
 });
 
 describe('obtainCheckedOutLocations', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockDispatch.mockClear();
+    mockApiCall.mockClear();
   })
-  it('does not call dispatch if no dispatch is given', async() => {
-    await obtainCheckedOutLocations({})
+
+  it('does not call dispatch if no dispatch is provided', async () => {
+    await obtainCheckedOutLocations({});
     expect(mockDispatch).not.toHaveBeenCalled();
   });
-  it('calls dispatcher and returns checked out locations if dispatch is given', async () => {
-    const result = await obtainCheckedOutLocations({dispatch: mockDispatch});
+
+  it('calls dispatch and returns checked out locations if dispatch is provided', async () => {
+    const result = await obtainCheckedOutLocations({ dispatch: mockDispatch });
     expect(result).toEqual(data);
     expect(mockDispatch).toHaveBeenCalled();
   });
