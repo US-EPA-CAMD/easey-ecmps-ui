@@ -4,7 +4,6 @@ import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
 import * as emSubmissionApi from '../../../utils/api/adminManagementApi'
-import { getReportingPeriods } from '../../../utils/api/qaCertificationsAPI'
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -13,7 +12,8 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRows, setReloadTableData }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, selectedRows, setReloadTableData, reportingPeriods }) => {
+
 
   const [title, setTitle] = useState('');
 
@@ -24,6 +24,85 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
   const [showLoader, setShowLoader] = useState(false);
   const [disableSaveBtn, setDisableSaveBtn] = useState(false);
+  const selectedRow = selectedRows[0];
+
+  const openEmSubmissionRecord = async () => {
+    const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
+
+    if (!selectedRow)
+      return;
+
+    const postPayload = {
+      emissionStatusCode: selectedRow.emissionStatusCode,
+      submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
+      resubExplanation: selectedReasonForAction,
+      closeDate: selectedCloseDate,
+      openDate: selectedOpenDate,
+      monitorPlanId: selectedRow.monitorPlanId,
+      reportingPeriodId: selectedRow.reportingPeriodId
+    }
+
+    postPayload.reportingPeriodId = selectedRp.id;
+    await emSubmissionApi.openEmSubmissionRecord(postPayload)
+
+    if (selectedRequireSubQtrs) {
+      
+      for (let i = selectedRp.quarter + 1; i <= 4; i++) {
+        const filteredRp = reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
+        postPayload.reportingPeriodId = filteredRp.id;
+
+        await emSubmissionApi.openEmSubmissionRecord(postPayload)
+      }
+    }
+  }
+
+  const extendSubmissionRecord = async ()=>{
+    const putPayloads = selectedRows.map(row => {
+      // append reason if it exists
+      let resubExplanation;
+
+      const isCurrentResubExplEmpty = (row.resubExplanation === null || row.resubExplanation === '')
+      if (isCurrentResubExplEmpty)
+        resubExplanation = "";
+
+      if (isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+        resubExplanation = selectedReasonForAction
+
+      if (!isCurrentResubExplEmpty && selectedReasonForAction.length === 0)
+        resubExplanation = row.resubExplanation;
+
+      if (!isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+        resubExplanation = `${row.resubExplanation}, ${selectedReasonForAction}`;
+        
+      const payload = {
+        id: row.id,
+        emissionStatusCode: row.emissionStatusCode,
+        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        resubExplanation,
+        closeDate: selectedCloseDate
+      }
+      return payload
+    })
+    const promises = putPayloads.map(payload => {
+      const id = payload.id
+      return emSubmissionApi.updateEmSubmissionRecord(payload, id)
+    })
+    await Promise.all(promises)
+  }
+
+  const closeEmSubmissionRecord = async () => {
+    const putPayloads = selectedRows.map(row => ({
+      id: row.id,
+      emissionStatusCode: row.emissionStatusCode,
+      submissionAvailabilityCode: "DELETE",
+      resubExplanation: selectedReasonForAction,
+      closeDate: row.closeDate
+    }))
+
+    const promises = putPayloads.map(payload => emSubmissionApi.updateEmSubmissionRecord(payload, payload.id));
+
+    await Promise.all(promises);
+  }
 
   const saveFunc = async () => {
     setShowLoader(true)
@@ -31,57 +110,21 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
     try {
       if (isOpenModal) {
-        const reportingPeriods = (await getReportingPeriods()).data
-        const firstSelectedRow = selectedRows[0]
-        const selectedRp = reportingPeriods.find(rp => rp.id === firstSelectedRow.reportingPeriodId)
+        await openEmSubmissionRecord();
+      }
 
-        const { emissionStatusCode, submissionAvailabilityCode, monitorPlanId, reportingPeriodId } = selectedRows[0]
-        const postPayload = {
-          emissionStatusCode,
-          submissionAvailabilityCode,
-          resubExplanation: selectedReasonForAction,
-          closeDate: selectedCloseDate,
-          openDate: selectedOpenDate,
-          monitorPlanId,
-          reportingPeriodId
-        }
+      if (isCloseModal) {
+        await closeEmSubmissionRecord();
+      }
 
-        postPayload.reportingPeriodId = selectedRp.id;
-        await emSubmissionApi.openEmSubmissionRecord(postPayload)
-
-        if (selectedRequireSubQtrs) {
-          for (let i = selectedRp.quarter + 1; i <= 4; i++) {
-            const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
-            postPayload.reportingPeriodId = filteredRp.id;
-
-            await emSubmissionApi.openEmSubmissionRecord(postPayload)
-          }
-        }
-      } else if (isExtendModal) {
-        const putPayloads = selectedRows.map(row => {
-          // append reason if it exists
-          const resubExplanation = selectedReasonForAction ? `${row.resubExplanation}, ${selectedReasonForAction}` : row.resubExplanation
-          const payload = {
-            id: row.id,
-            emissionStatusCode: row.emissionStatusCode,
-            submissionAvailabilityCode: row.submissionAvailabilityCode,
-            resubExplanation,
-            closeDate: selectedCloseDate
-          }
-          return payload
-        })
-        const promises = putPayloads.map(payload => {
-          const id = payload.id
-          delete payload.id
-          return emSubmissionApi.updateEmSubmissionRecord(payload, id)
-        })
-        await Promise.all(promises)
+      if (isExtendModal) {
+        await extendSubmissionRecord();
       }
       setReloadTableData(true)
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
-      close()
+      close();
     }
   }
 
@@ -97,8 +140,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     } else if (isExtendModal) {
       setTitle("Extend")
 
-      setSelectedOpenDate(getDateString(openDate))
-      setSelectedCloseDate(getDateString(closeDate))
+      setSelectedOpenDate(getDateString(selectedRow?.openDate))
+      setSelectedCloseDate(getDateString(selectedRow?.closeDate))
 
     } else if (isCloseModal) {
       setTitle("Close")
@@ -106,7 +149,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       setTitle("Approve")
     }
 
-  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, selectedRow.openDate, selectedRow.closeDate])
 
   const updateDates = (e) => {
     let date = new Date(e)
