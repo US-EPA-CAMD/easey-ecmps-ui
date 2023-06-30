@@ -126,6 +126,22 @@ export const EmSubmissionData = ({
       ),
     },
     {
+      name: "Facility Name / ID",
+      width: "210px",
+      // facilityName isn't in api response and will have to be added
+      selector: (row) =>
+        row.facilityName
+          ? `${row.facilityName} (${row.orisCode})`
+          : row.orisCode,
+      sortable: true,
+    },
+    {
+      name: "State",
+      width: "150px",
+      selector: (row) => row.state,
+      sortable: true,
+    },
+    {
       name: "MP Location(s)",
       width: "200px",
       selector: (row) => row.locations,
