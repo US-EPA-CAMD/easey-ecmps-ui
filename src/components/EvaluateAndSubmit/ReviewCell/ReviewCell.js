@@ -31,7 +31,7 @@ const ReviewCell = ({
 
   return (
     cellState && (
-      <div>
+      <div key={uuidv4()}>
         {cellState === "Lock" && <LockSharp data-testid="Lock" />}
         {cellState === "Checkbox" && (
           <Checkbox
