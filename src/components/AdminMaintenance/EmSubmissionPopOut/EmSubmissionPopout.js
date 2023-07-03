@@ -26,6 +26,25 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const [disableSaveBtn, setDisableSaveBtn] = useState(false);
   const selectedRow = selectedRows[0];
 
+  const resubExplanationUpdate = (row) => {
+    let resubExplanation;
+
+    const isCurrentResubExplEmpty =
+      row.resubExplanation === null || row.resubExplanation === "";
+    if (isCurrentResubExplEmpty) resubExplanation = "";
+
+    if (isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+      resubExplanation = selectedReasonForAction;
+
+    if (!isCurrentResubExplEmpty && selectedReasonForAction.length === 0)
+      resubExplanation = row.resubExplanation;
+
+    if (!isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+      resubExplanation = `${row.resubExplanation}, ${selectedReasonForAction}`;
+
+    return resubExplanation;
+  };
+
   const openEmSubmissionRecord = async () => {
     const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
 
@@ -59,21 +78,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
   const extendSubmissionRecord = async ()=>{
     const putPayloads = selectedRows.map(row => {
       // append reason if it exists
-      let resubExplanation;
-
-      const isCurrentResubExplEmpty = (row.resubExplanation === null || row.resubExplanation === '')
-      if (isCurrentResubExplEmpty)
-        resubExplanation = "";
-
-      if (isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
-        resubExplanation = selectedReasonForAction
-
-      if (!isCurrentResubExplEmpty && selectedReasonForAction.length === 0)
-        resubExplanation = row.resubExplanation;
-
-      if (!isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
-        resubExplanation = `${row.resubExplanation}, ${selectedReasonForAction}`;
-        
+      let resubExplanation = resubExplanationUpdate(row);
       const payload = {
         id: row.id,
         emissionStatusCode: row.emissionStatusCode,
@@ -104,6 +109,26 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     await Promise.all(promises);
   }
 
+  const approveEmSubmissionRecord = async () => {
+    const putPayloads = selectedRows.map((row) => {
+      let resubExplanation = resubExplanationUpdate(row);
+
+      const payload = {
+        id: row.id,
+        emissionStatusCode: "APPRVD",
+        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        resubExplanation,
+        closeDate: row.closeDate,
+      };
+      return payload;
+    });
+    const promises = putPayloads.map((payload) => {
+      const id = payload.id;
+      return emSubmissionApi.updateEmSubmissionRecord(payload, id);
+    });
+    await Promise.all(promises);
+  };
+
   const saveFunc = async () => {
     setShowLoader(true)
     setDisableSaveBtn(true)
@@ -119,6 +144,10 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
       if (isExtendModal) {
         await extendSubmissionRecord();
+      }
+
+      if (isApproveModal) {
+        await approveEmSubmissionRecord();
       }
       setReloadTableData(true)
     } catch (e) {
