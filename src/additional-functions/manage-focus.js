@@ -4,12 +4,6 @@ const elementAmountToKeep = 10;
 
 export const storeInFocusedArray = (event) => {
   if (event.target.innerHTML !== "Close") {
-    /*if (
-      window["lastModalButton"].length === 0 &&
-      event.target.innerHTML === "View"
-    ) {
-      window["lastModalButton"].push(event.target);
-    } else {*/
     // *** store item
     window["lastFocusedArray"].push(event.target);
 

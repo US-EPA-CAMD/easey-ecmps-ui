@@ -4,7 +4,6 @@ import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
 import * as emSubmissionApi from '../../../utils/api/adminManagementApi'
-import { getReportingPeriods } from '../../../utils/api/qaCertificationsAPI'
 
 const getDateString = (date) => {
   let d = new Date(dateToEstString(date)).toISOString();
@@ -13,55 +12,149 @@ const getDateString = (date) => {
   return dArr[0]
 }
 
-export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate, selectedRow, setReloadTableData }) => {
+export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal, isCloseModal, isApproveModal, selectedRows, setReloadTableData, reportingPeriods }) => {
+
 
   const [title, setTitle] = useState('');
 
-  const [selectedReasonToOpen, setSelectedReasonToOpen] = useState('');
+  const [selectedReasonForAction, setSelectedReasonForAction] = useState('');
   const [selectedOpenDate, setSelectedOpenDate] = useState('');
   const [selectedCloseDate, setSelectedCloseDate] = useState('');
   const [selectedRequireSubQtrs, setSelectedRequireSubQtrs] = useState(false);
 
   const [showLoader, setShowLoader] = useState(false);
   const [disableSaveBtn, setDisableSaveBtn] = useState(false);
+  const selectedRow = selectedRows[0];
 
-  const saveFunc = async () => {
-    setShowLoader(true)
-    setDisableSaveBtn(true)
-    const reportingPeriods = (await getReportingPeriods()).data
+  const resubExplanationUpdate = (row) => {
+    let resubExplanation;
+
+    const isCurrentResubExplEmpty =
+      row.resubExplanation === null || row.resubExplanation === "";
+    if (isCurrentResubExplEmpty) resubExplanation = "";
+
+    if (isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+      resubExplanation = selectedReasonForAction;
+
+    if (!isCurrentResubExplEmpty && selectedReasonForAction.length === 0)
+      resubExplanation = row.resubExplanation;
+
+    if (!isCurrentResubExplEmpty && selectedReasonForAction.length > 0)
+      resubExplanation = `${row.resubExplanation}, ${selectedReasonForAction}`;
+
+    return resubExplanation;
+  };
+
+  const openEmSubmissionRecord = async () => {
     const selectedRp = reportingPeriods.find(rp => rp.id === selectedRow.reportingPeriodId)
+
+    if (!selectedRow)
+      return;
 
     const postPayload = {
       emissionStatusCode: selectedRow.emissionStatusCode,
       submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
-      resubExplanation: selectedReasonToOpen,
+      resubExplanation: selectedReasonForAction,
       closeDate: selectedCloseDate,
       openDate: selectedOpenDate,
       monitorPlanId: selectedRow.monitorPlanId,
       reportingPeriodId: selectedRow.reportingPeriodId
     }
 
-    if (isOpenModal) {
-      try {
-        postPayload.reportingPeriodId = selectedRp.id;
+    postPayload.reportingPeriodId = selectedRp.id;
+    await emSubmissionApi.openEmSubmissionRecord(postPayload)
+
+    if (selectedRequireSubQtrs) {
+      
+      for (let i = selectedRp.quarter + 1; i <= 4; i++) {
+        const filteredRp = reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
+        postPayload.reportingPeriodId = filteredRp.id;
+
         await emSubmissionApi.openEmSubmissionRecord(postPayload)
-
-        if (selectedRequireSubQtrs) {
-          for (let i = selectedRp.quarter + 1; i <= 4; i++) {
-            const filteredRp = await reportingPeriods.find(rp => rp.calendarYear === selectedRp.calendarYear && rp.quarter === i)
-            postPayload.reportingPeriodId = filteredRp.id;
-
-            await emSubmissionApi.openEmSubmissionRecord(postPayload)
-          }
-        }
-        setReloadTableData(true)
-      } catch (e) {
-        console.error(e)
-      } finally {
-        close()
       }
     }
+  }
 
+  const extendSubmissionRecord = async ()=>{
+    const putPayloads = selectedRows.map(row => {
+      // append reason if it exists
+      let resubExplanation = resubExplanationUpdate(row);
+      const payload = {
+        id: row.id,
+        emissionStatusCode: row.emissionStatusCode,
+        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        resubExplanation,
+        closeDate: selectedCloseDate
+      }
+      return payload
+    })
+    const promises = putPayloads.map(payload => {
+      const id = payload.id
+      return emSubmissionApi.updateEmSubmissionRecord(payload, id)
+    })
+    await Promise.all(promises)
+  }
+
+  const closeEmSubmissionRecord = async () => {
+    const putPayloads = selectedRows.map(row => ({
+      id: row.id,
+      emissionStatusCode: row.emissionStatusCode,
+      submissionAvailabilityCode: "DELETE",
+      resubExplanation: selectedReasonForAction,
+      closeDate: row.closeDate
+    }))
+
+    const promises = putPayloads.map(payload => emSubmissionApi.updateEmSubmissionRecord(payload, payload.id));
+
+    await Promise.all(promises);
+  }
+
+  const approveEmSubmissionRecord = async () => {
+    const putPayloads = selectedRows.map((row) => {
+      let resubExplanation = resubExplanationUpdate(row);
+
+      const payload = {
+        id: row.id,
+        emissionStatusCode: "APPRVD",
+        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        resubExplanation,
+        closeDate: row.closeDate,
+      };
+      return payload;
+    });
+    const promises = putPayloads.map((payload) => {
+      const id = payload.id;
+      return emSubmissionApi.updateEmSubmissionRecord(payload, id);
+    });
+    await Promise.all(promises);
+  };
+
+  const saveFunc = async () => {
+    setShowLoader(true)
+    setDisableSaveBtn(true)
+
+    try {
+      if (isOpenModal) {
+        await openEmSubmissionRecord();
+      }
+
+      if (isCloseModal) {
+        await closeEmSubmissionRecord();
+      }
+
+      if (isExtendModal) {
+        await extendSubmissionRecord();
+      }
+
+      if (isApproveModal) {
+        await approveEmSubmissionRecord();
+      }
+      setReloadTableData(true)
+    } catch (e) {
+      console.error(e);
+    } finally {
+      close();
+    }
   }
 
   useEffect(() => {
@@ -76,8 +169,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     } else if (isExtendModal) {
       setTitle("Extend")
 
-      setSelectedOpenDate(getDateString(openDate))
-      setSelectedCloseDate(getDateString(closeDate))
+      setSelectedOpenDate(getDateString(selectedRow?.openDate))
+      setSelectedCloseDate(getDateString(selectedRow?.closeDate))
 
     } else if (isCloseModal) {
       setTitle("Close")
@@ -85,7 +178,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
       setTitle("Approve")
     }
 
-  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, openDate, closeDate])
+  }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, selectedRow.openDate, selectedRow.closeDate])
 
   const updateDates = (e) => {
     let date = new Date(e)
@@ -179,8 +272,8 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
                   type="text"
                   epa-testid={"reason-to-open"}
                   data-testid={"reason-to-open"}
-                  value={selectedReasonToOpen}
-                  onChange={(e) => { setSelectedReasonToOpen(e.target.value) }}
+                  value={selectedReasonForAction}
+                  onChange={(e) => { setSelectedReasonForAction(e.target.value) }}
                 />
               </Grid>
             </Grid>
