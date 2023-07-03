@@ -375,7 +375,7 @@ export const DataTableRender = ({
         name: "Actions",
         button: true,
         width: "15%",
-        cell: (row) => {
+        cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
@@ -387,6 +387,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid={`viewEditBtn-${index}`}
                   className="cursor-pointer open-modal-button text-no-wrap"
                   id={
                     // tableTitle
