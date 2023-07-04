@@ -1,129 +1,70 @@
 import React from "react";
-import { render, waitForElement } from "@testing-library/react";
-import {
-  DataTableConfigurations,
-  mapDispatchToProps,
-  mapStateToProps,
-} from "./DataTableConfigurations";
-import {getMonitoringPlans} from "../../../utils/api/monitoringPlansApi";
+import { act, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import configureMockStore from "redux-mock-store";
-const axios = require("axios");
 
-jest.mock("axios");
-jest.mock('../../../utils/api/monitoringPlansApi', () => ({
-  getMonitoringPlans: jest.fn(),
-}));
-//testing redux connected component to mimic props passed as argument
-const data = [
-  "5",
-  [
-    {
-      id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-      name: "110",
-      locations: [
-        {
-          id: "65",
-          name: "110",
-          type: "Unit",
-          active: false,
-          retireDate: null,
-          links: [
-            {
-              rel: "self",
-              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65",
-            },
-            {
-              rel: "methods",
-              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/methods",
-            },
-            {
-              rel: "systems",
-              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/systems",
-            },
-            {
-              rel: "spans",
-              href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/65/spans",
-            },
-          ],
-        },
-      ],
-      endReportPeriodId: "24",
-      active: false,
-      links: [
-        {
-          rel: "self",
-          href: "https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/monitor-plans/MDC-7C15B3D1B20542C3B54DD57F03A516E5",
-        },
-      ],
-    },
-  ],
-];
-const dataProp = {
-  col1: "5",
-  col2: "Chickasaw",
-  col3: "AL",
-  disabled: false,
-  expanded: false,
-};
-const mockStore = configureMockStore();
-const store = mockStore({});
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi"
 
-function componentRenderer() {
+import { DataTableConfigurations } from "./DataTableConfigurations";
+import configureStore from "../../../store/configureStore.dev";
+import { getMockMonitorPlanConfigurations } from "../../../mocks/functions";
+
+
+const store = configureStore();
+
+describe("- DataTable Configurations -", () => {
+  beforeEach(() => {
+    jest.spyOn(monitorPlanApi, "getMonitoringPlans").mockResolvedValue({
+      data: getMockMonitorPlanConfigurations(),
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  const mockData = {
+    col1: "facilityName",
+    col2: "facilityId",
+    col3: "stateCode",
+    col4: "orisCode",
+    facId: "facilityRecordId",
+  }
+
   const props = {
-    user: { firstName: "test" },
-    monitoringPlans: data,
-    data: dataProp,
+    data: mockData,
     selectedRowHandler: jest.fn(),
-    className: "test",
-    loadMonitoringPlansData: jest.fn(() => Promise.resolve()),
-  };
-  return render(
-    <Provider store={store}>
-      <DataTableConfigurations {...props} />
-    </Provider>
-  );
-}
-function componentRendererNoData(args) {
-  const defualtProps = {
-    monitoringPlans: [],
-    loadMonitoringPlansData: jest.fn(),
-    loading: true,
-    user: false,
-    data: {},
-  };
+    checkedOutLocations: []
+  }
 
-  const props = { ...defualtProps, ...args };
-  return render(
-    <Provider store={store}>
-      <DataTableConfigurations {...props} />
-    </Provider>
-  );
-}
+  test('renders DataTableConfigurations', async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTableConfigurations data={mockData} />
+        </Provider>
+      );
+    });
+    const title = screen.getByText("Configurations")
+    expect(title).toBeDefined()
+  })
 
-afterAll(() => {
-  jest.restoreAllMocks();
-});
+  it('opens the configuration', async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTableConfigurations {...props} />
+        </Provider>
+      );
+    });
 
-test("tests a configuration with only active systems", async () => {
-  const mockGetMonitoringPlans = jest.fn().mockResolvedValue({data})
-  getMonitoringPlans.mockImplementation(() => mockGetMonitoringPlans())
-  const title = await getMonitoringPlans(6);
-  expect(title.data).toEqual(data);
-  let { container } = await waitForElement(() => componentRenderer());
-  expect(container).toBeDefined();
-});
+    const openBtns = screen.getAllByTestId('btnOpenPublicRecord')
+    const firstOpenBtn = openBtns[0]
 
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  const state = jest.fn();
-  const stateProps = mapStateToProps(state);
+    await act(() => firstOpenBtn.click());
 
-  const formData = [];
-  // verify the appropriate action was called
-  actionProps.loadMonitoringPlansData();
-  actionProps.setCheckout();
-  // expect(actions.loadMonitoringPlansData).toHaveBeenCalled();
-});
+    screen.debug(undefined, 30000)
+
+    const title = screen.getByText("Configurations")
+    expect(title).toBeDefined()
+  })
+})
