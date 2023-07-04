@@ -262,6 +262,7 @@ export const DataTableRender = ({
                       type="button"
                       unstyled="true"
                       epa-testid="btnOpen"
+                      data-testid="btnOpen"
                       className="cursor-pointer open-modal-button text-no-wrap"
                       id={
                         tableTitle
@@ -320,6 +321,7 @@ export const DataTableRender = ({
                           type="button"
                           unstyled="true"
                           epa-testid="btnCheckBackIn"
+                          data-testid="btnCheckBackIn"
                           className="cursor-pointer open-modal-button text-no-wrap"
                           id={
                             tableTitle
@@ -351,6 +353,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid="btnOpenPublicRecord"
                   id={
                     tableTitle
                       ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -571,7 +574,7 @@ export const DataTableRender = ({
                 <div className="padding-y-1">
                   <Button
                     type="button"
-                    // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                    data-testid="addBtn"
                     className={"float-left clearfix margin-right-3 margin-y-1"}
                     outline="true"
                     color="black"
