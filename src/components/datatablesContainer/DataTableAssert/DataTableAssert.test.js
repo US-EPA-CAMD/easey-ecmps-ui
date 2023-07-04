@@ -1,6 +1,5 @@
 import React from "react";
 import { act, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import configureStore from "../../../store/configureStore.dev";
 import DataTableAssert from "./DataTableAssert";
@@ -23,12 +22,9 @@ const props = getDataTableAssertProps()
 
 describe("- DataTableAssert - ", () => {
   beforeEach(() => {
-    // init mocks
-    //Initialize our mocks before each test, using beforeAll with spyOn does not mock correctly
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
       data: getMockMonitoringSpans(),
     });
-    // getMonitoringPlansUnitControlRecords
     jest.spyOn(monitorPlanApi, "getMonitoringPlansUnitControlRecords").mockResolvedValue({
       data: getMockMonitoringPlansUnitControlRecords(),
     });
@@ -43,11 +39,11 @@ describe("- DataTableAssert - ", () => {
     });
 
     // init modal button
-    const someButton = document.createElement('button');
-    someButton.id = 'my-modal-button';
-    document.body.appendChild(someButton);
+    const modalBtn = document.createElement('button');
+    modalBtn.id = 'my-modal-button';
+    document.body.appendChild(modalBtn);
 
-    window.openModalBtn = someButton;
+    window.openModalBtn = modalBtn;
 
     // mock window.scrollTo
     window.scrollTo = jest.fn()
@@ -60,19 +56,7 @@ describe("- DataTableAssert - ", () => {
     delete window.openModalBtn
   })
 
-
-
-  test('render', async () => {
-    await act(() => {
-      render(
-        <Provider store={store}>
-          <DataTableAssert {...props} />
-        </Provider>
-      )
-    })
-  })
-
-  test('active and inactive data', async () => {
+  test('renders with active and inactive data', async () => {
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
       data: getMockBothActiveAndInactiveRecords(),
     });
@@ -84,9 +68,12 @@ describe("- DataTableAssert - ", () => {
         </Provider>
       )
     })
+
+    const table = screen.getByRole('table');
+    expect(table).toBeDefined()
   })
 
-  test('only inactive data', async () => {
+  test('renders with only inactive data', async () => {
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
       data: getMockOnlyInactiveRecords(),
     });
@@ -98,9 +85,12 @@ describe("- DataTableAssert - ", () => {
         </Provider>
       )
     })
+
+    const table = screen.getByRole('table');
+    expect(table).toBeDefined()
   })
 
-  test('unit info tables', async () => {
+  test('renders unit info tables', async () => {
     const props = getDataTableAssertProps()
     props.dataTableName = 'Unit Control'
 
@@ -111,22 +101,12 @@ describe("- DataTableAssert - ", () => {
         </Provider>
       )
     })
+
+    const table = screen.getByRole('table');
+    expect(table).toBeDefined()
   })
 
-  test('location attr tables', async () => {
-    const props = getDataTableAssertProps()
-    props.dataTableName = 'Location Attribute'
-
-    await act(() => {
-      render(
-        <Provider store={store}>
-          <DataTableAssert {...props} />
-        </Provider>
-      )
-    })
-  })
-
-  test.only('save data', async () => {
+  test('save data', async () => {
     const mockSaveMonitoringSpans = jest.fn().mockResolvedValue({ status: 200 });
     jest
       .spyOn(monitorPlanApi, "saveMonitoringSpans")
@@ -147,12 +127,38 @@ describe("- DataTableAssert - ", () => {
       firstViewEditBtn.click();
     });
 
-    screen.debug(undefined, 300000)
-
     const saveAndCloseBtn = screen.getByTestId("saveBtn")
 
     await act(() => saveAndCloseBtn.click());
 
     expect(mockSaveMonitoringSpans).toHaveBeenCalled();
+  })
+
+  test('create data', async () => {
+    const mockCreateMonitoringSpans = jest.fn().mockResolvedValue({ status: 201 });
+    jest
+      .spyOn(monitorPlanApi, "createMonitoringSpans")
+      .mockImplementation(mockCreateMonitoringSpans);
+
+    const props = getDataTableAssertProps();
+    props.checkout = true
+    await act(() => {
+      render(
+        <Provider store={store}>
+          <DataTableAssert {...props} />
+        </Provider>
+      )
+    })
+
+    const addBtn = screen.getByTestId("addBtn")
+    await act(() => {
+      addBtn.click();
+    });
+
+    const saveAndCloseBtn = screen.getByTestId("saveBtn")
+
+    await act(() => saveAndCloseBtn.click());
+
+    expect(mockCreateMonitoringSpans).toHaveBeenCalled();
   })
 })
