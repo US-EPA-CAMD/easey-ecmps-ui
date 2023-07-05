@@ -262,6 +262,7 @@ export const DataTableRender = ({
                       type="button"
                       unstyled="true"
                       epa-testid="btnOpen"
+                      data-testid="btnOpen"
                       className="cursor-pointer open-modal-button text-no-wrap"
                       id={
                         tableTitle
@@ -320,6 +321,7 @@ export const DataTableRender = ({
                           type="button"
                           unstyled="true"
                           epa-testid="btnCheckBackIn"
+                          data-testid="btnCheckBackIn"
                           className="cursor-pointer open-modal-button text-no-wrap"
                           id={
                             tableTitle
@@ -351,6 +353,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid="btnOpenPublicRecord"
                   id={
                     tableTitle
                       ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -375,7 +378,7 @@ export const DataTableRender = ({
         name: "Actions",
         button: true,
         width: "15%",
-        cell: (row) => {
+        cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
@@ -387,6 +390,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid={`viewEditBtn-${index}`}
                   className="cursor-pointer open-modal-button text-no-wrap"
                   id={
                     // tableTitle
@@ -570,7 +574,7 @@ export const DataTableRender = ({
                 <div className="padding-y-1">
                   <Button
                     type="button"
-                    // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                    data-testid="addBtn"
                     className={"float-left clearfix margin-right-3 margin-y-1"}
                     outline="true"
                     color="black"

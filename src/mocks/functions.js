@@ -4,6 +4,7 @@ import {
   mockMonitorPlanConfigurations,
   mockReportingPeriods,
   mockDropdownFacilityList,
+  mockMonitoringSpans,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -37,3 +38,7 @@ export const getMockMonitorPlanConfigurations = () => {
 export const getMockFacilityDropwdownList = () => {
   return [...mockDropdownFacilityList];
 };
+
+export const getMockMonitoringSpans = () => {
+  return [...mockMonitoringSpans];
+}

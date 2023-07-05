@@ -55,9 +55,9 @@ export const Modal = ({
   useEffect(
     () => () => {
       // * re-selecting the element because it is sometimes rerendered
-      const openModalBtn = document.querySelector(
+      const openModalBtn = window.openModalBtn?.id ? document.querySelector(
         `#${window.openModalBtn?.id}`
-      );
+      ) : null
       if (returnFocus && openModalBtn) {
         openModalBtn.focus();
       }
