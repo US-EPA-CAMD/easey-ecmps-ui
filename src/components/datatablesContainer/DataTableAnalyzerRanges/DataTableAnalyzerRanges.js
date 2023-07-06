@@ -110,14 +110,6 @@ export const DataTableAnalyzerRanges = ({
   };
   return (
     <div className="methodTable">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => openAnalyzerRanges(false, false, true)}
-      />
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}
