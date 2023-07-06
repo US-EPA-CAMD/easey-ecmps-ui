@@ -32,6 +32,7 @@ export const CountdownTimerRender = ({ remainingTime, countdownExpired }) => {
         aria-live="off"
         key={remainingTime}
         className={`time ${isTimeUp ? "up" : ""}`}
+        data-testid="remaining-time"
       >
         <div>{remainingTime}</div>
         <div className="font-alt-md position-relative left-neg-4">
