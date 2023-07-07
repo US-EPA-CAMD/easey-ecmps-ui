@@ -212,7 +212,7 @@ const FilterFormAdmin = ({
       setIsTableDataLoading(false);
       setSelectedRows([])
     }
-  }, [availableConfigurations, section, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, setIsTableDataLoading, setSelectedRows, setTableData, typeSelection]);
+  }, [availableConfigurations, section, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, setIsTableDataLoading, setQaMaintenanceTypeSelection, setSelectedRows, setTableData, typeSelection]);
 
   useEffect(() => {
     if (reloadTableData) {
