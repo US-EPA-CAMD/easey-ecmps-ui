@@ -58,3 +58,28 @@ export const sendSupportEmail = async (payload) => {
     throw new Error(error);
   }
 };
+
+const getMaintenanceRecords = async (orisCode, unitStack, endpoint) => {
+  let url = `${config.services.camd.uri}/admin/qa-maintenance/${endpoint}`;
+  if (orisCode !== null && orisCode !== undefined) {
+    url = `${url}?orisCode=${orisCode}`
+  }
+  if (unitStack !== null && unitStack !== undefined) {
+    url = `${url}?orisCode=${orisCode}`
+  }
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const getQaTestMaintenanceRecords = async (orisCode, unitStack) => {
+  return getMaintenanceRecords(orisCode, unitStack, `test-summary`)
+};
+
+export const getQaCertEventMaintenanceRecords = async (orisCode, unitStack) => {
+  return getMaintenanceRecords(orisCode, unitStack, 'cert-events')
+};
+
+export const getQaExtensionExemptionMaintenanceRecords = async (orisCode, unitStack) => {
+  return getMaintenanceRecords(orisCode, unitStack, 'extension-exemptions')
+};
