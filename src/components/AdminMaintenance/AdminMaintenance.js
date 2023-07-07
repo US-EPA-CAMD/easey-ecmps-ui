@@ -8,6 +8,7 @@ import {
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
 import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
 import { getReportingPeriods } from "../../utils/api/mdmApi";
+import QAMaintenanceTable from "./QAMaintenance/QAMaintenanceTable";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
@@ -15,6 +16,7 @@ export const AdminMaintenance = ({ section }) => {
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
   const [reloadTableData, setReloadTableData] = useState(false);
   const [reportingPeriods, setReportingPeriods] = useState([]);
+  const [qaMaintenanceTypeSelection, setQaMaintenanceTypeSelection] = useState(null)
 
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
   const [selectedRows, setSelectedRows] = useState([]);
@@ -34,7 +36,6 @@ export const AdminMaintenance = ({ section }) => {
     }
   }, [section]);
   const [facilityList, setFacilityList] = useState([]);
-
 
   useEffect(() => {
     getAllFacilities()
@@ -61,14 +62,14 @@ export const AdminMaintenance = ({ section }) => {
         console.error("Error getting facilities", error);
       });
 
-      getReportingPeriods()
-        .then(({data})=>{
-          setReportingPeriods(data);
-        })
-        .catch(error=>{
-          console.error("Error getting reporting periods", error);
-        })
-      
+    getReportingPeriods()
+      .then(({ data }) => {
+        setReportingPeriods(data);
+      })
+      .catch(error => {
+        console.error("Error getting reporting periods", error);
+      })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,16 +86,27 @@ export const AdminMaintenance = ({ section }) => {
         setReloadTableData={setReloadTableData}
         setSelectedRows={setSelectedRows}
         reportingPeriods={reportingPeriods}
+        setQaMaintenanceTypeSelection={setQaMaintenanceTypeSelection}
       />
       <hr />
-      <EmSubmissionData 
-        data={tableData} 
-        isLoading={isTableDataLoading} 
-        setReloadTableData={setReloadTableData} 
-        selectedRows={selectedRows} 
-        setSelectedRows={setSelectedRows} 
-        reportingPeriods={reportingPeriods}
-      />
+      {section === SUBMISSION_ACCESS_STORE_NAME &&
+        <EmSubmissionData
+          data={tableData}
+          isLoading={isTableDataLoading}
+          setReloadTableData={setReloadTableData}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          reportingPeriods={reportingPeriods}
+        />
+      }
+
+      {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME &&
+        <QAMaintenanceTable
+          data={tableData}
+          isLoading={isTableDataLoading}
+          typeSelection={qaMaintenanceTypeSelection}
+        />
+      }
     </div>
   );
 };
