@@ -18,11 +18,7 @@ import {
 } from "@trussworks/react-uswds";
 import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
 import { getQaCertEventMaintenanceRecords, getQaExtensionExemptionMaintenanceRecords, getQaTestMaintenanceRecords } from "../../../utils/api/camdServices";
-
-// must match constants defined in QaMaintenanceTable.js
-const testSummary = 'Test Summary'
-const certEvent = 'Cert Events'
-const testExtensionExemption = 'Test Extension Exemption'
+import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../AdminMaintenance";
 
 const FilterFormAdmin = ({
   facilities,
@@ -62,9 +58,9 @@ const FilterFormAdmin = ({
 
   const testTypeGroupOptions = [
     initialSelectOption,
-    { code: testSummary, name: testSummary },
-    { code: certEvent, name: certEvent },
-    { code: testExtensionExemption, name: testExtensionExemption },
+    { code: testSummaryLabel, name: testSummaryLabel },
+    { code: certEventLabel, name: certEventLabel },
+    { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
   ]
 
   const processReportingPeriods = async () => {
@@ -116,11 +112,11 @@ const FilterFormAdmin = ({
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
         // typeSelection is array of form [index, description]
-        const typeDescription = typeSelection?.[1]
-        setQaMaintenanceTypeSelection(typeDescription)
+        const typeLabel = typeSelection?.[1]
+        setQaMaintenanceTypeSelection(typeLabel)
         let resp
-        switch (typeDescription) {
-          case testSummary:
+        switch (typeLabel) {
+          case testSummaryLabel:
             // resp = await getQaTestMaintenanceRecords(selectedFacility)
             // TODO: remove dummy data
             resp = {
@@ -152,7 +148,7 @@ const FilterFormAdmin = ({
               ]
             }
             break
-          case certEvent:
+          case certEventLabel:
             // resp = await getQaCertEventMaintenanceRecords(selectedFacility)
             resp = {
               data: [
@@ -177,7 +173,7 @@ const FilterFormAdmin = ({
               ]
             }
             break
-          case testExtensionExemption:
+          case testExtensionExemptionLabel:
             // resp = await getQaExtensionExemptionMaintenanceRecords(selectedFacility)
             resp = {
               data: [

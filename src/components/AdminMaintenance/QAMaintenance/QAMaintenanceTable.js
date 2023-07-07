@@ -3,11 +3,7 @@ import { Button, Checkbox } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component"
 import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceTableColumns";
-
-// must match constants defined in FilterFormAdmin.js
-const testSummary = 'Test Summary'
-const certEvent = 'Cert Events'
-const testExtensionExemption = 'Test Extension Exemption'
+import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../AdminMaintenance";
 
 const QAMaintenanceTable = ({
   data = [],
@@ -109,13 +105,13 @@ const QAMaintenanceTable = ({
 
   let columns
   switch (typeSelection) {
-    case testSummary:
+    case testSummaryLabel:
       columns = baseStaticCols.concat(testSummaryCols)
       break
-    case certEvent:
+    case certEventLabel:
       columns = baseStaticCols.concat(certEventsCols)
       break
-    case testExtensionExemption:
+    case testExtensionExemptionLabel:
       columns = baseStaticCols.concat(testExtensionExemptionCols)
       break
     default:
