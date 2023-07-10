@@ -662,6 +662,7 @@ const QATestSummaryDataTable = ({
       extraControls: objProps["extraControls"],
       radioBtnPayload: objProps["radioBtnPayload"],
       expandable: true,
+      mdmProps:objProps["mdmProps"],
       ...props,
       extraIDs: null,
       isCheckedOut: isCheckedOut,
