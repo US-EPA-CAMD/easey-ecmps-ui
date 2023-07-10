@@ -1,188 +1,146 @@
+const unitStackCol = {
+  name: "Unit Stack",
+  width: "175px",
+  selector: (row) => row.unitStack,
+  sortable: true,
+  center: true,
+}
+
+const systemComponentIdCol = {
+  name: "System/Component ID",
+  width: "250px",
+  selector: (row) => {
+    const systemIdentifier = row.systemIdentifier
+    const componentIdentifier = row.componentIdentifier
+    return `${systemIdentifier}/${componentIdentifier}`
+  },
+  sortable: true,
+  wrap: true,
+  center: true,
+}
+
+const submissionAvailabilityDescriptionCol = {
+  name: "Submission Availability Description",
+  width: "350px",
+  selector: (row) => row.submissionAvailabilityDescription,
+  sortable: true,
+  center: true,
+}
+
+const severityDescriptionCol = {
+  name: "Severity Description",
+  width: "250px",
+  selector: (row) => row.severityDescription,
+  sortable: true,
+}
+
 export const testSummaryCols = [
-  {
-    name: "Unit Stack",
-    width: "auto",
-    selector: (row) => row.unitStack,
-    sortable: true,
-    center: true,
-  },
-  {
-    name: "System/Component ID",
-    width: "auto",
-    selector: (row) => {
-      const systemIdentifier = row.systemIdentifier
-      const componentIdentifier = row.componentIdentifier
-      return `${systemIdentifier}/${componentIdentifier}`
-    },
-    sortable: true,
-    wrap: true,
-    center: true,
-  },
+  unitStackCol,
+  systemComponentIdCol,
   {
     name: "Test Number",
-    width: "auto",
+    width: "200px",
     selector: (row) => row.testNumber,
     sortable: true,
     center: true,
   },
   {
     name: "Test Type Code",
-    width: "auto",
+    width: "200px",
     selector: (row) => row.testTypeCode,
     sortable: true,
     center: true,
   },
   {
     name: "Reporting Period",
-    width: "auto",
+    width: "225px",
     selector: (row) => row.yearQuarter,
     sortable: true,
     center: true,
   },
   {
     name: "Begin Date/Time",
-    width: "auto",
+    width: "225px",
     selector: (row) => row.beginDateTime,
     sortable: true,
     center: true,
   },
   {
     name: "End Date/Time",
-    width: "auto",
+    width: "200px",
     selector: (row) => row.endDateTime,
     sortable: true,
     center: true,
   },
-  {
-    name: "Submission Availability Description",
-    width: "auto",
-    selector: (row) => row.submissionAvailabilityDescription,
-    classNames: ['multiline-header'],
-    sortable: true,
-    center: true,
-  },
-  {
-    name: "Severity Description",
-    width: "auto",
-    selector: (row) => row.severityDescription,
-    sortable: true,
-    center: true,
-  },
+  submissionAvailabilityDescriptionCol,
+  severityDescriptionCol,
 ]
 
 
 export const certEventsCols = [
-  {
-    name: "Unit Stack",
-    width: "150px",
-    selector: (row) => row.unitStack,
-    sortable: true,
-  },
-  {
-    name: "System/Component ID",
-    width: "150px",
-    selector: (row) => {
-      const systemIdentifier = row.systemIdentifier
-      const componentIdentifier = row.componentIdentifier
-      return `${systemIdentifier}/${componentIdentifier}`
-    },
-    sortable: true,
-  },
+  unitStackCol,
+  systemComponentIdCol,
   {
     name: "Cert Event Code",
-    width: "150px",
+    width: "200px",
     selector: (row) => row.certEventCode,
     sortable: true,
   },
   {
     name: "Event Date/Time",
-    width: "150px",
+    width: "215px",
     selector: (row) => row.eventDateTime,
     sortable: true,
   },
   {
     name: "Required Test Code",
-    width: "150px",
+    width: "225px",
     selector: (row) => row.requiredTestCode,
     sortable: true,
   },
   {
     name: "Conditional Date/Time",
-    width: "150px",
+    width: "250px",
     selector: (row) => row.conditionalDateTime,
     sortable: true,
   },
   {
     name: "Last Completed Date/Time",
-    width: "150px",
+    width: "275px",
     selector: (row) => row.lastCompletedDateTime,
     sortable: true,
   },
-  {
-    name: "Submission Availability Description",
-    width: "150px",
-    selector: (row) => row.submissionAvailabilityDescription,
-    sortable: true,
-  },
-  {
-    name: "Severity Description",
-    width: "150px",
-    selector: (row) => row.severityDescription,
-    sortable: true,
-  },
+  submissionAvailabilityDescriptionCol,
+  severityDescriptionCol,
 ]
 
 export const testExtensionExemptionCols = [
-  {
-    name: "Unit Stack",
-    width: "150px",
-    selector: (row) => row.unitStack,
-    sortable: true,
-  },
-  {
-    name: "System/Component ID",
-    width: "150px",
-    selector: (row) => {
-      const systemIdentifier = row.systemIdentifier
-      const componentIdentifier = row.componentIdentifier
-      return `${systemIdentifier}/${componentIdentifier}`
-    },
-    sortable: true,
-  },
+  unitStackCol,
+  systemComponentIdCol,
   {
     name: "Fuel Code",
-    width: "150px",
+    width: "160px",
     selector: (row) => row.fuelCode,
     sortable: true,
   },
   {
     name: "Extension Exemption Code",
-    width: "150px",
+    width: "275px",
     selector: (row) => row.extensionExemptionCode,
     sortable: true,
   },
   {
     name: "Hours Used",
-    width: "150px",
+    width: "175px",
     selector: (row) => row.hoursUsed,
     sortable: true,
   },
   {
     name: "Span Scale Code",
-    width: "150px",
+    width: "200px",
     selector: (row) => row.spanScaleCode,
     sortable: true,
   },
-  {
-    name: "Submission Availability Description",
-    width: "150px",
-    selector: (row) => row.submissionAvailabilityDescription,
-    sortable: true,
-  },
-  {
-    name: "Severity Description",
-    width: "150px",
-    selector: (row) => row.severityDescription,
-    sortable: true,
-  },
+  submissionAvailabilityDescriptionCol,
+  severityDescriptionCol,
 ]
