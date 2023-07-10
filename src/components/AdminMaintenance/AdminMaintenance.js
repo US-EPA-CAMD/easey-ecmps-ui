@@ -89,7 +89,7 @@ export const AdminMaintenance = ({ section }) => {
         setQaMaintenanceTypeSelection={setQaMaintenanceTypeSelection}
       />
       <hr />
-      {section === SUBMISSION_ACCESS_STORE_NAME &&
+      {section === SUBMISSION_ACCESS_STORE_NAME ?
         <EmSubmissionData
           data={tableData}
           isLoading={isTableDataLoading}
@@ -98,19 +98,21 @@ export const AdminMaintenance = ({ section }) => {
           setSelectedRows={setSelectedRows}
           reportingPeriods={reportingPeriods}
         />
+        : null
       }
 
-      {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME &&
+      {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
         <QAMaintenanceTable
           data={tableData}
           isLoading={isTableDataLoading}
           typeSelection={qaMaintenanceTypeSelection}
         />
+        : null
       }
     </div>
   );
 };
 
 export const testSummaryLabel = 'Test Summary'
-export const certEventLabel= 'Cert Events'
+export const certEventLabel = 'Cert Events'
 export const testExtensionExemptionLabel = 'Test Extension Exemption'

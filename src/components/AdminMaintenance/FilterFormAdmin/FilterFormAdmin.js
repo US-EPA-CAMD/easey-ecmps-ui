@@ -304,7 +304,7 @@ const FilterFormAdmin = ({
               />
             </div>
           </Grid>
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME &&
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
             <Grid col={3}>
               <div className="margin-left-3 ">
                 <DropdownSelection
@@ -319,11 +319,12 @@ const FilterFormAdmin = ({
                 />
               </div>
             </Grid>
+            : null
           }
         </Grid>
 
         <Grid row className="margin-top-2">
-          {section === SUBMISSION_ACCESS_STORE_NAME &&
+          {section === SUBMISSION_ACCESS_STORE_NAME ?
             <>
               <Grid col={2}>
                 <DropdownSelection
@@ -352,6 +353,7 @@ const FilterFormAdmin = ({
                 </div>
               </Grid>
             </>
+            : null
           }
           <Grid col={4} className=" position-relative margin-top-3">
             <div
