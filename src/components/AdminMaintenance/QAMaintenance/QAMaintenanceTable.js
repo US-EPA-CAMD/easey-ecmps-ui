@@ -4,6 +4,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component"
 import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceTableColumns";
 import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../AdminMaintenance";
+import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
 
 const QAMaintenanceTable = ({
   data = [],
@@ -119,18 +120,51 @@ const QAMaintenanceTable = ({
   }
 
   return (
-    <div>
-      <DataTable
-        sortIcon={
-          <ArrowDownwardSharp className="margin-left-2 text-primary" />
-        }
-        noHeader={true}
-        fixedHeader={true}
-        fixedHeaderScrollHeight="50vh"
-        columns={columns}
-        data={data}
-        className={`data-display-table react-transition fade-in`}
-      />
+    <div className="padding-left-0 margin-left-0 padding-right-0">
+      <div className="grid-row row-width">
+        <div className="grid-col-3">
+          <span className="data-container-header">
+            {qaCertDataMaintenanceTitle}
+          </span>
+        </div>
+        <div className="grid-col-8">
+          <div className="grid-row margin-top-2">
+            <div className="grid-col-5">
+              <Button
+                aria-label="Require Resubmission"
+                data-testid="es-require-resubmission"
+                className="usa-button"
+                onClick={() => { }}
+              >
+                Require Resubmission
+              </Button>
+            </div>
+            <div className="grid-col-3">
+              <Button
+                aria-label="Delete"
+                data-testid="es-delete"
+                className="usa-button usa-button--outline"
+                onClick={() => { }}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="es-datatable margin-top-5">
+        <DataTable
+          sortIcon={
+            <ArrowDownwardSharp className="margin-left-2 text-primary" />
+          }
+          noHeader={true}
+          fixedHeader={true}
+          fixedHeaderScrollHeight="50vh"
+          columns={columns}
+          data={data}
+          className={`data-display-table react-transition fade-in`}
+        />
+      </div>
     </div>
   )
 }
