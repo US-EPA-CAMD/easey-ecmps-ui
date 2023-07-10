@@ -2,7 +2,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons"
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component"
-import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceTableColumns";
+import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceDataColumns";
 import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../AdminMaintenance";
 import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
 

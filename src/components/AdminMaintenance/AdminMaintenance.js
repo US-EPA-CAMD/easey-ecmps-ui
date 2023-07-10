@@ -8,7 +8,7 @@ import {
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
 import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
 import { getReportingPeriods } from "../../utils/api/mdmApi";
-import QAMaintenanceTable from "./QAMaintenance/QAMaintenanceTable";
+import QAMaintenanceTable from "./QAMaintenance/QAMaintenanceData";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
