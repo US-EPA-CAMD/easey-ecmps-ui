@@ -33,7 +33,7 @@ export const ExportTablesContainer = ({
 
   useEffect(() => {
     setTimeout(() => {
-      ensure508();
+      ensure508(divId);
     }, oneSecond);
 
     return () => {
@@ -64,7 +64,7 @@ export const ExportTablesContainer = ({
           setTableData(tableRows);
           setLoading(false);
 
-          const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
+          const rowsAriaLabelData = response.data[dataKey].map(e => e.stackPipeId? e.stackPipeId : e.unitId)
           assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData)
         }
       } catch (err) {
