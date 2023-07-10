@@ -58,7 +58,6 @@ const QAMaintenanceTable = ({
     {
       name: "Facility Name / ID",
       width: "210px",
-      // facilityName isn't in api response and will have to be added
       selector: (row) =>
         row.facilityName
           ? `${row.facilityName} (${row.orisCode})`
@@ -72,34 +71,9 @@ const QAMaintenanceTable = ({
       sortable: true,
     },
     {
-      name: "Identifying Data",
-      width: "150px",
-      selector: (row) => row.identifyingData,
-      sortable: true,
-    },
-
-    {
-      name: "Last Submission ID",
-      width: "220px",
-      selector: (row) => row.lastSubmissionId,
-      sortable: true,
-    },
-    {
-      name: "Submission Date/Time",
-      width: "150px",
-      selector: (row) => row.submissionDateTime,
-      sortable: true,
-    },
-    {
       name: "Severity Level",
       width: "200px",
       selector: (row) => row.severityLevel,
-      sortable: true,
-    },
-    {
-      name: "Representative",
-      width: "200px",
-      selector: (row) => row.representative,
       sortable: true,
     },
   ];
