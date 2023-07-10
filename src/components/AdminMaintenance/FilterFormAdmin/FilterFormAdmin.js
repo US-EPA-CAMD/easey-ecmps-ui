@@ -113,16 +113,87 @@ const FilterFormAdmin = ({
         const typeLabel = typeSelection?.[1]
         setQaMaintenanceTypeSelection(typeLabel)
         let resp
-        resp.data = [] // TODO: setting empty list as dummy data, add in api calls
         switch (typeLabel) {
           case testSummaryLabel:
             // resp = await getQaTestMaintenanceRecords(selectedFacility)
+            // TODO: remove dummy data
+            resp = {
+              data: [
+                {
+                  testSumId: "VMAEPHQAS1-89E7352373BA45D8B868B5D193329D50",
+                  locationId: "1873",
+                  orisCode: 3776,
+                  unitStack: "51",
+                  systemIdentifier: "51F",
+                  componentIdentifier: 'componentIdentifier',
+                  testNumber: "51F-Q3-2014-1",
+                  gracePeriodIndicator: 'gracePeriodIndicator',
+                  testTypeCode: "F2LCHK",
+                  testReasonCode: "QA",
+                  testResultCode: "FEW168H",
+                  yearQuarter: "2014 Q3",
+                  testDescription: 'testDescription',
+                  beginDateTime: 'beginDateTime',
+                  endDateTime: 'endDateTime',
+                  testComment: 'testComment',
+                  spanScaleCode: 'spanScaleCode',
+                  injectionProtocolCode: 'injectionProtocolCode',
+                  submissionAvailabilityCode: "UPDATED",
+                  submissionAvailabilityDescription: "Updated on Host",
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription'
+                }
+              ]
+            }
             break
           case certEventLabel:
             // resp = await getQaCertEventMaintenanceRecords(selectedFacility)
+            resp = {
+              data: [
+                {
+                  certEventId: 'certEventId',
+                  locationId: 'locationId',
+                  unitStack: 'unitStack',
+                  systemIdentifier: 'systemIdentifier',
+                  componentIdentifier: 'componentIdentifier',
+                  certEventCode: 'certEventCode',
+                  certEventDescription: 'certEventDescription',
+                  eventDateTime: 'eventDateTime',
+                  requiredTestCode: 'requiredTestCode',
+                  requiredTestDescription: 'requiredTestDescription',
+                  conditionalDateTime: 'conditionalDateTime',
+                  lastCompletedDateTime: 'lastCompletedDateTime',
+                  submissionAvailabilityCode: 'submissionAvailabilityCode',
+                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription',
+                }
+              ]
+            }
             break
           case testExtensionExemptionLabel:
             // resp = await getQaExtensionExemptionMaintenanceRecords(selectedFacility)
+            resp = {
+              data: [
+                {
+                  testExtensionExemptionId: 'testExtensionExemptionId',
+                  locationId: 'locationId',
+                  unitStack: 'unitStack',
+                  systemIdentifier: 'systemIdentifier',
+                  componentIdentifier: 'componentIdentifier',
+                  fuelCode: 'fuelCode',
+                  fuelDescription: 'fuelDescription',
+                  extensionExemptionCode: 'extensionExemptionCode',
+                  extensionExemptionDescription: 'extensionExemptionDescription',
+                  hoursUsed: 'hoursUsed',
+                  spanScaleCode: 'spanScaleCode',
+                  submissionAvailabilityCode: 'submissionAvailabilityCode',
+                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription',
+                }
+              ]
+            }
             break
           default:
             return
