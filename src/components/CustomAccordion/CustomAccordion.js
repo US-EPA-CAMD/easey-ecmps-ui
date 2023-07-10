@@ -35,6 +35,7 @@ const CustomAccordion = ({ title, table, section, headerButtonText, headerButton
                       className="bg-base-lighter text-black"
                       onClick={() => tableState(index, false)}
                       epa-testid="collapseBTN"
+                      data-testid="collapseBTN"
                       id="collapseBTN"
                     >
                       <KeyboardArrowUpSharp />
@@ -42,6 +43,7 @@ const CustomAccordion = ({ title, table, section, headerButtonText, headerButton
                   ) : (
                     <Button
                       aria-label={`Expand ${item[1]}`}
+                      data-testid="expandBTN"
                       epa-testid="expandBTN"
                       id="expandBTN"
                       className="bg-base-lighter text-black"
