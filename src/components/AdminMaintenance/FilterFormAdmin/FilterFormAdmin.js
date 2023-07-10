@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
-import {
-  getAllTestTypeGroupCodes,
-} from "../../../utils/api/dataManagementApi";
 import {
   GridContainer,
   Grid,
@@ -18,7 +14,10 @@ import {
 } from "@trussworks/react-uswds";
 import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
 import { getQaCertEventMaintenanceRecords, getQaExtensionExemptionMaintenanceRecords, getQaTestMaintenanceRecords } from "../../../utils/api/camdServices";
-import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../AdminMaintenance";
+
+export const testSummaryLabel = 'Test Summary'
+export const certEventLabel = 'Cert Events'
+export const testExtensionExemptionLabel = 'Test Extension Exemption'
 
 const FilterFormAdmin = ({
   facilities,

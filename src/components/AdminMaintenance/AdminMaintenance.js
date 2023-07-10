@@ -112,7 +112,3 @@ export const AdminMaintenance = ({ section }) => {
     </div>
   );
 };
-
-export const testSummaryLabel = 'Test Summary'
-export const certEventLabel = 'Cert Events'
-export const testExtensionExemptionLabel = 'Test Extension Exemption'
