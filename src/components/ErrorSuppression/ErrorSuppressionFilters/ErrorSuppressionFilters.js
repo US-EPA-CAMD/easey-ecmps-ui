@@ -6,6 +6,7 @@ import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmAp
 import { getAllFacilities } from "../../../utils/api/facilityApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { addAriaLabelOnDatePickerCalendar } from "../../../additional-functions/ensure-508";
 
 /**'
  * Transforms data from the api in the format of:
@@ -161,6 +162,10 @@ export const ErrorSuppressionFilters = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(()=>{
+    addAriaLabelOnDatePickerCalendar(["add-date-after","add-date-before"]);
+  },[]);
 
   const onChangeOfLocationMultiSelect = (id, changeType) => {
     const uniqueLocations = [
