@@ -13,7 +13,6 @@ import {
   Button,
 } from "@trussworks/react-uswds";
 import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
-import { getQaCertEventMaintenanceRecords, getQaExtensionExemptionMaintenanceRecords, getQaTestMaintenanceRecords } from "../../../utils/api/camdServices";
 
 export const testSummaryLabel = 'Test Summary'
 export const certEventLabel = 'Cert Events'
