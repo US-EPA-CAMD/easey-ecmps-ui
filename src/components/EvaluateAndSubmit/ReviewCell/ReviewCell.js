@@ -12,7 +12,7 @@ const ReviewCell = ({
   getRowState,
   setSelectAllState,
   setSelectAllVisible,
-}) => {
+}) => {console.log("type", type)
   const [cellState, setCellState] = useState(getRowState(row, type));
 
   useEffect(() => {
@@ -27,7 +27,18 @@ const ReviewCell = ({
 
   useEffect(() => {
     setCellState(getRowState(row, type));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
+
+  const getRowAriaLabel = (row) =>{
+    if(row.configuration){
+      return `${type}-select-row-with-configuration-${row?.configuration}`;
+    }else if(row.name){
+      return `${type}-select-row-with-configuration-${row?.name}`;
+    }else{
+      return `${type}-select-row-with-location-Info-${row?.locationInfo}`;
+    }
+  }
 
   return (
     cellState && (
@@ -36,6 +47,7 @@ const ReviewCell = ({
         {cellState === "Checkbox" && (
           <Checkbox
             data-testid={`${type}-select-${idx}`}
+            aria-label={getRowAriaLabel(row)}
             className="margin-bottom-5"
             id={`${uuidv4()}`}
             onChange={(e) => {
