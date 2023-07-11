@@ -12,7 +12,7 @@ const ReviewCell = ({
   getRowState,
   setSelectAllState,
   setSelectAllVisible,
-}) => {console.log("type", type)
+}) => {
   const [cellState, setCellState] = useState(getRowState(row, type));
 
   useEffect(() => {
