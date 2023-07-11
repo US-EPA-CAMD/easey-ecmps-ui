@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
-import {
-  getAllTestTypeGroupCodes,
-} from "../../../utils/api/dataManagementApi";
 import {
   GridContainer,
   Grid,
@@ -17,6 +13,10 @@ import {
   Button,
 } from "@trussworks/react-uswds";
 import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
+
+export const testSummaryLabel = 'Test Summary'
+export const certEventLabel = 'Cert Events'
+export const testExtensionExemptionLabel = 'Test Extension Exemption'
 
 const FilterFormAdmin = ({
   facilities,
@@ -27,6 +27,7 @@ const FilterFormAdmin = ({
   setReloadTableData,
   setSelectedRows,
   reportingPeriods,
+  setQaMaintenanceTypeSelection
 }) => {
 
   const defaultDropdownText = "Select";
@@ -52,37 +53,13 @@ const FilterFormAdmin = ({
   const [selectedStatus, setSelectedStatus] = useState();
 
   const [typeSelection, setTypeSelection] = useState([]);
-  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
-    { name: "Loading..." },
-  ]);
 
-  useEffect(() => {
-    const fetchTestTypeCodes = () => {
-      getAllTestTypeGroupCodes()
-        .then((res) => {
-          const options = res.data
-            .map((e) => {
-              return {
-                name: e.testTypeGroupDescription,
-                code: e.testTypeGroupCode,
-              };
-            })
-            .sort((a, b) => a.name.localeCompare(b.name));
-
-          options.unshift({
-            code: defaultDropdownText,
-            name: defaultDropdownText,
-          });
-          setTestTypeGroupOptions(options);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-
-    if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME)
-      fetchTestTypeCodes();
-  }, []);
+  const testTypeGroupOptions = [
+    initialSelectOption,
+    { code: testSummaryLabel, name: testSummaryLabel },
+    { code: certEventLabel, name: certEventLabel },
+    { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
+  ]
 
   const processReportingPeriods = async () => {
     const availReportingPeriods = reportingPeriods.map(rp => {
@@ -101,7 +78,7 @@ const FilterFormAdmin = ({
     processReportingPeriods();
   }, [reportingPeriods]);
 
-  const applyFilters = async () => {
+  const applyFilters = useCallback(async () => {
 
     let monitorPlanId;
     let year;
@@ -123,21 +100,113 @@ const FilterFormAdmin = ({
       status = selectedStatus[1].toUpperCase()
     }
 
-    if (section === SUBMISSION_ACCESS_STORE_NAME) {
-      try {
-        setIsTableDataLoading(true)
+    setIsTableDataLoading(true)
+    try {
+      if (section === SUBMISSION_ACCESS_STORE_NAME) {
         const { data } = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
         data.forEach((d) => (d.selected = false));
-
         setTableData(data);
-      } catch (e) {
-        console.error(e)
-      } finally {
-        setIsTableDataLoading(false);
-        setSelectedRows([])
       }
+
+      if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
+        // typeSelection is array of form [index, description]
+        const typeLabel = typeSelection?.[1]
+        setQaMaintenanceTypeSelection(typeLabel)
+        let resp
+        switch (typeLabel) {
+          case testSummaryLabel:
+            // resp = await getQaTestMaintenanceRecords(selectedFacility)
+            // TODO: remove dummy data
+            resp = {
+              data: [
+                {
+                  testSumId: "VMAEPHQAS1-89E7352373BA45D8B868B5D193329D50",
+                  locationId: "1873",
+                  orisCode: 3776,
+                  unitStack: "51",
+                  systemIdentifier: "51F",
+                  componentIdentifier: 'componentIdentifier',
+                  testNumber: "51F-Q3-2014-1",
+                  gracePeriodIndicator: 'gracePeriodIndicator',
+                  testTypeCode: "F2LCHK",
+                  testReasonCode: "QA",
+                  testResultCode: "FEW168H",
+                  yearQuarter: "2014 Q3",
+                  testDescription: 'testDescription',
+                  beginDateTime: 'beginDateTime',
+                  endDateTime: 'endDateTime',
+                  testComment: 'testComment',
+                  spanScaleCode: 'spanScaleCode',
+                  injectionProtocolCode: 'injectionProtocolCode',
+                  submissionAvailabilityCode: "UPDATED",
+                  submissionAvailabilityDescription: "Updated on Host",
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription'
+                }
+              ]
+            }
+            break
+          case certEventLabel:
+            // resp = await getQaCertEventMaintenanceRecords(selectedFacility)
+            resp = {
+              data: [
+                {
+                  certEventId: 'certEventId',
+                  locationId: 'locationId',
+                  unitStack: 'unitStack',
+                  systemIdentifier: 'systemIdentifier',
+                  componentIdentifier: 'componentIdentifier',
+                  certEventCode: 'certEventCode',
+                  certEventDescription: 'certEventDescription',
+                  eventDateTime: 'eventDateTime',
+                  requiredTestCode: 'requiredTestCode',
+                  requiredTestDescription: 'requiredTestDescription',
+                  conditionalDateTime: 'conditionalDateTime',
+                  lastCompletedDateTime: 'lastCompletedDateTime',
+                  submissionAvailabilityCode: 'submissionAvailabilityCode',
+                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription',
+                }
+              ]
+            }
+            break
+          case testExtensionExemptionLabel:
+            // resp = await getQaExtensionExemptionMaintenanceRecords(selectedFacility)
+            resp = {
+              data: [
+                {
+                  testExtensionExemptionId: 'testExtensionExemptionId',
+                  locationId: 'locationId',
+                  unitStack: 'unitStack',
+                  systemIdentifier: 'systemIdentifier',
+                  componentIdentifier: 'componentIdentifier',
+                  fuelCode: 'fuelCode',
+                  fuelDescription: 'fuelDescription',
+                  extensionExemptionCode: 'extensionExemptionCode',
+                  extensionExemptionDescription: 'extensionExemptionDescription',
+                  hoursUsed: 'hoursUsed',
+                  spanScaleCode: 'spanScaleCode',
+                  submissionAvailabilityCode: 'submissionAvailabilityCode',
+                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
+                  severityCode: 'severityCode',
+                  severityDescription: 'severityDescription',
+                }
+              ]
+            }
+            break
+          default:
+            return
+        }
+        setTableData(resp.data)
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsTableDataLoading(false);
+      setSelectedRows([])
     }
-  };
+  }, [availableConfigurations, section, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, setIsTableDataLoading, setQaMaintenanceTypeSelection, setSelectedRows, setTableData, typeSelection]);
 
   useEffect(() => {
     if (reloadTableData) {
@@ -180,7 +249,6 @@ const FilterFormAdmin = ({
     if (!value || value === defaultDropdownText) {
       setSelectedFacility(null);
       setSelectedLocation(null);
-      return;
     }
   };
 
@@ -196,6 +264,7 @@ const FilterFormAdmin = ({
     setSelectedLocation(null);
     setSelectedStatus(null);
   };
+
   return (
     <div className="container padding-y-1 ">
       <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
@@ -233,7 +302,7 @@ const FilterFormAdmin = ({
               />
             </div>
           </Grid>
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
             <Grid col={3}>
               <div className="margin-left-3 ">
                 <DropdownSelection
@@ -248,13 +317,12 @@ const FilterFormAdmin = ({
                 />
               </div>
             </Grid>
-          ) : (
-            ""
-          )}
+            : null
+          }
         </Grid>
 
         <Grid row className="margin-top-2">
-          {section === SUBMISSION_ACCESS_STORE_NAME ? (
+          {section === SUBMISSION_ACCESS_STORE_NAME ?
             <>
               <Grid col={2}>
                 <DropdownSelection
@@ -283,9 +351,8 @@ const FilterFormAdmin = ({
                 </div>
               </Grid>
             </>
-          ) : (
-            ""
-          )}
+            : null
+          }
           <Grid col={4} className=" position-relative margin-top-3">
             <div
               className={
