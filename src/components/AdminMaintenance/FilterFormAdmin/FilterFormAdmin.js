@@ -120,28 +120,28 @@ const FilterFormAdmin = ({
             resp = {
               data: [
                 {
-                  testSumId: "VMAEPHQAS1-89E7352373BA45D8B868B5D193329D50",
-                  locationId: "1873",
-                  orisCode: 3776,
-                  unitStack: "51",
-                  systemIdentifier: "51F",
-                  componentIdentifier: 'componentIdentifier',
-                  testNumber: "51F-Q3-2014-1",
-                  gracePeriodIndicator: 'gracePeriodIndicator',
-                  testTypeCode: "F2LCHK",
-                  testReasonCode: "QA",
-                  testResultCode: "FEW168H",
-                  yearQuarter: "2014 Q3",
-                  testDescription: 'testDescription',
-                  beginDateTime: 'beginDateTime',
-                  endDateTime: 'endDateTime',
-                  testComment: 'testComment',
-                  spanScaleCode: 'spanScaleCode',
-                  injectionProtocolCode: 'injectionProtocolCode',
-                  submissionAvailabilityCode: "UPDATED",
-                  submissionAvailabilityDescription: "Updated on Host",
-                  severityCode: 'severityCode',
-                  severityDescription: 'severityDescription'
+                  "testSumId": "TWCORNEL5-90104F90BE7E41B3B187DC12C86E8AFE",
+                  "locationId": "6",
+                  "orisCode": 3,
+                  "unitStack": "1",
+                  "systemIdentifier": null,
+                  "componentIdentifier": "AFA",
+                  "testNumber": "20221CEM5FFMAFA",
+                  "gracePeriodIndicator": null,
+                  "testTypeCode": "FFACCTT",
+                  "testReasonCode": "QA",
+                  "testResultCode": "PASSED",
+                  "yearQuarter": null,
+                  "testDescription": null,
+                  "beginDateTime": null,
+                  "endDateTime": "02/08/2022 06:58",
+                  "testComment": null,
+                  "spanScaleCode": null,
+                  "injectionProtocolCode": null,
+                  "submissionAvailabilityCode": "UPDATED",
+                  "submissionAvailabilityDescription": "Updated on Host",
+                  "severityCode": null,
+                  "severityDescription": null
                 }
               ]
             }
@@ -151,22 +151,23 @@ const FilterFormAdmin = ({
             resp = {
               data: [
                 {
-                  certEventId: 'certEventId',
-                  locationId: 'locationId',
-                  unitStack: 'unitStack',
-                  systemIdentifier: 'systemIdentifier',
-                  componentIdentifier: 'componentIdentifier',
-                  certEventCode: 'certEventCode',
-                  certEventDescription: 'certEventDescription',
-                  eventDateTime: 'eventDateTime',
-                  requiredTestCode: 'requiredTestCode',
-                  requiredTestDescription: 'requiredTestDescription',
-                  conditionalDateTime: 'conditionalDateTime',
-                  lastCompletedDateTime: 'lastCompletedDateTime',
-                  submissionAvailabilityCode: 'submissionAvailabilityCode',
-                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
-                  severityCode: 'severityCode',
-                  severityDescription: 'severityDescription',
+                  "certEventId": "EPA-112766C3AB3F5B57C828951A8F6BB087",
+                  "locationId": "5",
+                  "orisCode": 3,
+                  "unitStack": "CS0AAN",
+                  "systemIdentifier": "AA5",
+                  "componentIdentifier": "XX4",
+                  "certEventCode": "2",
+                  "certEventDescription": "DAHS Software Version Upgrade",
+                  "eventDateTime": "01/01/2003 00:00",
+                  "requiredTestCode": "22",
+                  "requiredTestDescription": "DAHS Verification (Formulas and Missing Data)",
+                  "conditionalDateTime": null,
+                  "lastCompletedDateTime": "01/01/2003 00:00",
+                  "submissionAvailabilityCode": "UPDATED",
+                  "submissionAvailabilityDescription": "Updated on Host",
+                  "severityCode": null,
+                  "severityDescription": null
                 }
               ]
             }
@@ -176,21 +177,22 @@ const FilterFormAdmin = ({
             resp = {
               data: [
                 {
-                  testExtensionExemptionId: 'testExtensionExemptionId',
-                  locationId: 'locationId',
-                  unitStack: 'unitStack',
-                  systemIdentifier: 'systemIdentifier',
-                  componentIdentifier: 'componentIdentifier',
-                  fuelCode: 'fuelCode',
-                  fuelDescription: 'fuelDescription',
-                  extensionExemptionCode: 'extensionExemptionCode',
-                  extensionExemptionDescription: 'extensionExemptionDescription',
-                  hoursUsed: 'hoursUsed',
-                  spanScaleCode: 'spanScaleCode',
-                  submissionAvailabilityCode: 'submissionAvailabilityCode',
-                  submissionAvailabilityDescription: 'submissionAvailabilityDescription',
-                  severityCode: 'severityCode',
-                  severityDescription: 'severityDescription',
+                  "testExtensionExemptionId": "EPA-626667CA1E1DF3B64152F253A4C2DDB1",
+                  "locationId": "1513",
+                  "orisCode": 3116,
+                  "unitStack": "032",
+                  "systemIdentifier": null,
+                  "componentIdentifier": null,
+                  "fuelCode": "DSL",
+                  "fuelDescription": "Diesel Oil",
+                  "extensionExemptionCode": "NONQAOS",
+                  "extensionExemptionDescription": "Non-QA Operating Quarters for Ozone-Season Reporter",
+                  "hoursUsed": null,
+                  "spanScaleCode": null,
+                  "submissionAvailabilityCode": "UPDATED",
+                  "submissionAvailabilityDescription": "Updated on Host",
+                  "severityCode": null,
+                  "severityDescription": null
                 }
               ]
             }
