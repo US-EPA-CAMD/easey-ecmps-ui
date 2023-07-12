@@ -44,7 +44,7 @@ const QADataTableRender = ({
       default:
         columns.push({
           name,
-          selector: `col${index + 1}`,
+          selector: (row) => row[`col${index + 1}`],
           sortable: true,
           wrap: true,
           width: `${columnWidth}%`,
