@@ -190,7 +190,8 @@ const QAMaintenanceTable = ({
         extensionExemptionCode: ["Extension Exemption Code", "input", ""],
         hoursUsed: ["Hours Used", "input", ""],
         spanScaleCode: ["Span Scale Code", "input", ""],
-        ...commonEndProps
+        skip: ["", "skip", "", ""],
+        ...commonEndProps,
       }
       break
     default:
@@ -225,6 +226,7 @@ const QAMaintenanceTable = ({
                   data-testid="es-require-resubmission"
                   className="usa-button"
                   onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                  disabled={disableActionBtns}
                 >
                   Require Resubmission
                 </Button>
@@ -235,6 +237,7 @@ const QAMaintenanceTable = ({
                   data-testid="es-delete"
                   className="usa-button usa-button--outline"
                   onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })}
+                  disabled={disableActionBtns}
                 >
                   Delete
                 </Button>
