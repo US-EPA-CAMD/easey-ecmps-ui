@@ -133,6 +133,7 @@ const TableRender = forwardRef(
                 className=" margin-left-4"
                 id={`${uuidv4()}`}
                 data-testid="SelectAll"
+                aria-label={`${type}-select-all`}
                 onClick={selectAll}
                 defaultChecked={selectAllState}
               />

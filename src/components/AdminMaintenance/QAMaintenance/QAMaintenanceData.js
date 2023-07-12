@@ -9,7 +9,7 @@ import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from ".
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-
+import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
 import { getFacilityById } from "../../../utils/api/facilityApi"
 
 let controlInputs;
@@ -74,6 +74,9 @@ const QAMaintenanceTable = ({
     }
   };
 
+
+  // modal state has form {isOpen: boolean, action: string}
+  const [modalState, setModalState] = useState({ isOpen: false, action: null })
 
   // handle loading
   if (isLoading) {
@@ -194,53 +197,64 @@ const QAMaintenanceTable = ({
       return
   }
 
+  const closeModalHandler = () => {
+    setModalState({ isOpen: false, type: null })
+  }
+
   return (
-    <div className="padding-left-0 margin-left-0 padding-right-0">
-      <div className="grid-row row-width">
-        <div className="grid-col-3">
-          <span className="data-container-header">
-            {qaCertDataMaintenanceTitle}
-          </span>
-        </div>
-        <div className="grid-col-8">
-          <div className="grid-row margin-top-2">
-            <div className="grid-col-5">
-              <Button
-                aria-label="Require Resubmission"
-                data-testid="es-require-resubmission"
-                className="usa-button"
-                onClick={() => { }}
-                disabled={disableActionBtns}
-              >
-                Require Resubmission
-              </Button>
-            </div>
-            <div className="grid-col-3">
-              <Button
-                aria-label="Delete"
-                data-testid="es-delete"
-                className="usa-button usa-button--outline"
-                onClick={() => { }}
-                disabled={disableActionBtns}
-              >
-                Delete
-              </Button>
+    <div>
+      {modalState.isOpen === true ?
+        <QAMaintenanceModalPopout
+          closeModalHandler={closeModalHandler}
+          action={modalState.action}
+        />
+        : null
+      }
+      <div className="padding-left-0 margin-left-0 padding-right-0">
+        <div className="grid-row row-width">
+          <div className="grid-col-3">
+            <span className="data-container-header">
+              {qaCertDataMaintenanceTitle}
+            </span>
+          </div>
+          <div className="grid-col-8">
+            <div className="grid-row margin-top-2">
+              <div className="grid-col-5">
+                <Button
+                  aria-label="Require Resubmission"
+                  data-testid="es-require-resubmission"
+                  className="usa-button"
+                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                >
+                  Require Resubmission
+                </Button>
+              </div>
+              <div className="grid-col-3">
+                <Button
+                  aria-label="Delete"
+                  data-testid="es-delete"
+                  className="usa-button usa-button--outline"
+                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })}
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="es-datatable margin-top-5">
-        <DataTable
-          sortIcon={
-            <ArrowDownwardSharp className="margin-left-2 text-primary" />
-          }
-          noHeader={true}
-          fixedHeader={true}
-          fixedHeaderScrollHeight="50vh"
-          columns={columns}
-          data={data}
-          className={`data-display-table react-transition fade-in`}
-        />
+        <div className="es-datatable margin-top-5">
+          <DataTable
+            sortIcon={
+              <ArrowDownwardSharp className="margin-left-2 text-primary" />
+            }
+            noHeader={true}
+            fixedHeader={true}
+            fixedHeaderScrollHeight="50vh"
+            columns={columns}
+            data={data}
+            className={`data-display-table react-transition fade-in`}
+          />
+        </div>
       </div>
       {showViewModal &&
         <Modal
