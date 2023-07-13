@@ -13,7 +13,11 @@ const QAMaintenanceModalPopout = ({
 
   let modalContent
   if (action === QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION) {
-    modalContent = <p>require resubmission modal content</p>
+    modalContent =
+      <QAMaintenanceRequireResubmissionPopout
+        showModal={showModal}
+        closeModalHandler={closeModalHandler}
+      />
   } else if (action === QA_MAINTENANCE_MODAL_DELETE) {
     modalContent =
       <QAMaintenanceDeletePopout
@@ -27,9 +31,41 @@ const QAMaintenanceModalPopout = ({
   )
 }
 
-const QAMaintenanceDeletePopout = ({
+const QAMaintenanceRequireResubmissionPopout = ({
   showModal,
   disableSaveBtn,
+  closeModalHandler,
+}) => {
+  const inputRef = useRef('')
+
+  const handleSave = () => {
+    console.log('reason to require resubmission', inputRef.current.value);
+  }
+
+  return (
+    <Modal
+      showDarkBg
+      show={showModal}
+      save={handleSave}
+      exitBTN='Save and Close'
+      showSave
+      title='Require Resubmission'
+      close={closeModalHandler}
+      width="40%"
+      left="30%"
+    >
+      <ReasonForActionTextInput
+        title='Reason to require resubmission'
+        action={QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION}
+        inputRef={inputRef}
+        className='margin-y-2'
+      />
+    </Modal >
+  )
+}
+
+const QAMaintenanceDeletePopout = ({
+  showModal,
   closeModalHandler,
 }) => {
   const inputRef = useRef('')
@@ -45,7 +81,6 @@ const QAMaintenanceDeletePopout = ({
       save={handleDelete}
       exitBTN={"Delete"}
       showSave
-      disableExitBtn={disableSaveBtn}
       title={"Delete QA/Cert Data"}
       close={closeModalHandler}
       width="40%"

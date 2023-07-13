@@ -6,7 +6,7 @@ import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./Q
 import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
 import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
 import { useState } from "react";
-import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE } from "./QAMaintenanceModalPopout";
+import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
 
 const QAMaintenanceTable = ({
   data = [],
@@ -125,7 +125,7 @@ const QAMaintenanceTable = ({
                   aria-label="Require Resubmission"
                   data-testid="es-require-resubmission"
                   className="usa-button"
-                  onClick={() => { }}
+                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
                 >
                   Require Resubmission
                 </Button>
