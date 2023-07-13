@@ -1,8 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GridContainer, Grid, Label, Dropdown, DatePicker, ButtonGroup, Button, ComboBox } from "@trussworks/react-uswds";
+import {
+  GridContainer,
+  Grid,
+  Label,
+  Dropdown,
+  DatePicker,
+  ButtonGroup,
+  Button,
+  ComboBox,
+} from "@trussworks/react-uswds";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
-import { getCheckCatalogResults, getReasonCodes } from "../../../utils/api/mdmApi";
+import {
+  getCheckCatalogResults,
+  getReasonCodes,
+} from "../../../utils/api/mdmApi";
 import { getAllFacilities } from "../../../utils/api/facilityApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
@@ -14,7 +26,7 @@ import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
  *      checkNumber: [objects from the api array with that exact checkTypeCode and checkTypeNumber]
  *  }
  * }
- * 
+ *
  * This is done so that we can access the check results by their check type code and check type number.
  */
 export const transformCheckResultData = (data) => {
@@ -26,27 +38,26 @@ export const transformCheckResultData = (data) => {
     if (!acc[cv.checkTypeCode][cv.checkNumber]) {
       acc[cv.checkTypeCode][cv.checkNumber] = [cv];
     } else {
-      acc[cv.checkTypeCode][cv.checkNumber]
-        .push(cv)
+      acc[cv.checkTypeCode][cv.checkNumber].push(cv);
     }
 
     return acc;
   }, {});
-}
+};
 
 // Takes a transformedData like in the shape described above and returns an array of objects with unique
 // check types and descriptions. We need this to build the checkType dropdown.
 export const getUniqueCheckTypeDescription = (transformedData) => {
-  return Object.keys(transformedData)
-    .map(ctCode => {
-      const checkNumbers = Object.keys(transformedData[ctCode]);
-      const { checkTypeDescription } = transformedData[ctCode][checkNumbers[0]][0];
-      return {
-        checkTypeDescription,
-        checkTypeCode: ctCode
-      }
-    });
-}
+  return Object.keys(transformedData).map((ctCode) => {
+    const checkNumbers = Object.keys(transformedData[ctCode]);
+    const { checkTypeDescription } =
+      transformedData[ctCode][checkNumbers[0]][0];
+    return {
+      checkTypeDescription,
+      checkTypeCode: ctCode,
+    };
+  });
+};
 
 // Makes API call to get locations and then formats them to be in the way
 // MultiSelectCombobox expects the items to look and calls setLocationData()
@@ -78,12 +89,14 @@ export const getLocations = (facilityValue, checkResultObj) => {
 };
 
 export const ErrorSuppressionFilters = () => {
-
   const ctxFilters = useContext(ErrorSuppressionFiltersContext);
   const {
-    transformedData, setTransformedData,
-    facilityList, setFacilityList,
-    reasonCodeList, setReasonCodeList,
+    transformedData,
+    setTransformedData,
+    facilityList,
+    setFacilityList,
+    reasonCodeList,
+    setReasonCodeList,
     setCheckType,
     setCheckNumber,
     setCheckResult,
@@ -120,63 +133,69 @@ export const ErrorSuppressionFilters = () => {
 
   // Make all api calls that only need to happen once on page load here
   useEffect(() => {
-    getCheckCatalogResults().then(({ data }) => {
-      const _transformedData = transformCheckResultData(data);
-      const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(_transformedData);
+    getCheckCatalogResults()
+      .then(({ data }) => {
+        const _transformedData = transformCheckResultData(data);
+        const uniqueTypeCodeAndDesc =
+          getUniqueCheckTypeDescription(_transformedData);
 
-      setCheckTypeList(uniqueTypeCodeAndDesc);
-      setTransformedData(_transformedData);
-    }).catch(error => {
-      console.error("Error getting Check Catalog Results", error);
-    })
+        setCheckTypeList(uniqueTypeCodeAndDesc);
+        setTransformedData(_transformedData);
+      })
+      .catch((error) => {
+        console.error("Error getting Check Catalog Results", error);
+      });
 
-    getAllFacilities().then(({ data }) => {
-      const formattedFacilities = data.map(f => ({ value: f.facilityRecordId, label: `${f.facilityName} (${f.facilityId})`, orisCode: f.facilityId }))
-      setFacilityList(formattedFacilities);
+    getAllFacilities()
+      .then(({ data }) => {
+        const formattedFacilities = data.map((f) => ({
+          value: f.facilityRecordId,
+          label: `${f.facilityName} (${f.facilityId})`,
+          orisCode: f.facilityId,
+        }));
+        setFacilityList(formattedFacilities);
 
-      // The following lines of code are hacks to mitigate an issue with the ComboBox USWDS component.
-      // BUG: When the page is initially loaded, clicking on the combobox only brings up an empty list.
-      //      The data does not populate until the second click. The below code does the initial click
-      //      on the ComboBox and then focuses away again. Tab is then reset to where it was when page
-      //      initially loaded.
-      const previouslyFocusedEle = document.activeElement;
-      document.getElementById("facility-name").click();
-      document.activeElement.blur();
-      previouslyFocusedEle.tabIndex = 0;
-      previouslyFocusedEle.focus();
-      previouslyFocusedEle.tabIndex = -1;
-    }).catch(error => {
-      console.error("Error getting facilities", error)
-    })
+        // The following lines of code are hacks to mitigate an issue with the ComboBox USWDS component.
+        // BUG: When the page is initially loaded, clicking on the combobox only brings up an empty list.
+        //      The data does not populate until the second click. The below code does the initial click
+        //      on the ComboBox and then focuses away again. Tab is then reset to where it was when page
+        //      initially loaded.
+        const previouslyFocusedEle = document.activeElement;
+        document.getElementById("facility-name").click();
+        document.activeElement.blur();
+        previouslyFocusedEle.tabIndex = 0;
+        previouslyFocusedEle.focus();
+        previouslyFocusedEle.tabIndex = -1;
+      })
+      .catch((error) => {
+        console.error("Error getting facilities", error);
+      });
 
-    getReasonCodes().then(({ data }) => {
-      setReasonCodeList(data)
-    }).catch(error => {
-      console.error("Error getting reason codes", error)
-    })
+    getReasonCodes()
+      .then(({ data }) => {
+        setReasonCodeList(data);
+      })
+      .catch((error) => {
+        console.error("Error getting reason codes", error);
+      });
 
     return () => {
-      setCheckTypeList([])
-      setTransformedData([])
-    }
+      setCheckTypeList([]);
+      setTransformedData([]);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeOfLocationMultiSelect = (id, changeType) => {
-    const uniqueLocations = [
-      ...new Set([...selectedLocations, id]),
-    ];
+    const uniqueLocations = [...new Set([...selectedLocations, id])];
 
     if (changeType === "add") {
       setSelectedLocations(uniqueLocations);
-    }
-    else if (changeType === "remove") {
-      const selected = locationData.filter((l) => l.selected).map(l => l.id);
+    } else if (changeType === "remove") {
+      const selected = locationData.filter((l) => l.selected).map((l) => l.id);
       setSelectedLocations(selected);
-    }
-    else
-      return;
-  }
+    } else return;
+  };
 
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
@@ -187,10 +206,14 @@ export const ErrorSuppressionFilters = () => {
     }
 
     if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
-      const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult);
-      const facility = facilityList.find(f => f.value === value);
+      const checkResultObj = transformedData[selectedCheckType][
+        selectedCheckNumber
+      ].find((r) => r.checkResult === selectedCheckResult);
+      const facility = facilityList.find((f) => f.value === value);
 
-      getLocations(facility.orisCode, checkResultObj).then(availLoc => setLocationData([...availLoc]));
+      getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
+        setLocationData([...availLoc])
+      );
     }
   };
 
@@ -201,15 +224,13 @@ export const ErrorSuppressionFilters = () => {
     setSelectedCheckType(value);
     setSelectedCheckNumber(false);
     setSelectedCheckResult(false);
-    if (!value)
-      return;
+    if (!value) return;
 
     const checkNumbers = Object.keys(transformedData[value]);
     setCheckNumberList(checkNumbers);
     // reset location selections if there are any
-    locationData.forEach(d => d.selected = false)
-
-  }
+    locationData.forEach((d) => (d.selected = false));
+  };
 
   const onCheckNumberChange = (e) => {
     let { value } = e.target;
@@ -218,16 +239,16 @@ export const ErrorSuppressionFilters = () => {
     setSelectedCheckNumber(value);
     setSelectedCheckResult(false);
 
-    if (!value)
-      return;
+    if (!value) return;
 
-    const checkResults = transformedData[selectedCheckType][value].map(d => d.checkResult);
+    const checkResults = transformedData[selectedCheckType][value].map(
+      (d) => d.checkResult
+    );
     setCheckResultList(checkResults);
 
     // reset location selections if there are any
-    locationData.forEach(d => d.selected = false)
-
-  }
+    locationData.forEach((d) => (d.selected = false));
+  };
 
   const onCheckResultChange = (e) => {
     let { value } = e.target;
@@ -240,10 +261,12 @@ export const ErrorSuppressionFilters = () => {
       return;
     }
 
-    const facility = facilityList.find(f => f.value === selectedFacility);
+    const facility = facilityList.find((f) => f.value === selectedFacility);
 
     if (selectedCheckType && selectedCheckNumber && value && facility) {
-      const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === value);
+      const checkResultObj = transformedData[selectedCheckType][
+        selectedCheckNumber
+      ].find((r) => r.checkResult === value);
 
       getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
         setLocationData([...availLoc])
@@ -257,36 +280,52 @@ export const ErrorSuppressionFilters = () => {
 
     // Keep in the the below will convert the dates to UTC
     if (selectedAddDateAfter) {
-      apiFormattedDateAfter = new Date(selectedAddDateAfter).toISOString().split('T')[0]
+      apiFormattedDateAfter = new Date(selectedAddDateAfter)
+        .toISOString()
+        .split("T")[0];
     }
 
     if (selectedAddDateBefore) {
-      apiFormattedDateBefore = new Date(selectedAddDateBefore).toISOString().split('T')[0];
+      apiFormattedDateBefore = new Date(selectedAddDateBefore)
+        .toISOString()
+        .split("T")[0];
     }
 
     // selectedFacility is the facility record id so we need to use it with facilityList to find the facility orisCode
     let orisCode = null;
     if (selectedFacility && selectedFacility !== defaultDropdownText)
-      orisCode = facilityList.find(f => f.value === selectedFacility)?.orisCode;
+      orisCode = facilityList.find(
+        (f) => f.value === selectedFacility
+      )?.orisCode;
 
     // selectedLocations is an array of location ids. For the creation API call, we actually need the unit/stack name which is the label of the MultiselectCombobox
-    const unitStackNames = selectedLocations.map(selectedId => locationData.find(ld => ld.id === selectedId)?.label)
-        .filter(loc => loc !== null && loc !== undefined) // just sanity checking
+    const unitStackNames = selectedLocations
+      .map(
+        (selectedId) => locationData.find((ld) => ld.id === selectedId)?.label
+      )
+      .filter((loc) => loc !== null && loc !== undefined); // just sanity checking
 
     //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
-    setCheckType(selectedCheckType !== defaultDropdownText ? selectedCheckType : null)
-    setCheckNumber(selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null)
-    setCheckResult(selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null)
-    setFacility(orisCode)
-    setLocations(unitStackNames)
-    setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null)
-    setReasonCode(selectedReason !== defaultDropdownText ? selectedReason : null)
-    setAddDateAfter(apiFormattedDateAfter)
-    setAddDateBefore(apiFormattedDateBefore)
-  }
+    setCheckType(
+      selectedCheckType !== defaultDropdownText ? selectedCheckType : null
+    );
+    setCheckNumber(
+      selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null
+    );
+    setCheckResult(
+      selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null
+    );
+    setFacility(orisCode);
+    setLocations(unitStackNames);
+    setActive(selectedStatus !== defaultDropdownText ? selectedStatus : null);
+    setReasonCode(
+      selectedReason !== defaultDropdownText ? selectedReason : null
+    );
+    setAddDateAfter(apiFormattedDateAfter);
+    setAddDateBefore(apiFormattedDateBefore);
+  };
 
   const clearFilters = () => {
-
     setCheckNumberList([]);
     setCheckResultList([]);
     setSelectedCheckType("");
@@ -307,9 +346,8 @@ export const ErrorSuppressionFilters = () => {
     setAddDateBefore(null);
     setSelectedAddDateAfter(null);
     setSelectedAddDateBefore(null);
-    setDateAfterKey(k => !k)
-    setDateBeforeKey(k => !k)
-
+    setDateAfterKey((k) => !k);
+    setDateBeforeKey((k) => !k);
   };
 
   return (
@@ -404,7 +442,6 @@ export const ErrorSuppressionFilters = () => {
             onChange={onFacilityChange}
             disableFiltering={false}
           />
-
         </Grid>
         <Grid col={4}>
           <div className="margin-left-2">
@@ -446,18 +483,17 @@ export const ErrorSuppressionFilters = () => {
             onChange={(e) => setSelectedStatus(e.target.value)}
           >
             <option>{defaultDropdownText}</option>
-            {[{
-              label: 'ACTIVE',
-              value: true
-            }, {
-              label: 'INACTIVE',
-              value: false
-            }].map((d) => (
-              <option
-                key={d.label}
-                value={d.value}
-                data-testid={d.label}
-              >
+            {[
+              {
+                label: "ACTIVE",
+                value: true,
+              },
+              {
+                label: "INACTIVE",
+                value: false,
+              },
+            ].map((d) => (
+              <option key={d.label} value={d.value} data-testid={d.label}>
                 {d.label}
               </option>
             ))}
@@ -540,4 +576,4 @@ export const ErrorSuppressionFilters = () => {
       </Grid>
     </GridContainer>
   );
-}
+};
