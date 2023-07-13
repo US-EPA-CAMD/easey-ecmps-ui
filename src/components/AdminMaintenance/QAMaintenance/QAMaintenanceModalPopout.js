@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { Label, Textarea, Alert } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
+import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
+import { updateQaCertEventMaintenanceRecords, updateQaExtensionExemptionMaintenanceRecords, updateQaTestMaintenanceRecords } from "../../../utils/api/adminManagementApi";
 
 export const QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION = 'require-resubmission'
 export const QA_MAINTENANCE_MODAL_DELETE = 'delete'
@@ -8,7 +10,9 @@ export const QA_MAINTENANCE_MODAL_DELETE = 'delete'
 const QAMaintenanceModalPopout = ({
   showModal,
   closeModalHandler,
-  action
+  action,
+  typeSelection,
+  selectedRows,
 }) => {
 
   let modalContent
@@ -17,6 +21,8 @@ const QAMaintenanceModalPopout = ({
       <QAMaintenanceRequireResubmissionPopout
         showModal={showModal}
         closeModalHandler={closeModalHandler}
+        typeSelection={typeSelection}
+        selectedRows={selectedRows}
       />
   } else if (action === QA_MAINTENANCE_MODAL_DELETE) {
     modalContent =
@@ -33,13 +39,41 @@ const QAMaintenanceModalPopout = ({
 
 const QAMaintenanceRequireResubmissionPopout = ({
   showModal,
-  disableSaveBtn,
   closeModalHandler,
+  typeSelection,
+  selectedRows,
 }) => {
   const inputRef = useRef('')
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log('reason to require resubmission', inputRef.current.value);
+
+    let updateFunc
+    let identifier // name of id field for each type
+    switch (typeSelection) {
+      case testSummaryLabel:
+        identifier = 'testSumId'
+        updateFunc = updateQaTestMaintenanceRecords
+        break
+      case certEventLabel:
+        identifier = 'qaCertEventIdentifier'
+        updateFunc = updateQaCertEventMaintenanceRecords
+        break
+      case testExtensionExemptionLabel:
+        identifier = 'testExtensionExemptionIdentifier'
+        updateFunc = updateQaExtensionExemptionMaintenanceRecords
+        break
+      default:
+        throw new Error(`type selection of ${typeSelection} does not exist`)
+    }
+
+    const selectedIds = selectedRows.map(row => row[identifier])
+
+    // TODO: add require resubmission reason to payload, replace temp null value
+    const promises = selectedIds.map(id => updateFunc(null, id))
+    await Promise.all(promises)
+
+    closeModalHandler()
   }
 
   return (
