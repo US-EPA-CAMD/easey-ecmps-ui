@@ -82,13 +82,7 @@ const QAMaintenanceTable = ({
       width: "200px",
       selector: (row) => row.locationId,
       sortable: true,
-    },
-    {
-      name: "Severity Level",
-      width: "200px",
-      selector: (row) => row.severityLevel,
-      sortable: true,
-    },
+    }
   ];
 
   let columns;

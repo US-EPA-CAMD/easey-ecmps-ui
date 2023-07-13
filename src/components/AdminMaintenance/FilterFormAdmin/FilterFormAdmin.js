@@ -160,7 +160,6 @@ const FilterFormAdmin = ({
             return;
         }
         let newData = resp.data;
-        console.log('length',facilities.length)
         if (facilities.length > 0) {
           newData = resp.data.map((obj) => ({
             ...obj,
