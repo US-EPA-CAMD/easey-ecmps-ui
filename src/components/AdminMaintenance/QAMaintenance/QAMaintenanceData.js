@@ -78,7 +78,7 @@ const QAMaintenanceTable = ({
       sortable: true,
     },
     {
-      name: "MP Location(s)",
+      name: "MP Location",
       width: "200px",
       selector: (row) => row.locationId,
       sortable: true,

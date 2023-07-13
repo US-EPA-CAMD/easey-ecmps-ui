@@ -159,13 +159,17 @@ const FilterFormAdmin = ({
           default:
             return;
         }
+        let newData = resp.data;
+        console.log('length',facilities.length)
+        if (facilities.length > 0) {
+          newData = resp.data.map((obj) => ({
+            ...obj,
+            facilityName: `${
+              facilities.find((fac) => fac.value === selectedFacility).label
+            }`,
+          }));
+        }
 
-        const newData = resp.data.map((obj) => ({
-          ...obj,
-          facilityName: `${
-            facilities.find((fac) => fac.value === selectedFacility).label
-          }`,
-        }));
         setTableData(newData);
       }
     } catch (e) {
@@ -239,12 +243,6 @@ const FilterFormAdmin = ({
     }).then((availLoc) =>
       setAvailableConfigurations(convertingArrayObject([...availLoc]))
     );
-
-    console.log({
-      facilityName: `${
-        facilities.find((fac) => fac.value === selectedFacility).label
-      }`,
-    });
   };
 
   useEffect(() => {
