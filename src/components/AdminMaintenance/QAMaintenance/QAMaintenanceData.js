@@ -1,25 +1,35 @@
-import { ArrowDownwardSharp } from "@material-ui/icons"
+import { ArrowDownwardSharp } from "@material-ui/icons";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import DataTable from "react-data-table-component"
-import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceDataColumns";
+import DataTable from "react-data-table-component";
+import {
+  certEventsCols,
+  testExtensionExemptionCols,
+  testSummaryCols,
+} from "./QAMaintenanceDataColumns";
 import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
-import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
+import {
+  certEventLabel,
+  testExtensionExemptionLabel,
+  testSummaryLabel,
+} from "../FilterFormAdmin/FilterFormAdmin";
 import { useState } from "react";
-import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
+import QAMaintenanceModalPopout, {
+  QA_MAINTENANCE_MODAL_DELETE,
+  QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION,
+} from "./QAMaintenanceModalPopout";
 
 const QAMaintenanceTable = ({
   data = [],
   isLoading = false,
   typeSelection, // string description of selected type
 }) => {
-
   // modal state has form {isOpen: boolean, action: string}
-  const [modalState, setModalState] = useState({ isOpen: false, action: null })
+  const [modalState, setModalState] = useState({ isOpen: false, action: null });
 
   // handle loading
   if (isLoading) {
-    return <Preloader />
+    return <Preloader />;
   }
 
   const baseStaticCols = [
@@ -53,7 +63,7 @@ const QAMaintenanceTable = ({
         <div>
           <Button
             className=" usa-button usa-button--outline"
-          // onClick={() => openViewEditModalHandler(row, idx, false)}
+            // onClick={() => openViewEditModalHandler(row, idx, false)}
           >
             View
           </Button>
@@ -63,16 +73,14 @@ const QAMaintenanceTable = ({
     {
       name: "Facility Name / ID",
       width: "210px",
-      selector: (row) =>
-        row.facilityName
-          ? `${row.facilityName} (${row.orisCode})`
-          : row.orisCode,
+      selector: (row) => row.facilityName,
+
       sortable: true,
     },
     {
       name: "MP Location(s)",
       width: "200px",
-      selector: (row) => row.locations,
+      selector: (row) => row.locationId,
       sortable: true,
     },
     {
@@ -83,34 +91,33 @@ const QAMaintenanceTable = ({
     },
   ];
 
-  let columns
+  let columns;
   switch (typeSelection) {
     case testSummaryLabel:
-      columns = baseStaticCols.concat(testSummaryCols)
-      break
+      columns = baseStaticCols.concat(testSummaryCols);
+      break;
     case certEventLabel:
-      columns = baseStaticCols.concat(certEventsCols)
-      break
+      columns = baseStaticCols.concat(certEventsCols);
+      break;
     case testExtensionExemptionLabel:
-      columns = baseStaticCols.concat(testExtensionExemptionCols)
-      break
+      columns = baseStaticCols.concat(testExtensionExemptionCols);
+      break;
     default:
-      return
+      return;
   }
 
   const closeModalHandler = () => {
-    setModalState({ isOpen: false, type: null })
-  }
+    setModalState({ isOpen: false, type: null });
+  };
 
   return (
     <div>
-      {modalState.isOpen === true ?
+      {modalState.isOpen === true ? (
         <QAMaintenanceModalPopout
           closeModalHandler={closeModalHandler}
           action={modalState.action}
         />
-        : null
-      }
+      ) : null}
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-3">
@@ -125,7 +132,12 @@ const QAMaintenanceTable = ({
                   aria-label="Require Resubmission"
                   data-testid="es-require-resubmission"
                   className="usa-button"
-                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                  onClick={() =>
+                    setModalState({
+                      isOpen: true,
+                      action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION,
+                    })
+                  }
                 >
                   Require Resubmission
                 </Button>
@@ -135,7 +147,12 @@ const QAMaintenanceTable = ({
                   aria-label="Delete"
                   data-testid="es-delete"
                   className="usa-button usa-button--outline"
-                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })}
+                  onClick={() =>
+                    setModalState({
+                      isOpen: true,
+                      action: QA_MAINTENANCE_MODAL_DELETE,
+                    })
+                  }
                 >
                   Delete
                 </Button>
@@ -158,7 +175,7 @@ const QAMaintenanceTable = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default QAMaintenanceTable
+export default QAMaintenanceTable;

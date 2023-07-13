@@ -159,7 +159,14 @@ const FilterFormAdmin = ({
           default:
             return;
         }
-        setTableData(resp.data);
+
+        const newData = resp.data.map((obj) => ({
+          ...obj,
+          facilityName: `${
+            facilities.find((fac) => fac.value === selectedFacility).label
+          }`,
+        }));
+        setTableData(newData);
       }
     } catch (e) {
       console.error(e);
@@ -189,7 +196,6 @@ const FilterFormAdmin = ({
   }, [reloadTableData, setReloadTableData, applyFilters]);
 
   const configurationFilterChange = (id) => {
-    console.log(" ID", id);
     setSelectedLocation(id);
   };
 
@@ -233,6 +239,12 @@ const FilterFormAdmin = ({
     }).then((availLoc) =>
       setAvailableConfigurations(convertingArrayObject([...availLoc]))
     );
+
+    console.log({
+      facilityName: `${
+        facilities.find((fac) => fac.value === selectedFacility).label
+      }`,
+    });
   };
 
   useEffect(() => {
@@ -241,7 +253,6 @@ const FilterFormAdmin = ({
       : individualFacilityFilterChange(selectedFacility);
   }, [selectedFacility]);
   const onFacilityChange = (value) => {
-    console.log("value", value);
     setSelectedFacility(value);
     // facilityFilterChange(value);
 
