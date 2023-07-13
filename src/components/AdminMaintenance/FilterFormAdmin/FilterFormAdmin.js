@@ -4,6 +4,8 @@ import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
+
+import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
   GridContainer,
@@ -12,11 +14,16 @@ import {
   ComboBox,
   Button,
 } from "@trussworks/react-uswds";
-import { getEmSubmissionRecords } from "../../../utils/api/adminManagementApi";
+import {
+  getEmSubmissionRecords,
+  getQaTestMaintenanceRecords,
+  getQaCertEventMaintenanceRecords,
+  getQaExtensionExemptionMaintenanceRecords,
+} from "../../../utils/api/adminManagementApi";
 
-export const testSummaryLabel = 'Test Summary'
-export const certEventLabel = 'Cert Events'
-export const testExtensionExemptionLabel = 'Test Extension Exemption'
+export const testSummaryLabel = "Test Summary";
+export const certEventLabel = "Cert Events";
+export const testExtensionExemptionLabel = "Test Extension Exemption";
 
 const FilterFormAdmin = ({
   facilities,
@@ -27,19 +34,21 @@ const FilterFormAdmin = ({
   setReloadTableData,
   setSelectedRows,
   reportingPeriods,
-  setQaMaintenanceTypeSelection
+  setQaMaintenanceTypeSelection,
 }) => {
-
   const defaultDropdownText = "Select";
   const initialSelectOption = { code: "", name: defaultDropdownText };
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
-    initialSelectOption
+    initialSelectOption,
   ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
   ]);
 
+  const [availableConfigurationss, setAvailableConfigurationss] = useState([
+    initialSelectOption,
+  ]);
   const [availStatus, setAvailStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
@@ -50,6 +59,7 @@ const FilterFormAdmin = ({
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+
   const [selectedStatus, setSelectedStatus] = useState();
 
   const [typeSelection, setTypeSelection] = useState([]);
@@ -59,27 +69,26 @@ const FilterFormAdmin = ({
     { code: testSummaryLabel, name: testSummaryLabel },
     { code: certEventLabel, name: certEventLabel },
     { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
-  ]
+  ];
 
   const processReportingPeriods = async () => {
-    const availReportingPeriods = reportingPeriods.map(rp => {
+    const availReportingPeriods = reportingPeriods.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
-      }
+      };
     });
-    const reversed = availReportingPeriods.sort().toReversed()
+    const reversed = availReportingPeriods.sort().toReversed();
     reversed.unshift(initialSelectOption);
 
     setAvailableReportingPeriods(reversed);
-  }
+  };
 
   useEffect(() => {
     processReportingPeriods();
   }, [reportingPeriods]);
 
   const applyFilters = useCallback(async () => {
-
     let monitorPlanId;
     let year;
     let quarter;
@@ -90,130 +99,102 @@ const FilterFormAdmin = ({
       monitorPlanId = availableConfigurations[locationIdx].code;
     }
 
-    if (selectedReportingPeriod?.length > 0 && selectedReportingPeriod[1] !== defaultDropdownText) {
+    if (
+      selectedReportingPeriod?.length > 0 &&
+      selectedReportingPeriod[1] !== defaultDropdownText
+    ) {
       const rpString = selectedReportingPeriod[1];
       year = rpString.split(" ")[0];
       quarter = rpString.slice(-1);
     }
 
-    if (selectedStatus?.length > 0 && selectedStatus[1] !== defaultDropdownText) {
-      status = selectedStatus[1].toUpperCase()
+    if (
+      selectedStatus?.length > 0 &&
+      selectedStatus[1] !== defaultDropdownText
+    ) {
+      status = selectedStatus[1].toUpperCase();
     }
 
-    setIsTableDataLoading(true)
+    setIsTableDataLoading(true);
     try {
       if (section === SUBMISSION_ACCESS_STORE_NAME) {
-        const { data } = await getEmSubmissionRecords(selectedFacility, monitorPlanId, year, quarter, status);
+        const { data } = await getEmSubmissionRecords(
+          selectedFacility,
+          monitorPlanId,
+          year,
+          quarter,
+          status
+        );
         data.forEach((d) => (d.selected = false));
         setTableData(data);
       }
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
         // typeSelection is array of form [index, description]
-        const typeLabel = typeSelection?.[1]
-        setQaMaintenanceTypeSelection(typeLabel)
-        let resp
+        const typeLabel = typeSelection?.[1];
+        setQaMaintenanceTypeSelection(typeLabel);
+        let resp;
         switch (typeLabel) {
           case testSummaryLabel:
-            // resp = await getQaTestMaintenanceRecords(selectedFacility)
-            // TODO: remove dummy data
-            resp = {
-              data: [
-                {
-                  "testSumId": "TWCORNEL5-90104F90BE7E41B3B187DC12C86E8AFE",
-                  "locationId": "6",
-                  "orisCode": 3,
-                  "unitStack": "1",
-                  "systemIdentifier": null,
-                  "componentIdentifier": "AFA",
-                  "testNumber": "20221CEM5FFMAFA",
-                  "gracePeriodIndicator": null,
-                  "testTypeCode": "FFACCTT",
-                  "testReasonCode": "QA",
-                  "testResultCode": "PASSED",
-                  "yearQuarter": null,
-                  "testDescription": null,
-                  "beginDateTime": null,
-                  "endDateTime": "02/08/2022 06:58",
-                  "testComment": null,
-                  "spanScaleCode": null,
-                  "injectionProtocolCode": null,
-                  "submissionAvailabilityCode": "UPDATED",
-                  "submissionAvailabilityDescription": "Updated on Host",
-                  "severityCode": null,
-                  "severityDescription": null
-                }
-              ]
-            }
-            break
+            resp = await getQaTestMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[1]
+            );
+
+            break;
           case certEventLabel:
-            // resp = await getQaCertEventMaintenanceRecords(selectedFacility)
-            resp = {
-              data: [
-                {
-                  "certEventId": "EPA-112766C3AB3F5B57C828951A8F6BB087",
-                  "locationId": "5",
-                  "orisCode": 3,
-                  "unitStack": "CS0AAN",
-                  "systemIdentifier": "AA5",
-                  "componentIdentifier": "XX4",
-                  "certEventCode": "2",
-                  "certEventDescription": "DAHS Software Version Upgrade",
-                  "eventDateTime": "01/01/2003 00:00",
-                  "requiredTestCode": "22",
-                  "requiredTestDescription": "DAHS Verification (Formulas and Missing Data)",
-                  "conditionalDateTime": null,
-                  "lastCompletedDateTime": "01/01/2003 00:00",
-                  "submissionAvailabilityCode": "UPDATED",
-                  "submissionAvailabilityDescription": "Updated on Host",
-                  "severityCode": null,
-                  "severityDescription": null
-                }
-              ]
-            }
-            break
+            resp = await getQaCertEventMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[0]
+            );
+
+            break;
           case testExtensionExemptionLabel:
-            // resp = await getQaExtensionExemptionMaintenanceRecords(selectedFacility)
-            resp = {
-              data: [
-                {
-                  "testExtensionExemptionId": "EPA-626667CA1E1DF3B64152F253A4C2DDB1",
-                  "locationId": "1513",
-                  "orisCode": 3116,
-                  "unitStack": "032",
-                  "systemIdentifier": null,
-                  "componentIdentifier": null,
-                  "fuelCode": "DSL",
-                  "fuelDescription": "Diesel Oil",
-                  "extensionExemptionCode": "NONQAOS",
-                  "extensionExemptionDescription": "Non-QA Operating Quarters for Ozone-Season Reporter",
-                  "hoursUsed": null,
-                  "spanScaleCode": null,
-                  "submissionAvailabilityCode": "UPDATED",
-                  "submissionAvailabilityDescription": "Updated on Host",
-                  "severityCode": null,
-                  "severityDescription": null
-                }
-              ]
-            }
-            break
+            resp = await getQaExtensionExemptionMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[1]
+            );
+
+            break;
           default:
-            return
+            return;
         }
-        setTableData(resp.data)
+        let newData = resp.data;
+        if (facilities.length > 0) {
+          newData = resp.data.map((obj) => ({
+            ...obj,
+            facilityName: `${
+              facilities.find((fac) => fac.value === selectedFacility).label
+            }`,
+          }));
+        }
+
+        setTableData(newData);
       }
     } catch (e) {
-      console.error(e)
+      console.error(e);
     } finally {
       setIsTableDataLoading(false);
-      setSelectedRows([])
+      setSelectedRows([]);
     }
-  }, [availableConfigurations, section, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, setIsTableDataLoading, setQaMaintenanceTypeSelection, setSelectedRows, setTableData, typeSelection]);
+  }, [
+    availableConfigurations,
+    section,
+    selectedFacility,
+    selectedLocation,
+    selectedReportingPeriod,
+    selectedStatus,
+    setIsTableDataLoading,
+    setQaMaintenanceTypeSelection,
+    setSelectedRows,
+    setTableData,
+    typeSelection,
+  ]);
 
   useEffect(() => {
     if (reloadTableData) {
-      applyFilters()
-      setReloadTableData(false)
+      applyFilters();
+      setReloadTableData(false);
     }
   }, [reloadTableData, setReloadTableData, applyFilters]);
 
@@ -222,7 +203,7 @@ const FilterFormAdmin = ({
   };
 
   const facilityFilterChange = async (id) => {
-    const configurationData = (await getMonitoringPlans([id])).data
+    const configurationData = (await getMonitoringPlans([id])).data;
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -234,7 +215,6 @@ const FilterFormAdmin = ({
     }
     const availConfigs = [];
     for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-
       availConfigs.push({
         code: monPlanId,
         name: name,
@@ -244,9 +224,34 @@ const FilterFormAdmin = ({
     setAvailableConfigurations(availConfigs);
   };
 
+  const convertingArrayObject = (arr) => {
+    const convertedArray = arr.map((item) => {
+      return {
+        code: item.label,
+        name: item.label,
+      };
+    });
+
+    convertedArray.unshift(initialSelectOption);
+    return convertedArray;
+  };
+
+  const individualFacilityFilterChange = async (id) => {
+    getLocations(selectedFacility, {
+      locationTypeCode: "LOC",
+    }).then((availLoc) =>
+      setAvailableConfigurations(convertingArrayObject([...availLoc]))
+    );
+  };
+
+  useEffect(() => {
+    section === SUBMISSION_ACCESS_STORE_NAME
+      ? facilityFilterChange(selectedFacility)
+      : individualFacilityFilterChange(selectedFacility);
+  }, [selectedFacility]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
-    facilityFilterChange(value);
+    // facilityFilterChange(value);
 
     if (!value || value === defaultDropdownText) {
       setSelectedFacility(null);
@@ -304,7 +309,7 @@ const FilterFormAdmin = ({
               />
             </div>
           </Grid>
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
             <Grid col={3}>
               <div className="margin-left-3 ">
                 <DropdownSelection
@@ -319,12 +324,11 @@ const FilterFormAdmin = ({
                 />
               </div>
             </Grid>
-            : null
-          }
+          ) : null}
         </Grid>
 
         <Grid row className="margin-top-2">
-          {section === SUBMISSION_ACCESS_STORE_NAME ?
+          {section === SUBMISSION_ACCESS_STORE_NAME ? (
             <>
               <Grid col={2}>
                 <DropdownSelection
@@ -333,10 +337,11 @@ const FilterFormAdmin = ({
                   options={availableReportingPeriods}
                   viewKey="name"
                   selectKey="code"
-                  initialSelection={selectedReportingPeriod ? selectedReportingPeriod[0] : null}
+                  initialSelection={
+                    selectedReportingPeriod ? selectedReportingPeriod[0] : null
+                  }
                   extraSpace
                 />
-
               </Grid>
               <Grid col={3}>
                 <div className="margin-left-2">
@@ -353,8 +358,7 @@ const FilterFormAdmin = ({
                 </div>
               </Grid>
             </>
-            : null
-          }
+          ) : null}
           <Grid col={4} className=" position-relative margin-top-3">
             <div
               className={
@@ -370,7 +374,7 @@ const FilterFormAdmin = ({
               <Button
                 disabled={
                   false
-                  // There is currently a BUG in the API where sending facility id does not return data so 
+                  // There is currently a BUG in the API where sending facility id does not return data so
                   // commenting this out until that bug is fixed.
                   // !(
                   //   selectedFacility &&

@@ -3,36 +3,41 @@ const unitStackCol = {
   width: "175px",
   selector: (row) => row.unitStack,
   sortable: true,
-  center: true,
-}
+};
 
 const systemComponentIdCol = {
   name: "System/Component ID",
   width: "250px",
   selector: (row) => {
-    const systemIdentifier = row.systemIdentifier
-    const componentIdentifier = row.componentIdentifier
-    return `${systemIdentifier}/${componentIdentifier}`
+    const systemIdentifier = row.systemIdentifier;
+    const componentIdentifier = row.componentIdentifier;
+
+    if (systemIdentifier !== null && componentIdentifier === null) {
+      return `${systemIdentifier}`;
+    } else if (systemIdentifier === null && componentIdentifier !== null) {
+      return `${componentIdentifier}`;
+    } else if (systemIdentifier === null && componentIdentifier === null) {
+      return ``;
+    }
+    return `${systemIdentifier}/${componentIdentifier}`;
   },
   sortable: true,
   wrap: true,
-  center: true,
-}
+};
 
 const submissionAvailabilityDescriptionCol = {
   name: "Submission Availability Description",
   width: "350px",
   selector: (row) => row.submissionAvailabilityDescription,
   sortable: true,
-  center: true,
-}
+};
 
 const severityDescriptionCol = {
   name: "Severity Description",
   width: "250px",
   selector: (row) => row.severityDescription,
   sortable: true,
-}
+};
 
 export const testSummaryCols = [
   unitStackCol,
@@ -42,40 +47,34 @@ export const testSummaryCols = [
     width: "200px",
     selector: (row) => row.testNumber,
     sortable: true,
-    center: true,
   },
   {
     name: "Test Type Code",
     width: "200px",
     selector: (row) => row.testTypeCode,
     sortable: true,
-    center: true,
   },
   {
     name: "Reporting Period",
     width: "225px",
     selector: (row) => row.yearQuarter,
     sortable: true,
-    center: true,
   },
   {
     name: "Begin Date/Time",
     width: "225px",
     selector: (row) => row.beginDateTime,
     sortable: true,
-    center: true,
   },
   {
     name: "End Date/Time",
     width: "200px",
     selector: (row) => row.endDateTime,
     sortable: true,
-    center: true,
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
-]
-
+];
 
 export const certEventsCols = [
   unitStackCol,
@@ -112,7 +111,7 @@ export const certEventsCols = [
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
-]
+];
 
 export const testExtensionExemptionCols = [
   unitStackCol,
@@ -143,4 +142,4 @@ export const testExtensionExemptionCols = [
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
-]
+];

@@ -1,16 +1,19 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ArrowDownwardSharp } from "@material-ui/icons"
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import DataTable from "react-data-table-component"
-import { certEventsCols, testExtensionExemptionCols, testSummaryCols } from "./QAMaintenanceDataColumns";
+import DataTable from "react-data-table-component";
+import {
+  certEventsCols,
+  testExtensionExemptionCols,
+  testSummaryCols,
+} from "./QAMaintenanceDataColumns";
 import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
 import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
-import { getFacilityById } from "../../../utils/api/facilityApi"
 
 let controlInputs;
 
@@ -29,11 +32,8 @@ const QAMaintenanceTable = ({
 
   const openViewModalHandler = useCallback(async (row, index, isCreate = false) => {
     const selectedData = data[index]
-    const { orisCode, systemIdentifier, componentIdentifier } = selectedData
+    const { systemIdentifier, componentIdentifier } = selectedData
 
-    const facility = (await getFacilityById(orisCode)).data
-
-    selectedData.facilityNameAndId = `${facility.facilityName} (${facility.facilityId})`
     selectedData.systemComponentID = systemIdentifier && componentIdentifier ? `${systemIdentifier}/${componentIdentifier}` : systemIdentifier ? systemIdentifier : componentIdentifier
 
     const mdmData = {}
@@ -65,22 +65,28 @@ const QAMaintenanceTable = ({
   const onRowSelection = (row, checked) => {
     row.selected = checked;
     if (checked) {
-      setDisableActionBtns(false);
       setSelectedRows((prev) => [...prev, row]);
     } else {
-      setDisableActionBtns(true);
-      const currSelectedRows = selectedRows.filter((r) => r.id !== row.id);
+      const currSelectedRows = selectedRows.filter((r) => r.testSumId !== row.testSumId || r.testExtensionExemptionId !== row.testExtensionExemptionId || r.certEventId !== row.certEventId);
       setSelectedRows(currSelectedRows);
     }
   };
 
+  useEffect(() => {
+    if (selectedRows.length > 0) {
+      setDisableActionBtns(false);
+    } else {
+      setDisableActionBtns(true);
+    }
+  }, [selectedRows]);
+
 
   // modal state has form {isOpen: boolean, action: string}
-  const [modalState, setModalState] = useState({ isOpen: false, action: null })
+  const [modalState, setModalState] = useState({ isOpen: false, action: null });
 
   // handle loading
   if (isLoading) {
-    return <Preloader />
+    return <Preloader />;
   }
 
   const baseStaticCols = [
@@ -124,29 +130,21 @@ const QAMaintenanceTable = ({
     {
       name: "Facility Name / ID",
       width: "210px",
-      selector: (row) =>
-        row.facilityName
-          ? `${row.facilityName} (${row.orisCode})`
-          : row.orisCode,
+      selector: (row) => row.facilityName,
+
       sortable: true,
     },
     {
-      name: "MP Location(s)",
+      name: "MP Location",
       width: "200px",
-      selector: (row) => row.locations,
+      selector: (row) => row.locationId,
       sortable: true,
-    },
-    {
-      name: "Severity Level",
-      width: "200px",
-      selector: (row) => row.severityLevel,
-      sortable: true,
-    },
+    }
   ];
 
   let columns
   let commonBeginProps = {
-    facilityNameAndId: ["Facility Name/ID", "input", ""],
+    facilityName: ["Facility Name/ID", "input", ""],
     locationId: ["MP Location(s)", "input", ""],
     unitStack: ["Unit/StackPipe ID", "input", ""],
     systemComponentID: ["System/Component ID", "input", ""],
@@ -195,22 +193,21 @@ const QAMaintenanceTable = ({
       }
       break
     default:
-      return
+      return;
   }
 
   const closeModalHandler = () => {
-    setModalState({ isOpen: false, type: null })
-  }
+    setModalState({ isOpen: false, type: null });
+  };
 
   return (
     <div>
-      {modalState.isOpen === true ?
+      {modalState.isOpen === true ? (
         <QAMaintenanceModalPopout
           closeModalHandler={closeModalHandler}
           action={modalState.action}
         />
-        : null
-      }
+      ) : null}
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-3">
@@ -276,8 +273,8 @@ const QAMaintenanceTable = ({
         </Modal>
       }
     </div>
-  )
-}
+  );
+};
 
 export default QAMaintenanceTable;
 

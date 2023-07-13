@@ -649,7 +649,7 @@ const QATestSummaryDataTable = ({
         objProps = qaHgSummaryDataProps();
         break;
       default:
-        return null;
+        return false;
     }
     return {
       payload: objProps["payload"],
