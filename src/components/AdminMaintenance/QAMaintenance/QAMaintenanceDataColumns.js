@@ -16,6 +16,8 @@ const systemComponentIdCol = {
       return `${systemIdentifier}`;
     } else if (systemIdentifier === null && componentIdentifier !== null) {
       return `${componentIdentifier}`;
+    } else if (systemIdentifier === null && componentIdentifier === null) {
+      return ``;
     }
     return `${systemIdentifier}/${componentIdentifier}`;
   },

@@ -106,6 +106,8 @@ export const AdminMaintenance = ({ section }) => {
           data={tableData}
           isLoading={isTableDataLoading}
           typeSelection={qaMaintenanceTypeSelection}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
         />
         : null
       }

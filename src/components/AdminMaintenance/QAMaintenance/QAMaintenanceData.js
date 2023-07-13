@@ -1,4 +1,5 @@
-import { ArrowDownwardSharp } from "@material-ui/icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { ArrowDownwardSharp } from "@material-ui/icons"
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component";
@@ -8,22 +9,78 @@ import {
   testSummaryCols,
 } from "./QAMaintenanceDataColumns";
 import { qaCertDataMaintenanceTitle } from "../../../utils/constants/moduleTitles";
-import {
-  certEventLabel,
-  testExtensionExemptionLabel,
-  testSummaryLabel,
-} from "../FilterFormAdmin/FilterFormAdmin";
-import { useState } from "react";
-import QAMaintenanceModalPopout, {
-  QA_MAINTENANCE_MODAL_DELETE,
-  QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION,
-} from "./QAMaintenanceModalPopout";
+import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
+
+let controlInputs;
 
 const QAMaintenanceTable = ({
   data = [],
   isLoading = false,
   typeSelection, // string description of selected type
+  selectedRows,
+  setSelectedRows,
 }) => {
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [disableActionBtns, setDisableActionBtns] = useState(true);
+
+  const [selectedViewModalData, setSelectedViewModalData] = useState(null);
+  const [modalDataSelections, setModalDataSelections] = useState(null)
+
+  const openViewModalHandler = useCallback(async (row, index, isCreate = false) => {
+    const selectedData = data[index]
+    const { systemIdentifier, componentIdentifier } = selectedData
+
+    selectedData.systemComponentID = systemIdentifier && componentIdentifier ? `${systemIdentifier}/${componentIdentifier}` : systemIdentifier ? systemIdentifier : componentIdentifier
+
+    const mdmData = {}
+    const prefilteredDataName = false
+    const mainDropdownName = null
+    const mainDropdownResult = []
+    const hasMainDropdown = false;
+    const prefilteredTotalName = null
+    const extraControls = false
+
+    setSelectedViewModalData(
+      modalViewData(
+        selectedData,
+        controlInputs,
+        controlDatePickerInputs,
+        isCreate,
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        hasMainDropdown,
+        prefilteredTotalName,
+        extraControls
+      )
+    )
+    setShowViewModal(true);
+  }, [data])
+
+  const onRowSelection = (row, checked) => {
+    row.selected = checked;
+    if (checked) {
+      setSelectedRows((prev) => [...prev, row]);
+    } else {
+      const currSelectedRows = selectedRows.filter((r) => r.testSumId !== row.testSumId || r.testExtensionExemptionId !== row.testExtensionExemptionId || r.certEventId !== row.certEventId);
+      setSelectedRows(currSelectedRows);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedRows.length > 0) {
+      setDisableActionBtns(false);
+    } else {
+      setDisableActionBtns(true);
+    }
+  }, [selectedRows]);
+
+
   // modal state has form {isOpen: boolean, action: string}
   const [modalState, setModalState] = useState({ isOpen: false, action: null });
 
@@ -44,7 +101,7 @@ const QAMaintenanceTable = ({
             id={idx}
             key={idx}
             onChange={(e) => {
-              // onRowSelection(row, e.target.checked);
+              onRowSelection(row, e.target.checked);
             }}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
@@ -63,7 +120,7 @@ const QAMaintenanceTable = ({
         <div>
           <Button
             className=" usa-button usa-button--outline"
-            // onClick={() => openViewEditModalHandler(row, idx, false)}
+            onClick={() => openViewModalHandler(row, idx, false)}
           >
             View
           </Button>
@@ -85,17 +142,56 @@ const QAMaintenanceTable = ({
     }
   ];
 
-  let columns;
+  let columns
+  let commonBeginProps = {
+    facilityName: ["Facility Name/ID", "input", ""],
+    locationId: ["MP Location(s)", "input", ""],
+    unitStack: ["Unit/StackPipe ID", "input", ""],
+    systemComponentID: ["System/Component ID", "input", ""],
+  }
+
+  let commonEndProps = {
+    submissionAvailabilityDescription: ["Submission Availability Description", "input", ""],
+    severityDescription: ["Severity Description", "input", ""],
+  }
+
   switch (typeSelection) {
     case testSummaryLabel:
-      columns = baseStaticCols.concat(testSummaryCols);
-      break;
+      columns = baseStaticCols.concat(testSummaryCols)
+      controlInputs = {
+        ...commonBeginProps,
+        testNumber: ["Test Number", "input", ""],
+        testTypeCode: ["Test Type Code", "input", ""],
+        yearQuarter: ["Reporting Period", "input", ""],
+        beginDateTime: ["Begin Date / Time", "input", ""],
+        endDateTime: ["End Date / Time", "input", ""],
+        ...commonEndProps
+      }
+      break
     case certEventLabel:
-      columns = baseStaticCols.concat(certEventsCols);
-      break;
+      columns = baseStaticCols.concat(certEventsCols)
+      controlInputs = {
+        ...commonBeginProps,
+        certEventCode: ["Cert Event Code", "input", ""],
+        eventDateTime: ["Event Date / Time", "input", ""],
+        requiredTestCode: ["Required Test Code", "input", ""],
+        conditionalDateTime: ["Conditional Date / Time", "input", ""],
+        lastCompletedDateTime: ["Last Completed Date / Time", "input", ""],
+        ...commonEndProps
+      }
+      break
     case testExtensionExemptionLabel:
-      columns = baseStaticCols.concat(testExtensionExemptionCols);
-      break;
+      columns = baseStaticCols.concat(testExtensionExemptionCols)
+      controlInputs = {
+        ...commonBeginProps,
+        fuelCode: ["Fuel Code", "input", ""],
+        extensionExemptionCode: ["Extension Exemption Code", "input", ""],
+        hoursUsed: ["Hours Used", "input", ""],
+        spanScaleCode: ["Span Scale Code", "input", ""],
+        skip: ["", "skip", "", ""],
+        ...commonEndProps,
+      }
+      break
     default:
       return;
   }
@@ -126,12 +222,8 @@ const QAMaintenanceTable = ({
                   aria-label="Require Resubmission"
                   data-testid="es-require-resubmission"
                   className="usa-button"
-                  onClick={() =>
-                    setModalState({
-                      isOpen: true,
-                      action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION,
-                    })
-                  }
+                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                  disabled={disableActionBtns}
                 >
                   Require Resubmission
                 </Button>
@@ -141,12 +233,8 @@ const QAMaintenanceTable = ({
                   aria-label="Delete"
                   data-testid="es-delete"
                   className="usa-button usa-button--outline"
-                  onClick={() =>
-                    setModalState({
-                      isOpen: true,
-                      action: QA_MAINTENANCE_MODAL_DELETE,
-                    })
-                  }
+                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })}
+                  disabled={disableActionBtns}
                 >
                   Delete
                 </Button>
@@ -168,8 +256,26 @@ const QAMaintenanceTable = ({
           />
         </div>
       </div>
+      {showViewModal &&
+        <Modal
+          title={`QA/Cert Data Maintenance `}
+          show={showViewModal}
+          close={() => setShowViewModal(false)}
+          showDarkBg
+          showCancel
+        >
+          <ModalDetails
+            modalData={modalDataSelections}
+            data={selectedViewModalData}
+            cols={3}
+            viewOnly={true}
+          />
+        </Modal>
+      }
     </div>
   );
 };
 
 export default QAMaintenanceTable;
+
+const controlDatePickerInputs = {}
