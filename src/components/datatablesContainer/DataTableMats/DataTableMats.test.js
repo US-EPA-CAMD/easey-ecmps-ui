@@ -50,7 +50,7 @@ describe("- DataTableMats -", () => {
 
     jest
       .spyOn(monitorPlanApi, "createMats")
-      .mockImplementation(createMats); //Our final evaluation call that needs to be processed
+      .mockImplementation(createMats);
 
     await act(async () => {
       const props = getMockDataTableMatsProps()
@@ -62,10 +62,7 @@ describe("- DataTableMats -", () => {
     })
 
     const addBtn = screen.getByTestId("addBtn")
-    // userEvent.click(addBtn)
     await act(() => addBtn.click())
-
-    // screen.debug(undefined, 3000000000000)
 
     const saveBtn = screen.getByTestId("saveBtn")
     await act(() => saveBtn.click())
@@ -79,7 +76,7 @@ describe("- DataTableMats -", () => {
 
     jest
       .spyOn(monitorPlanApi, "saveMonitoringMats")
-      .mockImplementation(saveMonitoringMats); //Our final evaluation call that needs to be processed
+      .mockImplementation(saveMonitoringMats);
 
     await act(async () => {
       const props = getMockDataTableMatsProps()

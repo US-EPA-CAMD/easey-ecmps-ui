@@ -50,7 +50,7 @@ describe("- DataTableMethods -", () => {
 
     jest
       .spyOn(monitorPlanApi, "createMethods")
-      .mockImplementation(createMethods); //Our final evaluation call that needs to be processed
+      .mockImplementation(createMethods);
 
     await act(async () => {
       const props = getMockDataTableMethodsProps()
@@ -64,8 +64,6 @@ describe("- DataTableMethods -", () => {
     const addBtn = screen.getByTestId("addBtn")
     await act(() => addBtn.click())
 
-    screen.debug(undefined, 3000000000000)
-
     const saveBtn = screen.getByTestId("saveBtn")
     await act(() => saveBtn.click())
 
@@ -78,7 +76,7 @@ describe("- DataTableMethods -", () => {
 
     jest
       .spyOn(monitorPlanApi, "saveMonitoringMethods")
-      .mockImplementation(saveMonitoringMethods); //Our final evaluation call that needs to be processed
+      .mockImplementation(saveMonitoringMethods);
 
     await act(async () => {
       const props = getMockDataTableMethodsProps()
@@ -91,8 +89,6 @@ describe("- DataTableMethods -", () => {
 
     const addBtn = screen.getByTestId("viewEditBtn-0")
     await act(() => addBtn.click())
-
-    screen.debug(undefined, 30000000)
 
     const saveBtn = screen.getByTestId("saveBtn")
     await act(() => saveBtn.click())
