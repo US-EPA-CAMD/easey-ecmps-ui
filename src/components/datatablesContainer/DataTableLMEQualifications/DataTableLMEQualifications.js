@@ -136,7 +136,7 @@ export const DataTableLMEQualifications = ({
     });
 
     if (create) {
-      returnsFocusMpDatatableCreateBTN("Create Qualification LME")
+      returnsFocusMpDatatableCreateBTN("Create Qualification LME", 1000)
     }
   };
 

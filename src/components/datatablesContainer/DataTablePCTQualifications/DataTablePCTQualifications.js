@@ -153,7 +153,7 @@ export const DataTablePCTQualifications = ({
     });
 
     if (create) {
-      returnsFocusMpDatatableCreateBTN("Create Qualification Percent")
+      returnsFocusMpDatatableCreateBTN("Create Qualification Percent", 1000)
     }
   };
 

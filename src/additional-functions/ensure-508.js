@@ -400,14 +400,14 @@ export const returnsFocusToAddBtn = (dataTableName) => {
 };
 
 // returns focus to MP Create Button
-export const returnsFocusMpDatatableCreateBTN = (addBtnName) => {
+export const returnsFocusMpDatatableCreateBTN = (addBtnName, time) => {
   setTimeout(() => {
     let btn = document
       .getElementById(addBtnName.toLowerCase().split(" ").join("-") + "-add-btn");
     if (btn) {
       btn.focus();
     }
-  }, 500);
+  }, time ? time: 500);
 };
 
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {

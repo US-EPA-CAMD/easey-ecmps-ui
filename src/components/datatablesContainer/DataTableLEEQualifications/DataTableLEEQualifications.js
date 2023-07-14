@@ -173,7 +173,7 @@ export const DataTableLEEQualifications = ({
     });
 
     if (create) {
-      returnsFocusMpDatatableCreateBTN("Create Qualification LEE")
+      returnsFocusMpDatatableCreateBTN("Create Qualification LEE", 1000)
 
     }
   };
