@@ -342,8 +342,8 @@ export const DataTableSystemsComponents = ({
           ],
         },
         {
-          beginDate: ["Start Date", "date", "", ""],
-          beginHour: ["Start Time", "hourDropdown", "", ""],
+          beginDate: ["Begin Date", "date", "", ""],
+          beginHour: ["Begin Hour", "hourDropdown", "", ""],
           endDate: ["End Date", "date", "", ""],
           endHour: ["End Time", "hourDropdown", "", ""],
         },
@@ -420,8 +420,8 @@ export const DataTableSystemsComponents = ({
           ],
         },
         {
-          beginDate: ["Start Date", "date", "", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", "", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", "", ""],
           endHour: ["End Time", "hourDropdown", "", ""],
         },
@@ -482,8 +482,8 @@ export const DataTableSystemsComponents = ({
           skip: ["", "skip", "", ""],
         },
         {
-          beginDate: ["Start Date", "date", "", ""],
-          beginHour: ["Start Time", "hourDropdown", "", ""],
+          beginDate: ["Begin Date", "date", "", ""],
+          beginHour: ["Begin Hour", "hourDropdown", "", ""],
           endDate: ["End Date", "date", "", ""],
           endHour: ["End Time", "hourDropdown", "", ""],
         },
