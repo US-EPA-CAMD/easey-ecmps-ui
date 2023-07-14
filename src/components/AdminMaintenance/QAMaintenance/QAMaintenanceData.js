@@ -23,6 +23,7 @@ const QAMaintenanceData = ({
   typeSelection, // string description of selected type
   selectedRows,
   setSelectedRows,
+  setReloadTableData,
 }) => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [disableActionBtns, setDisableActionBtns] = useState(true);
@@ -208,6 +209,7 @@ const QAMaintenanceData = ({
           action={modalState.action}
           typeSelection={typeSelection}
           selectedRows={selectedRows}
+          setReloadTableData={setReloadTableData}
         />
       ) : null}
       <div className="padding-left-0 margin-left-0 padding-right-0">

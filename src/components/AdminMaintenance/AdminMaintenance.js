@@ -108,6 +108,7 @@ export const AdminMaintenance = ({ section }) => {
           typeSelection={qaMaintenanceTypeSelection}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
+          setReloadTableData={setReloadTableData}
         />
         : null
       }

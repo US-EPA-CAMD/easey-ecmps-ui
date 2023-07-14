@@ -13,6 +13,7 @@ const QAMaintenanceModalPopout = ({
   action,
   typeSelection,
   selectedRows,
+  setReloadTableData,
 }) => {
 
   let modalContent
@@ -23,6 +24,7 @@ const QAMaintenanceModalPopout = ({
         closeModalHandler={closeModalHandler}
         typeSelection={typeSelection}
         selectedRows={selectedRows}
+        setReloadTableData={setReloadTableData}
       />
   } else if (action === QA_MAINTENANCE_MODAL_DELETE) {
     modalContent =
@@ -42,6 +44,7 @@ const QAMaintenanceRequireResubmissionPopout = ({
   closeModalHandler,
   typeSelection,
   selectedRows,
+  setReloadTableData
 }) => {
   const inputRef = useRef('')
 
@@ -69,11 +72,16 @@ const QAMaintenanceRequireResubmissionPopout = ({
 
     const selectedIds = selectedRows.map(row => row[identifier])
 
-    // TODO: add require resubmission reason to payload, replace temp null value
-    const promises = selectedIds.map(id => updateFunc(null, id))
-    await Promise.all(promises)
-
-    closeModalHandler()
+    try {
+      // TODO: add require resubmission reason to payload, replace temp null value
+      const promises = selectedIds.map(id => updateFunc(null, id))
+      await Promise.all(promises)
+      setReloadTableData(true)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      closeModalHandler()
+    }
   }
 
   return (
