@@ -319,7 +319,7 @@ export const EmSubmissionData = ({
               modalData={modalDataSelections}
               data={selectedModalData}
               cols={3}
-              title={'TEMP em submission data title'}
+              title="Maintain EM Submission Access"
               viewOnly={true}
             // create={createNewData}
             />
@@ -331,7 +331,6 @@ export const EmSubmissionData = ({
 };
 
 const controlInputs = {
-  // TODO: facilityName isn't in api response and will have to be added
   facilityNameAndId: ["Facility Name/ID", "input", ""],
   state: ["State", "input", ""],
   locations: ["MP Location(s)", "input", ""],
