@@ -20,7 +20,7 @@ export const getEmSubmissionRecords = async (
   return secureAxios({
     url: url,
     params: {
-      facilityId: orisCode,
+      orisCode,
       monitorPlanId,
       year,
       quarter,
