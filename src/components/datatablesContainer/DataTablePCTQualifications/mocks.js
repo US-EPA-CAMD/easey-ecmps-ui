@@ -1,5 +1,3 @@
-
-
 const mockPCTQualifications = [
   {
     qualificationYear: 2020,
