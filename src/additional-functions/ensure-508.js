@@ -437,3 +437,10 @@ export const assignAriaLabelsToDataTableColumns = () => {
       }
     })
 }
+
+export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) =>{
+  datePickerInputIds.forEach(id=>{
+    const calendarBtn = document.getElementById(id).nextElementSibling;
+    calendarBtn.setAttribute("aria-label", id.replaceAll("-", " "));
+  })
+}

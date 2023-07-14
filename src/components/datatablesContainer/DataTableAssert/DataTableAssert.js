@@ -23,6 +23,7 @@ import {
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
+  returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import {
   getActiveData,
@@ -107,8 +108,11 @@ export const DataTableAssert = ({
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
       assignFocusEventListeners();
+      ensure508();
     }
   }, [dataLoaded, dropdownsLoaded]);
+  // *** Reassign handlers when inactive checkbox is toggled
+
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -117,6 +121,7 @@ export const DataTableAssert = ({
     } else {
       assignFocusEventListeners();
     }
+    
     return () => {
       setReturnedFocusToLast(true);
     };
@@ -212,7 +217,9 @@ export const DataTableAssert = ({
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
-
+  useEffect(() => {
+    assignFocusEventListeners();
+  }, [displayedRecords]);
   const inactiveCheckboxFiltering = (records, multiTable) => {
     if (records.length > 0) {
       const activeRecords = getActiveData(records);

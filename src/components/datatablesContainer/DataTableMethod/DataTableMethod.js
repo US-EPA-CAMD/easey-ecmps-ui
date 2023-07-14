@@ -270,8 +270,8 @@ export const DataTableMethod = ({
           bypassApproachCode: ["Bypass Approach", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },

@@ -141,7 +141,7 @@ export const DataTableQualifications = ({
     useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
-  const columnNames = ["Qualification Type Code", "Start Date", "End Date"];
+  const columnNames = ["Qualification Type Code", "Begin Date", "End Date"];
 
   const qualificationPercentPayload = {
     locationId: locationSelectValue,
@@ -457,7 +457,7 @@ export const DataTableQualifications = ({
           skip: ["", "skip", "", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
+          beginDate: ["Begin Date", "date", ""],
           endDate: ["End Date", "date", ""],
         },
         create,
