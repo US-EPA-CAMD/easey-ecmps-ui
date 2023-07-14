@@ -189,8 +189,8 @@ export const DataTableSystems = ({
           fuelCode: ["Fuel Code", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },

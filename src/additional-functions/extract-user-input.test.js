@@ -25,7 +25,7 @@ const Test = () => {
         className="usa-date-picker__internal-input"
         epadataname="beginDate"
         epa-testid="beginDate"
-        name="Start Date"
+        name="Begin Date"
         value={parseInt(1)}
       />
       <Radio
