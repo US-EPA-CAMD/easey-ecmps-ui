@@ -34,6 +34,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableAssert = ({
   mdmData,
@@ -487,6 +488,9 @@ export const DataTableAssert = ({
     setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    if (createNewData) {
+      returnsFocusMpDatatableCreateBTN(`Create ${dataTableName}`)
+    }
   };
   if (document) {
     changeGridCellAttributeValue();

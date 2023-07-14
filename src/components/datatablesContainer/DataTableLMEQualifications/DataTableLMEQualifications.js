@@ -21,6 +21,7 @@ import {
   LME_QUALIFICATIONS_SECTION_NAME,
   LME_QUALIFICATIONS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableLMEQualifications = ({
   mdmData,
@@ -133,6 +134,10 @@ export const DataTableLMEQualifications = ({
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
+
+    if (create) {
+      returnsFocusMpDatatableCreateBTN("Create Qualification LME")
+    }
   };
 
   const backBtnHandler = () => {
@@ -149,6 +154,7 @@ export const DataTableLMEQualifications = ({
       resetIsDataChanged();
       removeChangeEventListeners(".modalUserInput");
     }
+    returnsFocusMpDatatableCreateBTN("Create Qualification LME")
   };
 
   return (

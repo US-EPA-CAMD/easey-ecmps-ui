@@ -41,6 +41,7 @@ import {
   resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableQualifications = ({
   mdmData,
@@ -307,6 +308,15 @@ export const DataTableQualifications = ({
     setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
+    const qual = user && checkout && openPCT && creatingChild
+      ? "Create Qualification Percent"
+      : user && checkout && openLEE && creatingChild
+        ? "Create Qualification LEE"
+        : user && checkout && openLME && creatingChild
+          ? "Create Qualification LME"
+          : "Create Qualification"
+    
+    returnsFocusMpDatatableCreateBTN(qual)
   };
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
@@ -468,7 +478,6 @@ export const DataTableQualifications = ({
       window.confirm(unsavedDataMessage) === false
     ) {
       // do nothing
-      executeOnClose();
     }
     // otherwise return back to parent qual and reset change tracker
     else {
@@ -477,11 +486,11 @@ export const DataTableQualifications = ({
       } else {
         setShow(false);
       }
+      executeOnClose();
       setOpenPCT(false);
       setOpenLEE(false);
       setOpenLME(false);
       removeChangeEventListeners(".modalUserInput");
-      executeOnClose();
     }
   };
 
