@@ -183,8 +183,8 @@ export const DataTableRectangularDucts = ({
         {
           wafDeterminationDate: ["WAF Determination Date", "date", ""],
           skip: ["", "skip", ""],
-          wafBeginDate: ["Start Date", "date", ""],
-          wafBeginHour: ["Start Time", "hourDropdown", ""],
+          wafBeginDate: ["Begin Date", "date", ""],
+          wafBeginHour: ["Begin Hour", "hourDropdown", ""],
           wafEndDate: ["End Date", "date", ""],
           wafEndHour: ["End Time", "hourDropdown", ""],
         },
