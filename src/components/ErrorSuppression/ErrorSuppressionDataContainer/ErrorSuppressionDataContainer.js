@@ -170,6 +170,10 @@ export const ErrorSuppressionDataContainer = () => {
   };
 
   const closeModal = () => {
+    if(showAddModal){
+      const addBtn = document.getElementById("error-suppres-add-btn");
+      addBtn?.focus();
+    }
     setShowAddModal(false);
     setShowCloneModal(false);
   };
@@ -276,6 +280,7 @@ export const ErrorSuppressionDataContainer = () => {
               data-testid="es-add"
               className="margin-left-1"
               onClick={() => setShowAddModal(true)}
+              id="error-suppres-add-btn"
             >
               Add
             </Button>

@@ -17,12 +17,13 @@ import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_M
 
 let controlInputs;
 
-const QAMaintenanceTable = ({
+const QAMaintenanceData = ({
   data = [],
   isLoading = false,
   typeSelection, // string description of selected type
   selectedRows,
   setSelectedRows,
+  setReloadTableData,
 }) => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [disableActionBtns, setDisableActionBtns] = useState(true);
@@ -206,6 +207,9 @@ const QAMaintenanceTable = ({
         <QAMaintenanceModalPopout
           closeModalHandler={closeModalHandler}
           action={modalState.action}
+          typeSelection={typeSelection}
+          selectedRows={selectedRows}
+          setReloadTableData={setReloadTableData}
         />
       ) : null}
       <div className="padding-left-0 margin-left-0 padding-right-0">
@@ -276,6 +280,6 @@ const QAMaintenanceTable = ({
   );
 };
 
-export default QAMaintenanceTable;
+export default QAMaintenanceData;
 
 const controlDatePickerInputs = {}

@@ -8,7 +8,7 @@ import {
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
 import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
 import { getReportingPeriods } from "../../utils/api/mdmApi";
-import QAMaintenanceTable from "./QAMaintenance/QAMaintenanceData";
+import QAMaintenanceData from "./QAMaintenance/QAMaintenanceData";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
@@ -102,12 +102,13 @@ export const AdminMaintenance = ({ section }) => {
       }
 
       {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
-        <QAMaintenanceTable
+        <QAMaintenanceData
           data={tableData}
           isLoading={isTableDataLoading}
           typeSelection={qaMaintenanceTypeSelection}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
+          setReloadTableData={setReloadTableData}
         />
         : null
       }
