@@ -59,11 +59,11 @@ const QAMaintenanceRequireResubmissionPopout = ({
         updateFunc = updateQaTestMaintenanceRecords
         break
       case certEventLabel:
-        identifier = 'qaCertEventIdentifier'
+        identifier = 'certEventId'
         updateFunc = updateQaCertEventMaintenanceRecords
         break
       case testExtensionExemptionLabel:
-        identifier = 'testExtensionExemptionIdentifier'
+        identifier = 'testExtensionExemptionId'
         updateFunc = updateQaExtensionExemptionMaintenanceRecords
         break
       default:
