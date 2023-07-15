@@ -1,105 +1,73 @@
-import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import * as axios from "axios";
-import {
-  DataTablePCTQualifications,
-  mapDispatchToProps,
-  mapStateToProps,
-} from "./DataTablePCTQualifications";
-jest.mock("axios");
+import { Provider } from "react-redux";
+import { act, render, screen } from "@testing-library/react";
 
-const selectedQualifications = [{}];
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
 
-const locationSelectValue = 60;
+import configureStore from "../../../store/configureStore.dev";
+import { getMockDataTablePCTQualMdmData, getMockDataTablePCTQualificationsProps, getMockPCTQualifications } from "./mocks";
+import initialState from "../../../store/reducers/initialState";
+import { PCT_QUALIFICATIONS_STORE_NAME } from "../../../additional-functions/data-table-section-and-store-names";
+import DataTablePCTQualifications from "./DataTablePCTQualifications";
 
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (
-  checkout,
-  secondLevel,
-  addComponentFlag,
-  openComponentViewTest,
-  openAddComponentTest,
-  mdmDataPCT
-) => {
-  let currentData = [];
+const mockInitialState = JSON.parse(JSON.stringify(initialState))
+mockInitialState.openedFacilityTabs.monitoringPlans = [{ inactive: [{}] }]
+// mdmData prop
+mockInitialState.dropdowns[PCT_QUALIFICATIONS_STORE_NAME] = getMockDataTablePCTQualMdmData()
 
-  if (mdmDataPCT) {
-    currentData = mdmDataPCT;
-  }
+const store = configureStore(mockInitialState);
 
-  const props = {
-    mdmDataPCT: currentData,
-    loadDropdownsData: jest.fn(),
-    locationSelectValue: "60",
-    qualSelectValue: "60",
-    user: "testUser",
-    checkout: false,
-    inactive: [false],
-    settingInactiveCheckBox: jest.fn(),
-    revertedState: false,
-    setRevertedState: jest.fn(),
-    setOpenPCT: jest.fn(),
-    openPCT: false,
-    setUpdatePCT: jest.fn(),
-    updatePCT: false,
-    setCreatingChild: jest.fn(),
-  };
-  return render(<DataTablePCTQualifications {...props} />);
-};
+describe("- DataTablePCTQualifications -", () => {
+  beforeEach(() => {
+    jest.spyOn(monitorPlanApi, "getPCTQualifications").mockResolvedValue({
+      data: getMockPCTQualifications(),
+    });
+  });
 
-/*
-test("tests getMonitoringQualifications", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, { test: "" })
-  );
+  test("renders DataTablePCTQualifications", async () => {
+    const props = getMockDataTablePCTQualificationsProps()
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTablePCTQualifications {...props} />
+        </Provider>
+      );
+    })
+  });
 
-  let backBtns = container.querySelectorAll("#testBtn");
+  test("open DataTablePCTQualifications modal", async () => {
+    await act(async () => {
+      const props = getMockDataTablePCTQualificationsProps()
+      render(
+        <Provider store={store}>
+          <DataTablePCTQualifications {...props} />
+        </Provider>
+      );
+    })
 
-  for (var x of backBtns) {
-    fireEvent.click(x);
-  }
-  expect(container).toBeDefined();
-});
+    const addBtn = screen.getByTestId("addBtn")
+    await act(() => addBtn.click())
 
-test("tests getMonitoringQualifications", async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ status: 200, data: selectedQualifications })
-  );
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
+    expect(addBtn).toBeDefined();
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, undefined)
-  );
+  });
 
-  let backBtns = container.querySelectorAll("#testBtn");
+  test("DataTablePCTQualifications edit", async () => {
+    await act(async () => {
+      const props = getMockDataTablePCTQualificationsProps()
+      render(
+        <Provider store={store}>
+          <DataTablePCTQualifications {...props} />
+        </Provider>
+      );
+    })
 
-  for (var x of backBtns) {
-    fireEvent.click(x);
-  }
-  expect(container).toBeDefined();
-});
-*/
+    const addBtn = screen.getByTestId("viewEditBtn-0")
+    await act(() => addBtn.click())
 
-test("mapStateToProps calls the appropriate state", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = { dropdowns: [1] };
-  const stateProps = mapStateToProps(state, true);
-});
-
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  const formData = [];
-  // verify the appropriate action was called
-  actionProps.loadDropdownsData();
-});
+    expect(addBtn).toBeDefined()
+  });
+})
