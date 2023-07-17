@@ -623,7 +623,9 @@ export const DataTableRender = ({
                       onClick={(event) => {
                         addBtn(false, false, true);
                       }}
-                      id="addBtn"
+                      id={
+                        addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+                      }
                     >
                       {addBtnName}
                     </Button>
