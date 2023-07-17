@@ -119,6 +119,7 @@ const QAMaintenanceRequireResubmissionPopout = ({
       close={closeModalHandler}
       width="40%"
       left="30%"
+      returnFocus={true}
     >
       <ReasonForActionTextInput
         title='Reason to require resubmission'
@@ -166,6 +167,7 @@ const QAMaintenanceDeletePopout = ({
       close={closeModalHandler}
       width="40%"
       left="30%"
+      returnFocus={true}
     >
       <h3>Are you sure you want to continue?</h3>
 
