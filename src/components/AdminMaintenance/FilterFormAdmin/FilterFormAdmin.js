@@ -145,7 +145,7 @@ const FilterFormAdmin = ({
           case certEventLabel:
             resp = await getQaCertEventMaintenanceRecords(
               selectedFacility,
-              selectedLocation[0]
+              selectedLocation[1]
             );
 
             break;
