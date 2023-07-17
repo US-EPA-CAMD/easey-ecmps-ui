@@ -624,6 +624,7 @@ export const DataTableRender = ({
                         addBtn(false, false, true);
                       }}
                       id="addBtn"
+                      data-testid="addBtn"
                     >
                       {addBtnName}
                     </Button>
