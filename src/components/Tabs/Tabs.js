@@ -242,6 +242,7 @@ const Tabs = ({
                       data-test-id={`closeXBtnTab-${cleanConfigStr(
                         el.props.title
                       )}`}
+                      data-testid="closeXBtnTab"
                       epa-testid={`closeXBtnTab-${cleanConfigStr(
                         el.props.title
                       )}`}
