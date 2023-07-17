@@ -76,7 +76,7 @@ export const getQaExtensionExemptionMaintenanceRecords = async (orisCode, unitSt
   return getMaintenanceRecords(orisCode, unitStack, EXT_EXEMP_ENDPOINT)
 };
 
-const updateMaintenanceRecord = (payload, id, endpoint) => {
+const updateQaMaintenanceRecord = (payload, id, endpoint) => {
   const url = `${config.services.camd.uri}/admin/qa-maintenance/${endpoint}/${id}`;
   return secureAxios({
     method: "PUT",
@@ -88,13 +88,36 @@ const updateMaintenanceRecord = (payload, id, endpoint) => {
 }
 
 export const updateQaTestMaintenanceRecords = async (payload, id) => {
-  return updateMaintenanceRecord(payload, id, TEST_SUMMARY_ENDPOINT)
+  return updateQaMaintenanceRecord(payload, id, TEST_SUMMARY_ENDPOINT)
 };
 
 export const updateQaCertEventMaintenanceRecords = async (payload, id) => {
-  return updateMaintenanceRecord(payload, id, CERT_EVENT_ENDPOINT)
+  return updateQaMaintenanceRecord(payload, id, CERT_EVENT_ENDPOINT)
 };
 
 export const updateQaExtensionExemptionMaintenanceRecords = async (payload, id) => {
-  return updateMaintenanceRecord(payload, id, EXT_EXEMP_ENDPOINT)
+  return updateQaMaintenanceRecord(payload, id, EXT_EXEMP_ENDPOINT)
 };
+
+const deleteQaMaintenanceRecord = (id, endpoint) => {
+  const url = `${config.services.camd.uri}/admin/qa-maintenance/${endpoint}/${id}`;
+  return secureAxios({
+    method: "DELETE",
+    url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export const deleteQaTestMaintenanceRecords = async (id)=>{
+  return deleteQaMaintenanceRecord(id, TEST_SUMMARY_ENDPOINT)
+}
+
+export const deleteQaCertEventMaintenanceRecords = async (id)=>{
+  return deleteQaMaintenanceRecord(id, CERT_EVENT_ENDPOINT)
+}
+
+export const deleteQaExtensionExemptionMaintenanceRecords = async (id)=>{
+  return deleteQaMaintenanceRecord(id, EXT_EXEMP_ENDPOINT)
+}
+
