@@ -93,8 +93,8 @@ export const DataTableAnalyzerRanges = ({
           dualRangeIndicator: ["Dual Range Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },
