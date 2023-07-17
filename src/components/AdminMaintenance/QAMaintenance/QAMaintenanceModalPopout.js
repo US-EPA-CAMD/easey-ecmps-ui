@@ -125,6 +125,7 @@ const QAMaintenanceRequireResubmissionPopout = ({
         action={QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION}
         inputRef={inputRef}
         className='margin-y-2'
+        disabled={true}
       />
     </Modal >
   )
@@ -137,10 +138,8 @@ const QAMaintenanceDeletePopout = ({
   selectedRows,
   setReloadTableData,
 }) => {
-  const inputRef = useRef('')
 
   const handleSave = async () => {
-    console.log('reason to require resubmission', inputRef.current.value);
 
     const { identifier, deleteFunc } = getFunctionsAndIdentifiers(typeSelection);
     const selectedIds = selectedRows.map(row => row[identifier]);
@@ -174,18 +173,11 @@ const QAMaintenanceDeletePopout = ({
         Are you sure you want to Delete? This action cannot be undone.
       </Alert>
 
-      <ReasonForActionTextInput
-        title='Reason to delete QA/Cert Data'
-        action={QA_MAINTENANCE_MODAL_DELETE}
-        inputRef={inputRef}
-        className='margin-y-2'
-      />
-
     </Modal >
   )
 }
 
-const ReasonForActionTextInput = ({ title, action, inputRef, className }) => {
+const ReasonForActionTextInput = ({ title, action, inputRef, className, disabled=false }) => {
 
   const reasonToAction = `reason-to-${action}`
 
@@ -200,6 +192,7 @@ const ReasonForActionTextInput = ({ title, action, inputRef, className }) => {
         epa-testid={reasonToAction}
         data-testid={reasonToAction}
         inputRef={inputRef}
+        disabled={disabled}
       />
     </div>
   )
