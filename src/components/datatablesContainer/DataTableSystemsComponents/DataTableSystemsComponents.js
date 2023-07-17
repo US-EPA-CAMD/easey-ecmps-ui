@@ -23,6 +23,7 @@ import {
 } from "../../../additional-functions/data-table-section-and-store-names";
 
 import ModalAddComponent from "../../ModalAddComponent/ModalAddComponent";
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
 
 export const DataTableSystemsComponents = ({
   fuelFlowsMdmData,
@@ -601,6 +602,9 @@ export const DataTableSystemsComponents = ({
                 backBtn={() => {
                   setBread()
                   setDisableExitBtn(true)
+                  if (createFuelFlowFlag) {
+                    returnsFocusMpDatatableCreateBTN("Create New Fuel Flow", 1000)
+                  }
                 }}
                 prefilteredMdmData={prefilteredMdmDataFuelFlows}
                 data={selectedFuelFlowsModalData}
@@ -632,6 +636,7 @@ export const DataTableSystemsComponents = ({
                   setAddComponentFlag(false);
                   setAddExistingComponentFlag(false);
                   backToFirstLevelLevelBTN(false);
+                  returnsFocusMpDatatableCreateBTN("Add Component")
                 }}
                 title={"Add Component"}
               />
@@ -722,7 +727,12 @@ export const DataTableSystemsComponents = ({
                   //EDIT ANALYZER RANGES
                   <ModalDetails
                     modalData={selectedRange}
-                    backBtn={setThirdLevel}
+                      backBtn={() => {
+                        setThirdLevel()
+                        if (createAnalyzerRangesFlag) {
+                          returnsFocusMpDatatableCreateBTN("Create New Analyzer Range", 1000)
+                        }
+                      }}
                     data={selectedModalData}
                     cols={2}
                     title={
