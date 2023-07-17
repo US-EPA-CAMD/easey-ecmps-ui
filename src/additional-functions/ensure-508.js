@@ -399,6 +399,17 @@ export const returnsFocusToAddBtn = (dataTableName) => {
   }, 500);
 };
 
+// returns focus to MP Create Button
+export const returnsFocusMpDatatableCreateBTN = (addBtnName, time) => {
+  setTimeout(() => {
+    let btn = document
+      .getElementById(addBtnName.toLowerCase().split(" ").join("-") + "-add-btn");
+    if (btn) {
+      btn.focus();
+    }
+  }, time ? time: 500);
+};
+
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
   const table = document.querySelector(containerSelector).querySelector('[role="table"]')
 
