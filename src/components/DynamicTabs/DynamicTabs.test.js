@@ -4,95 +4,21 @@ import {
   mapDispatchToProps,
 } from "./DynamicTabs";
 import { render, fireEvent, screen, act } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { Provider } from "react-redux";
+
 import * as actions from "../../store/actions/dynamicFacilityTab";
 import configureStore from "../../store/configureStore.dev";
-import { Provider } from "react-redux";
 import { getMockDynamicTabsProps } from "./mocks";
-import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
 jest.mock("../../store/actions/dynamicFacilityTab");
 
 const store = configureStore();
 
-class Welcome extends React.Component {
-  clickHandler = () => {
-    const selectedConfig = {
-      id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-      name: "1, 2, CS0AAN",
-      locations: [{ id: "6", name: "1" }],
-      active: true,
-    };
-    this.props.addtabs([
-      {
-        title: "Good Bye ( test ) ",
-        component: <GoodBye name="John" />,
-        selectedConfig: selectedConfig,
-      },
-    ]);
-  };
-  render() {
-    return (
-      <div>
-        <h1>Hello, {this.props.name}</h1>
-        <a onClick={this.clickHandler}>Add Tab</a>
-      </div>
-    );
-  }
-}
-
-// const Welcome = ({ name, addTabs }) => {
-//   const clickHandler = () => {
-//     const selectedConfig = {
-//       id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
-//       name: "1, 2, CS0AAN",
-//       locations: [{ id: "6", name: "1" }],
-//       active: true,
-//     };
-//     addTabs([
-//       {
-//         title: "Good Bye ( test ) ",
-//         component: <GoodBye name="John" />,
-//         selectedConfig: selectedConfig,
-//       },
-//     ]);
-//   };
-//   return (
-//     <div>
-//       <h1>Hello, {name}</h1>
-//       <button onClick={clickHandler}>Add Tab</button>
-//     </div>
-//   )
-// }
-
-class GoodBye extends React.Component {
-  render() {
-    return <h1>Good-bye, {this.props.name}</h1>;
-  }
-}
-
 describe("testing a reusable Dynamic Tabs component", () => {
 
   test("renders the inital tab and its content", async () => {
-    // render(<Provider store={store}>{dynamicTabs}</Provider>);
     const dynamicTabs = <DynamicTabs {...getMockDynamicTabsProps()} />
 
-    await act(async () => {
-      render(
-        <Provider store={store}>
-          {dynamicTabs}
-        </Provider>
-      );
-    })
-
-    const tabs = screen.getAllByRole("button");
-    const initTabContent = screen.getByText("Hello, Addis");
-    expect(tabs).toHaveLength(4);
-    expect(initTabContent).not.toBeUndefined();
-  });
-
-  test.skip("renders workspace section monitoring plan", async () => {
-    const dynamicTabs = <DynamicTabs {...getMockDynamicTabsProps()} workspaceSection={MONITORING_PLAN_STORE_NAME} />
     await act(async () => {
       render(
         <Provider store={store}>
@@ -138,7 +64,7 @@ describe("testing a reusable Dynamic Tabs component", () => {
     expect(closeTabIcons).toHaveLength(3);
   });
 
-  test.skip("mapDispatchToProps calls the appropriate action", async () => {
+  test("mapDispatchToProps calls the appropriate action", async () => {
     // mock the 'dispatch' object
     const dispatch = jest.fn();
     const actionProps = mapDispatchToProps(dispatch);
