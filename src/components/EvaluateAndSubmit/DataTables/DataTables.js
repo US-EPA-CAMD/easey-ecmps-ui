@@ -190,6 +190,9 @@ const DataTables = ({
                     icon={faChevronUp}
                     className="padding-3 bg-base-lighter"
                     onClick={() => showOrHideTable(name)}
+                    onKeyDown={(e)=> e.key === 'Enter' ? showOrHideTable(name): null}
+                    tabIndex={0}
+                    focusable={true}
                   />
                 ) : (
                   <FontAwesomeIcon
@@ -197,6 +200,9 @@ const DataTables = ({
                     icon={faChevronDown}
                     className="padding-3 bg-base-lighter"
                     onClick={() => showOrHideTable(name)}
+                    onKeyDown={(e)=> e.key === 'Enter' ? showOrHideTable(name): null}
+                    tabIndex={0}
+                    focusable={true}
                   />
                 )}
               </span>

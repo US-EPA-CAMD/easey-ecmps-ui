@@ -544,7 +544,7 @@ const ModalDetails = ({
   return (
     <div className=" padding-top-0 systemsCompTable">
       <div className="grid-container margin-bottom-2">
-        <div className="display-inline-flex padding-top-1 padding-bottom-3">
+        <div className="display-inline-flex">
           {backBtn ? (
             <div className="display-block">
               <Button

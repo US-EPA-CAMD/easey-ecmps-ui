@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import FilterFormAdmin from "./FilterFormAdmin/FilterFormAdmin";
 import { getAllFacilities } from "../../utils/api/facilityApi";
 import {
@@ -7,16 +7,19 @@ import {
 } from "../../additional-functions/system-admin-section-and-store-names";
 import { submissionAccessTitle, qaCertDataMaintenanceTitle } from "../../utils/constants/moduleTitles";
 import { EmSubmissionData } from "./EmSubmissionData/EmSubmissionData";
+import { getReportingPeriods } from "../../utils/api/mdmApi";
+import QAMaintenanceData from "./QAMaintenance/QAMaintenanceData";
 
 export const AdminMaintenance = ({ section }) => {
   const [title, setTitle] = useState("");
-  // const [dropdownFacilities, setDropdownFacilities] = useState([]);
-  // const [activityId, setActivityId] = useState("");
-  // const [excludeErrors, setExcludeErrors] = useState(true);
-  // const [showModal, setShowModal] = useState(false);
-  // const [submitting, setSubmitting] = useState(false);
-  // const [numFilesSelected, setNumFilesSelected] = useState(0);
-  // const filesSelected = useRef(0);
+  const [tableData, setTableData] = useState([]);
+  const [isTableDataLoading, setIsTableDataLoading] = useState(false);
+  const [reloadTableData, setReloadTableData] = useState(false);
+  const [reportingPeriods, setReportingPeriods] = useState([]);
+  const [qaMaintenanceTypeSelection, setQaMaintenanceTypeSelection] = useState(null)
+
+  // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
+  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     switch (section) {
@@ -28,10 +31,12 @@ export const AdminMaintenance = ({ section }) => {
         document.title = qaCertDataMaintenanceTitle;
         setTitle(qaCertDataMaintenanceTitle);
         break;
+      default:
+        break;
     }
   }, [section]);
   const [facilityList, setFacilityList] = useState([]);
-  const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => { };
+
   useEffect(() => {
     getAllFacilities()
       .then(({ data }) => {
@@ -57,20 +62,56 @@ export const AdminMaintenance = ({ section }) => {
         console.error("Error getting facilities", error);
       });
 
+    getReportingPeriods()
+      .then(({ data }) => {
+        setReportingPeriods(data);
+      })
+      .catch(error => {
+        console.error("Error getting reporting periods", error);
+      })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const filterClick = () => { };
+
   return (
     <div className="react-transition fade-in padding-x-3">
       <h2 className="page-header margin-top-2">{title}</h2>
-      <hr/>
+      <hr />
       <FilterFormAdmin
-        filterClick={filterClick}
         facilities={facilityList}
         section={section}
+        setTableData={setTableData}
+        setIsTableDataLoading={setIsTableDataLoading}
+        reloadTableData={reloadTableData}
+        setReloadTableData={setReloadTableData}
+        setSelectedRows={setSelectedRows}
+        reportingPeriods={reportingPeriods}
+        setQaMaintenanceTypeSelection={setQaMaintenanceTypeSelection}
       />
-      <hr/>
-      <EmSubmissionData />
+      <hr />
+      {section === SUBMISSION_ACCESS_STORE_NAME ?
+        <EmSubmissionData
+          data={tableData}
+          isLoading={isTableDataLoading}
+          setReloadTableData={setReloadTableData}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          reportingPeriods={reportingPeriods}
+        />
+        : null
+      }
+
+      {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ?
+        <QAMaintenanceData
+          data={tableData}
+          isLoading={isTableDataLoading}
+          typeSelection={qaMaintenanceTypeSelection}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          setReloadTableData={setReloadTableData}
+        />
+        : null
+      }
     </div>
   );
 };

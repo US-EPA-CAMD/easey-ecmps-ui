@@ -135,7 +135,12 @@ const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
       }
    }
   }else if (tableName) {
-    const tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
+    let tableWrapper;
+    if(tableName.startsWith("export")){
+      tableWrapper = document.getElementById(tableName);
+    }else{
+      tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
+    }
     if (tableWrapper) {
       const dataTable = tableWrapper.querySelector('[role="table"]');
       dataTable ? dataTable.setAttribute("aria-label", tableName) : dataTable.setAttribute("aria-label", "Data table");
@@ -394,17 +399,28 @@ export const returnsFocusToAddBtn = (dataTableName) => {
   }, 500);
 };
 
+// returns focus to MP Create Button
+export const returnsFocusMpDatatableCreateBTN = (addBtnName, time) => {
+  setTimeout(() => {
+    let btn = document
+      .getElementById(addBtnName.toLowerCase().split(" ").join("-") + "-add-btn");
+    if (btn) {
+      btn.focus();
+    }
+  }, time ? time: 500);
+};
+
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
   const table = document.querySelector(containerSelector).querySelector('[role="table"]')
-  table.setAttribute('aria-label', 'Test Summary Data')
 
   const rowGroups = table.querySelectorAll('[role="rowgroup"]')
 
   if (rowGroups.length > 1) {
+    rowGroups[0].querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-all-rows-for-${containerSelector.split('-')[1]}`);
     const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
 
     tableRows.forEach((row, idx) => {
-      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select row for Test Number ${ariaLiveData[idx]}`)
+      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-for-Unit/StackPipeID ${ariaLiveData[idx]}`)
 
       row.querySelectorAll('[role="gridcell"').forEach(cell => {
         cell.setAttribute('role', `cell`)
@@ -420,4 +436,11 @@ export const assignAriaLabelsToDataTableColumns = () => {
       column.setAttribute('aria-label', `Click to sort by ${columnName}`)
       }
     })
+}
+
+export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) =>{
+  datePickerInputIds.forEach(id=>{
+    const calendarBtn = document.getElementById(id).nextElementSibling;
+    calendarBtn.setAttribute("aria-label", id.replaceAll("-", " "));
+  })
 }

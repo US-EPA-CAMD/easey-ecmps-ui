@@ -48,8 +48,8 @@ export const defaultsDataTableProps = (location) => {
       // skip: ["", "skip", "" , ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "hourDropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
       endHour: ["End Time", "hourDropdown", "", ""],
     },
@@ -84,8 +84,8 @@ export const formulasDataTableProps = (location) => {
       formulaText: ["Formula", "input", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "hourDropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
       endHour: ["End Time", "hourDropdown", "", ""],
     },
@@ -146,8 +146,8 @@ export const loadsDataTableProps = (location) => {
     },
     controlDatePickerInputs: {
       loadAnalysisDate: ["Load Analysis Date", "date", "", ""],
-      beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "hourDropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
       endHour: ["End Time", "hourDropdown", "", ""],
     },
@@ -205,8 +205,8 @@ export const rectWAFsDataTableProps = (location) => {
     controlDatePickerInputs: {
       wafDeterminationDate: ["WAF Determination Date", "date", "", ""],
       skip: ["", "skip", "", ""],
-      wafBeginDate: ["Start Date", "date", "", ""],
-      wafBeginHour: ["Start Time", "hourDropdown", "", ""],
+      wafBeginDate: ["Begin Date", "date", "", ""],
+      wafBeginHour: ["Begin Hour", "hourDropdown", "", ""],
       wafEndDate: ["End Date", "date", "", ""],
       wafEndHour: ["End Time", "hourDropdown", "", ""],
     },
@@ -270,8 +270,8 @@ export const spanDataTableProps = (location) => {
       skip: ["", "skip", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
-      beginHour: ["Start Time", "hourDropdown", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
+      beginHour: ["Begin Hour", "hourDropdown", "", ""],
       endDate: ["End Date", "date", "", ""],
       endHour: ["End Time", "hourDropdown", "", ""],
     },
@@ -351,7 +351,7 @@ export const unitFuelDataTableProps = (selectedLocation) => {
       "Ozone Season Indicator",
       "Dem GCV",
       "Dem SO2",
-      "Start Date",
+      "Begin Date",
       "End Date",
     ],
     controlInputs: {
@@ -362,7 +362,7 @@ export const unitFuelDataTableProps = (selectedLocation) => {
       demSO2: ["Dem SO2", "independentDropdown", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
       endDate: ["End Date", "date", "", ""],
     },
   };
@@ -383,7 +383,7 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
       "Boiler/Turbine Begin Date",
       "Boiler/Turbine End Date",
       "Maximum Hourly Heat Input Capacity",
-      "Start Date",
+      "Begin Date",
       "End Date",
     ],
     controlInputs: {
@@ -412,7 +412,7 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
     },
     controlDatePickerInputs: {
       skip: ["", "skip", "", ""],
-      beginDate: ["Start Date", "date", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
       endDate: ["End Date", "date", "", ""],
     },
     urlParameters: {
@@ -447,7 +447,7 @@ export const locationAttributesDataTableProps = (location) => {
       "Shape Code",
       "Cross Area Flow",
       "Cross Area Stack Exit",
-      "Start Date",
+      "Begin Date",
       "End Date",
     ],
     controlInputs: {
@@ -461,7 +461,7 @@ export const locationAttributesDataTableProps = (location) => {
       crossAreaStackExit: ["Cross Area Stack Exit", "input", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "date", "", ""],
+      beginDate: ["Begin Date", "date", "", ""],
       endDate: ["End Date", "date", "", ""],
     },
   };
@@ -476,13 +476,13 @@ export const relationshipDataTableProps = (location) => {
       endDate: "string",
     },
     dropdownArray: [[]],
-    columnNames: ["Stack Pipe Name", "Unit Name", "Start Date", "End Date"],
+    columnNames: ["Stack Pipe Name", "Unit Name", "Begin Date", "End Date"],
     controlInputs: {
       stackPipeId: ["Stack Pipe Name", "input", "", ""],
       unitId: ["Unit Name", "input", "", ""],
     },
     controlDatePickerInputs: {
-      beginDate: ["Start Date", "dateTime", "", ""],
+      beginDate: ["Begin Date", "dateTime", "", ""],
       endDate: ["End Date", "dateTime", "", ""],
     },
   };

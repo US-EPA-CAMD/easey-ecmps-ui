@@ -180,7 +180,7 @@ export const getQASchema = async () => {
  * @param {*} isExport if true excludes most recent/current reporting period
  * @returns list of reporting periods
  */
-export const getReportingPeriod = async (isExport) => {
+export const getReportingPeriods = async (isExport) => {
   const url = `${config.services.mdm.uri}/reporting-periods${
     isExport ? "?export=true" : ""
   }`;

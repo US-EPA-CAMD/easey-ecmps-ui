@@ -21,6 +21,7 @@ import {
   LEE_QUALIFICATIONS_SECTION_NAME,
   LEE_QUALIFICATIONS_STORE_NAME,
 } from "../../../additional-functions/data-table-section-and-store-names";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableLEEQualifications = ({
   mdmData,
@@ -170,6 +171,11 @@ export const DataTableLEEQualifications = ({
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
+
+    if (create) {
+      returnsFocusMpDatatableCreateBTN("Create Qualification LEE", 1000)
+
+    }
   };
 
   const backBtnHandler = () => {
@@ -186,6 +192,7 @@ export const DataTableLEEQualifications = ({
       resetIsDataChanged();
       removeChangeEventListeners(".modalUserInput");
     }
+    returnsFocusMpDatatableCreateBTN("Create Qualification LEE")
   };
 
   return (

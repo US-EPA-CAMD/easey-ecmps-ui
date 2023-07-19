@@ -1,96 +1,46 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import * as axios from "axios";
-import {
-  DataTableLMEQualifications,
-  mapStateToProps,
-  mapDispatchToProps,
-} from "./DataTableLMEQualifications";
-jest.mock("axios");
+import { act, render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "../../../store/configureStore.dev";
 
-const selectedQualifications = [{}];
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
 
-jest.mock("../../../utils/api/easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({
-    status: 200,
-    data: [{}],
-  }),
-}));
+import { getMockLMEQualifications } from "./mocks";
+import initialState from "../../../store/reducers/initialState";
+import DataTableLMEQualifications from "./DataTableLMEQualifications";
 
-const locationSelectValue = 60;
+const mockInitialState = JSON.parse(JSON.stringify(initialState))
 
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (
-  checkout,
-  secondLevel,
-  addComponentFlag,
-  openComponentViewTest,
-  openAddComponentTest,
-  mdmData
-) => {
-  let currentData = [];
+mockInitialState.dropdowns.leeQualifications = [
+  {
+    parameterCode: "HG",
+    unitsOfStandard: "LBTBTU",
+    qualificationTestType: "INITIAL"
+  },
+]
 
-  if (mdmData) {
-    currentData = mdmData;
-  }
+const store = configureStore(mockInitialState);
 
-  const props = {
-    mdmData: currentData,
-    loadDropdownsData: jest.fn(),
-    locationSelectValue: "60",
-    user: "testUser",
-    checkout: false,
-    inactive: [false],
-    settingInactiveCheckBox: jest.fn(),
-    revertedState: false,
-    setRevertedState: jest.fn(),
-    setOpenLME: jest.fn(),
-    openLME: false,
-    setUpdateLME: jest.fn(),
-    updateLME: false,
-    setCreatingChild: jest.fn(),
-  };
-  return render(<DataTableLMEQualifications {...props} />);
-};
+describe("- DataTable LME Qualifications - ", () => {
+  beforeEach(() => {
+    jest.spyOn(monitorPlanApi, "getLMEQualifications").mockResolvedValue({ data: getMockLMEQualifications() });
+  })
 
-test("tests getMonitoringQualifications", async () => {
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, { test: "" })
-  );
-  let backBtns = container.querySelectorAll("#testBtn");
+  it('renders rows from the data fetched', async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTableLMEQualifications updateLME={true} />
+        </Provider>
+      );
+    });
 
-  for (var x of backBtns) {
-    fireEvent.click(x);
-  }
-  expect(container).toBeDefined();
-});
-
-test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
-
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, false)
-  );
-  expect(container).toBeDefined();
-});
-
-test("mapStateToProps calls the appropriate state", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = { dropdowns: [1] };
-  const stateProps = mapStateToProps(state, true);
-});
-
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  const formData = [];
-  // verify the appropriate action was called
-  actionProps.loadDropdownsData();
-});
+    const rows = screen.getAllByRole('row');
+    const numRows = getMockLMEQualifications().length + 1
+    expect(rows.length).toBe(numRows);
+  })
+})

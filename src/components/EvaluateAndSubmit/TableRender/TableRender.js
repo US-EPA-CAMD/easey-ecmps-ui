@@ -133,6 +133,7 @@ const TableRender = forwardRef(
                 className=" margin-left-4"
                 id={`${uuidv4()}`}
                 data-testid="SelectAll"
+                aria-label={`${type}-select-all`}
                 onClick={selectAll}
                 defaultChecked={selectAllState}
               />
@@ -170,7 +171,7 @@ const TableRender = forwardRef(
     addEvalStatusCell(mappings, handleRowView);
 
     return (
-      <>
+      <div>
         <DataTable
           className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
           defaultSortField="orisCode"
@@ -190,7 +191,7 @@ const TableRender = forwardRef(
             <div aria-live="polite">There are no records to display</div>
           }
         />
-      </>
+      </div>
     );
   }
 );

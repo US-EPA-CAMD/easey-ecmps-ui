@@ -1,91 +1,69 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import {
-  mapStateToProps,
-  mapDispatchToProps,
-  DataTableLEEQualifications,
-} from "./DataTableLEEQualifications";
+import { act, render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "../../../store/configureStore.dev";
+import DataTableLEEQualifications from "./DataTableLEEQualifications";
 
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
+import * as dataManagementApi from "../../../utils/api/dataManagementApi";
 
-const selectedQualifications = [{}];
+import { getMockLEEQualifications } from "./mocks";
+import initialState from "../../../store/reducers/initialState";
 
-jest.mock("../../../utils/api/easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({ data: [{}], status: 200 }),
-}));
+const mockInitialState = JSON.parse(JSON.stringify(initialState))
 
-const locationSelectValue = 60;
+mockInitialState.dropdowns.leeQualifications = [
+  {
+    parameterCode: "HG",
+    unitsOfStandard: "LBTBTU",
+    qualificationTestType: "INITIAL"
+  },
+]
 
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (
-  checkout,
-  secondLevel,
-  addComponentFlag,
-  openComponentViewTest,
-  openAddComponentTest,
-  mdmData
-) => {
-  let currentData = [];
+const store = configureStore(mockInitialState);
 
-  if (mdmData) {
-    currentData = mdmData;
-  }
+describe("- DataTable LEE Qualifications - ", () => {
+  beforeEach(() => {
+    jest.spyOn(monitorPlanApi, "getLEEQualifications").mockResolvedValue({
+      data: getMockLEEQualifications(),
+    });
+    jest.spyOn(dataManagementApi, "prefilteredLEEQualifications").mockResolvedValue({
+      data: getMockLEEQualifications(),
+    });
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
 
   const props = {
-    mdmData: currentData,
+    mdmData: [{}, {}],
+    user: 'user',
     loadDropdownsData: jest.fn(),
     locationSelectValue: "60",
-    user: "testUser",
     checkout: false,
     inactive: [false],
-    settingInactiveCheckBox: jest.fn(),
+    settingInactiveCheckBox: false,
     revertedState: false,
     setRevertedState: jest.fn(),
     setOpenLEE: jest.fn(),
     openLEE: false,
     setUpdateLEE: jest.fn(),
-    updateLEE: false,
+    updateLEE: true,
     setCreatingChild: jest.fn(),
-  };
-  return render(<DataTableLEEQualifications {...props} />);
-};
-
-test("tests getMonitoringQualifications", async () => {
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
-
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, { test: "" })
-  );
-  let backBtns = container.querySelectorAll("#testBtn");
-
-  for (let x of backBtns) {
-    fireEvent.click(x);
   }
-  expect(container).toBeDefined();
-});
 
-test("tests getMonitoringQualifications WITHOUT mdmdata", async () => {
-  const title = await mpApi.getQualifications(locationSelectValue);
-  expect(title.data).toEqual(selectedQualifications);
+  it('renders rows from data fetched', async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTableLEEQualifications {...props} />
+        </Provider>
+      );
+    });
 
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false, false, true, false, false)
-  );
-  expect(container).toBeDefined();
-});
-
-test("mapStateToProps calls the appropriate state", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = { dropdowns: [1] };
-  const stateProps = mapStateToProps(state, true);
-});
-
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  // verify the appropriate action was called
-  actionProps.loadDropdownsData();
-});
+    const rows = screen.getAllByRole('row');
+    const numRows = getMockLEEQualifications().length + 1
+    expect(rows.length).toBe(numRows);
+  })
+})

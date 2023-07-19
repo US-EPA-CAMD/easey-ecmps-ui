@@ -1,54 +1,55 @@
 import { extractUserInput, validateUserInput } from "./extract-user-input";
 import React from "react";
 import { Radio } from "@trussworks/react-uswds";
-import { render } from "@testing-library/react";
+import {act, render, screen} from "@testing-library/react";
 
-class Test extends React.Component {
-  render() {
-    return (
-      <div>
-        <input
-          className="modalUserInput"
-          id="Parameter"
-          epadataname="parameterCode"
-          value="Parameter"
-        />
-        <input
-          className="modalUserInput"
-          id="Pr"
-          epadataname="prCode"
-          value=""
-        />
-        <h1 className="modalUserInput" id="" epadataname="parameterCode">
-          Parameter
-        </h1>
-        <input
-          className="usa-date-picker__internal-input"
-          epadataname="beginDate"
-          epa-testid="beginDate"
-          name="Start Date"
-          value={parseInt(1)}
-        />
-        <Radio
-          name="secondNormalIndicator2"
-          label={"secondNormalIndicator2"}
-          key={`key2`}
-        />
-        <Radio
-          name="secondNormalIndicator"
-          label={"secondNormalIndicator"}
-          value={1}
-          key={`key`}
-        />
-      </div>
-    );
-  }
+const Test = () => {
+  return (
+    <div data-testid="container">
+      <input
+        className="modalUserInput"
+        id="Parameter"
+        epadataname="parameterCode"
+        value="Parameter"
+      />
+      <input
+        className="modalUserInput"
+        id="Pr"
+        epadataname="prCode"
+        value=""
+      />
+      <h1 className="modalUserInput" id="" epadataname="parameterCode">
+        Parameter
+      </h1>
+      <input
+        className="usa-date-picker__internal-input"
+        epadataname="beginDate"
+        epa-testid="beginDate"
+        name="Begin Date"
+        value={parseInt(1)}
+      />
+      <Radio
+        name="secondNormalIndicator2"
+        label={"secondNormalIndicator2"}
+        key={`key2`}
+      />
+      <Radio
+        name="secondNormalIndicator"
+        label={"secondNormalIndicator"}
+        value={1}
+        key={`key`}
+      />
+    </div>
+  );
 }
 
 describe("extract user functions", () => {
-  it("should test with valid input", () => {
-    const { container } = render(<Test />);
+  it("should test with valid input", async () => {
+    await act(async () => {
+      render(<Test />);
+    });
 
+    const container = screen.getByTestId("container");
     const input = {
       parameterCode: "CO2",
       prCode: "test",
@@ -63,9 +64,12 @@ describe("extract user functions", () => {
     expect(test).toBeDefined();
   });
 
-  it("should test with valid radios", () => {
-    const { container } = render(<Test />);
+  it("should test with valid radios", async () => {
+    await act(async () => {
+      render(<Test />);
+    });
 
+    const container = screen.getByTestId("container");
     const input = {
       parameterCode: "CO2",
       prCode: "test",

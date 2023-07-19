@@ -13,7 +13,7 @@ beforeAll(() => {
 });
 describe("testing the creation of 1 select drop down and handling change", () => {
   test("renders 1 drop down with an initial value and required text ", () => {
-    const { containe } = render(
+    const { container } = render(
       <DropdownSelection
         caption={"testcaption"}
         initialSelection={0}
@@ -30,7 +30,7 @@ describe("testing the creation of 1 select drop down and handling change", () =>
 
 describe("testing the creation of 1 select drop down and handling change", () => {
   test("renders 1 drop down with no initial selection ", () => {
-    const { containe } = render(
+    const { container } = render(
       <DropdownSelection
         caption={"testcaption"}
         selectKey={"id"}

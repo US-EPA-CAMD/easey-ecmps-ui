@@ -93,8 +93,8 @@ export const DataTableAnalyzerRanges = ({
           dualRangeIndicator: ["Dual Range Indicator", "radio", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },
@@ -110,14 +110,6 @@ export const DataTableAnalyzerRanges = ({
   };
   return (
     <div className="methodTable">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => openAnalyzerRanges(false, false, true)}
-      />
       <DataTableRender
         columnNames={rangesColumnNames}
         data={rangeData}

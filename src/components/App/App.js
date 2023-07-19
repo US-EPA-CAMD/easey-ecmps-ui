@@ -393,7 +393,16 @@ const App = () => {
           />
           <Route
             path="/admin/qa-maintenance"
-            element={!user ? <Navigate to="/" /> :<AdminMaintenance user ={user} section={QA_CERT_DATA_MAINTENANCE_STORE_NAME} />}
+            element={
+              !user ? (
+                <Navigate to="/" />
+              ) : (
+                <AdminMaintenance
+                  user={user}
+                  section={QA_CERT_DATA_MAINTENANCE_STORE_NAME}
+                />
+              )
+            }
           />
           <Route
             path="/admin/error-suppression"
@@ -403,21 +412,17 @@ const App = () => {
           />
           <Route
             path="/admin/em-submission-access"
-            element={!user ? <Navigate to="/" /> : <AdminMaintenance user ={user} section={SUBMISSION_ACCESS_STORE_NAME} />}
-          />
-          <Route
-            path="/reports"
             element={
-              user ? <Navigate to="/workspace/reports" /> : <ReportGenerator />
+              !user ? (
+                <Navigate to="/" />
+              ) : (
+                <AdminMaintenance
+                  user={user}
+                  section={SUBMISSION_ACCESS_STORE_NAME}
+                />
+              )
             }
           />
-          <Route
-            path="/workspace/reports"
-            element={
-              !user ? <Navigate to="/" /> : <ReportGenerator user={user} requireAuth={true}/>
-            }
-          />
-
           <Route path={`/faqs`} element={<FAQ />} />
           <Route path="/tutorials" element={<ComingSoon />} />
           <Route path="/cam-api" element={<ComingSoon />} />
