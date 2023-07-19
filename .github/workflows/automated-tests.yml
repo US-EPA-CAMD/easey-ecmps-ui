@@ -26,15 +26,16 @@ jobs:
           repository: US-EPA-CAMD/easey-testing
           path: easey-testing
     
-    # - name: Set Up ChromeDriver
-    #   uses: nanasess/setup-chromedriver@v2
-    #   working-directory: /home/runner/drivers/chromedriver
-
     - name: Install Browser Drivers
       run: |
         cd easey-testing/scripts
         chmod +x install-browser-drivers.sh
         ./install-browser-drivers.sh
+    
+    - name: Move Drivers
+      run: |
+       mkdir -p /home/runner/drivers
+       mv /usr/local/bin/chromedriver /home/runner/drivers/
 
     - name: Build with Maven
       run: |

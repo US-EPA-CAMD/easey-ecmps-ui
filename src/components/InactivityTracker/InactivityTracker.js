@@ -10,6 +10,7 @@ import {
   currentDateTime,
   currentSecondsTilInactive,
 } from "../../utils/functions";
+import { v4 as uuidv4 } from "uuid";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -38,6 +39,8 @@ const renderTime = ({ remainingTime }) => {
 export const InactivityTracker = () => {
   const signingOut = useRef(false); //Prevent double sign outs
   const wasActiveInWindow = useRef(false); //Activity monitor
+
+  const [refreshKey, setRefreshKey] = useState(uuidv4()); //Using this to force the component to refresh when the user redirects to the page
 
   const showCountdownRef = useRef(false); //Use a ref that we can manipulate and set the showCountdown [avoids weird state behavior]
   const [showCountdown, setShowCountdown] = useState(showCountdownRef.current); //State management determines when to show the countdown modal based on the corresponding ref
@@ -120,6 +123,7 @@ export const InactivityTracker = () => {
         document.visibilityState === "visible" &&
         currentSecondsTilInactive() <= inactiveDuration / 2
       ) {
+        setRefreshKey(uuidv4);
         setShowCountdown(false); //Need these two lines to force a state change on the page becoming visible again
         setShowCountdown(true);
       }
@@ -143,7 +147,7 @@ export const InactivityTracker = () => {
   }
 
   return ReactDom.createPortal(
-    <div className="modal-back">
+    <div key={refreshKey} className="modal-back">
       {showCountdown && (
         <div className="usa-overlay is-visible">
           <div role="dialog" aria-modal="true">

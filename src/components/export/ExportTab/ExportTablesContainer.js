@@ -33,13 +33,17 @@ export const ExportTablesContainer = ({
 
   useEffect(() => {
     setTimeout(() => {
-      ensure508();
+      ensure508(divId);
+      if(tableData){
+        const rowsAriaLabelData = tableData.map(e => e.stackPipeId? e.stackPipeId : e.unitId);
+        assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData);
+      }
     }, oneSecond);
 
     return () => {
       addScreenReaderLabelForCollapses();
 
-    };
+    };// eslint-disable-next-line
   }, [tableData]);
 
   useEffect(() => {
@@ -63,9 +67,6 @@ export const ExportTablesContainer = ({
           const tableRows = response.data[dataKey].map(data => ({ ...data, dataKey }))
           setTableData(tableRows);
           setLoading(false);
-
-          const rowsAriaLabelData = response.data[dataKey].map(e => e.id)
-          assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData)
         }
       } catch (err) {
         console.log(err);

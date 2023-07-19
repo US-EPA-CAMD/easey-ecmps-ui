@@ -20,9 +20,8 @@ const controlInputs = {
 };
 
 const controlDatePickerInputs = {
-  beginDate: ["Start Date", "date", ""],
-  beginDate: ["Start Date", "dateTime", ""],
-  beginHour: ["Start Time", "time", ""],
+  beginDate: ["Begin Date", "dateTime", ""],
+  beginHour: ["Start Hour", "time", ""],
   endDate: ["End Date", "date", ""],
   endHour: ["End Time", "time", ""],
   skip: ["skip", "skip", ""],
@@ -41,9 +40,22 @@ const boolOptions = [true, false];
 const extraControlInputs = false;
 describe("create all options for modal input controls", () => {
   test("create method modal input controls", async () => {
-    const response = await mpApi.getMonitoringMethods(locationSelectValue);
-    const methods = response.data;
-    const selectedData = methods[0];
+    const selectedData = {
+      "parameterCode": "SO2",
+      "monitoringMethodCode": "CEM",
+      "substituteDataCode": "SPTS",
+      "bypassApproachCode": "BYMAX",
+      "beginDate": "2007-11-27",
+      "beginHour": 17,
+      "endDate": null,
+      "endHour": null,
+      "id": "4B46150F6",
+      "locationId": "5770",
+      "userId": "abcde",
+      "addDate": "2009-02-20",
+      "updateDate": "2009-02-20",
+      "active": true
+    };
 
     for (const isCreate of boolOptions) {
       for (const isMats of boolOptions) {

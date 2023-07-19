@@ -1,15 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
+
+import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
-import {
-  getAllTestTypeCodes,
-  getAllTestTypeGroupCodes,
-} from "../../../utils/api/dataManagementApi";
 import {
   GridContainer,
   Grid,
@@ -17,158 +14,196 @@ import {
   ComboBox,
   Button,
 } from "@trussworks/react-uswds";
+import {
+  getEmSubmissionRecords,
+  getQaTestMaintenanceRecords,
+  getQaCertEventMaintenanceRecords,
+  getQaExtensionExemptionMaintenanceRecords,
+} from "../../../utils/api/adminManagementApi";
+
+export const testSummaryLabel = "Test Summary";
+export const certEventLabel = "Cert Events";
+export const testExtensionExemptionLabel = "Test Extension Exemption";
+
 const FilterFormAdmin = ({
   facilities,
-  queryCallback,
   section,
+  setTableData,
+  setIsTableDataLoading,
+  reloadTableData,
+  setReloadTableData,
+  setSelectedRows,
+  reportingPeriods,
+  setQaMaintenanceTypeSelection,
 }) => {
   const defaultDropdownText = "Select";
   const initialSelectOption = { code: "", name: defaultDropdownText };
-  const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
-    []
-  );
+  const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
+    initialSelectOption,
+  ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [, setAvailableConfigState] = useState([]);
-
   const [availableConfigurations, setAvailableConfigurations] = useState([
     initialSelectOption,
   ]);
-  const selectedOrisCodes = useRef([]);
-  const selectedReportingPeriods = useRef([]);
 
+  const [availableConfigurationss, setAvailableConfigurationss] = useState([
+    initialSelectOption,
+  ]);
   const [availStatus, setAvailStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
-    { code: "all", name: "Show All" },
   ]);
 
+  const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState({
-    code: "",
-    name: defaultDropdownText,
-  });
-  const [facility, setFacility] = useState([]);
-  const [facilityList, setFacilityList] = useState([]);
-  const [locations, setLocations] = useState([]);
-  // Make all api calls that only need to happen once on page load here
 
-  const [reset, setReset] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState();
 
   const [typeSelection, setTypeSelection] = useState([]);
-  const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
-    { name: "Loading..." },
-  ]);
 
-  const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
+  const testTypeGroupOptions = [
+    initialSelectOption,
+    { code: testSummaryLabel, name: testSummaryLabel },
+    { code: certEventLabel, name: certEventLabel },
+    { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
+  ];
 
-  useEffect(() => {
-    const fetchTestTypeCodes = () => {
-      getAllTestTypeCodes()
-        .then((res) => {
-          setAllTestTypeCodes(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      getAllTestTypeGroupCodes()
-        .then((res) => {
-          const options = res.data
-            .map((e) => {
-              return {
-                name: e.testTypeGroupDescription,
-                code: e.testTypeGroupCode,
-              };
-            })
-            .sort((a, b) => a.name.localeCompare(b.name));
-
-          options.unshift({
-            code: defaultDropdownText,
-            name: defaultDropdownText,
-          });
-          setTestTypeGroupOptions(options);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchTestTypeCodes();
-  }, []);
-
-  async function fetchReportingPeriods() {
-    const reportingPeriodList = (await getReportingPeriods()).data;
-
-    const availReportingPeriods = [];
-
-    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
-      const period = reportingPeriodList[i];
-      const objectMapping = {
-        id: period.periodAbbreviation,
-        label: period.periodAbbreviation,
-        selected: false,
-        enabled: true,
+  const processReportingPeriods = async () => {
+    const availReportingPeriods = reportingPeriods.map((rp) => {
+      return {
+        code: rp.periodAbbreviation,
+        name: rp.periodAbbreviation,
       };
-
-      if (i === reportingPeriodList.length - 1) {
-        objectMapping.selected = true;
-        selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
-      }
-
-      availReportingPeriods.push(objectMapping);
-    }
-
-    setAvailableReportingPeriods(availReportingPeriods);
-  }
-
-  useEffect(() => {
-    fetchReportingPeriods();
-  }, [facilities]);
-
-  const applyFilters = () => {
-    const selectedEntries = availableConfigurations.filter((item) => {
-      return item.selected;
     });
+    const reversed = availReportingPeriods.sort().toReversed();
+    reversed.unshift(initialSelectOption);
 
-    let monPlanIds = [];
-    if (selectedEntries) {
-      monPlanIds = selectedEntries.map((entry) => entry.monPlanId);
-    }
-
-    queryCallback(
-      selectedOrisCodes.current,
-      monPlanIds,
-      selectedReportingPeriods.current
-    );
+    setAvailableReportingPeriods(reversed);
   };
 
-  async function reportingPeriodFilterChange(id, action) {
-    let newState;
-    if (action === "add") {
-      newState = [...selectedReportingPeriods.current, id];
-    } else {
-      newState = [];
-      selectedReportingPeriods.current.forEach((item) => {
-        if (item !== id) {
-          newState.push(item);
-        }
-      });
+  useEffect(() => {
+    processReportingPeriods();
+  }, [reportingPeriods]);
+
+  const applyFilters = useCallback(async () => {
+    let monitorPlanId;
+    let year;
+    let quarter;
+    let status;
+
+    if (selectedLocation) {
+      const locationIdx = selectedLocation[0];
+      monitorPlanId = availableConfigurations[locationIdx].code;
     }
-    selectedReportingPeriods.current = newState;
-  }
+
+    if (
+      selectedReportingPeriod?.length > 0 &&
+      selectedReportingPeriod[1] !== defaultDropdownText
+    ) {
+      const rpString = selectedReportingPeriod[1];
+      year = rpString.split(" ")[0];
+      quarter = rpString.slice(-1);
+    }
+
+    if (
+      selectedStatus?.length > 0 &&
+      selectedStatus[1] !== defaultDropdownText
+    ) {
+      status = selectedStatus[1].toUpperCase();
+    }
+
+    setIsTableDataLoading(true);
+    try {
+      if (section === SUBMISSION_ACCESS_STORE_NAME) {
+        const { data } = await getEmSubmissionRecords(
+          selectedFacility,
+          monitorPlanId,
+          year,
+          quarter,
+          status
+        );
+        data.forEach((d) => (d.selected = false));
+        setTableData(data);
+      }
+
+      if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
+        // typeSelection is array of form [index, description]
+        const typeLabel = typeSelection?.[1];
+        setQaMaintenanceTypeSelection(typeLabel);
+        let resp;
+        switch (typeLabel) {
+          case testSummaryLabel:
+            resp = await getQaTestMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[1]
+            );
+
+            break;
+          case certEventLabel:
+            resp = await getQaCertEventMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[1]
+            );
+
+            break;
+          case testExtensionExemptionLabel:
+            resp = await getQaExtensionExemptionMaintenanceRecords(
+              selectedFacility,
+              selectedLocation[1]
+            );
+
+            break;
+          default:
+            return;
+        }
+        let newData = resp.data;
+        if (facilities.length > 0) {
+          newData = resp.data.map((obj) => ({
+            ...obj,
+            facilityName: `${
+              facilities.find((fac) => fac.value === selectedFacility).label
+            }`,
+          }));
+        }
+
+        setTableData(newData);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsTableDataLoading(false);
+      setSelectedRows([]);
+    }
+  }, [
+    availableConfigurations,
+    section,
+    selectedFacility,
+    selectedLocation,
+    selectedReportingPeriod,
+    selectedStatus,
+    setIsTableDataLoading,
+    setQaMaintenanceTypeSelection,
+    setSelectedRows,
+    setTableData,
+    typeSelection,
+  ]);
+
+  useEffect(() => {
+    if (reloadTableData) {
+      applyFilters();
+      setReloadTableData(false);
+    }
+  }, [reloadTableData, setReloadTableData, applyFilters]);
 
   const configurationFilterChange = (id) => {
     setSelectedLocation(id);
   };
 
   const facilityFilterChange = async (id) => {
-    let newState = [id];
-    const configurationData = newState.length
-      ? (await getMonitoringPlans(newState)).data
-      : [];
-
+    const configurationData = (await getMonitoringPlans([id])).data;
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {
@@ -180,28 +215,47 @@ const FilterFormAdmin = ({
     }
     const availConfigs = [];
     for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      const existingEntry = availableConfigurations.filter((item) => {
-        return item.selected && item.label === name;
-      });
-
       availConfigs.push({
-        code: name,
+        code: monPlanId,
         name: name,
       });
     }
     availConfigs.unshift(initialSelectOption);
     setAvailableConfigurations(availConfigs);
-    setAvailableConfigState(availableConfigurations);
   };
 
+  const convertingArrayObject = (arr) => {
+    const convertedArray = arr.map((item) => {
+      return {
+        code: item.label,
+        name: item.label,
+      };
+    });
+
+    convertedArray.unshift(initialSelectOption);
+    return convertedArray;
+  };
+
+  const individualFacilityFilterChange = async (id) => {
+    getLocations(selectedFacility, {
+      locationTypeCode: "LOC",
+    }).then((availLoc) =>
+      setAvailableConfigurations(convertingArrayObject([...availLoc]))
+    );
+  };
+
+  useEffect(() => {
+    section === SUBMISSION_ACCESS_STORE_NAME
+      ? facilityFilterChange(selectedFacility)
+      : individualFacilityFilterChange(selectedFacility);
+  }, [selectedFacility]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
-    facilityFilterChange(value);
+    // facilityFilterChange(value);
 
     if (!value || value === defaultDropdownText) {
       setSelectedFacility(null);
       setSelectedLocation(null);
-      return;
     }
   };
 
@@ -217,6 +271,7 @@ const FilterFormAdmin = ({
     setSelectedLocation(null);
     setSelectedStatus(null);
   };
+
   return (
     <div className="container padding-y-1 ">
       <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
@@ -245,12 +300,10 @@ const FilterFormAdmin = ({
                     : "Location"
                 }
                 selectionHandler={configurationFilterChange}
-                // options={sections}
                 options={availableConfigurations}
                 viewKey="name"
-                selectKey="name"
+                selectKey="code"
                 initialSelection={selectedLocation ? selectedLocation[0] : 0}
-                // orisCode={orisCode}
                 workspaceSection={section}
                 extraSpace
               />
@@ -271,29 +324,23 @@ const FilterFormAdmin = ({
                 />
               </div>
             </Grid>
-          ) : (
-            ""
-          )}
+          ) : null}
         </Grid>
 
         <Grid row className="margin-top-2">
           {section === SUBMISSION_ACCESS_STORE_NAME ? (
             <>
               <Grid col={2}>
-                <Label
-                  test-id={"reporting-period-name-label"}
-                  htmlFor={"reporting-period-name"}
-                >
-                  Reporting Period
-                </Label>
-                <ComboBox
-                  id="reporting-period-name"
-                  name="reporting-period-name"
-                  epa-testid={"reporting-period-name"}
-                  data-testid={"reporting-period-name"}
+                <DropdownSelection
+                  caption="Reporting Period"
+                  selectionHandler={setSelectedReportingPeriod}
                   options={availableReportingPeriods}
-                  onChange={reportingPeriodFilterChange}
-                  disableFiltering={true}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={
+                    selectedReportingPeriod ? selectedReportingPeriod[0] : null
+                  }
+                  extraSpace
                 />
               </Grid>
               <Grid col={3}>
@@ -303,7 +350,7 @@ const FilterFormAdmin = ({
                     selectionHandler={(option) => setSelectedStatus(option)}
                     options={availStatus}
                     viewKey="name"
-                    selectKey="name"
+                    selectKey="code"
                     initialSelection={selectedStatus ? selectedStatus[0] : null}
                     workspaceSection={section}
                     extraSpace
@@ -311,9 +358,7 @@ const FilterFormAdmin = ({
                 </div>
               </Grid>
             </>
-          ) : (
-            ""
-          )}
+          ) : null}
           <Grid col={4} className=" position-relative margin-top-3">
             <div
               className={
@@ -328,20 +373,23 @@ const FilterFormAdmin = ({
 
               <Button
                 disabled={
-                  !(
-                    selectedFacility &&
-                    selectedFacility[0] !== "" &&
-                    selectedLocation &&
-                    selectedLocation[0] !== "" &&
-                    (section === SUBMISSION_ACCESS_STORE_NAME
-                      ? selectedStatus && selectedStatus[0] !== ""
-                      : true) &&
-                    (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                      ? typeSelection && typeSelection[0] !== ""
-                      : true)
-                  )
+                  false
+                  // There is currently a BUG in the API where sending facility id does not return data so
+                  // commenting this out until that bug is fixed.
+                  // !(
+                  //   selectedFacility &&
+                  //   selectedFacility[0] !== "" &&
+                  //   selectedLocation &&
+                  //   selectedLocation[0] !== "" &&
+                  //   (section === SUBMISSION_ACCESS_STORE_NAME
+                  //     ? selectedStatus && selectedStatus[0] !== ""
+                  //     : true) &&
+                  //   (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
+                  //     ? typeSelection && typeSelection[0] !== ""
+                  //     : true)
+                  // )
                 }
-                //   onClick={applyFilters}
+                onClick={applyFilters}
                 outline={false}
               >
                 Apply Filter(s)

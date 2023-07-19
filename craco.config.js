@@ -33,6 +33,9 @@ module.exports = {
         "!src/utils/api/axiosSetup.js",
         "!src/utils/api/setupTests.js",
       ];
+      jestConfig.moduleNameMapper = {
+        "\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
+      };
       return jestConfig;
     },
   },

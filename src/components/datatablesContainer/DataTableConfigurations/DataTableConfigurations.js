@@ -174,6 +174,7 @@ export const DataTableConfigurations = ({
         dataLoaded={dataLoaded}
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort="col2"
+        defaultSortDir="asc"
         className={className}
         openHandler={openConfig}
         actionsBtn="Open"

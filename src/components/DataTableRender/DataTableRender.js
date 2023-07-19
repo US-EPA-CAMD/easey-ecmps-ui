@@ -56,6 +56,7 @@ export const DataTableRender = ({
   expandableRowComp,
   expandableRowProps,
   defaultSort,
+  defaultSortDir, // can be either "asc" for ascending or any other value for descending
   expandableRows,
   headerStyling,
   tableStyling,
@@ -195,6 +196,7 @@ export const DataTableRender = ({
     switch (name) {
       case "Facility":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
@@ -205,6 +207,7 @@ export const DataTableRender = ({
 
       case "Configurations":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
@@ -215,6 +218,7 @@ export const DataTableRender = ({
 
       case "ORIS":
         columns.push({
+          id: `col${index + 1}`,
           name,
           wrap: true,
           selector: (row) => row.col2,
@@ -226,8 +230,8 @@ export const DataTableRender = ({
 
       default:
         columns.push({
+          id: `col${index + 1}`,
           name,
-
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           style: { whiteSpace: "normal" },
@@ -235,6 +239,7 @@ export const DataTableRender = ({
         break;
     }
   });
+
   if (actionsBtn) {
     if (actionsBtn === "Open") {
       columns.push({
@@ -257,6 +262,7 @@ export const DataTableRender = ({
                       type="button"
                       unstyled="true"
                       epa-testid="btnOpen"
+                      data-testid="btnOpen"
                       className="cursor-pointer open-modal-button text-no-wrap"
                       id={
                         tableTitle
@@ -315,6 +321,7 @@ export const DataTableRender = ({
                           type="button"
                           unstyled="true"
                           epa-testid="btnCheckBackIn"
+                          data-testid="btnCheckBackIn"
                           className="cursor-pointer open-modal-button text-no-wrap"
                           id={
                             tableTitle
@@ -346,6 +353,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid="btnOpenPublicRecord"
                   id={
                     tableTitle
                       ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -370,7 +378,7 @@ export const DataTableRender = ({
         name: "Actions",
         button: true,
         width: "15%",
-        cell: (row) => {
+        cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
@@ -382,6 +390,7 @@ export const DataTableRender = ({
                   type="button"
                   unstyled="true"
                   epa-testid="btnOpen"
+                  data-testid={`viewEditBtn-${index}`}
                   className="cursor-pointer open-modal-button text-no-wrap"
                   id={
                     // tableTitle
@@ -490,9 +499,10 @@ export const DataTableRender = ({
         />
       );
     }
-
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection]);
+
   return (
     <div className={`${componentStyling}`}>
       <div id="datatableFilterContainer" />
@@ -524,7 +534,8 @@ export const DataTableRender = ({
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
               }
               // props
-              defaultSortField={defaultSort ? defaultSort : "col1"}
+              defaultSortFieldId={defaultSort ? defaultSort : "col1"}
+              defaultSortAsc={defaultSortDir === 'asc'}
               expandableRows={expandableRows}
               pagination={pagination}
               columns={columns}
@@ -563,7 +574,7 @@ export const DataTableRender = ({
                 <div className="padding-y-1">
                   <Button
                     type="button"
-                    // test-id={tableTitle? `btnAdd${tableTitle.split(" ").join("")}`: `${sectionTitle.split(" ").join("")}`}
+                    data-testid="addBtn"
                     className={"float-left clearfix margin-right-3 margin-y-1"}
                     outline="true"
                     color="black"
@@ -612,7 +623,9 @@ export const DataTableRender = ({
                       onClick={(event) => {
                         addBtn(false, false, true);
                       }}
-                      id="addBtn"
+                      id={
+                        addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+                      }
                     >
                       {addBtnName}
                     </Button>

@@ -34,6 +34,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { ensure508 } from "../../../additional-functions/ensure-508";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableMats = ({
   mdmData,
@@ -326,8 +327,8 @@ export const DataTableMats = ({
           supplementalMATSMonitoringMethodCode: ["Methodology", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },
@@ -359,6 +360,9 @@ export const DataTableMats = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
+    if (createNewMats) {
+      returnsFocusMpDatatableCreateBTN("Create MATS")
+    }
   };
 
   return (

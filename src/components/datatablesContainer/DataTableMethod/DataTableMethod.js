@@ -31,6 +31,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { successResponses } from "../../../utils/api/apiUtils";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableMethod = ({
   mdmData,
@@ -269,8 +270,8 @@ export const DataTableMethod = ({
           bypassApproachCode: ["Bypass Approach", "dropdown", ""],
         },
         {
-          beginDate: ["Start Date", "date", ""],
-          beginHour: ["Start Time", "hourDropdown", ""],
+          beginDate: ["Begin Date", "date", ""],
+          beginHour: ["Begin Hour", "hourDropdown", ""],
           endDate: ["End Date", "date", ""],
           endHour: ["End Time", "hourDropdown", ""],
         },
@@ -303,6 +304,9 @@ export const DataTableMethod = ({
     setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    if (createNewMethod) {
+      returnsFocusMpDatatableCreateBTN("Create Method")
+    }
   };
 
   const data = useMemo(() => {

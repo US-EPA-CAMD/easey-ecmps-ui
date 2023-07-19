@@ -39,12 +39,13 @@ const QADataTableRender = ({
   sectionSelect = null,
 }) => {
   const columns = [];
+  console.log('columnnames',columnNames,dataTableName,expandableRowComp , expandableRowProps)
   columnNames.forEach((name, index) => {
     switch (name) {
       default:
         columns.push({
           name,
-          selector: `col${index + 1}`,
+          selector: (row) => row[`col${index + 1}`],
           sortable: true,
           wrap: true,
           width: `${columnWidth}%`,
@@ -265,10 +266,10 @@ const QADataTableRender = ({
               ? getEmptyRows(columns)
               : []
         }
-        expandableRows={expandableRowComp}
+        expandableRows={expandableRowComp ? expandableRowComp : false}
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
-        expandableRowsComponent={ expandableRowComp}
+        expandableRowsComponent={ expandableRowComp ? expandableRowComp :false}
         expandableRowsComponentProps= {expandableRowProps}
         noDataComponent={noDataComp}
         sortFunction={ hasEvalStatusColumn(dataTableName)? (rows, field, direction) => customSort(rows, field, direction, columns) : null}

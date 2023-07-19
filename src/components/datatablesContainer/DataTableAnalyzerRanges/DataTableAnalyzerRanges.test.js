@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitForElement, fireEvent } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import {
   DataTableAnalyzerRanges,
   mapStateToProps,
@@ -7,66 +7,28 @@ import {
 } from "./DataTableAnalyzerRanges";
 import { Provider } from "react-redux";
 import configureStore from "../../../store/configureStore.dev";
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
+import { getMockMonitoringAnalyzerRanges } from "../../../mocks/functions";
+import initialState from "../../../store/reducers/initialState";
+const mockInitialState = JSON.parse(JSON.stringify(initialState));
 
-import * as mpApi from "../../../utils/api/monitoringPlansApi";
-const store = configureStore();
-
-const mockRanges = [
+mockInitialState.dropdowns.analyzerRanges = [
   {
-    active: false,
-    addDate: "2009-02-20",
-    analyzerRangeCode: "H",
-    beginDate: "1993-10-01",
-    beginHour: "0",
-    componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
-    dualRangeIndicator: "0",
-    endDate: "2019-11-06",
-    endHour: "14",
-    id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
-    updateDate: "2020-01-23",
-    userId: "bvick",
+    analyzerRangeCode: "L",
   },
 ];
+const store = configureStore(mockInitialState);
 
-jest.mock("../../../utils/api/easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({
-    status: 200,
-    data: [
-      {
-        active: false,
-        addDate: "2009-02-20",
-        analyzerRangeCode: "H",
-        beginDate: "1993-10-01",
-        beginHour: "0",
-        componentRecordId: "CAMD-60A6D62FDAB14840BFCF67E049B4B4C5",
-        dualRangeIndicator: "0",
-        endDate: "2019-11-06",
-        endHour: "14",
-        id: "CAMD-A39804B8C17A4478970F7B2CCBF429B6",
-        updateDate: "2020-01-23",
-        userId: "bvick",
-      },
-    ],
-  }),
-}));
-
-//testing redux connected component to mimic props passed as argument
-const componentRenderer = (update, mdmData) => {
-  let currentData = [];
-
-  if (mdmData) {
-    currentData = mdmData;
-  }
-
+describe("Datatable Analyzer Ranges - ", () => {
   const props = {
-    mdmData: currentData,
+    mdmData: [],
     loadDropdownsData: jest.fn(),
     user: { firstName: "test" },
     checkout: true,
 
-    selectedRanges: mockRanges[0],
+    selectedRanges: getMockMonitoringAnalyzerRanges()[0],
     thirdLevel: false,
-    updateAnalyzerRangeTable: update,
+    updateAnalyzerRangeTable: false,
     setThirdLevel: jest.fn(),
 
     setOpenFuelFlowsView: jest.fn(),
@@ -77,49 +39,47 @@ const componentRenderer = (update, mdmData) => {
     setCreateAnalyzerRangesFlag: jest.fn(),
     setUpdateAnalyzerRangeTable: jest.fn(),
   };
-  return render(
-    <Provider store={store}>
-      {" "}
-      <DataTableAnalyzerRanges {...props} />{" "}
-    </Provider>
-  );
-};
+  beforeEach(() => {
+    jest
+      .spyOn(monitorPlanApi, "getMonitoringAnalyzerRanges")
+      .mockResolvedValue({
+        data: getMockMonitoringAnalyzerRanges(),
+      });
+  });
 
-test("renders an analyzer range with mdm data", async () => {
-  const title = await mpApi.getMonitoringAnalyzerRanges("5", "CAMD");
-  expect(title.data).toEqual(mockRanges);
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, { test: "" })
-  );
-  componentRenderer(true);
-  fireEvent.click(container.querySelector("#testingBtn"));
-  expect(container).toBeDefined();
-});
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-test("renders an analyzer range withOUT mdm data", async () => {
-  const title = await mpApi.getMonitoringAnalyzerRanges("5", "CAMD");
-  expect(title.data).toEqual(mockRanges);
-  let { container } = await waitForElement(() =>
-    componentRenderer(false, false)
-  );
-  componentRenderer(true, false);
-  expect(container).toBeDefined();
-});
-test("mapStateToProps calls the appropriate state", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const state = { dropdowns: [1] };
-  const stateProps = mapStateToProps(state, true);
-});
+  it("renders rows from the data fetched", async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <DataTableAnalyzerRanges {...props} />
+        </Provider>
+      );
+    });
 
-test("mapDispatchToProps calls the appropriate action", async () => {
-  // mock the 'dispatch' object
-  const dispatch = jest.fn();
-  const actionProps = mapDispatchToProps(dispatch);
-  const state = store.getState();
-  const stateProps = mapStateToProps(state);
+    const rows = screen.getAllByRole("img");
 
-  // verify the appropriate action was called
-  actionProps.loadDropdownsData();
-  expect(state).toBeDefined();
+    expect(rows.length).toBe(1);
+  });
+  test("mapStateToProps calls the appropriate state", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const state = { dropdowns: [1] };
+    const stateProps = mapStateToProps(state, true);
+  });
+
+  test("mapDispatchToProps calls the appropriate action", async () => {
+    // mock the 'dispatch' object
+    const dispatch = jest.fn();
+    const actionProps = mapDispatchToProps(dispatch);
+    const state = store.getState();
+    const stateProps = mapStateToProps(state);
+
+    // verify the appropriate action was called
+    actionProps.loadDropdownsData();
+    expect(state).toBeDefined();
+  });
 });
