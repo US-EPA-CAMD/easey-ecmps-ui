@@ -41,7 +41,7 @@ import {
   resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
 
 export const DataTableQualifications = ({
   mdmData,
@@ -76,11 +76,15 @@ export const DataTableQualifications = ({
   const [openLME, setOpenLME] = useState(false);
   const [updateLME, setUpdateLME] = useState(false);
 
+  const [openCPMS, setOpenCPMS] = useState(false);
+  const [updateCPMS, setUpdateCPMS] = useState(false);
+
+
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const dropdownArray = [["qualificationTypeCode"]];
 
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
-  const [errorMsgs, setErrorMsgs] = useState([])
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
@@ -112,16 +116,18 @@ export const DataTableQualifications = ({
       locationSelectValue ||
       revertedState
     ) {
-      mpApi.getQualifications(locationSelectValue).then((res) => {
-        setQualificationsData(res.data);
-        setDataLoaded(true);
-        setUpdateTable(false);
-        setRevertedState(false);
-        setUpdatePCT(false);
-        setUpdateLEE(false);
-        setUpdateLME(false);
-      })
-        .catch(error => console.log('getQualifications failed', error));
+      mpApi
+        .getQualifications(locationSelectValue)
+        .then((res) => {
+          setQualificationsData(res.data);
+          setDataLoaded(true);
+          setUpdateTable(false);
+          setRevertedState(false);
+          setUpdatePCT(false);
+          setUpdateLEE(false);
+          setUpdateLME(false);
+        })
+        .catch((error) => console.log("getQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
@@ -169,7 +175,7 @@ export const DataTableQualifications = ({
     applicableEmissionStandard: 0,
     unitsOfStandard: "string",
     percentageOfEmissionStandard: 0,
-  }
+  };
 
   const qualificationLmePayload = {
     locationId: locationSelectValue,
@@ -178,7 +184,13 @@ export const DataTableQualifications = ({
     operatingHours: 0,
     so2Tons: 0,
     noxTons: 0,
-  }
+  };
+
+  const qualificationCpmsPayload = {
+    qualificationDataYear: 0,
+    stackTestNumber: "string",
+    operatingLimit: 0,
+  };
 
   const data = useMemo(() => {
     if (qualificationData.length > 0) {
@@ -203,120 +215,32 @@ export const DataTableQualifications = ({
       else {
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
         return fs.getMonitoringPlansQualifications(
-          tabs[currentTabIndex].inactive[0] === false ? getActiveData(qualificationData) : qualificationData
+          tabs[currentTabIndex].inactive[0] === false
+            ? getActiveData(qualificationData)
+            : qualificationData
         );
       }
     } else {
-
       return [];
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, tabs[currentTabIndex].inactive[0]]);
 
-  //also tests edge cases for some functions between open PCT/LEE/LME
-  const testingSave = () => {
-    setCreating(true);
-    setOpenPCT(true);
-    setOpenLEE(false);
-    setOpenLME(false);
-    buildBreadBar();
-    let payload = {}
-    if(openPCT){payload = {...qualificationPercentPayload}}
-    if(openLME){payload = {...qualificationLmePayload}}
-    if(openLEE){payload = {...qualificationLeePayload}}
-    let userInput = extractUserInput(payload, ".modalUserInput");
-    openQualificationDataModal(
-      {
-        col1: "LEE",
-        col2: "07/15/2018",
-        col3: "",
-        col4: "MIKE",
-      },
-      false,
-      null
-    );
-    setSelectedQualificationData({
-      id: "MIKE",
-      locationId: "129",
-      qualificationTypeCode: "LEE",
-      beginDate: "2-07-15",
-      endDate: null,
-      active: true,
-      leeQualifications: [],
-      lmeQualifications: [],
-      pctQualifications: [],
-    });
-    // openQualificationDataModal(false, false, true);
-    handleRequest("qual", mpApi.saveQualificationData, userInput);
-
-    closeModalHandler();
-    handleRequest("lee", mpApi.saveQualificationData, userInput);
-    manageSaveBtn();
-
-    //2nd ccondition
-    setOpenPCT(false);
-    setOpenLEE(true);
-    manageSaveBtn();
-    handleRequest("pct", mpApi.saveQualificationData, userInput);
-    //3rd condition
-
-    setOpenLEE(false);
-    setOpenLME(true);
-    buildBreadBar();
-    manageSaveBtn();
-    handleRequest("lme", mpApi.saveQualificationData, userInput);
-    window.isDataChanged = false;
-    closeModalHandler();
-
-    setOpenPCT(false);
-    setOpenLEE(false);
-    setOpenLME(true);
-    manageSaveBtn();
-
-    setOpenPCT(false);
-    setOpenLEE(true);
-    setOpenLME(false);
-    manageSaveBtn();
-  };
-
-  const testingManage = () => {
-    setOpenPCT(false);
-    setOpenLEE(true);
-    setOpenLME(false);
-    manageSaveBtn();
-    buildBreadBar();
-  };
-  const testingCreate = () => {
-    let payload = {}
-    if(openPCT){payload = {...qualificationPercentPayload}}
-    if(openLME){payload = {...qualificationLmePayload}}
-    if(openLEE){payload = {...qualificationLeePayload}}
-    let userInput = extractUserInput(payload, ".modalUserInput");
-    openQualificationDataModal(false, false, true);
-    setCreating(true);
-    setOpenPCT(false);
-    setOpenLEE(false);
-    setOpenLME(false);
-    handleRequest("qual", mpApi.createQualificationData, userInput);
-    window.isDataChanged = false;
-    closeModalHandler();
-    setShow(true);
-  };
-
   const executeOnClose = () => {
     setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
-    const qual = user && checkout && openPCT && creatingChild
-      ? "Create Qualification Percent"
-      : user && checkout && openLEE && creatingChild
+    const qual =
+      user && checkout && openPCT && creatingChild
+        ? "Create Qualification Percent"
+        : user && checkout && openLEE && creatingChild
         ? "Create Qualification LEE"
         : user && checkout && openLME && creatingChild
-          ? "Create Qualification LME"
-          : ""
-    
-    returnsFocusMpDatatableCreateBTN(qual)
+        ? "Create Qualification LME"
+        : "";
+
+    returnsFocusMpDatatableCreateBTN(qual);
   };
 
   // function to handle what type of api call to make (edit/create -> qual/pct/lme/lee)
@@ -352,16 +276,22 @@ export const DataTableQualifications = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs([JSON.stringify(error)])
+      setErrorMsgs([JSON.stringify(error)]);
     }
   };
 
   // Manages SAVE button (either Parent, PCT, LME, or LEE)
   const manageSaveBtn = () => {
-    let payload = {}
-    if(openPCT){payload = {...qualificationPercentPayload}}
-    if(openLME){payload = {...qualificationLmePayload}}
-    if(openLEE){payload = {...qualificationLeePayload}}
+    let payload = {};
+    if (openPCT) {
+      payload = { ...qualificationPercentPayload };
+    }
+    if (openLME) {
+      payload = { ...qualificationLmePayload };
+    }
+    if (openLEE) {
+      payload = { ...qualificationLeePayload };
+    }
     let userInput = extractUserInput(payload, ".modalUserInput");
 
     if (!creating) {
@@ -424,8 +354,8 @@ export const DataTableQualifications = ({
               {openPCT
                 ? "Qualification Percent"
                 : openLEE
-                  ? "Qualification LEE"
-                  : "Qualification LME"}
+                ? "Qualification LEE"
+                : "Qualification LME"}
             </span>
           </Breadcrumb>
         </BreadcrumbBar>
@@ -497,35 +427,6 @@ export const DataTableQualifications = ({
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn2"
-        onClick={() => testingCreate()}
-      />
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn3"
-        onClick={() => testingManage()}
-      />
-
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testingBtn"
-        onClick={() => {
-          testingSave();
-          setOpenPCT(true);
-          buildBreadBar();
-        }}
-      />
 
       <DataTableRender
         columnNames={columnNames}
@@ -557,12 +458,12 @@ export const DataTableQualifications = ({
             createNewQualificationData
               ? "Create Qualification"
               : user && checkout && openPCT && creatingChild
-                ? "Create Qualification Percent"
-                : user && checkout && openLEE && creatingChild
-                  ? "Create Qualification LEE"
-                  : user && checkout && openLME && creatingChild
-                    ? "Create Qualification LME"
-                    : "Save and Close"
+              ? "Create Qualification Percent"
+              : user && checkout && openLEE && creatingChild
+              ? "Create Qualification LEE"
+              : user && checkout && openLME && creatingChild
+              ? "Create Qualification LME"
+              : "Save and Close"
           }
           errorMsgs={errorMsgs}
           children={
@@ -658,9 +559,7 @@ export const DataTableQualifications = ({
 const mapStateToProps = (state) => {
   return {
     mdmData: state.dropdowns[QUALIFICATIONS_STORE_NAME],
-    tabs: state.openedFacilityTabs[
-      'monitoringPlans'
-    ],
+    tabs: state.openedFacilityTabs["monitoringPlans"],
   };
 };
 
