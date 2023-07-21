@@ -114,6 +114,7 @@ const QAExpandableRowsRender = ({
     let expand = expandable ? expandable :false;
     switch (name) {
       case "Protocol Gas":
+        extraIDsProps = [locationId, id];
         objProps = qaProtocalGasProps(data);
         break;
       case "Air Emissions":
@@ -121,6 +122,7 @@ const QAExpandableRowsRender = ({
         objProps = qaAirEmissionsProps(data);
         break;
       case "Test Qualification":
+        extraIDsProps = [locationId, id];
         objProps = qaTestQualificationProps(data);
         break;
       // test  > injections
