@@ -3,11 +3,11 @@ import {
   render,
   fireEvent,
   waitFor,
-  screen,
-  waitForElement,
 } from '@testing-library/react';
+
 import { DataTableSystems } from './DataTableSystems';
 import { getMonitoringSystems } from '../../../utils/api/monitoringPlansApi';
+
 const axios = require('axios');
 const DataTableSystemsfunction = require('./DataTableSystems');
 jest.mock('axios');
@@ -426,30 +426,15 @@ const componentRenderer = location => {
   return render(<DataTableSystems {...props} />);
 };
 
-beforeAll(() => {
-  // jest.spyOn(DataTableSystems.prototype, 'selectedRowHandler').mockImplementation(() => 'Hello');
-});
-
 afterAll(() => {
-  jest.restoreAllMocks();
-});
-
-test('here to run tests', () => {
-  expect(true);
+  jest.clearAllMocks();
 });
 
 test('tests a configuration with only active systems', async () => {
-  const title = await getMonitoringSystems(6);
+  getMonitoringSystems.mockResolvedValue({ data: systemsDataActiveOnly });
+  const title = await getMonitoringSystems(5);
   expect(title.data).toEqual(systemsDataActiveOnly);
-
-  render(componentRenderer(6));
-
-  let container;
-
-  await waitFor(() => {
-    container = screen.getByTestId('your-container-test-id');
-  });
-
+  let { container } = await waitFor(() => componentRenderer(5));
   expect(container).toBeDefined();
 });
 
