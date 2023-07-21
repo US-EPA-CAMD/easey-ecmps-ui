@@ -5,7 +5,7 @@ import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
 import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
-
+import DataTableCPMSQualifications from "../DataTableCPMSQualifications/DataTableCPMSQualifications";
 import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -79,7 +79,6 @@ export const DataTableQualifications = ({
   const [openCPMS, setOpenCPMS] = useState(false);
   const [updateCPMS, setUpdateCPMS] = useState(false);
 
-
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const dropdownArray = [["qualificationTypeCode"]];
 
@@ -126,6 +125,7 @@ export const DataTableQualifications = ({
           setUpdatePCT(false);
           setUpdateLEE(false);
           setUpdateLME(false);
+          setUpdateCPMS(false);
         })
         .catch((error) => console.log("getQualifications failed", error));
     }
@@ -238,6 +238,8 @@ export const DataTableQualifications = ({
         ? "Create Qualification LEE"
         : user && checkout && openLME && creatingChild
         ? "Create Qualification LME"
+        : user && checkout && openCPMS && creatingChild
+        ? "Create Qualification CPMS"
         : "";
 
     returnsFocusMpDatatableCreateBTN(qual);
@@ -270,6 +272,10 @@ export const DataTableQualifications = ({
           // update lme modal, then return to parent qual page
           setUpdateLME(true);
           setOpenLME(false);
+        } else if (dataType === "cpms") {
+          // update cpms modal, then return to parent qual page
+          setUpdateCPMS(true);
+          setOpenCPMS(false);
         }
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -291,6 +297,9 @@ export const DataTableQualifications = ({
     }
     if (openLEE) {
       payload = { ...qualificationLeePayload };
+    }
+    if (openCPMS) {
+      payload = { ...qualificationCpmsPayload };
     }
     let userInput = extractUserInput(payload, ".modalUserInput");
 
@@ -330,6 +339,16 @@ export const DataTableQualifications = ({
         userInput
       );
     }
+    // CPMS qual
+    else if (openCPMS) {
+      return handleRequest(
+        "cpms",
+        creatingChild
+          ? mpApi.createCPMSQualificationData
+          : mpApi.saveCPMSQualificationData,
+        userInput
+      );
+    }
 
     // Parent qual
     return handleRequest(
@@ -355,7 +374,9 @@ export const DataTableQualifications = ({
                 ? "Qualification Percent"
                 : openLEE
                 ? "Qualification LEE"
-                : "Qualification LME"}
+                : openLME
+                ? "Qualification LME"
+                : "Qualification CPMS"}
             </span>
           </Breadcrumb>
         </BreadcrumbBar>
@@ -463,12 +484,14 @@ export const DataTableQualifications = ({
               ? "Create Qualification LEE"
               : user && checkout && openLME && creatingChild
               ? "Create Qualification LME"
+              : user && checkout && openCPMS && creatingChild
+              ? "Create Qualification CPMS"
               : "Save and Close"
           }
           errorMsgs={errorMsgs}
           children={
             <div>
-              {openPCT || openLEE || openLME ? (
+              {openPCT || openLEE || openLME || openCPMS ? (
                 ""
               ) : dropdownsLoaded ? (
                 <ModalDetails
@@ -485,7 +508,7 @@ export const DataTableQualifications = ({
                 ""
               ) : (
                 <div>
-                  {openLEE || openLME ? (
+                  {openLEE || openLME || openCPMS ? (
                     ""
                   ) : (
                     <DataTablePCTQualifications
@@ -505,7 +528,7 @@ export const DataTableQualifications = ({
                       setCreatingChild={setCreatingChild}
                     />
                   )}
-                  {openPCT || openLME ? (
+                  {openPCT || openLME || openCPMS ? (
                     ""
                   ) : (
                     <DataTableLEEQualifications
@@ -526,7 +549,7 @@ export const DataTableQualifications = ({
                     />
                   )}
 
-                  {openLEE || openPCT ? (
+                  {openLEE || openPCT || openCPMS ? (
                     ""
                   ) : (
                     <DataTableLMEQualifications
@@ -543,6 +566,27 @@ export const DataTableQualifications = ({
                       openLME={openLME}
                       setUpdateLME={setUpdateLME}
                       updateLME={updateLME}
+                      setCreatingChild={setCreatingChild}
+                    />
+                  )}
+
+                  {openLEE || openPCT || openLME ? (
+                    ""
+                  ) : (
+                    <DataTableCPMSQualifications
+                      locationSelectValue={locationSelectValue}
+                      user={user}
+                      checkout={checkout}
+                      inactive={inactive}
+                      settingInactiveCheckBox={settingInactiveCheckBox}
+                      revertedState={revertedState}
+                      setRevertedState={setRevertedState}
+                      selectedLocation={selectedLocation}
+                      qualSelectValue={selectedQualificationData["id"]}
+                      setOpenCPMS={setOpenCPMS}
+                      openCPMS={openCPMS}
+                      setUpdateCPMS={setUpdateCPMS}
+                      updateCPMS={updateCPMS}
                       setCreatingChild={setCreatingChild}
                     />
                   )}

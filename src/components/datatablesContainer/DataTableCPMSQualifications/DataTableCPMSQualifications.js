@@ -1,19 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import * as fs from "../../../utils/selectors/monitoringPlanPCTQualifications";
+import * as fs from "../../../utils/selectors/monitoringPlanCPMSQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-
-import { Preloader } from "@us-epa-camd/easey-design-system";
-import { connect } from "react-redux";
-import { loadDropdowns } from "../../../store/actions/dropdowns";
-import {
-  convertSectionToStoreName,
-  PCT_QUALIFICATIONS_SECTION_NAME,
-  PCT_QUALIFICATIONS_STORE_NAME,
-} from "../../../additional-functions/data-table-section-and-store-names";
 
 import {
   attachChangeEventListeners,
@@ -21,10 +12,19 @@ import {
   resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
-export const DataTablePCTQualifications = ({
-  mdmDataPCT,
+import { Preloader } from "@us-epa-camd/easey-design-system";
+import { connect } from "react-redux";
+import { loadDropdowns } from "../../../store/actions/dropdowns";
+import {
+  convertSectionToStoreName,
+  CPMS_QUALIFICATIONS_SECTION_NAME,
+  CPMS_QUALIFICATIONS_STORE_NAME,
+} from "../../../additional-functions/data-table-section-and-store-names";
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+
+export const DataTableCPMSQualifications = ({
+  mdmData,
   loadDropdownsData,
   locationSelectValue,
   qualSelectValue,
@@ -33,118 +33,110 @@ export const DataTablePCTQualifications = ({
   inactive,
   revertedState,
   setRevertedState,
-  setOpenPCT,
-  openPCT,
-  setUpdatePCT,
-  updatePCT,
+  setOpenCPMS,
+  openCPMS,
+  setUpdateCPMS,
+  updateCPMS,
   setCreatingChild,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [qualPctData, setQualPctData] = useState([]);
-
-  const dropdownArray = [
-    [
-      "qualificationYear",
-      "yr1QualificationDataYear",
-      "yr2QualificationDataYear",
-      "yr3QualificationDataYear",
-      "yr1QualificationDataTypeCode",
-      "yr2QualificationDataTypeCode",
-      "yr3QualificationDataTypeCode",
-    ],
-  ];
-  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
-
+  const [qualCpmsData, setQualCpmsData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
+  const dropdownArray = [["qualificationYear"]];
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
+
   useEffect(() => {
     if (
-      updatePCT ||
+      updateCPMS ||
       updateTable ||
-      qualPctData.length <= 0 ||
+      qualCpmsData.length <= 0 ||
       locationSelectValue ||
       qualSelectValue ||
       revertedState
     ) {
       mpApi
-        .getPCTQualifications(locationSelectValue, qualSelectValue)
+        .getCPMSQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualPctData(res.data);
+          setQualCpmsData(res.data);
+
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
-          setUpdatePCT(false);
+          setUpdateCPMS(false);
         })
-        .catch(error => console.log('getPCTQualifications failed', error))
+        .catch((error) => console.log("getCPMSQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState, updatePCT]);
+  }, [locationSelectValue, updateTable, revertedState, updateCPMS]);
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (mdmDataPCT !== undefined && mdmDataPCT.length === 0) {
-      loadDropdownsData(PCT_QUALIFICATIONS_SECTION_NAME, dropdownArray);
+    if (mdmData.length === 0) {
+      loadDropdownsData(CPMS_QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mdmDataPCT]);
+  }, [mdmData]);
 
-  const [selectedQualPct, setSelectedQualPct] = useState(null);
+  const [selectedQualCpms, setSelectedQualCpms] = useState(null);
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
     "Qualification Year",
-    "Average Percent Value",
-    "Data Year 1",
-    "Data Year 2",
-    "Data Year 3",
+    "Stack Test Number",
+    "Operating Limit",
   ];
 
   const data = useMemo(() => {
-    if (qualPctData.length > 0) {
-      return fs.getMonitoringPlansPCTQualifications(qualPctData);
+    if (qualCpmsData.length > 0) {
+      return fs.getMonitoringPlansCPMSQualifications(qualCpmsData);
     }
     return [];
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qualPctData, inactive]);
+  }, [qualCpmsData]);
 
-  const openPctQualModal = (row, bool, create) => {
-    setOpenPCT(true);
+  const openCpmsQualModal = (row, bool, create) => {
+    setOpenCPMS(true);
     setCreatingChild(create);
-    let pctData = null;
+    let cpmsData = null;
 
-    if (qualPctData.length > 0 && !create) {
-      pctData = qualPctData.filter(
+    if (qualCpmsData.length > 0 && !create) {
+      cpmsData = qualCpmsData.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];
-      setSelectedQualPct(pctData);
+      setSelectedQualCpms(cpmsData);
     }
+
+    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
+    const mainDropdownName = "";
+    const staticDropdownFlag = true;
+    const mainDropdownResult = [];
+
     setSelectedModalData(
       modalViewData(
-        pctData,
+        cpmsData,
         {
-          qualificationYear: ["Qualification Year", "nonFilteredDropdown", ""],
-          averagePercentValue: ["Average Percent Value", "input", ""],
-          emptyfield: ["", "skip", ""],
-          yr1QualificationDataYear: ["Data Year 1", "nonFilteredDropdown", ""],
-          yr1QualificationDataTypeCode: ["Year 1 Type Code", "dropdown", ""],
-          yr1PercentageValue: ["Year 1 Percentage Value", "input", ""],
-
-          yr2QualificationDataYear: ["Data Year 2", "nonFilteredDropdown", ""],
-          yr2QualificationDataTypeCode: ["Year 2 Type Code", "dropdown", ""],
-          yr2PercentageValue: ["Year 2 Percentage Value", "input", ""],
-
-          yr3QualificationDataYear: ["Data Year 3", "nonFilteredDropdown", ""],
-          yr3QualificationDataTypeCode: ["Year 3 Type Code", "dropdown", ""],
-          yr3PercentageValue: ["Year 3 Percentage Value", "input", ""],
+          qualificationYear: ["Qualification Test Date", "independentDropdown", ""],
+          stackTestNumber: ["Parameter Code", "input", ""],
+          operatingLimit: [
+            "Qualification Test Type",
+            "input",
+            "",
+          ],
         },
         {},
         create,
-        mdmDataPCT
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        staticDropdownFlag,
+        prefilteredDataName
       )
     );
 
@@ -153,7 +145,7 @@ export const DataTablePCTQualifications = ({
     });
 
     if (create) {
-      returnsFocusMpDatatableCreateBTN("Create Qualification Percent", 1000)
+      returnsFocusMpDatatableCreateBTN("Create Qualification CPMS", 1000);
     }
   };
 
@@ -167,24 +159,24 @@ export const DataTablePCTQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      setOpenPCT(false);
+      setOpenCPMS(false);
       resetIsDataChanged();
       removeChangeEventListeners(".modalUserInput");
     }
-    returnsFocusMpDatatableCreateBTN("Create Qualification Percent")
+    returnsFocusMpDatatableCreateBTN("Create Qualification CPMS");
   };
 
   return (
     <div className="methodTable react-transition fade-in">
-      {openPCT ? (
+      {openCPMS ? (
         <div>
           <ModalDetails
-            modalData={selectedQualPct}
+            modalData={selectedQualCpms}
             backBtn={backBtnHandler}
             data={selectedModalData}
-            cols={3}
+            cols={2}
             // title={`Qualification Percent: ${selectedQualPct["id"]}`}
-            title={"Qualification Percent"}
+            title={"Qualification CPMS"}
             viewOnly={!(user && checkout)}
           />
         </div>
@@ -195,13 +187,13 @@ export const DataTablePCTQualifications = ({
           dataLoaded={dataLoaded && dropdownsLoaded}
           checkout={checkout}
           user={user}
-          openHandler={openPctQualModal}
+          openHandler={openCpmsQualModal}
           actionsBtn={"View"}
-          tableTitle={"Qualification Percent"}
+          tableTitle={"Qualification CPMS"}
           componentStyling="systemsCompTable"
-          addBtnName={"Create Qualification Percent"}
-          addBtn={openPctQualModal}
-          ariaLabel={"PCT Qualifications"}
+          addBtnName={"Create Qualification CPMS"}
+          addBtn={openCpmsQualModal}
+          ariaLabel={"CPMS Qualifications"}
         />
       ) : (
         <Preloader />
@@ -212,7 +204,7 @@ export const DataTablePCTQualifications = ({
 
 const mapStateToProps = (state) => {
   return {
-    mdmDataPCT: state.dropdowns[PCT_QUALIFICATIONS_STORE_NAME],
+    mdmData: state.dropdowns[CPMS_QUALIFICATIONS_STORE_NAME],
   };
 };
 
@@ -229,6 +221,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DataTablePCTQualifications);
+)(DataTableCPMSQualifications);
 export { mapDispatchToProps };
 export { mapStateToProps };
