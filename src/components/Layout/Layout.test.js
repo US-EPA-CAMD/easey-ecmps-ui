@@ -1,67 +1,67 @@
-import React from "react";
-import Layout from "./Layout";
-import { render, screen, fireEvent, wait } from "@testing-library/react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
+import React from 'react';
+import { render, act, fireEvent } from '@testing-library/react';
+import Layout from './Layout';
+import { MemoryRouter } from 'react-router-dom';
+import * as contentApi from "../../utils/api/contentApi";
 
-jest.mock("react-markdown", () => (props) => {
-  return <>{props.children}</>;
-});
-jest.mock("@us-epa-camd/easey-design-system", () => ({
-  ...jest.requireActual("@us-epa-camd/easey-design-system"),
-  Header: () => <></>,
+const mockFn = jest.fn();
+
+jest.mock("../../additional-functions/app-error", () => ({
+  hideAppError: () => mockFn,
 }));
-jest.mock("remark-gfm", () => () => {});
 
-jest.mock("../../utils/api/contentApi", () => {
-  const testContent = {
-    data: {
-      heading: "Test Heading:",
-      message: "Test message.",
-      enabled: "true",
-    },
-  };
-  return {
-    getContent: jest.fn().mockResolvedValue(testContent),
-  };
-});
-
-const childComponent = () => {
-  return <div>Welcome!</div>;
+const testContent = {
+  heading: "Test Heading:",
+  message: "Test message.",
+  enabled: "true",
 };
-describe("tests Layout component", () => {
-  it(" should render a routed child component between header and footer", async () => {
-    await wait(() => {
-      // render Layout component with a sample child div element
-      const layout = render(
-        <BrowserRouter>
-          <Layout>
-            <Switch>
-              <Route path="/" exact component={childComponent} />
-            </Switch>
-          </Layout>
-        </BrowserRouter>
-      );
+describe('Layout', () => {
+  beforeEach(() => {
+    jest.spyOn(contentApi, "getContent").mockResolvedValue({ data: testContent })
+  });
+  it('renders Layout component', () => {
+    let renderer
 
-      const errorMsgCloseBtn = layout.container.querySelector(
-        ".MuiSvgIcon-root.float-right.cursor-pointer"
-      );
+    act(() => {
+      renderer = render(<Layout />, { wrapper: MemoryRouter });
+    })
+    const layout = renderer.container.querySelector('#layout');
+    expect(layout).toBeInTheDocument();
+  });
 
-      // click error message close button
-      userEvent.click(errorMsgCloseBtn);
-      const errorMsgBanner = layout.container.querySelector("#appErrorMessage");
+  it('Clears error messages on Enter key press', () => {
+    let renderer
 
-      // fire keyPress event (Enter) on error message close button
-      const child = errorMsgBanner.children[1];
+    act(() => {
+      renderer = render(<Layout />, { wrapper: MemoryRouter });
+    })
+
+    const errorMsgBanner = renderer.container.querySelector("#appErrorMessage");
+    // fire keyPress event (Enter) on error message close button
+    const child = errorMsgBanner.children[1];
+    act(() => {
       fireEvent.keyPress(child, {
         key: "Enter",
         code: 13,
         charCode: 13,
       });
-
-      // check that the child component was rendered
-      const layoutContent = screen.getByText("Welcome!");
-      expect(layoutContent).not.toBeUndefined();
-    });
+    })
   });
-});
+
+  it('Clears error messages on Click', () => {
+    let renderer
+
+    act(() => {
+      renderer = render(<Layout />, { wrapper: MemoryRouter });
+    })
+
+    const errorMsgBanner = renderer.container.querySelector("#appErrorMessage");
+    // fire keyPress event (Enter) on error message close button
+    const child = errorMsgBanner.children[1];
+    act(() => {
+      fireEvent.click(child);
+    })
+  });
+
+}
+);

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import ImportModal from "./ImportModal";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
@@ -2499,9 +2499,9 @@ const schema = {
 }
 
 describe("testing ImportModal component ", () => {
-  test("renders the content of ImportModal component with MONITORING_PLAN_STORE_NAME", async() => {
+  test("renders the content of ImportModal component with MONITORING_PLAN_STORE_NAME", async () => {
     mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/monitor-plan.schema.json").reply(200, schema);
-    const { container, findByText, getByText } = render(
+    const { container, findByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
         complete={false}
@@ -2528,18 +2528,18 @@ describe("testing ImportModal component ", () => {
     expect(fileInputLabel2).toBeDefined()
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
+        files: [new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' })],
       }
     });
   });
 
-  test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME", async() => {
-    const fakeFile = new File(['(⌐□_□)'], {item:'chucknorris.png'}, {type: 'image/png'});
+  test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME", async () => {
+    const fakeFile = new File(['(⌐□_□)'], { item: 'chucknorris.png' }, { type: 'image/png' });
     mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/qa-certification.schema.json").reply(200, schema);
 
-    const { container, findByText, getByText } = render(
+    const { container, findByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
         complete={false}
@@ -2566,16 +2566,16 @@ describe("testing ImportModal component ", () => {
     expect(fileInputLabel2).toBeDefined()
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
+        files: [new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' })],
       }
     });
   });
 
-  test("renders the content of ImportModal component with EMISSIONS_STORE_NAME", async() => {
+  test("renders the content of ImportModal component with EMISSIONS_STORE_NAME", async () => {
     mock.onGet("https://api.epa.gov/easey/dev/content-mgmt/ecmps/reporting-instructions/emissions.schema.json").reply(200, schema);
-    const { container, findByText, getByText } = render(
+    const { container, findByText } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
         complete={false}
@@ -2601,12 +2601,12 @@ describe("testing ImportModal component ", () => {
     expect(fileInputLabel2).toBeDefined()
     const fileInput = container.querySelector("#file-input-single");
     expect(fileInput).not.toBeUndefined();
-    fireEvent.change(fileInput,{
+    fireEvent.change(fileInput, {
       dataTransfer: {
-        files: [new File(['(⌐□_□)'], 'chucknorris.png', {type: 'image/png'})],
+        files: [new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' })],
       }
     });
-    
+
   });
   test("renders the content of ImportModal component with QA_CERT_TEST_SUMMARY_STORE_NAME with file change", async () => {
     mock
@@ -2615,7 +2615,7 @@ describe("testing ImportModal component ", () => {
       )
       .reply(200, schema);
 
-    const { container, findByText, getByText } = render(
+    const { container } = render(
       <ImportModal
         setDisablePortBtn={jest.fn()}
         complete={false}
@@ -2642,9 +2642,6 @@ describe("testing ImportModal component ", () => {
       ],
     };
 
-    const fakeSchemaJson = JSON.stringify(fakeSchema);
-    const fakeSchemaFile = new File([fakeSchemaJson], "fileSchema.json");
-
     const fileInput = container.querySelector("#file-input-single");
 
     const str = JSON.stringify(fakeSchema);
@@ -2654,7 +2651,6 @@ describe("testing ImportModal component ", () => {
     });
 
     File.prototype.text = jest.fn().mockResolvedValueOnce(str);
-    const files = [file];
 
     Object.defineProperty(fileInput, "files", { value: [file] });
     fireEvent.input(fileInput);
