@@ -1,5 +1,5 @@
 import React from "react";
-import { render, act, screen } from "@testing-library/react";
+import { render, act, screen, prettyDOM } from "@testing-library/react";
 import ReviewCell from "./ReviewCell";
 import userEvent from "@testing-library/user-event";
 
@@ -26,7 +26,7 @@ describe("Review and Submit Tables component", () => {
       );
     });
 
-    const checkbox = screen.getByTestId("Checkbox");
+    const checkbox = screen.getByTestId("checkbox");
     expect(checkbox).toBeInTheDocument();
   });
 
@@ -146,8 +146,9 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
     const mockHandleRowSelection = jest.fn();
+    let rendered
     await act(async () => {
-      render(
+      rendered = render(
         <ReviewCell
           row={mockRow}
           handleRowSelection={mockHandleRowSelection}
@@ -159,7 +160,7 @@ describe("Review and Submit Tables component", () => {
         />
       );
     });
-    const checkbox = screen.getByTestId("Checkbox")
+    const checkbox = rendered.container.querySelector("[type=checkbox]")
     await act(async() => userEvent.click(checkbox))
     expect(mockHandleRowSelection).toHaveBeenCalled();
   });
