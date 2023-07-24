@@ -1,5 +1,5 @@
 import React from "react";
-import { render, act } from "@testing-library/react";
+import { render, act, screen, } from "@testing-library/react";
 import DataTables from "./DataTables";
 
 let mockRowState = {
@@ -10,7 +10,7 @@ let mockRowState = {
   orisCode: 1,
 };
 
-const permissions = { current: { 1: ["DSMP", "DSQA"] } };
+const permissions = { current: { get: jest.fn().mockReturnValue(["DSMP", "DSQA"]) } };
 
 let dataList;
 
@@ -40,7 +40,7 @@ jest.mock("../../../additional-functions/checkout", () => ({
 }));
 
 describe("Review and Submit Tables component", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     dataList = [
       {
         columns: [],
@@ -153,20 +153,19 @@ describe("Review and Submit Tables component", () => {
   });
 
   it("expect initial loading state to be correct for submission", async () => {
-    let query = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Submission"
-        monitorPlanIdToSelectedMap={new Map()}
-        userCheckedOutPlans={{ current: [] }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Submission"
+          monitorPlanIdToSelectedMap={new Map()}
+          userCheckedOutPlans={{ current: [] }}
+        />)
+    })
 
-    const { getByText } = query;
-    expect(getByText("QA:Checkbox")).toBeInTheDocument();
-    expect(getByText("QA:SELECT ROW")).toBeInTheDocument();
+    expect(screen.getByText("QA:SELECT ROW")).toBeInTheDocument();
   });
 
   it("expect lock to be shown if record is checked out", async () => {
@@ -178,18 +177,19 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let { getByText } = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Submission"
-        monitorPlanIdToSelectedMap={new Map()}
-        userCheckedOutPlans={{ current: [] }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Submission"
+          monitorPlanIdToSelectedMap={new Map()}
+          userCheckedOutPlans={{ current: [] }}
+        />)
+    })
 
-    expect(getByText("QA:Lock")).toBeInTheDocument();
+    expect(screen.getByText("QA:Lock")).toBeInTheDocument();
   });
 
   it("expect view button to show if record is open but does not require submissions", async () => {
@@ -201,18 +201,19 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let { getByText } = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Submission"
-        monitorPlanIdToSelectedMap={new Map()}
-        userCheckedOutPlans={{ current: [] }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Submission"
+          monitorPlanIdToSelectedMap={new Map()}
+          userCheckedOutPlans={{ current: [] }}
+        />)
+    })
 
-    expect(getByText("QA:View")).toBeInTheDocument();
+    expect(screen.getByText("QA:View")).toBeInTheDocument();
   });
 
   it("expect selection of a qa record to select qa and monitor plan", async () => {
@@ -224,23 +225,27 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let { getByText } = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Submission"
-        monitorPlanIdToSelectedMap={{ current: new Map() }}
-        userCheckedOutPlans={{ current: new Set() }}
-      />
-    );
+    jest.spyOn(permissions.current, 'get').mockReturnValue(["DSMP", "DSQA"])
 
     await act(async () => {
-      await getByText("QA:SELECT ROW").click();
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Submission"
+          monitorPlanIdToSelectedMap={{ current: new Map() }}
+          userCheckedOutPlans={{ current: new Set() }}
+        />)
+    })
+
+    await act(() => {
+      screen.getAllByText("QA:SELECT ROW")[0].click();
     });
 
     expect(dataList[1].ref.current[0].selected).toBe(true);
     expect(dataList[0].ref.current[0].selected).toBe(true);
+
   });
 
   it("expect selection of an em record to select em, qa and monitor plan", async () => {
@@ -252,19 +257,22 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let { getByText } = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Submission"
-        monitorPlanIdToSelectedMap={{ current: new Map() }}
-        userCheckedOutPlans={{ current: new Set() }}
-      />
-    );
+    jest.spyOn(permissions.current, 'get').mockReturnValue(["DSMP", "DSQA"])
 
     await act(async () => {
-      await getByText("EM:SELECT ROW").click();
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Submission"
+          monitorPlanIdToSelectedMap={{ current: new Map() }}
+          userCheckedOutPlans={{ current: new Set() }}
+        />)
+    })
+
+    await act(async () => {
+      screen.getByText("EM:SELECT ROW").click();
     });
 
     expect(dataList[2].ref.current[0].selected).toBe(true);
@@ -281,20 +289,20 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let query = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Evaluate"
-        monitorPlanIdToSelectedMap={{ current: new Map() }}
-        userCheckedOutPlans={{ current: new Set() }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Evaluate"
+          monitorPlanIdToSelectedMap={{ current: new Map() }}
+          userCheckedOutPlans={{ current: new Set() }}
+        />)
+    })
 
-    const { getByText } = query;
-    expect(getByText("MP:Checkbox")).toBeInTheDocument();
-    expect(getByText("MP:SELECT ROW")).toBeInTheDocument();
+    expect(screen.getByText("MP:Checkbox")).toBeInTheDocument();
+    expect(screen.getByText("MP:SELECT ROW")).toBeInTheDocument();
   });
 
   it("expect initial loading state to be correct for evaluate lock", async () => {
@@ -306,20 +314,20 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let query = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Evaluate"
-        monitorPlanIdToSelectedMap={{ current: new Map() }}
-        userCheckedOutPlans={{ current: new Set() }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Evaluate"
+          monitorPlanIdToSelectedMap={{ current: new Map() }}
+          userCheckedOutPlans={{ current: new Set() }}
+        />)
+    })
 
-    const { getByText } = query;
-    expect(getByText("MP:Lock")).toBeInTheDocument();
-    expect(getByText("MP:SELECT ROW")).toBeInTheDocument();
+    expect(screen.getByText("MP:Lock")).toBeInTheDocument();
+    expect(screen.getByText("MP:SELECT ROW")).toBeInTheDocument();
   });
 
   it("expect initial loading state to be correct for evaluate view button", async () => {
@@ -331,19 +339,19 @@ describe("Review and Submit Tables component", () => {
       orisCode: 1,
     };
 
-    let query = render(
-      <DataTables
-        dataList={dataList}
-        permissions={permissions}
-        updateFilesSelected={jest.fn()}
-        componentType="Evaluate"
-        monitorPlanIdToSelectedMap={{ current: new Map() }}
-        userCheckedOutPlans={{ current: new Set() }}
-      />
-    );
+    await act(async () => {
+      render(
+        <DataTables
+          dataList={dataList}
+          permissions={permissions}
+          updateFilesSelected={jest.fn()}
+          componentType="Evaluate"
+          monitorPlanIdToSelectedMap={{ current: new Map() }}
+          userCheckedOutPlans={{ current: new Set() }}
+        />)
+    })
 
-    const { getByText } = query;
-    expect(getByText("MP:View")).toBeInTheDocument();
-    expect(getByText("MP:SELECT ROW")).toBeInTheDocument();
+    expect(screen.getByText("MP:View")).toBeInTheDocument();
+    expect(screen.getByText("MP:SELECT ROW")).toBeInTheDocument();
   });
 });

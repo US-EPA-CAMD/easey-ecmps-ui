@@ -36,6 +36,9 @@ module.exports = {
       jestConfig.moduleNameMapper = {
         "\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
       };
+      jestConfig.setupFilesAfterEnv = [
+        "@testing-library/jest-dom/extend-expect"
+      ];
       return jestConfig;
     },
   },
