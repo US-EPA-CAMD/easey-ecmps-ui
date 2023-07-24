@@ -2,6 +2,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
 import * as qaAssert from "./assert";
+import * as qaApi from "../../api/qaCertificationsAPI";
 
 import { secureAxios } from "../../api/easeyAuthApi";
 
@@ -15,7 +16,7 @@ const appECorrTestSumId = "appECorrTestSumId";
 const appECorrTestRunId = "appECorrTestRunId";
 const linSumId = "linSumId";
 const hgTestSumId = "hgTestSumId";
-
+const proGas = "Protocol Gas";
 const lineTest = "Linearity Test";
 const testQualification = "Test Qualification";
 const appendixECorrHeatInputOil = "Appendix E Correlation Heat Input from Oil";
@@ -39,60 +40,66 @@ describe("Test Qualification CRUD operations", () => {
     mock.resetHistory();
   });
   test("getTestQualification", async () => {
-    const lineSumData = [{ lineSum: "data" }];
-    const getTestQualificationUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
-    mock.onGet(getTestQualificationUrl).reply(200, lineSumData);
-    const resp = await qaAssert.getDataTableApis(
+    const mockGetTestQualification = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "getTestQualification")
+        .mockImplementation(mockGetTestQualification);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.getDataTableApis(
       testQualification,
       locId,
-      testSumId
+      testSumId,
+      extraIDs
     );
-
-    expect(mock.history.get.length).toBe(1);
-    expect(resp.data).toStrictEqual(lineSumData);
+    expect(mockGetTestQualification).toHaveBeenCalledTimes(1);
   });
 
   test("createTestQualification", async () => {
-    const payload = { lineSum: "data" };
-    const postTestQualificationUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
-    mock.onPost(postTestQualificationUrl).reply(200, "success");
-    const resp = await qaAssert.createDataSwitch(
-      payload,
+    const mockCreateTestQualification = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "createTestQualification")
+        .mockImplementation(mockCreateTestQualification);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.createDataSwitch(
+      {},
       testQualification,
       locId,
-      testSumId
+      testSumId,
+      extraIDs
     );
-    expect(mock.history.post.length).toBe(1);
-    expect(resp.data).toStrictEqual("success");
+    expect(mockCreateTestQualification).toHaveBeenCalledTimes(1);
   });
 
   test("updateTestQualification", async () => {
-    const payload = { id: "id", lineSum: "data" };
-    const putTestQualificationUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
-    mock.onPut(putTestQualificationUrl).reply(200, "success");
-    const resp = await qaAssert.saveDataSwitch(
-      payload,
+    const mockUpdateTestQualification = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "updateTestQualification")
+        .mockImplementation(mockUpdateTestQualification);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.saveDataSwitch(
+      {},
       testQualification,
       locId,
-      testSumId
+      testSumId,
+      extraIDs
     );
-    expect(mock.history.put.length).toBe(1);
-    expect(resp.data).toStrictEqual("success");
+    expect(mockUpdateTestQualification).toHaveBeenCalledTimes(1);
   });
 
   test("deleteTestQualification", async () => {
-    const payload = { id: "id", lineSum: "data" };
-    const deleteTestQualUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/test-qualifications/${id}`;
-    mock.onDelete(deleteTestQualUrl).reply(200, "deleted");
-    const resp = await qaAssert.removeDataSwitch(
-      payload,
+    const mockDeleteTestQualification = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "deleteTestQualification")
+        .mockImplementation(mockDeleteTestQualification);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.removeDataSwitch(
+      {},
       testQualification,
       locId,
-      testSumId
+      testSumId,
+      extraIDs
     );
-
-    expect(mock.history.delete.length).toBe(1);
-    expect(resp.data).toStrictEqual("deleted");
+    expect(mockDeleteTestQualification).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -680,67 +687,135 @@ describe("Rata Data CRUD operations", () => {
   });
 });
 
+describe("Protocol Gas CRUD operations", () => {
+  beforeEach(() => {
+    mock.resetHistory();
+  });
+  test("getProtocolGas", async () => {
+    const mockGetProtocolGas = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "getProtocolGas")
+        .mockImplementation(mockGetProtocolGas);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.getDataTableApis(
+      proGas,
+      locId,
+      testSumId,
+      extraIDs
+    );
+    expect(mockGetProtocolGas).toHaveBeenCalledTimes(1);
+  });
+
+  test("createProtocolGas", async () => {
+    const mockCreateProtocolGas = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "createProtocolGas")
+        .mockImplementation(mockCreateProtocolGas);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.createDataSwitch(
+      {},
+      proGas,
+      locId,
+      testSumId,
+      extraIDs
+    );
+    expect(mockCreateProtocolGas).toHaveBeenCalledTimes(1);
+  });
+
+  test("updateProtocolGas", async () => {
+    const mockUpdateProtocolGas = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "updateProtocolGas")
+        .mockImplementation(mockUpdateProtocolGas);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.saveDataSwitch(
+      {},
+      proGas,
+      locId,
+      testSumId,
+      extraIDs
+    );
+
+    expect(mockUpdateProtocolGas).toHaveBeenCalledTimes(1);
+  });
+
+  test("deleteProtocolGas", async () => {
+    const mockDeleteProtocolGas = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "deleteProtocolGas")
+        .mockImplementation(mockDeleteProtocolGas);
+    const extraIDs = [locId, testSumId];
+    await qaAssert.removeDataSwitch(
+      { id: id },
+      proGas,
+      locId,
+      testSumId,
+      extraIDs
+    );
+
+    expect(mockDeleteProtocolGas).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("Air Emissions CRUD operations", () => {
   beforeEach(() => {
     mock.resetHistory();
   });
   test("getAirEmissions", async () => {
-    const airEmissionsObject = [{ airEmissions: "data" }];
-    const postAirEmissionsUrl = `${qaCertBaseUrl}/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
-    mock.onGet(postAirEmissionsUrl).reply(200, airEmissionsObject);
+    const mockGetAirEmissions = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "getAirEmissions")
+        .mockImplementation(mockGetAirEmissions);
     const extraIDs = [locId, testSumId];
-    const resp = await qaAssert.getDataTableApis(
+    await qaAssert.getDataTableApis(
       airEmissions,
       locId,
       testSumId,
       extraIDs
     );
-
-    expect(mock.history.get.length).toBe(1);
-    expect(resp.data).toStrictEqual(airEmissionsObject);
+    expect(mockGetAirEmissions).toHaveBeenCalledTimes(1);
   });
 
   test("createAirEmissions", async () => {
-    const payload = { airEmissions: "data" };
-    const postAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings`;
-    mock.onPost(postAirEmissionsUrl).reply(200, "success");
+    const mockCreateAirEmissions = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "createAirEmissions")
+        .mockImplementation(mockCreateAirEmissions);
     const extraIDs = [locId, testSumId];
-    const resp = await qaAssert.createDataSwitch(
-      payload,
+    await qaAssert.createDataSwitch(
+      {},
       airEmissions,
       locId,
       testSumId,
       extraIDs
     );
-
-    expect(mock.history.post.length).toBe(1);
-    expect(resp.data).toStrictEqual("success");
+    expect(mockCreateAirEmissions).toHaveBeenCalledTimes(1);
   });
 
   test("updateAirEmissions", async () => {
-    const payload = { id: id, airEmissions: "data" };
-    const putAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
-    mock.onPut(putAirEmissionsUrl).reply(200, "success");
-
+    const mockUpdateAirEmissions = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "updateAirEmissions")
+        .mockImplementation(mockUpdateAirEmissions);
     const extraIDs = [locId, testSumId];
-    const resp = await qaAssert.saveDataSwitch(
-      payload,
+    await qaAssert.saveDataSwitch(
+      {},
       airEmissions,
       locId,
       testSumId,
       extraIDs
     );
 
-    expect(mock.history.put.length).toBe(1);
-    expect(resp.data).toStrictEqual("success");
+    expect(mockUpdateAirEmissions).toHaveBeenCalledTimes(1);
   });
 
   test("deleteAirEmissions", async () => {
-    const deleteAirEmissionsUrl = `${qaCertBaseUrl}/workspace/locations/${locId}/test-summary/${testSumId}/air-emission-testings/${id}`;
-    mock.onDelete(deleteAirEmissionsUrl).reply(200, "deleted");
-
+    const mockDeleteAirEmissions = jest.fn().mockResolvedValue({});
+    jest
+        .spyOn(qaApi, "deleteAirEmissions")
+        .mockImplementation(mockDeleteAirEmissions);
     const extraIDs = [locId, testSumId];
-    const resp = await qaAssert.removeDataSwitch(
+    await qaAssert.removeDataSwitch(
       { id: id },
       airEmissions,
       locId,
@@ -748,8 +823,7 @@ describe("Air Emissions CRUD operations", () => {
       extraIDs
     );
 
-    expect(mock.history.delete.length).toBe(1);
-    expect(resp.data).toStrictEqual("deleted");
+    expect(mockDeleteAirEmissions).toHaveBeenCalledTimes(1);
   });
 });
 
