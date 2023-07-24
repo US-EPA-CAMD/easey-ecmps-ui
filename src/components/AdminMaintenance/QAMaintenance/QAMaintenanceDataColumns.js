@@ -39,6 +39,13 @@ const severityDescriptionCol = {
   sortable: true,
 };
 
+const requireResubmissionReasonCol = {
+  name: "Resubmission Reason",
+  width: "250pxpx",
+  selector: (row) => row.resubExplanation,
+  sortable: true,
+}
+
 export const testSummaryCols = [
   unitStackCol,
   systemComponentIdCol,
@@ -74,6 +81,7 @@ export const testSummaryCols = [
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
+  requireResubmissionReasonCol,
 ];
 
 export const certEventsCols = [
@@ -111,6 +119,7 @@ export const certEventsCols = [
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
+  requireResubmissionReasonCol,
 ];
 
 export const testExtensionExemptionCols = [
@@ -142,4 +151,5 @@ export const testExtensionExemptionCols = [
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
+  requireResubmissionReasonCol,
 ];
