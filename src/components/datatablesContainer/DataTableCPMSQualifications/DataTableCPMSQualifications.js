@@ -44,7 +44,7 @@ export const DataTableCPMSQualifications = ({
   const [updateTable, setUpdateTable] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState([]);
 
-  const dropdownArray = [["qualificationYear"]];
+  const dropdownArray = [["qualificationDataYear"]];
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export const DataTableCPMSQualifications = ({
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = [
-    "Qualification Year",
+    "Qualification Data Year",
     "Stack Test Number",
     "Operating Limit",
   ];
@@ -111,32 +111,21 @@ export const DataTableCPMSQualifications = ({
       )[0];
       setSelectedQualCpms(cpmsData);
     }
-
-    const prefilteredDataName = dropdownArray[0][dropdownArray[0].length - 1];
-    const mainDropdownName = "";
-    const staticDropdownFlag = true;
-    const mainDropdownResult = [];
-
     setSelectedModalData(
       modalViewData(
         cpmsData,
         {
-          qualificationYear: ["Qualification Test Date", "independentDropdown", ""],
-          stackTestNumber: ["Parameter Code", "input", ""],
-          operatingLimit: [
-            "Qualification Test Type",
-            "input",
+          qualificationDataYear: [
+            "Qualification Data Year",
+            "nonFilteredDropdown",
             "",
           ],
+          stackTestNumber: ["Stack Test Number", "input", ""],
+          operatingLimit: ["Operating Limit", "input", ""],
         },
         {},
         create,
-        mdmData,
-        prefilteredDataName ? mdmData[prefilteredDataName] : "",
-        mainDropdownName,
-        mainDropdownResult,
-        staticDropdownFlag,
-        prefilteredDataName
+        mdmData
       )
     );
 
