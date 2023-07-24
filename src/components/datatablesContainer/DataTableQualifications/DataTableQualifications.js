@@ -359,7 +359,7 @@ export const DataTableQualifications = ({
   };
 
   const buildBreadBar = () => {
-    if (openPCT || openLEE || openLME) {
+    if (openPCT || openLEE || openLME || openCPMS) {
       const breadBar = (
         <BreadcrumbBar className="padding-0">
           <Breadcrumb onClick={closeModalHandler}>
@@ -432,7 +432,7 @@ export const DataTableQualifications = ({
     }
     // otherwise return back to parent qual and reset change tracker
     else {
-      if (openPCT || openLEE || openLME) {
+      if (openPCT || openLEE || openLME || openCPMS) {
         resetIsDataChanged();
       } else {
         setShow(false);
@@ -441,6 +441,7 @@ export const DataTableQualifications = ({
       setOpenPCT(false);
       setOpenLEE(false);
       setOpenLME(false);
+      setOpenCPMS(false);
       removeChangeEventListeners(".modalUserInput");
     }
   };

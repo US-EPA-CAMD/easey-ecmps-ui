@@ -4,11 +4,11 @@ export const getMonitoringPlansCPMSQualifications = (totalData) => {
 
   data.forEach((el) => {
     records.push({
-      col1: el.qualificationTestDate,
+      col1: el.qualificationDataYear,
       col2: el.stackTestNumber ? el.stackTestNumber : "",
       col3: el.operatingLimit ? el.operatingLimit : "",
 
-      col8: el.id,
+      col4: el.id,
     });
   });
   return records;
