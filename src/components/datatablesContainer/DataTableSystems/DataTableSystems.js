@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import Modal from "../../Modal/Modal";
@@ -218,7 +218,16 @@ export const DataTableSystems = ({
     setCreateNewComponentFlag(false);
   };
 
-  const closeModalHandler = () => {
+  const executeOnClose = useCallback(() => {
+    setErrorMsgs([]);
+    resetFlags();
+    setShow(false);
+    setDisableExitBtn(true);
+    removeChangeEventListeners(".modalUserInput");
+    setReturnedFocusToLast(false);
+  }, []);
+
+  const closeModalHandler = useCallback(() => {
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         executeOnClose();
@@ -226,16 +235,7 @@ export const DataTableSystems = ({
     } else {
       executeOnClose();
     }
-  };
-
-  const executeOnClose = () => {
-    setErrorMsgs([]);
-    resetFlags();
-    setShow(false);
-    setDisableExitBtn(true);
-    removeChangeEventListeners(".modalUserInput");
-    setReturnedFocusToLast(false);
-  };
+  }, [executeOnClose]);
 
   const [createNewSystem, setCreateNewSystem] = useState(false);
 
