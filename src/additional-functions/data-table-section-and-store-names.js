@@ -15,6 +15,8 @@ export const FUEL_FLOWS_SECTION_NAME = "Fuel Flows";
 export const SYSTEM_COMPONENTS_SECTION_NAME = "System Components";
 export const ANALYZER_RANGES_SECTION_NAME = "Analyzer Ranges";
 export const PCT_QUALIFICATIONS_SECTION_NAME = "Qualification Percent";
+
+export const CPMS_QUALIFICATIONS_SECTION_NAME = "Qualification CPMS";
 export const LME_QUALIFICATIONS_SECTION_NAME = "Qualification LME";
 export const LEE_QUALIFICATIONS_SECTION_NAME = "Qualification LEE";
 export const MATS_METHODS_SECTION_NAME = "Supplemental Methods";
@@ -48,6 +50,7 @@ export const FUEL_FLOWS_STORE_NAME = "fuelFlows";
 export const SYSTEM_COMPONENTS_STORE_NAME = "systemComponents";
 export const ANALYZER_RANGES_STORE_NAME = "analyzerRanges";
 export const PCT_QUALIFICATIONS_STORE_NAME = "pctQualifications";
+export const CPMS_QUALIFICATIONS_STORE_NAME = "cpmsQualifications";
 export const LME_QUALIFICATIONS_STORE_NAME = "lmeQualifications";
 export const LEE_QUALIFICATIONS_STORE_NAME = "leeQualifications";
 export const MATS_METHODS_STORE_NAME = "matsMethods";
@@ -105,6 +108,9 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case PCT_QUALIFICATIONS_SECTION_NAME:
       storeName = PCT_QUALIFICATIONS_STORE_NAME;
+      break;
+    case CPMS_QUALIFICATIONS_SECTION_NAME:
+      storeName = CPMS_QUALIFICATIONS_STORE_NAME;
       break;
     case LME_QUALIFICATIONS_SECTION_NAME:
       storeName = LME_QUALIFICATIONS_STORE_NAME;

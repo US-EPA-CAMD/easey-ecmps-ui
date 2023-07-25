@@ -49,7 +49,7 @@ const QAMaintenanceModalPopout = ({
   )
 }
 
-const getFunctionsAndIdentifiers = (typeSelection, ) => {
+const getFunctionsAndIdentifiers = (typeSelection) => {
   let updateFunc;
   let deleteFunc;
   let identifier; // name of id field for each type
@@ -91,14 +91,14 @@ const QAMaintenanceRequireResubmissionPopout = ({
   const inputRef = useRef('');
 
   const handleSave = async () => {
-    console.log('reason to require resubmission', inputRef.current.value);
-
     const { identifier, updateFunc } = getFunctionsAndIdentifiers(typeSelection);
     const selectedIds = selectedRows.map(row => row[identifier]);
 
     try {
-      // TODO: add require resubmission reason to payload, replace temp null value
-      const promises = selectedIds.map(id => updateFunc(null, id));
+      const payload = {
+        resubExplanation: inputRef.current.value
+      }
+      const promises = selectedIds.map(id => updateFunc(payload, id));
       await Promise.all(promises);
       setReloadTableData(true);
     } catch (e) {
@@ -126,7 +126,7 @@ const QAMaintenanceRequireResubmissionPopout = ({
         action={QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION}
         inputRef={inputRef}
         className='margin-y-2'
-        disabled={true}
+        disabled={false}
       />
     </Modal >
   )
@@ -179,7 +179,7 @@ const QAMaintenanceDeletePopout = ({
   )
 }
 
-const ReasonForActionTextInput = ({ title, action, inputRef, className, disabled=false }) => {
+const ReasonForActionTextInput = ({ title, action, inputRef, className, disabled = false }) => {
 
   const reasonToAction = `reason-to-${action}`
 

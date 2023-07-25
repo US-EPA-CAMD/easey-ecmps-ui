@@ -153,7 +153,6 @@ const FilterFormAdmin = ({
               selectedFacility,
               selectedLocation[1]
             );
-
             break;
           default:
             return;
