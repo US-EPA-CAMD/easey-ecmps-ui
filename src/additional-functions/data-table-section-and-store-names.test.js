@@ -18,6 +18,7 @@ const dataTableNames = [
   "System Components",
   "Analyzer Ranges",
   "Qualification Percent",
+  "Qualification CPMS",
   "Qualification LME",
   "Qualification LEE",
   "Supplemental Methods",

@@ -176,17 +176,6 @@ export const DataTablePCTQualifications = ({
 
   return (
     <div className="methodTable react-transition fade-in">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testBtn"
-        onClick={() => {
-          backBtnHandler();
-          openPctQualModal(false, false, true);
-        }}
-      />
       {openPCT ? (
         <div>
           <ModalDetails

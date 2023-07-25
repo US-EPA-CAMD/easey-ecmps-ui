@@ -27,6 +27,7 @@ const initialState = {
     lmeQualifications: [],
     leeQualifications: [],
     pctQualifications: [],
+    cpmsQualifications: [],
     rectangularDuctWafs: [],
     spans: [],
     systems: [],
