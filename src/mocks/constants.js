@@ -164,3 +164,59 @@ export const mockMonitoringAnalyzerRanges = [
     userId: "bvick",
   },
 ]
+
+export const mockFacilities = [
+  [
+    {
+      orisCode: "3",
+      name: "Barry",
+      state: "Alabama",
+      epaRegion: "4",
+      county: "Mobile County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/3",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/3/monitor-plans",
+        },
+      ],
+    },
+    {
+      orisCode: "5",
+      name: "Chickasaw",
+      state: "Alabama",
+      epaRegion: "4",
+      county: "Mobile County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/5",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/5/monitor-plans",
+        },
+      ],
+    },
+    {
+      orisCode: "9",
+      name: "Copper Station",
+      state: "Texas",
+      epaRegion: "6",
+      county: "El Paso County",
+      links: [
+        {
+          rel: "self",
+          href: "/facilities/9",
+        },
+        {
+          rel: "monitor-plans",
+          href: "facilities/9/monitor-plans",
+        },
+      ],
+    },
+  ],
+];
