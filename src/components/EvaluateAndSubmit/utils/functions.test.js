@@ -1,4 +1,6 @@
 import { getDropDownFacilities } from './functions';
+import * as facilityApi from '../../../utils/api/facilityApi'
+
 const data = [
   {
     facilityRecordId: 1,
@@ -7,14 +9,10 @@ const data = [
     stateCode: 'AL',
   },
 ];
-const mockFacilityCall = jest.fn().mockResolvedValue({ data });
-jest.mock('../../../utils/api/facilityApi', () => ({
-  getAllFacilities: () => mockFacilityCall(),
-}));
 
 describe('getDropDownFacilities', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    jest.spyOn(facilityApi, 'getAllFacilities').mockResolvedValue({ data })
   });
 
   test('should format facilities correctly', async () => {
