@@ -49,7 +49,7 @@ export const ExportTab = ({
 
   const rowsData = useRef();
 
-  const dataTypeSelectionHanlder = (e) => {
+  const dataTypeSelectionHandler = (e) => {
     const dataTypesCopy = [...dataTypes];
     const index = dataTypesCopy.findIndex((d) => d.name === e.target.name);
     if (index > -1) {
@@ -190,7 +190,7 @@ export const ExportTab = ({
                 name={d.name}
                 label={<strong>{d.label}</strong>}
                 checked={d.checked}
-                onChange={dataTypeSelectionHanlder}
+                onChange={dataTypeSelectionHandler}
                 key={i}
               />
             ))}
@@ -215,7 +215,6 @@ export const ExportTab = ({
                 exportClickHandler().catch((error) => {
                   console.error("Error during Export", error);
                 });
-                return;
               }}
             >
               Export
