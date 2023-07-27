@@ -1,15 +1,31 @@
-import React from "react";
-import { act, render, screen } from "@testing-library/react";
-import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { EmissionsImportTypeModalContent } from './EmissionsImportTypeModalContent';
 
-describe("EmissionsImportTypeModalContent Test", () => {
-  it("render component with proper text", async () => {
-    await act(async () => {
-      render(<EmissionsImportTypeModalContent onChange={() => null} />);
-    });
+describe('EmissionsImportTypeModalContent', () => {
+  it('renders without crashing', () => {
+    const { getByText } = render(
+      <EmissionsImportTypeModalContent onChange={() => {}} />,
+    );
+    expect(getByText('Import Historical or File Data')).toBeInTheDocument();
+  });
 
-    expect(screen.queryByText("Import Historical or File Data")).toBeDefined();
-    expect(screen.queryByText("Import From File")).toBeDefined();
-    expect(screen.queryByText("Import From Historical Data")).toBeDefined();
+  it('calls onChange when an option is selected', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(
+      <EmissionsImportTypeModalContent onChange={onChange} />,
+    );
+    fireEvent.change(getByRole('combobox'), { target: { value: 'file' } });
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('renders correct options', () => {
+    const { getByText } = render(
+      <EmissionsImportTypeModalContent onChange={() => {}} />,
+    );
+    expect(getByText('Select Data Type to Import')).toBeInTheDocument();
+    expect(getByText('Import From File')).toBeInTheDocument();
+    expect(getByText('Import From Historical Data')).toBeInTheDocument();
   });
 });
