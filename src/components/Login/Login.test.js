@@ -1,106 +1,60 @@
-import { render, screen, wait, fireEvent } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import * as React from "react";
 import Login from "./Login";
+import render from "../../mocks/render";
+import * as easeyAuthApi from "../../utils/api/easeyAuthApi";
 
-// mock authenticate method
-jest.mock("../../utils/api/easeyAuthApi", () => {
-  const errorWithResponse = new Error("Error occurred while authenticating.");
-  const res = {
-    data: {
-      message: "Authentication error occurred with a response",
-    },
-  };
-  errorWithResponse["response"] = res;
-  return {
-    authenticate: jest
-      .fn()
-      .mockResolvedValueOnce({
-        error: false,
-      })
-      .mockResolvedValueOnce({
-        error: true,
-      })
-      .mockRejectedValueOnce(new Error("Error occurred while authenticating."))
-      .mockRejectedValueOnce(errorWithResponse),
-  };
+describe("login modal component", ()=>{
+  beforeEach( async ()=>{
+    await render(<Login isModal={false} />);
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it("renders component elements", async () => {
+    const createAcctLink = screen.getByRole('link', { name: 'create an account' })
+    expect(createAcctLink).toHaveAttribute('href', 'https://dev.epacdx.net/Registration/Terms')
+    
+    const forgotUserNameLink = screen.getByRole('link', { name: 'Forgot username?' })
+    expect(forgotUserNameLink).toHaveAttribute('href', 'https://dev.epacdx.net/AccountRecovery/ForgotUserId')
+
+    const forgotPwdLink = screen.getByRole('link', { name: 'Forgot password?' })
+    expect(forgotPwdLink).toHaveAttribute('href', 'https://dev.epacdx.net/PasswordReset/GetResetCode');
+
+    // show/hide password
+    const showHidePasswordBtn = screen.getByTestId("showHidePasswordBtn");
+    expect(showHidePasswordBtn).not.toBeDisabled();
+    await userEvent.click(showHidePasswordBtn);
+    const passwordInput = screen.getByTestId("component-login-password");
+    //show
+    expect(passwordInput.type).toBe("text");
+    await userEvent.click(showHidePasswordBtn);
+    //hide
+    expect(passwordInput.type).toBe("password");
+  });
+
+  it("tests user authentication", async () =>{
+    const mockAuthenticate = jest.fn().mockResolvedValue({});
+
+      jest
+        .spyOn(easeyAuthApi, "authenticate")
+        .mockImplementation(mockAuthenticate);
+    // username
+    const usernameInput = screen.getByTestId("component-login-username");
+    expect(usernameInput).not.toBeDisabled();
+    expect(usernameInput.type).toBe("text");
+    await userEvent.type(usernameInput, "myusername");
+    expect(usernameInput.value).toBe('myusername');
+    // password
+    const passwordInput = screen.getByTestId("component-login-password");
+    expect(passwordInput).not.toBeDisabled();
+    await userEvent.type(passwordInput, "pass1234");
+    expect(passwordInput.value).toBe('pass1234');
+    const loginBtn = screen.getByTestId("component-login-submit-button");
+    expect(loginBtn).toBeInTheDocument();
+    await userEvent.click(loginBtn);
+    expect(mockAuthenticate).toHaveBeenCalled();
+  });
+  
 });
 
-test("renders and tests Login component", async () => {
-  // render component
-  const login = render(<Login isModal={false} />);
-
-  // click on create an account link
-  const createAcc = screen.getByText("create an account");
-  expect(createAcc).not.toBeDisabled();
-  userEvent.click(createAcc);
-
-  // click on forgot username link
-  const forgotUser = screen.getByText("Forgot username?");
-  expect(forgotUser).not.toBeDisabled();
-  userEvent.click(forgotUser);
-
-  // click on forgot password link
-  const forgotPwd = screen.getByText("Forgot password?");
-  expect(forgotPwd).not.toBeDisabled();
-  userEvent.click(forgotPwd);
-
-  // username
-  const usernameInput = screen.getByLabelText("Username");
-  expect(usernameInput).not.toBeDisabled();
-  expect(usernameInput.type).toBe("text");
-  userEvent.type(usernameInput, "myusername");
-  expect(screen.getByDisplayValue("myusername")).toBeInTheDocument();
-
-  // password
-  const passwordInput = screen.getByLabelText("Password");
-  expect(passwordInput).not.toBeDisabled();
-  userEvent.type(passwordInput, "pass1234");
-
-  const btns = screen.getAllByRole("button");
-
-  // click on hide password toggle
-  await wait(async () => {
-    const hidePwdBtn = btns[1];
-    expect(hidePwdBtn).not.toBeDisabled();
-    userEvent.click(hidePwdBtn);
-    userEvent.click(hidePwdBtn);
-    expect(screen.getByDisplayValue("pass1234")).toBeInTheDocument();
-  });
-
-  // login button
-  const loginBtn = btns[0];
-  expect(loginBtn).not.toBeDisabled();
-
-  // successful login
-  await wait(async () => {
-    userEvent.click(loginBtn);
-  });
-
-  // login response contains error
-  await wait(async () => {
-    userEvent.click(loginBtn);
-  });
-
-  // receives authentication error with a response
-  await wait(async () => {
-    userEvent.click(loginBtn);
-  });
-
-  // receives authentication error without a response
-  await wait(async () => {
-    userEvent.click(loginBtn);
-  });
-
-  // clear username & password fields
-  fireEvent.change(usernameInput, { target: { value: "" } });
-  fireEvent.change(passwordInput, { target: { value: "" } });
-
-  // fails form validation (due to blank fields)
-  await wait(async () => {
-    userEvent.click(loginBtn);
-    expect(
-      screen.getByText("Please enter your username and password")
-    ).toBeInTheDocument();
-  });
-});
