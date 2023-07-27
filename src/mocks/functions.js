@@ -7,6 +7,8 @@ import {
   mockMonitoringSpans,
   mockMonitoringAnalyzerRanges,
   mockFacilities,
+  mockExportQa,
+  mockSelectedConfig,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -52,3 +54,6 @@ export const getFacilitiesFromMDM = () =>{
   return [...mockFacilities];
 }
 
+export const getMockExportQa = () => {
+  return JSON.parse(JSON.stringify(mockExportQa))
+}
