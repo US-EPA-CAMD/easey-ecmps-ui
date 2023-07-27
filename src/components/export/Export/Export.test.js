@@ -1,10 +1,11 @@
 import React from "react";
-import { render, act } from "@testing-library/react";
+import { act } from "@testing-library/react";
 
 import Export from "./Export";
 import { Provider } from 'react-redux';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
+import render from "../../../mocks/render";
 
 initialState.openedFacilityTabs.export = [
   {

@@ -1,6 +1,6 @@
 import React from "react";
 import ExportTab from "./ExportTab";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import userEvent from "@testing-library/user-event";
 
@@ -8,12 +8,9 @@ import * as qaCertificationApi from "../../../utils/api/qaCertificationsAPI";
 import * as emissionsApi from "../../../utils/api/emissionsApi";
 import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
 
-import {
-  EXPORT_TAB_TEST_EXPORT_STATE,
-  getMockExportQa,
-  getMockReportingPeriods,
-  selectedConfig,
-} from "./ExportTab.test.mocks";
+import render from "../../../mocks/render"
+import { getMockExportQa, getMockReportingPeriods, getMockSelectedConfig } from "../../../mocks/functions";
+import { EXPORT_TAB_TEST_EXPORT_STATE, mockSelectedConfig } from "../../../mocks/constants";
 
 describe("ExportTab", () => {
   beforeEach(() => {
@@ -46,7 +43,7 @@ describe("ExportTab", () => {
             exportState={EXPORT_TAB_TEST_EXPORT_STATE}
             setExportState={() => null}
             workspaceSection={"export"}
-            selectedConfig={selectedConfig}
+            selectedConfig={mockSelectedConfig}
             facility={"Barry (1, 2, CS0AAN)"}
           />
         );
@@ -78,7 +75,7 @@ describe("ExportTab", () => {
             exportState={null}
             setExportState={() => null}
             workspaceSection={"export"}
-            selectedConfig={selectedConfig}
+            selectedConfig={mockSelectedConfig}
             facility={"Barry (1, 2, CS0AAN)"}
           />
         );
@@ -91,6 +88,7 @@ describe("ExportTab", () => {
       });
 
       userEvent.click(qaCertCheckbox);
+      screen.debug()
       expect(exportButton).not.toBeEnabled();
     });
   });

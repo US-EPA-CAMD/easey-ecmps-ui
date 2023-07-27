@@ -3,10 +3,22 @@ import { act, render, screen } from "@testing-library/react";
 
 import * as qaCertificationApi from "../../../utils/api/qaCertificationsAPI";
 
-import { getMockExportTablesContainerProps } from "./ExportTablesContainer.mocks";
 import ExportTablesContainer from "./ExportTablesContainer";
-import { getMockExportQa } from "./ExportTab.test.mocks";
+import { getMockExportQa } from "../../../mocks/functions";
 
+const props = {
+  selectionData: { beginDate: "1/1/11", endDate: "1/1/11" },
+  selectedConfig: {
+    locations: [{ unitId: "51", type: "unitId", stackPipeId: null }],
+  },
+  exportState: {},
+  setExportState: jest.fn(),
+  workspaceSection: "workspacesection",
+  orisCode: "3776",
+  dataRef: {},
+  tableTitle: "Test Summary",
+  dataKey: "testSummaryData",
+};
 
 beforeEach(() => {
   jest.spyOn(qaCertificationApi, "exportQA").mockResolvedValue({
@@ -22,7 +34,7 @@ afterEach(() => {
 test("renders ExportTablesContainer", async () => {
   await act(async () => {
     return render(
-      <ExportTablesContainer {...getMockExportTablesContainerProps()} />
+      <ExportTablesContainer {...props} />
     );
   });
   const tableTitle = screen.getByTestId('export-table-title')
