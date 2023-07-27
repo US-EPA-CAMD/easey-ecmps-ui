@@ -1,10 +1,10 @@
 import React from "react";
-import { render, waitForElement, screen, fireEvent } from "@testing-library/react";
 
-import Export  from "./Export";
+import Export from "./Export";
 import { Provider } from 'react-redux';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
+import render from "../../../mocks/render";
 
 initialState.openedFacilityTabs.export = [
   {
@@ -88,20 +88,17 @@ initialState.openedFacilityTabs.export = [
 ];
 let store = configureStore(initialState);
 //testing redux connected component to mimic props passed as argument
-const componentRenderer = () => {
-  const props = {
-    orisCode: 51,
-    selectedConfig: initialState.openedFacilityTabs.export[0].selectedConfig,
-    title : "Barry (1, 2, CS0AAN)",
-  };
-  return render(
+
+const props = {
+  orisCode: 51,
+  selectedConfig: initialState.openedFacilityTabs.export[0].selectedConfig,
+  title: "Barry (1, 2, CS0AAN)",
+};
+
+test('renders Export', async () => {
+  await render(
     <Provider store={store}>
       <Export {...props} />
     </Provider>
-  );
-};
-
-test("testing Export component renders with no errors", async () => {
-  let { container } = await waitForElement(() => componentRenderer());
-  expect(container).toBeDefined();
-});
+  )
+})
