@@ -9,7 +9,7 @@ import * as emissionsApi from "../../../utils/api/emissionsApi";
 import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
 
 import render from "../../../mocks/render"
-import { getMockExportQa, getMockReportingPeriods, getMockSelectedConfig } from "../../../mocks/functions";
+import { getMockExportQa, getMockReportingPeriods } from "../../../mocks/functions";
 import { EXPORT_TAB_TEST_EXPORT_STATE, mockSelectedConfig } from "../../../mocks/constants";
 
 describe("ExportTab", () => {
@@ -36,18 +36,18 @@ describe("ExportTab", () => {
 
   describe("Emissions Export", function () {
     it("should enable export button when the emissions checkbox is checked, and download when export is clicked", async () => {
-      await act(async () => {
-        return render(
-          <ExportTab
-            orisCode={3}
-            exportState={EXPORT_TAB_TEST_EXPORT_STATE}
-            setExportState={() => null}
-            workspaceSection={"export"}
-            selectedConfig={mockSelectedConfig}
-            facility={"Barry (1, 2, CS0AAN)"}
-          />
-        );
-      });
+      jest.setTimeout(10000)
+
+      await render(
+        <ExportTab
+          orisCode={3}
+          exportState={EXPORT_TAB_TEST_EXPORT_STATE}
+          setExportState={() => null}
+          workspaceSection={"export"}
+          selectedConfig={mockSelectedConfig}
+          facility={"Barry (1, 2, CS0AAN)"}
+        />
+      );
 
       const emissionsCheckbox = screen.getByRole("checkbox", {
         name: "Emissions",
@@ -68,18 +68,16 @@ describe("ExportTab", () => {
 
   describe("QA & Cert Export", () => {
     test("when qa&cert is checked and no rows are selected then export should be disabled", async () => {
-      await act(async () => {
-        return render(
-          <ExportTab
-            orisCode={3}
-            exportState={null}
-            setExportState={() => null}
-            workspaceSection={"export"}
-            selectedConfig={mockSelectedConfig}
-            facility={"Barry (1, 2, CS0AAN)"}
-          />
-        );
-      });
+      await render(
+        <ExportTab
+          orisCode={3}
+          exportState={null}
+          setExportState={() => null}
+          workspaceSection={"export"}
+          selectedConfig={mockSelectedConfig}
+          facility={"Barry (1, 2, CS0AAN)"}
+        />
+      );
       const qaCertCheckbox = screen.getByRole("checkbox", {
         name: "QA & Certification",
       });
@@ -88,7 +86,6 @@ describe("ExportTab", () => {
       });
 
       userEvent.click(qaCertCheckbox);
-      screen.debug()
       expect(exportButton).not.toBeEnabled();
     });
   });

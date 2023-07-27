@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import * as qaCertificationApi from "../../../utils/api/qaCertificationsAPI";
 
@@ -32,11 +32,9 @@ afterEach(() => {
 })
 
 test("renders ExportTablesContainer", async () => {
-  await act(async () => {
-    return render(
-      <ExportTablesContainer {...props} />
-    );
-  });
-  const tableTitle = screen.getByTestId('export-table-title')
+  await render(
+    <ExportTablesContainer {...props} />
+  );
+  const tableTitle = await screen.findByTestId('export-table-title')
   expect(tableTitle).toBeDefined();
 });

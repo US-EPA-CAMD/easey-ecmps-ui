@@ -1,5 +1,4 @@
 import React from "react";
-import { act } from "@testing-library/react";
 
 import Export from "./Export";
 import { Provider } from 'react-redux';
@@ -97,11 +96,9 @@ const props = {
 };
 
 test('renders Export', async () => {
-  await act(() => {
-    render(
-      <Provider store={store}>
-        <Export {...props} />
-      </Provider>
-    )
-  })
+  await render(
+    <Provider store={store}>
+      <Export {...props} />
+    </Provider>
+  )
 })
