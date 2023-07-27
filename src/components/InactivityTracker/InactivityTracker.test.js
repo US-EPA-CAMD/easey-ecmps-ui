@@ -6,28 +6,21 @@ import { InactivityTracker } from "./InactivityTracker";
 import configureStore from "../../store/configureStore.dev";
 import config from "../../config";
 import { logOut } from "../../utils/api/easeyAuthApi";
-import {
-  currentSecondsTilInactive,
-  currentDateTime,
-} from "../../utils/functions";
+import * as utilsFunctions from "../../utils/functions";
 
 const store = configureStore();
 jest.mock("axios");
 
 class MockChannel {
-  constructor(name) {}
+  constructor(name) { }
 
-  addEventListener = () => {};
-  postMessage = () => {};
+  addEventListener = () => { };
+  postMessage = () => { };
 }
 global.BroadcastChannel = MockChannel;
 
 jest.mock("../../utils/api/easeyAuthApi");
 logOut.mockImplementation(() => Promise.resolve(""));
-
-jest.mock("../../utils/functions");
-currentSecondsTilInactive.mockImplementation(() => 0);
-currentDateTime.mockImplementation(() => new Date());
 
 config.app.inactivityDuration = 30000;
 
@@ -36,6 +29,9 @@ describe("InactivityTracker", () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
+
+    jest.spyOn(utilsFunctions, "currentDateTime").mockReturnValue(new Date());
+    jest.spyOn(utilsFunctions, "currentSecondsTilInactive").mockReturnValue(0);
   });
   afterEach(() => {
     callback.mockRestore();
@@ -51,7 +47,9 @@ describe("InactivityTracker", () => {
         <InactivityTracker />
       </Provider>
     );
-    jest.advanceTimersByTime(3000);
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
     expect(container).not.toBeUndefined();
   });
 
