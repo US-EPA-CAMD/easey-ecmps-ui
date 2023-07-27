@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Accordion } from "@trussworks/react-uswds";
+import React, { useEffect, useState } from 'react';
+import { Accordion } from '@trussworks/react-uswds';
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { getContent } from "../../utils/api/contentApi";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { getContent } from '../../utils/api/contentApi';
 
 const FAQ = () => {
   const [mainContent, setMainContent] = useState();
   const [questionsAnswers, setQuestionsAnswers] = useState([]);
 
   useEffect(() => {
-    document.title = "ECMPS FAQs";
-    getContent("/ecmps/faqs/index.md").then((resp) =>
-      setMainContent(resp.data)
-    );
-    getContent("/ecmps/faqs/questions-answers.json").then((resp) =>
-      setQuestionsAnswers(resp.data)
-    );
+    document.title = 'ECMPS FAQs';
+
+    async function fetchData() {
+      const content = await getContent('/ecmps/faqs/index.md');
+      setMainContent(content.data);
+
+      const questionsAnswers = await getContent(
+        '/ecmps/faqs/questions-answers.json',
+      );
+      setQuestionsAnswers(questionsAnswers.data);
+    }
+
+    fetchData();
   }, []);
 
   const createAccordionItems = (questions, name) => {
@@ -29,9 +35,9 @@ const FAQ = () => {
         key: index,
         title: element.question,
         content: element.answer,
-        headingLevel: "h3",
+        headingLevel: 'h3',
         expanded: false,
-        id: `question_${keyCount++}_${name.split(" ").join("")}`,
+        id: `question_${keyCount++}_${name.split(' ').join('')}`,
       });
     });
 
@@ -49,15 +55,15 @@ const FAQ = () => {
           children={mainContent}
           remarkPlugins={[remarkGfm]}
         />
-        {questionsAnswers.map((item) => {
+        {questionsAnswers.map(item => {
           return (
             <div className=" padding-top-2 padding-bottom-2" key={item.name}>
-              {" "}
+              {' '}
               <h3 className="text-bold font-heading-xl">{item.name} </h3>
               {createAccordionItems(item.questions, item.name)}
             </div>
           );
-        })}{" "}
+        })}{' '}
       </div>
     </div>
   );

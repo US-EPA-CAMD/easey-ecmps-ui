@@ -1,25 +1,25 @@
-import React from "react";
-import { render, wait } from "@testing-library/react";
-import FAQ from "./FAQ";
+import React from 'react';
+import { render, waitFor } from '@testing-library/react';
+import FAQ from './FAQ';
 
-jest.mock("react-markdown", () => (props) => {
+jest.mock('react-markdown', () => props => {
   return <>{props.children}</>;
 });
 
-jest.mock("remark-gfm", () => () => {});
+jest.mock('remark-gfm', () => () => {});
 
-jest.mock("../../utils/api/contentApi", () => {
+jest.mock('../../utils/api/contentApi', async () => {
   const testContent = {
-    data: "test",
+    data: 'test',
   };
   const testQuestionsAnswers = {
     data: [
       {
-        name: "test questions",
+        name: 'test questions',
         questions: [
           {
-            question: "test question",
-            answer: "test answer",
+            question: 'test question',
+            answer: 'test answer',
           },
         ],
       },
@@ -33,11 +33,11 @@ jest.mock("../../utils/api/contentApi", () => {
   };
 });
 
-describe("testing FAQ component ", () => {
-  test("renders the content of faqPage component", async () => {
-    await wait(() => {
+describe('testing FAQ component ', () => {
+  test('renders the content of faqPage component', async () => {
+    await waitFor(() => {
       const { container } = render(<FAQ />);
-      const renderedComponent = container.querySelector("#faqPage");
+      const renderedComponent = container.querySelector('#faqPage');
       expect(renderedComponent).not.toBeUndefined();
     });
   });

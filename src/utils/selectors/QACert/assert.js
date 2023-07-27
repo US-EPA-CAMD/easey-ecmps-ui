@@ -585,7 +585,6 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .updateRataSummary(
           extraIdsArr[0],
           extraIdsArr[1],
-          extraIdsArr[2],
           id,
           userInput.id,
           userInput

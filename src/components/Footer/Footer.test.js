@@ -1,13 +1,35 @@
-import React from "react";
-import Footer from "./Footer";
-import { render } from "@testing-library/react";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Footer from './Footer';
+import config from '../../config';
+import '@testing-library/jest-dom';
 
-describe("testing updated go-wide template footer", () => {
-  test("should render logo text description", () => {
-    const { getByText } = render(<Footer />);
-    const logoDescription = getByText(
-      "United States Environmental Protection Agency"
+describe('<Footer />', () => {
+  beforeEach(() => {
+    render(<Footer />);
+  });
+
+  it('renders without crashing', () => {
+    expect(
+      screen.getByRole('img', { name: /img alt text/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders the logo with the correct alt text', () => {
+    expect(screen.getByRole('img', { name: /img alt text/ })).toHaveAttribute(
+      'src',
+      '/images/epaSeal.svg',
     );
-    expect(logoDescription).toBeTruthy();
+  });
+
+  it('renders the correct agency name and version information', () => {
+    expect(
+      screen.getByText(/United States Environmental Protection Agency/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `${config.app.version} published ${config.app.published}`,
+      ),
+    ).toBeInTheDocument();
   });
 });
