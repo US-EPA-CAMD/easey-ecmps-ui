@@ -1,5 +1,5 @@
 import React from "react";
-import { render,screen  } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import MonitoringPlanHome from "./MonitoringPlanHome";
 import { Provider } from "react-redux";
 import * as modules from "../../utils/constants/moduleTitles";
@@ -18,7 +18,7 @@ import configureStore from "../../store/configureStore.dev";
 const store = configureStore();
 
 test("renders MonitoringPlanHome without rendering DynamicTabs", () => {
-  const user = { firstName: "" }; 
+  const user = { firstName: "" };
 
   const { getByText, queryByTestId } = render(
     <Provider store={store}>
@@ -29,18 +29,16 @@ test("renders MonitoringPlanHome without rendering DynamicTabs", () => {
         setExpired={() => {}}
         resetTimerFlag={false}
         callApiFlag={false}
-        workspaceSection={MONITORING_PLAN_STORE_NAME} 
+        workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
     </Provider>
   );
 
-  const monitoringPlanHomeElement = screen.queryAllByText(modules.monitoring_plans_module); 
-  expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
+  expect(document.title).toBe(modules.monitoring_plans_module);
 });
 
-
 test("renders MonitoringPlanHome with EMISSIONS_STORE_NAME", () => {
-  const user = { firstName: "" }; 
+  const user = { firstName: "" };
 
   const { getByText, queryByTestId } = render(
     <Provider store={store}>
@@ -51,17 +49,16 @@ test("renders MonitoringPlanHome with EMISSIONS_STORE_NAME", () => {
         setExpired={() => {}}
         resetTimerFlag={false}
         callApiFlag={false}
-        workspaceSection={EMISSIONS_STORE_NAME} 
+        workspaceSection={EMISSIONS_STORE_NAME}
       />
     </Provider>
   );
 
-  const monitoringPlanHomeElement = screen.queryAllByText(modules.emissions_module); 
-  expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
+  expect(document.title).toBe(modules.emissions_module);
 });
 
 test("renders MonitoringPlanHome with EXPORT_STORE_NAME", () => {
-  const user = { firstName: "" }; 
+  const user = { firstName: "" };
 
   const { getByText, queryByTestId } = render(
     <Provider store={store}>
@@ -72,17 +69,16 @@ test("renders MonitoringPlanHome with EXPORT_STORE_NAME", () => {
         setExpired={() => {}}
         resetTimerFlag={false}
         callApiFlag={false}
-        workspaceSection={EXPORT_STORE_NAME} 
+        workspaceSection={EXPORT_STORE_NAME}
       />
     </Provider>
   );
 
-  const monitoringPlanHomeElement = screen.queryAllByText(modules.export_Module); 
-  expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
+  expect(document.title).toBe(modules.export_Module);
 });
 
 test("renders MonitoringPlanHome with QA_CERT_EVENT_STORE_NAME", () => {
-  const user = { firstName: "" }; 
+  const user = { firstName: "" };
 
   const { getByText, queryByTestId } = render(
     <Provider store={store}>
@@ -93,11 +89,30 @@ test("renders MonitoringPlanHome with QA_CERT_EVENT_STORE_NAME", () => {
         setExpired={() => {}}
         resetTimerFlag={false}
         callApiFlag={false}
-        workspaceSection={QA_CERT_EVENT_STORE_NAME} 
+        workspaceSection={QA_CERT_EVENT_STORE_NAME}
       />
     </Provider>
   );
 
-  const monitoringPlanHomeElement = screen.queryAllByText(modules.qa_Certifications_Event_Module); 
-  expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
+  expect(document.title).toBe(modules.qa_Certifications_Event_Module);
+});
+
+test("renders MonitoringPlanHome with QA_CERT_TEST_SUMMARY_STORE_NAME", () => {
+  const user = { firstName: "" };
+
+  const { getByText, queryByTestId } = render(
+    <Provider store={store}>
+      {" "}
+      <MonitoringPlanHome
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    </Provider>
+  );
+
+  expect(document.title).toBe(modules.qa_Certifications_Test_Summary_Module);
 });
