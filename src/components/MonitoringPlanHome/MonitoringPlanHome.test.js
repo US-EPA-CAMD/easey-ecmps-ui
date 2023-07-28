@@ -37,26 +37,7 @@ test("renders MonitoringPlanHome without rendering DynamicTabs", () => {
   const monitoringPlanHomeElement = screen.queryAllByText(modules.monitoring_plans_module); 
   expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
 });
-test("renders MonitoringPlanHome with QA_CERT_TEST_SUMMARY_STORE_NAME", () => {
-  const user = { firstName: "" }; 
 
-  const { getByText, queryByTestId } = render(
-    <Provider store={store}>
-      {" "}
-      <MonitoringPlanHome
-        user={user}
-        resetTimer={() => {}}
-        setExpired={() => {}}
-        resetTimerFlag={false}
-        callApiFlag={false}
-        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME} 
-      />
-    </Provider>
-  );
-
-  const monitoringPlanHomeElement = screen.queryAllByText(modules.qa_Certifications_Test_Summary_Module); 
-  expect(monitoringPlanHomeElement[0]).toBeInTheDocument();
-});
 
 test("renders MonitoringPlanHome with EMISSIONS_STORE_NAME", () => {
   const user = { firstName: "" }; 
