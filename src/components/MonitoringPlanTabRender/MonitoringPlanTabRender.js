@@ -45,7 +45,7 @@ export const MonitoringPlanTabRender = ({
   checkedOutLocations,
   currentTabIndex,
 
-  workspaceSection
+  workspaceSection,
 }) => {
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
@@ -262,7 +262,6 @@ export const MonitoringPlanTabRender = ({
               setUpdateRelatedTables={setUpdateRelatedTables}
               updateRelatedTables={updateRelatedTables}
               currentTabIndex={currentTabIndex}
-              
             />,
             "Supplemental Methods",
           ],
@@ -600,7 +599,6 @@ export const MonitoringPlanTabRender = ({
 
   return (
     <div className=" padding-top-0">
-      
       <div className="grid-row">
         <HeaderInfo
           facility={title}
