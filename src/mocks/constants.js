@@ -303,7 +303,7 @@ export const mockExportQa = {
   ],
   certificationEventData: [
     {
-      id: "string",
+      id: "TWCORNEL5-5438209079BE4E7C83507AFC1D8DA532",
       locationId: "string",
       lastUpdated: "2023-02-17T20:37:37.814Z",
       updatedStatusFlag: "string",
@@ -339,7 +339,7 @@ export const mockExportQa = {
       monitoringSystemID: "string",
       componentID: "string",
       spanScaleCode: "string",
-      id: "string",
+      id: "TWCORNEL5-5438209079BE4E7C83507AFC1D8DA532",
       locationId: "string",
       reportPeriodId: 0,
       checkSessionId: "string",
@@ -485,11 +485,161 @@ export const mockTestTypeGroupCodes = [
   },
 ]
 
+export const mockSpanScaleCodes = [
+  {
+    spanScaleCode: "H",
+    spanScaleDescription: "High"
+  },
+  {
+    spanScaleCode: "L",
+    spanScaleDescription: "Low"
+  }
+]
+
+export const mockTestReasonCodes = [
+  {
+    testReasonCode: "DIAG",
+    testReasonDescription: "Diagnostic"
+  },
+  {
+    testReasonCode: "INITIAL",
+    testReasonDescription: "Initial Certification"
+  },
+  {
+    testReasonCode: "QA",
+    testReasonDescription: "Quality Assurance"
+  },
+  {
+    testReasonCode: "RECERT",
+    testReasonDescription: "Recertification"
+  }
+]
+
+export const mockTestResultCodes = [
+  {
+    testResultCode: "PASSED",
+    testResultDescription: "Test Passed"
+  },
+  {
+    testResultCode: "FAILED",
+    testResultDescription: "Test Failed"
+  },
+]
+
 export const mockCheckedOutLocations = [
   {
     facilityId: 3,
     date: "2019-01-01",
     id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
     checkedOutBy: "user"
+  }
+]
+
+export const mockQATestSummary = [
+  {
+    id: "TWCORNEL5",
+    stackPipeId: null,
+    unitId: "1",
+    testTypeCode: "FFA",
+    monitoringSystemId: null,
+    componentId: "AFA",
+    spanScaleCode: null,
+    testNumber: "20201CEM5F",
+    testReasonCode: "QA",
+    testDescription: null,
+    testResultCode: "PASSED",
+    calculatedTestResultCode: "PASSED",
+    beginDate: null,
+    beginHour: null,
+    beginMinute: null,
+    endDate: "2020-02-26",
+    endHour: 20,
+    endMinute: 3,
+    gracePeriodIndicator: null,
+    calculatedGracePeriodIndicator: null,
+    year: null,
+    quarter: null,
+    testComment: null,
+    injectionProtocolCode: null,
+    calculatedSpanValue: null,
+    evalStatusCode: null,
+    userId: "bvick",
+    addDate: "2020-04-23",
+    updateDate: null,
+    reportPeriodId: null,
+  },
+]
+
+export const mockMonitoringComponents = [
+  {
+    componentId: "027",
+    componentTypeCode: "SO2",
+    sampleAcquisitionMethodCode: "DOU",
+    basisCode: "W",
+    manufacturer: "TECO",
+    modelVersion: "43I",
+    serialNumber: "631819420",
+    hgConverterIndicator: 1,
+    id: "CAMD-646D15E327E1480D814D48286DA7F073",
+    locationId: "5770",
+    userId: "abcde",
+    addDate: "2009-02-20",
+    updateDate: "2009-02-20",
+    analyzerRanges: [
+      {
+        analyzerRangeCode: "A",
+        dualRangeIndicator: 1,
+        beginDate: "2008-05-17",
+        beginHour: 14,
+        endDate: null,
+        endHour: null
+      }
+    ]
+  }
+]
+
+export const mockMonitoringSystems = [
+  {
+    monitoringSystemId: "C42",
+    systemTypeCode: "FLOW",
+    systemDesignationCode: "P",
+    fuelCode: "NFS",
+    beginDate: "2007-11-28",
+    endDate: null,
+    beginHour: 17,
+    endHour: null,
+    id: "CAMD-4B0DC37051224A7AA9D8CA1E5BE6B4D4",
+    locationId: "5770",
+    userId: "abcde",
+    addDate: "2009-02-20",
+    updateDate: "2009-02-20",
+    active: true,
+    components: [
+      {
+        componentId: "027",
+        componentTypeCode: "SO2",
+        sampleAcquisitionMethodCode: "DOU",
+        basisCode: "W",
+        manufacturer: "TECO",
+        modelVersion: "43I",
+        serialNumber: "631819420",
+        hgConverterIndicator: 1,
+        beginDate: "2008-12-31",
+        beginHour: 23,
+        endDate: null,
+        endHour: null
+      }
+    ],
+    fuelFlows: [
+      {
+        maximumFuelFlowRate: 30667,
+        systemFuelFlowUOMCode: "HSCF",
+        maximumFuelFlowRateSourceCode: "URV",
+        beginDate: "2010-08-01",
+        beginHour: 12,
+        endDate: null,
+        endHour: null
+      }
+    ]
   }
 ]
