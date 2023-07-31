@@ -6,6 +6,7 @@ import {
   mockDropdownFacilityList,
   mockMonitoringSpans,
   mockMonitoringAnalyzerRanges,
+  mockFacilities,
   mockExportQa,
   mockSelectedConfig,
   mockTestTypeCodes,
@@ -50,6 +51,10 @@ export const getMockMonitoringSpans = () => {
 }
 export const getMockMonitoringAnalyzerRanges = () => {
   return [...mockMonitoringAnalyzerRanges];
+}
+
+export const getFacilitiesFromMDM = () =>{
+  return [...mockFacilities];
 }
 
 export const getMockExportQa = () => {

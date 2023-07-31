@@ -1,48 +1,60 @@
-import React from "react";
-import Layout from "../Layout/Layout";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { screen } from "@testing-library/react";
 import LeftNavigation from "./LeftNavigation";
+import render from "../../mocks/render";
 
-jest.mock("@us-epa-camd/easey-design-system", () => ({
-  ...jest.requireActual("@us-epa-camd/easey-design-system"),
-  Header: () => <></>,
-}));
 describe("Left Navigation links", () => {
-  test("renders links correctly", () => {
-    const { container } = render(
-      <BrowserRouter>
-        <Layout>
-          <Switch>
-            <Route
-              path="/"
-              exact
-              component={() => (
-                <LeftNavigation user={true} setCurrentLink={jest.fn()} />
-              )}
-            />
-          </Switch>
-        </Layout>
-      </BrowserRouter>
-    );
+  it("renders only home link menu when roles are not provided", async () => {
+    await render(<LeftNavigation user={true} setCurrentLink={jest.fn()} />);
+    const homeLink = screen.getByLabelText("Go to Home");
+    expect(homeLink).toBeInTheDocument();
+    expect(homeLink).toHaveAttribute('href','/');
+  });
 
-    const homeLink = screen.getAllByText("Home");
-    fireEvent.click(homeLink[homeLink.length - 1]);
-    expect(homeLink).not.toBeUndefined();
+  it("renders applicable menu items for specified role", async ()=>{
+    await render(<LeftNavigation user={{roles: ["ECMPS Analyst", "ECMPS Admin", "Preparer", "Submitter"]}} setCurrentLink={jest.fn()} />);
+    const homeLink = screen.getByLabelText("Go to Home");
+    expect(homeLink).toBeInTheDocument();
+    expect(homeLink).toHaveAttribute('href','/');
 
-    const wksLink = screen.getAllByText("Workspace");
-    expect(wksLink).not.toBeUndefined();
+    const mpLink = screen.getByLabelText("Monitoring Plans - Workspace");
+    expect(mpLink).toBeInTheDocument();
+    expect(mpLink).toHaveAttribute('href','/workspace/monitoring-plans');
 
-    const mpLink = screen.getAllByText("Monitoring Plans");
-    expect(mpLink).not.toBeUndefined();
+    const tdLink = screen.getByLabelText("Test Data - Workspace");
+    expect(tdLink).toBeInTheDocument();
+    expect(tdLink).toHaveAttribute('href','/workspace/qa/tests');
 
-    const qaLink = screen.getAllByText("QA & Certifications");
-    expect(qaLink).not.toBeUndefined();
+    const certEvtExtExmLink = screen.getByLabelText("Cert Events, Extensions & Exemptions - Workspace");
+    expect(certEvtExtExmLink).toBeInTheDocument();
+    expect(certEvtExtExmLink).toHaveAttribute('href','/workspace/qa/qce-tee');
 
-    const emLink = screen.getAllByText("Emissions");
-    expect(emLink).not.toBeUndefined();
+    const emissionsLink = screen.getByLabelText("Emissions - Workspace");
+    expect(emissionsLink).toBeInTheDocument();
+    expect(emissionsLink).toHaveAttribute('href','/workspace/emissions');
 
-    const exportLink = screen.getAllByText("Export");
-    expect(exportLink).not.toBeUndefined();
+    const exportLink = screen.getByLabelText("Export - Workspace");
+    expect(exportLink).toBeInTheDocument();
+    expect(exportLink).toHaveAttribute('href','/workspace/export');
+
+    const evaluateLink = screen.getByLabelText("Evaluate - Workspace");
+    expect(evaluateLink).toBeInTheDocument();
+    expect(evaluateLink).toHaveAttribute('href','/workspace/evaluate');
+
+    const submitLink = screen.getByLabelText("Submit - Workspace");
+    expect(submitLink).toBeInTheDocument();
+    expect(submitLink).toHaveAttribute('href','/workspace/submit');
+    
+    const qaMtnLink = screen.getByLabelText("QA Maintenance - Workspace");
+    expect(qaMtnLink).toBeInTheDocument();
+    expect(qaMtnLink).toHaveAttribute('href','/admin/qa-maintenance');
+
+    const errSupLink = screen.getByLabelText("Error Suppression - Workspace");
+    expect(errSupLink).toBeInTheDocument();
+    expect(errSupLink).toHaveAttribute('href','/admin/error-suppression');
+
+    const emSubAccessLink = screen.getByLabelText("Emission Submission Access - Workspace");
+    expect(emSubAccessLink).toBeInTheDocument();
+    expect(emSubAccessLink).toHaveAttribute('href','/admin/em-submission-access');
+    //screen.debug(null, Infinity);
   });
 });
