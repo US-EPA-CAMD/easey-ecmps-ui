@@ -448,3 +448,48 @@ export const mockSelectedConfig = {
   submissionAvailabilityCode: "UPDATED",
   lastEvaluatedDate: "2022-04-25T13:59:00.000Z",
 };
+
+export const mockTestTypeCodes = [
+  {
+    testTypeCode: "RATA",
+    testTypeDescription: "Relative Accuracy Test",
+    testTypeGroupCode: "RELACC"
+  },
+  {
+    testTypeCode: "APPE",
+    testTypeDescription: "Appendix E NOx Rate Test",
+    testTypeGroupCode: "APPESUM"
+  },
+  {
+    testTypeCode: 'DAYCAL',
+    testTypeDescription: 'Daily Calibration',
+    testTypeGroupCode: null,
+  },
+]
+
+export const mockTestTypeGroupCodes = [
+  {
+    testTypeGroupCode: "LINSUM",
+    testTypeGroupDescription: "Linearity Summary",
+    childDepth: "3"
+  },
+  {
+    testTypeGroupCode: "RELACC",
+    testTypeGroupDescription: "Relative Accuracy",
+    childDepth: "6"
+  },
+  {
+    testTypeGroupCode: 'PEI',
+    testTypeGroupDescription: 'Primary Element Inspection',
+    childDepth: '1',
+  },
+]
+
+export const mockCheckedOutLocations = [
+  {
+    facilityId: 3,
+    date: "2019-01-01",
+    id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+    checkedOutBy: "user"
+  }
+]
