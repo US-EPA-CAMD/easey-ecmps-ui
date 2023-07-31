@@ -5,15 +5,12 @@ import {
   render,
   fireEvent,
   screen,
-  waitForElement,
+  act,
 } from "@testing-library/react";
-
 import {
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-import configureStore from "../../store/configureStore.dev";
-const store = configureStore();
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 
 const testMonPlanId = "testMonPlanId";
 const testFacId = "123";
@@ -36,25 +33,6 @@ const childProps = {
   facId: testFacId,
   checkedOutBy: testUserId,
 };
-
-jest.mock("../../utils/api/monitoringPlansApi", () => {
-  return {
-    deleteCheckInMonitoringPlanConfiguration: jest.fn().mockResolvedValue(),
-    getCheckedOutLocations: jest.fn().mockResolvedValue({
-      data: [
-        {
-          data: [
-            {
-              monPlanId: "testMonPlanId",
-              facId: "1234567890",
-              checkedOutBy: "testUserId",
-            },
-          ],
-        },
-      ],
-    }),
-  };
-});
 
 jest.mock("axios", () => {
   return {
@@ -99,6 +77,25 @@ const TabsUsage = (bool) => (
 );
 
 describe("testing a reusable Tabs component", () => {
+
+  beforeEach(() => {
+    jest.spyOn(mpApi, "deleteCheckInMonitoringPlanConfiguration").mockResolvedValue({
+    })
+    jest.spyOn(mpApi, "getCheckedOutLocations").mockResolvedValue({
+      data: [
+        {
+          data: [
+            {
+              monPlanId: "testMonPlanId",
+              facId: "1234567890",
+              checkedOutBy: "testUserId",
+            },
+          ],
+        },
+      ],
+    });
+  })
+
   test("renders all tabs", () => {
     render(<TabsUsage />);
     const tabs = screen.getAllByRole("button");
@@ -112,8 +109,9 @@ describe("testing a reusable Tabs component", () => {
   test("renders the user selected tab", async () => {
 
     // verify the appropriate action was called
-    const { container } = await waitForElement(() =>
-      render(
+    let container
+    await act(async () => {
+      let renderer = render(
         <Tabs
           dynamic={true}
           setActive={jest.fn()}
@@ -136,6 +134,8 @@ describe("testing a reusable Tabs component", () => {
           </TabPane>
         </Tabs>
       )
+      container = renderer.container;
+    }
     );
     const btns = screen.getAllByRole("button");
     fireEvent.click(btns[2]);
@@ -193,28 +193,4 @@ describe("testing a reusable Tabs component", () => {
 
     fireEvent.keyDown(newCLose, { key: "Enter", code: "Enter" });
   });
-  // test("mapDispatchToProps calls the appropriate action", async () => {
-  //   // mock the 'dispatch' object
-  //   const dispatch = jest.fn();
-  //   const actionProps = mapDispatchToProps(dispatch);
-  //   const state = jest.fn();
-
-  //   // verify the appropriate action was called
-  //   actionProps.setCheckout();
-
-  //   expect(state).toBeDefined();
-  // });
-  // test("mapStateToProps calls the appropriate state", async () => {
-  //   const state = { dropdowns: [1] };
-  //   mapStateToProps(state, true);
-  // });
-
-  // test("mapDispatchToProps calls the appropriate action", async () => {
-  //   // mock the 'dispatch' object
-  //   const dispatch = jest.fn();
-  //   const actionProps = mapDispatchToProps(dispatch);
-
-  //   // verify the appropriate action was called
-  //   actionProps.setCheckout();
-  // });
 });

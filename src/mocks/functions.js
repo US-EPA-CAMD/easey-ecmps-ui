@@ -9,6 +9,9 @@ import {
   mockFacilities,
   mockExportQa,
   mockSelectedConfig,
+  mockTestTypeCodes,
+  mockTestTypeGroupCodes,
+  mockCheckedOutLocations,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -56,4 +59,16 @@ export const getFacilitiesFromMDM = () =>{
 
 export const getMockExportQa = () => {
   return JSON.parse(JSON.stringify(mockExportQa))
+}
+
+export const getMockTestTypeCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeCodes))
+}
+
+export const getMockTestTypeGroupCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeGroupCodes))
+}
+
+export const getMockCheckedOutLocations = () => {
+  return JSON.parse(JSON.stringify(mockCheckedOutLocations))
 }
