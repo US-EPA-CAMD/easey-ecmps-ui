@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, container } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import { BrowserRouter } from "react-router-dom";
 import { SubHeader } from "./SubHeader";
@@ -27,10 +27,6 @@ describe("SubHeader Component", () => {
     //Regulation Patterns
     const regpatternsMenuItem = screen.getByText("Regulatory Partners");
     expect(regpatternsMenuItem).toBeInTheDocument();
-
-    // //Site Map - hidden now
-    // const sitemapMenuItem = screen.getByText('Site Map');
-    // expect(sitemapMenuItem).toBeInTheDocument();
   });
 
   test("Log In button renders without errors", () => {
@@ -63,7 +59,7 @@ describe("SubHeader Component", () => {
   const mockUser = { firstName: "FNTest", lastName: "LNTest" };
 
   test("User Information after Login renders without errors", () => {
-    const { container } = render(
+    render(
       <BrowserRouter>
         <SubHeader user={mockUser} setCurrentLink={jest.fn()} />
       </BrowserRouter>
@@ -81,9 +77,6 @@ describe("SubHeader Component", () => {
 
     const logOutBtn = screen.getByText("Log Out");
     fireEvent.click(logOutBtn);
-
-    // const toggleDropDownBTN = container.querySelector("#toggleDropDown");
-    // expect(toggleDropDownBTN).toBe(1);
 
     const toggleDropDownBTN = screen.getByText("Regulatory Partners");
     fireEvent.click(toggleDropDownBTN);
