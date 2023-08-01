@@ -17,6 +17,7 @@ const reportData = {
                     "severityCode": "NONE",
                     "categoryDescription": "Unit Program Parameter Evaluation",
                     "checkCode": "PROGRAM-11-D",
+                    "checkCodeGroup": "PROGRAM-11-D",
                     "resultMessage": "Although Unit ID 5 is a ARP affected unit, monitoring method(s) for OP have not been reported for the unit, for a common stack or pipe linked to the unit, or for all multiple stacks or pipes linked to the unit for the entire evaluation period.  If you believe that this error is incorrect, and has been caused by an inaccurate date in the Unit Program record, please contact ECMPS Support at ecmps-support@camdsupport.com."
                 }
             ]
@@ -40,6 +41,10 @@ const reportData = {
                 },
                 {
                     "name": "checkCode",
+                    "displayName": "Check Code"
+                },
+                {
+                    "name": "checkCodeGroup",
                     "displayName": "Check Code"
                 },
                 {
