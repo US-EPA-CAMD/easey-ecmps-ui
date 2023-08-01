@@ -25,7 +25,7 @@ describe("ErrorSuppressionDataContainer component", () => {
     // Mock the context provider
     const ProviderForTest = ({ children }) => {
       const p = useSuppressionFiltersStore();
-      console.log('my provider: ', p)
+
       return (
         <ErrorSuppressionFiltersContext.Provider
           value={p}
@@ -87,7 +87,6 @@ describe("ErrorSuppressionDataContainer component", () => {
 
     const cb0 = screen.getByTestId("select-cb-0");
     const cb1 = screen.getByTestId("select-cb-1");
-
 
     await act(async () => {
       await userEvent.click(cb0);
