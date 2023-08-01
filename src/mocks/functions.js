@@ -12,6 +12,7 @@ import {
   mockTestTypeCodes,
   mockTestTypeGroupCodes,
   mockCheckedOutLocations,
+  mockReportData,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -71,4 +72,8 @@ export const getMockTestTypeGroupCodes = () => {
 
 export const getMockCheckedOutLocations = () => {
   return JSON.parse(JSON.stringify(mockCheckedOutLocations))
+}
+
+export const getMockReportData = () =>{
+  return JSON.parse(JSON.stringify(mockReportData))
 }

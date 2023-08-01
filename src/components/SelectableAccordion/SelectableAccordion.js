@@ -43,7 +43,7 @@ export const SelectableAccordion = ({
   }, []);
 
   return (
-    <div className="usa-accordion">
+    <div className="usa-accordion" data-testid="selectable-accordion-wrapper">
       {items.map((element, idx) => {
         return (
           <div key={idx}>

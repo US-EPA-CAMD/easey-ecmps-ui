@@ -493,3 +493,82 @@ export const mockCheckedOutLocations = [
     checkedOutBy: "user"
   }
 ]
+
+export const mockReportData = {
+  title: "string",
+  facilityId: "number",
+  orisCode: "number",
+  facilityName: "string",
+  stateCode: "string",
+  countyName: "string",
+  unitStackInfo: "string",
+  templateCode: "DTLRPT",
+  noResultsMessage: "string",
+  displayName:"Monitoring Plan Evaluation Report",
+  columns: [
+    {
+        "code": "EVAL",
+        "values": [
+            {
+                "name": "unitStack",
+                "displayName": "Unit/Stack"
+            },
+            {
+                "name": "severityCode",
+                "displayName": "Severity"
+            },
+            {
+                "name": "categoryDescription",
+                "displayName": "Category"
+            },
+            {
+                "name": "checkCode",
+                "displayName": "Check Code"
+            },
+            {
+                "name": "resultMessage",
+                "displayName": "Result Message"
+            }
+        ]
+    }
+],
+  // details: [
+  //   {
+  //     position: "number",
+  //     title: "string",
+  //     sqlStatement: "string",
+  //     noResultsMessage: "string",
+  //     columns: [
+  //       {
+  //         position: "number",
+  //         name: "string",
+  //         displayName: "string",
+  //       },
+  //     ],
+  //     parameters: [
+  //       {
+  //         position: "number",
+  //         name: "string",
+  //         defaultValue: "any",
+  //       },
+  //     ],
+  //     results: [],
+  //   },
+  // ],
+  "details": [
+    {
+        "displayName": "Evaluation Results",
+        "templateCode": "EVAL",
+        "templateType": "DEFAULT",
+        "results": [
+            {
+                "unitStack": "5",
+                "severityCode": "NONE",
+                "categoryDescription": "Unit Program Parameter Evaluation",
+                "checkCode": "PROGRAM-11-D",
+                "resultMessage": "Although Unit ID 5 is a ARP affected unit, monitoring method(s) for OP have not been reported for the unit, for a common stack or pipe linked to the unit, or for all multiple stacks or pipes linked to the unit for the entire evaluation period.  If you believe that this error is incorrect, and has been caused by an inaccurate date in the Unit Program record, please contact ECMPS Support at ecmps-support@camdsupport.com."
+            }
+        ]
+    }
+],
+};
