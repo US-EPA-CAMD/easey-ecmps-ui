@@ -18,6 +18,7 @@ import {
   mockTestResultCodes,
   mockMonitoringComponents,
   mockMonitoringSystems,
+  mockReportData,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -101,4 +102,7 @@ export const getMockMonitoringComponents = () => {
 
 export const getMockMonitoringSystems = () => {
   return JSON.parse(JSON.stringify(mockMonitoringSystems))
+}
+export const getMockReportData = () =>{
+  return JSON.parse(JSON.stringify(mockReportData))
 }
