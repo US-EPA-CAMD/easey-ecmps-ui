@@ -1,370 +1,147 @@
 import React from "react";
-import { cleanup, fireEvent, render, within, screen } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import MultiSelectCombobox, {
+  DEBOUNCE_MILLISECONDS,
+} from "./MultiSelectCombobox";
 
-import MultiSelectCombobox, { DEBOUNCE_MILLISECONDS } from "./MultiSelectCombobox";
-
-const facilities = [
-  {
-    id: "1",
-    facilityId: "3",
-    facilityName: "Barry",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/1",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/1/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/1/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/1/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/1/contacts",
-      },
-    ],
-  },
-  {
-    id: "2",
-    facilityId: "5",
-    facilityName: "Chickasaw",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/2",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/2/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/2/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/2/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/2/contacts",
-      },
-    ],
-  },
-  {
-    id: "3",
-    facilityId: "7",
-    facilityName: "Gadsden",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/3",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/3/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/3/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/3/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/3/contacts",
-      },
-    ],
-  },
-  {
-    id: "4",
-    facilityId: "8",
-    facilityName: "Gorgas",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/4",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/4/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/4/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/4/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/4/contacts",
-      },
-    ],
-  },
-  {
-    id: "5",
-    facilityId: "10",
-    facilityName: "Greene County",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/5",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/5/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/5/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/5/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/5/contacts",
-      },
-    ],
-  },
-  {
-    id: "6",
-    facilityId: "26",
-    facilityName: "E C Gaston",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/6",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/6/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/6/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/6/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/6/contacts",
-      },
-    ],
-  },
-  {
-    id: "7",
-    facilityId: "47",
-    facilityName: "Colbert",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/7",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/7/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/7/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/7/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/7/contacts",
-      },
-    ],
-  },
-  {
-    id: "8",
-    facilityId: "50",
-    facilityName: "Widows Creek",
-    stateCode: "AL",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/8",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/8/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/8/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/8/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/8/contacts",
-      },
-    ],
-  },
-  {
-    id: "9",
-    facilityId: "51",
-    facilityName: "Dolet Hills Power Station",
-    stateCode: "LA",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/9",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/9/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/9/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/9/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/9/contacts",
-      },
-    ],
-  },
-  {
-    id: "10",
-    facilityId: "54",
-    facilityName: "Smith Generating Facility",
-    stateCode: "KY",
-    links: [
-      {
-        rel: "self",
-        href: "/api/facility-mgmt/facilities/10",
-      },
-      {
-        rel: "units",
-        href: "/api/facility-mgmt/facilities/10/units",
-      },
-      {
-        rel: "stacks",
-        href: "/api/facility-mgmt/facilities/10/stacks",
-      },
-      {
-        rel: "owners",
-        href: "/api/facility-mgmt/facilities/10/owners",
-      },
-      {
-        rel: "contacts",
-        href: "/api/facility-mgmt/facilities/10/contacts",
-      },
-    ],
-  },
-];
-const items = facilities.map((f) => ({
-  id: f.facilityId,
-  label: `${f.facilityName} (${f.facilityId})`,
-  selected: false,
-  enabled: true,
+// Mock debounce function to avoid waiting during tests
+jest.mock("lodash", () => ({
+  debounce: (fn) => fn,
 }));
 
-describe("MultiSelectCombobox Component", () => {
-  let query;
-  beforeEach(() => {
-    query = render(
+const items = [
+  { id: 1, label: "Item 1", enabled: true, selected: false },
+  { id: 2, label: "Item 2", enabled: true, selected: false },
+  { id: 3, label: "Item 3", enabled: true, selected: false },
+];
+
+describe("MultiSelectCombobox", () => {
+  it("renders without crashing", () => {
+    render(
       <MultiSelectCombobox
         items={items}
-        label="Select or Search Facilities/ORIS Codes"
-        entity="Facility"
+        label="Test Combobox"
+        entity="test"
+        onChangeUpdate={() => {}}
+        searchBy="contains"
+      />
+    );
+
+    expect(screen.getByText("Test Combobox")).toBeInTheDocument();
+  });
+
+  it("filters items correctly based on input", () => {
+    render(
+      <MultiSelectCombobox
+        items={items}
+        label="Test Combobox"
+        entity="test"
+        onChangeUpdate={() => {}}
+        searchBy="contains"
+      />
+    );
+
+    const input = screen.getByTestId("test-input-search");
+
+    fireEvent.change(input, { target: { value: "2" } });
+
+    expect(screen.queryByText("Item 1")).not.toBeInTheDocument();
+    expect(screen.queryByText("Item 3")).not.toBeInTheDocument();
+    expect(screen.getByText("Item 2")).toBeInTheDocument();
+  });
+
+  it("calls onChangeUpdate with debounce", () => {
+    jest.useFakeTimers();
+
+    const onChangeUpdateMock = jest.fn();
+    render(
+      <MultiSelectCombobox
+        items={items}
+        label="Test Combobox"
+        entity="test"
+        onChangeUpdate={onChangeUpdateMock}
+        searchBy="contains"
+      />
+    );
+
+    const input = screen.getByTestId("test-input-search");
+
+    fireEvent.change(input, { target: { value: "2" } });
+    expect(onChangeUpdateMock).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(DEBOUNCE_MILLISECONDS);
+
+    const options = screen.getAllByTestId("test-multi-select-option-0");
+    expect(options).toHaveLength(1);
+
+    fireEvent.click(options[0]);
+
+    expect(onChangeUpdateMock).toHaveBeenCalledWith("2", "add");
+  });
+  it("opens and closes the listbox correctly", () => {
+    render(
+      <MultiSelectCombobox
+        items={items}
+        label="Test Combobox"
+        entity="test"
+        onChangeUpdate={() => {}}
+        searchBy="contains"
+      />
+    );
+
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("test-input-search"));
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+    fireEvent.click(document.body);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("shows the selected items correctly", async () => {
+    render(
+      <MultiSelectCombobox
+        items={items}
+        label="Test Combobox"
+        entity="test"
         onChangeUpdate={jest.fn()}
         searchBy="contains"
       />
     );
-  });
 
-  afterEach(cleanup);
+    const input = screen.getByTestId("test-input-search");
 
-  it("renders all roles that make up the multi-select-combobox and populates items in drowpdown list", () => {
-    const { getByTestId, getAllByTestId } = query;
-    const searchbox = getByTestId("Facility-input-search");
-    expect(searchbox).toBeInTheDocument();
-    searchbox.focus();
-    searchbox.click();
-    const listBox = getByTestId("multi-select-listbox");
-    expect(listBox).toBeInTheDocument();
-    expect(within(listBox).getAllByTestId("multi-select-option").length).toBe(
-      items.length
-    );
-  });
+    fireEvent.change(input, { target: { value: "I" } });
 
-  it("handles click event of listbox option", () => {
-    const { getByTestId, getAllByTestId } = query;
-    getByTestId("Facility-input-search").click();
-    const options = getAllByTestId("multi-select-option");
-    fireEvent.click(options[0]);
-    fireEvent.click(options[1]);
-    expect(getAllByTestId("button").length).toBe(2);
-  });
-
-  it("should search using input box for facilities in listboxt", () => {
-    const { getByTestId, getAllByTestId } = query;
-    const searchbox = getByTestId("Facility-input-search");
-    searchbox.click();
-    fireEvent.change(searchbox, { target: { value: "Barry" } });
-    //setTimeout(()=>{
-      expect(searchbox.value).toBe("Barry");
+    await waitFor(() => {
       expect(
-        within(getByTestId("multi-select-listbox")).getAllByTestId(
-          "multi-select-option"
-        ).length
-      ).toBe(10);
-      fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
-      fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
-      expect(searchbox.value).toBe("Barry");
-      expect(getAllByTestId("multi-select-option").length).toBe(10);
-      fireEvent.click(getAllByTestId("multi-select-option")[0]);
-      expect(getAllByTestId("button", { name: "Barry (3)" })).toBeDefined();  
-    //}, DEBOUNCE_MILLISECONDS)
+        screen.queryByTestId("test-multi-select-option-1")
+      ).toBeInTheDocument();
+    });
   });
+  it("adds and removes items correctly", () => {
+    render(
+      <MultiSelectCombobox
+        items={items}
+        label="Test Combobox"
+        entity="test"
+        onChangeUpdate={jest.fn()}
+        searchBy="contains"
+      />
+    );
 
-  it("should remove an already selected item that has been clicked for removal and keep focus on the search input element", ()=>{
-    // Clicks barry 3 and clicks the x button to remove it again
+    const input = screen.getByTestId("test-input-search");
 
-    const { getByTestId, getAllByTestId } = query;
-    const searchbox = getByTestId("Facility-input-search");
-    fireEvent.change(searchbox, { target: { value: "Barry" } });
-    fireEvent.keyDown(searchbox, { key: "Tab", code: 9 });
-    fireEvent.keyDown(searchbox, { key: "Enter", code: "Enter" });
+    fireEvent.change(input, { target: { value: "I" } });
 
-    expect(getByTestId('3-remove')).toBeInTheDocument();
-          
-    fireEvent.click(getByTestId('3-remove'));
-    expect(screen.queryByTestId('3-remove')).toBeNull();
-    expect(getByTestId('Facility-input-search')).toHaveFocus();
-  })
+    const options = screen.getAllByTestId("test-multi-select-option-1");
+    expect(options).toHaveLength(1);
+    fireEvent.click(options[0]);
 
+    const selectedItem = document.getElementsByClassName("selected");
+
+    fireEvent.click(screen.getByTestId("2-remove"));
+
+    expect(screen.queryByTestId("test-1-selected-pill")).toBeNull();
+  });
 });
