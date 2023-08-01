@@ -1,6 +1,7 @@
 import React from "react";
 import { fireEvent, render, waitForElement } from "@testing-library/react";
 import ReportingInstructions from "./ReportingInstructions.js";
+import * as contentApi from "../../utils/api/contentApi";
 
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
@@ -8,17 +9,14 @@ jest.mock("react-markdown", () => (props) => {
 
 jest.mock("remark-gfm", () => () => {});
 
-jest.mock("../../utils/api/contentApi", () => {
-  const testContent = {
-    headers: { "content-type": "text/markdown" },
-    data: "test",
-  };
-  return {
-    getContent: jest.fn().mockResolvedValue(testContent),
-  };
-});
-
 describe("<reporting instructions/>", () => {
+  beforeEach(() => {
+    jest.spyOn(contentApi, "getContent").mockResolvedValue({
+      headers: { "content-type": "text/markdown" },
+      data: "test",
+    })
+  })
+  
   test("renders reporting instructions", () => {
     const { container, queryByPlaceholderText } = render(
       <ReportingInstructions />
