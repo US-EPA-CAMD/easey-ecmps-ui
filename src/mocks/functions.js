@@ -6,8 +6,13 @@ import {
   mockDropdownFacilityList,
   mockMonitoringSpans,
   mockMonitoringAnalyzerRanges,
+  mockFacilities,
   mockExportQa,
   mockSelectedConfig,
+  mockTestTypeCodes,
+  mockTestTypeGroupCodes,
+  mockCheckedOutLocations,
+  mockReportData,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -49,6 +54,26 @@ export const getMockMonitoringAnalyzerRanges = () => {
   return [...mockMonitoringAnalyzerRanges];
 }
 
+export const getFacilitiesFromMDM = () =>{
+  return [...mockFacilities];
+}
+
 export const getMockExportQa = () => {
   return JSON.parse(JSON.stringify(mockExportQa))
+}
+
+export const getMockTestTypeCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeCodes))
+}
+
+export const getMockTestTypeGroupCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeGroupCodes))
+}
+
+export const getMockCheckedOutLocations = () => {
+  return JSON.parse(JSON.stringify(mockCheckedOutLocations))
+}
+
+export const getMockReportData = () =>{
+  return JSON.parse(JSON.stringify(mockReportData))
 }
