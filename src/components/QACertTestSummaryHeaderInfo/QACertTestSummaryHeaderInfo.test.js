@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, waitForElement, within } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import axios from "axios";
 import QACertTestSummaryHeaderInfo from "./QACertTestSummaryHeaderInfo";
 
@@ -75,12 +75,12 @@ beforeEach(() => {
 })
 
 test("testing QACertTestSummaryHeaderInfo component", async () => {
-  const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
+  const { container } = await waitFor(() => render(<QACertTestSummaryHeaderInfo {...props} />));
   expect(container).toBeDefined();
 });
 
 test("testing QACertTestSummaryHeaderInfo component and opening selection modal import", async () => {
-  const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />));
+  const { container } = await waitFor(() => render(<QACertTestSummaryHeaderInfo {...props} />));
   const openBtn = container.querySelector("#importSelectionQAModal");
 
   fireEvent.click(openBtn);
@@ -89,7 +89,7 @@ test("testing QACertTestSummaryHeaderInfo component and opening selection modal 
 
 test('test type dropdown selection renders with options', async () => {
   // Arrange
-  await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+  await waitFor(() => render(<QACertTestSummaryHeaderInfo {...props} />))
   const testTypeDropdown = screen.getByLabelText(testTypeDropdownLabel)
   const options = within(testTypeDropdown).getAllByRole('option')
 
@@ -100,7 +100,7 @@ test('test type dropdown selection renders with options', async () => {
 
 test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report"', async () => {
   // Arrange
-  const {container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+  const {container } = await waitFor(() => render(<QACertTestSummaryHeaderInfo {...props} />))
 
   const importTestDataBtn = container.querySelector("#importSelectionQAModal")
 
@@ -112,9 +112,10 @@ test('renders buttons for "Import Test Data", "Test Data Report", "Test History 
 
 test('when import test data button is clicked then a modal is rendered', async () => {
   // Arrange
- const { container } = await waitForElement(() => render(<QACertTestSummaryHeaderInfo {...props} />))
+ const { container } = await waitFor(() => render(<QACertTestSummaryHeaderInfo {...props} />))
   const importTestDataBtn = container.querySelector("#importSelectionQAModal")
 
+  
   // Act
   fireEvent.click(importTestDataBtn)
 
