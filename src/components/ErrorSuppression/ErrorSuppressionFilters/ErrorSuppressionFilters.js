@@ -63,6 +63,7 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 // Makes API call to get locations and then formats them to be in the way
 // MultiSelectCombobox expects the items to look and calls setLocationData()
 export const getLocations = (facilityValue, checkResultObj) => {
+
   return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
     const locations = data.map((f) => f.locations).flat(1);
 
@@ -373,7 +374,7 @@ export const ErrorSuppressionFilters = () => {
             value={selectedCheckType}
             onChange={onCheckTypeChange}
           >
-            <option value="false">{defaultDropdownText}</option>
+            <option value="false" key="false">{defaultDropdownText}</option>
             {checkTypeList.map((d) => (
               <option
                 key={d.checkTypeCode}
@@ -391,13 +392,13 @@ export const ErrorSuppressionFilters = () => {
             <Dropdown
               id={"check-number"}
               name={"check-number"}
-              epa-testid={"check-number"}
+              epa-testid={" "}
               data-testid={"check-number"}
               value={selectedCheckNumber}
               onChange={onCheckNumberChange}
               disabled={!selectedCheckType}
             >
-              <option value="false">{defaultDropdownText}</option>
+              <option value="false" key="false">{defaultDropdownText}</option>
               {checkNumberList.map((d) => (
                 <option key={d} value={d} data-testid={d}>
                   {d}
@@ -421,7 +422,7 @@ export const ErrorSuppressionFilters = () => {
             onChange={onCheckResultChange}
             disabled={!selectedCheckType || !selectedCheckNumber}
           >
-            <option value="false">{defaultDropdownText}</option>
+            <option value="false" key="false">{defaultDropdownText}</option>
             {checkResultList.map((d) => (
               <option key={d} value={d} data-testid={d}>
                 {d}
@@ -476,7 +477,7 @@ export const ErrorSuppressionFilters = () => {
       </Grid>
       <Grid row>
         <Grid col={3}>
-          <Label test-id={"reason-label"} htmlFor={"reason"}>
+          <Label test-id={"status-label"} htmlFor={"status"}>
             Status
           </Label>
           <Dropdown
@@ -487,7 +488,7 @@ export const ErrorSuppressionFilters = () => {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
           >
-            <option>{defaultDropdownText}</option>
+            <option key={defaultDropdownText}>{defaultDropdownText}</option>
             {[
               {
                 label: "ACTIVE",
@@ -516,7 +517,7 @@ export const ErrorSuppressionFilters = () => {
             value={selectedReason}
             onChange={(e) => setSelectedReason(e.target.value)}
           >
-            <option>{defaultDropdownText}</option>
+            <option key={defaultDropdownText}>{defaultDropdownText}</option>
             {reasonCodeList.map((d) => (
               <option
                 key={d.errorSuppressionReasonCode}
