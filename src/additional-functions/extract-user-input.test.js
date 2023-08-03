@@ -1,7 +1,7 @@
 import { extractUserInput, validateUserInput } from "./extract-user-input";
 import React from "react";
 import { Radio } from "@trussworks/react-uswds";
-import {act, render, screen} from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 
 const Test = () => {
   return (
@@ -89,9 +89,9 @@ describe("validateUserInput", () => {
   const dataTableName = "Formula";
   test("given valid data then returns no errors", () => {
     const validInput = {
-      beginDate: '03/22/2023',
+      beginDate: '2023-03-22',
       beginHour: 0,
-      endDate: '03/23/2023',
+      endDate: '2023-03-23',
       endHour: 0
     }
     const errors = validateUserInput(validInput, dataTableName)
@@ -102,6 +102,35 @@ describe("validateUserInput", () => {
     const invalidInput = {
       beginDate: null,
       beginHour: 0
+    }
+    const errors = validateUserInput(invalidInput, dataTableName)
+    expect(errors).not.toHaveLength(0)
+  })
+
+  test('given begin date that comes before end date then returns no errors', () => {
+    const validInput = {
+      beginDate: '2023-01-01',
+      endDate: '2023-12-31'
+    }
+    const errors = validateUserInput(validInput, dataTableName)
+    expect(errors).toHaveLength(0)
+  })
+
+  test('given begin date that comes after end date then returns errors', () => {
+    const invalidInput = {
+      beginDate: '2023-12-31',
+      endDate: '2023-01-01'
+    }
+    const errors = validateUserInput(invalidInput, dataTableName)
+    expect(errors).not.toHaveLength(0)
+  })
+
+  test('given same begin/end dates and begin hour that comes after end hour then returns errors', () => {
+    const invalidInput = {
+      beginDate: '2023-11-11',
+      endDate: '2023-11-11',
+      beginHour: 20,
+      endHour: 5,
     }
     const errors = validateUserInput(invalidInput, dataTableName)
     expect(errors).not.toHaveLength(0)
