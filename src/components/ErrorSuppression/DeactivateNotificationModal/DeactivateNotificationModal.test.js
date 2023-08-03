@@ -1,8 +1,7 @@
 import React from "react";
-import { render, screen, } from "@testing-library/react";
+import { render, screen, act} from "@testing-library/react";
 import { DeactivateNotificationModal } from "./DeactivateNotificationModal";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-test-renderer";
 import { secureAxios } from "../../../utils/api/easeyAuthApi";
 import MockAdapter from "axios-mock-adapter";
 import config from "../../../config";
@@ -66,7 +65,7 @@ describe("DeactivateNotificationModal", ()=>{
         
         await act(async ()=>{
 
-            userEvent.click(saveButton);
+            await userEvent.click(saveButton);
         })
         expect(refreshTableMock).toHaveBeenCalled()
     })

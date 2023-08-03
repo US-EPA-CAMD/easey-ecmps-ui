@@ -277,7 +277,7 @@ export const ErrorSuppressionDataContainer = () => {
           <div className="grid-col-2">
             <Button
               aria-label="Add"
-              data-testid="es-add"
+              data-testid="es-add-btn"
               className="margin-left-1"
               onClick={() => setShowAddModal(true)}
               id="error-suppres-add-btn"
@@ -288,7 +288,7 @@ export const ErrorSuppressionDataContainer = () => {
           <div className="grid-col-2">
             <Button
               aria-label="Clone"
-              data-testid="es-clone"
+              data-testid="es-clone-btn"
               disabled={selectedRows.length !== 1}
               onClick={() => {
                 setShowCloneModal(true);
@@ -300,7 +300,7 @@ export const ErrorSuppressionDataContainer = () => {
           <div className="grid-col-2">
             <Button
               aria-label="Deactivate"
-              data-testid="es-deactivate"
+              data-testid="es-deactivate-btn"
               onClick={() => setShowDeactivateModal(true)}
               disabled={selectedRows.length === 0}
             >

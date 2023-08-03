@@ -1,292 +1,118 @@
-import React from 'react';
-import { render, fireEvent, waitForElement } from '@testing-library/react';
-import MonitoringPlanHome, { mapStateToProps } from './MonitoringPlanHome';
-import { Provider } from 'react-redux';
-import configureStore from '../../store/configureStore.dev';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import MonitoringPlanHome from "./MonitoringPlanHome";
+import { Provider } from "react-redux";
+import * as modules from "../../utils/constants/moduleTitles";
 import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
-  QA_CERT_EVENT_STORE_NAME,
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
-} from '../../additional-functions/workspace-section-and-store-names';
-import initialState from '../../store/reducers/initialState';
+  QA_CERT_EVENT_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
+// Mock the DynamicTabs component
+jest.mock("../DynamicTabs/DynamicTabs", () => () => (
+  <div data-testid="mock-dynamic-tabs" />
+));
+import configureStore from "../../store/configureStore.dev";
+const store = configureStore();
 
-initialState.openedFacilityTabs.monitoringPlans = [
-  {
-    orisCode: '3',
-    checkout: false,
-    name: 'Barry (1, 2, CS0AAN) ',
-    location: [0, '6'],
-    section: [3, 'Methods'],
-    selectedConfig: {
-      id: 'TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A',
-      name: '1, 2, CS0AAN',
-      unitStackConfigurations: [
-        {
-          unitId: '1',
-        },
-      ],
-      locations: [
-        {
-          id: '6',
-          name: '1',
-          type: 'Unit',
-          active: true,
-          retireDate: null,
-          links: [
-            {
-              rel: 'self',
-              href: 'https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6',
-            },
-            {
-              rel: 'methods',
-              href: 'https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/methods',
-            },
-            {
-              rel: 'systems',
-              href: 'https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/systems',
-            },
-            {
-              rel: 'spans',
-              href: 'https://easey-dev.app.cloud.gov/api/monitor-plan-mgmt/locations/6/spans',
-            },
-          ],
-        },
-      ],
-    },
-    inactive: [false, false],
-  },
-];
-const store = configureStore(initialState);
-test('renders monitoring plan home with redux', async () => {
-  jest.mock('../../utils/api/monitoringPlansApi', () => {
-    const data = {
-      data: [
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: 'test',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: '',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-      ],
-    };
-    return {
-      getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
-    };
-  });
+test("renders MonitoringPlanHome without rendering DynamicTabs", () => {
+  const user = { firstName: "" };
 
-  window.currentlyCheckedOutMonPlanId = 123;
-
-  const { container } = render(
+  const { getByText, queryByTestId } = render(
     <Provider store={store}>
+      {" "}
       <MonitoringPlanHome
-        user={{ firstName: 'test' }}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
         workspaceSection={MONITORING_PLAN_STORE_NAME}
       />
     </Provider>
   );
-  fireEvent.click(container.querySelector('#testingBtn2'));
-  const renderedComponent = container.querySelector('.home-container');
-  expect(renderedComponent).not.toBeUndefined();
+
+  expect(document.title).toBe(modules.monitoring_plans_module);
 });
 
-test('renders monitoring plan home with QA_CERT_TEST_SUMMARY_STORE_NAME', async () => {
-  jest.mock('../../utils/api/monitoringPlansApi', () => {
-    const data = {
-      data: [
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: 'test',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: '',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-      ],
-    };
-    return {
-      getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
-    };
-  });
+test("renders MonitoringPlanHome with EMISSIONS_STORE_NAME", () => {
+  const user = { firstName: "" };
 
-  window.currentlyCheckedOutMonPlanId = 123;
-
-  const { container } = render(
+  const { getByText, queryByTestId } = render(
     <Provider store={store}>
+      {" "}
       <MonitoringPlanHome
-        user={{ firstName: 'test' }}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
-        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-      />
-    </Provider>
-  );
-
-  fireEvent.click(container.querySelector('#testingBtn2'));
-  const renderedComponent = container.querySelector('.home-container');
-  expect(renderedComponent).not.toBeUndefined();
-});
-
-test('renders monitoring plan home with QA_CERT_EVENT_STORE_NAME', async () => {
-  jest.mock('../../utils/api/monitoringPlansApi', () => {
-    const data = {
-      data: [
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: 'test',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: '',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-      ],
-    };
-    return {
-      getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
-    };
-  });
-
-  window.currentlyCheckedOutMonPlanId = 123;
-
-  const { container } = render(
-    <Provider store={store}>
-      <MonitoringPlanHome
-        user={{ firstName: 'test' }}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
-        workspaceSection={QA_CERT_EVENT_STORE_NAME}
-      />
-    </Provider>
-  );
-
-  fireEvent.click(container.querySelector('#testingBtn2'));
-  const renderedComponent = container.querySelector('.home-container');
-  expect(renderedComponent).not.toBeUndefined();
-});
-
-test('renders monitoring plan home with EMISSIONS_STORE_NAME', async () => {
-  jest.mock('../../utils/api/monitoringPlansApi', () => {
-    const data = {
-      data: [
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: 'test',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: '',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-      ],
-    };
-    return {
-      getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
-    };
-  });
-
-  window.currentlyCheckedOutMonPlanId = 123;
-
-  const { container } = render(
-    <Provider store={store}>
-      <MonitoringPlanHome
-        user={{ firstName: 'test' }}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
         workspaceSection={EMISSIONS_STORE_NAME}
       />
     </Provider>
   );
 
-  fireEvent.click(container.querySelector('#testingBtn2'));
-  const renderedComponent = container.querySelector('.home-container');
-  expect(renderedComponent).not.toBeUndefined();
+  expect(document.title).toBe(modules.emissions_module);
 });
 
-test('renders monitoring plan home with EXPORT_STORE_NAME', async () => {
-  jest.mock('../../utils/api/monitoringPlansApi', () => {
-    const data = {
-      data: [
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: 'test',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-        {
-          facId: 1,
-          monPlanId: 'TWA7A',
-          checkedOutOn: '2022-04-04T06:16:59.959Z',
-          checkedOutBy: '',
-          lastActivity: '2022-04-04T06:16:59.959Z',
-        },
-      ],
-    };
-    return {
-      getCheckedOutLocations: jest.fn(() => Promise.resolve(data)),
-    };
-  });
+test("renders MonitoringPlanHome with EXPORT_STORE_NAME", () => {
+  const user = { firstName: "" };
 
-  window.currentlyCheckedOutMonPlanId = 123;
-
-  const { container } = render(
+  const { getByText, queryByTestId } = render(
     <Provider store={store}>
+      {" "}
       <MonitoringPlanHome
-        user={{ firstName: 'test' }}
-        resetTimer={jest.fn()}
-        setExpired={jest.fn()}
-        resetTimerFlag={jest.fn()}
-        callApiFlag={jest.fn()}
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
         workspaceSection={EXPORT_STORE_NAME}
       />
     </Provider>
   );
 
-  fireEvent.click(container.querySelector('#testingBtn2'));
-  const renderedComponent = container.querySelector('.home-container');
-  expect(renderedComponent).not.toBeUndefined();
+  expect(document.title).toBe(modules.export_Module);
 });
 
-test('mapStateToProps calls the appropriate action', async () => {
-  // mock the 'dispatch' object
-  const state = store.getState();
-  const stateProps = mapStateToProps(state, true);
+test("renders MonitoringPlanHome with QA_CERT_EVENT_STORE_NAME", () => {
+  const user = { firstName: "" };
 
-  expect(stateProps).toBeDefined();
+  const { getByText, queryByTestId } = render(
+    <Provider store={store}>
+      {" "}
+      <MonitoringPlanHome
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
+        workspaceSection={QA_CERT_EVENT_STORE_NAME}
+      />
+    </Provider>
+  );
+
+  expect(document.title).toBe(modules.qa_Certifications_Event_Module);
+});
+
+test("renders MonitoringPlanHome with QA_CERT_TEST_SUMMARY_STORE_NAME", () => {
+  const user = { firstName: "" };
+
+  const { getByText, queryByTestId } = render(
+    <Provider store={store}>
+      {" "}
+      <MonitoringPlanHome
+        user={user}
+        resetTimer={() => {}}
+        setExpired={() => {}}
+        resetTimerFlag={false}
+        callApiFlag={false}
+        workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
+      />
+    </Provider>
+  );
+
+  expect(document.title).toBe(modules.qa_Certifications_Test_Summary_Module);
 });
