@@ -713,6 +713,11 @@ export const getMonitoringPlansUnitControlRecords = async (
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
+  // These two radio fields must be converted to
+  // STRING values of "1" (Yes) or "0" (No)
+  payload.originalCode = payload.originalCode?.toString();
+  payload.seasonalControlsIndicator = payload.seasonalControlsIndicator?.toString();
+
   const url = getApiUrl(
     `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`
   );
