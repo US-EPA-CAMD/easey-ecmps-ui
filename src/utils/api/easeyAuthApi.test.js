@@ -1,23 +1,11 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { displayAppError } from "../../additional-functions/app-error";
 import config from "../../config";
+import * as monitoringPlansApi from "./monitoringPlansApi"
+import * as appError from "../../additional-functions/app-error.js"
+import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios } from "./easeyAuthApi";
-
-jest.mock("./monitoringPlansApi", () => ({
-  getCheckedOutLocations: jest.fn().mockResolvedValue({
-    data: [],
-  }),
-  checkoutAPI: jest.fn().mockResolvedValue({
-    data: [],
-  }),
-  getApiUrl: jest.fn(),
-}));
-
-jest.mock("../../additional-functions/app-error.js", () => ({
-  displayAppError: jest.fn(),
-}));
+import { authenticate, refreshClientToken, secureAxios, refreshToken, credentialsAuth, verifyChallenge, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -31,8 +19,23 @@ window.location = {
 
 describe("Easey Auth API", () => {
   const mock = new MockAdapter(axios);
+  let displayAppError
 
   beforeEach(() => {
+    jest.spyOn(monitoringPlansApi, 'getCheckedOutLocations').mockResolvedValue({
+      data: [{
+        checkedOutBy: 'subrata',
+      }],
+    })
+    jest.spyOn(checkoutAPI, 'checkoutAPI').mockResolvedValue({
+      data: [],
+    })
+    jest.spyOn(monitoringPlansApi, 'getApiUrl').mockImplementation(() => { })
+
+    displayAppError = jest.spyOn(appError, 'displayAppError').mockImplementation(() => { })
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
     mock.reset();
   });
@@ -52,10 +55,43 @@ describe("Easey Auth API", () => {
     expect(res.data).toEqual("success message");
   });
 
+  it("should return response on success secureAxios call when additional headers provided", async () => {
+    jest.setTimeout(10000);
+
+    const date = new Date(
+      new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+      })
+    );
+    date.setMinutes(date.getMinutes() - 15);
+
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
+    );
+
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, "token");
+    mock
+      .onGet(`${config.services.authApi.uri}/test`)
+      .reply(200, "success message");
+
+    const res = await secureAxios({
+      method: "GET",
+      url: `${config.services.authApi.uri}/test`,
+      headers: {
+        contentType: "application/json",
+      }
+    });
+
+    expect(res.data).toEqual("success message");
+    expect(res.config.headers.contentType).toEqual("application/json");
+    localStorage.removeItem("ecmps_user");
+  });
+
   it("Can we authenticate", async () => {
     const ecmpsUser = {
       token: "xyz",
-      userId: "jeff",
+      userId: "subrata",
       tokenExpiration: new Date(),
     };
     mock
@@ -117,7 +153,7 @@ describe("Easey Auth API", () => {
     expect(displayAppError).toHaveBeenCalledTimes(1);
   });
 
-  /*
+
   it("Can we refreshToken", async () => {
     const date = new Date(
       new Date().toLocaleString("en-US", {
@@ -127,7 +163,7 @@ describe("Easey Auth API", () => {
     date.setMinutes(date.getMinutes() - 15);
     localStorage.setItem(
       "ecmps_user",
-      JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
+      JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
     const data = { token: "refreshed token", expiration: "2022-11-23" };
@@ -149,7 +185,7 @@ describe("Easey Auth API", () => {
     date.setSeconds(date.getSeconds() + 50);
     localStorage.setItem(
       "ecmps_user",
-      JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
+      JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
     const data = { token: "refreshed token", expiration: "2022-11-23" };
@@ -161,13 +197,13 @@ describe("Easey Auth API", () => {
       data.token
     );
   });
-  
+
   it("Can we refreshToken with error", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
     localStorage.setItem(
       "ecmps_user",
-      JSON.stringify({ token: "xyz", userId: "jeff", tokenExpiration: date })
+      JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
     mock
@@ -183,7 +219,7 @@ describe("Easey Auth API", () => {
       "ecmps_user",
       JSON.stringify({
         token: "xyz",
-        userId: "test",
+        userId: "subrata",
         tokenExpiration: "11-21-2022",
       })
     );
@@ -218,13 +254,23 @@ describe("Easey Auth API", () => {
 
     mock
       .onGet(
-        `${
-          config.services.authApi.uri
+        `${config.services.authApi.uri
         }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`
       )
       .reply(200, {});
 
     expect((await getCredentials(monitorPlans)).data).toEqual({});
   });
-  */
+
+  it("refreshLastActivity", async () => {
+
+    mock
+      .onPost(`${config.services.authApi.uri}/authentication/update-last-activity`)
+      .reply(500, "some error");
+
+    await refreshLastActivity();
+    expect(displayAppError).toHaveBeenCalled();
+
+  });
+
 });
