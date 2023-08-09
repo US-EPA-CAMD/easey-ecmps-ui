@@ -1,16 +1,14 @@
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
+import * as appError from "../../additional-functions/app-error";
 
 let globalMsg = "";
 
-jest.mock("../../additional-functions/app-error", () => {
-  return {
-    displayAppError: jest.fn((msg) => {
-      globalMsg = msg;
-    }),
-  };
-});
-
 describe("test response and error handler functions", () => {
+  beforeEach(() => {
+    jest.spyOn(appError, 'displayAppError').mockImplementation((msg) => {
+      globalMsg = msg;
+    });
+  })
   test("test response handler", async () => {
     const res1 = { status: 200, data: [] };
     const res2 = { status: 201, data: [] };
