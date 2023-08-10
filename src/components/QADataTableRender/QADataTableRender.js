@@ -39,7 +39,6 @@ const QADataTableRender = ({
   sectionSelect = null,
 }) => {
   const columns = [];
-  console.log('columnnames',columnNames,dataTableName,expandableRowComp , expandableRowProps)
   columnNames.forEach((name, index) => {
     switch (name) {
       default:

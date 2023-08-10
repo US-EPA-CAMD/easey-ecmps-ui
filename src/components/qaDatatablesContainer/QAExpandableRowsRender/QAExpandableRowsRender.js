@@ -127,6 +127,7 @@ const QAExpandableRowsRender = ({
       case "Linearity Test":
         extraIDsProps = [locationId, id];
         objProps = qaLinearityInjectionProps();
+        expand = false;
         break;
       // rata data > rata summary > rata run
       case "RATA Data":
@@ -143,7 +144,7 @@ const QAExpandableRowsRender = ({
 
       case "RATA Run Data":
         extraIDsProps = [...extraIDs, id];
-        expand = true;
+        expand = false;
         objProps = qaFlowRataRunProps();
         break;
       case "Flow":
@@ -169,14 +170,17 @@ const QAExpandableRowsRender = ({
       case "Cycle Time Summary":
         extraIDsProps = [locationId, id];
         objProps = qaCycleTimeInjectionProps();
+        expand = false;
         break;
       case "Unit Default Test": //Unit Default Test Data => Unit Default Test Run
         extraIDsProps = [locationId, id];
         objProps = qaUnitDefaultTestRunDataProps();
+        expand = false;
         break;
       case "Hg Summary": // Hg Test Data => Hg Summary => Hg Injection
         extraIDsProps = [locationId, id];
         objProps = qaHgInjectionDataProps();
+        expand = false;
         break;
       default:
         break;

@@ -103,7 +103,6 @@ export const QACertTestSummaryHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
-          console.log('res.data',res.data)
           setAllTestTypeCodes(res.data);
         })
         .catch((error) => {
@@ -112,7 +111,6 @@ export const QACertTestSummaryHeaderInfo = ({
 
       getAllTestTypeGroupCodes()
         .then((res) => {
-          console.log('res.data 2',res.data)
           const options = res.data
             .map((e) => {
               return {

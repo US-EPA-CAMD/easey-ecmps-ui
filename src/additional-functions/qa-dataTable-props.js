@@ -2,7 +2,7 @@ export const qaProtocalGasProps = (selectedRow) => {
   return {
     dataTableName: "Protocol Gas",
     payload: {
-      gasLevelCode: selectedRow ? selectedRow.gasLevelCode: '',
+      gasLevelCode: selectedRow ? selectedRow.gasLevelCode : "",
       gasTypeCode: "string",
       cylinderIdentifier: "string",
       vendorIdentifier: "string",
@@ -72,11 +72,7 @@ export const qaLinearityInjectionProps = () => {
       referenceValue: 0,
     },
     dropdownArray: ["gasLevelCode", "gasTypeCode"],
-    columnNames: [
-      "Injection Date",
-      "Measured Value",
-      "Reference Value",
-    ],
+    columnNames: ["Injection Date", "Measured Value", "Reference Value"],
     controlInputs: {},
     controlDatePickerInputs: {
       injectionDate: ["Injection Date", "date", "", ""],
@@ -428,7 +424,7 @@ export const qaTestQualificationProps = (selectedRow) => {
   return {
     dataTableName: "Test Qualification",
     payload: {
-      testClaimCode: selectedRow? selectedRow.testClaimCode: '',
+      testClaimCode: selectedRow ? selectedRow.testClaimCode : "",
       beginDate: "string",
       endDate: "string",
       highLoadPercentage: 0,
@@ -507,13 +503,11 @@ export const qaAppendixECorrelationSummaryHeatInputGasProps = (selectedRow) => {
       gasHeatInput: 0,
       monitoringSystemID: "string",
     },
-    dropdownArray: [
-      "monitoringSystemID",
-    ],
+    dropdownArray: ["monitoringSystemID"],
     columnNames: [
       "Monitoring System ID",
-      "Gas GCV", 
-      "Gas Volume", 
+      "Gas GCV",
+      "Gas Volume",
       "Gas Heat Input",
     ],
     controlInputs: {
