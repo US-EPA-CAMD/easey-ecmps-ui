@@ -9,20 +9,17 @@ export async function getReport(params) {
   return secureAxios({
     method: "GET",
     url,
-  })
+  });
 }
 
 export async function submitData(payload) {
-  /*
   return secureAxios({
     method: "POST",
-    url: `${config.services.camd.uri}/submit`,
+    url: `${config.services.camd.uri}/submission/queue`,
     data: payload,
   })
     .then(handleResponse)
     .catch(handleError);
-    */
-  return true;
 }
 
 export const triggerBulkEvaluation = async (payload) => {
