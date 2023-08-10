@@ -1024,6 +1024,55 @@ export const createLMEQualificationData = async (payload) => {
     return handleImportError(error);
   }
 };
+export const getCPMSQualifications = async (locationId, qualId) => {
+  const url = getApiUrl(
+    `/locations/${locationId}/qualifications/${qualId}/cpms-qualifications`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const saveCPMSQualificationData = async (payload) => {
+  const url = getApiUrl(
+    `/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/cpms-qualifications/${payload["id"]}`
+  );
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createCPMSQualificationData = async (payload) => {
+  const url = getApiUrl(
+    `/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/cpms-qualifications`
+  );
+
+  // *** remove attributes not needed by the API
+  delete payload["id"];
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
 
 export const getLocationAttributes = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/attributes`);

@@ -1,105 +1,42 @@
 import { loadFacilities, loadFacilitiesSuccess } from "./facilities";
 import * as types from "./actionTypes";
-import axios from "axios";
 import thunk from "redux-thunk";
-import MockAdapter from "axios-mock-adapter";
 import configureMockStore from "redux-mock-store";
-import config from "../../config";
+import { getFacilitiesFromMDM } from "../../mocks/functions";
+import * as facilitiesApi from "../../utils/api/facilityApi";
 
 // Test an async action
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
 
-// Mocked facilities returned data
-const facilities = [
-  [
-    {
-      orisCode: "3",
-      name: "Barry",
-      state: "Alabama",
-      epaRegion: "4",
-      county: "Mobile County",
-      links: [
-        {
-          rel: "self",
-          href: "/facilities/3",
-        },
-        {
-          rel: "monitor-plans",
-          href: "facilities/3/monitor-plans",
-        },
-      ],
-    },
-    {
-      orisCode: "5",
-      name: "Chickasaw",
-      state: "Alabama",
-      epaRegion: "4",
-      county: "Mobile County",
-      links: [
-        {
-          rel: "self",
-          href: "/facilities/5",
-        },
-        {
-          rel: "monitor-plans",
-          href: "facilities/5/monitor-plans",
-        },
-      ],
-    },
-    {
-      orisCode: "9",
-      name: "Copper Station",
-      state: "Texas",
-      epaRegion: "6",
-      county: "El Paso County",
-      links: [
-        {
-          rel: "self",
-          href: "/facilities/9",
-        },
-        {
-          rel: "monitor-plans",
-          href: "facilities/9/monitor-plans",
-        },
-      ],
-    },
-  ],
-];
-
-describe("Async Actions", () => {
-  const mock = new MockAdapter(axios);
+describe("Facility Async Actions", () => {
   afterEach(() => {
-    mock.restore();
+    jest.clearAllMocks();
   });
+  it("should create BEGIN_FACILITIES_API_CALL and LOAD_FACILITIES_SUCCESS when loading facilities", () => {
+    const mockFacilities = getFacilitiesFromMDM();
+    const mockFacilitiesResponse = jest.fn().mockResolvedValue({data: mockFacilities})
+    jest.spyOn(facilitiesApi, "getAllFacilities").mockImplementation(mockFacilitiesResponse); 
+    const expectedActions = [
+      { type: types.BEGIN_FACILITIES_API_CALL },
+      { type: types.LOAD_FACILITIES_SUCCESS, mockFacilities },
+    ];
 
-  describe("Load Facilities Thunk", () => {
-    it("should create BEGIN_FACILITIES_API_CALL and LOAD_FACILITIES_SUCCESS when loading facilities", () => {
-      mock
-        .onGet(`${config.services.facilities.uri}/facilities`)
-        .reply(200, facilities);
-      const expectedActions = [
-        { type: types.BEGIN_FACILITIES_API_CALL },
-        { type: types.LOAD_FACILITIES_SUCCESS, facilities },
-      ];
-
-      const store = mockStore({ facilities: [] });
-      return store.dispatch(loadFacilities()).then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+    const store = mockStore({ facilities: [] });
+    return store.dispatch(loadFacilities()).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
-});
 
-describe("load facilities success", () => {
   it("should create a LOAD FACILITIES SUCCESS action", () => {
+    const mockFacilities = getFacilitiesFromMDM();
     const expectedAction = {
       type: types.LOAD_FACILITIES_SUCCESS,
-      facilities,
+      facilities: mockFacilities,
     };
 
-    const action = loadFacilitiesSuccess(facilities);
-
+    const action = loadFacilitiesSuccess(mockFacilities);
     expect(action).toEqual(expectedAction);
   });
 });
+

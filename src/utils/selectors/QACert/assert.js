@@ -42,7 +42,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
         console.log("error", error);
       });
     case proGas:
-      return qaApi.getProtocolGas(location, id).catch((error) => {
+      return qaApi.getProtocolGas(extraIdsArr[0], extraIdsArr[1]).catch((error) => {
         console.log("error", error);
       });
     case lineInjection:
@@ -70,7 +70,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error", error);
         });
     case airEmissions:
-      return qaApi.getAirEmissions(extraIdsArr[0], id).catch((error) => {
+      return qaApi.getAirEmissions(extraIdsArr[0], extraIdsArr[1]).catch((error) => {
         console.log("error", error);
       });
     case flowRataRun:
@@ -99,7 +99,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           console.log("error fetching rata traverse data", error)
         );
     case testQualification:
-      return qaApi.getTestQualification(location, id).catch((error) => {
+      return qaApi.getTestQualification(extraIdsArr[0], extraIdsArr[1]).catch((error) => {
         console.log("error", error);
       });
     case appendixECorrelationSummary:
@@ -316,17 +316,17 @@ export const removeDataSwitch = async (
         });
     case proGas:
       return qaApi
-        .deleteProtocolGas(locationId, id, row.id)
+        .deleteProtocolGas(extraIdsArr[0], extraIdsArr[1], row.id)
         .catch((error) => console.log("error", error));
 
     case airEmissions:
       return qaApi
-        .deleteAirEmissions(locationId, id, row.id)
+        .deleteAirEmissions(extraIdsArr[0], extraIdsArr[1], row.id)
         .catch((error) => console.log("error", error));
 
     case testQualification:
       return qaApi
-        .deleteTestQualification(locationId, id, row.id)
+        .deleteTestQualification(extraIdsArr[0], extraIdsArr[1], row.id)
         .catch((error) => console.log("error", error));
 
     case lineInjection:
@@ -534,14 +534,14 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
 
     case proGas:
       return qaApi
-        .updateProtocolGas(location, id, userInput.id, userInput)
+        .updateProtocolGas(extraIdsArr[0], extraIdsArr[1], userInput.id, userInput)
         .catch((error) => {
           console.log("error", error);
         });
 
     case airEmissions:
       return qaApi
-        .updateAirEmissions(location, id, userInput.id, userInput)
+        .updateAirEmissions(extraIdsArr[0], extraIdsArr[1], userInput.id, userInput)
         .catch((error) => {
           console.log("error", error);
         });
@@ -585,7 +585,6 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         .updateRataSummary(
           extraIdsArr[0],
           extraIdsArr[1],
-          extraIdsArr[2],
           id,
           userInput.id,
           userInput
@@ -625,8 +624,8 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
         );
     case testQualification:
       return qaApi.updateTestQualification(
-        location,
-        id,
+        extraIdsArr[0], 
+        extraIdsArr[1],
         userInput.id,
         userInput
       )
@@ -808,7 +807,7 @@ export const createDataSwitch = async (
           console.log("error", error);
         });
     case proGas:
-      return qaApi.createProtocolGas(location, id, userInput)
+      return qaApi.createProtocolGas(extraIdsArr[0], extraIdsArr[1], userInput)
       .catch(error => console.log('createProtocolGas failed', error));
     case lineInjection:
       return qaApi
@@ -863,7 +862,7 @@ export const createDataSwitch = async (
 
     case airEmissions:
       return qaApi
-        .createAirEmissions(location, id, userInput)
+        .createAirEmissions(extraIdsArr[0], extraIdsArr[1], userInput)
         .catch((error) => {
           console.log("error", error);
         });
@@ -881,7 +880,7 @@ export const createDataSwitch = async (
           console.log("error", error);
         });
     case testQualification:
-      return qaApi.createTestQualification(location, id, userInput)
+      return qaApi.createTestQualification(extraIdsArr[0], extraIdsArr[1], userInput)
       .catch(error => console.log('createTestQualification failed', error));
     case appendixECorrelationSummary:
       return qaApi.createAppendixECorrelationSummaryRecord(

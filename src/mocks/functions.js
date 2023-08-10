@@ -6,6 +6,19 @@ import {
   mockDropdownFacilityList,
   mockMonitoringSpans,
   mockMonitoringAnalyzerRanges,
+  mockFacilities,
+  mockExportQa,
+  mockSelectedConfig,
+  mockTestTypeCodes,
+  mockTestTypeGroupCodes,
+  mockCheckedOutLocations,
+  mockQATestSummary,
+  mockSpanScaleCodes,
+  mockTestReasonCodes,
+  mockTestResultCodes,
+  mockMonitoringComponents,
+  mockMonitoringSystems,
+  mockReportData,
 } from "./constants";
 
 export const getMockEcmpsUser = () => {
@@ -45,4 +58,51 @@ export const getMockMonitoringSpans = () => {
 }
 export const getMockMonitoringAnalyzerRanges = () => {
   return [...mockMonitoringAnalyzerRanges];
+}
+
+export const getFacilitiesFromMDM = () => {
+  return [...mockFacilities];
+}
+
+export const getMockExportQa = () => {
+  return JSON.parse(JSON.stringify(mockExportQa))
+}
+
+export const getMockTestTypeCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeCodes))
+}
+
+export const getMockTestTypeGroupCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestTypeGroupCodes))
+}
+
+export const getMockSpanScaleCodes = () => {
+  return JSON.parse(JSON.stringify(mockSpanScaleCodes))
+}
+
+export const getMockTestReasonCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestReasonCodes))
+}
+
+export const getMockTestResultCodes = () => {
+  return JSON.parse(JSON.stringify(mockTestResultCodes))
+}
+
+export const getMockCheckedOutLocations = () => {
+  return JSON.parse(JSON.stringify(mockCheckedOutLocations))
+}
+
+export const getMockQATestSummary = () => {
+  return JSON.parse(JSON.stringify(mockQATestSummary))
+}
+
+export const getMockMonitoringComponents = () => {
+  return JSON.parse(JSON.stringify(mockMonitoringComponents))
+}
+
+export const getMockMonitoringSystems = () => {
+  return JSON.parse(JSON.stringify(mockMonitoringSystems))
+}
+export const getMockReportData = () =>{
+  return JSON.parse(JSON.stringify(mockReportData))
 }

@@ -162,6 +162,7 @@ export const QAImportHistoricalDataPreview = ({
               <div
                 className="margin-x-3 margin-y-4"
                 id={`import-${TEST_SUMMARY_KEY}`}
+                data-testid="test-summary-table"
               >
                 <h4 className="margin-y-1">Test Summary</h4>
                 <DataTable
@@ -189,6 +190,7 @@ export const QAImportHistoricalDataPreview = ({
                 <div
                   className="margin-x-3 margin-y-4"
                   id={`import-${CERT_EVENT_KEY}`}
+                  data-testid="qa-cert-events-and-tee-table"
                 >
                   <h4 className="margin-y-1">QA Certification Events</h4>
                   <DataTable

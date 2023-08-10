@@ -20,8 +20,8 @@ const controlInputs = {
 };
 
 const controlDatePickerInputs = {
-  beginDate: ["Start Date", "dateTime", ""],
-  beginHour: ["Start Time", "time", ""],
+  beginDate: ["Begin Date", "dateTime", ""],
+  beginHour: ["Start Hour", "time", ""],
   endDate: ["End Date", "date", ""],
   endHour: ["End Time", "time", ""],
   skip: ["skip", "skip", ""],

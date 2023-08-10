@@ -17,12 +17,13 @@ import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_M
 
 let controlInputs;
 
-const QAMaintenanceTable = ({
+const QAMaintenanceData = ({
   data = [],
   isLoading = false,
   typeSelection, // string description of selected type
   selectedRows,
   setSelectedRows,
+  setReloadTableData,
 }) => {
   const [showViewModal, setShowViewModal] = useState(false);
   const [disableActionBtns, setDisableActionBtns] = useState(true);
@@ -153,6 +154,7 @@ const QAMaintenanceTable = ({
   let commonEndProps = {
     submissionAvailabilityDescription: ["Submission Availability Description", "input", ""],
     severityDescription: ["Severity Description", "input", ""],
+    resubExplanation: ["Resubmission Reason", "input", ""],
   }
 
   switch (typeSelection) {
@@ -206,6 +208,9 @@ const QAMaintenanceTable = ({
         <QAMaintenanceModalPopout
           closeModalHandler={closeModalHandler}
           action={modalState.action}
+          typeSelection={typeSelection}
+          selectedRows={selectedRows}
+          setReloadTableData={setReloadTableData}
         />
       ) : null}
       <div className="padding-left-0 margin-left-0 padding-right-0">
@@ -222,8 +227,12 @@ const QAMaintenanceTable = ({
                   aria-label="Require Resubmission"
                   data-testid="es-require-resubmission"
                   className="usa-button"
-                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                  onClick={() =>{
+                    window.openModalBtn = document.activeElement;
+                    setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION })}
+                  }
                   disabled={disableActionBtns}
+                  id="qa-update-submission-btn"
                 >
                   Require Resubmission
                 </Button>
@@ -233,8 +242,13 @@ const QAMaintenanceTable = ({
                   aria-label="Delete"
                   data-testid="es-delete"
                   className="usa-button usa-button--outline"
-                  onClick={() => setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })}
+                  onClick={() => {
+                      window.openModalBtn = document.activeElement;
+                      setModalState({ isOpen: true, action: QA_MAINTENANCE_MODAL_DELETE })
+                    }
+                  }
                   disabled={disableActionBtns}
+                  id="qa-delete-btn"
                 >
                   Delete
                 </Button>
@@ -276,6 +290,6 @@ const QAMaintenanceTable = ({
   );
 };
 
-export default QAMaintenanceTable;
+export default QAMaintenanceData;
 
 const controlDatePickerInputs = {}

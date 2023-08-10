@@ -253,11 +253,10 @@ export const EvaluateAndSubmit = ({
     if (componentType === "Submission") {
       // Build submission payload
       payload.activityId = activityId;
-    } else {
-      // Build base evaluate payload
-      payload.userId = user.userId;
-      payload.userEmail = user.email;
     }
+
+    payload.userId = user.userId;
+    payload.userEmail = user.email;
 
     payload.items = [];
 
@@ -453,6 +452,7 @@ export const EvaluateAndSubmit = ({
           </Alert>
         )}
 
+        {/*
         {componentType === "Submission" && (
           <Alert type="warning" heading="Warning" headingLevel="h4">
             The submission process is still under construction. The final sign
@@ -460,6 +460,7 @@ export const EvaluateAndSubmit = ({
             integrated.
           </Alert>
         )}
+        */}
 
         <h2
           data-testid="page-title"
@@ -467,9 +468,12 @@ export const EvaluateAndSubmit = ({
         >
           {title}
         </h2>
-        {/* {finalSubmitStage && (
+      </div>
+
+      <div className="text-black flex-justify-end margin-top-1 grid-row">
+        {finalSubmitStage && (
           <Button
-            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-right-2"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
@@ -477,7 +481,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )} */}
+        )}
       </div>
 
       {componentType !== "Submission" && (
@@ -537,9 +541,9 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {/*finalSubmitStage && (
+        {finalSubmitStage && (
           <Button
-            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-right-2"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
@@ -547,7 +551,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-          )*/}
+        )}
       </div>
     </div>
   );

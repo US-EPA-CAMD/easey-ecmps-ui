@@ -129,7 +129,7 @@ beforeAll(() => {
       ],
     ],
     [[], [], [], "", "skip"],
-    ["beginDate", "Start Date", "10/31/2002", false, "date", "2002-10-31"],
+    ["beginDate", "Begin Date", "10/31/2002", false, "date", "2002-10-31"],
     ["endDate", "End Date", "", false, "date", null],
   ];
   cols = 2;

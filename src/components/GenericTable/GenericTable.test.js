@@ -1,43 +1,45 @@
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import GenericTable from "./GenericTable";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import GenericTable from './GenericTable';
 
-describe("testing generictable component ", () => {
-  test("renders the content of generictable component", () => {
-    const data = [
-      { Name: "Abc", Age: 15, Location: "Bangalore" },
-      {
-        Name: "Def",
-        Age: 43,
-        Location: "Mumbaissssssssssssssssssssssssssssssssss",
-      },
-      { Name: "Uff", Age: 30, Location: "Chennai" },
-      { Name: "Ammse", Age: 87, Location: "Delhi" },
-      { Name: "Yysse", Age: 28, Location: "Hyderabad" },
-    ];
-    const { container, getAllByText, getByText } = render(
-      <GenericTable
-        title={"test"}
-        data1={data}
-        expandable
-        additionalTitle={"test1"}
-      />
-    );
-    const renderedComponent = container.querySelector(".genericTable");
+describe('GenericTable', () => {
+  const mockData = [
+    {
+      column1: 'test1',
+      column2: 'test2',
+      expandable: '+',
+    },
+  ];
 
-    expect(renderedComponent).not.toBeUndefined();
+  test('renders without crashing', () => {
+    render(<GenericTable data1={mockData} expandable={true} />);
   });
 
-  test("renders the content of empty data component", () => {
-    const data = [{ Name: "", Location: "" }];
-    const { container, getAllByText, getByText } = render(
-      <GenericTable
-        // title={"test"}
-        data1={data}
-        // additionalTitle={"test1"}
-      />
+  test('renders title correctly', () => {
+    render(
+      <GenericTable data1={mockData} expandable={true} title="Table Title" />,
     );
-    const renderedComponent = container.querySelector(".genericTable");
-    expect(renderedComponent).not.toBeUndefined();
+    const titleElement = screen.getByText(/Table Title/i);
+    expect(titleElement).toBeInTheDocument();
+  });
+
+  test('renders additionalTitle correctly', () => {
+    render(
+      <GenericTable
+        data1={mockData}
+        expandable={true}
+        additionalTitle="Additional Title"
+      />,
+    );
+    const additionalTitleElement = screen.getByText(/Additional Title/i);
+    expect(additionalTitleElement).toBeInTheDocument();
+  });
+
+  test('renders table headers correctly', () => {
+    render(<GenericTable data1={mockData} expandable={true} />);
+    const header1 = screen.getByText(/column1/i);
+    const header2 = screen.getByText(/column2/i);
+    expect(header1).toBeInTheDocument();
+    expect(header2).toBeInTheDocument();
   });
 });

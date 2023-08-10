@@ -34,6 +34,7 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTableAssert = ({
   mdmData,
@@ -106,8 +107,11 @@ export const DataTableAssert = ({
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
       assignFocusEventListeners();
+      ensure508();
     }
   }, [dataLoaded, dropdownsLoaded]);
+  // *** Reassign handlers when inactive checkbox is toggled
+
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -116,6 +120,7 @@ export const DataTableAssert = ({
     } else {
       assignFocusEventListeners();
     }
+    
     return () => {
       setReturnedFocusToLast(true);
     };
@@ -211,7 +216,9 @@ export const DataTableAssert = ({
   }, [mdmData, loadDropdownsData, dataTableName, dropdownArray]);
 
   const [displayedRecords, setDisplayedRecords] = useState([]);
-
+  useEffect(() => {
+    assignFocusEventListeners();
+  }, [displayedRecords]);
   const inactiveCheckboxFiltering = (records, multiTable) => {
     if (records.length > 0) {
       const activeRecords = getActiveData(records);
@@ -487,6 +494,9 @@ export const DataTableAssert = ({
     setErrorMsgs([]);
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
+    if (createNewData) {
+      returnsFocusMpDatatableCreateBTN(`Create ${dataTableName}`)
+    }
   };
   if (document) {
     changeGridCellAttributeValue();

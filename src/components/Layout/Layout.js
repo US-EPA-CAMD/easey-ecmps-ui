@@ -79,6 +79,7 @@ const Layout = (props) => {
             >
               <ErrorSharp className="margin-right-2" />
               <CloseSharp
+                aria-label="close error alert message"
                 className="float-right cursor-pointer"
                 onClick={() => hideAppError()}
                 onKeyPress={(event) => {

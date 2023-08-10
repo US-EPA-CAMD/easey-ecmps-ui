@@ -21,6 +21,7 @@ import {
   resetIsDataChanged,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
+import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
 export const DataTablePCTQualifications = ({
   mdmDataPCT,
@@ -150,6 +151,10 @@ export const DataTablePCTQualifications = ({
     setTimeout(() => {
       attachChangeEventListeners(".modalUserInput");
     });
+
+    if (create) {
+      returnsFocusMpDatatableCreateBTN("Create Qualification Percent", 1000)
+    }
   };
 
   const backBtnHandler = () => {
@@ -166,21 +171,11 @@ export const DataTablePCTQualifications = ({
       resetIsDataChanged();
       removeChangeEventListeners(".modalUserInput");
     }
+    returnsFocusMpDatatableCreateBTN("Create Qualification Percent")
   };
 
   return (
     <div className="methodTable react-transition fade-in">
-      <input
-        tabIndex={-1}
-        aria-hidden={true}
-        role="button"
-        type="hidden"
-        id="testBtn"
-        onClick={() => {
-          backBtnHandler();
-          openPctQualModal(false, false, true);
-        }}
-      />
       {openPCT ? (
         <div>
           <ModalDetails

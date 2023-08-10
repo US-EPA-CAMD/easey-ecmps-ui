@@ -252,7 +252,7 @@ export const EmSubmissionData = ({
                       setShowOpenModal(true);
                     }
                   }}
-                  disabled={selectedRows.length !== 1 ? true : false}
+                  disabled={selectedRows.length !== 1}
                 >
                   Open
                 </Button>
@@ -263,6 +263,7 @@ export const EmSubmissionData = ({
                   data-testid="es-clone"
                   className="usa-button usa-button--outline"
                   onClick={() => setShowExtendModal(true)}
+                  disabled={selectedRows.length === 0}
                 >
                   Extend
                 </Button>
@@ -273,6 +274,7 @@ export const EmSubmissionData = ({
                   data-testid="es-deactivate"
                   className="usa-button usa-button--outline"
                   onClick={() => setShowCloseModal(true)}
+                  disabled={selectedRows.length === 0}
                 >
                   Close
                 </Button>
@@ -281,7 +283,7 @@ export const EmSubmissionData = ({
                 <Button
                   aria-label="Deactivate"
                   data-testid="es-deactivate"
-                  disabled={disableApproveBtn}
+                  disabled={disableApproveBtn || selectedRows.length === 0}
                   className="usa-button usa-button--outline"
                   onClick={() => setShowApproveModal(true)}
                 >
@@ -319,7 +321,7 @@ export const EmSubmissionData = ({
               modalData={modalDataSelections}
               data={selectedModalData}
               cols={3}
-              title={'TEMP em submission data title'}
+              title="Maintain EM Submission Access"
               viewOnly={true}
             // create={createNewData}
             />
@@ -331,7 +333,6 @@ export const EmSubmissionData = ({
 };
 
 const controlInputs = {
-  // TODO: facilityName isn't in api response and will have to be added
   facilityNameAndId: ["Facility Name/ID", "input", ""],
   state: ["State", "input", ""],
   locations: ["MP Location(s)", "input", ""],

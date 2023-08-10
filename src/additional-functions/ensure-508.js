@@ -399,6 +399,17 @@ export const returnsFocusToAddBtn = (dataTableName) => {
   }, 500);
 };
 
+// returns focus to MP Create Button
+export const returnsFocusMpDatatableCreateBTN = (addBtnName, time) => {
+  setTimeout(() => {
+    let btn = document
+      .getElementById(addBtnName.toLowerCase().split(" ").join("-") + "-add-btn");
+    if (btn) {
+      btn.focus();
+    }
+  }, time ? time: 500);
+};
+
 export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
   const table = document.querySelector(containerSelector).querySelector('[role="table"]')
 
@@ -425,4 +436,11 @@ export const assignAriaLabelsToDataTableColumns = () => {
       column.setAttribute('aria-label', `Click to sort by ${columnName}`)
       }
     })
+}
+
+export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) =>{
+  datePickerInputIds.forEach(id=>{
+    const calendarBtn = document.getElementById(id).nextElementSibling;
+    calendarBtn.setAttribute("aria-label", id.replaceAll("-", " "));
+  })
 }

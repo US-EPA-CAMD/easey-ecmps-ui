@@ -1,37 +1,42 @@
 import { getAllFacilities, getFacilityById } from "./facilityApi";
+import MockAdapter from "axios-mock-adapter";
+import axios from "axios";
+import config from "../../config";
 
-jest.mock("./easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({
-    status: 200,
-    data: {
+describe("testing facilities data fetching APIs", () => {
+  let mock;
+  let mockResponse;
+
+  beforeAll(() => {
+    mock = new MockAdapter(axios);
+    mockResponse = {
       facilities: [
         { orisCode: 3, name: "Barry" },
         { orisCode: 8, name: "Gorgas" },
         { orisCode: 9, name: "Copper Station" },
       ],
-    },
-  }),
-}));
-
-describe("testing facilities data fetching APIs", () => {
-  test("Should fetch list of facilities from FACT API", async () => {
-    const result = await getAllFacilities();
-
-    expect(result["data"].facilities).toEqual([
-      { orisCode: 3, name: "Barry" },
-      { orisCode: 8, name: "Gorgas" },
-      { orisCode: 9, name: "Copper Station" },
-    ]);
+    };
   });
 
-  test("Should get facility data from a specific facility ID", async () => {
+  it("Should fetch list of facilities from FACT API", async () => {
+    mock.onGet(`${config.services.facilities.uri}/workspace/facilities`).reply(200, mockResponse);
+
+    delete window.location;
+    window.location = new URL(`https://test.com/workspace/monitoring-plans`);
+
+    const result = await getAllFacilities();
+
+    expect(result["data"].facilities).toEqual(mockResponse.facilities);
+  });
+
+  it("Should get facility data from a specific facility ID", async () => {
+    delete window.location;
+    window.location = new URL(`https://test.com/monitoring-plans`);
+
     const id = 1;
+    mock.onGet(`${config.services.facilities.uri}/facilities/${id}`).reply(200, mockResponse);
 
     const result = await getFacilityById(id);
-    expect(result.data.facilities).toEqual([
-      { name: "Barry", orisCode: 3 },
-      { name: "Gorgas", orisCode: 8 },
-      { name: "Copper Station", orisCode: 9 },
-    ]);
+    expect(result.data.facilities).toEqual(mockResponse.facilities);
   });
 });

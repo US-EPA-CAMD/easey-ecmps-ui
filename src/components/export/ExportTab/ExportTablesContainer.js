@@ -34,12 +34,16 @@ export const ExportTablesContainer = ({
   useEffect(() => {
     setTimeout(() => {
       ensure508(divId);
+      if(tableData){
+        const rowsAriaLabelData = tableData.map(e => e.stackPipeId? e.stackPipeId : e.unitId);
+        assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData);
+      }
     }, oneSecond);
 
     return () => {
       addScreenReaderLabelForCollapses();
 
-    };
+    };// eslint-disable-next-line
   }, [tableData]);
 
   useEffect(() => {
@@ -63,9 +67,6 @@ export const ExportTablesContainer = ({
           const tableRows = response.data[dataKey].map(data => ({ ...data, dataKey }))
           setTableData(tableRows);
           setLoading(false);
-
-          const rowsAriaLabelData = response.data[dataKey].map(e => e.stackPipeId? e.stackPipeId : e.unitId)
-          assignAriaLabelsToDataTable(`#${divId}`, rowsAriaLabelData)
         }
       } catch (err) {
         console.log(err);
@@ -105,7 +106,7 @@ export const ExportTablesContainer = ({
 
   const dataTable = (
     <div className="margin-x-3 margin-y-4" id={divId}>
-      <h4 className="margin-y-1">{tableTitle}</h4>
+      <h4 className="margin-y-1" data-testid="export-table-title">{tableTitle}</h4>
       <DataTable
         className="data-display-table maxh-mobile overflow-y-scroll fixed-table-header"
         responsive={true}

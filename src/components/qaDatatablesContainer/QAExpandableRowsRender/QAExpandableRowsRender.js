@@ -16,7 +16,7 @@ import {
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
-import { extractUserInput } from "../../../additional-functions/extract-user-input";
+import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -111,9 +111,10 @@ const QAExpandableRowsRender = ({
   const nextExpandableRow = (name) => {
     let objProps = {};
     let extraIDsProps = null;
-    let expand = expandable ? expandable :false;
+    let expand = expandable ? expandable : false;
     switch (name) {
       case "Protocol Gas":
+        extraIDsProps = [locationId, id];
         objProps = qaProtocalGasProps(data);
         break;
       case "Air Emissions":
@@ -121,6 +122,7 @@ const QAExpandableRowsRender = ({
         objProps = qaAirEmissionsProps(data);
         break;
       case "Test Qualification":
+        extraIDsProps = [locationId, id];
         objProps = qaTestQualificationProps(data);
         break;
       // test  > injections
@@ -198,7 +200,7 @@ const QAExpandableRowsRender = ({
       extraControls: objProps["extraControls"],
       radioBtnPayload: objProps["radioBtnPayload"],
       extraIDs: extraIDsProps,
-      expandable :expand,
+      expandable: expand,
       user: user,
       isCheckedOut: isCheckedOut,
     };
@@ -227,7 +229,7 @@ const QAExpandableRowsRender = ({
       case "Protocol Gas":
       case "Linearity Test":
       case "Linearity Injection":
-        
+
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
         Promise.all(allPromises)
@@ -776,6 +778,14 @@ const QAExpandableRowsRender = ({
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      console.log('valid errors', validationErrors);
+      setErrorMsgs(validationErrors);
+      return;
+    }
+
     try {
       const resp = await assertSelector.saveDataSwitch(
         userInput,
@@ -802,6 +812,13 @@ const QAExpandableRowsRender = ({
       ".modalUserInput",
       getListOfRadioControls(controlInputs)
     );
+
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
+    }
+
     try {
       const resp = await assertSelector.createDataSwitch(
         userInput,
@@ -925,7 +942,7 @@ const QAExpandableRowsRender = ({
           expandableRowComp={
             expandable ? QAExpandableRowsRender : false
           }
-          expandableRowProps= { nextExpandableRow(dataTableName)}
+          expandableRowProps={nextExpandableRow(dataTableName)}
           // shows empty table with add if user is logged in
           noDataComp={
             user && isCheckedOut ? (
@@ -973,8 +990,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user && isCheckedOut
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           errorMsgs={errorMsgs}

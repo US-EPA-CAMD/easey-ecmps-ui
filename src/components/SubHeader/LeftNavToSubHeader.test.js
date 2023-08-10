@@ -4,6 +4,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { LeftNavToSubHeader } from "./LeftNavToSubHeader";
 
+jest.mock('../../utils/constants/menuTopics', () => ({
+  getAppNavItems: jest.fn().mockReturnValue([
+    {
+      label: "Home",
+      items: [],
+    },
+    {
+      label: "QA & Certification",
+      items: [{ link: "/qa/test-data", menu: "Test Data" }],
+    }])
+}))
+
 describe("LeftNavToSubHeader Component", () => {
   test("Menu items render without errors", () => {
     const { container } = render(
