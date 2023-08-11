@@ -604,6 +604,7 @@ const QATestSummaryDataTable = ({
   // add here for future test type code selection dts
   const getExpandableComponentProps = (testTypeGroupCode, props) => {
     let objProps = {};
+    let expand = true;
     switch (testTypeGroupCode) {
       case "LINSUM":
         objProps = qaLinearitySummaryProps();
@@ -616,41 +617,50 @@ const QATestSummaryDataTable = ({
         break;
       case "FFL": // Fuel Flow to Load
         objProps = qaFuelFlowToLoadProps();
+        expand = false;
         break;
       case "FFLB":
         objProps = qaFuelFlowToLoadBaselineProps();
+        expand = false;
         break;
       case "FLC": // Flow to Load Check
         objProps = qaFlowToLoadCheckProps();
+        expand = false;
         break;
       case "OLOLCAL": // Online Offline Calibration
         objProps = qaOnOffCalibrationProps();
+        expand = false;
         break;
       case "CALINJ":
         objProps = qaCalibrationInjectionProps();
+        expand = false;
         break;
       case "FFACC": // Fuel Flowmeter Accuracy
         objProps = qaFuelFlowmeterAccuracyDataProps();
+        expand = false;
         break;
       case "CYCSUM": // Cycle Time Summary Nested Below Test Data
         objProps = qaCycleTimeSummaryProps();
         break;
       case "TTACC":
         objProps = qaTransmitterTransducerAccuracyDataProps();
-
+        expand = false;
         break;
       case "FLR":
         objProps = qaFlowToLoadReferenceProps();
+        expand = false;
         break;
       case "LME": //unit default test
         objProps = qaUnitDefaultTestDataProps();
         break;
       case "HGL3LS": //Hg Linearity and 3-Level Summary
         objProps = qaHgSummaryDataProps();
+
         break;
       default:
         return false;
     }
+
     return {
       payload: objProps["payload"],
       dropdownArray: objProps["dropdownArray"],
@@ -661,8 +671,8 @@ const QATestSummaryDataTable = ({
       sectionSelect: sectionSelect,
       extraControls: objProps["extraControls"],
       radioBtnPayload: objProps["radioBtnPayload"],
-      expandable: true,
-      mdmProps:objProps["mdmProps"],
+      expandable: expand,
+      mdmProps: objProps["mdmProps"],
       ...props,
       extraIDs: null,
       isCheckedOut: isCheckedOut,
@@ -702,7 +712,11 @@ const QATestSummaryDataTable = ({
           }
           actionsBtn={"View"}
           user={user}
-          expandableRowComp={QAExpandableRowsRender}
+          expandableRowComp={
+            selectedTestCode.testTypeGroupCode !== "PEI"
+              ? QAExpandableRowsRender
+              : ""
+          }
           expandableRowProps={getExpandableComponentProps(
             selectedTestCode.testTypeGroupCode,
             {
