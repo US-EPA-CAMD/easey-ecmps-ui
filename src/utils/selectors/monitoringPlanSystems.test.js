@@ -1,7 +1,7 @@
 import * as fs from "./monitoringPlanSystems";
 
 describe("testing monitoring plan data selectors", () => {
-  let selectedMonitoringSystems;git 
+  let selectedMonitoringSystems;
   let monitoringSystemsTableRecods;
   let selectedMonitoringSystemsComponents;
   let monitoringSystemsComponentsTableRecods;
