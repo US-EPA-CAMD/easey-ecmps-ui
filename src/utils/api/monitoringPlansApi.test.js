@@ -1,4 +1,5 @@
 import * as mpApi from "./monitoringPlansApi";
+import * as easeyAuthApi from "./easeyAuthApi"
 
 const selectedFacilityOrisCode = 3;
 const mockData = {};
@@ -9,14 +10,21 @@ jest.mock("../../additional-functions/checkout", () => ({
   checkoutAPI: () => mockCheckoutApiCall(),
 }));
 
-jest.mock("./easeyAuthApi", () => ({
-  secureAxios: jest.fn().mockResolvedValue({ data: {}, status: 200 }),
-}));
-
 const monitoringLocationId = 56;
 describe("testing monitoring plans data fetching APIs", () => {
+  let secureAxiosSpy
+
+  beforeEach(() => {
+    secureAxiosSpy = jest.spyOn(easeyAuthApi, 'secureAxios')
+    secureAxiosSpy.mockImplementation(() => Promise.resolve({
+      data: {},
+      status: 200,
+    }))
+  })
+
   afterEach(() => {
     jest.clearAllMocks();
+    secureAxiosSpy.mockRestore()
   });
 
   test("tests getMonitoringPlanById workspace", async () => {
@@ -787,7 +795,3 @@ describe("testing monitoring plans data fetching APIs", () => {
   //   expect(result["data"].monitoringSystems).toEqual(mockSystems);
   // });
 });
-// test("test file", () => {
-//   const val = 1;
-//   expect(val === 1);
-// });
