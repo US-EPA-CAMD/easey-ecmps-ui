@@ -176,6 +176,15 @@ const App = () => {
     };
   }, []);
 
+  const facilityCheckoutPermission = () => {
+    return (
+      user &&
+      (user?.roles?.includes(config.app.sponsorRole) ||
+        user?.roles?.includes(config.app.submitterRole) ||
+        user?.roles?.includes(config.app.preparerRole))
+    );
+  };
+
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     if (user) {
@@ -215,7 +224,7 @@ const App = () => {
           <Route
             path="/monitoring-plans"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/monitoring-plans" />
               ) : (
                 <MonitoringPlanHome
@@ -228,8 +237,8 @@ const App = () => {
           <Route
             path="/workspace/monitoring-plans"
             element={
-              !user ? (
-                <Navigate to="/monitoring-plans" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -246,7 +255,7 @@ const App = () => {
           <Route
             path="/qa/tests"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/qa/tests" />
               ) : (
                 <MonitoringPlanHome
@@ -259,8 +268,8 @@ const App = () => {
           <Route
             path="/workspace/qa/tests"
             element={
-              !user ? (
-                <Navigate to="/qa/tests" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -277,7 +286,7 @@ const App = () => {
           <Route
             path="/qa/qce-tee"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/qa/qce-tee" />
               ) : (
                 <MonitoringPlanHome
@@ -290,8 +299,8 @@ const App = () => {
           <Route
             path="/workspace/qa/qce-tee"
             element={
-              !user ? (
-                <Navigate to="/qa/qce-tee" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -308,7 +317,7 @@ const App = () => {
           <Route
             path="/emissions"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/emissions" />
               ) : (
                 <MonitoringPlanHome
@@ -321,8 +330,8 @@ const App = () => {
           <Route
             path="/workspace/emissions"
             element={
-              !user ? (
-                <Navigate to="/emissions" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -339,7 +348,7 @@ const App = () => {
           <Route
             path="/export"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/export" />
               ) : (
                 <MonitoringPlanHome
@@ -353,8 +362,8 @@ const App = () => {
             path="/workspace/export"
             user={user}
             element={
-              !user ? (
-                <Navigate to="/export" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -370,7 +379,7 @@ const App = () => {
           <Route
             path="/workspace/evaluate"
             element={
-              !user ? (
+              !facilityCheckoutPermission ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Evaluate-Component"}>
@@ -382,7 +391,7 @@ const App = () => {
           <Route
             path="/workspace/submit"
             element={
-              !user ? (
+              !user || !user?.roles?.includes(config.app.submitterRole) ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Submit-Component"}>
@@ -394,7 +403,7 @@ const App = () => {
           <Route
             path="/admin/qa-maintenance"
             element={
-              !user ? (
+              !user || !config.adminRole ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -407,13 +416,17 @@ const App = () => {
           <Route
             path="/admin/error-suppression"
             element={
-              !user ? <Navigate to="/" /> : <ErrorSuppression user={user} />
+              !user || !config.adminRole ? (
+                <Navigate to="/" />
+              ) : (
+                <ErrorSuppression user={user} />
+              )
             }
           />
           <Route
             path="/admin/em-submission-access"
             element={
-              !user ? (
+              !user || !config.adminRole ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
