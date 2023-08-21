@@ -268,10 +268,10 @@ const QADataTableRender = ({
         expandableRows={expandableRowComp ? expandableRowComp : false}
         expandableRowsHideExpander
         expandableRowExpanded={(row) => row.expanded}
-        expandableRowsComponent={ expandableRowComp ? expandableRowComp :false}
-        expandableRowsComponentProps= {expandableRowProps}
+        expandableRowsComponent={expandableRowComp ? expandableRowComp : false}
+        expandableRowsComponentProps={expandableRowProps}
         noDataComponent={noDataComp}
-        sortFunction={ hasEvalStatusColumn(dataTableName)? (rows, field, direction) => customSort(rows, field, direction, columns) : null}
+        sortFunction={hasEvalStatusColumn(dataTableName) ? (rows, selector, direction) => customSort(rows, selector, direction, columns) : null}
       />
     </div>
   );
