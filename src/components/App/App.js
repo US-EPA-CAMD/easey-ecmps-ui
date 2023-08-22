@@ -176,6 +176,25 @@ const App = () => {
     };
   }, []);
 
+  const validUser = () => {
+    const expDate = localStorage.getItem("ecmps_session_expiration");
+    return (
+      JSON.parse(localStorage.getItem("ecmps_user")) &&
+      expDate &&
+      new Date(expDate) > currentDateTime()
+    );
+  };
+
+  const facilityCheckoutPermission = () => {
+    const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
+    return (
+      validUser() &&
+      (cdxUser?.roles?.includes(config.app.sponsorRole) ||
+        cdxUser?.roles?.includes(config.app.submitterRole) ||
+        cdxUser?.roles?.includes(config.app.preparerRole))
+    );
+  };
+
   // *** assign / un-assign activity event listeners
   useEffect(() => {
     if (user) {
@@ -215,7 +234,7 @@ const App = () => {
           <Route
             path="/monitoring-plans"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/monitoring-plans" />
               ) : (
                 <MonitoringPlanHome
@@ -228,8 +247,8 @@ const App = () => {
           <Route
             path="/workspace/monitoring-plans"
             element={
-              !user ? (
-                <Navigate to="/monitoring-plans" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -246,7 +265,7 @@ const App = () => {
           <Route
             path="/qa/tests"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/qa/tests" />
               ) : (
                 <MonitoringPlanHome
@@ -259,8 +278,8 @@ const App = () => {
           <Route
             path="/workspace/qa/tests"
             element={
-              !user ? (
-                <Navigate to="/qa/tests" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -277,7 +296,7 @@ const App = () => {
           <Route
             path="/qa/qce-tee"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/qa/qce-tee" />
               ) : (
                 <MonitoringPlanHome
@@ -290,8 +309,8 @@ const App = () => {
           <Route
             path="/workspace/qa/qce-tee"
             element={
-              !user ? (
-                <Navigate to="/qa/qce-tee" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -308,7 +327,7 @@ const App = () => {
           <Route
             path="/emissions"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/emissions" />
               ) : (
                 <MonitoringPlanHome
@@ -321,8 +340,8 @@ const App = () => {
           <Route
             path="/workspace/emissions"
             element={
-              !user ? (
-                <Navigate to="/emissions" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -339,7 +358,7 @@ const App = () => {
           <Route
             path="/export"
             element={
-              user ? (
+              facilityCheckoutPermission() ? (
                 <Navigate to="/workspace/export" />
               ) : (
                 <MonitoringPlanHome
@@ -353,8 +372,8 @@ const App = () => {
             path="/workspace/export"
             user={user}
             element={
-              !user ? (
-                <Navigate to="/export" />
+              !facilityCheckoutPermission() ? (
+                <Navigate to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
@@ -370,7 +389,7 @@ const App = () => {
           <Route
             path="/workspace/evaluate"
             element={
-              !user ? (
+              !facilityCheckoutPermission() ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Evaluate-Component"}>
@@ -382,7 +401,10 @@ const App = () => {
           <Route
             path="/workspace/submit"
             element={
-              !user ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.submitterRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Submit-Component"}>
@@ -394,7 +416,10 @@ const App = () => {
           <Route
             path="/admin/qa-maintenance"
             element={
-              !user ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -407,13 +432,23 @@ const App = () => {
           <Route
             path="/admin/error-suppression"
             element={
-              !user ? <Navigate to="/" /> : <ErrorSuppression user={user} />
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
+                <Navigate to="/" />
+              ) : (
+                <ErrorSuppression user={user} />
+              )
             }
           />
           <Route
             path="/admin/em-submission-access"
             element={
-              !user ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -439,7 +474,7 @@ const App = () => {
         <Route
           path="/reports"
           element={
-            user ? (
+            validUser() ? (
               <Navigate to={`/workspace/reports${queryParams}`} />
             ) : (
               <ReportGenerator />
@@ -449,7 +484,7 @@ const App = () => {
         <Route
           path="/workspace/reports"
           element={
-            !user ? (
+            !validUser() ? (
               <Navigate to={`/reports${queryParams}`} />
             ) : (
               <ReportGenerator requireAuth={true} user={user} />
