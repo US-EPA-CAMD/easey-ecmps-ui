@@ -8,6 +8,7 @@ import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
 import { resetTabOrder } from "../../utils/functions";
+import { config } from "../../config";
 
 import "./AboutHome.scss";
 const AboutHome = ({ user, setCurrentLink }) => {
@@ -45,6 +46,15 @@ const AboutHome = ({ user, setCurrentLink }) => {
     });
   };
 
+  const homeButtonsPermission = () => {
+    return (
+      !user ||
+      user?.roles?.includes(config.app.sponsorRole) ||
+      user?.roles?.includes(config.app.submitterRole) ||
+      user?.roles?.includes(config.app.preparerRole)
+    );
+  };
+
   return (
     <div className="grid-row padding-top-7 padding-2 react-transition fade-in aboutHome">
       <div className="grid-col-9 fit-content">
@@ -78,21 +88,25 @@ const AboutHome = ({ user, setCurrentLink }) => {
             ),
           }}
         />
-        <USWDSLink
-          className="usa-button bg-accent-cool margin-1"
-          variant="unstyled"
-          asCustom={Link}
-          to="/monitoring-plans"
-          role="link"
-          exact="true"
-          rel="Monitoring Plans"
-          title="Go to Monitoring Plans page"
-          key="monitoring-plans"
-          id="monitoringPlansBtn"
-          onClick={(event) => handleRouteChange(event, "/monitoring-plans")}
-        >
-          View Monitoring Plans
-        </USWDSLink>
+        {homeButtonsPermission() ? (
+          <USWDSLink
+            className="usa-button bg-accent-cool margin-1"
+            variant="unstyled"
+            asCustom={Link}
+            to="/monitoring-plans"
+            role="link"
+            exact="true"
+            rel="Monitoring Plans"
+            title="Go to Monitoring Plans page"
+            key="monitoring-plans"
+            id="monitoringPlansBtn"
+            onClick={(event) => handleRouteChange(event, "/monitoring-plans")}
+          >
+            View Monitoring Plans
+          </USWDSLink>
+        ) : (
+          ""
+        )}
         <ReactMarkdown
           className="padding-top-2 qa-certification-content"
           children={qaCertificationContent}
@@ -108,21 +122,25 @@ const AboutHome = ({ user, setCurrentLink }) => {
             ),
           }}
         />
-        <USWDSLink
-          className="usa-button bg-accent-cool margin-1"
-          variant="unstyled"
-          asCustom={Link}
-          to="/qa/tests"
-          role="link"
-          exact="true"
-          rel="QA & Certifications"
-          title="Go to QA & Certifications page"
-          key="qa-test"
-          id="qaCertificationsBtn"
-          onClick={(event) => handleRouteChange(event, "/qa/tests")}
-        >
-          View QA & Certifications
-        </USWDSLink>
+        {homeButtonsPermission() ? (
+          <USWDSLink
+            className="usa-button bg-accent-cool margin-1"
+            variant="unstyled"
+            asCustom={Link}
+            to="/qa/tests"
+            role="link"
+            exact="true"
+            rel="QA & Certifications"
+            title="Go to QA & Certifications page"
+            key="qa-test"
+            id="qaCertificationsBtn"
+            onClick={(event) => handleRouteChange(event, "/qa/tests")}
+          >
+            View QA & Certifications
+          </USWDSLink>
+        ) : (
+          ""
+        )}
         <ReactMarkdown
           className="padding-top-2 emissions-content"
           children={emissionsContent}
@@ -138,21 +156,25 @@ const AboutHome = ({ user, setCurrentLink }) => {
             ),
           }}
         />
-        <USWDSLink
-          className="usa-button bg-accent-cool margin-1"
-          variant="unstyled"
-          asCustom={Link}
-          to="/emissions"
-          role="link"
-          exact="true"
-          rel="Emissions"
-          title="Go to Emissions page"
-          key="emissions"
-          id="emissionsBtn"
-          onClick={(event) => handleRouteChange(event, "/emissions")}
-        >
-          View Emissions
-        </USWDSLink>
+        {homeButtonsPermission() ? (
+          <USWDSLink
+            className="usa-button bg-accent-cool margin-1"
+            variant="unstyled"
+            asCustom={Link}
+            to="/emissions"
+            role="link"
+            exact="true"
+            rel="Emissions"
+            title="Go to Emissions page"
+            key="emissions"
+            id="emissionsBtn"
+            onClick={(event) => handleRouteChange(event, "/emissions")}
+          >
+            View Emissions
+          </USWDSLink>
+        ) : (
+          ""
+        )}
       </div>
       <div className="grid-col-3 float-right padding-2">
         <div className="box border-1px">
