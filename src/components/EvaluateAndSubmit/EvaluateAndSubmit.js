@@ -278,34 +278,16 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.testSumId,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.qaCertEventIdentifier,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.testExtensionExemptionIdentifier,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.testExtensionExemptionIdentifier;
         });
 

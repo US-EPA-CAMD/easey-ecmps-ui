@@ -263,7 +263,7 @@ export const EmSubmissionData = ({
                   data-testid="es-clone"
                   className="usa-button usa-button--outline"
                   onClick={() => setShowExtendModal(true)}
-                  disabled={selectedRows.length === 0}
+                  disabled={disableApproveBtn || selectedRows.length === 0}
                 >
                   Extend
                 </Button>
