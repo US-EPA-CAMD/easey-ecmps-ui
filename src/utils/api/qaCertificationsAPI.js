@@ -176,7 +176,7 @@ export const getQASchema = async () => {
 };
 
 /**
- * 
+ *
  * @param {*} isExport if true excludes most recent/current reporting period
  * @returns list of reporting periods
  */
@@ -1319,7 +1319,9 @@ export const getAppendixEHeatInputOilData = async (
   appECorrTestrunId
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+
   const url = getApiUrl(path);
+  console.log("path", url);
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
