@@ -176,12 +176,22 @@ const App = () => {
     };
   }, []);
 
-  const facilityCheckoutPermission = () => {
+  const validUser = () => {
+    const expDate = localStorage.getItem("ecmps_session_expiration");
     return (
-      user &&
-      (user?.roles?.includes(config.app.sponsorRole) ||
-        user?.roles?.includes(config.app.submitterRole) ||
-        user?.roles?.includes(config.app.preparerRole))
+      JSON.parse(localStorage.getItem("ecmps_user")) &&
+      expDate &&
+      new Date(expDate) > currentDateTime()
+    );
+  };
+
+  const facilityCheckoutPermission = () => {
+    const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
+    return (
+      validUser() &&
+      (cdxUser?.roles?.includes(config.app.sponsorRole) ||
+        cdxUser?.roles?.includes(config.app.submitterRole) ||
+        cdxUser?.roles?.includes(config.app.preparerRole))
     );
   };
 
@@ -379,7 +389,7 @@ const App = () => {
           <Route
             path="/workspace/evaluate"
             element={
-              !facilityCheckoutPermission ? (
+              !facilityCheckoutPermission() ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Evaluate-Component"}>
@@ -391,7 +401,10 @@ const App = () => {
           <Route
             path="/workspace/submit"
             element={
-              !user || !user?.roles?.includes(config.app.submitterRole) ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.submitterRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <div key={"Submit-Component"}>
@@ -403,7 +416,10 @@ const App = () => {
           <Route
             path="/admin/qa-maintenance"
             element={
-              !user || !config.adminRole ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -416,7 +432,10 @@ const App = () => {
           <Route
             path="/admin/error-suppression"
             element={
-              !user || !config.adminRole ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <ErrorSuppression user={user} />
@@ -426,7 +445,10 @@ const App = () => {
           <Route
             path="/admin/em-submission-access"
             element={
-              !user || !config.adminRole ? (
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -452,7 +474,7 @@ const App = () => {
         <Route
           path="/reports"
           element={
-            user ? (
+            validUser() ? (
               <Navigate to={`/workspace/reports${queryParams}`} />
             ) : (
               <ReportGenerator />
@@ -462,7 +484,7 @@ const App = () => {
         <Route
           path="/workspace/reports"
           element={
-            !user ? (
+            !validUser() ? (
               <Navigate to={`/reports${queryParams}`} />
             ) : (
               <ReportGenerator requireAuth={true} user={user} />
