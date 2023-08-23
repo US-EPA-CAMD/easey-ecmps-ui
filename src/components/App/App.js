@@ -474,7 +474,7 @@ const App = () => {
         <Route
           path="/reports"
           element={
-            validUser() ? (
+            user ? (
               <Navigate to={`/workspace/reports${queryParams}`} />
             ) : (
               <ReportGenerator />
@@ -484,7 +484,7 @@ const App = () => {
         <Route
           path="/workspace/reports"
           element={
-            !validUser() ? (
+            !user ? (
               <Navigate to={`/reports${queryParams}`} />
             ) : (
               <ReportGenerator requireAuth={true} user={user} />
