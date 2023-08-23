@@ -702,7 +702,7 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
   return result;
 };
 
-const findEvalStatusCol = (columns) =>{
+const findEvalStatusCol = (columns) => {
   return columns.find(col => col.name === "Eval Status")?.selector;
 }
 
@@ -710,13 +710,14 @@ export const hasEvalStatusColumn = (dataTableName) => {
   return dataTableName === "QA Certification Event" || dataTableName === "Test Extension Exemption" || dataTableName === "Test Summary Data";
 };
 //AG: needed to sort last column if data table type is satisfied on hasEvalStatusColumn
-export const customSort = (rows, field, direction, columns) =>{
+export const customSort = (rows, selector, direction, columns) => {
   const evalStatusCol = findEvalStatusCol(columns);
-  return rows.sort((a, b) => {
-    let aField = a[field];
-		let bField = b[field];
-    if(field === evalStatusCol){
-      if(aField.type === "div"){
+  return rows.sort((rowA, rowB) => {
+    let aField = selector(rowA)
+    let bField = selector(rowB)
+
+    if (selector === evalStatusCol) {
+      if (aField.type === "div") {
         aField = aField.props?.children?.props?.children;
       } else if (aField.type === "p") {
         aField = aField.props?.children;
