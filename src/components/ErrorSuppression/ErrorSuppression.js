@@ -3,7 +3,7 @@ import * as modules from "../../utils/constants/moduleTitles";
 import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer/ErrorSuppressionDataContainer";
 import { ErrorSuppressionFiltersContextProvider } from "./context/error-suppression-context";
-import { FileInput } from "@trussworks/react-uswds";
+
 export const defaultDropdownText = "-- Select a value --";
 
 export const ErrorSuppression = () => {
@@ -21,7 +21,6 @@ export const ErrorSuppression = () => {
           </h2>
           <hr/>
           <ErrorSuppressionFiltersContextProvider>
-            <FileInput/>
             <ErrorSuppressionFilters/>
             <hr className="margin-top-4 margin-bottom-4"/>
             <ErrorSuppressionDataContainer />
