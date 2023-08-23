@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
-import { FileInput, FormGroup, Label } from "@trussworks/react-uswds";
+import { FormGroup, Label } from "@trussworks/react-uswds";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { FileInput } from "../../FileInput/FileInput";
 
 const initialSelectOption = { key: "select", name: "--- Select a value ---" }
 
