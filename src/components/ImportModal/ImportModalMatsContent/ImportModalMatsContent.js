@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FormGroup, Label } from "@trussworks/react-uswds";
 
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 import { FileInput } from "../../FileInput/FileInput";
 import { getQATestSummary, getQATestSummaryOfficial } from "../../../utils/api/qaCertificationsAPI";
 
