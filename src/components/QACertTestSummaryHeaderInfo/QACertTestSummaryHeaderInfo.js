@@ -323,17 +323,23 @@ export const QACertTestSummaryHeaderInfo = ({
     try {
       setIsLoading(true)
       setFinishedLoading(false)
-      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      const testconfigID = 'doesNotExist'
+      const resp = await matsFileUpload(testconfigID, selectedTestNumberRef.current, payload)
+      console.log('resp', resp);
       if (successResponses.includes(resp.status)) {
-        // show success content in modal
-        setUsePortBtn(true)
-        setShowImportModal(true)
+        setImportedFileErrorMsgs([])
+      } else {
+        const errorMsgs = formatErrorResponse(resp);
+        setImportedFileErrorMsgs(errorMsgs);
       }
     } catch (error) {
       console.log('error importing MATS files', error);
     } finally {
       setIsLoading(false)
       setFinishedLoading(true);
+      // set flags to show success/error modal content
+      setUsePortBtn(true)
+      setShowImportModal(true)
     }
   }
 
@@ -628,6 +634,7 @@ export const QACertTestSummaryHeaderInfo = ({
           mainBTN={"Import"}
           disablePortBtn={importedFile.length === 0}
           port={() => importMats(importedFile)}
+          importedFileErrorMsgs={importedFileErrorMsgs}
         >
           <ImportModalMatsContent
             locationId={locationSelect[1]}
