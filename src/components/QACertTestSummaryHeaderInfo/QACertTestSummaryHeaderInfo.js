@@ -249,6 +249,7 @@ export const QACertTestSummaryHeaderInfo = ({
       importBtn.focus();
     }
   };
+
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
   };
@@ -320,20 +321,18 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const importMats = async (payload) => {
     try {
-      setIsLoading(true);
-      setFinishedLoading(false);
-      const testConfigId = 'doesNotExist'
-      const resp = await matsFileUpload(testConfigId, selectedTestNumberRef.current, payload)
-      if (!successResponses.includes(resp.status)) {
-        const errorMsgs = formatErrorResponse(resp);
-        setImportedFileErrorMsgs(errorMsgs);
-      } else {
-        setImportedFileErrorMsgs([]);
+      setIsLoading(true)
+      setFinishedLoading(false)
+      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      if (successResponses.includes(resp.status)) {
+        // show success content in modal
+        setUsePortBtn(true)
+        setShowImportModal(true)
       }
     } catch (error) {
       console.log('error importing MATS files', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
       setFinishedLoading(true);
     }
   }
@@ -619,7 +618,7 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       {/* MATS */}
-      {(showMatsImport && !finishedLoading && !isLoading) &&
+      {(showMatsImport) &&
         <UploadModal
           show={showMatsImport}
           close={closeImportModalHandler}
