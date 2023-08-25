@@ -183,29 +183,15 @@
 
   .usa-nav__primary > .usa-nav__primary-item > a {
     font-weight: normal;
-    color: #fff;
+    color: $epa-white;
 
     @media (max-width: 128em) {
       font-size: 0.72rem;
     }
   }
 
-  .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("../../public/images/icons/menu-item-expand.svg"),
-      linear-gradient(transparent, transparent);
-    background-repeat: no-repeat;
-    background-size: 3rem;
-  }
-
-  .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("../../public/images/icons/menu-item-collapse.svg"),
-      linear-gradient(transparent, transparent);
-    background-repeat: no-repeat;
-    background-size: 3rem;
-  }
-
-  .usa-nav__primary .usa-accordion__button span::after {
-    color: #fff;
+  .usa-nav__primary button span::after {
+    background-color: $epa-white !important;
   }
 
   .usa-nav__submenu {
