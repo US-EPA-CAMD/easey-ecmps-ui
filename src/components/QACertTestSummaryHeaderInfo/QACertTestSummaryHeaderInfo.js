@@ -323,9 +323,7 @@ export const QACertTestSummaryHeaderInfo = ({
     try {
       setIsLoading(true)
       setFinishedLoading(false)
-      const testconfigID = 'doesNotExist'
-      const resp = await matsFileUpload(testconfigID, selectedTestNumberRef.current, payload)
-      console.log('resp', resp);
+      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
       if (successResponses.includes(resp.status)) {
         setImportedFileErrorMsgs([])
       } else {
