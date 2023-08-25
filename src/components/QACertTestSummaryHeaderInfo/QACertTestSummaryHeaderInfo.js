@@ -287,7 +287,6 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
-    console.log('import qa payload', payload);
     setIsLoading(true);
     setFinishedLoading(false);
     importQA(payload)
@@ -321,21 +320,21 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const importMats = async (payload) => {
     try {
-      // locationSelect[1] is not the monitorPlanId, no clue where that comes from (apparently its configID)
-      console.log('locationselect, testnumber, payload', configID, selectedTestNumberRef.current, payload);
-
-      console.log({
-        facility,
-        selectedConfig,
-        orisCode,
-        user,
-        configID,
-      });
-
-      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
-      console.log('resp', resp);
+      setIsLoading(true);
+      setFinishedLoading(false);
+      const testConfigId = 'doesNotExist'
+      const resp = await matsFileUpload(testConfigId, selectedTestNumberRef.current, payload)
+      if (!successResponses.includes(resp.status)) {
+        const errorMsgs = formatErrorResponse(resp);
+        setImportedFileErrorMsgs(errorMsgs);
+      } else {
+        setImportedFileErrorMsgs([]);
+      }
     } catch (error) {
       console.log('error importing MATS files', error);
+    } finally {
+      setIsLoading(false);
+      setFinishedLoading(true);
     }
   }
 
@@ -628,12 +627,8 @@ export const QACertTestSummaryHeaderInfo = ({
           showSave={true}
           title={importTestTitle}
           mainBTN={"Import"}
-          disablePortBtn={disablePortBtn}
-          port={() => {
-            console.log('import btn clicked for mats, do save/import here');
-            console.log('selected files', importedFile);
-            importMats(importedFile)
-          }}
+          disablePortBtn={importedFile.length === 0}
+          port={() => importMats(importedFile)}
         >
           <ImportModalMatsContent
             locationId={locationSelect[1]}
