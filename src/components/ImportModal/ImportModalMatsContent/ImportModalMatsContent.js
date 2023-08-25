@@ -8,7 +8,9 @@ import { getQATestSummary, getQATestSummaryOfficial } from "../../../utils/api/q
 const initialSelectOption = { key: "select", name: "--- Select a value ---" }
 
 const ImportModalMatsContent = ({
-  locationId
+  locationId,
+  setImportedFile,
+  selectedTestNumberRef,
 }) => {
   const [selection, setSelection] = useState(0);
   const [testNums, setTestNums] = useState([initialSelectOption])
@@ -32,8 +34,14 @@ const ImportModalMatsContent = ({
     fetchTestNumbers()
   }, [locationId])
 
+  const selectTestNumberHandler = (value) => {
+    setSelection(value[0])
+    selectedTestNumberRef.current = value[0]
+  }
+
   const onChangeHandler = (e) => {
     console.log(e.target.files);
+    setImportedFile(e.target.files)
   };
 
   return (
@@ -44,7 +52,7 @@ const ImportModalMatsContent = ({
         viewKey={"name"}
         selectKey={"key"}
         initialSelection={selection}
-        selectionHandler={(value) => setSelection(value[0])}
+        selectionHandler={selectTestNumberHandler}
       />
       <FormGroup>
         <Label htmlFor="file-input-multiple">File Upload</Label>
