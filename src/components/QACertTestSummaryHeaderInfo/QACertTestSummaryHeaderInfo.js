@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
@@ -31,6 +31,7 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { successResponses } from "../../utils/api/apiUtils";
 import { formatErrorResponse } from "../../utils/functions";
 import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
+import { matsFileUpload } from "../../utils/api/camdServices";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -81,6 +82,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [lockedFacility, setLockedFacility] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+
+  const selectedTestNumberRef = useRef()
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -284,26 +287,27 @@ export const QACertTestSummaryHeaderInfo = ({
   };
 
   const importQABtn = (payload) => {
+    console.log('import qa payload', payload);
     setIsLoading(true);
     setFinishedLoading(false);
-    importQA(payload)
-      .then((response) => {
-        setShowImportModal(true);
-        setUsePortBtn(true);
-        if (!successResponses.includes(response.status)) {
-          const errorMsgs = formatErrorResponse(response);
-          setImportedFileErrorMsgs(errorMsgs);
-        } else {
-          setImportedFileErrorMsgs([]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setFinishedLoading(true);
-      });
+    // importQA(payload)
+    //   .then((response) => {
+    //     setShowImportModal(true);
+    //     setUsePortBtn(true);
+    //     if (!successResponses.includes(response.status)) {
+    //       const errorMsgs = formatErrorResponse(response);
+    //       setImportedFileErrorMsgs(errorMsgs);
+    //     } else {
+    //       setImportedFileErrorMsgs([]);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //     setFinishedLoading(true);
+    //   });
   };
 
   const importHistoricalData = () => {
@@ -314,6 +318,26 @@ export const QACertTestSummaryHeaderInfo = ({
     importQABtn(payload);
     setShowImportDataPreview(false);
   };
+
+  const importMats = async (payload) => {
+    try {
+      // locationSelect[1] is not the monitorPlanId, no clue where that comes from (apparently its configID)
+      console.log('locationselect, testnumber, payload', configID, selectedTestNumberRef.current, payload);
+
+      console.log({
+        facility,
+        selectedConfig,
+        orisCode,
+        user,
+        configID,
+      });
+
+      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      console.log('resp', resp);
+    } catch (error) {
+      console.log('error importing MATS files', error);
+    }
+  }
 
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
@@ -606,11 +630,15 @@ export const QACertTestSummaryHeaderInfo = ({
           mainBTN={"Import"}
           disablePortBtn={disablePortBtn}
           port={() => {
-            openModalType(importTypeSelection);
+            console.log('import btn clicked for mats, do save/import here');
+            console.log('selected files', importedFile);
+            importMats(importedFile)
           }}
         >
           <ImportModalMatsContent
             locationId={locationSelect[1]}
+            setImportedFile={setImportedFile}
+            selectedTestNumberRef={selectedTestNumberRef}
           />
         </UploadModal>
       }
