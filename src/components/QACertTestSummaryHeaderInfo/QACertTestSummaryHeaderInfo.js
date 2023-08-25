@@ -290,24 +290,24 @@ export const QACertTestSummaryHeaderInfo = ({
     console.log('import qa payload', payload);
     setIsLoading(true);
     setFinishedLoading(false);
-    // importQA(payload)
-    //   .then((response) => {
-    //     setShowImportModal(true);
-    //     setUsePortBtn(true);
-    //     if (!successResponses.includes(response.status)) {
-    //       const errorMsgs = formatErrorResponse(response);
-    //       setImportedFileErrorMsgs(errorMsgs);
-    //     } else {
-    //       setImportedFileErrorMsgs([]);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //     setFinishedLoading(true);
-    //   });
+    importQA(payload)
+      .then((response) => {
+        setShowImportModal(true);
+        setUsePortBtn(true);
+        if (!successResponses.includes(response.status)) {
+          const errorMsgs = formatErrorResponse(response);
+          setImportedFileErrorMsgs(errorMsgs);
+        } else {
+          setImportedFileErrorMsgs([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setFinishedLoading(true);
+      });
   };
 
   const importHistoricalData = () => {
