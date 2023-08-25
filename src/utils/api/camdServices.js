@@ -55,3 +55,24 @@ export const sendSupportEmail = async (payload) => {
     throw new Error(error);
   }
 };
+
+export const matsFileUpload = async (monitorPlanId, testNumber, fileListPayload) => {
+  const url = `${config.services.camd.uri}/mats-file-upload/${monitorPlanId}/${testNumber}/import`;
+
+  const formData = new FormData()
+
+  for (const file of fileListPayload) {
+    formData.append('file', file)
+  }
+
+  return secureAxios({
+    method: "POST",
+    url,
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
