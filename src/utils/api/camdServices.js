@@ -1,7 +1,7 @@
 import config from "../../config";
 import { secureAxios } from "./easeyAuthApi";
 import { formatReportUrl } from "../functions";
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import { clientTokenAxios } from "./clientTokenAxios";
 
 export async function getReport(params) {
@@ -74,5 +74,5 @@ export const matsFileUpload = async (monitorPlanId, testNumber, fileListPayload)
     }
   })
     .then(handleResponse)
-    .catch(handleError);
+    .catch(handleImportError);
 }
