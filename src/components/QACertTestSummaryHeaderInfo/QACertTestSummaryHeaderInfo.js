@@ -340,6 +340,7 @@ export const QACertTestSummaryHeaderInfo = ({
       // set flags to show success/error modal content
       setUsePortBtn(true)
       setShowImportModal(true)
+      setShowMatsImport(false) // stop showing mats content
     }
   }
 
