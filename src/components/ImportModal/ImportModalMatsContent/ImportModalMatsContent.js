@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { FormGroup, Label } from "@trussworks/react-uswds";
+
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
-import { FileInput, FormGroup, Label } from "@trussworks/react-uswds";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { FileInput } from "../../FileInput/FileInput";
+import { getQATestSummary, getQATestSummaryOfficial } from "../../../utils/api/qaCertificationsAPI";
 
 const initialSelectOption = { key: "select", name: "--- Select a value ---" }
 
@@ -14,13 +16,15 @@ const ImportModalMatsContent = ({
   useEffect(() => {
     const fetchTestNumbers = async () => {
       try {
-        const resp = await getQATestSummary(locationId)
+        const respWorkspace = await getQATestSummary(locationId)
+        const respOfficial = await getQATestSummaryOfficial(locationId)
 
-        const testNums = resp.data.map(testSummary => {
-          const { testNumber } = testSummary
-          return { key: testNumber, name: testNumber }
-        })
-        setTestNums([initialSelectOption, ...testNums])
+        const allTestSummaries = [...respWorkspace.data, ...respOfficial.data]
+        const testNums = allTestSummaries.map(testSummary => testSummary.testNumber)
+        const testNumsSet = new Set(testNums) // remove duplicates
+        const testNumsData = Array.from(testNumsSet).sort().map(testNum => ({key: testNum, name: testNum}))
+
+        setTestNums([initialSelectOption, ...testNumsData])
       } catch (e) {
         console.log('error fetching test numbers', e)
       }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import { FormGroup, Label, FileInput, Alert } from "@trussworks/react-uswds";
+import { FormGroup, Label, Alert } from "@trussworks/react-uswds";
+import { FileInput } from "../FileInput/FileInput";
 import { checkingCorrectSchema } from "./import-functions";
 import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,

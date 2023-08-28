@@ -280,10 +280,9 @@ const FilterFormAdmin = ({
   }, [setTableData, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, typeSelection]);
 
   return (
-    <div className="container padding-y-1 ">
-      <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
-        <Grid row>
-          <Grid col={6}>
+    <div className="margin-05">
+        <div className="display-flex flex-row flex-justify-start padding-2">
+          <div className="desktop:width-mobile-lg desktop-lg:width-mobile">
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
             </Label>
@@ -296,48 +295,44 @@ const FilterFormAdmin = ({
               onChange={onFacilityChange}
               disableFiltering={true}
             />
-          </Grid>
+          </div>
 
-          <Grid col={3}>
-            <div className="margin-left-2 ">
+          <div className="padding-left-4 desktop:width-mobile-lg desktop-lg:width-mobile">
+            <DropdownSelection
+              caption={
+                section === SUBMISSION_ACCESS_STORE_NAME
+                  ? "Configuration"
+                  : "Location"
+              }
+              selectionHandler={configurationFilterChange}
+              options={availableConfigurations}
+              viewKey="name"
+              selectKey="code"
+              initialSelection={selectedLocation ? selectedLocation[0] : 0}
+              workspaceSection={section}
+              extraSpace
+            />
+          </div>
+        
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
+            <div className="margin-left-4 width-card display-none widescreen:display-flex">
               <DropdownSelection
-                caption={
-                  section === SUBMISSION_ACCESS_STORE_NAME
-                    ? "Configuration"
-                    : "Location"
-                }
-                selectionHandler={configurationFilterChange}
-                options={availableConfigurations}
+                caption="Type"
+                selectionHandler={setTypeSelection}
+                options={testTypeGroupOptions}
                 viewKey="name"
-                selectKey="code"
-                initialSelection={selectedLocation ? selectedLocation[0] : 0}
+                selectKey="name"
+                initialSelection={typeSelection ? typeSelection[0] : null}
                 workspaceSection={section}
                 extraSpace
               />
             </div>
-          </Grid>
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
-            <Grid col={3}>
-              <div className="margin-left-3 ">
-                <DropdownSelection
-                  caption="Type"
-                  selectionHandler={setTypeSelection}
-                  options={testTypeGroupOptions}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={typeSelection ? typeSelection[0] : null}
-                  workspaceSection={section}
-                  extraSpace
-                />
-              </div>
-            </Grid>
-          ) : null}
-        </Grid>
 
-        <Grid row className="margin-top-2">
-          {section === SUBMISSION_ACCESS_STORE_NAME ? (
-            <>
-              <Grid col={2}>
+          )}
+    
+          {section === SUBMISSION_ACCESS_STORE_NAME && (
+            <div className="display-none widescreen:display-flex">
+              <div className="margin-left-4 width-card">
                 <DropdownSelection
                   caption="Reporting Period"
                   selectionHandler={setSelectedReportingPeriod}
@@ -349,54 +344,95 @@ const FilterFormAdmin = ({
                   }
                   extraSpace
                 />
-              </Grid>
-              <Grid col={3}>
-                <div className="margin-left-2">
-                  <DropdownSelection
-                    caption="Status"
-                    selectionHandler={(option) => setSelectedStatus(option)}
-                    options={availStatus}
-                    viewKey="name"
-                    selectKey="code"
-                    initialSelection={selectedStatus ? selectedStatus[0] : null}
-                    workspaceSection={section}
-                    extraSpace
-                  />
-                </div>
-              </Grid>
-            </>
-          ) : null}
-          <Grid col={4} className=" position-relative margin-top-3">
-            <div
-              className={
-                section === SUBMISSION_ACCESS_STORE_NAME
-                  ? "position-absolute right-0 bottom-0"
-                  : " "
-              }
-            >
-              <Button onClick={clearFilters} outline={true}>
-                Clear
-              </Button>
-
-              <Button
-                disabled={
-                  !(
-                    (selectedFacility &&
-                      selectedLocation && selectedLocation[1] !== "") &&
-                    ((section === SUBMISSION_ACCESS_STORE_NAME) ||
-                      (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                        && typeSelection && typeSelection[1] !== defaultDropdownText))
-                  )
-                }
-                onClick={applyFilters}
-                outline={false}
-              >
-                Apply Filter(s)
-              </Button>
+              </div>
+              <div className="margin-left-4 width-card">
+                <DropdownSelection
+                  caption="Status"
+                  selectionHandler={(option) => setSelectedStatus(option)}
+                  options={availStatus}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedStatus ? selectedStatus[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
             </div>
-          </Grid>
-        </Grid>
-      </GridContainer>
+          )}
+        </div>
+        <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
+            <div className="widescreen:display-none desktop:display-flex">
+              <div className="width-card">
+                <DropdownSelection
+                  caption="Type"
+                  selectionHandler={setTypeSelection}
+                  options={testTypeGroupOptions}
+                  viewKey="name"
+                  selectKey="name"
+                  initialSelection={typeSelection ? typeSelection[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
+            </div>
+          )}
+
+          {section === SUBMISSION_ACCESS_STORE_NAME && (
+            <div className="widescreen:display-none desktop:display-flex">
+              <div className="width-card">
+                <DropdownSelection
+                  caption="Reporting Period"
+                  selectionHandler={setSelectedReportingPeriod}
+                  options={availableReportingPeriods}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={
+                    selectedReportingPeriod ? selectedReportingPeriod[0] : null
+                  }
+                  extraSpace
+                />
+              </div>
+              <div className="margin-left-4 width-card">
+                <DropdownSelection
+                  caption="Status"
+                  selectionHandler={(option) => setSelectedStatus(option)}
+                  options={availStatus}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedStatus ? selectedStatus[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex-align-self-end">
+            <Button 
+              onClick={clearFilters} 
+              outline={true}
+            >
+              Clear
+            </Button>
+
+            <Button
+              disabled={
+                !(
+                  (selectedFacility &&
+                    selectedLocation && selectedLocation[1] !== "") &&
+                  ((section === SUBMISSION_ACCESS_STORE_NAME) ||
+                    (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
+                      && typeSelection && typeSelection[1] !== defaultDropdownText))
+                )
+              }
+              onClick={applyFilters}
+              outline={false}
+            >
+              Apply Filter(s)
+            </Button>
+          </div>
+        </div>
+
     </div>
   );
 };

@@ -168,24 +168,13 @@ export const getQATestSummaryByID = async (locID, id) => {
     .catch(handleError);
 };
 
-export const getQATestSummaryByCode = async (
-  locId,
-  { _beginDate, _endDate, testTypeCodes = [] }
-) => {
-  let url = `${config.services.qaCertification.uri}`;
-
-  // *** attach the rest of the url
-  url = `${url}/locations/${locId}/test-summary`;
-
-  if (testTypeCodes.length > 0) {
-    const param = testTypeCodes.join("|");
-    url = `${url}?testTypeCode=${param}`;
-  }
+export const getQATestSummaryOfficial = async (locId) => {
+  const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary`;
 
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
-};
+}
 
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
@@ -198,9 +187,8 @@ export const getQASchema = async () => {
  * @returns list of reporting periods
  */
 export const getReportingPeriods = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? "?export=true" : ""
-  }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
+    }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -1336,7 +1324,9 @@ export const getAppendixEHeatInputOilData = async (
   appECorrTestrunId
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
+
   const url = getApiUrl(path);
+  console.log("path", url);
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
