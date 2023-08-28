@@ -48,8 +48,14 @@ const props = {
   orisCode: "5",
   checkoutState: true,
   configID: selectedConfig.id,
+  currentTab: {
+    name: 'Test Tab'
+  }
 };
-test("tests QACertTestSummaryTabRender", () => {
-  const { container } = render(<QACertTestSummaryTabRender {...props} />);
+test("tests QACertTestSummaryTabRender", async () => {
+  jest.useFakeTimers();
+  const { container } = await render(<QACertTestSummaryTabRender {...props} />);
+
+  jest.runAllTimers();
   expect(container).not.toBeUndefined();
 });
