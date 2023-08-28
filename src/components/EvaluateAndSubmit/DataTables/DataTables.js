@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TableRender from "../TableRender/TableRender";
 import { checkoutAPI } from "../../../additional-functions/checkout";
 import _ from "lodash";
+import Preloader from "../../Preloader/Preloader";
 
 const DataTables = ({
   dataList,
@@ -43,6 +44,7 @@ const DataTables = ({
         }
 
         if (tableType === "QA") {
+          // Don't execute this logic for MATS bulk files
           updateMonPlanRow(row.monPlanId, bool);
         } else if (tableType === "EM") {
           updateMonPlanRow(row.monPlanId, bool);
@@ -138,8 +140,7 @@ const DataTables = ({
     ) {
       if (
         type === "EM" &&
-        row.windowStatus !== "REQUIRE" &&
-        row.windowStatus !== "GRANTED"
+        (row.windowStatus !== "REQUIRE" || row.windowStatus !== "GRANTED")
       ) {
         row.selected = false;
         return "View";
@@ -179,7 +180,16 @@ const DataTables = ({
   return (
     <div>
       {dataList.map((table, i) => {
-        const { name, columns, state, setState, ref, type, rowId } = table;
+        const {
+          name,
+          columns,
+          state,
+          setState,
+          ref,
+          type,
+          rowId,
+          progressPending,
+        } = table;
         return (
           <div className="" key={i}>
             <div className="padding-y-5 display-flex">
@@ -190,7 +200,9 @@ const DataTables = ({
                     icon={faChevronUp}
                     className="padding-3 bg-base-lighter"
                     onClick={() => showOrHideTable(name)}
-                    onKeyDown={(e)=> e.key === 'Enter' ? showOrHideTable(name): null}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" ? showOrHideTable(name) : null
+                    }
                     tabIndex={0}
                     focusable={true}
                   />
@@ -200,7 +212,9 @@ const DataTables = ({
                     icon={faChevronDown}
                     className="padding-3 bg-base-lighter"
                     onClick={() => showOrHideTable(name)}
-                    onKeyDown={(e)=> e.key === 'Enter' ? showOrHideTable(name): null}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" ? showOrHideTable(name) : null
+                    }
                     tabIndex={0}
                     focusable={true}
                   />
@@ -211,25 +225,28 @@ const DataTables = ({
             <div
               className={activeTables[name] ? "display-block" : "display-none"}
             >
-              <TableRender
-                columns={columns}
-                state={state}
-                setState={setState}
-                ref={ref}
-                dataTableName={name}
-                type={type}
-                updateMonPlanRow={updateMonPlanRow}
-                updateQARow={updateQARow}
-                rowId={rowId}
-                getRowState={
-                  componentType === "Submission"
-                    ? getRowStateSubmission
-                    : getRowStateEvaluate
-                }
-                selectRow={selectRow}
-                componentType={componentType}
-                updateFilesSelected={updateFilesSelected}
-              />
+              {progressPending.current && <Preloader></Preloader>}
+              {!progressPending.current && (
+                <TableRender
+                  columns={columns}
+                  state={state}
+                  setState={setState}
+                  ref={ref}
+                  dataTableName={name}
+                  type={type}
+                  updateMonPlanRow={updateMonPlanRow}
+                  updateQARow={updateQARow}
+                  rowId={rowId}
+                  getRowState={
+                    componentType === "Submission"
+                      ? getRowStateSubmission
+                      : getRowStateEvaluate
+                  }
+                  selectRow={selectRow}
+                  componentType={componentType}
+                  updateFilesSelected={updateFilesSelected}
+                />
+              )}
             </div>
           </div>
         );

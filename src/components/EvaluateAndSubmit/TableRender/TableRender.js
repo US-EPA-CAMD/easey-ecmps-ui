@@ -161,11 +161,6 @@ const TableRender = forwardRef(
         selector: (row) => row.submissionAvailabilityCode,
         sortable: true,
       },
-      {
-        name: "Eval Status",
-        selector: (row) => row.evalStatusCodeDescription,
-        sortable: true,
-      },
     ];
 
     addEvalStatusCell(mappings, handleRowView);
