@@ -198,7 +198,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
         disableExitBtn={disableSaveBtn}
         title={`${title} Submission Access`}
         close={close}
-        width={"40%"}
+        width={"45%"}
       >
         {showLoader ?
           <Preloader />
