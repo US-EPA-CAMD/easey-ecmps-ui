@@ -135,6 +135,23 @@ export const getQATeeReviewSubmit = async (
     .catch(handleError);
 };
 
+export const getMatsBulkFilesReviewSubmit = async (
+  orisCodes,
+  monPlanIds = [],
+  quarters = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  let url = `${config.services.qaCertification.uri}/workspace/mats-bulk-file?${queryString}`;
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getQATestSummaryByID = async (locID, id) => {
   let url = `${config.services.qaCertification.uri}/`;
 
