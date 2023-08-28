@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
@@ -31,6 +31,7 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { successResponses } from "../../utils/api/apiUtils";
 import { formatErrorResponse } from "../../utils/functions";
 import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
+import { matsFileUpload } from "../../utils/api/camdServices";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -81,6 +82,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [lockedFacility, setLockedFacility] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+
+  const selectedTestNumberRef = useRef()
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -246,6 +249,7 @@ export const QACertTestSummaryHeaderInfo = ({
       importBtn.focus();
     }
   };
+
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
   };
@@ -314,6 +318,29 @@ export const QACertTestSummaryHeaderInfo = ({
     importQABtn(payload);
     setShowImportDataPreview(false);
   };
+
+  const importMats = async (payload) => {
+    try {
+      setIsLoading(true)
+      setFinishedLoading(false)
+      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      if (successResponses.includes(resp.status)) {
+        setImportedFileErrorMsgs([])
+      } else {
+        const errorMsgs = formatErrorResponse(resp);
+        setImportedFileErrorMsgs(errorMsgs);
+      }
+    } catch (error) {
+      console.log('error importing MATS files', error);
+    } finally {
+      setIsLoading(false)
+      setFinishedLoading(true);
+      // set flags to show success/error modal content
+      setUsePortBtn(true)
+      setShowImportModal(true)
+      setShowMatsImport(false) // stop showing mats content
+    }
+  }
 
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
@@ -596,7 +623,7 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       {/* MATS */}
-      {(showMatsImport && !finishedLoading && !isLoading) &&
+      {(showMatsImport) &&
         <UploadModal
           show={showMatsImport}
           close={closeImportModalHandler}
@@ -604,13 +631,14 @@ export const QACertTestSummaryHeaderInfo = ({
           showSave={true}
           title={importTestTitle}
           mainBTN={"Import"}
-          disablePortBtn={disablePortBtn}
-          port={() => {
-            openModalType(importTypeSelection);
-          }}
+          disablePortBtn={importedFile.length === 0}
+          port={() => importMats(importedFile)}
+          importedFileErrorMsgs={importedFileErrorMsgs}
         >
           <ImportModalMatsContent
             locationId={locationSelect[1]}
+            setImportedFile={setImportedFile}
+            selectedTestNumberRef={selectedTestNumberRef}
           />
         </UploadModal>
       }
