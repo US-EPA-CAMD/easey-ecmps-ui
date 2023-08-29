@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import QADataTableRender from "./QADataTableRender"; //   mapStateToProps, //   mapDispatchToProps, //     QADataTableRender, // {
+import { act, render, screen, fireEvent } from "@testing-library/react";
+import QADataTableRender from "./QADataTableRender";
 
 let options = [];
 let data = [];
@@ -56,8 +56,8 @@ beforeAll(() => {
   ];
 });
 describe("renders datatable with all values ", () => {
-  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", () => {
-    const { container } = render(
+  test("makes sure 3 rows of data are passed in + 1 for header +2 for rest of table", async () => {
+    const { container } = await render(
       <QADataTableRender
         actionsBtn={"View"}
         columnNames={columnNames}
@@ -75,8 +75,9 @@ describe("renders datatable with all values ", () => {
     // const noData = screen.getByAltText("Please wait");
     // expect(noData).toBeDefined();
   });
-  test("data is loaded but no preloader or dt ", () => {
-    const { container } = render(
+  test("data is loaded but no preloader or dt ", async () => {
+    jest.useFakeTimers();
+    const { container } = await  render(
       <QADataTableRender
         columnNames={columnNames}
         data={[]}
@@ -85,17 +86,20 @@ describe("renders datatable with all values ", () => {
         dataTableName="Test Summary Data"
       />
     );
+    jest.runAllTimers();
     expect(container).toBeDefined();
   });
-  test("no user logged in - should not render edit/remove buttons and only renders view", () => {
-    render(
+  test("no user logged in - should not render edit/remove buttons and only renders view", async () => {
+    jest.useFakeTimers();
+    await act(async () => { render(
       <QADataTableRender
         columnNames={columnNames}
         data={data}
         actionsBtn={"View"}
         dataTableName="Test Summary Data"
       />
-    );
+    )});
+    jest.runAllTimers();
     const editBtns = screen.queryAllByRole('button', { name: /Edit/i })
     expect(editBtns).toHaveLength(0);
     const deleteBtns = screen.queryAllByRole('button', { name: /Remove/i })
@@ -104,9 +108,10 @@ describe("renders datatable with all values ", () => {
     expect(viewBtns).toHaveLength(1);
   });
 
-  test('given a user then renders edit button for each row in table', () => {
+  test('given a user then renders edit button for each row in table', async () => {
+    jest.useFakeTimers();
     // Arrange
-    render(
+    await act(async () => { render(
       <QADataTableRender
         actionsBtn={"View"}
         columnNames={columnNames}
@@ -115,16 +120,17 @@ describe("renders datatable with all values ", () => {
         isCheckedOut={true}
         dataTableName="Test Summary Data"
       />
-    );
-
+    )});
+    jest.runAllTimers();
     // Assert
     const editBtns = screen.getAllByRole('button', { name: /edit/i })
     expect(editBtns).toHaveLength(data.length)
   })
 
-  test("given a user then renders remove button for each row in table", () => {
+  test("given a user then renders remove button for each row in table", async () => {
+    jest.useFakeTimers();
     // Arrange
-    render(
+    await act(async () => { render(
       <QADataTableRender
         actionsBtn={"View"}
         columnNames={columnNames}
@@ -133,8 +139,8 @@ describe("renders datatable with all values ", () => {
         isCheckedOut={true}
         dataTableName="Test Summary Data"
       />
-    );
-
+    ) });
+    jest.runAllTimers();
     // Assert
     const removeBtns = screen.getAllByRole('button', { name: /remove/i })
     expect(removeBtns).toHaveLength(data.length)
