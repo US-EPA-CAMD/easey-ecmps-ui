@@ -135,6 +135,23 @@ export const getQATeeReviewSubmit = async (
     .catch(handleError);
 };
 
+export const getMatsBulkFilesReviewSubmit = async (
+  orisCodes,
+  monPlanIds = [],
+  quarters = []
+) => {
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
+
+  if (monPlanIds.length > 0) {
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
+  }
+
+  let url = `${config.services.qaCertification.uri}/workspace/mats-bulk-file?${queryString}`;
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getQATestSummaryByID = async (locID, id) => {
   let url = `${config.services.qaCertification.uri}/`;
 
@@ -151,24 +168,13 @@ export const getQATestSummaryByID = async (locID, id) => {
     .catch(handleError);
 };
 
-export const getQATestSummaryByCode = async (
-  locId,
-  { _beginDate, _endDate, testTypeCodes = [] }
-) => {
-  let url = `${config.services.qaCertification.uri}`;
-
-  // *** attach the rest of the url
-  url = `${url}/locations/${locId}/test-summary`;
-
-  if (testTypeCodes.length > 0) {
-    const param = testTypeCodes.join("|");
-    url = `${url}?testTypeCode=${param}`;
-  }
+export const getQATestSummaryOfficial = async (locId) => {
+  const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary`;
 
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
-};
+}
 
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
@@ -181,9 +187,8 @@ export const getQASchema = async () => {
  * @returns list of reporting periods
  */
 export const getReportingPeriods = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? "?export=true" : ""
-  }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
+    }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
