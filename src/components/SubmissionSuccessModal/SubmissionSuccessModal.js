@@ -1,7 +1,7 @@
 import "../SubmissionModal/SubmissionModal.scss";
 import React, { useEffect, createRef } from "react";
 import ReactDom from "react-dom";
-import { Button } from "@trussworks/react-uswds";
+import { Button, Alert } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
 
 const modalClassName = "modal-wrapper radius-md";
@@ -14,8 +14,8 @@ if (!modalRoot) {
 }
 
 export const SubmissionSuccessModal = ({
-  width = "20%",
-  left = "40%",
+  width = "30%",
+  left = "35%",
   callback,
 }) => {
   const modalRef = createRef();
@@ -35,6 +35,7 @@ export const SubmissionSuccessModal = ({
 
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
+      <div className="usa-overlay is-visible"></div>
       <div ref={modalRef}>
         <div
           className={`${modalClassName} react-transition flip-in-x`}
@@ -64,18 +65,21 @@ export const SubmissionSuccessModal = ({
             </div>
 
             <div className="modal-body margin-x-2 padding-top-0 modal-color maxh-tablet overflow-y-auto">
-              <div className="display-flex flex-column flex-align-center">
-                <h2 className="margin-y-1">Submission Success!</h2>
-                <center className="padding-y-2">
-                  The records you submitted have been queued for submission.
-                </center>
-                <Button
-                  data-testid="submissionSuccessButton"
-                  id="closeButton"
-                  onClick={callback}
-                >
-                  Close
-                </Button>
+              <div className="display-flex flex-column flex-align-center padding-y-2">
+                <Alert type="success" heading="Success" headingLevel="h4">
+                  The records you submitted have successfully been queued for
+                  submission.
+                </Alert>
+                <div className="margin-top-2">
+                  <Button
+                    data-testid="submissionSuccessButton"
+                    id="closeButton"
+                    onClick={callback}
+                    size="big"
+                  >
+                    Close
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
