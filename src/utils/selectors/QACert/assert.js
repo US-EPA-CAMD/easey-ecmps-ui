@@ -222,14 +222,14 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
       return qaApi
         .getQaCertEvents(location)
         .catch((error) =>
-          console.log("error fetching hg injection data", error)
+          console.log("error fetching cert event data", error)
         );
 
     case qaExeptions:
       return qaApi
         .getTestExtension(location)
         .catch((error) =>
-          console.log("error fetching hg injection data", error)
+          console.log("error fetching qa exceptions data", error)
         );
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
