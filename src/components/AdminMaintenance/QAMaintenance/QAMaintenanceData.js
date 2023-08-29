@@ -272,6 +272,7 @@ const QAMaintenanceData = ({
       </div>
       {showViewModal &&
         <Modal
+          width='55%'
           title={`QA/Cert Data Maintenance `}
           show={showViewModal}
           close={() => setShowViewModal(false)}
