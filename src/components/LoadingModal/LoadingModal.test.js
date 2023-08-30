@@ -1,40 +1,28 @@
-/*
-import React from "react";
-
-import { shallow } from "enzyme";
-
-import { findByTestAttr } from "../../test/testUtils";
+import { screen } from "@testing-library/react";
 import LoadingModal from "./LoadingModal";
+import render from "../../mocks/render";
 
-const defaultProps = { loading: false };
+describe("loading modal component", ()=>{
 
-/!**
- * Factory function to create a ShallowWrapper for the LoadingModal component.
- * function setup
- * @param {object} props - Component props specific to this setup of the component.
- * @returns {ShallowWrapper}
- *!/
-const setup = (props = {}) => {
-  const setupProps = { ...defaultProps, ...props };
-  return shallow(<LoadingModal {...setupProps} />);
-};
+  it("renders Loading component elements", async () =>{
+    await render(<LoadingModal loading={true} type="Loading" />);
+    const images = screen.getAllByRole("img");
+    expect(images.length).toBe(2);
+    expect(images[0].src).toContain("loading-snake");
+    expect(images[0].title).toBe("Loading... Please wait...");
+    expect(images[1].src).toContain("loading-text");
+    expect(images[1].title).toBe("Loading Text... Please wait...");
+  });
 
-test("renders without error", () => {
-  const wrapper = setup({ loading: true });
-  const component = findByTestAttr(wrapper, "component-loading");
-  expect(component.length).toBe(1);
+  it("renders Auth component elements", async () =>{
+    await render(<LoadingModal loading={true} type="Auth" />);
+    const images = screen.getAllByRole("img");
+    expect(images.length).toBe(2);
+    expect(images[0].src).toContain("scanning");
+    expect(images[0].title).toBe("Loading... Please wait...");
+    expect(images[1].src).toContain("authenticating-message");
+    expect(images[1].title).toBe("Authenticating... Please wait...");
+  });
+
 });
-test("it expects the close loading modal window cancel button to exist", () => {
-  const wrapper = setup({ loading: true });
-  const cancelButton = findByTestAttr(
-    wrapper,
-    "component-loading-cancel-button"
-  );
-  expect(cancelButton.length).toBe(0);
-});
-*/
 
-test("test file", () => {
-  const val = 1;
-  expect(val === 1);
-});

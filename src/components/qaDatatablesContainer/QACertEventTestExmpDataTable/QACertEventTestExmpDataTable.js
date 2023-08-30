@@ -8,9 +8,7 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import {
-  generateArrayOfYears
-} from "../../HeaderInfo/HeaderInfo";
+import { generateArrayOfYears } from "../../HeaderInfo/HeaderInfo";
 import {
   qaCertEventsProps,
   qaTestExemptionProps,
@@ -49,7 +47,7 @@ const QACertEventTestExmpDataTable = ({
   orisCode,
   locations,
   updateTable,
-  setUpdateTable
+  setUpdateTable,
 }) => {
   const [loading, setLoading] = useState(false);
   const [mdmData, setMdmData] = useState(null);
@@ -63,7 +61,6 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
-
 
   const years = generateArrayOfYears(2009).map((year, index) => {
     return {
@@ -414,7 +411,10 @@ const QACertEventTestExmpDataTable = ({
         updatedData = mapQaCertEventsDataToRows(data ? data : [], orisCode);
         break;
       case "Test Exemptions and Exeptions":
-        updatedData = mapQaExtensionsExemptionsDataToRows(data ? data : [], orisCode);
+        updatedData = mapQaExtensionsExemptionsDataToRows(
+          data ? data : [],
+          orisCode
+        );
         break;
       default:
         break;
@@ -481,7 +481,7 @@ const QACertEventTestExmpDataTable = ({
       userInput.stackPipeId = String(userInput.stackPipeId);
       userInput.unitId = null;
     }
-    
+
     assertSelector
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
@@ -514,7 +514,9 @@ const QACertEventTestExmpDataTable = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">{dataTableName}</span>
+                <span className="padding-right-2 text-wrap display-table-cell">
+                  {dataTableName}
+                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"

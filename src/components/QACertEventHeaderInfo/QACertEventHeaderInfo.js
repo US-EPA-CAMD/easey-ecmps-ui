@@ -341,7 +341,7 @@ export const QACertEventHeaderInfo = ({
       <div className="grid-container width-full clearfix position-relative">
         <div className="display-flex flex-row flex-justify flex-align-center height-2">
           <div className="grid-row">
-            <h3 className="margin-y-auto font-body-lg margin-right-2">
+            <h3 className="margin-y-auto font-body-lg margin-right-2" data-testid="facility-name-header">
               {facilityMainName}
             </h3>
           </div>
@@ -442,7 +442,7 @@ export const QACertEventHeaderInfo = ({
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
-        <div>
+        <div data-testid="selection-type-import-modal">
           <UploadModal
             show={showSelectionTypeImportModal}
             close={closeImportModalHandler}

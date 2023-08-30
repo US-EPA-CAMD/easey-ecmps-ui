@@ -713,6 +713,11 @@ export const getMonitoringPlansUnitControlRecords = async (
 };
 
 export const saveUnitControl = async (payload, urlParameters) => {
+  // These two radio fields must be converted to
+  // STRING values of "1" (Yes) or "0" (No)
+  payload.originalCode = payload.originalCode?.toString();
+  payload.seasonalControlsIndicator = payload.seasonalControlsIndicator?.toString();
+
   const url = getApiUrl(
     `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`
   );
@@ -736,6 +741,11 @@ export const createUnitControl = async (payload, urlParameters) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
+
+  // These two radio fields must be converted to
+  // STRING values of "1" (Yes) or "0" (No)
+  payload.originalCode = payload.originalCode?.toString();
+  payload.seasonalControlsIndicator = payload.seasonalControlsIndicator?.toString();
 
   try {
     return handleResponse(
@@ -1010,6 +1020,55 @@ export const createLMEQualificationData = async (payload) => {
     `/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/lme-qualifications`
   );
 
+  delete payload["id"];
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+export const getCPMSQualifications = async (locationId, qualId) => {
+  const url = getApiUrl(
+    `/locations/${locationId}/qualifications/${qualId}/cpms-qualifications`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const saveCPMSQualificationData = async (payload) => {
+  const url = getApiUrl(
+    `/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/cpms-qualifications/${payload["id"]}`
+  );
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createCPMSQualificationData = async (payload) => {
+  const url = getApiUrl(
+    `/locations/${payload["locationId"]}/qualifications/${payload["qualId"]}/cpms-qualifications`
+  );
+
+  // *** remove attributes not needed by the API
   delete payload["id"];
 
   try {

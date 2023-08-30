@@ -7,6 +7,7 @@ import {
   getQATestSummaryReviewSubmit,
   getQACertEventReviewSubmit,
   getQATeeReviewSubmit,
+  getMatsBulkFilesReviewSubmit,
 } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import DataTables from "./DataTables/DataTables";
@@ -28,10 +29,12 @@ import {
   emissionsColumns,
   qaCertEventColumns,
   qaTeeColumns,
+  matsBulkFilesColumns,
 } from "./ColumnMappings";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { getDropDownFacilities } from "./utils/functions";
 import useGetContent from "./utils/useGetContent";
+import SubmissionSuccessModal from "../SubmissionSuccessModal/SubmissionSuccessModal";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
@@ -52,6 +55,8 @@ export const EvaluateAndSubmit = ({
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showSuccesModal, setShowSuccessModal] = useState(false);
+  const [hasClickedSubmit, setHasClickedSubmit] = useState(false);
 
   const [numFilesSelected, setNumFilesSelected] = useState(0);
   const filesSelected = useRef(0);
@@ -67,6 +72,9 @@ export const EvaluateAndSubmit = ({
 
   const [emissions, setEmissions] = useState([]);
   const emissionsRef = useRef([]);
+
+  const [matsBulkFiles, setMatsBulkFiles] = useState([]);
+  const matsBulkFilesRef = useRef([]);
 
   const [monPlans, setMonPlans] = useState([]);
   const monPlanRef = useRef([]);
@@ -89,7 +97,7 @@ export const EvaluateAndSubmit = ({
     }
   }, [finalSubmitStage, componentType]);
 
-  const dataList = [
+  let dataList = [
     {
       columns: monPlanColumns,
       ref: monPlanRef,
@@ -99,6 +107,7 @@ export const EvaluateAndSubmit = ({
       rowId: "monPlanId",
       name: "Monitoring Plan",
       type: "MP",
+      progressPending: useRef(false),
     },
     {
       columns: qaTestSummaryColumns,
@@ -109,6 +118,7 @@ export const EvaluateAndSubmit = ({
       rowId: "testSumId",
       name: "Test Data",
       type: "QA",
+      progressPending: useRef(false),
     },
     {
       columns: qaCertEventColumns,
@@ -119,6 +129,7 @@ export const EvaluateAndSubmit = ({
       rowId: "qaCertEventIdentifier",
       name: "QA Certification Events",
       type: "QA",
+      progressPending: useRef(false),
     },
     {
       columns: qaTeeColumns,
@@ -129,6 +140,7 @@ export const EvaluateAndSubmit = ({
       rowId: "testExtensionExemptionIdentifier",
       name: "Test Extension Exemptions Data",
       type: "QA",
+      progressPending: useRef(false),
     },
     {
       columns: emissionsColumns,
@@ -139,8 +151,24 @@ export const EvaluateAndSubmit = ({
       rowId: "periodAbbreviation",
       name: "Emissions",
       type: "EM",
+      progressPending: useRef(false),
+    },
+    {
+      columns: matsBulkFilesColumns,
+      ref: matsBulkFilesRef,
+      state: matsBulkFiles,
+      setState: setMatsBulkFiles,
+      call: getMatsBulkFilesReviewSubmit,
+      rowId: "matsBulkFileIdentifier",
+      name: "MATS Bulk Files",
+      type: "QA",
+      progressPending: useRef(false),
     },
   ];
+
+  if (componentType !== "Submission") {
+    dataList = dataList.filter((f) => f.rowId !== "matsBulkFileIdentifier");
+  }
 
   const getUserPlans = async () => {
     const data = (await getCheckedOutLocations()).data;
@@ -253,11 +281,10 @@ export const EvaluateAndSubmit = ({
     if (componentType === "Submission") {
       // Build submission payload
       payload.activityId = activityId;
-    } else {
-      // Build base evaluate payload
-      payload.userId = user.userId;
-      payload.userEmail = user.email;
     }
+
+    payload.userId = user.userId;
+    payload.userEmail = user.email;
 
     payload.items = [];
 
@@ -279,34 +306,16 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.testSumId,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.qaCertEventIdentifier,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
-          if (componentType === "Submission") {
-            return {
-              id: m.testExtensionExemptionIdentifier,
-              quarter: m.periodAbbreviation,
-            };
-          }
           return m.testExtensionExemptionIdentifier;
         });
 
@@ -314,6 +323,13 @@ export const EvaluateAndSubmit = ({
       newItem.emissionsReportingPeriods = emissionsRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => m.periodAbbreviation);
+
+      if (componentType === "Submission") {
+        // Iterate MATs bulk files and append them to the submission payload
+        newItem.matsBulkFiles = matsBulkFilesRef.current
+          .filter((f) => f.monPlanId === monPlanId && f.selected)
+          .map((m) => m.matsBulkFileIdentifier);
+      }
 
       // Add it to the result set of data sent to the back-end
       payload.items.push(newItem);
@@ -324,7 +340,9 @@ export const EvaluateAndSubmit = ({
       checkInAllCheckedOutLocations();
       setSubmitting(false);
       if (componentType === "Submission") {
-        window.location.reload(false);
+        //TODO Pop submission modal / hide submission buttons
+        setHasClickedSubmit(true);
+        setShowSuccessModal(true);
       } else {
         for (const value of dataList) {
           const { ref } = value;
@@ -377,7 +395,14 @@ export const EvaluateAndSubmit = ({
     };
 
     for (const value of dataList) {
-      const { ref, setState, call, type } = value;
+      //Iterate here to show the client tables are loading
+      const { setState, progressPending } = value;
+      progressPending.current = true;
+      setState([]);
+    }
+
+    for (const value of dataList) {
+      const { ref, setState, call, type, progressPending } = value;
 
       let data;
       if (type !== "MP") {
@@ -421,6 +446,7 @@ export const EvaluateAndSubmit = ({
       }
 
       ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
+      progressPending.current = false;
       setState(data);
     }
   };
@@ -441,6 +467,14 @@ export const EvaluateAndSubmit = ({
 
   return (
     <div className="react-transition fade-in padding-x-3">
+      {showSuccesModal && (
+        <SubmissionSuccessModal
+          callback={() => {
+            window.location.reload();
+          }}
+        ></SubmissionSuccessModal>
+      )}
+
       <div className="text-black flex-justify margin-top-1 grid-row flex-column">
         {waitTimeData?.displayAlert && (
           <Alert
@@ -453,23 +487,18 @@ export const EvaluateAndSubmit = ({
           </Alert>
         )}
 
-        {componentType === "Submission" && (
-          <Alert type="warning" heading="Warning" headingLevel="h4">
-            The submission process is still under construction. The final sign
-            and submit, with files being loaded to the database is not yet
-            integrated.
-          </Alert>
-        )}
-
         <h2
           data-testid="page-title"
           className="grid-col-9 page-header margin-top-2"
         >
           {title}
         </h2>
-        {/* {finalSubmitStage && (
+      </div>
+
+      <div className="text-black flex-justify-end margin-top-1 grid-row">
+        {finalSubmitStage && !hasClickedSubmit && (
           <Button
-            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-right-2"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
@@ -477,7 +506,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-        )} */}
+        )}
       </div>
 
       {componentType !== "Submission" && (
@@ -537,9 +566,9 @@ export const EvaluateAndSubmit = ({
       )}
 
       <div className="text-black flex-justify-end margin-top-1 grid-row">
-        {/*finalSubmitStage && (
+        {finalSubmitStage && !hasClickedSubmit && (
           <Button
-            className="grid-col-3 flex-align-self-center maxw-mobile margin-0"
+            className="grid-col-3 flex-align-self-center maxw-mobile margin-right-2"
             size="big"
             onClick={() => {
               finalSubmission(submitData);
@@ -547,7 +576,7 @@ export const EvaluateAndSubmit = ({
           >
             Submit
           </Button>
-          )*/}
+        )}
       </div>
     </div>
   );

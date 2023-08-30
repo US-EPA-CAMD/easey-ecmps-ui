@@ -9,6 +9,9 @@ import "./ErrorSuppressionDataContainer.scss";
 import { formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 import { ArrowDownwardSharp } from "@material-ui/icons";
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -24,8 +27,10 @@ export const ErrorSuppressionDataContainer = () => {
   } = useContext(ErrorSuppressionFiltersContext);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showCloneModal, setShowCloneModal] = useState(false);
-
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedViewModalData, setSelectedViewModalData] = useState(null);
+
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(false);
@@ -80,19 +85,68 @@ export const ErrorSuppressionDataContainer = () => {
     addDateBefore,
   ]);
 
-  const getCheckbox = useCallback((row, idx) => {
+  const openViewModalHandler = useCallback(async (row, index, isCreate = false) => {
+    const selectedData = { ...tableData[index] }
+
+
+    selectedData.addDate = formatDateWithHoursMinutesSeconds(row.addDate)
+    selectedData.updateDate = formatDateWithHoursMinutesSeconds(row.updateDate)
+    selectedData.facNameAndId = `${row.facilityName} (${row.facilityId})`
+    selectedData.status = row.active ? 'Active' : 'Inactive'
+    selectedData.result = `${row.checkTypeCode}-${row.checkNumber}-${row.checkResultCode}`
+    selectedData.criteria = "" + row.matchDataTypeCode + (row.matchDataValue ? ":" + row.matchDataValue : "")
+
+    const mdmData = {}
+    const prefilteredDataName = false
+    const mainDropdownName = null
+    const mainDropdownResult = []
+    const hasMainDropdown = false;
+    const prefilteredTotalName = null
+
+    setSelectedViewModalData(
+      modalViewData(
+        selectedData,
+        controlInputs,
+        controlDatePickerInputs,
+        isCreate,
+        mdmData,
+        prefilteredDataName ? mdmData[prefilteredDataName] : "",
+        mainDropdownName,
+        mainDropdownResult,
+        hasMainDropdown,
+        prefilteredTotalName,
+        extraControlInputs
+      )
+    )
+    setShowViewModal(true);
+  }, [tableData])
+
+  const getActions = useCallback((row, idx) => {
     return (
-      <input
-        checked={row.selected}
-        key={idx}
-        data-testid={`select-cb-${idx}`}
-        type="checkbox"
-        className="usa-checkbox"
-        aria-label="Select"
-        onChange={(e) => onRowSelection(row, e.target.checked)}
-      />
+      <div>
+        <input
+          checked={row.selected}
+          key={idx}
+          data-testid={`select-cb-${idx}`}
+          type="checkbox"
+          className="usa-checkbox"
+          aria-label="Select"
+          onChange={(e) => onRowSelection(row, e.target.checked)}
+        />
+        <Button
+          type="button"
+          epa-testid="btnOpen"
+          id={`btnOpen_${row[`col${Object.keys(row).length - 1}`]}`}
+          className="cursor-pointer margin-left-2"
+          aria-label={`View ${row.id}`}
+          onClick={() => openViewModalHandler(row, idx)}
+          outline
+        >
+          View
+        </Button>
+      </div>
     );
-  }, []);
+  }, [openViewModalHandler]);
 
   const onRowSelection = (row, checked) => {
     row.selected = checked;
@@ -170,7 +224,7 @@ export const ErrorSuppressionDataContainer = () => {
   };
 
   const closeModal = () => {
-    if(showAddModal){
+    if (showAddModal) {
       const addBtn = document.getElementById("error-suppres-add-btn");
       addBtn?.focus();
     }
@@ -181,8 +235,8 @@ export const ErrorSuppressionDataContainer = () => {
   const columns = [
     {
       name: "Select",
-      width: "130px",
-      cell: (row, idx) => getCheckbox(row, idx),
+      width: "150px",
+      cell: (row, idx) => getActions(row, idx),
       sortable: true,
     },
     {
@@ -268,16 +322,33 @@ export const ErrorSuppressionDataContainer = () => {
           refreshTable={getTableData}
         />
       ) : null}
+      {showViewModal &&
+        <Modal
+          show={showViewModal}
+          nonEditable={true}
+          title={"Error Suppression"}
+          exitBTN={"Close"}
+          close={() => setShowViewModal(false)}
+          showCancel
+          showDarkBg
+        >
+          <ModalDetails
+            data={selectedViewModalData}
+            cols={3}
+            viewOnly={true}
+          />
+        </Modal>
+      }
 
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-5">
-            <span className="data-container-header">Add Suppression </span>
+            <span className="data-container-header">Add Suppression</span>
           </div>
           <div className="grid-col-2">
             <Button
               aria-label="Add"
-              data-testid="es-add"
+              data-testid="es-add-btn"
               className="margin-left-1"
               onClick={() => setShowAddModal(true)}
               id="error-suppres-add-btn"
@@ -288,7 +359,7 @@ export const ErrorSuppressionDataContainer = () => {
           <div className="grid-col-2">
             <Button
               aria-label="Clone"
-              data-testid="es-clone"
+              data-testid="es-clone-btn"
               disabled={selectedRows.length !== 1}
               onClick={() => {
                 setShowCloneModal(true);
@@ -300,7 +371,7 @@ export const ErrorSuppressionDataContainer = () => {
           <div className="grid-col-2">
             <Button
               aria-label="Deactivate"
-              data-testid="es-deactivate"
+              data-testid="es-deactivate-btn"
               onClick={() => setShowDeactivateModal(true)}
               disabled={selectedRows.length === 0}
             >
@@ -329,3 +400,30 @@ export const ErrorSuppressionDataContainer = () => {
     </div>
   );
 };
+
+// fieldnames determined by selectedData passed to modalViewData in openViewModalHandler
+// uses blank# control input for empty space padding
+const controlInputs = {
+  result: ["Result", "input", ""], // combination of checkTypeCode + checkNumber + checkResultCode
+  severityCode: ["Severity", "input", ""],
+  facNameAndId: ["Facility Name/ID", "input", ""],
+
+  locations: ["Locations", "input", ""],
+  criteria: ["Criteria", "input", ""],
+  reasonCode: ["Reason", "input", ""],
+
+  status: ["Status", "input", ""],
+  blank1: [" ", "input", ""],
+  blank2: [" ", "input", ""],
+
+  userId: ["User", "input", ""],
+  addDate: ["Add Date & Hour", "input", ""],
+  updateDate: ["Update Date", "input", ""],
+}
+
+// put Note field into extraControlInputs so it expands full length of modal
+const extraControlInputs = {
+  note: ["Note", "input", ""],
+}
+
+const controlDatePickerInputs = {}

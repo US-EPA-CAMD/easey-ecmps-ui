@@ -4,23 +4,25 @@ import {
   EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import { checkingCorrectSchema, formatSchemaErrors } from "./import-functions";
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
 describe("testing import functions", () => {
   test("called checkingCorrectSchema", () => {
     const f = new File([""], "test.json");
 
     const correctQaSchema = { orisCode: "123", testSummaryData: [] };
     const correctMpSchema = { orisCode: "123", unitStackConfigurations: [] };
+    const correctEmSchema = { dailyEmissionData: [] };
 
     const incorrectQaSchema = { testSummaryData: [] };
     const incorrectMpSchema = { unitStackConfigurations: [] };
+    const incorrectEmSchema = { unitStackConfigurations: [] };
     const fakeSchema = {};
     const fakeWs = "";
 
     const mpFile = new File([incorrectMpSchema], "test.json");
 
     const qaFile = new File([incorrectQaSchema], "test.json");
+
+    const emFile = new File([incorrectQaSchema], "test.json");
     expect(
       checkingCorrectSchema(
         f,
@@ -119,6 +121,46 @@ describe("testing import functions", () => {
         jest.fn()
       )
     ).not.toBeDefined();
+
+    // EMISSIONS_STORE_NAME with correct schema
+    expect(
+      checkingCorrectSchema(
+        f,
+        EMISSIONS_STORE_NAME,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        fakeSchema,
+        correctEmSchema,
+      )
+    ).not.toBeDefined();
+
+    // EMISSIONS_STORE_NAME with correct schema just errors
+    expect(
+      checkingCorrectSchema(
+        qaFile,
+        EMISSIONS_STORE_NAME,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        fakeSchema,
+        incorrectEmSchema,
+      )
+    ).not.toBeDefined();
+
+    // EMISSIONS_STORE_NAME with wrong schema
+    expect(
+      checkingCorrectSchema(
+        f,
+        EMISSIONS_STORE_NAME,
+        jest.fn(),
+        jest.fn(),
+        jest.fn(),
+        fakeSchema,
+        fakeSchema,
+      )
+    ).not.toBeDefined();
+
     // default switcch
     expect(
       checkingCorrectSchema(

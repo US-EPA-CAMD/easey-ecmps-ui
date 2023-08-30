@@ -154,6 +154,7 @@ const QAMaintenanceData = ({
   let commonEndProps = {
     submissionAvailabilityDescription: ["Submission Availability Description", "input", ""],
     severityDescription: ["Severity Description", "input", ""],
+    resubExplanation: ["Resubmission Reason", "input", ""],
   }
 
   switch (typeSelection) {
@@ -271,6 +272,7 @@ const QAMaintenanceData = ({
       </div>
       {showViewModal &&
         <Modal
+          width='55%'
           title={`QA/Cert Data Maintenance `}
           show={showViewModal}
           close={() => setShowViewModal(false)}

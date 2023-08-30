@@ -2,18 +2,9 @@ import apiStatusReducer from "./apiStatusReducer";
 import * as actions from "../actions/apiStatusActions";
 import { loadFacilitiesSuccess } from "../actions/facilities";
 import { loadMonitoringPlansSuccess } from "../actions/monitoringPlans";
+import initialState from "./initialState";
 
 describe("apiStatus Reducer State Update", () => {
-  let initialState;
-  beforeAll(() => {
-    initialState = {
-      apiCallsInProgress: {
-        facilities: false,
-        monitoringPlans: false,
-        monitoringSystemsComponents: false,
-      },
-    };
-  });
   // begin
   it("should update state related to apiStatus when passed beginFacilitiesApiCall", () => {
     const action = actions.beginFacilitiesApiCall();
@@ -38,17 +29,10 @@ describe("apiStatus Reducer State Update", () => {
     expect(newState.monitoringPlans).toBe(false);
   });
 
-  it("passing in no action.type for default case", () => {
-    const newState = apiStatusReducer(initialState.apiCallsInProgress, {
-      type: "",
-    });
-    expect(newState.monitoringSystemsComponents).toBe(false);
-  });
-
-  it("passing in no state", () => {
+  it("passing in no action type and state for default case", () => {
     const newState = apiStatusReducer(null, {
       type: "",
     });
-    expect(newState.monitoringSystemsComponents).toBe(false);
+    expect(newState).toBe(initialState.apiCallsInProgress);
   });
 });

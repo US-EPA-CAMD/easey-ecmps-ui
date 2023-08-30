@@ -30,15 +30,15 @@ const ReviewCell = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const getRowAriaLabel = (row) =>{
-    if(row.configuration){
+  const getRowAriaLabel = (row) => {
+    if (row.configuration) {
       return `${type}-select-row-with-configuration-${row?.configuration}`;
-    }else if(row.name){
+    } else if (row.name) {
       return `${type}-select-row-with-configuration-${row?.name}`;
-    }else{
+    } else {
       return `${type}-select-row-with-location-Info-${row?.locationInfo}`;
     }
-  }
+  };
 
   return (
     cellState && (
@@ -56,16 +56,17 @@ const ReviewCell = ({
             defaultChecked={row.selected}
           />
         )}
-        {cellState === "View" && (
-          <Button
-            data-testid="ViewButton"
-            onClick={() => {
-              handleRowView(row, true);
-            }}
-          >
-            View
-          </Button>
-        )}
+        {cellState === "View" &&
+          !row["matsBulkFileIdentifier"] && ( //Don't show view button for MATS bulk files
+            <Button
+              data-testid="ViewButton"
+              onClick={() => {
+                handleRowView(row, true);
+              }}
+            >
+              View
+            </Button>
+          )}
       </div>
     )
   );

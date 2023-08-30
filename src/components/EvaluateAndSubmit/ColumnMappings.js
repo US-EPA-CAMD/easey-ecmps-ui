@@ -143,6 +143,11 @@ export const monPlanColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+  },
 ];
 
 export const qaTestSummaryColumns = [
@@ -194,12 +199,64 @@ export const qaTestSummaryColumns = [
     name: "End Date/Time",
     selector: (row) => row.endDate,
     sortable: true,
-    wrap: true,
     // sortFunction: sortByEndDate,
+    wrap: true,
   },
   {
     name: "Last Modified By",
     selector: (row) => row.userId,
+    sortable: true,
+  },
+  {
+    name: "Last Modified Date/Time",
+    selector: (row) => formatTimeStamp(row.updateDate),
+    sortable: true,
+    // sortFunction: sortByUpdateDate,
+  },
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+    allowOverflow: true,
+    wrap: true,
+  },
+];
+
+export const matsBulkFilesColumns = [
+  {
+    name: "ORIS Code",
+    selector: (row) => row.orisCode,
+    sortable: true,
+  },
+  {
+    name: "Facility Name",
+    selector: (row) => row.facilityName,
+    sortable: true,
+  },
+  {
+    name: "Location Info",
+    selector: (row) => row.locationInfo,
+    sortable: true,
+  },
+  {
+    name: "System/Component ID",
+    selector: (row) => row.systemComponentIdentifier,
+    sortable: true,
+  },
+  {
+    name: "Test Number",
+    selector: (row) => row.testNumber,
+    sortable: true,
+  },
+  {
+    name: "File Name",
+    selector: (row) => row.filename,
+    sortable: true,
+    width: "180px",
+  },
+  {
+    name: "Last Modified By",
+    selector: (row) => row.userid,
     sortable: true,
   },
   {
@@ -275,6 +332,11 @@ export const qaCertEventColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+  },
 ];
 
 export const qaTeeColumns = [
@@ -336,6 +398,11 @@ export const qaTeeColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+  },
 ];
 
 export const emissionsColumns = [
@@ -376,6 +443,11 @@ export const emissionsColumns = [
   {
     name: "Submission Window",
     selector: (row) => formatSubmissionWindow(row.windowStatus),
+    sortable: true,
+  },
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
     sortable: true,
   },
 ];

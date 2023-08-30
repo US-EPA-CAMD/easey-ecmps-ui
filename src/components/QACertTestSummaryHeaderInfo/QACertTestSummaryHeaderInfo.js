@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
@@ -30,6 +30,8 @@ import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { checkoutAPI } from "../../additional-functions/checkout";
 import { successResponses } from "../../utils/api/apiUtils";
 import { formatErrorResponse } from "../../utils/functions";
+import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
+import { matsFileUpload } from "../../utils/api/camdServices";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -52,6 +54,7 @@ export const QACertTestSummaryHeaderInfo = ({
 }) => {
   const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showMatsImport, setShowMatsImport] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
@@ -80,6 +83,8 @@ export const QACertTestSummaryHeaderInfo = ({
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
 
+  const selectedTestNumberRef = useRef()
+
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
   ]);
@@ -103,7 +108,6 @@ export const QACertTestSummaryHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
-          console.log('res.data',res.data)
           setAllTestTypeCodes(res.data);
         })
         .catch((error) => {
@@ -112,7 +116,6 @@ export const QACertTestSummaryHeaderInfo = ({
 
       getAllTestTypeGroupCodes()
         .then((res) => {
-          console.log('res.data 2',res.data)
           const options = res.data
             .map((e) => {
               return {
@@ -188,9 +191,9 @@ export const QACertTestSummaryHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -203,9 +206,9 @@ export const QACertTestSummaryHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
+        checkedOutConfigs
+          .map((con) => con["monPlanId"])
+          .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -246,6 +249,7 @@ export const QACertTestSummaryHeaderInfo = ({
       importBtn.focus();
     }
   };
+
   const openSelectionTypeImportModal = () => {
     setShowSelectionTypeImportModal(true);
   };
@@ -260,16 +264,26 @@ export const QACertTestSummaryHeaderInfo = ({
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
+    setShowMatsImport(false)
   };
 
   const openModalType = (modalType) => {
     setShowSelectionTypeImportModal(false);
     setDisablePortBtn(false);
-    if (modalType === "file") {
-      setShowImportModal(true);
-    } else {
-      setShowImportDataPreview(true);
-      setShowSelectionTypeImportModal(false);
+
+    switch (modalType) {
+      case 'file':
+        setShowImportModal(true)
+        break
+      case 'historical':
+        setShowImportDataPreview(true)
+        setShowSelectionTypeImportModal(false)
+        break
+      case 'mats':
+        setShowMatsImport(true)
+        break
+      default:
+        throw Error(`modalType of ${modalType} does not exist`)
     }
   };
 
@@ -305,6 +319,29 @@ export const QACertTestSummaryHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
+  const importMats = async (payload) => {
+    try {
+      setIsLoading(true)
+      setFinishedLoading(false)
+      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      if (successResponses.includes(resp.status)) {
+        setImportedFileErrorMsgs([])
+      } else {
+        const errorMsgs = formatErrorResponse(resp);
+        setImportedFileErrorMsgs(errorMsgs);
+      }
+    } catch (error) {
+      console.log('error importing MATS files', error);
+    } finally {
+      setIsLoading(false)
+      setFinishedLoading(true);
+      // set flags to show success/error modal content
+      setUsePortBtn(true)
+      setShowImportModal(true)
+      setShowMatsImport(false) // stop showing mats content
+    }
+  }
+
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
     //HANDLE -1 days from DB dates which are UTC
@@ -327,9 +364,8 @@ export const QACertTestSummaryHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -461,14 +497,13 @@ export const QACertTestSummaryHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
@@ -586,6 +621,27 @@ export const QACertTestSummaryHeaderInfo = ({
           }
         />
       )}
+
+      {/* MATS */}
+      {(showMatsImport) &&
+        <UploadModal
+          show={showMatsImport}
+          close={closeImportModalHandler}
+          showCancel={true}
+          showSave={true}
+          title={importTestTitle}
+          mainBTN={"Import"}
+          disablePortBtn={importedFile.length === 0}
+          port={() => importMats(importedFile)}
+          importedFileErrorMsgs={importedFileErrorMsgs}
+        >
+          <ImportModalMatsContent
+            locationId={locationSelect[1]}
+            setImportedFile={setImportedFile}
+            selectedTestNumberRef={selectedTestNumberRef}
+          />
+        </UploadModal>
+      }
     </div>
   );
 };

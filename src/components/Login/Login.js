@@ -121,7 +121,7 @@ const Login = ({ isModal }) => {
 
             <Label htmlFor={usernameText}>Username</Label>
             <TextInput
-              data-test="component-login-username"
+              data-testid="component-login-username"
               id={usernameText}
               name={usernameText}
               type="text"
@@ -131,7 +131,7 @@ const Login = ({ isModal }) => {
 
             <Label htmlFor={passwordText}>Password</Label>
             <TextInput
-              data-test="component-login-password"
+              data-testid="component-login-password"
               id={passwordText}
               name={passwordText}
               type={showPassword ? "text" : "password"}
@@ -140,7 +140,7 @@ const Login = ({ isModal }) => {
             />
 
             <Button
-              data-test="component-login-submit-button"
+              data-testid="component-login-submit-button"
               className="margin-bottom-2"
               type="submit"
             >
@@ -149,6 +149,7 @@ const Login = ({ isModal }) => {
 
             <p className="usa-form__note">
               <Button
+                data-testid="showHidePasswordBtn"
                 type="button"
                 unstyled="true"
                 title="Show password"

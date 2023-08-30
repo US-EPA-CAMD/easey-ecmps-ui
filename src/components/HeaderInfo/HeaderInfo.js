@@ -367,7 +367,7 @@ export const HeaderInfo = ({
     const isSelectedReportingPeriodsEmpty =
       emissionDropdownState.selectedReportingPeriods.length === 0;
     const isBothSelectedStackPipeIdAndUnitIdEmpty =
-      selectedStackPipeId.length === 0 && selectedUnitId.length === 0;
+      selectedStackPipeId?.length === 0 && selectedUnitId?.length === 0;
 
     if (
       isSelectedReportingPeriodsEmpty ||
@@ -662,7 +662,7 @@ export const HeaderInfo = ({
 
   const findCurrentlyCheckedOutByInfo = (configs) => {
     return configs[
-      configs.map((con) => con["monPlanId"]).indexOf(selectedConfig.id)
+      configs.map((con) => con["monPlanId"]).indexOf(selectedConfig?.id)
     ];
   };
 

@@ -25,6 +25,9 @@ export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
 export const testExtensionExemptionLabel = "Test Extension Exemption";
 
+const defaultDropdownText = "Select";
+const initialSelectOption = { code: "", name: defaultDropdownText };
+
 const FilterFormAdmin = ({
   facilities,
   section,
@@ -36,8 +39,6 @@ const FilterFormAdmin = ({
   reportingPeriods,
   setQaMaintenanceTypeSelection,
 }) => {
-  const defaultDropdownText = "Select";
-  const initialSelectOption = { code: "", name: defaultDropdownText };
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
     initialSelectOption,
   ]);
@@ -46,10 +47,7 @@ const FilterFormAdmin = ({
     initialSelectOption,
   ]);
 
-  const [availableConfigurationss, setAvailableConfigurationss] = useState([
-    initialSelectOption,
-  ]);
-  const [availStatus, setAvailStatus] = useState([
+  const [availStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
@@ -71,22 +69,23 @@ const FilterFormAdmin = ({
     { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
   ];
 
-  const processReportingPeriods = async () => {
+  const processReportingPeriods = useCallback(async () => {
     const availReportingPeriods = reportingPeriods.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
       };
     });
-    const reversed = availReportingPeriods.sort().toReversed();
+
+    const reversed = availReportingPeriods.sort().reverse();
     reversed.unshift(initialSelectOption);
 
     setAvailableReportingPeriods(reversed);
-  };
+  }, [reportingPeriods])
 
   useEffect(() => {
     processReportingPeriods();
-  }, [reportingPeriods]);
+  }, [reportingPeriods, processReportingPeriods]);
 
   const applyFilters = useCallback(async () => {
     let monitorPlanId;
@@ -101,7 +100,7 @@ const FilterFormAdmin = ({
 
     if (
       selectedReportingPeriod?.length > 0 &&
-      selectedReportingPeriod[1] !== defaultDropdownText
+      selectedReportingPeriod[1] !== ''
     ) {
       const rpString = selectedReportingPeriod[1];
       year = rpString.split(" ")[0];
@@ -110,7 +109,7 @@ const FilterFormAdmin = ({
 
     if (
       selectedStatus?.length > 0 &&
-      selectedStatus[1] !== defaultDropdownText
+      selectedStatus[1] !== ''
     ) {
       status = selectedStatus[1].toUpperCase();
     }
@@ -154,7 +153,6 @@ const FilterFormAdmin = ({
               selectedFacility,
               selectedLocation[1]
             );
-
             break;
           default:
             return;
@@ -163,9 +161,8 @@ const FilterFormAdmin = ({
         if (facilities.length > 0) {
           newData = resp.data.map((obj) => ({
             ...obj,
-            facilityName: `${
-              facilities.find((fac) => fac.value === selectedFacility).label
-            }`,
+            facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
+              }`,
           }));
         }
 
@@ -189,6 +186,7 @@ const FilterFormAdmin = ({
     setSelectedRows,
     setTableData,
     typeSelection,
+    facilities
   ]);
 
   useEffect(() => {
@@ -236,19 +234,19 @@ const FilterFormAdmin = ({
     return convertedArray;
   };
 
-  const individualFacilityFilterChange = async (id) => {
+  const individualFacilityFilterChange = useCallback(async (id) => {
     getLocations(selectedFacility, {
       locationTypeCode: "LOC",
     }).then((availLoc) =>
       setAvailableConfigurations(convertingArrayObject([...availLoc]))
     );
-  };
+  }, [selectedFacility])
 
   useEffect(() => {
     section === SUBMISSION_ACCESS_STORE_NAME
       ? facilityFilterChange(selectedFacility)
       : individualFacilityFilterChange(selectedFacility);
-  }, [selectedFacility]);
+  }, [selectedFacility, individualFacilityFilterChange, section]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
     // facilityFilterChange(value);
@@ -259,7 +257,7 @@ const FilterFormAdmin = ({
     }
   };
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     const elements = document.querySelectorAll(
       '[data-testid="combo-box-clear-button"]'
     );
@@ -270,13 +268,21 @@ const FilterFormAdmin = ({
     setTypeSelection(null);
     setSelectedLocation(null);
     setSelectedStatus(null);
-  };
+    setTableData([]);
+  }, [setTableData])
+
+  useEffect(() => {
+    clearFilters()
+  }, [section, clearFilters]);
+
+  useEffect(() => {
+    setTableData([]);
+  }, [setTableData, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, typeSelection]);
 
   return (
-    <div className="container padding-y-1 ">
-      <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
-        <Grid row>
-          <Grid col={6}>
+    <div className="margin-05">
+        <div className="display-flex flex-row flex-justify-start padding-2">
+          <div className="desktop:width-mobile-lg desktop-lg:width-mobile">
             <Label test-id={"facility-name-label"} htmlFor={"facility-name"}>
               Facility Name/ID
             </Label>
@@ -289,48 +295,44 @@ const FilterFormAdmin = ({
               onChange={onFacilityChange}
               disableFiltering={true}
             />
-          </Grid>
+          </div>
 
-          <Grid col={3}>
-            <div className="margin-left-2 ">
+          <div className="padding-left-4 desktop:width-mobile-lg desktop-lg:width-mobile">
+            <DropdownSelection
+              caption={
+                section === SUBMISSION_ACCESS_STORE_NAME
+                  ? "Configuration"
+                  : "Location"
+              }
+              selectionHandler={configurationFilterChange}
+              options={availableConfigurations}
+              viewKey="name"
+              selectKey="code"
+              initialSelection={selectedLocation ? selectedLocation[0] : 0}
+              workspaceSection={section}
+              extraSpace
+            />
+          </div>
+        
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
+            <div className="margin-left-4 width-card display-none widescreen:display-flex">
               <DropdownSelection
-                caption={
-                  section === SUBMISSION_ACCESS_STORE_NAME
-                    ? "Configuration"
-                    : "Location"
-                }
-                selectionHandler={configurationFilterChange}
-                options={availableConfigurations}
+                caption="Type"
+                selectionHandler={setTypeSelection}
+                options={testTypeGroupOptions}
                 viewKey="name"
-                selectKey="code"
-                initialSelection={selectedLocation ? selectedLocation[0] : 0}
+                selectKey="name"
+                initialSelection={typeSelection ? typeSelection[0] : null}
                 workspaceSection={section}
                 extraSpace
               />
             </div>
-          </Grid>
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME ? (
-            <Grid col={3}>
-              <div className="margin-left-3 ">
-                <DropdownSelection
-                  caption="Type"
-                  selectionHandler={setTypeSelection}
-                  options={testTypeGroupOptions}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={typeSelection ? typeSelection[0] : null}
-                  workspaceSection={section}
-                  extraSpace
-                />
-              </div>
-            </Grid>
-          ) : null}
-        </Grid>
 
-        <Grid row className="margin-top-2">
-          {section === SUBMISSION_ACCESS_STORE_NAME ? (
-            <>
-              <Grid col={2}>
+          )}
+    
+          {section === SUBMISSION_ACCESS_STORE_NAME && (
+            <div className="display-none widescreen:display-flex">
+              <div className="margin-left-4 width-card">
                 <DropdownSelection
                   caption="Reporting Period"
                   selectionHandler={setSelectedReportingPeriod}
@@ -342,62 +344,95 @@ const FilterFormAdmin = ({
                   }
                   extraSpace
                 />
-              </Grid>
-              <Grid col={3}>
-                <div className="margin-left-2">
-                  <DropdownSelection
-                    caption="Status"
-                    selectionHandler={(option) => setSelectedStatus(option)}
-                    options={availStatus}
-                    viewKey="name"
-                    selectKey="code"
-                    initialSelection={selectedStatus ? selectedStatus[0] : null}
-                    workspaceSection={section}
-                    extraSpace
-                  />
-                </div>
-              </Grid>
-            </>
-          ) : null}
-          <Grid col={4} className=" position-relative margin-top-3">
-            <div
-              className={
-                section === SUBMISSION_ACCESS_STORE_NAME
-                  ? "position-absolute right-0 bottom-0"
-                  : " "
-              }
-            >
-              <Button onClick={clearFilters} outline={true}>
-                Clear
-              </Button>
-
-              <Button
-                disabled={
-                  false
-                  // There is currently a BUG in the API where sending facility id does not return data so
-                  // commenting this out until that bug is fixed.
-                  // !(
-                  //   selectedFacility &&
-                  //   selectedFacility[0] !== "" &&
-                  //   selectedLocation &&
-                  //   selectedLocation[0] !== "" &&
-                  //   (section === SUBMISSION_ACCESS_STORE_NAME
-                  //     ? selectedStatus && selectedStatus[0] !== ""
-                  //     : true) &&
-                  //   (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                  //     ? typeSelection && typeSelection[0] !== ""
-                  //     : true)
-                  // )
-                }
-                onClick={applyFilters}
-                outline={false}
-              >
-                Apply Filter(s)
-              </Button>
+              </div>
+              <div className="margin-left-4 width-card">
+                <DropdownSelection
+                  caption="Status"
+                  selectionHandler={(option) => setSelectedStatus(option)}
+                  options={availStatus}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedStatus ? selectedStatus[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
             </div>
-          </Grid>
-        </Grid>
-      </GridContainer>
+          )}
+        </div>
+        <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
+            <div className="widescreen:display-none desktop:display-flex">
+              <div className="width-card">
+                <DropdownSelection
+                  caption="Type"
+                  selectionHandler={setTypeSelection}
+                  options={testTypeGroupOptions}
+                  viewKey="name"
+                  selectKey="name"
+                  initialSelection={typeSelection ? typeSelection[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
+            </div>
+          )}
+
+          {section === SUBMISSION_ACCESS_STORE_NAME && (
+            <div className="widescreen:display-none desktop:display-flex">
+              <div className="width-card">
+                <DropdownSelection
+                  caption="Reporting Period"
+                  selectionHandler={setSelectedReportingPeriod}
+                  options={availableReportingPeriods}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={
+                    selectedReportingPeriod ? selectedReportingPeriod[0] : null
+                  }
+                  extraSpace
+                />
+              </div>
+              <div className="margin-left-4 width-card">
+                <DropdownSelection
+                  caption="Status"
+                  selectionHandler={(option) => setSelectedStatus(option)}
+                  options={availStatus}
+                  viewKey="name"
+                  selectKey="code"
+                  initialSelection={selectedStatus ? selectedStatus[0] : null}
+                  workspaceSection={section}
+                  extraSpace
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex-align-self-end">
+            <Button 
+              onClick={clearFilters} 
+              outline={true}
+            >
+              Clear
+            </Button>
+
+            <Button
+              disabled={
+                !(
+                  (selectedFacility &&
+                    selectedLocation && selectedLocation[1] !== "") &&
+                  ((section === SUBMISSION_ACCESS_STORE_NAME) ||
+                    (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
+                      && typeSelection && typeSelection[1] !== defaultDropdownText))
+                )
+              }
+              onClick={applyFilters}
+              outline={false}
+            >
+              Apply Filter(s)
+            </Button>
+          </div>
+        </div>
+
     </div>
   );
 };

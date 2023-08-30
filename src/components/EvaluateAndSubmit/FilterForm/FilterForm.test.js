@@ -1,26 +1,8 @@
 import React from "react";
-import { render, act, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, act, screen, fireEvent } from "@testing-library/react";
 import FilterForm from "./FilterForm";
-
-jest.mock("../../../utils/api/monitoringPlansApi", () => ({
-  getMonitoringPlans: jest.fn().mockResolvedValue({
-    data: [
-      { id: "MOCK-1", active: true, facilityName: "Barry", name: "1" },
-      { id: "MOCK-2", active: true, facilityName: "Barry", name: "2" },
-      { id: "MOCK-3", active: true, facilityName: "Barry", name: "3" },
-    ],
-  }),
-}));
-
-jest.mock("../../../utils/api/mdmApi", () => ({
-  getReportingPeriods: jest.fn().mockResolvedValue({
-    data: [
-      { periodAbbreviation: "2022 Q3" },
-      { periodAbbreviation: "2022 Q4" },
-    ],
-  }),
-}));
+import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
+import * as mdmApi from "../../../utils/api/mdmApi";
 
 const mockFacilities = [
   {
@@ -41,9 +23,21 @@ const mockFacilities = [
 ];
 
 describe("Review and submit form", () => {
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => {
+    jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValueOnce({
+      data: [
+        { periodAbbreviation: "2022 Q3" },
+        { periodAbbreviation: "2022 Q4" },
+      ]
+    });
+    jest.spyOn(monitoringPlansApi, "getMonitoringPlans").mockResolvedValueOnce({
+      data: [
+        { id: "MOCK-1", active: true, facilityName: "Barry", name: "1" },
+        { id: "MOCK-2", active: true, facilityName: "Barry", name: "2" },
+        { id: "MOCK-3", active: true, facilityName: "Barry", name: "3" },
+      ]
+    });
+  })
 
   test("Render Review and Submit Form with no errors", async () => {
     let container;
@@ -88,10 +82,8 @@ describe("Review and submit form", () => {
   });
 
   test("Render drop box of facilities and click a facility to load a configuration", async () => {
-    let byText;
-
     await act(async () => {
-      const { getByText } = render(
+      render(
         <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
@@ -102,30 +94,27 @@ describe("Review and submit form", () => {
         />
       );
 
-      byText = getByText;
     });
 
+    const facilityInput = screen.getByTestId("facilities-input-search");
     await act(async () => {
-      const facilityInput = screen.getByTestId("Facilities-input-search");
-      await userEvent.click(facilityInput);
-      await byText("Barry (3)").click();
+      fireEvent.click(facilityInput);
     });
-
     await act(async () => {
-      const configurationInput = screen.getByTestId(
-        "Configurations-input-search"
-      );
-      await userEvent.click(configurationInput);
+      screen.getByText("Barry (3)").click();
     });
 
-    expect(byText("Barry - 1")).toBeInTheDocument();
+    const configurationInput = screen.getByTestId("configurations-input-search");
+    await act(async () => {
+      fireEvent.click(configurationInput);
+    });
+
+    expect(screen.getByText("Barry - 1")).toBeInTheDocument();
   });
 
   test("Removes selections properly", async () => {
-    let byText, query;
-
     await act(async () => {
-      const actQuery = render(
+      render(
         <FilterForm
           facilities={mockFacilities}
           queryCallback={jest.fn()}
@@ -135,33 +124,32 @@ describe("Review and submit form", () => {
           componentType="Submission"
         />
       );
-
-      byText = actQuery.getByText;
-      query = actQuery;
     });
 
+    const facilityInput = screen.getByTestId("facilities-input-search");
     await act(async () => {
-      const facilityInput = screen.getByTestId("Facilities-input-search");
-      await userEvent.click(facilityInput);
-      await byText("Barry (3)").click();
+      fireEvent.click(facilityInput);
+    });
+    await act(async () => {
+      screen.getByText("Barry (3)").click();
+    });
+
+    const configurationInput = screen.getByTestId("configurations-input-search");
+    await act(async () => {
+      fireEvent.click(configurationInput);
     });
 
     await act(async () => {
-      const configurationInput = screen.getByTestId(
-        "Configurations-input-search"
-      );
-      await userEvent.click(configurationInput);
+      const facilityRemoveButton = screen.getByTestId('3-remove');
+      await fireEvent.click(facilityRemoveButton);
     });
+
     await act(async () => {
-      const facilityRemoveButton = query.getByTestId('3-remove');
-      await userEvent.click(facilityRemoveButton);
+      const reportingPeriodRemoveButton = screen.getByTestId('2022 Q4-remove');
+      await fireEvent.click(reportingPeriodRemoveButton);
     });
-    await act(async () => {
-      const reportingPeriodRemoveButton = query.getByTestId('2022 Q4-remove');
-      await userEvent.click(reportingPeriodRemoveButton);
-    });
-    query.debug()
-    expect(query.queryByText("Barry - 1")).not.toBeInTheDocument();
+
+    expect(screen.queryByText("Barry - 1")).not.toBeInTheDocument();
   });
 
   test("Click a configuration from returned configurations", async () => {
@@ -172,10 +160,8 @@ describe("Review and submit form", () => {
       monPlanTable = monPlan;
     });
 
-    let byText;
-
     await act(async () => {
-      const { getByText } = render(
+      render(
         <FilterForm
           facilities={mockFacilities}
           queryCallback={mockCallback}
@@ -185,25 +171,24 @@ describe("Review and submit form", () => {
           componentType="Submission"
         />
       );
-      byText = getByText;
+    });
+
+    const facilityInput = screen.getByTestId("facilities-input-search");
+    await act(async () => {
+      fireEvent.click(facilityInput);
+    });
+    await act(async () => {
+      screen.getByText("Barry (3)").click();
+    });
+
+    const configurationInput = screen.getByTestId("configurations-input-search");
+    await act(async () => {
+      fireEvent.click(configurationInput);
     });
 
     await act(async () => {
-      const facilityInput = screen.getByTestId("Facilities-input-search");
-      await userEvent.click(facilityInput);
-      await byText("Barry (3)").click();
-    });
-
-    await act(async () => {
-      const configurationInput = screen.getByTestId(
-        "Configurations-input-search"
-      );
-      await userEvent.click(configurationInput);
-    });
-
-    await act(async () => {
-      byText("Barry - 1").click();
-      byText("Apply Filter(s)").click();
+      screen.getByText("Barry - 1").click();
+      screen.getByText("Apply Filter(s)").click();
     });
 
     expect(orisTable).toEqual(["3"]);
@@ -236,9 +221,8 @@ describe("Review and submit form", () => {
       reportingPeriods = rps;
     });
 
-    let byText;
     await act(async () => {
-      const { getByText } = render(
+      render(
         <FilterForm
           facilities={mockFacilities}
           queryCallback={mockCallback}
@@ -248,31 +232,32 @@ describe("Review and submit form", () => {
           componentType="Submission"
         />
       );
-      byText = getByText;
+    });
+
+    const reportInput = screen.getByTestId("reporting-periods-input-search");
+    await act(async () => {
+      fireEvent.click(reportInput);
+    });
+    await act(async () => {
+      screen.getByText("2022 Q3").click();
+    });
+
+    const facilityInput = screen.getByTestId("facilities-input-search");
+    await act(async () => {
+      fireEvent.click(facilityInput);
+    });
+    await act(async () => {
+      screen.getByText("Barry (3)").click();
+    });
+
+    const configurationInput = screen.getByTestId("configurations-input-search");
+    await act(async () => {
+      fireEvent.click(configurationInput);
     });
 
     await act(async () => {
-      const reportInput = screen.getByTestId("Reporting-Periods-input-search");
-      await userEvent.click(reportInput);
-      byText("2022 Q3").click();
-    });
-
-    await act(async () => {
-      const facilityInput = screen.getByTestId("Facilities-input-search");
-      await userEvent.click(facilityInput);
-      await byText("Barry (3)").click();
-    });
-
-    await act(async () => {
-      const configurationInput = screen.getByTestId(
-        "Configurations-input-search"
-      );
-      await userEvent.click(configurationInput);
-    });
-
-    await act(async () => {
-      byText("Barry - 1").click();
-      byText("Apply Filter(s)").click();
+      screen.getByText("Barry - 1").click();
+      screen.getByText("Apply Filter(s)").click();
     });
 
     expect(reportingPeriods).toEqual(["2022 Q4", "2022 Q3"]);

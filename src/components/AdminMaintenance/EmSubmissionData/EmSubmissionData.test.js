@@ -8,7 +8,7 @@ describe("<EmSubmissionData />", () => {
 
   test("renders table with data", async () => {
 
-    render(<EmSubmissionData data={mockedApiData}/>);
+    render(<EmSubmissionData data={mockedApiData} selectedRows={[]} setSelectedRows={() => jest.fn()} />);
    
     const tableRecord = screen.getByText("2012-04-01");
     expect(tableRecord).toBeInTheDocument();

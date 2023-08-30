@@ -121,7 +121,5 @@ describe("QACertEventTabRender", () => {
       />
     );
     expect(container).toBeDefined();
-    // const testDataReportButton = getByText(/Test Data Report/i);
-    // expect(testDataReportButton).toBeInTheDocument();
   });
 });

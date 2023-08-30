@@ -218,7 +218,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         onToggle={() => {
                           handleToggleNavDropdown(i);
                         }}
-                        className="text-white"
                       />
                       <Menu
                         id={

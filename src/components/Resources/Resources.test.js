@@ -1,7 +1,7 @@
 import React from "react";
 import Resources from "./Resources";
-import { render, fireEvent, screen, wait } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { fireEvent, screen, wait } from "@testing-library/react";
+import render from "../../mocks/render";
 
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
@@ -9,61 +9,47 @@ jest.mock("react-markdown", () => (props) => {
 
 jest.mock("remark-gfm", () => () => {});
 
-jest.mock("../../utils/api/contentApi", () => {
-  const testContent = {
-    headers: { "content-type": "text/markdown" },
-    data: "[Test Link] [Test Link]: <https://dev.epacdx.net/FAQ>",
-  };
-
-  const testResourceLinks = {
-    data: [
-      {
-        name: "CDX",
-        url: "https://cdx.epa.gov/",
-        type: "external",
-      },
-      {
-        name: "Tutorials",
-        url: "/tutorials",
-        type: "internal",
-      },
-    ],
-  };
-
-  return {
-    getContent: jest
-      .fn()
-      .mockResolvedValueOnce(testContent)
-      .mockResolvedValueOnce(testContent)
-      .mockResolvedValueOnce(testContent)
-      .mockResolvedValueOnce(testContent)
-      .mockResolvedValueOnce(testContent)
-      .mockResolvedValueOnce(testResourceLinks),
-  };
-});
-
-describe("Resources: ", () => {
-  it("render Resources component and check buttons", async () => {
-    let resources;
-    await wait(() => {
-      resources = render(
-        <BrowserRouter>
-          <Resources />
-        </BrowserRouter>
-      );
+describe("Resources component ", () => {
+  it("render Resources component and link buttons", async () => {
+    const testContent = {
+      headers: { "content-type": "text/markdown" },
+      data: "[Test Link] [Test Link]: <https://dev.epacdx.net/FAQ>",
+    };
+  
+    const testResourceLinks = {
+      data: [
+        {
+          name: "CDX",
+          url: "https://cdx.epa.gov/",
+          type: "external",
+        },
+        {
+          name: "Tutorials",
+          url: "/tutorials",
+          type: "internal",
+        },
+      ],
+    };
+  
+    jest.mock("../../utils/api/contentApi", () => {
+      return {
+        getContent: jest
+        .fn()
+        .mockResolvedValueOnce(testContent)
+        .mockResolvedValueOnce(testContent)
+        .mockResolvedValueOnce(testContent)
+        .mockResolvedValueOnce(testContent)
+        .mockResolvedValueOnce(testContent)
+        .mockResolvedValueOnce(testResourceLinks),
+      }
     });
-
-    await wait(() => {
-      const topics = [
-        "Visit The Glossary",
-        "Visit Reporting Instructions",
-        "Visit CAM API",
-      ];
-
-      topics.forEach((topic) => {
-        const button = resources.getByText(topic);
-        expect(button).toBeTruthy();
-      });
-    });
+    await render(<Resources/>);
+    const glossaryLink = screen.getByRole('link', { name: 'Visit The Glossary' })
+    expect(glossaryLink).toHaveAttribute('href', '/glossary');
+    const repInstLink = screen.getByRole('link', { name: 'Visit Reporting Instructions' })
+    expect(repInstLink).toHaveAttribute('href', '/reporting-instructions');
+    const camApiLink = screen.getByRole('link', { name: 'Visit CAM API' })
+    expect(camApiLink).toHaveAttribute('href', '/cam-api');
+    //screen.debug(null, Infinity);
   });
 });

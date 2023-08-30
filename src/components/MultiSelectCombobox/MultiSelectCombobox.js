@@ -134,7 +134,6 @@ const MultiSelectCombobox = ({
               index={id}
               label={optionLabel}
               onRemove={onRemoveHanlder}
-              disableButton={true}
             />
           ),
         },
@@ -159,7 +158,6 @@ const MultiSelectCombobox = ({
             index={s.id}
             label={s.label}
             onRemove={onRemoveHanlder}
-            disableButton={true}
             data-testid={`${entity}-${s.id}-selected-pill`}
           />
         ),
