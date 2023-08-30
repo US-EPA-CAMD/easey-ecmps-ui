@@ -3,25 +3,23 @@ import { Button } from "@trussworks/react-uswds";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
-const PillButton = (props) => {
+const PillButton = ({tooltip, index, label, onClick, onRemove}) => {
   return (
     <div className="display-inline-flex margin-bottom-05">
       <Button
         type="button"
         className="padding-1 padding-right-0 margin-0 radius-0 radius-left-lg bg-primary"
-        title={props.tooltip}
-        onClick={(evt) => props.onClick(props.index, props.label, evt.target)}
-        disabled={props.disableButton}
-        aria-label={!props.disableButton ? `Modify` : null}
+        title={tooltip}
+        onClick={(evt) => onClick ? onClick(index, label, evt.target) : null}
       >
-        {props.label}
+        {label}
       </Button>
       <Button
         type="button"
-        aria-label={`Remove selection for ${props.label}`}
+        aria-label={`Remove selection for ${label}`}
         className="padding-y-0 padding-left-1 padding-right-1 radius-0 radius-right-lg bg-primary"
-        data-testid={`${props.index}-remove`}
-        onClick={() => props.onRemove(props.index, props.label)}
+        data-testid={`${index}-remove`}
+        onClick={() => onRemove(index, label)}
       >
         <FontAwesomeIcon icon={faWindowClose} />
       </Button>
