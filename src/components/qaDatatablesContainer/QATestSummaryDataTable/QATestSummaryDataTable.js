@@ -713,9 +713,9 @@ const QATestSummaryDataTable = ({
           actionsBtn={"View"}
           user={user}
           expandableRowComp={
-            selectedTestCode.testTypeGroupCode !== "PEI"
+            (selectedTestCode.testTypeGroupCode !== "PEI") && (selectedTestCode.testTypeGroupCode !== "MISC")
               ? QAExpandableRowsRender
-              : ""
+              : null
           }
           expandableRowProps={getExpandableComponentProps(
             selectedTestCode.testTypeGroupCode,
