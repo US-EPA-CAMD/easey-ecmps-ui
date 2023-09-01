@@ -47,7 +47,7 @@ export const exportEmissionsData = async (
     });
     return handleResponse(response);
   } catch (error) {
-    handleError(error);
+    handleImportError(error);
     return error.response
   }
 };
