@@ -48,6 +48,7 @@ export const exportEmissionsData = async (
     return handleResponse(response);
   } catch (error) {
     handleError(error);
+    return error.response
   }
 };
 
