@@ -40,7 +40,6 @@ export const ImportHistoricalDataModal = ({
       }
 
       const importResp = await importEmissionsData(exportResp.data);
-      console.log('import resp', importResp);
       if (!successResponses.includes(importResp.status)) {
         throw importResp // go to catch block
       }
