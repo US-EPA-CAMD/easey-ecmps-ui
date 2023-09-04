@@ -49,10 +49,10 @@ export const EmissionsTabRender = ({
   }, [currentTab]);
 
   const handleDownload = async () => {
-    const selectedUnitId = selectedConfig?.locations
+    const selectedUnitId = selectedConfig?.monitoringLocationData
       ?.filter((l) => l.id === locationSelect[1])
       .map((l) => l.unitId);
-    const selectedStackPipeId = selectedConfig?.locations
+    const selectedStackPipeId = selectedConfig?.monitoringLocationData
       ?.filter((l) => l.id === locationSelect[1])
       .map((l) => l.stackPipeId);
 
@@ -116,7 +116,7 @@ export const EmissionsTabRender = ({
       </div>
       <hr />
       {!isInitialLoadOfPage && 
-      viewTemplateSelect?.code === "SELECT" || !viewTemplateSelect ? (
+      (viewTemplateSelect?.code === "SELECT" || !viewTemplateSelect) ? (
         <div>
           <div className="grid-row overflow-x-auto">
             {!user ? (

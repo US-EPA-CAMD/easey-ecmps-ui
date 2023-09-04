@@ -25,7 +25,7 @@ export const ExportTablesContainer = ({
   dataKey,
 }) => {
   const { beginDate, endDate } = selectionData;
-  const { locations } = selectedConfig;
+  const { monitoringLocationData } = selectedConfig;
   const [tableData, setTableData] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +49,7 @@ export const ExportTablesContainer = ({
   useEffect(() => {
     const fetchTableData = async () => {
       setLoading(true);
-      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(locations);
+      const { unitIds, stackPipeIds } = getUnitIdAndStackPipeIds(monitoringLocationData);
       try {
         const response = await exportQA(
           orisCode,
@@ -73,7 +73,7 @@ export const ExportTablesContainer = ({
       }
     };
     fetchTableData();
-  }, [beginDate, dataKey, divId, endDate, locations, orisCode]);
+  }, [beginDate, dataKey, divId, endDate, monitoringLocationData, orisCode]);
 
   const onSelectRowsHandler = ({
     selectedRows,
