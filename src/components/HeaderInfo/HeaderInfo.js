@@ -968,8 +968,6 @@ export const HeaderInfo = ({
       ...cloneDeep(emissionDropdownState),
       selectedReportingPeriods,
     });
-    console.log("selectedReportingPeriods",selectedReportingPeriods);
-    console.log("uniqueReportingPeriods",uniqueReportingPeriods);
     dispatch(
       setReportingPeriods(
         selectedReportingPeriods,
