@@ -82,8 +82,9 @@ export const QACertTestSummaryHeaderInfo = ({
   const [lockedFacility, setLockedFacility] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+  const [disableMatsImportButton, setDisableMatsImportButton] = useState(true);
 
-  const selectedTestNumberRef = useRef()
+  const selectedTestNumberRef = useRef();
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
     { name: "Loading..." },
@@ -191,9 +192,9 @@ export const QACertTestSummaryHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -206,9 +207,9 @@ export const QACertTestSummaryHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-        checkedOutConfigs
-          .map((con) => con["monPlanId"])
-          .indexOf(selectedConfig.id)
+          checkedOutConfigs
+            .map((con) => con["monPlanId"])
+            .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -264,7 +265,9 @@ export const QACertTestSummaryHeaderInfo = ({
     setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
-    setShowMatsImport(false)
+    setShowMatsImport(false);
+    setImportedFile([]);
+    setDisableMatsImportButton(true);
   };
 
   const openModalType = (modalType) => {
@@ -272,18 +275,18 @@ export const QACertTestSummaryHeaderInfo = ({
     setDisablePortBtn(false);
 
     switch (modalType) {
-      case 'file':
-        setShowImportModal(true)
-        break
-      case 'historical':
-        setShowImportDataPreview(true)
-        setShowSelectionTypeImportModal(false)
-        break
-      case 'mats':
-        setShowMatsImport(true)
-        break
+      case "file":
+        setShowImportModal(true);
+        break;
+      case "historical":
+        setShowImportDataPreview(true);
+        setShowSelectionTypeImportModal(false);
+        break;
+      case "mats":
+        setShowMatsImport(true);
+        break;
       default:
-        throw Error(`modalType of ${modalType} does not exist`)
+        throw Error(`modalType of ${modalType} does not exist`);
     }
   };
 
@@ -321,26 +324,30 @@ export const QACertTestSummaryHeaderInfo = ({
 
   const importMats = async (payload) => {
     try {
-      setIsLoading(true)
-      setFinishedLoading(false)
-      const resp = await matsFileUpload(configID, selectedTestNumberRef.current, payload)
+      setIsLoading(true);
+      setFinishedLoading(false);
+      const resp = await matsFileUpload(
+        configID,
+        selectedTestNumberRef.current,
+        payload
+      );
       if (successResponses.includes(resp.status)) {
-        setImportedFileErrorMsgs([])
+        setImportedFileErrorMsgs([]);
       } else {
         const errorMsgs = formatErrorResponse(resp);
         setImportedFileErrorMsgs(errorMsgs);
       }
     } catch (error) {
-      console.log('error importing MATS files', error);
+      console.log("error importing MATS files", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
       setFinishedLoading(true);
       // set flags to show success/error modal content
-      setUsePortBtn(true)
-      setShowImportModal(true)
-      setShowMatsImport(false) // stop showing mats content
+      setUsePortBtn(true);
+      setShowImportModal(true);
+      setShowMatsImport(false); // stop showing mats content
     }
-  }
+  };
 
   const formatDate = (dateString, isUTC = false) => {
     const date = new Date(dateString);
@@ -364,8 +371,9 @@ export const QACertTestSummaryHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-            } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${
+            currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -497,13 +505,14 @@ export const QACertTestSummaryHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${showImportModal ||
+        className={`usa-overlay ${
+          showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-          ? "is-visible"
-          : ""
-          }`}
+            ? "is-visible"
+            : ""
+        }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
@@ -623,7 +632,7 @@ export const QACertTestSummaryHeaderInfo = ({
       )}
 
       {/* MATS */}
-      {(showMatsImport) &&
+      {showMatsImport && (
         <UploadModal
           show={showMatsImport}
           close={closeImportModalHandler}
@@ -631,17 +640,20 @@ export const QACertTestSummaryHeaderInfo = ({
           showSave={true}
           title={importTestTitle}
           mainBTN={"Import"}
-          disablePortBtn={importedFile.length === 0}
+          disablePortBtn={disableMatsImportButton}
           port={() => importMats(importedFile)}
           importedFileErrorMsgs={importedFileErrorMsgs}
         >
           <ImportModalMatsContent
-            locationId={locationSelect[1]}
             setImportedFile={setImportedFile}
+            importedFile={importedFile}
             selectedTestNumberRef={selectedTestNumberRef}
+            testCodeLegend={allTestTypeCodes}
+            locations={locations}
+            setDisablePortBtn={setDisableMatsImportButton}
           />
         </UploadModal>
-      }
+      )}
     </div>
   );
 };
