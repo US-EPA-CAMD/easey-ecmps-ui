@@ -56,13 +56,17 @@ export const sendSupportEmail = async (payload) => {
   }
 };
 
-export const matsFileUpload = async (monitorPlanId, testNumber, fileListPayload) => {
-  const url = `${config.services.camd.uri}/mats-file-upload/${monitorPlanId}/${testNumber}/import`;
+export const matsFileUpload = async (
+  monitorPlanId,
+  payload,
+  fileListPayload
+) => {
+  const url = `${config.services.camd.uri}/mats-file-upload/${monitorPlanId}/${payload.location}/${payload.testTypeGroup}/${payload.testNumber}/import`;
 
-  const formData = new FormData()
+  const formData = new FormData();
 
   for (const file of fileListPayload) {
-    formData.append('file', file)
+    formData.append("file", file);
   }
 
   return secureAxios({
@@ -70,9 +74,9 @@ export const matsFileUpload = async (monitorPlanId, testNumber, fileListPayload)
     url,
     data: formData,
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
+      "Content-Type": "multipart/form-data",
+    },
   })
     .then(handleResponse)
     .catch(handleImportError);
-}
+};
