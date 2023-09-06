@@ -968,6 +968,13 @@ export const HeaderInfo = ({
       ...cloneDeep(emissionDropdownState),
       selectedReportingPeriods,
     });
+    dispatch(
+      setReportingPeriods(
+        selectedReportingPeriods,
+        currentTab.name,
+        workspaceSection
+      )
+    );
   };
 
   const handleExport = async () => {
