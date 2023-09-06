@@ -234,14 +234,15 @@ export const matsBulkFilesColumns = [
     sortable: true,
   },
   {
-    name: "Location Info",
-    selector: (row) => row.locationInfo,
+    name: "Configuration",
+    selector: (row) => row.location,
     sortable: true,
   },
   {
-    name: "System/Component ID",
-    selector: (row) => row.systemComponentIdentifier,
+    name: "Test Type Code",
+    selector: (row) => row.testTypeCodeDescription,
     sortable: true,
+    width: "400px",
   },
   {
     name: "Test Number",
@@ -261,7 +262,7 @@ export const matsBulkFilesColumns = [
   },
   {
     name: "Last Modified Date/Time",
-    selector: (row) => formatTimeStamp(row.updateDate),
+    selector: (row) => formatTimeStamp(row.addDate),
     sortable: true,
     wrap: true,
     // sortFunction: sortByUpdateDate,
