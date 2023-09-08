@@ -347,7 +347,7 @@ describe('QA Cert API', function () {
     test('createAppendixEHeatInputGas', async () => {
       const payload = {
         appendixECorrelationHeatInputGas: 'data',
-        monitoringSystemID: undefined,
+        monitoringSystemId: undefined,
       };
       const testSummaryData = {
         data: {
@@ -356,8 +356,8 @@ describe('QA Cert API', function () {
           stackPipeId: null,
           unitId: '1',
           testTypeCode: 'APPE',
-          monitoringSystemID: '400',
-          componentID: null,
+          monitoringSystemId: '400',
+          componentId: null,
           spanScaleCode: null,
           testNumber: '01NOX2021-2',
           testReasonCode: 'QA',
