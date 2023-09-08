@@ -418,6 +418,10 @@ export const EvaluateAndSubmit = ({
           r.monPlanId = r["id"];
         }
 
+        if (r["monPlanIdentifier"]) {
+          r.monPlanId = r["monPlanIdentifier"];
+        }
+
         if (r["submissionCode"]) {
           r.submissionAvailabilityCode = r["submissionCode"];
         }
