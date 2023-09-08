@@ -9,7 +9,7 @@ export const defaultsDataTableProps = (location) => {
       fuelCode: "string",
       operatingConditionCode: "string",
       defaultSourceCode: "string",
-      groupId: "string",
+      groupId: "string", // TODO: 5609
       beginDate: "string",
       beginHour: 0,
       endDate: "string",
@@ -44,7 +44,7 @@ export const defaultsDataTableProps = (location) => {
       fuelCode: ["Fuel Code", "dropdown", "", ""],
       operatingConditionCode: ["Operating Condition", "dropdown", "", ""],
       defaultSourceCode: ["Source of Value", "dropdown", "", ""],
-      groupId: ["Group ID", "input", "", ""],
+      groupId: ["Group ID", "input", "", ""], // TODO: 5609
       // skip: ["", "skip", "" , ""],
     },
     controlDatePickerInputs: {
