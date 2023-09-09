@@ -39,6 +39,15 @@ export const ImportHistoricalDataModal = ({
         throw exportResp // go to catch block
       }
 
+      // if exported data is empty
+      if( Object.keys(exportResp.data).length === 0 ){
+        throw {
+          data:{
+            message:["Import unsuccessful. There is no data for this reporting period"]
+          }
+        }
+      }
+        
       const importResp = await importEmissionsData(exportResp.data);
       if (!successResponses.includes(importResp.status)) {
         throw importResp // go to catch block
@@ -47,6 +56,7 @@ export const ImportHistoricalDataModal = ({
       setImportedFileErrorMsgs([]);
       portCallback(selectedYear, selectedQuarter)
     } catch (error) {
+      console.log(JSON.stringify(error))
       const errorMsgs = error?.data?.message ?? ['There was an error importing historical data']
       setImportedFileErrorMsgs(errorMsgs)
     } finally {
