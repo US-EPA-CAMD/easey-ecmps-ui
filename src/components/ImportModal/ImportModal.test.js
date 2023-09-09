@@ -31,7 +31,7 @@ const schema = {
         "$ref": "#/definitions/TestSummary"
       }
     },
-    "qaCertificationEventData": {
+    "certificationEventData": {
       "type": "array",
       "minItems": 0,
       "items": {
@@ -82,13 +82,13 @@ const schema = {
         "testTypeCode": {
           "type": "string"
         },
-        "monitoringSystemID": {
+        "monitoringSystemId": {
           "type": [
             "string",
             "null"
           ]
         },
-        "componentID": {
+        "componentId": {
           "type": [
             "string",
             "null"
@@ -266,7 +266,7 @@ const schema = {
             "$ref": "#/definitions/FuelFlowToLoadCheck"
           }
         },
-        "appECorrelationTestSummaryData": {
+        "appendixECorrelationTestSummaryData": {
           "type": "array",
           "minItems": 0,
           "items": {
@@ -311,8 +311,8 @@ const schema = {
       },
       "required": [
         "testTypeCode",
-        "monitoringSystemID",
-        "componentID",
+        "monitoringSystemId",
+        "componentId",
         "spanScaleCode",
         "testNumber",
         "testReasonCode",
@@ -360,26 +360,26 @@ const schema = {
             "null"
           ]
         },
-        "monitoringSystemID": {
+        "monitoringSystemId": {
           "type": [
             "string",
             "null"
           ]
         },
-        "componentID": {
+        "componentId": {
           "type": [
             "string",
             "null"
           ]
         },
-        "qaCertEventCode": {
+        "certificationEventCode": {
           "type": "string"
         },
-        "qaCertEventDate": {
+        "certificationEventDate": {
           "type": "string",
           "format": "date"
         },
-        "qaCertEventHour": {
+        "certificationEventHour": {
           "type": [
             "number",
             "null"
@@ -419,11 +419,11 @@ const schema = {
         }
       },
       "required": [
-        "monitoringSystemID",
-        "componentID",
-        "qaCertEventCode",
-        "qaCertEventDate",
-        "qaCertEventHour",
+        "monitoringSystemId",
+        "componentId",
+        "certificationEventCode",
+        "certificationEventDate",
+        "certificationEventHour",
         "requiredTestCode",
         "conditionalBeginDate",
         "conditionalBeginHour",
@@ -466,13 +466,13 @@ const schema = {
         "quarter": {
           "type": "number"
         },
-        "monitoringSystemID": {
+        "monitoringSystemId": {
           "type": [
             "string",
             "null"
           ]
         },
-        "componentID": {
+        "componentId": {
           "type": [
             "string",
             "null"
@@ -503,8 +503,8 @@ const schema = {
       "required": [
         "year",
         "quarter",
-        "monitoringSystemID",
-        "componentID",
+        "monitoringSystemId",
+        "componentId",
         "hoursUsed",
         "spanScaleCode",
         "fuelCode",
@@ -1050,7 +1050,7 @@ const schema = {
             "null"
           ]
         },
-        "avgVelocityWithoutWallEffects": {
+        "averageVelocityWithoutWallEffects": {
           "type": [
             "number",
             "null"
@@ -1091,7 +1091,7 @@ const schema = {
         "percentMoisture",
         "dryMolecularWeight",
         "wetMolecularWeight",
-        "avgVelocityWithoutWallEffects",
+        "averageVelocityWithoutWallEffects",
         "averageVelocityWithWallEffects",
         "calculatedWAF",
         "averageStackFlowRate"
@@ -1102,7 +1102,7 @@ const schema = {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "probeID": {
+        "probeId": {
           "type": [
             "string",
             "null"
@@ -1120,7 +1120,7 @@ const schema = {
             "null"
           ]
         },
-        "methodTraversePointID": {
+        "methodTraversePointId": {
           "type": "string"
         },
         "velocityCalibrationCoefficient": {
@@ -1136,13 +1136,13 @@ const schema = {
           ],
           "format": "date"
         },
-        "avgVelDiffPressure": {
+        "averageVelocityDifferencePressure": {
           "type": [
             "number",
             "null"
           ]
         },
-        "avgSquareVelDiffPressure": {
+        "averageSquareVelocityDifferencePressure": {
           "type": [
             "number",
             "null"
@@ -1192,14 +1192,14 @@ const schema = {
         }
       },
       "required": [
-        "probeID",
+        "probeId",
         "probeTypeCode",
         "pressureMeasureCode",
-        "methodTraversePointID",
+        "methodTraversePointId",
         "velocityCalibrationCoefficient",
         "lastProbeDate",
-        "avgVelDiffPressure",
-        "avgSquareVelDiffPressure",
+        "averageVelocityDifferencePressure",
+        "averageSquareVelocityDifferencePressure",
         "tstackTemperature",
         "pointUsedIndicator",
         "numberWallEffectsPoints",
@@ -1253,7 +1253,7 @@ const schema = {
             "null"
           ]
         },
-        "calcSeparateReferenceIndicator": {
+        "calculatedSeparateReferenceIndicator": {
           "type": [
             "number",
             "null"
@@ -1268,7 +1268,7 @@ const schema = {
         "referenceFlowLoadRatio",
         "averageHourlyHeatInputRate",
         "referenceGrossHeatRate",
-        "calcSeparateReferenceIndicator"
+        "calculatedSeparateReferenceIndicator"
       ]
     },
     "FlowToLoadCheck": {
@@ -1288,7 +1288,7 @@ const schema = {
             "null"
           ]
         },
-        "avgAbsolutePercentDiff": {
+        "averageAbsolutePercentDifference": {
           "type": [
             "number",
             "null"
@@ -1330,7 +1330,7 @@ const schema = {
             "null"
           ]
         },
-        "numberOfHoursExcMainBypass": {
+        "numberOfHoursExcludedMainBypass": {
           "type": [
             "number",
             "null"
@@ -1346,14 +1346,14 @@ const schema = {
       "required": [
         "testBasisCode",
         "biasAdjustedIndicator",
-        "avgAbsolutePercentDiff",
+        "averageAbsolutePercentDifference",
         "numberOfHours",
         "numberOfHoursExcludedForFuel",
         "numberOfHoursExcludedRamping",
         "numberOfHoursExcludedBypass",
         "numberOfHoursExcludedPreRATA",
         "numberOfHoursExcludedTest",
-        "numberOfHoursExcMainBypass",
+        "numberOfHoursExcludedMainBypass",
         "operatingLevelCode"
       ]
     },
@@ -1785,7 +1785,7 @@ const schema = {
             "null"
           ]
         },
-        "fuelFlowToLoadUOMCode": {
+        "fuelFlowToLoadUnitsOfMeasureCode": {
           "type": [
             "string",
             "null"
@@ -1834,7 +1834,7 @@ const schema = {
         "averageFuelFlowRate",
         "averageLoad",
         "baselineFuelFlowToLoadRatio",
-        "fuelFlowToLoadUOMCode",
+        "fuelFlowToLoadUnitsOfMeasureCode",
         "averageHourlyHeatInputRate",
         "baselineGHR",
         "ghrUnitsOfMeasureCode",
@@ -1920,7 +1920,7 @@ const schema = {
             "null"
           ]
         },
-        "appECorrelationTestRunData": {
+        "appendixECorrelationTestRunData": {
           "type": "array",
           "minItems": 0,
           "items": {
@@ -2039,7 +2039,7 @@ const schema = {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "monitoringSystemID": {
+        "monitoringSystemId": {
           "type": "string"
         },
         "oilMass": {
@@ -2092,7 +2092,7 @@ const schema = {
         }
       },
       "required": [
-        "monitoringSystemID",
+        "monitoringSystemId",
         "oilMass",
         "oilGCV",
         "oilGCVUnitsOfMeasureCode",
@@ -2108,7 +2108,7 @@ const schema = {
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "monitoringSystemID": {
+        "monitoringSystemId": {
           "type": "string"
         },
         "gasGCV": {
@@ -2131,7 +2131,7 @@ const schema = {
         }
       },
       "required": [
-        "monitoringSystemID",
+        "monitoringSystemId",
         "gasGCV",
         "gasVolume",
         "gasHeatInput"
@@ -2157,7 +2157,7 @@ const schema = {
             "null"
           ]
         },
-        "groupID": {
+        "groupId": {
           "type": [
             "string",
             "null"
@@ -2187,7 +2187,7 @@ const schema = {
         "fuelCode",
         "noxDefaultRate",
         "operatingConditionCode",
-        "groupID",
+        "groupId",
         "numberOfUnitsInGroup",
         "numberOfTestsForGroup"
       ]

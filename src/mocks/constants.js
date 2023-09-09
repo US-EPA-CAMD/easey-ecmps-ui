@@ -271,7 +271,7 @@ export const mockExportQa = {
       stackPipeId: "CS0AAN",
       unitId: null,
       testTypeCode: "F2LCHK",
-      monitoringSystemID: "AA4",
+      monitoringSystemId: "AA4",
       componentID: null,
       spanScaleCode: null,
       testNumber: "201904010000AA4",

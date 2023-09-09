@@ -146,8 +146,8 @@ describe("testing getLinearitySummary data selectors", () => {
   test("getQAModalDetailsByTestCode", () => {
     // const unitId = ["Unit/Stack Pipe ID", "nonFilteredDropdown", "", ""]
     const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""];
-    const monitoringSystemID = ["Monitoring System ID", "nonFilteredDropdown", "", ""];
-    const componentID = ["Component ID", "nonFilteredDropdown", "", ""];
+    const monitoringSystemId = ["Monitoring System ID", "nonFilteredDropdown", "", ""];
+    const componentId = ["Component ID", "nonFilteredDropdown", "", ""];
     const spanScaleCode = ["Span Scale Code", "nonFilteredDropdown", "", ""];
     const testNumber = ["Test Number", "input", "", ""];
     const testReasonCode = ["Test Reason Code", "dropdown", "", ""];
@@ -184,8 +184,8 @@ describe("testing getLinearitySummary data selectors", () => {
     let modalDetails = {
       controlInputs: {
         testTypeCode,
-        monitoringSystemID,
-        componentID,
+        monitoringSystemId,
+        componentId,
         spanScaleCode,
         testNumber,
         testReasonCode,
@@ -209,7 +209,7 @@ describe("testing getLinearitySummary data selectors", () => {
       controlInputs: {
         unitId,
         testTypeCode,
-        monitoringSystemID,
+        monitoringSystemId,
         testNumber,
         testReasonCode,
       },
@@ -229,7 +229,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const CALINJCols = {
       controlInputs: {
         testTypeCode,
-        componentID,
+        componentId,
         spanScaleCode,
         testNumber,
         testReasonCode,
@@ -259,7 +259,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const FFACC = {
         controlInputs: {
           testTypeCode,
-          componentID,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,unitId
@@ -280,7 +280,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const HGL3LS ={
         controlInputs: {
           testTypeCode,
-          componentID,
+          componentId,
           spanScaleCode,
           testNumber,
           testReasonCode,
@@ -310,7 +310,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const PEI = {
         controlInputs: {
           testTypeCode,
-          componentID,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -334,7 +334,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const TTACC =  {
         controlInputs: {
           testTypeCode,
-          componentID,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,unitId
@@ -355,7 +355,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const FLCCols = {
         controlInputs: {
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -377,7 +377,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const FLRCols = {
       controlInputs: {
         testTypeCode,
-        monitoringSystemID,
+        monitoringSystemId,
         testNumber,unitId
       },
       extraControlInputs: {
@@ -397,7 +397,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const FFLBCols = {
       controlInputs: {
         testTypeCode,
-        monitoringSystemID,
+        monitoringSystemId,
         testNumber,unitId
       },
       extraControlInputs: {
@@ -418,7 +418,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const OLOLCALCols = {
       controlInputs: {
         testTypeCode,
-        componentID,
+        componentId,
         spanScaleCode,
         testNumber,
         testReasonCode,
@@ -442,7 +442,7 @@ describe("testing getLinearitySummary data selectors", () => {
     const RELACCCols = {
       controlInputs: {
         testTypeCode,
-        monitoringSystemID,
+        monitoringSystemId,
         testNumber,
         testReasonCode,
         testResultCode,unitId
@@ -491,8 +491,8 @@ describe("testing getLinearitySummary data selectors", () => {
     const MISC = {
       controlInputs: {
         testTypeCode,
-        monitoringSystemID,
-        componentID,
+        monitoringSystemId,
+        componentId,
         testNumber,
         testReasonCode,
         testResultCode,
@@ -514,8 +514,8 @@ describe("testing getLinearitySummary data selectors", () => {
     const empty = {
         controlInputs: {
           testTypeCode,
-          monitoringSystemID,
-          componentID,
+          monitoringSystemId,
+          componentId,
           spanScaleCode,
           testNumber,
           testReasonCode,
