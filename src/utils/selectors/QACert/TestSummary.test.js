@@ -24,7 +24,7 @@ describe("testing TestSummary data selectors", () => {
         unitId: "51",
         testTypeCode: "LINE",
 
-        componentID: null,
+        componentId: null,
 
         testNumber: "412343",
         testReasonCode: "DIAG",
@@ -41,7 +41,7 @@ describe("testing TestSummary data selectors", () => {
         unitId: null,
         testTypeCode: "LINE",
 
-        componentID: null,
+        componentId: null,
 
         testNumber: "412343",
         testReasonCode: "DIAG",
@@ -58,7 +58,7 @@ describe("testing TestSummary data selectors", () => {
         unitId: null,
         testTypeCode: "LINE",
 
-        componentID: null,
+        componentId: null,
 
         testNumber: "412343",
         testReasonCode: "DIAG",
@@ -433,14 +433,14 @@ describe("testing TestSummary data selectors", () => {
         id: "0000120",
         testBasisCode: '100',
         biasAdjustedIndicator: 1,
-        avgAbsolutePercentDiff: 1,
+        averageAbsolutePercentDifference: 1,
         numberOfHours: 1,
         numberOfHoursExcludedForFuel: 1,
         numberOfHoursExcludedRamping: 1,
         numberOfHoursExcludedBypass: 1,
         numberOfHoursExcludedPreRATA: 1,
         numberOfHoursExcludedTest: 1,
-        numberOfHoursExcMainBypass: 1,
+        numberOfHoursExcludedMainBypass: 1,
         operatingLevelCode: "test",
       },
     ];
@@ -466,7 +466,7 @@ describe("testing TestSummary data selectors", () => {
     const data = [
       {
         id: "0000120",
-        monitoringSystemID: '100',
+        monitoringSystemId: '100',
         oilMass: 1,
         oilGCV: 1,
         oilGCVUnitsOfMeasureCode: 'BTUBBL',
@@ -497,7 +497,7 @@ describe("testing TestSummary data selectors", () => {
     const data = [
       {
         id: "0000120",
-        monitoringSystemID: '100',
+        monitoringSystemId: '100',
         gasGCV: 1,
         gasVolume: 1,
         gasHeatInput: 1,

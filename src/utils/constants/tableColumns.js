@@ -10,7 +10,7 @@ export const qaTestSummaryCols = [
 	{
 		name: "System/Component ID",
 		selector: (row) =>
-			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
+			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{
@@ -67,17 +67,17 @@ export const qaCertificationEventDataCols = [
 	{
 		name: "System/Component ID",
 		selector: (row) =>
-			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
+			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{
 		name: "Event Code",
-		selector: (row) => row.qaCertEventCode,
+		selector: (row) => row.certificationEventCode,
 		sortable: true,
 	},
 	{
 		name: "Event Date/Time",
-		selector: (row) => formatDateTime(row.qaCertEventDate, row.qaCertEventHour, null),
+		selector: (row) => formatDateTime(row.certificaitonEventDate, row.certificationEventHour, null),
 		sortable: true,
 	},
 	{
@@ -96,7 +96,7 @@ export const qaTestExtensionExemptionDataCols = [
 	{
 		name: "System/Component ID",
 		selector: (row) =>
-			row.monitoringSystemID ? row.monitoringSystemID : row.componentID,
+			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{

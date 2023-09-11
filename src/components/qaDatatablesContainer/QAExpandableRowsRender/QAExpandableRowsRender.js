@@ -667,7 +667,7 @@ const QAExpandableRowsRender = ({
         ];
       }
       if (dataTableName === "Appendix E Correlation Heat Input from Oil") {
-        controlInputs.monitoringSystemID = [
+        controlInputs.monitoringSystemId = [
           "Monitoring System ID",
           "dropdown",
           "",
@@ -692,7 +692,7 @@ const QAExpandableRowsRender = ({
         ];
       }
       if (dataTableName === "Appendix E Correlation Heat Input from Oil") {
-        controlInputs.monitoringSystemID = [
+        controlInputs.monitoringSystemId = [
           "Monitoring System ID",
           "dropdown",
           "",

@@ -587,6 +587,7 @@ export const DataTableSystems = ({
     modelVersion: "string",
     serialNumber: "string",
     sampleAcquisitionMethodCode: "string",
+    analyticalPrincipleCode:"string",
     componentTypeCode: "string",
     hgConverterIndicator: 0,
     beginDate: "2021-09-11T06:23:36.289Z",
@@ -642,6 +643,7 @@ export const DataTableSystems = ({
     userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode =
       selectedRangeInFirst.sampleAcquisitionMethodCode;
+    userInput.analyticalPrincipleCode = selectedRangeInFirst.analyticalPrincipleCode;
 
     const sysCompTable = "System Components";
     const validationErrors = validateUserInput(userInput, sysCompTable);
