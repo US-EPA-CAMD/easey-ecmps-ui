@@ -530,7 +530,7 @@ export const mapUnitDefaultTestDataToRows = (data) => {
       col1: el.fuelCode,
       col2: el.noxDefaultRate,
       col3: el.operatingConditionCode,
-      col4: el.groupId,
+      col4: el.groupID,
       col5: el.numberOfUnitsInGroup,
       col6: el.numberOfTestsForGroup,
     };
