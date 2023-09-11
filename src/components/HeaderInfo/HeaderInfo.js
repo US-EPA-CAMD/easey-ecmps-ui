@@ -1017,6 +1017,7 @@ export const HeaderInfo = ({
       inWorkspace
     );
 
+    console.log('response',response)
     if (
       response &&
       response.status === 200 &&
