@@ -47,7 +47,7 @@ export const exportEmissionsData = async (
     });
     return handleResponse(response);
   } catch (error) {
-    handleImportError(error);
+    handleError(error);
     return error.response
   }
 };
@@ -66,8 +66,9 @@ export const exportEmissionsDataDownload = async (
     quarter,
     isWorkspace
   );
-
-  download(JSON.stringify(response.data, null, "\t"), fileName);
+  
+  if( response.status === 200)
+    download(JSON.stringify(response.data, null, "\t"), fileName);
 };
 
 export const getEmissionViewData = async (
