@@ -166,7 +166,7 @@ export const UseRetrieveDropdownApi = async (
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
       case "maximumLoadUnitsOfMeasureCode":
-      case "systemFuelFlowUOMCode":
+      case "systemFuelFlowUnitsOfMeasureCode":
       case "unitsOfStandard":
         await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {

@@ -270,15 +270,15 @@ const testObjects = [
   },
 
   {
-    name: "systemFuelFlowUOMCode",
+    name: "systemFuelFlowUnitsOfMeasureCode",
     expectedApiResponse: {
       status: successCode,
       data: [{ unitOfMeasureCode: "", unitOfMeasureDescription: "" }],
     },
     expectedDropdownOptions: {
-      systemFuelFlowUOMCode: dropdownOptions,
+      systemFuelFlowUnitsOfMeasureCode: dropdownOptions,
     },
-    case: "systemFuelFlowUOMCode",
+    case: "systemFuelFlowUnitsOfMeasureCode",
     function: dmApi.getAllUnitsOfMeasureCodes,
   },
 

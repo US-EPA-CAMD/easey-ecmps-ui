@@ -108,7 +108,7 @@ export const DataTableSystemsComponents = ({
   const fuelFlowsDataArray = [
     [
       "maximumFuelFlowRateSourceCode",
-      "systemFuelFlowUOMCode",
+      "systemFuelFlowUnitsOfMeasureCode",
       "prefilteredSystemFuelFlows",
     ],
   ];
@@ -470,7 +470,7 @@ export const DataTableSystemsComponents = ({
         selectFuelFlows,
         {
           maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "", ""],
-          systemFuelFlowUOMCode: [
+          systemFuelFlowUnitsOfMeasureCode: [
             "Units of Measure Code",
             "independentDropdown",
             "",
