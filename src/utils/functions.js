@@ -159,7 +159,7 @@ export const reportWindowParams = [
   //`fullscreen=yes`,
 ].join(",");
 
-export const formatReportUrl = (params) => {
+export const formatReportUrl = (params, service) => {
   const year = params.year ? `&year=${params.year}` : "";
   const tee = params.teeId ? `&teeId=${params.teeId}` : "";
   const qce = params.qceId ? `&qceId=${params.qceId}` : "";
@@ -169,10 +169,10 @@ export const formatReportUrl = (params) => {
   const monitorPlan = params.monitorPlanId
     ? `&monitorPlanId=${params.monitorPlanId}`
     : "";
-  let url = `/reports?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
+  let url = `/${service}?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
 
   if (window.location.href.includes("/workspace")) {
-    return url.replace("/reports", "/workspace/reports");
+    return url.replace(`/${service}`, `/workspace/${service}`);
   }
 
   return url;
@@ -233,7 +233,9 @@ export const addEvalStatusCell = (columns, callback) =>
               {row.evalStatusCodeDescription}
             </button>
           ) : (
-            <button className={"unstyled-btn"}>{row.evalStatusCodeDescription}</button>
+            <button className={"unstyled-btn"}>
+              {row.evalStatusCodeDescription}
+            </button>
           )}
         </div>
       );

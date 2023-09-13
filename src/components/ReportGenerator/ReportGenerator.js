@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Button, GovBanner } from "@trussworks/react-uswds";
@@ -16,6 +16,8 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
   const [error, setError] = useState();
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const paramsObject = useRef({});
 
   useEffect(() => {
     const searchParams = new URLSearchParams(search);
@@ -39,6 +41,8 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
       year,
       quarter,
     };
+
+    paramsObject.current = params;
 
     if (((requireAuth && user) || !requireAuth) && !dataLoaded) {
       camdApi
@@ -72,7 +76,11 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
           ) : (
             <div>
               <div className="react-transition scale-in">
-                <Report reportData={reportData} dataLoaded={dataLoaded} />
+                <Report
+                  reportData={reportData}
+                  dataLoaded={dataLoaded}
+                  paramsObject={paramsObject}
+                />
               </div>
             </div>
           )}
