@@ -2157,7 +2157,7 @@ const schema = {
             "null"
           ]
         },
-        "groupId": {
+        "groupID": {
           "type": [
             "string",
             "null"
@@ -2187,7 +2187,7 @@ const schema = {
         "fuelCode",
         "noxDefaultRate",
         "operatingConditionCode",
-        "groupId",
+        "groupID",
         "numberOfUnitsInGroup",
         "numberOfTestsForGroup"
       ]

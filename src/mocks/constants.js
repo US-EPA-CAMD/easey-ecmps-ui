@@ -633,7 +633,7 @@ export const mockMonitoringSystems = [
     fuelFlows: [
       {
         maximumFuelFlowRate: 30667,
-        systemFuelFlowUOMCode: "HSCF",
+        systemFuelFlowUnitsOfMeasureCode: "HSCF",
         maximumFuelFlowRateSourceCode: "URV",
         beginDate: "2010-08-01",
         beginHour: 12,
