@@ -5,10 +5,31 @@ import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import { clientTokenAxios } from "./clientTokenAxios";
 
 export async function getReport(params) {
-  const url = `${config.services.camd.uri}${formatReportUrl(params)}`;
+  const url = `${config.services.camd.uri}${formatReportUrl(
+    params,
+    "reports"
+  )}`;
   return secureAxios({
     method: "GET",
     url,
+  });
+}
+
+export async function downloadReport(params) {
+  const url = `${config.services.camd.uri}${formatReportUrl(
+    params,
+    "copy-of-record"
+  )}`;
+
+  console.log(url);
+
+  return secureAxios({
+    method: "GET",
+    url,
+    headers: {
+      Accept: "application/html",
+    },
+    responseType: "blob",
   });
 }
 
