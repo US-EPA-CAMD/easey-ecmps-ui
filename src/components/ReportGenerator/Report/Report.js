@@ -4,11 +4,10 @@ import { AppVersion } from "@us-epa-camd/easey-design-system";
 import DefaultTemplate from "../DefaultTemplate/DefaultTemplate";
 import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplate";
 import config from "../../../config";
+import { downloadReport } from "../../../utils/api/camdServices";
+import { handleError } from "../../../utils/api/apiUtils";
 
-export const Report = ({
-  reportData,
-  dataLoaded,
-}) => {
+export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   const displayCloseButton = useState(true);
 
   const displayCurrentDate = () => {
@@ -24,11 +23,33 @@ export const Report = ({
     return date.toLocaleDateString("en-US", options);
   };
 
-  // Grabs the Report Area for printing (Print button is excluded)
-  const print = () => {
-    window.print();
-  };
+  const onDownloadHandler = () => {
+    downloadReport(paramsObject.current)
+      .then((response) => {
+        const disposition = response.headers["content-disposition"];
+        const parts =
+          disposition !== undefined ? disposition.split("; ") : undefined;
 
+        if (parts !== undefined && parts[0] === "attachment") {
+          const url = window.URL.createObjectURL(
+            new Blob([response.data], { type: "application/html" })
+          );
+
+          const link = document.createElement("a");
+          let fileName = parts[1].replace("filename=", "");
+          fileName = fileName.replace(/"/g, "");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          link.parentNode.removeChild(link);
+        }
+      })
+      .catch((error) => {
+        handleError(error);
+      });
+  };
   const closeReport = () => {
     window.close();
   };
@@ -38,61 +59,66 @@ export const Report = ({
   let columnNames = [];
   let columnGroups = [];
 
-  reportData.details.forEach(detail => {
+  reportData.details.forEach((detail) => {
     let groups = [];
     const detailColumns = reportData.columns.find(
-      x => x.code === detail.templateCode
+      (x) => x.code === detail.templateCode
     );
     columnNames.push(
       detailColumns.values.map((column, index) => {
         let mod = 1;
-        if (detail.templateType.endsWith('COLTBL')) {
+        if (detail.templateType.endsWith("COLTBL")) {
           mod = Number(detail.templateType.charAt(0));
         }
-        let columnGroup = groups[index%mod];
+        let columnGroup = groups[index % mod];
         if (columnGroup === null || columnGroup === undefined) {
           columnGroup = [];
           groups.push(columnGroup);
         }
         columnGroup.push(column);
         return column.displayName;
-      }
-    ));
+      })
+    );
     columnGroups.push(groups);
-    
+
     groups = [];
     codeGroups.push(groups);
-    results.push(detail.results.map(row => {
-      const columnData = detailColumns.values.map((column, index) => {
-        const columnValue = row[column.name];
-        const codeGroup = row[column.name + 'Group'];
-        const codeDescription = row[column.name + 'Description'];
+    results.push(
+      detail.results.map((row) => {
+        const columnData = detailColumns.values.map((column, index) => {
+          const columnValue = row[column.name];
+          const codeGroup = row[column.name + "Group"];
+          const codeDescription = row[column.name + "Description"];
 
-        if (codeGroup) {
-          let group = groups.find(i => i.name === codeGroup);
+          if (codeGroup) {
+            let group = groups.find((i) => i.name === codeGroup);
 
-          if (!group) {
-            group = { name: codeGroup, items: [] };
-            groups.push(group);
+            if (!group) {
+              group = { name: codeGroup, items: [] };
+              groups.push(group);
+            }
+
+            const code = group.items.find((i) => i.code === columnValue);
+            if (!code && columnValue !== null && columnValue !== undefined) {
+              group.items.push({
+                code: columnValue,
+                description: codeDescription,
+              });
+            }
           }
 
-          const code = group.items.find(i => i.code === columnValue);
-          if (!code && columnValue !== null && columnValue !== undefined) {
-            group.items.push({ code: columnValue, description: codeDescription })
+          const columnNumber = `"col${index + 1}": `;
+          if (columnValue !== null && columnValue !== undefined) {
+            if (columnValue.includes('"')) {
+              return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
+            }
+            return `${columnNumber}"${columnValue}"`;
           }
-        }
-
-        const columnNumber = `"col${index + 1}": `;
-        if (columnValue !== null && columnValue !== undefined) {
-          if (columnValue.includes('"')) {
-            return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
-          }
-          return `${columnNumber}"${columnValue}"`;
-        }
-        return `${columnNumber}null`;
+          return `${columnNumber}null`;
+        });
+        return JSON.parse(`{${columnData.join(",")}}`);
       })
-      return JSON.parse(`{${columnData.join(',')}}`)
-    }));
+    );
   });
 
   return (
@@ -119,8 +145,7 @@ export const Report = ({
               >
                 Close Report
               </Button>
-            ) : null
-            }
+            ) : null}
           </div>
 
           <div className="padding-x-5">
@@ -131,11 +156,11 @@ export const Report = ({
                 outline={false}
                 aria-label={`Print ${reportData.title}`}
                 className="float-right clearfix do-not-print"
-                onClick={() => print()}
+                onClick={onDownloadHandler}
                 id="printBTN"
                 epa-testid="printBTN"
               >
-                Print PDF
+                Download Report
               </Button>
             </h1>
 
@@ -143,31 +168,29 @@ export const Report = ({
               {displayCurrentDate()}
             </div>
 
-            {
-              reportData.details.map((detail, index) => {
-                if (detail.templateType.endsWith('COLTBL')) {
-                  return (
-                    <PropertyTableTemplate
-                      key={detail.displayName}
-                      title={detail.displayName}
-                      columnGroups={columnGroups[index]}
-                      data={detail.results[0]}
-                    />
-                  )
-                } else {
-                  return (
-                    <DefaultTemplate
-                      key={detail.displayName}                      
-                      title={detail.displayName}
-                      codeGroups={codeGroups[index]}
-                      columnNames={columnNames[index]}
-                      data={results[index]}
-                      dataLoaded={dataLoaded}
-                    />
-                  )                  
-                }
-              })
-            }
+            {reportData.details.map((detail, index) => {
+              if (detail.templateType.endsWith("COLTBL")) {
+                return (
+                  <PropertyTableTemplate
+                    key={detail.displayName}
+                    title={detail.displayName}
+                    columnGroups={columnGroups[index]}
+                    data={detail.results[0]}
+                  />
+                );
+              } else {
+                return (
+                  <DefaultTemplate
+                    key={detail.displayName}
+                    title={detail.displayName}
+                    codeGroups={codeGroups[index]}
+                    columnNames={columnNames[index]}
+                    data={results[index]}
+                    dataLoaded={dataLoaded}
+                  />
+                );
+              }
+            })}
 
             <div className="position-fixed bottom-0 right-0 width-full do-not-print">
               <AppVersion

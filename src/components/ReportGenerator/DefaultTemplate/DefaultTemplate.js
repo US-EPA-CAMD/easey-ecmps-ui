@@ -1,5 +1,5 @@
 import React from "react";
-import { DataTableRender } from "../../DataTableRender/DataTableRender";
+import DataTable from "react-data-table-component";
 
 export const DefaultTemplate = ({
   data,
@@ -9,8 +9,28 @@ export const DefaultTemplate = ({
   dataLoaded,
 }) => {
   if (!data || data.length === 0) {
-    return <></>
+    return <></>;
   }
+
+  const columns = [];
+  columnNames.forEach((name, index) => {
+    columns.push({
+      id: `col${index + 1}`,
+      name,
+      selector: (row) => row[`col${index + 1}`],
+      sortable: false,
+      wrap: true,
+    });
+  });
+
+  const customStyles = {
+    headCells: {
+      style: {
+        wrap: true, // override the cell padding for head cells
+        whiteSpace: "normal",
+      },
+    },
+  };
 
   return (
     <div className="margin-bottom-3">
@@ -18,41 +38,37 @@ export const DefaultTemplate = ({
         {title}
       </h2>
 
-      <div className="width-auto margin-top-0">
-        <DataTableRender
+      <div className="width-auto margin-top-0 data-display-table-report">
+        <DataTable
           data={data}
-          filter={false}
-          pagination={false}
-          dataLoaded={dataLoaded}
-          columnNames={columnNames}
-        />
+          columns={columns}
+          customStyles={customStyles}
+        ></DataTable>
       </div>
 
       <div>
-        {
-          codeGroups.filter(x => x.items.length > 0).map(group => {
+        {codeGroups
+          .filter((x) => x.items.length > 0)
+          .map((group) => {
             return (
               <div key={group.name}>
                 <hr />
                 <div className="display-flex grid-col-12" key={group.name}>
                   <div className="grid-col-3 text-bold text-no-wrap padding-right-1">{`${group.name}:`}</div>
                   <div className="grid-col-9">
-                    {
-                      group.items.map(i => {
-                        return (
-                          <div key={i.code}>{`${i.code} - ${i.description}`}</div>
-                        )
-                      })
-                    }
+                    {group.items.map((i) => {
+                      return (
+                        <div key={i.code}>{`${i.code} - ${i.description}`}</div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-            )
-          })
-        }
+            );
+          })}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default DefaultTemplate;
