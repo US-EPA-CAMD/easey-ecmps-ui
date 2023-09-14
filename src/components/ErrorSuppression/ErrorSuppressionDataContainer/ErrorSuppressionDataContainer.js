@@ -130,15 +130,15 @@ export const ErrorSuppressionDataContainer = () => {
           data-testid={`select-cb-${idx}`}
           type="checkbox"
           className="usa-checkbox"
-          aria-label="Select"
+          aria-label={`select-row-for-error-suppression-${row.id}`}
           onChange={(e) => onRowSelection(row, e.target.checked)}
         />
         <Button
           type="button"
-          epa-testid="btnOpen"
-          id={`btnOpen_${row[`col${Object.keys(row).length - 1}`]}`}
+          epa-testid="btnView"
+          id={`btnView-error-suppression-${row.id}`}
           className="cursor-pointer margin-left-2"
-          aria-label={`View ${row.id}`}
+          aria-label={`view-row-for-error-suppression-${row.id}`}
           onClick={() => openViewModalHandler(row, idx)}
           outline
         >
@@ -385,7 +385,10 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div className="es-datatable">
+        <div
+          className="es-datatable"
+          id="error-suppression"
+        >
           {isTableLoading ? (
             <Preloader />
           ) : (
