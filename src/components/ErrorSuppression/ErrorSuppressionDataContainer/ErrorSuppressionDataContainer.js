@@ -302,6 +302,12 @@ export const ErrorSuppressionDataContainer = () => {
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
       sortable: true,
     },
+    {
+      name: "Record Id",
+      width: "200px",
+      selector: (row) => row.id,
+      sortable: true,
+    },
   ];
 
   return (
