@@ -385,10 +385,7 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div
-          className="es-datatable"
-          id="error-suppression"
-        >
+        <div className="es-datatable">
           {isTableLoading ? (
             <Preloader />
           ) : (
