@@ -62,7 +62,7 @@ export const QACertEventTab = ({
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig.locations}
+          locations={selectedConfig?.monitoringLocationData}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}

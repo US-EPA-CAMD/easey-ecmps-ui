@@ -222,7 +222,7 @@ export const ExportTab = ({
           </div>
         </div>
         {previewOptions && (
-          <div class="maxh-tablet overflow-y-auto">
+          <div className="maxh-tablet overflow-y-auto">
             <ExportTablesContainer
               tableTitle={"Test Summary"}
               dataKey={"testSummaryData"}

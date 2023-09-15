@@ -506,7 +506,7 @@ export const DataTableSystems = ({
   const fuelFlowsPayload = {
     maximumFuelFlowRate: 0,
     id: null, // fuel flow id
-    systemFuelFlowUOMCode: "string",
+    systemFuelFlowUnitsOfMeasureCode: "string",
     maximumFuelFlowRateSourceCode: "string",
     beginDate: null,
     beginHour: 0,
