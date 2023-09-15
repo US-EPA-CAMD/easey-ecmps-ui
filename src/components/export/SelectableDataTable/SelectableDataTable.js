@@ -16,6 +16,10 @@ export const SelectableDataTable = ({
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(providedData);
 
+  columns = columns.map((c) => {
+    return { ...c, wrap: true };
+  });
+
   //Automatically refresh data using the dataFetchCall with the dataFetchParams, whenever the dataFetchParams are changed
   const refreshData = async () => {
     if (dataFetchCall && dataFetchParams) {
@@ -58,7 +62,7 @@ export const SelectableDataTable = ({
     <>
       {loading && <Preloader />}
       {!loading && (
-        <div className="data-display-table-export fixed-table-header">
+        <div className="data-display-table-export fixed-table-header grid-col-12">
           <DataTable
             columns={columns}
             data={data}
