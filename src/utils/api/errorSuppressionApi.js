@@ -1,5 +1,5 @@
 import config from "../../config";
-import { handleError, handleResponse } from "./apiUtils";
+import { handleError, handleResponse,handleImportError } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 
 const url = `${config.services.camd.uri}/admin/error-suppressions`;
@@ -81,6 +81,6 @@ export const createErrorSuppression = async (payload)=>{
     );
   }
   catch(error){
-    return handleError(error)
+    return handleImportError(error)
   }
 }
