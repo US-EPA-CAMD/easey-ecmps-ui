@@ -61,6 +61,8 @@ export const DataTableRender = ({
   headerStyling,
   tableStyling,
   componentStyling,
+  fixedHeader = true,
+  hasSortIcon = true,
   // className,
   addBtnName,
   uniqueKey,
@@ -531,7 +533,7 @@ export const DataTableRender = ({
               keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
               className={`data-display-table react-transition fade-in`}
               sortIcon={
-                <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                hasSortIcon ? <ArrowDownwardSharp className="margin-left-2 text-primary" /> : null
               }
               // props
               defaultSortFieldId={defaultSort ? defaultSort : "col1"}
@@ -542,7 +544,7 @@ export const DataTableRender = ({
               data={filteredItems}
               subHeader={filter}
               ////
-              fixedHeader={true}
+              fixedHeader={fixedHeader}
               noHeader={true}
               highlightOnHover={true}
               selectableRows={false}
