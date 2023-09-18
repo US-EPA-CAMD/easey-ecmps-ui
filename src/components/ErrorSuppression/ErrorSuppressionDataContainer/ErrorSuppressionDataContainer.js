@@ -130,7 +130,7 @@ export const ErrorSuppressionDataContainer = () => {
           data-testid={`select-cb-${idx}`}
           type="checkbox"
           className="usa-checkbox"
-          aria-label={`select-row-for-error-suppression-${row.id}`}
+          aria-label={`select row for error suppression ${row.id}`}
           onChange={(e) => onRowSelection(row, e.target.checked)}
         />
         <Button
@@ -138,7 +138,7 @@ export const ErrorSuppressionDataContainer = () => {
           epa-testid="btnView"
           id={`btnView-error-suppression-${row.id}`}
           className="cursor-pointer margin-left-2"
-          aria-label={`view-row-for-error-suppression-${row.id}`}
+          aria-label={`view row for error suppression ${row.id}`}
           onClick={() => openViewModalHandler(row, idx)}
           outline
         >
