@@ -38,6 +38,65 @@
   }
 }
 
+.data-display-table-export {
+  .rdt_Table {
+    width: 99%;
+    margin: 0.5% 0.5%;
+  }
+  .rdt_TableCol_Sortable {
+    color: $epa-black !important;
+    /*white-space: nowrap !important;*/
+    margin-right: 1em !important;
+  }
+  .rdt_TableRow {
+    /**/
+  }
+  .rdt_TableHead {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableHeader {
+    display: none;
+  }
+  .rdt_TableHeadRow {
+    .rdt_TableCol {
+      @extend .font-heading-md;
+      background: $epa-white;
+      color: $epa-black !important;
+      font-weight: bold;
+      border: solid 1px $epa-white;
+      :focus {
+        outline: none;
+        border: solid 3.8px #2672de;
+        //color: $epa-black !important;
+      }
+      :focus {
+        .MuiSvgIcon-root {
+          opacity: 1;
+        }
+      }
+    }
+    border: none !important;
+  }
+
+  .rdt_TableBody {
+    // height: 400px;
+    // min-height: 400px;
+  }
+  .rdt_ExpanderRow {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableFooter {
+    /* this comment is here to avoid a code smell for empty content */
+  }
+  .rdt_TableCell {
+    @extend .font-body-md;
+    font-size: 1.2em;
+  }
+  .__rdt_custom_sort_icon__ {
+    @extend .text-indigo;
+  }
+}
+
 .data-display-table {
   .rdt_Table {
     width: 99%;
