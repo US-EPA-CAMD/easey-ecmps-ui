@@ -71,7 +71,7 @@ export const ExportTable = ({
       <div className="grid-col-1">
         <FontAwesomeIcon
           role="button"
-          icon={isVisible ? faChevronDown : faChevronUp}
+          icon={isVisible ? faChevronUp : faChevronDown}
           className="padding-3 bg-base-lighter margin-top-3"
           onClick={() => {
             setIsVisible(!isVisible);
@@ -97,12 +97,14 @@ export const ExportTable = ({
           </Button>
         </div>
       </div>
-      <SelectableDataTable
-        columns={columns}
-        dataFetchCall={dataFetchCall}
-        dataFetchParams={dataFetchParams}
-        changedCallback={handleSelectionChange}
-      ></SelectableDataTable>
+      <div style={{ display: isVisible ? "block" : "none", width: "100%" }}>
+        <SelectableDataTable
+          columns={columns}
+          dataFetchCall={dataFetchCall}
+          dataFetchParams={dataFetchParams}
+          changedCallback={handleSelectionChange}
+        ></SelectableDataTable>
+      </div>
     </div>
   );
 };

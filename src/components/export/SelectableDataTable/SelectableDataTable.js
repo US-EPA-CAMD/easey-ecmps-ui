@@ -34,7 +34,6 @@ export const SelectableDataTable = ({
   useEffect(() => {
     refreshData();
   }, [dataFetchParams]);
-
   //Custom formatting for the USWDS checkbox
   const DataTableCheckbox = forwardRef(({ onClick, ...rest }, ref) => {
     // Generate a unique ID for this checkbox
