@@ -12,6 +12,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -59,6 +60,8 @@ export const ErrorSuppressionDataContainer = () => {
         data.forEach((d) => (d.selected = false));
         setTableData(data);
         setSelectedRows([]);
+        assignAriaSortHandlersToDatatable()
+        assignAriaLabelsToDataTableColumns()
       })
       .catch((err) => {
         console.log("error", err);
@@ -71,6 +74,7 @@ export const ErrorSuppressionDataContainer = () => {
     getTableData();
     return () => {
       setTableData([]);
+      removeAriaSortHandlersFromDatatable()
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
