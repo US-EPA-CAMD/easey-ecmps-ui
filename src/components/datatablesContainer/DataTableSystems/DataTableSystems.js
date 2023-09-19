@@ -6,6 +6,7 @@ import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableS
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import NotFound from "../../NotFound/NotFound";
 import {
   extractUserInput,
   validateUserInput,
@@ -111,6 +112,9 @@ export const DataTableSystems = ({
       returnFocusToLast();
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
@@ -920,8 +924,8 @@ export const DataTableSystems = ({
                 ) : (
                   <Preloader />
                 )}
-
-                <DataTableSystemsComponents
+                  <NotFound/> 
+                {/* <DataTableSystemsComponents
                   secondLevel={secondLevel}
                   setSecondLevel={setSecondLevel}
                   viewOnly={false}
@@ -968,7 +972,7 @@ export const DataTableSystems = ({
                   openFuelFlowsView={openFuelFlowsView}
                   setOpenFuelFlowsView={setOpenFuelFlowsView}
                   setDisableExitBtn={setDisableExitBtn}
-                />
+                /> */}
               </div>
             }
           />
