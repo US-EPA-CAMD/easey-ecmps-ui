@@ -127,7 +127,7 @@ export const Modal = ({
                 </div>
               </div>
 
-              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto">
+              <div className="modal-body padding-top-0 modal-color maxh-tablet overflow-y-auto ">
                 {children}
               </div>
               <span className="break-line" />

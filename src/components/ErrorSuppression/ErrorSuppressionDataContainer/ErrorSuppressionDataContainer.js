@@ -34,7 +34,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(false);
-
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
     if (!checkType || !checkNumber || !checkResult) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
@@ -130,15 +130,15 @@ export const ErrorSuppressionDataContainer = () => {
           data-testid={`select-cb-${idx}`}
           type="checkbox"
           className="usa-checkbox"
-          aria-label="Select"
+          aria-label={`select row for error suppression ${row.id}`}
           onChange={(e) => onRowSelection(row, e.target.checked)}
         />
         <Button
           type="button"
-          epa-testid="btnOpen"
-          id={`btnOpen_${row[`col${Object.keys(row).length - 1}`]}`}
+          epa-testid="btnView"
+          id={`btnView-error-suppression-${row.id}`}
           className="cursor-pointer margin-left-2"
-          aria-label={`View ${row.id}`}
+          aria-label={`view row for error suppression ${row.id}`}
           onClick={() => openViewModalHandler(row, idx)}
           outline
         >
@@ -228,6 +228,7 @@ export const ErrorSuppressionDataContainer = () => {
       const addBtn = document.getElementById("error-suppres-add-btn");
       addBtn?.focus();
     }
+    setErrorMsgs([]);
     setShowAddModal(false);
     setShowCloneModal(false);
   };
@@ -318,6 +319,8 @@ export const ErrorSuppressionDataContainer = () => {
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
           isClone={showCloneModal}
+          errorMsgs= {errorMsgs}
+          setErrorMsgs={setErrorMsgs}
         />
       ) : null}
       {showDeactivateModal ? (
