@@ -223,6 +223,8 @@ export const DataTableLEEQualifications = ({
           addBtnName={"Create Qualification LEE"}
           addBtn={openLeeQualModal}
           ariaLabel={"LEE Qualifications"}
+          fixedHeader={false}
+          hasSortIcon={false}
         />
       ) : (
         <Preloader />
