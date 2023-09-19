@@ -34,7 +34,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(false);
-
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
     if (!checkType || !checkNumber || !checkResult) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
@@ -228,6 +228,7 @@ export const ErrorSuppressionDataContainer = () => {
       const addBtn = document.getElementById("error-suppres-add-btn");
       addBtn?.focus();
     }
+    setErrorMsgs([]);
     setShowAddModal(false);
     setShowCloneModal(false);
   };
@@ -318,6 +319,8 @@ export const ErrorSuppressionDataContainer = () => {
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
           isClone={showCloneModal}
+          errorMsgs= {errorMsgs}
+          setErrorMsgs={setErrorMsgs}
         />
       ) : null}
       {showDeactivateModal ? (
