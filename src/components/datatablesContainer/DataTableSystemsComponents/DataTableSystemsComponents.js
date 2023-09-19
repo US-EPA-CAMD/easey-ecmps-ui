@@ -136,9 +136,11 @@ export const DataTableSystemsComponents = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
