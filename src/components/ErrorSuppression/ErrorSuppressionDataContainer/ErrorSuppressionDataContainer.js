@@ -130,15 +130,15 @@ export const ErrorSuppressionDataContainer = () => {
           data-testid={`select-cb-${idx}`}
           type="checkbox"
           className="usa-checkbox"
-          aria-label="Select"
+          aria-label={`select row for error suppression ${row.id}`}
           onChange={(e) => onRowSelection(row, e.target.checked)}
         />
         <Button
           type="button"
-          epa-testid="btnOpen"
-          id={`btnOpen_${row[`col${Object.keys(row).length - 1}`]}`}
+          epa-testid="btnView"
+          id={`btnView-error-suppression-${row.id}`}
           className="cursor-pointer margin-left-2"
-          aria-label={`View ${row.id}`}
+          aria-label={`view row for error suppression ${row.id}`}
           onClick={() => openViewModalHandler(row, idx)}
           outline
         >
@@ -300,6 +300,12 @@ export const ErrorSuppressionDataContainer = () => {
       name: "Update Date",
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
+      sortable: true,
+    },
+    {
+      name: "Record Id",
+      width: "200px",
+      selector: (row) => row.id,
       sortable: true,
     },
   ];

@@ -6,7 +6,11 @@ import config from "./../../config";
 export const successResponses = [200, 201];
 
 export async function handleResponse(response) {
-  if (successResponses.includes(response.status) && (response.data !== null && response.data !== undefined)) {
+  if (
+    successResponses.includes(response.status) &&
+    response.data !== null &&
+    response.data !== undefined
+  ) {
     return response;
   } else {
     throw new Error("failed");
@@ -41,7 +45,7 @@ export function handleError(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
-    errorMessage = error.response.data.message
+    errorMessage = error.response.data.message;
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
@@ -57,7 +61,7 @@ export function handleError(error) {
     displayAppError(errorMessage);
   }
 
-  // sonarcloud doesnt want to return anything 
+  // sonarcloud doesnt want to return anything
   // if (error.response) {
   //   return error.response.data.message;
   // }
@@ -79,7 +83,7 @@ export function handleImportError(error) {
     // anything else
     log.error({ error: error.message });
   }
-  // sonarcloud doesnt want to return anything 
+  // sonarcloud doesnt want to return anything
   if (error.response) {
     return error.response.data.message;
   }

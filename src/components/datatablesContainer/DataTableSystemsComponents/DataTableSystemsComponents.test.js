@@ -32,7 +32,7 @@ const selectedSystem = [
     beginHour: '0',
     endDate: null,
     endHour: null,
-    systemFuelFlowUOMCode: 'PNG',
+    systemFuelFlowUnitsOfMeasureCode: 'PNG',
     id: 'TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D',
     locationId: '6',
     systemDesignationCode: 'P',
@@ -45,7 +45,7 @@ const selectedSystem = [
     beginHour: '0',
     endDate: null,
     endHour: null,
-    systemFuelFlowUOMCode: 'PNG',
+    systemFuelFlowUnitsOfMeasureCode: 'PNG',
     id: 'TWCORNEL5-10B54DDC6DBF4DF3B309251288E83E12',
     locationId: '6',
     systemDesignationCode: 'P',
@@ -57,7 +57,7 @@ const apiFuel = [
   {
     id: 'TWCORNEL5-346B541485484501A5C748F8CAAABC22',
     locationId: 'TWCORNEL5-5BCFD5B414474E1083A77A6B33A2F13D',
-    systemFuelFlowUOMCode: 'PNG',
+    systemFuelFlowUnitsOfMeasureCode: 'PNG',
     maximumFuelFlowRateSourceCode: 'GAS',
     maximumFuelFlowRate: '10000.0',
     beginDate: '2019-07-01',
@@ -241,7 +241,7 @@ const componentRenderer = (
           name: 'Unit Maximum Rate',
         },
       ],
-      systemFuelFlowUOMCode: [
+      systemFuelFlowUnitsOfMeasureCode: [
         {
           code: '',
           name: '-- Select a value --',

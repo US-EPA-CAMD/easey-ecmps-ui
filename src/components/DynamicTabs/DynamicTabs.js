@@ -50,7 +50,7 @@ export const DynamicTabs = ({
             orisCode: t.orisCode,
             checkout: t.checkout,
             name: t.title,
-            location: [0, t.selectedConfig.locations[0].id ?? null],
+            location: [0, t.selectedConfig?.monitoringLocationData[0]?.id ?? null],
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
             facId: t.selectedConfig.facId, // changed to id ??

@@ -213,10 +213,10 @@ export const HeaderInfo = ({
     locationSelect,
     selectedReportingPeriods,
   });
-  const selectedUnitId = selectedConfig?.locations
+  const selectedUnitId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
     .map((l) => l.unitId);
-  const selectedStackPipeId = selectedConfig?.locations
+  const selectedStackPipeId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
     .map((l) => l.stackPipeId);
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
