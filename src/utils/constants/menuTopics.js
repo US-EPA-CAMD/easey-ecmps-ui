@@ -167,7 +167,7 @@ export const globalView = [
     ],
   },
   { name: "Emissions", url: "/emissions" },
-  { name: "Export", url: "/export" },
+  { name: "Export & Report", url: "/export" },
 ];
 
 export const systemAdmin = [
@@ -231,7 +231,7 @@ export const getWorkspacePaths = () => {
       ],
     },
     {
-      name: "Export",
+      name: "Export & Report",
       url: "/workspace/export",
       requiredRoles: [
         config.app.preparerRole,
