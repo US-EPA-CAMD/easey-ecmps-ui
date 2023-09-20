@@ -108,7 +108,7 @@ export const DataTableSystemsComponents = ({
   const fuelFlowsDataArray = [
     [
       "maximumFuelFlowRateSourceCode",
-      "systemFuelFlowUOMCode",
+      "systemFuelFlowUnitsOfMeasureCode",
       "prefilteredSystemFuelFlows",
     ],
   ];
@@ -117,6 +117,7 @@ export const DataTableSystemsComponents = ({
       "sampleAcquisitionMethodCode",
       "componentTypeCode",
       "basisCode",
+      "analyticalPrincipleCode",
       "prefilteredSystemsComponents",
     ],
   ];
@@ -135,9 +136,11 @@ export const DataTableSystemsComponents = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
@@ -327,6 +330,7 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", ""],
           basisCode: ["Basis Description", "dropdown", "", ""],
+          analyticalPrincipleCode:["Analytical Principle", "dropdown","",""],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
@@ -405,6 +409,7 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", "locked"],
           basisCode: ["Basis Description", "dropdown", "", "locked"],
+          analyticalPrincipleCode:["Analytical Principle", "dropdown","","locked"],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
@@ -467,7 +472,7 @@ export const DataTableSystemsComponents = ({
         selectFuelFlows,
         {
           maximumFuelFlowRate: ["Max Fuel Flow Rate", "input", "", ""],
-          systemFuelFlowUOMCode: [
+          systemFuelFlowUnitsOfMeasureCode: [
             "Units of Measure Code",
             "independentDropdown",
             "",
@@ -571,6 +576,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Add Component"}
                   show={true}
                   ariaLabel={"System Components"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
               <div>
@@ -588,6 +595,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Create New Fuel Flow"}
                   show={true}
                   ariaLabel={"Fuel Flows"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
             </>

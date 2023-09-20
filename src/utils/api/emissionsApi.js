@@ -4,6 +4,16 @@ import { secureAxios } from "./easeyAuthApi";
 import download from "downloadjs";
 import axios from "axios";
 
+const getApiUrl = (path = "") => {
+  let url = config.services.emissions.uri;
+
+  if (window.location.href.includes("/workspace")) {
+    url = `${url}/workspace`;
+  }
+
+  return `${url}${path}`;
+};
+
 export const getEmissionsReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
@@ -17,7 +27,7 @@ export const getEmissionsReviewSubmit = async (
 
   queryString = queryString + `&quarters=${quarters.join("|")}`;
 
-  let url = `${config.services.emissions.uri}/workspace/emissions?${queryString}`;
+  let url = `${getApiUrl()}/emissions?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -48,6 +58,7 @@ export const exportEmissionsData = async (
     return handleResponse(response);
   } catch (error) {
     handleError(error);
+    return error.response;
   }
 };
 
@@ -66,7 +77,8 @@ export const exportEmissionsDataDownload = async (
     isWorkspace
   );
 
-  download(JSON.stringify(response.data, null, "\t"), fileName);
+  if (response.status === 200)
+    download(JSON.stringify(response.data, null, "\t"), fileName);
 };
 
 export const getEmissionViewData = async (

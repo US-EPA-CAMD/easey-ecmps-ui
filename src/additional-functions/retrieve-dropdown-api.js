@@ -166,7 +166,7 @@ export const UseRetrieveDropdownApi = async (
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
       case "maximumLoadUnitsOfMeasureCode":
-      case "systemFuelFlowUOMCode":
+      case "systemFuelFlowUnitsOfMeasureCode":
       case "unitsOfStandard":
         await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
           options = response.data.map((option) => {
@@ -308,6 +308,19 @@ export const UseRetrieveDropdownApi = async (
             return {
               code: option["basisCode"],
               name: option["basisDescription"],
+            };
+          });
+
+          setDefaultOptions(options, fieldName);
+        })
+        .catch(error => console.log('getAllBasisCodes failed', error));
+        break;
+      case "analyticalPrincipleCode":
+        await dmApi.getAnalyticalPrincipleCodes().then((response) => {
+          options = response.data.map((option) => {
+            return {
+              code: option["analyticalPrincipleCode"],
+              name: option["analyticalPrincipleDescription"],
             };
           });
 

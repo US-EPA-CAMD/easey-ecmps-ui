@@ -87,7 +87,7 @@ export const getQATestSummaryReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/test-summary?${queryString}`;
+  let url = `${getApiUrl()}/test-summary?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -108,7 +108,7 @@ export const getQACertEventReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/cert-events?${queryString}`;
+  let url = `${getApiUrl()}/cert-events?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -129,7 +129,7 @@ export const getQATeeReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/test-extension-exemption?${queryString}`;
+  let url = `${getApiUrl()}/test-extension-exemption?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -174,7 +174,7 @@ export const getQATestSummaryOfficial = async (locId) => {
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
-}
+};
 
 export const getQASchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/qa-certification.schema.json`;
@@ -187,8 +187,9 @@ export const getQASchema = async () => {
  * @returns list of reporting periods
  */
 export const getReportingPeriods = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${isExport ? "?export=true" : ""
-    }`;
+  const url = `${config.services.mdm.uri}/reporting-periods${
+    isExport ? "?export=true" : ""
+  }`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -218,7 +219,10 @@ export const exportQA = async (
   options = {
     isOfficial: Boolean,
     isHistoricalImport: Boolean,
-  }
+  },
+  testSumIds = null,
+  qceIds = null,
+  teeIds = null
 ) => {
   const path = `/export?facilityId=${facilityId}`;
   let url;
@@ -241,6 +245,19 @@ export const exportQA = async (
     const stackPipeIdsQueryParam = stackPipeIds.join("|");
     url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`;
   }
+
+  if (testSumIds?.length > 0) {
+    url = `${url}&testSummaryIds=${testSumIds.join("|")}`;
+  }
+
+  if (qceIds?.length > 0) {
+    url = `${url}&qaCertificationEventIds=${qceIds.join("|")}`;
+  }
+
+  if (teeIds?.length > 0) {
+    url = `${url}&qaTestExtensionExemptionIds=${teeIds.join("|")}`;
+  }
+
   if (beginDate && endDate) {
     url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
   }
@@ -1326,7 +1343,6 @@ export const getAppendixEHeatInputOilData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
 
   const url = getApiUrl(path);
-  console.log("path", url);
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);

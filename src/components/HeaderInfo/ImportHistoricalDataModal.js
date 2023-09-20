@@ -6,6 +6,7 @@ import {
   importEmissionsData,
 } from "../../utils/api/emissionsApi";
 import { useSelector } from "react-redux";
+import { successResponses } from "../../utils/api/apiUtils";
 
 export const ImportHistoricalDataModal = ({
   closeModalHandler,
@@ -25,43 +26,43 @@ export const ImportHistoricalDataModal = ({
         ?.selectedConfig
   );
 
-  const historicalImport = () => {
+  const historicalImport = async () => {
     if (selectedYear === null || selectedQuarter === null || !selectedConfig)
       return;
 
     setIsLoading(true);
     setFinishedLoading(false);
 
-    exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
-      .then(({ data: exportResponse }) => {
-        return importEmissionsData(exportResponse);
-      })
-      .then(({ data: importResponse, status }) => {
-        
-        if (status === 201) {
-          setImportedFileErrorMsgs([]);
-          portCallback(selectedYear, selectedQuarter)
-        } else if (importResponse?.message) {
-          if(Array.isArray(importResponse.message)) {
-            setImportedFileErrorMsgs(
-              importResponse?.message || [`HTTP ${status} Error`]
-            );
-          } else {
-            setImportedFileErrorMsgs(
-              importResponse?.message?.split(",") || [`HTTP ${status} Error`]
-            );
+    try {
+      const exportResp = await exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
+      if (!successResponses.includes(exportResp.status)) {
+        throw exportResp // go to catch block
+      }
+
+      // if exported data is empty
+      if( Object.keys(exportResp.data).length === 0 ){
+        throw {
+          data:{
+            message:["Import unsuccessful. There is no data for this reporting period"]
           }
-        } else {
-          setImportedFileErrorMsgs([`HTTP ${status} Error`]);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setFinishedLoading(true);
-      });
+      }
+        
+      const importResp = await importEmissionsData(exportResp.data);
+      if (!successResponses.includes(importResp.status)) {
+        throw importResp // go to catch block
+      }
+
+      setImportedFileErrorMsgs([]);
+      portCallback(selectedYear, selectedQuarter)
+    } catch (error) {
+      console.log(JSON.stringify(error))
+      const errorMsgs = error?.data?.message ?? ['There was an error importing historical data']
+      setImportedFileErrorMsgs(errorMsgs)
+    } finally {
+      setIsLoading(false);
+      setFinishedLoading(true);
+    }
   };
 
   const setYearAndQuarter = (reportingPeriodObj) => {

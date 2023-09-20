@@ -6,6 +6,7 @@ import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableS
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
+import NotFound from "../../NotFound/NotFound";
 import {
   extractUserInput,
   validateUserInput,
@@ -111,6 +112,9 @@ export const DataTableSystems = ({
       returnFocusToLast();
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
@@ -502,7 +506,7 @@ export const DataTableSystems = ({
   const fuelFlowsPayload = {
     maximumFuelFlowRate: 0,
     id: null, // fuel flow id
-    systemFuelFlowUOMCode: "string",
+    systemFuelFlowUnitsOfMeasureCode: "string",
     maximumFuelFlowRateSourceCode: "string",
     beginDate: null,
     beginHour: 0,
@@ -583,6 +587,7 @@ export const DataTableSystems = ({
     modelVersion: "string",
     serialNumber: "string",
     sampleAcquisitionMethodCode: "string",
+    analyticalPrincipleCode: "string",
     componentTypeCode: "string",
     hgConverterIndicator: 0,
     beginDate: "2021-09-11T06:23:36.289Z",
@@ -638,6 +643,8 @@ export const DataTableSystems = ({
     userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode =
       selectedRangeInFirst.sampleAcquisitionMethodCode;
+    userInput.analyticalPrincipleCode =
+      selectedRangeInFirst.analyticalPrincipleCode;
 
     const sysCompTable = "System Components";
     const validationErrors = validateUserInput(userInput, sysCompTable);
@@ -918,7 +925,6 @@ export const DataTableSystems = ({
                 ) : (
                   <Preloader />
                 )}
-
                 <DataTableSystemsComponents
                   secondLevel={secondLevel}
                   setSecondLevel={setSecondLevel}

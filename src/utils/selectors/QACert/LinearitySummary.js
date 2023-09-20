@@ -122,13 +122,13 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
   const unitId = ["Unit/Stack Pipe ID", "input", "", ""];
   const stackPipeId = ["Unit/Stack Pipe ID", "input", "", ""];
   const testTypeCode = ["Test Type Code", "mainDropdown", "mainDropdown", ""];
-  const monitoringSystemID = [
+  const monitoringSystemId = [
     "Monitoring System ID",
     "nonFilteredDropdown",
     "",
     "",
   ];
-  const componentID = ["Component ID", "nonFilteredDropdown", "", ""];
+  const componentId = ["Component ID", "nonFilteredDropdown", "", ""];
   const spanScaleCode = ["Span Scale Code", "nonFilteredDropdown", "", ""];
   const testNumber = ["Test Number", "input", "", ""];
   const testReasonCode = ["Test Reason Code", "dropdown", "", ""];
@@ -154,8 +154,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
   let modalDetails = {
     controlInputs: {
       testTypeCode,
-      monitoringSystemID,
-      componentID,
+      monitoringSystemId,
+      componentId,
       spanScaleCode,
       testNumber,
       testReasonCode,
@@ -182,7 +182,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
           testReasonCode,
         },
@@ -206,7 +206,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          componentID,
+          componentId,
           spanScaleCode,
           testNumber,
           testReasonCode,
@@ -233,7 +233,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          componentID,
+          componentId,
           spanScaleCode,
           testNumber,
           testReasonCode,
@@ -259,7 +259,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          componentID,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -283,7 +283,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          componentID,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -305,7 +305,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -323,7 +323,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
         },
         extraControlInputs: {
@@ -342,7 +342,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
         },
         extraControlInputs: {
@@ -362,7 +362,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          componentID,
+          componentId,
           spanScaleCode,
           testNumber,
           testReasonCode,
@@ -385,7 +385,7 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
+          monitoringSystemId,
           testNumber,
           testReasonCode,
           testResultCode,
@@ -432,8 +432,8 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
           unitId,
           stackPipeId,
           testTypeCode,
-          monitoringSystemID,
-          componentID,
+          monitoringSystemId,
+          componentId,
           testNumber,
           testReasonCode,
           testResultCode,

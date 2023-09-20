@@ -83,7 +83,7 @@ export const MonitoringPlanTab = ({
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig.locations}
+          locations={selectedConfig?.monitoringLocationData}
           user={user}
           configID={tabs[currentTabIndex].selectedConfig.id}
           checkout={tabs[currentTabIndex].checkout}

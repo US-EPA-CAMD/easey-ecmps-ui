@@ -59,8 +59,8 @@ export const getTestSummary = (data, colTitles, orisCode) => {
 
 const colTitleToDtoKeyMap = {
   "Test Type Code": "testTypeCode",
-  "Monitoring System ID": "monitoringSystemID",
-  "Component ID": "componentID",
+  "Monitoring System ID": "monitoringSystemId",
+  "Component ID": "componentId",
   "Span Scale Code": "spanScaleCode",
   "Test Number": "testNumber",
   "Test Reason Code": "testReasonCode",
@@ -231,8 +231,8 @@ export const mapRataTraverseToRows = (data) => {
       col4: el.methodTraversePointId,
       col5: el.velocityCalibrationCoefficient,
       col6: el.lastProbeDate,
-      col7: el.avgVelDiffPressure,
-      col8: el.avgSquareVelDiffPressure,
+      col7: el.averageVelocityDifferencePressure,
+      col8: el.averageSquareVelocityDifferencePressure,
       col9: el.tStackTemperature,
       col10: el.pointUsedIndicator,
       col11: el.numberWallEffectsPoints,
@@ -305,7 +305,7 @@ export const mapFuelFlowToLoadBaselineToRows = (data) => {
       col3: el.averageFuelFlowRate,
       col4: el.averageLoad,
       col5: el.baselineFuelFlowToLoadRatio,
-      col6: el.fuelFlowToLoadUOMCode,
+      col6: el.fuelFlowToLoadUnitsOfMeasureCode,
       col7: el.averageHourlyHeatInputRate,
       col8: el.baselineGHR,
       col9: el.ghrUnitsOfMeasureCode,
@@ -341,7 +341,7 @@ export const mapAppendixECorrHeatInputGasToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.monitoringSystemID,
+      col1: el.monitoringSystemId,
       col2: el.gasGCV === 0 ? "0" : el.gasGCV,
       col3: el.gasVolume === 0 ? "0" : el.gasVolume,
       col4: el.gasHeatInput === 0 ? "0" : el.gasHeatInput,
@@ -356,7 +356,7 @@ export const mapAppendixECorrHeatInputOilToRows = (data) => {
   for (const el of data) {
     const row = {
       id: el.id,
-      col1: el.monitoringSystemID,
+      col1: el.monitoringSystemId,
       col2: el.oilMass,
       col3: el.oilGCV,
       col4: el.oilGCVUnitsOfMeasureCode,
@@ -378,14 +378,14 @@ export const mapFlowToLoadCheckToRows = (data) => {
       id: el.id,
       col1: el.testBasisCode,
       col2: el.biasAdjustedIndicator,
-      col3: el.avgAbsolutePercentDiff,
+      col3: el.averageAbsolutePercentDifference,
       col4: el.numberOfHours,
       col5: el.numberOfHoursExcludedForFuel,
       col6: el.numberOfHoursExcludedRamping,
       col7: el.numberOfHoursExcludedBypass,
       col8: el.numberOfHoursExcludedPreRATA,
       col9: el.numberOfHoursExcludedTest,
-      col10: el.numberOfHoursExcMainBypass,
+      col10: el.numberOfHoursExcludedMainBypass,
       col11: el.operatingLevelCode,
     };
     records.push(row);
@@ -515,7 +515,7 @@ export const mapFlowToLoadReferenceToRows = (data) => {
       col5: el.referenceFlowLoadRatio,
       col6: el.averageHourlyHeatInputRate,
       col7: el.referenceGrossHeatRate,
-      col8: el.calcSeparateReferenceIndicator,
+      col8: el.calculatedSeparateReferenceIndicator,
     };
     records.push(row);
   }
@@ -599,10 +599,10 @@ export const mapQaCertEventsDataToRows = (data, orisCode) => {
     const row = {
       id: el.id,
       col1: el.unitId ? el.unitId : el.stackPipeId,
-      col2: el.componentID,
-      col3: el.monitoringSystemID,
-      col4: isNaN(el.qaCertEventCode) ? el.qaCertEventCode : Number(el.qaCertEventCode),
-      col5: formatDateTime(el.qaCertEventDate, el.qaCertEventHour),
+      col2: el.componentId,
+      col3: el.monitoringSystemId,
+      col4: isNaN(el.certificationEventCode) ? el.certificationEventCode : Number(el.certificationEventCode),
+      col5: formatDateTime(el.certificationEventDate, el.certificationEventHour),
       col6: isNaN(el.requiredTestCode) ? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
@@ -629,8 +629,8 @@ export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
             : "",
       col2: el.year,
       col3: el.quarter,
-      col4: el.componentID,
-      col5: el.monitoringSystemID,
+      col4: el.componentId,
+      col5: el.monitoringSystemId,
       col6: el.hoursUsed,
       col7: el.spanScaleCode,
       col8: el.fuelCode,

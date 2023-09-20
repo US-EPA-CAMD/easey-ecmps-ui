@@ -8,7 +8,7 @@ import axios from "axios";
 export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
 
-  if (workspaceOnly || window.location.href.includes("/workspace")) {
+  if (workspaceOnly === true || window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
 
@@ -30,7 +30,8 @@ export const getMonitoringPlanById = async (id) => {
 export const getMonitoringPlans = async (
   orisCodes,
   monPlanIds = [],
-  forWorkspace = false
+  forWorkspace = false,
+  submissionPeriods = [] //Added for polymorphism across data fetch calls
 ) => {
   let queryString;
 
@@ -270,8 +271,8 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
-  if(!localStorage.getItem("ecmps_user")){
-    return {data: []};
+  if (!localStorage.getItem("ecmps_user")) {
+    return { data: [] };
   }
   const url = getApiUrl(`/check-outs/plans`, true);
 
@@ -279,10 +280,9 @@ export const getCheckedOutLocations = async () => {
     method: "GET",
     url: url,
   })
-    .then((res)=>{
+    .then((res) => {
       return handleResponse(res);
-    }
-    )
+    })
     .catch(handleError);
 };
 
@@ -716,7 +716,8 @@ export const saveUnitControl = async (payload, urlParameters) => {
   // These two radio fields must be converted to
   // STRING values of "1" (Yes) or "0" (No)
   payload.originalCode = payload.originalCode?.toString();
-  payload.seasonalControlsIndicator = payload.seasonalControlsIndicator?.toString();
+  payload.seasonalControlsIndicator =
+    payload.seasonalControlsIndicator?.toString();
 
   const url = getApiUrl(
     `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/unit-controls/${payload["id"]}`
@@ -745,7 +746,8 @@ export const createUnitControl = async (payload, urlParameters) => {
   // These two radio fields must be converted to
   // STRING values of "1" (Yes) or "0" (No)
   payload.originalCode = payload.originalCode?.toString();
-  payload.seasonalControlsIndicator = payload.seasonalControlsIndicator?.toString();
+  payload.seasonalControlsIndicator =
+    payload.seasonalControlsIndicator?.toString();
 
   try {
     return handleResponse(

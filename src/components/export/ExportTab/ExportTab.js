@@ -1,15 +1,33 @@
 import React, { useRef, useState } from "react";
 import download from "downloadjs";
-import { Button, Checkbox } from "@trussworks/react-uswds";
+import { Button } from "@trussworks/react-uswds";
 
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
+import { ExportTable } from "../ExportTable/ExportTable";
+import {
+  monPlanColumns,
+  qaTestSummaryColumns,
+  qaCertEventColumns,
+  qaTeeColumns,
+  emissionsColumns,
+} from "../../EvaluateAndSubmit/ColumnMappings";
+import {
+  getQATestSummaryReviewSubmit,
+  getQACertEventReviewSubmit,
+  getQATeeReviewSubmit,
+  exportQA,
+} from "../../../utils/api/qaCertificationsAPI";
+import { getEmissionsReviewSubmit } from "../../../utils/api/emissionsApi";
 
-import ExportTablesContainer from "./ExportTablesContainer";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
+import { v4 as uuidv4 } from "uuid";
+
 export const ExportTab = ({
   facility,
   selectedConfig,
@@ -19,278 +37,207 @@ export const ExportTab = ({
   workspaceSection,
 }) => {
   const [isExporting, setIsExporting] = useState(false);
+  const [reportingPeriod, setReportingPeriod] = useState("");
+
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
-  const mp = "monitoring-plan";
-  const qa = "qa-and-certification";
-  const em = "emissions";
+  const selectedUnits = selectedConfig.monitoringLocationData
+    .filter((ml) => ml.unitId)
+    .map((data) => data.unitId);
+  const selectedStacks = selectedConfig.monitoringLocationData
+    .filter((ml) => ml.stackPipeId)
+    .map((data) => data.stackPipeId);
 
-  const [dataTypes, setDataTypes] = useState([
+  const dataTypes = [
     {
-      label: "Monitoring Plan",
-      name: mp,
-      checked: exportState ? exportState.checkedDataTypes.includes(mp) : false,
+      title: "Monitor Plan",
+      columns: monPlanColumns,
+      dataFetch: getMonitoringPlans,
+      selectedRows: useRef([]),
+      reportCode: "MPP",
     },
     {
-      label: "QA & Certification",
-      name: qa,
-      checked: exportState ? exportState.checkedDataTypes.includes(qa) : false,
+      title: "Test Data",
+      columns: qaTestSummaryColumns,
+      dataFetch: getQATestSummaryReviewSubmit,
+      selectedRows: useRef([]),
+      reportCode: "TEST_DETAIL",
     },
     {
-      label: "Emissions",
-      name: em,
-      checked: exportState ? exportState.checkedDataTypes.includes(em) : false,
+      title: "QA Certification Events",
+      columns: qaCertEventColumns,
+      dataFetch: getQACertEventReviewSubmit,
+      selectedRows: useRef([]),
+      reportCode: "QCE",
     },
-  ]);
-  const [reportingPeriod, setReportingPeriod] = useState(null);
-  const [previewOptions, setPreviewOptions] = useState();
-  const [loading, setLoading] = useState(false);
+    {
+      title: "Test Extension Exemptions Data",
+      columns: qaTeeColumns,
+      dataFetch: getQATeeReviewSubmit,
+      selectedRows: useRef([]),
+      reportCode: "TEE",
+    },
 
-  const rowsData = useRef();
-
-  const dataTypeSelectionHandler = (e) => {
-    const dataTypesCopy = [...dataTypes];
-    const index = dataTypesCopy.findIndex((d) => d.name === e.target.name);
-    if (index > -1) {
-      dataTypesCopy[index].checked = e.target.checked;
-      setDataTypes(dataTypesCopy);
-    }
-    setExportState(
-      selectedConfig.id,
-      {
-        ...exportState,
-        checkedDataTypes: dataTypesCopy
-          .filter((f) => f.checked)
-          .map((e) => e.name),
-        reportingPeriodId: reportingPeriod.id,
-      },
-      workspaceSection
-    );
-
-    // qa checkbox checked/unchecked
-    if (e.target.name === qa) {
-      const options = dataTypesCopy[index].checked
-        ? { ...reportingPeriod }
-        : null;
-      setPreviewOptions(options);
-    }
-  };
+    {
+      title: "Emissions",
+      columns: emissionsColumns,
+      dataFetch: getEmissionsReviewSubmit,
+      selectedRows: useRef([]),
+      reportCode: "EM",
+    },
+  ];
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
-    const { id, beginDate, calendarYear, endDate, quarter } = selectedObj;
-    setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
-    setExportState(
-      selectedConfig.id,
-      {
-        ...exportState,
-        checkedDataTypes: dataTypes.filter((e) => e.checked).map((e) => e.name),
-        reportingPeriodId: selectedObj.id,
-      },
-      workspaceSection
-    );
-    const isQaChecked = dataTypes.some((e) => e.name === qa && e.checked);
-    // update preview options only if qa is checked
-    if (isQaChecked) {
-      setPreviewOptions({ beginDate, endDate });
-    }
+    const { calendarYear, quarter } = selectedObj;
+    setReportingPeriod(`${calendarYear} Q${quarter}`);
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { id, beginDate, calendarYear, endDate, quarter } =
-      reportingPeriodObj;
-    setReportingPeriod({ id, beginDate, calendarYear, endDate, quarter });
-    if (exportState && exportState?.checkedDataTypes.includes(qa)) {
-      setPreviewOptions({ beginDate, endDate });
-    }
+    const { calendarYear, quarter } = reportingPeriodObj;
+    setReportingPeriod(`${calendarYear} Q${quarter}`);
+  };
+
+  const downloadQaData = async () => {
+    const exportJson = await exportQA(
+      selectedConfig.orisCode,
+      selectedUnits,
+      selectedStacks,
+      null,
+      null,
+      { isOfficial: getUser() !== null, isHistoricalImport: false },
+      dataTypes[1].selectedRows.current.map((d) => d.testSumId),
+      dataTypes[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
+      dataTypes[3].selectedRows.current.map(
+        (d) => d.testExtensionExemptionIdentifier
+      )
+    );
+
+    download(
+      JSON.stringify(exportJson.data, null, "\t"),
+      `QA & Certification | Export - ${facilityMainName}.json`
+    );
   };
 
   const exportClickHandler = async () => {
+    let selectedItems = 0;
+    for (const section of dataTypes) {
+      selectedItems += section.selectedRows.current.length;
+    }
+
+    if (selectedItems <= 0) {
+      return;
+    }
+
     setIsExporting(true);
-    setLoading(true);
-    let exportFileName;
     const promises = [];
 
     // export monitoring plan
-    if (dataTypes.find((e) => e.name === mp).checked) {
+    if (dataTypes[0].selectedRows.current.length > 0) {
       promises.push(exportMonitoringPlanDownload(selectedConfig.id));
     }
-    // export qa
-    const selectedRowsObj = rowsData.current;
-    if (dataTypes.find((e) => e.name === qa).checked && selectedRowsObj) {
-      exportFileName = `QA & Certification | Export - ${facility}.json`;
-      const exportJson = {
-        orisCode: orisCode,
-        ...selectedRowsObj,
-      };
-      download(JSON.stringify(exportJson, null, "\t"), exportFileName);
+
+    //export qa
+    if (
+      dataTypes[1].selectedRows.current.length > 0 ||
+      dataTypes[2].selectedRows.current.length > 0 ||
+      dataTypes[3].selectedRows.current.length > 0
+    ) {
+      promises.push(downloadQaData());
     }
 
     // export emissions
-    if (dataTypes.find((e) => e.name === em).checked) {
-      await exportEmissionsDataDownload(
-        facility,
-        selectedConfig.id,
-        reportingPeriod.calendarYear,
-        reportingPeriod.quarter,
-        getUser() !== null
+    if (dataTypes[4].selectedRows.current.length > 0) {
+      promises.push(
+        exportEmissionsDataDownload(
+          facility,
+          selectedConfig.id,
+          dataTypes[4].selectedRows.current.calendarYear,
+          dataTypes[4].selectedRows.current.quarter,
+          getUser() !== null
+        )
       );
     }
 
     await Promise.all(promises);
     setIsExporting(false);
-    setLoading(false);
-  };
-
-  const isExportDisabled = () => {
-    const isMonitoringPlanChecked = dataTypes.find(
-      (e) => e.name === mp
-    ).checked;
-    const isEmissionsChecked = dataTypes.find((dataType) => {
-      return dataType.name === em;
-    }).checked;
-
-    const rowsHasSelected = () => {
-      if (!exportState?.selectedIds) {
-        return false;
-      }
-      for (const listOfSelected of Object.values(exportState?.selectedIds)) {
-        if (listOfSelected.length > 0) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    return (
-      isExporting ||
-      (!isMonitoringPlanChecked && !isEmissionsChecked && !rowsHasSelected())
-    );
   };
 
   return (
-    <>
-      {loading && <Preloader />}
-      <div>
-        <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-          <div className="grid-row">
-            <h3>
-              <span className="font-body-lg">{facilityMainName}</span>
-              <span className="text-bold font-body-xl display-block">
-                {facilityAdditionalName}
-              </span>
-            </h3>{" "}
-          </div>
-        </div>
-        <div className="grid-row margin-y-3 maxw-desktop">
-          <div className="grid-col-3">
-            {dataTypes.map((d, i) => (
-              <Checkbox
-                id={d.name}
-                name={d.name}
-                label={<strong>{d.label}</strong>}
-                checked={d.checked}
-                onChange={dataTypeSelectionHandler}
-                key={i}
-              />
-            ))}
-          </div>
-          <div className="grid-col-6">
+    <div>
+      <div className="border-bottom-1px border-base-lighter padding-bottom-2">
+        <div className="grid-row">
+          <h3 className="grid-col-3">
+            <span className="font-body-lg">{facilityMainName}</span>
+            <span className="text-bold font-body-xl display-block">
+              {facilityAdditionalName}
+            </span>
+          </h3>
+          <div className="grid-col-6 padding-left-5 margin-y-auto">
             <ReportingPeriodSelector
               isExport={true}
               dataTypes={dataTypes.filter((e) => e.checked)}
               reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
               exportState={exportState}
-              setLoading={setLoading}
               getInitSelection={getInitSelection}
               isQaCert={true}
             />
           </div>
-          <div className="grid-col-3">
+          <center className="grid-col-3 margin-y-auto =">
             <Button
               type={"button"}
-              className="float-right"
-              disabled={isExportDisabled()}
-              onClick={() => {
-                exportClickHandler().catch((error) => {
-                  console.error("Error during Export", error);
-                });
-              }}
+              size="big"
+              className="width-full maxw-card-lg"
+              onClick={exportClickHandler}
             >
               Export
             </Button>
-          </div>
+          </center>
         </div>
-        {previewOptions && (
-          <div class="maxh-tablet overflow-y-auto">
-            <ExportTablesContainer
-              tableTitle={"Test Summary"}
-              dataKey={"testSummaryData"}
-              selectionData={previewOptions}
-              selectedConfig={selectedConfig}
-              exportState={exportState}
-              setExportState={setExportState}
-              workspaceSection={workspaceSection}
-              orisCode={orisCode}
-              dataRef={rowsData}
-            />
-            <ExportTablesContainer
-              tableTitle={"QA Certification Events"}
-              dataKey={"certificationEventData"}
-              selectionData={previewOptions}
-              selectedConfig={selectedConfig}
-              exportState={exportState}
-              setExportState={setExportState}
-              workspaceSection={workspaceSection}
-              orisCode={orisCode}
-              dataRef={rowsData}
-            />
-            <ExportTablesContainer
-              tableTitle={"Test Extension Exemptions"}
-              dataKey={"testExtensionExemptionData"}
-              selectionData={previewOptions}
-              selectedConfig={selectedConfig}
-              exportState={exportState}
-              setExportState={setExportState}
-              workspaceSection={workspaceSection}
-              orisCode={orisCode}
-              dataRef={rowsData}
-            />
-          </div>
-        )}
-        {previewOptions && (
-          <div className="border-top-1px border-base-lighter">
-            <div className="grid-row margin-y-3 maxw-desktop padding-top-1">
-              <div className="grid-col-9"></div>
-              <div className="grid-col-3">
-                <Button
-                  type={"button"}
-                  className="float-right"
-                  disabled={isExportDisabled()}
-                  onClick={() => {
-                    exportClickHandler().catch((error) => {
-                      console.error("Error during export", error);
-                    });
-                    return;
-                  }}
-                >
-                  Export
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isExporting && (
-          <UploadModal
-            width={"30%"}
-            left={"35%"}
-            children={<Preloader />}
-            preloader
-          />
-        )}
       </div>
-    </>
+
+      <div className="border-bottom-1px border-base-lighter padding-bottom-2">
+        {dataTypes.map((dt) => {
+          return (
+            <ExportTable
+              key={uuidv4}
+              title={dt.title}
+              columns={dt.columns}
+              dataFetchCall={dt.dataFetch}
+              dataFetchParams={[
+                [orisCode],
+                [selectedConfig.id],
+                [reportingPeriod],
+              ]}
+              selectedDataRef={dt.selectedRows}
+              reportCode={dt.reportCode}
+            />
+          );
+        })}
+      </div>
+
+      <div className="grid-row">
+        <center className="grid-col-3 grid-offset-9 margin-y-auto padding-top-2">
+          <Button
+            type={"button"}
+            size="big"
+            className="width-full maxw-card-lg"
+            onClick={exportClickHandler}
+          >
+            Export
+          </Button>
+        </center>
+      </div>
+
+      {isExporting && (
+        <UploadModal
+          width={"30%"}
+          left={"35%"}
+          children={<Preloader />}
+          preloader
+        />
+      )}
+    </div>
   );
 };
 

@@ -65,7 +65,8 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 export const getLocations = (facilityValue, checkResultObj) => {
 
   return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
-    const locations = data.map((f) => f.locations).flat(1);
+    const locations = data.map((f) => f.monitoringLocationData).flat(1);
+    // TODO: 5609 this might fail
 
     let availLoc = locations?.map((l) => ({
       id: l.id,

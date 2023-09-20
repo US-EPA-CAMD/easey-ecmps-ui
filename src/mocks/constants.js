@@ -271,7 +271,7 @@ export const mockExportQa = {
       stackPipeId: "CS0AAN",
       unitId: null,
       testTypeCode: "F2LCHK",
-      monitoringSystemID: "AA4",
+      monitoringSystemId: "AA4",
       componentID: null,
       spanScaleCode: null,
       testNumber: "201904010000AA4",
@@ -633,7 +633,7 @@ export const mockMonitoringSystems = [
     fuelFlows: [
       {
         maximumFuelFlowRate: 30667,
-        systemFuelFlowUOMCode: "HSCF",
+        systemFuelFlowUnitsOfMeasureCode: "HSCF",
         maximumFuelFlowRateSourceCode: "URV",
         beginDate: "2010-08-01",
         beginHour: 12,
