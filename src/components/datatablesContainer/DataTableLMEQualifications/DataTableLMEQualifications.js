@@ -195,6 +195,8 @@ export const DataTableLMEQualifications = ({
           addBtnName={"Create Qualification LME"}
           addBtn={openLmeQualModal}
           ariaLabel={"LME Qualifications"}
+          fixedHeader={false}
+          hasSortIcon={false}
         />
       ) : (
         <Preloader />
