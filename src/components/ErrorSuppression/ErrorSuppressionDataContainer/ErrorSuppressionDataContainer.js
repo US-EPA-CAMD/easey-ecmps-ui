@@ -12,7 +12,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
+import { addAriaLabelToDatatable, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -72,6 +72,9 @@ export const ErrorSuppressionDataContainer = () => {
   };
   useEffect(() => {
     getTableData();
+    setTimeout(() => {
+      addAriaLabelToDatatable();
+    }, 1000);
     return () => {
       setTableData([]);
       removeAriaSortHandlersFromDatatable()
@@ -393,6 +396,7 @@ export const ErrorSuppressionDataContainer = () => {
           </div>
         </div>
         <div className="es-datatable">
+        <span data-aria-label={'Error Suppression'}></span>
           {isTableLoading ? (
             <Preloader />
           ) : (
