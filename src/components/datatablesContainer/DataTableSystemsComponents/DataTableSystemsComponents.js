@@ -576,6 +576,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Add Component"}
                   show={true}
                   ariaLabel={"System Components"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
               <div>
@@ -593,6 +595,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Create New Fuel Flow"}
                   show={true}
                   ariaLabel={"Fuel Flows"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
             </>

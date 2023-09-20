@@ -8,7 +8,7 @@ import axios from "axios";
 export const getApiUrl = (path, workspaceOnly = false) => {
   let url = config.services.monitorPlans.uri;
 
-  if (workspaceOnly || window.location.href.includes("/workspace")) {
+  if (workspaceOnly === true || window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
 
