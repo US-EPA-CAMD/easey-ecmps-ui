@@ -972,7 +972,7 @@ export const DataTableSystems = ({
                   openFuelFlowsView={openFuelFlowsView}
                   setOpenFuelFlowsView={setOpenFuelFlowsView}
                   setDisableExitBtn={setDisableExitBtn}
-                /> */}
+                />
               </div>
             }
           />
