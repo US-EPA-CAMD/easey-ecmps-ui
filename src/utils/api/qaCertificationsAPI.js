@@ -87,7 +87,7 @@ export const getQATestSummaryReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/test-summary?${queryString}`;
+  let url = `${getApiUrl()}/test-summary?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -108,7 +108,7 @@ export const getQACertEventReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/cert-events?${queryString}`;
+  let url = `${getApiUrl()}/cert-events?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
@@ -129,7 +129,7 @@ export const getQATeeReviewSubmit = async (
     queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
-  let url = `${config.services.qaCertification.uri}/workspace/test-extension-exemption?${queryString}`;
+  let url = `${getApiUrl()}/test-extension-exemption?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
