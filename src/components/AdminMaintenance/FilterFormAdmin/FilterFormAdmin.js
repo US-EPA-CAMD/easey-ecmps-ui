@@ -20,6 +20,7 @@ import {
   getQaCertEventMaintenanceRecords,
   getQaExtensionExemptionMaintenanceRecords,
 } from "../../../utils/api/adminManagementApi";
+import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 
 export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
@@ -168,6 +169,9 @@ const FilterFormAdmin = ({
 
         setTableData(newData);
       }
+
+      assignAriaSortHandlersToDatatable()
+      assignAriaLabelsToDataTableColumns()
     } catch (e) {
       console.error(e);
     } finally {
@@ -191,6 +195,7 @@ const FilterFormAdmin = ({
 
   useEffect(() => {
     if (reloadTableData) {
+      removeAriaSortHandlersFromDatatable()
       applyFilters();
       setReloadTableData(false);
     }
