@@ -202,6 +202,8 @@ export const DataTablePCTQualifications = ({
           addBtnName={"Create Qualification Percent"}
           addBtn={openPctQualModal}
           ariaLabel={"PCT Qualifications"}
+          fixedHeader={false}
+          hasSortIcon={false}
         />
       ) : (
         <Preloader />

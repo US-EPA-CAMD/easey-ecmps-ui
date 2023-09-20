@@ -12,6 +12,9 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import {
+  addAriaLabelToDatatable,
+} from "../../../additional-functions/ensure-508";
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -34,7 +37,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(false);
-
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
     if (!checkType || !checkNumber || !checkResult) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
@@ -69,6 +72,9 @@ export const ErrorSuppressionDataContainer = () => {
   };
   useEffect(() => {
     getTableData();
+    setTimeout(() => {
+      addAriaLabelToDatatable();
+    }, 1000);
     return () => {
       setTableData([]);
     };
@@ -244,6 +250,7 @@ export const ErrorSuppressionDataContainer = () => {
       );
       deactiveaBtn?.focus();
     }
+    setErrorMsgs([]);
     setShowAddModal(false);
     setShowCloneModal(false);
     setShowDeactivateModal(false);
@@ -346,6 +353,8 @@ export const ErrorSuppressionDataContainer = () => {
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
           isClone={showCloneModal}
+          errorMsgs= {errorMsgs}
+          setErrorMsgs={setErrorMsgs}
         />
       ) : null}
       {showDeactivateModal ? (
@@ -412,6 +421,7 @@ export const ErrorSuppressionDataContainer = () => {
           </div>
         </div>
         <div className="es-datatable">
+        <span data-aria-label={'Error Suppression'}></span>
           {isTableLoading ? (
             <Preloader />
           ) : (
