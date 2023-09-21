@@ -12,6 +12,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import { addAriaLabelToDatatable, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -34,7 +35,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isTableLoading, setIsTableLoading] = useState(false);
-
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
     if (!checkType || !checkNumber || !checkResult) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
@@ -59,6 +60,8 @@ export const ErrorSuppressionDataContainer = () => {
         data.forEach((d) => (d.selected = false));
         setTableData(data);
         setSelectedRows([]);
+        assignAriaSortHandlersToDatatable()
+        assignAriaLabelsToDataTableColumns()
       })
       .catch((err) => {
         console.log("error", err);
@@ -69,8 +72,12 @@ export const ErrorSuppressionDataContainer = () => {
   };
   useEffect(() => {
     getTableData();
+    setTimeout(() => {
+      addAriaLabelToDatatable();
+    }, 1000);
     return () => {
       setTableData([]);
+      removeAriaSortHandlersFromDatatable()
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -85,68 +92,78 @@ export const ErrorSuppressionDataContainer = () => {
     addDateBefore,
   ]);
 
-  const openViewModalHandler = useCallback(async (row, index, isCreate = false) => {
-    const selectedData = { ...tableData[index] }
+  const openViewModalHandler = useCallback(
+    async (row, index, isCreate = false) => {
+      const selectedData = { ...tableData[index] };
 
+      selectedData.addDate = formatDateWithHoursMinutesSeconds(row.addDate);
+      selectedData.updateDate = formatDateWithHoursMinutesSeconds(
+        row.updateDate
+      );
+      selectedData.facNameAndId = `${row.facilityName} (${row.facilityId})`;
+      selectedData.status = row.active ? "Active" : "Inactive";
+      selectedData.result = `${row.checkTypeCode}-${row.checkNumber}-${row.checkResultCode}`;
+      selectedData.criteria =
+        "" +
+        row.matchDataTypeCode +
+        (row.matchDataValue ? ":" + row.matchDataValue : "");
 
-    selectedData.addDate = formatDateWithHoursMinutesSeconds(row.addDate)
-    selectedData.updateDate = formatDateWithHoursMinutesSeconds(row.updateDate)
-    selectedData.facNameAndId = `${row.facilityName} (${row.facilityId})`
-    selectedData.status = row.active ? 'Active' : 'Inactive'
-    selectedData.result = `${row.checkTypeCode}-${row.checkNumber}-${row.checkResultCode}`
-    selectedData.criteria = "" + row.matchDataTypeCode + (row.matchDataValue ? ":" + row.matchDataValue : "")
+      const mdmData = {};
+      const prefilteredDataName = false;
+      const mainDropdownName = null;
+      const mainDropdownResult = [];
+      const hasMainDropdown = false;
+      const prefilteredTotalName = null;
 
-    const mdmData = {}
-    const prefilteredDataName = false
-    const mainDropdownName = null
-    const mainDropdownResult = []
-    const hasMainDropdown = false;
-    const prefilteredTotalName = null
+      setSelectedViewModalData(
+        modalViewData(
+          selectedData,
+          controlInputs,
+          controlDatePickerInputs,
+          isCreate,
+          mdmData,
+          prefilteredDataName ? mdmData[prefilteredDataName] : "",
+          mainDropdownName,
+          mainDropdownResult,
+          hasMainDropdown,
+          prefilteredTotalName,
+          extraControlInputs
+        )
+      );
+      setShowViewModal(true);
+    },
+    [tableData]
+  );
 
-    setSelectedViewModalData(
-      modalViewData(
-        selectedData,
-        controlInputs,
-        controlDatePickerInputs,
-        isCreate,
-        mdmData,
-        prefilteredDataName ? mdmData[prefilteredDataName] : "",
-        mainDropdownName,
-        mainDropdownResult,
-        hasMainDropdown,
-        prefilteredTotalName,
-        extraControlInputs
-      )
-    )
-    setShowViewModal(true);
-  }, [tableData])
-
-  const getActions = useCallback((row, idx) => {
-    return (
-      <div>
-        <input
-          checked={row.selected}
-          key={idx}
-          data-testid={`select-cb-${idx}`}
-          type="checkbox"
-          className="usa-checkbox"
-          aria-label={`select row for error suppression ${row.id}`}
-          onChange={(e) => onRowSelection(row, e.target.checked)}
-        />
-        <Button
-          type="button"
-          epa-testid="btnView"
-          id={`btnView-error-suppression-${row.id}`}
-          className="cursor-pointer margin-left-2"
-          aria-label={`view row for error suppression ${row.id}`}
-          onClick={() => openViewModalHandler(row, idx)}
-          outline
-        >
-          View
-        </Button>
-      </div>
-    );
-  }, [openViewModalHandler]);
+  const getActions = useCallback(
+    (row, idx) => {
+      return (
+        <div>
+          <input
+            checked={row.selected}
+            key={idx}
+            data-testid={`select-cb-${idx}`}
+            type="checkbox"
+            className="usa-checkbox"
+            aria-label={`select row for error suppression ${row.id}`}
+            onChange={(e) => onRowSelection(row, e.target.checked)}
+          />
+          <Button
+            type="button"
+            epa-testid="btnView"
+            id={`btnView-error-suppression-${row.id}`}
+            className="cursor-pointer margin-left-2"
+            aria-label={`view row for error suppression ${row.id}`}
+            onClick={() => openViewModalHandler(row, idx)}
+            outline
+          >
+            View
+          </Button>
+        </div>
+      );
+    },
+    [openViewModalHandler]
+  );
 
   const onRowSelection = (row, checked) => {
     row.selected = checked;
@@ -212,9 +229,7 @@ export const ErrorSuppressionDataContainer = () => {
   };
 
   const formatDateWithHoursMinutesSeconds = (dateString) => {
-
-    if (!dateString)
-      return "";
+    if (!dateString) return "";
 
     const date = new Date(dateString);
     return `${formatDate(
@@ -227,9 +242,20 @@ export const ErrorSuppressionDataContainer = () => {
     if (showAddModal) {
       const addBtn = document.getElementById("error-suppres-add-btn");
       addBtn?.focus();
+    } else if (showCloneModal) {
+      const cloneBtn = document.getElementById("error-suppres-clone-btn");
+      cloneBtn?.focus();
+    } else if (showDeactivateModal) {
+      const deactiveaBtn = document.getElementById(
+        "error-suppres-deactivate-btn"
+      );
+      deactiveaBtn?.focus();
     }
+    setErrorMsgs([]);
     setShowAddModal(false);
     setShowCloneModal(false);
+    setShowDeactivateModal(false);
+    setShowViewModal(false)
   };
 
   const columns = [
@@ -253,7 +279,12 @@ export const ErrorSuppressionDataContainer = () => {
         (row.orisCode ? " (" + row.orisCode + ")" : ""),
       sortable: true,
     },
-    { name: "Locations", width: '200px', selector: (row) => row.locations, sortable: true },
+    {
+      name: "Locations",
+      width: "200px",
+      selector: (row) => row.locations,
+      sortable: true,
+    },
     {
       name: "Match Data Criteria",
       width: "250px",
@@ -289,7 +320,12 @@ export const ErrorSuppressionDataContainer = () => {
       selector: (row) => row.note,
       sortable: true,
     },
-    { name: "User", selector: (row) => row.userId, sortable: true, width: "150px" },
+    {
+      name: "User",
+      selector: (row) => row.userId,
+      sortable: true,
+      width: "150px",
+    },
     {
       name: "Add Date & Hour",
       width: "200px",
@@ -318,33 +354,31 @@ export const ErrorSuppressionDataContainer = () => {
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
           isClone={showCloneModal}
+          errorMsgs= {errorMsgs}
+          setErrorMsgs={setErrorMsgs}
         />
       ) : null}
       {showDeactivateModal ? (
         <DeactivateNotificationModal
           showDeactivateModal={showDeactivateModal}
-          close={() => setShowDeactivateModal(false)}
+          close={() => closeModal()}
           selectedRowIds={selectedRows.map((r) => r.id)}
           refreshTable={getTableData}
         />
       ) : null}
-      {showViewModal &&
+      {showViewModal && (
         <Modal
           show={showViewModal}
           nonEditable={true}
           title={"Error Suppression"}
           exitBTN={"Close"}
-          close={() => setShowViewModal(false)}
+          close={() => closeModal()}
           showCancel
           showDarkBg
         >
-          <ModalDetails
-            data={selectedViewModalData}
-            cols={3}
-            viewOnly={true}
-          />
+          <ModalDetails data={selectedViewModalData} cols={3} viewOnly={true} />
         </Modal>
-      }
+      )}
 
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
@@ -370,6 +404,7 @@ export const ErrorSuppressionDataContainer = () => {
               onClick={() => {
                 setShowCloneModal(true);
               }}
+              id="error-suppres-clone-btn"
             >
               Clone
             </Button>
@@ -380,12 +415,14 @@ export const ErrorSuppressionDataContainer = () => {
               data-testid="es-deactivate-btn"
               onClick={() => setShowDeactivateModal(true)}
               disabled={selectedRows.length === 0}
+              id="error-suppres-deactivate-btn"
             >
               Deactivate
             </Button>
           </div>
         </div>
         <div className="es-datatable">
+        <span data-aria-label={'Error Suppression'}></span>
           {isTableLoading ? (
             <Preloader />
           ) : (
@@ -425,11 +462,11 @@ const controlInputs = {
   userId: ["User", "input", ""],
   addDate: ["Add Date & Hour", "input", ""],
   updateDate: ["Update Date", "input", ""],
-}
+};
 
 // put Note field into extraControlInputs so it expands full length of modal
 const extraControlInputs = {
   note: ["Note", "input", ""],
-}
+};
 
-const controlDatePickerInputs = {}
+const controlDatePickerInputs = {};

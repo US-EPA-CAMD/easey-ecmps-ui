@@ -78,6 +78,7 @@ export const ExportTab = ({
       selectedRows: useRef([]),
       reportCode: "TEE",
     },
+
     {
       title: "Emissions",
       columns: emissionsColumns,
@@ -164,7 +165,6 @@ export const ExportTab = ({
 
   return (
     <div>
-      {console.log("Rerendering")}
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
         <div className="grid-row">
           <h3 className="grid-col-3">

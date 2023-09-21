@@ -183,6 +183,8 @@ export const DataTableCPMSQualifications = ({
           addBtnName={"Create Qualification CPMS"}
           addBtn={openCpmsQualModal}
           ariaLabel={"CPMS Qualifications"}
+          fixedHeader={false}
+          hasSortIcon={false}
         />
       ) : (
         <Preloader />

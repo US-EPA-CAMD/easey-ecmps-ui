@@ -167,7 +167,7 @@ export const globalView = [
     ],
   },
   { name: "Emissions", url: "/emissions" },
-  { name: "Export", url: "/export" },
+  { name: "Export & Report", url: "/export" },
 ];
 
 export const systemAdmin = [
@@ -230,15 +230,7 @@ export const getWorkspacePaths = () => {
         config.app.submitterRole,
       ],
     },
-    {
-      name: "Export",
-      url: "/workspace/export",
-      requiredRoles: [
-        config.app.preparerRole,
-        config.app.sponsorRole,
-        config.app.submitterRole,
-      ],
-    },
+
     {
       name: "Evaluate",
       url: "/workspace/evaluate",
@@ -252,6 +244,15 @@ export const getWorkspacePaths = () => {
       name: "Submit",
       url: "/workspace/submit",
       requiredRoles: [config.app.submitterRole],
+    },
+    {
+      name: "Export & Report",
+      url: "/workspace/export",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.submitterRole,
+      ],
     },
   ];
 

@@ -136,9 +136,11 @@ export const DataTableSystemsComponents = ({
     if (!returnedFocusToLast) {
       setReturnedFocusToLast(true);
     } else {
-      returnFocusToLast();
       assignFocusEventListeners();
     }
+    return () => {
+      setReturnedFocusToLast(true);
+    };
   }, [returnedFocusToLast]);
 
   // *** Clean up focus event listeners
@@ -574,6 +576,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Add Component"}
                   show={true}
                   ariaLabel={"System Components"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
               <div>
@@ -591,6 +595,8 @@ export const DataTableSystemsComponents = ({
                   addBtnName={"Create New Fuel Flow"}
                   show={true}
                   ariaLabel={"Fuel Flows"}
+                  fixedHeader={false}
+                  hasSortIcon={false}
                 />
               </div>
             </>
