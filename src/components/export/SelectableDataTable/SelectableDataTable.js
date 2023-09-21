@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { forwardRef } from "react";
@@ -12,7 +12,11 @@ export const SelectableDataTable = ({
   dataFetchCall = null,
   dataFetchParams = null,
   changedCallback,
+  exportState,
+  tableTitle,
+  uniqueIdField,
 }) => {
+  // console.log('provided data in selec data table', providedData);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(providedData);
 
@@ -32,7 +36,7 @@ export const SelectableDataTable = ({
 
   //Handle data refresh on search parameter changes
   useEffect(() => {
-    refreshData();
+    // refreshData();
   }, [dataFetchParams]);
   //Custom formatting for the USWDS checkbox
   const DataTableCheckbox = forwardRef(({ onClick, ...rest }, ref) => {
@@ -57,6 +61,11 @@ export const SelectableDataTable = ({
     );
   });
 
+  const rowIsSelected = useCallback((row) => {
+    const isSelected = exportState?.[tableTitle]?.includes(row[uniqueIdField])
+    return isSelected
+  }, [])
+
   return (
     <>
       {loading && <Preloader />}
@@ -64,10 +73,11 @@ export const SelectableDataTable = ({
         <div className="data-display-table-export fixed-table-header grid-col-12">
           <DataTable
             columns={columns}
-            data={data}
+            data={providedData}
             selectableRowsComponent={DataTableCheckbox}
             selectableRows
             onSelectedRowsChange={changedCallback}
+            selectableRowSelected={rowIsSelected}
           />
         </div>
       )}

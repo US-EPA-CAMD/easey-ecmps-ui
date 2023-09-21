@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
@@ -35,6 +35,7 @@ export const ExportTab = ({
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
+  const [tableData, setTableData] = useState([])
 
   const exportState = useSelector(state => {
     const exportTabs = state.openedFacilityTabs.export
@@ -43,7 +44,6 @@ export const ExportTab = ({
   })
   const dispatch = useDispatch();
 
-  // console.log('selectedconfig exporttab.js', selectedConfig);
   console.log('exportState', exportState);
 
   const facilityMainName = facility.split("(")[0];
@@ -63,6 +63,7 @@ export const ExportTab = ({
       dataFetch: getMonitoringPlans,
       selectedRows: useRef([]),
       reportCode: "MPP",
+      uniqueIdField: "id",
     },
     {
       title: "Test Data",
@@ -77,6 +78,7 @@ export const ExportTab = ({
       dataFetch: getQACertEventReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "QCE",
+      uniqueIdField: "qaCertEventIdentifier"
     },
     {
       title: "Test Extension Exemptions Data",
@@ -95,12 +97,24 @@ export const ExportTab = ({
     },
   ];
 
+  useEffect(() => {
+    const fetchTableData = async () => {
+      const promises = dataTypes.map(dt => dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod]))
+      const responses = await Promise.all(promises)
+      console.log('responses', responses);
+
+      const tableData = responses.map(resp => resp.data)
+      setTableData(tableData)
+    }
+    fetchTableData();
+  }, [reportingPeriod])
+
   const reportingPeriodSelectionHandler = (selectedObj) => {
-    // console.log('rp select handler select obj', selectedObj);
     const { id, calendarYear, quarter } = selectedObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
 
     const newExportState = {
+      ...exportState,
       reportingPeriodId: id
     }
     dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
@@ -176,6 +190,10 @@ export const ExportTab = ({
     setIsExporting(false);
   };
 
+  const handleDispatch = (newExportState) => {
+    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
+  }
+
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
@@ -210,20 +228,18 @@ export const ExportTab = ({
       </div>
 
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-        {dataTypes.map((dt) => {
+        {dataTypes.map((dt, index) => {
           return (
             <ExportTable
               key={uuidv4}
               title={dt.title}
               columns={dt.columns}
-              dataFetchCall={dt.dataFetch}
-              dataFetchParams={[
-                [orisCode],
-                [selectedConfig.id],
-                [reportingPeriod],
-              ]}
+              providedData={tableData[index]}
               selectedDataRef={dt.selectedRows}
               reportCode={dt.reportCode}
+              exportState={exportState}
+              handleDispatch={handleDispatch}
+              uniqueIdField={dt.uniqueIdField}
             />
           );
         })}
