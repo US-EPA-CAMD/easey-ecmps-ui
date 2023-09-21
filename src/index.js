@@ -10,6 +10,7 @@ import configureStore from "./store/configureStore.dev";
 
 import { ErrorBoundary  } from 'react-error-boundary';
 import ErrorFallbackModal from "./components/ErrorFallbackModal/ErrorFallbackModal";
+import { logServerError } from "./utils/api/apiUtils";
 
 import "@trussworks/react-uswds/lib/index.css";
 import "./styles/index.scss";
@@ -26,10 +27,15 @@ root.render(
         <ErrorBoundary
           FallbackComponent={ErrorFallbackModal}
           onReset={() => {
-            console.log("reloading the page...");
+            console.info("reloading the page...");
             window.location.reload();
           }}
-          onError={error =>console.error(error)}
+          onError={(error, info) =>{
+            console.error("error message", error.message);
+            console.error("error componentStack", info.componentStack);
+            //AG: log to an external API currently not working
+            //logServerError(error.message, info);
+          }}
         >
           <App />
         </ErrorBoundary>
