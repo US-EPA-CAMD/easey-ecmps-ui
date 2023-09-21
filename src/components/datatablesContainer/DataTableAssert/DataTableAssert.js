@@ -153,6 +153,7 @@ export const DataTableAssert = ({
               )
               .then((locAtt) => {
                 setComplimentaryData(locAtt.data);
+                console.log('locAtt.data',locAtt.data,res.data)
                 finishedLoadingData(res.data);
               });
           }
