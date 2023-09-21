@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
+import { v4 as uuidv4 } from "uuid";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
 import { ExportTable } from "../ExportTable/ExportTable";
@@ -17,27 +19,32 @@ import {
   getQATeeReviewSubmit,
   exportQA,
 } from "../../../utils/api/qaCertificationsAPI";
-import { getEmissionsReviewSubmit } from "../../../utils/api/emissionsApi";
-
-import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-
-import { Preloader } from "@us-epa-camd/easey-design-system";
-import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
-import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getEmissionsReviewSubmit, exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getMonitoringPlans, exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
-import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { setExportState } from "../../../store/actions/dynamicFacilityTab";
+
 
 export const ExportTab = ({
   facility,
   selectedConfig,
   orisCode,
-  exportState,
-  setExportState,
   workspaceSection,
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
+
+  const exportState = useSelector(state => {
+    const exportTabs = state.openedFacilityTabs.export
+    const curTabObj = exportTabs.find((tab) => tab.selectedConfig.id === selectedConfig.id)
+    return curTabObj?.exportState ?? null
+  })
+  const dispatch = useDispatch();
+
+  // console.log('selectedconfig exporttab.js', selectedConfig);
+  console.log('exportState', exportState);
 
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -89,12 +96,18 @@ export const ExportTab = ({
   ];
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
-    const { calendarYear, quarter } = selectedObj;
+    // console.log('rp select handler select obj', selectedObj);
+    const { id, calendarYear, quarter } = selectedObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
+
+    const newExportState = {
+      reportingPeriodId: id
+    }
+    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { calendarYear, quarter } = reportingPeriodObj;
+    const { calendarYear, quarter } = reportingPeriodObj
     setReportingPeriod(`${calendarYear} Q${quarter}`);
   };
 
