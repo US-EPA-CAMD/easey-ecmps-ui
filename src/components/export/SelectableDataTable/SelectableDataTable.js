@@ -16,7 +16,6 @@ export const SelectableDataTable = ({
   tableTitle,
   uniqueIdField,
 }) => {
-  // console.log('provided data in selec data table', providedData);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(providedData);
 
@@ -36,7 +35,7 @@ export const SelectableDataTable = ({
 
   //Handle data refresh on search parameter changes
   useEffect(() => {
-    // refreshData();
+    refreshData();
   }, [dataFetchParams]);
   //Custom formatting for the USWDS checkbox
   const DataTableCheckbox = forwardRef(({ onClick, ...rest }, ref) => {

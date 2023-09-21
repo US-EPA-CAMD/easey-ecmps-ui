@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
@@ -44,7 +44,9 @@ export const ExportTab = ({
   })
   const dispatch = useDispatch();
 
-  console.log('exportState', exportState);
+  const memoizedExportState = useMemo(() => {
+    return exportState
+  }, [exportState])
 
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -71,6 +73,7 @@ export const ExportTab = ({
       dataFetch: getQATestSummaryReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "TEST_DETAIL",
+      uniqueIdField: "testSumId",
     },
     {
       title: "QA Certification Events",
@@ -86,6 +89,7 @@ export const ExportTab = ({
       dataFetch: getQATeeReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "TEE",
+      uniqueIdField: "testExtensionExemptionIdentifier",
     },
 
     {
@@ -94,6 +98,7 @@ export const ExportTab = ({
       dataFetch: getEmissionsReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "EM",
+      uniqueIdField: "submissionId"
     },
   ];
 
@@ -101,7 +106,6 @@ export const ExportTab = ({
     const fetchTableData = async () => {
       const promises = dataTypes.map(dt => dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod]))
       const responses = await Promise.all(promises)
-      console.log('responses', responses);
 
       const tableData = responses.map(resp => resp.data)
       setTableData(tableData)
@@ -209,7 +213,7 @@ export const ExportTab = ({
               isExport={true}
               dataTypes={dataTypes.filter((e) => e.checked)}
               reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
-              exportState={exportState}
+              exportState={memoizedExportState}
               getInitSelection={getInitSelection}
               isQaCert={true}
             />

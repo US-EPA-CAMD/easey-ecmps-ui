@@ -22,7 +22,6 @@ export const ExportTable = ({
   const [isVisible, setIsVisible] = useState(true);
 
   const handleSelectionChange = (rows) => {
-    // console.log(`${title} called handleSelectionChange`);
     setHasSelected(rows.selectedRows.length > 0);
     selectedDataRef.current = rows.selectedRows;
 
