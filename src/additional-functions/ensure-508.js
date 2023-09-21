@@ -430,12 +430,16 @@ export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => 
 }
 
 export const assignAriaLabelsToDataTableColumns = () => {
-    document.querySelectorAll(`.rdt_TableCol_Sortable`).forEach((column) => {
-      if (column.querySelectorAll(".__rdt_custom_sort_icon__").length > 0) {
-      let columnName = column?.innerText
-      column.setAttribute('aria-label', `Click to sort by ${columnName}`)
+  setTimeout(function() {
+    const columns = document.querySelectorAll(`.rdt_TableCol_Sortable`)
+    columns.forEach((column) => {
+      const sortIcons = column.querySelectorAll(".__rdt_custom_sort_icon__")
+      if (sortIcons.length > 0) {
+        let columnName = column?.innerText
+        column.setAttribute('aria-label', `Click to sort by ${columnName}`)
       }
     })
+  }, 500);
 }
 
 export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) =>{
