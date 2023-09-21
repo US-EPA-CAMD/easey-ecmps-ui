@@ -8,6 +8,9 @@ import App from "./components/App/App";
 import * as serviceWorker from "./serviceWorker";
 import configureStore from "./store/configureStore.dev";
 
+import { ErrorBoundary  } from 'react-error-boundary';
+import ErrorFallbackModal from "./components/ErrorFallbackModal/ErrorFallbackModal";
+
 import "@trussworks/react-uswds/lib/index.css";
 import "./styles/index.scss";
 
@@ -20,7 +23,16 @@ root.render(
   <Provider store={store}>
     <React.StrictMode>
       <BrowserRouter basename={config.app.path}>
-        <App />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallbackModal}
+          onReset={() => {
+            console.log("reloading the page...");
+            window.location.reload();
+          }}
+          onError={error =>console.error(error)}
+        >
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </React.StrictMode>
   </Provider>
