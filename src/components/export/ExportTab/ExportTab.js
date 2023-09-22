@@ -1,6 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
+import { v4 as uuidv4 } from "uuid";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
 import { ExportTable } from "../ExportTable/ExportTable";
@@ -17,27 +19,31 @@ import {
   getQATeeReviewSubmit,
   exportQA,
 } from "../../../utils/api/qaCertificationsAPI";
-import { getEmissionsReviewSubmit } from "../../../utils/api/emissionsApi";
-
-import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-
-import { Preloader } from "@us-epa-camd/easey-design-system";
-import { exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
-import { exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getEmissionsReviewSubmit, exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
+import { getMonitoringPlans, exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
-import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { setExportState } from "../../../store/actions/dynamicFacilityTab";
+
 
 export const ExportTab = ({
   facility,
   selectedConfig,
   orisCode,
-  exportState,
-  setExportState,
   workspaceSection,
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
+  const [tableData, setTableData] = useState([])
+
+  const exportState = useSelector(state => {
+    const exportTabs = state.openedFacilityTabs.export
+    const curTabObj = exportTabs.find((tab) => tab.selectedConfig.id === selectedConfig.id)
+    return curTabObj?.exportState ?? null
+  })
+
+  const dispatch = useDispatch();
 
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -56,6 +62,7 @@ export const ExportTab = ({
       dataFetch: getMonitoringPlans,
       selectedRows: useRef([]),
       reportCode: "MPP",
+      uniqueIdField: "id",
     },
     {
       title: "Test Data",
@@ -63,6 +70,7 @@ export const ExportTab = ({
       dataFetch: getQATestSummaryReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "TEST_DETAIL",
+      uniqueIdField: "testSumId",
     },
     {
       title: "QA Certification Events",
@@ -70,6 +78,7 @@ export const ExportTab = ({
       dataFetch: getQACertEventReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "QCE",
+      uniqueIdField: "qaCertEventIdentifier"
     },
     {
       title: "Test Extension Exemptions Data",
@@ -77,6 +86,7 @@ export const ExportTab = ({
       dataFetch: getQATeeReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "TEE",
+      uniqueIdField: "testExtensionExemptionIdentifier",
     },
 
     {
@@ -85,16 +95,35 @@ export const ExportTab = ({
       dataFetch: getEmissionsReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "EM",
+      uniqueIdField: "submissionId"
     },
   ];
 
+  useEffect(() => {
+    const fetchTableData = async () => {
+      const promises = dataTypes.map(dt => dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod]))
+      const responses = await Promise.all(promises)
+
+      const tableData = responses.map(resp => resp.data)
+      setTableData(tableData)
+    }
+    fetchTableData();
+    // causes inf rerender: dataTypes (dataTypes is not a primitive)
+  }, [reportingPeriod, orisCode, selectedConfig.id])
+
   const reportingPeriodSelectionHandler = (selectedObj) => {
-    const { calendarYear, quarter } = selectedObj;
+    const { id, calendarYear, quarter } = selectedObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
+
+    const newExportState = {
+      ...exportState,
+      reportingPeriodId: id
+    }
+    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { calendarYear, quarter } = reportingPeriodObj;
+    const { calendarYear, quarter } = reportingPeriodObj
     setReportingPeriod(`${calendarYear} Q${quarter}`);
   };
 
@@ -163,6 +192,10 @@ export const ExportTab = ({
     setIsExporting(false);
   };
 
+  const dispatchSetExportState = (newExportState) => {
+    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
+  }
+
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
@@ -197,20 +230,18 @@ export const ExportTab = ({
       </div>
 
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-        {dataTypes.map((dt) => {
+        {dataTypes.map((dt, index) => {
           return (
             <ExportTable
               key={uuidv4}
               title={dt.title}
               columns={dt.columns}
-              dataFetchCall={dt.dataFetch}
-              dataFetchParams={[
-                [orisCode],
-                [selectedConfig.id],
-                [reportingPeriod],
-              ]}
+              providedData={tableData[index]}
               selectedDataRef={dt.selectedRows}
               reportCode={dt.reportCode}
+              exportState={exportState}
+              dispatchSetExportState={dispatchSetExportState}
+              uniqueIdField={dt.uniqueIdField}
             />
           );
         })}
