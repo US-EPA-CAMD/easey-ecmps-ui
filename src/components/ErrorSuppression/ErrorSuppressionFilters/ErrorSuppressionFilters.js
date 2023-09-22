@@ -8,7 +8,7 @@ import {
   ButtonGroup,
   Button,
 } from "@trussworks/react-uswds";
-import ComboBox from "../../ComboBox/ComboBox";
+import {ComboBox} from "../../ComboBox/ComboBox";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import {

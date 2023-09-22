@@ -8,12 +8,10 @@ import {
 import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
-  GridContainer,
-  Grid,
   Label,
-  ComboBox,
   Button,
 } from "@trussworks/react-uswds";
+import { ComboBox } from "../../ComboBox/ComboBox";
 import {
   getEmSubmissionRecords,
   getQaTestMaintenanceRecords,

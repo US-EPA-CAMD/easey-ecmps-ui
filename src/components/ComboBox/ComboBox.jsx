@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import classnames from 'classnames'
 
-import { ActionTypes, Action, State, useComboBox } from './useComboBox'
+import { ActionTypes, useComboBox } from './useComboBox'
 
 /*  As per USWDS spec, ComboBox includes a HTML <select> with options AND a separate <input> and dropdown <ul> with items.
     The select is usa-sr-only and is always hidden via CSS. The input and dropdown list are the elements used for interaction.
@@ -16,23 +16,6 @@ import { ActionTypes, Action, State, useComboBox } from './useComboBox'
 */
 
 const DEFAULT_FILTER = '.*{{query}}.*'
-
-// type ComboBoxProps = {
-//   id: string
-//   name: string
-//   className?: string
-//   options: ComboBoxOption[]
-//   defaultValue?: string
-//   disabled?: boolean
-//   onChange: (val?: string) => void
-//   assistiveHint?: string
-//   noResults?: string
-//   inputProps?: JSX.IntrinsicElements['input']
-//   selectProps?: JSX.IntrinsicElements['select']
-//   ulProps?: JSX.IntrinsicElements['ul']
-//   customFilter?: CustomizableFilter
-//   disableFiltering?: boolean
-// }
 
 export const FocusMode = {
   None: "None",
@@ -489,5 +472,3 @@ const ComboBoxForwardRef = (
 }
 
 export const ComboBox = forwardRef(ComboBoxForwardRef)
-
-export default ComboBox
