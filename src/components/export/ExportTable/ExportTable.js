@@ -1,5 +1,5 @@
 import { Button } from "@trussworks/react-uswds";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
@@ -16,12 +16,12 @@ export const ExportTable = ({
   uniqueIdField = "id",
   exportState,
   providedData,
-  handleDispatch
+  dispatchSetExportState,
 }) => {
   const [hasSelected, setHasSelected] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleSelectionChange = (rows) => {
+  const handleSelectionChange = useCallback((rows) => {
     setHasSelected(rows.selectedRows.length > 0);
     selectedDataRef.current = rows.selectedRows;
 
@@ -32,8 +32,8 @@ export const ExportTable = ({
       [title]: selectedIds
     }
 
-    handleDispatch(newExportState)
-  };
+    dispatchSetExportState(newExportState)
+  }, [dispatchSetExportState, exportState, selectedDataRef, title, uniqueIdField]);
 
   const handleReportLoad = () => {
     let additionalParams = "";
@@ -79,7 +79,7 @@ export const ExportTable = ({
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  const selectedIds = exportState?.[title] ?? []
+  const selectedIds = useMemo(() => exportState?.[title] ?? [], [])
 
   return (
     <div className="grid-row">
@@ -116,7 +116,6 @@ export const ExportTable = ({
         <SelectableDataTable
           columns={columns}
           changedCallback={handleSelectionChange}
-          exportState={exportState}
           selectedIds={selectedIds}
           providedData={providedData}
           tableTitle={title}

@@ -42,11 +42,8 @@ export const ExportTab = ({
     const curTabObj = exportTabs.find((tab) => tab.selectedConfig.id === selectedConfig.id)
     return curTabObj?.exportState ?? null
   })
-  const dispatch = useDispatch();
 
-  const memoizedExportState = useMemo(() => {
-    return exportState
-  }, [exportState])
+  const dispatch = useDispatch();
 
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName = facility.split("(")[1].replace(")", "");
@@ -111,7 +108,8 @@ export const ExportTab = ({
       setTableData(tableData)
     }
     fetchTableData();
-  }, [reportingPeriod])
+    // causes inf rerender: dataTypes (dataTypes is not a primitive)
+  }, [reportingPeriod, orisCode, selectedConfig.id])
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
     const { id, calendarYear, quarter } = selectedObj;
@@ -194,7 +192,7 @@ export const ExportTab = ({
     setIsExporting(false);
   };
 
-  const handleDispatch = (newExportState) => {
+  const dispatchSetExportState = (newExportState) => {
     dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
   }
 
@@ -213,7 +211,7 @@ export const ExportTab = ({
               isExport={true}
               dataTypes={dataTypes.filter((e) => e.checked)}
               reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
-              exportState={memoizedExportState}
+              exportState={exportState}
               getInitSelection={getInitSelection}
               isQaCert={true}
             />
@@ -242,7 +240,7 @@ export const ExportTab = ({
               selectedDataRef={dt.selectedRows}
               reportCode={dt.reportCode}
               exportState={exportState}
-              handleDispatch={handleDispatch}
+              dispatchSetExportState={dispatchSetExportState}
               uniqueIdField={dt.uniqueIdField}
             />
           );

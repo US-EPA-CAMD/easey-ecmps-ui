@@ -12,9 +12,8 @@ export const SelectableDataTable = ({
   dataFetchCall = null,
   dataFetchParams = null,
   changedCallback,
-  exportState,
-  tableTitle,
   uniqueIdField,
+  selectedIds
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(providedData);
@@ -60,10 +59,9 @@ export const SelectableDataTable = ({
     );
   });
 
-  const rowIsSelected = useCallback((row) => {
-    const isSelected = exportState?.[tableTitle]?.includes(row[uniqueIdField])
-    return isSelected
-  }, [])
+  const rowIsSelected = useCallback(row => {
+    return selectedIds.includes(row[uniqueIdField])
+  }, [selectedIds, uniqueIdField])
 
   return (
     <>
