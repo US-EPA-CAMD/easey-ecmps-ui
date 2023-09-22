@@ -7,8 +7,8 @@ import {
   DatePicker,
   ButtonGroup,
   Button,
-  ComboBox,
 } from "@trussworks/react-uswds";
+import ComboBox from "../../ComboBox/ComboBox";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import {
@@ -163,12 +163,12 @@ export const ErrorSuppressionFilters = () => {
         //      The data does not populate until the second click. The below code does the initial click
         //      on the ComboBox and then focuses away again. Tab is then reset to where it was when page
         //      initially loaded.
-        const previouslyFocusedEle = document.activeElement;
-        document.getElementById("facility-name").click();
-        document.activeElement.blur();
-        previouslyFocusedEle.tabIndex = 0;
-        previouslyFocusedEle.focus();
-        previouslyFocusedEle.tabIndex = -1;
+        // const previouslyFocusedEle = document.activeElement;
+        // document.getElementById("facility-name").click();
+        // document.activeElement.blur();
+        // previouslyFocusedEle.tabIndex = 0;
+        // previouslyFocusedEle.focus();
+        // previouslyFocusedEle.tabIndex = -1;
       })
       .catch((error) => {
         console.error("Error getting facilities", error);
