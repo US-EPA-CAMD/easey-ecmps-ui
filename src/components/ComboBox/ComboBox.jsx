@@ -113,7 +113,8 @@ const ComboBoxForwardRef = (
 
   useEffect(() => {
     onChange && onChange(state.selectedOption?.value || undefined)
-  }, [state.selectedOption, onChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.selectedOption])
 
   useEffect(() => {
     if (
@@ -147,7 +148,7 @@ const ComboBoxForwardRef = (
         listRef.current.scrollTop = focusedItemRef.current.offsetTop
       }
     }
-  }, [state.isOpen, state.focusedOption, state.focusMode])
+  }, [state.isOpen, state.focusedOption,])
 
   // If the focused element (activeElement) is outside of the combo box,
   // make sure the focusMode is BLUR
@@ -159,7 +160,6 @@ const ComboBoxForwardRef = (
         })
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.focusMode])
 
   useImperativeHandle(
@@ -169,14 +169,13 @@ const ComboBoxForwardRef = (
       clearSelection: () =>
         dispatch({ type: ActionTypes.CLEAR_SELECTION }),
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 
   const handleInputKeyDown = (event) => {
     if (event.key === 'Escape') {
       dispatch({ type: ActionTypes.CLOSE_LIST })
-    } else if (event.key === 'ArrowDown' || event.key === 'Down') {
+    } else if (event.key === 'ArrowDown' || event.key == 'Down') {
       event.preventDefault()
       dispatch({
         type: ActionTypes.FOCUS_OPTION,
