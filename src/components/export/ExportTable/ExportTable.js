@@ -1,8 +1,9 @@
 import { Button } from "@trussworks/react-uswds";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
 
 //Selectable data table that automatically refreshes its data based on the dataFetchCall whenever dataFetchParams are changed
 export const ExportTable = ({
@@ -12,14 +13,27 @@ export const ExportTable = ({
   dataFetchParams,
   selectedDataRef,
   reportCode,
+  uniqueIdField = "id",
+  exportState,
+  providedData,
+  dispatchSetExportState,
 }) => {
   const [hasSelected, setHasSelected] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleSelectionChange = (rows) => {
+  const handleSelectionChange = useCallback((rows) => {
     setHasSelected(rows.selectedRows.length > 0);
     selectedDataRef.current = rows.selectedRows;
-  };
+
+
+    const selectedIds = rows.selectedRows.map((row) => row[uniqueIdField])
+    const newExportState = {
+      ...exportState,
+      [title]: selectedIds
+    }
+
+    dispatchSetExportState(newExportState)
+  }, [dispatchSetExportState, exportState, selectedDataRef, title, uniqueIdField]);
 
   const handleReportLoad = () => {
     let additionalParams = "";
@@ -47,9 +61,8 @@ export const ExportTable = ({
     } else {
       const yearQuarter =
         selectedDataRef.current[0].periodAbbreviation.split(" ");
-      additionalParams = `&monitorPlanId=${
-        selectedDataRef.current[0].monPlanId
-      }&year=${yearQuarter[0]}&quarter=${yearQuarter[1].charAt(1)}`;
+      additionalParams = `&monitorPlanId=${selectedDataRef.current[0].monPlanId
+        }&year=${yearQuarter[0]}&quarter=${yearQuarter[1].charAt(1)}`;
       reportTitle = "Emissions Printout Report";
     }
 
@@ -66,6 +79,8 @@ export const ExportTable = ({
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
+  const selectedIds = useMemo(() => exportState?.[title] ?? [], [])
+
   return (
     <div className="grid-row">
       <div className="grid-col-1">
@@ -79,8 +94,8 @@ export const ExportTable = ({
           onKeyDown={(e) =>
             e.key === "Enter"
               ? () => {
-                  setIsVisible(!isVisible);
-                }
+                setIsVisible(!isVisible);
+              }
               : null
           }
           tabIndex={0}
@@ -100,9 +115,11 @@ export const ExportTable = ({
       <div style={{ display: isVisible ? "block" : "none", width: "100%" }}>
         <SelectableDataTable
           columns={columns}
-          dataFetchCall={dataFetchCall}
-          dataFetchParams={dataFetchParams}
           changedCallback={handleSelectionChange}
+          selectedIds={selectedIds}
+          providedData={providedData}
+          tableTitle={title}
+          uniqueIdField={uniqueIdField}
         ></SelectableDataTable>
       </div>
     </div>
