@@ -299,6 +299,7 @@ const FilterFormAdmin = ({
               options={facilities}
               onChange={onFacilityChange}
               disableFiltering={true}
+              tabIndex={0}
             />
           </div>
 
