@@ -7,8 +7,8 @@ import {
   DatePicker,
   TextInput,
   Checkbox,
-  ComboBox,
 } from "@trussworks/react-uswds";
+import { ComboBox } from "../../ComboBox/ComboBox";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
