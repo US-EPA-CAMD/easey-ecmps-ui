@@ -12,7 +12,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { addAriaLabelToDatatable, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
+import { addAriaLabelToDatatable, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable,returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508"
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -31,6 +31,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedViewModalData, setSelectedViewModalData] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null);
 
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -114,7 +115,7 @@ export const ErrorSuppressionDataContainer = () => {
       const mainDropdownResult = [];
       const hasMainDropdown = false;
       const prefilteredTotalName = null;
-
+      setSelectedRowId(row.id);
       setSelectedViewModalData(
         modalViewData(
           selectedData,
@@ -252,10 +253,12 @@ export const ErrorSuppressionDataContainer = () => {
       deactiveaBtn?.focus();
     }
     setErrorMsgs([]);
+    
     setShowAddModal(false);
     setShowCloneModal(false);
     setShowDeactivateModal(false);
     setShowViewModal(false)
+    returnsFocusDatatableViewBTN('-error-suppression-',selectedRowId,true)
   };
 
   const columns = [
