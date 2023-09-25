@@ -9,7 +9,7 @@
  *       Outputs:
  *              none
  *****************************************************/
-export const ensure508 = (tableName, sectionSelect=null) => {
+export const ensure508 = (tableName, sectionSelect = null) => {
   // *** add aria label to all data tables
   addAriaLabelToDatatable(tableName, sectionSelect);
 
@@ -101,10 +101,10 @@ export const addScreenReaderLabelForCollapses = () => {
   });
 };
 
-export const addAriaLiveToDatatable = () =>{
-  document.querySelectorAll('[role="table"]').forEach(function (el){
+export const addAriaLiveToDatatable = () => {
+  document.querySelectorAll('[role="table"]').forEach(function (el) {
     el.setAttribute("aria-live", "polite");
-    });
+  });
 };
 
 /*****************************************************
@@ -118,32 +118,38 @@ export const addAriaLiveToDatatable = () =>{
  *              none
  *****************************************************/
 export const addAriaLabelToDatatable = (tableName, sectionSelect) => {
-const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
-  if (tableWrappers.length>0) {//only for all QA & Certs section data tables
+  const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
+  if (tableWrappers.length > 0) {
+    //only for all QA & Certs section data tables
     for (var i = 0; i < tableWrappers.length; i++) {
       const tableWrapper = tableWrappers[i];
       const tableName = tableWrapper.getAttribute("id").replaceAll("-", " ");
       const dataTable = tableWrapper.querySelector('[role="table"]');
-      if(dataTable){
-        if(sectionSelect && tableName ==="Test Summary Data"){
-          dataTable.setAttribute("aria-label", `${tableName} for ${sectionSelect}`)
-        }else{
+      if (dataTable) {
+        if (sectionSelect && tableName === "Test Summary Data") {
+          dataTable.setAttribute(
+            "aria-label",
+            `${tableName} for ${sectionSelect}`
+          );
+        } else {
           dataTable.setAttribute("aria-label", tableName);
         }
-      }else{
+      } else {
         dataTable.setAttribute("aria-label", "Data table");
       }
-   }
-  }else if (tableName) {
+    }
+  } else if (tableName) {
     let tableWrapper;
-    if(tableName.startsWith("export")){
+    if (tableName.startsWith("export")) {
       tableWrapper = document.getElementById(tableName);
-    }else{
+    } else {
       tableWrapper = document.getElementById(tableName.replaceAll(" ", "-"));
     }
     if (tableWrapper) {
       const dataTable = tableWrapper.querySelector('[role="table"]');
-      dataTable ? dataTable.setAttribute("aria-label", tableName) : dataTable.setAttribute("aria-label", "Data table");
+      dataTable
+        ? dataTable.setAttribute("aria-label", tableName)
+        : dataTable.setAttribute("aria-label", "Data table");
     }
   } else {
     document.querySelectorAll(`.rdt_Table`).forEach((element) => {
@@ -185,7 +191,6 @@ const tableWrappers = document.getElementsByClassName("qa-table-wrapper");
       element.setAttribute("aria-label", label);
     });
   }
-  
 };
 
 /*****************************************************
@@ -251,9 +256,7 @@ export const addInitialAriaSort = () => {
               .setAttribute("aria-sort", "descending");
           }
         } else {
-          column
-            .closest(`.rdt_TableCol_Sortable`)
-            .removeAttribute("aria-sort");
+          column.closest(`.rdt_TableCol_Sortable`).removeAttribute("aria-sort");
         }
       }
     });
@@ -358,19 +361,26 @@ export const assignAriaLabelsToDatePickerButtons = () => {
 };
 
 // returns focus
-export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, colName) => {
+export const returnsFocusDatatableExpandBTN = (
+  datatableName,
+  index,
+  direction,
+  colName
+) => {
   let lastBTN = "";
 
   setTimeout(() => {
     if (direction) {
-      lastBTN = document
-        .getElementById(`expandRow${datatableName}${colName}${index + 1}`)
+      lastBTN = document.getElementById(
+        `expandRow${datatableName}${colName}${index + 1}`
+      );
       if (lastBTN) {
         lastBTN.focus();
       }
     } else {
-      lastBTN = document
-        .getElementById(`collapseRow${datatableName}${colName}${index + 1}`)
+      lastBTN = document.getElementById(
+        `collapseRow${datatableName}${colName}${index + 1}`
+      );
       if (lastBTN) {
         lastBTN.focus();
       }
@@ -379,10 +389,15 @@ export const returnsFocusDatatableExpandBTN = (datatableName, index, direction, 
 };
 
 // returns focus to View Button
-export const returnsFocusDatatableViewBTN = (datatableName, index) => {
+export const returnsFocusDatatableViewBTN = (
+  datatableName,
+  index,
+  viewOnly = false
+) => {
   setTimeout(() => {
-    let lastBTN = document
-      .getElementById(`btnEditView${datatableName}${index + 1}`);
+    let lastBTN = viewOnly
+      ? document.getElementById(`btnView${datatableName}${index}`)
+      : document.getElementById(`btnEditView${datatableName}${index + 1}`);
     if (lastBTN) {
       lastBTN.focus();
     }
@@ -391,8 +406,7 @@ export const returnsFocusDatatableViewBTN = (datatableName, index) => {
 
 export const returnsFocusToAddBtn = (dataTableName) => {
   setTimeout(() => {
-    let lastBTN = document
-      .getElementById(`btnAdd${dataTableName}`);
+    let lastBTN = document.getElementById(`btnAdd${dataTableName}`);
     if (lastBTN) {
       lastBTN.focus();
     }
@@ -401,50 +415,69 @@ export const returnsFocusToAddBtn = (dataTableName) => {
 
 // returns focus to MP Create Button
 export const returnsFocusMpDatatableCreateBTN = (addBtnName, time) => {
-  setTimeout(() => {
-    let btn = document
-      .getElementById(addBtnName.toLowerCase().split(" ").join("-") + "-add-btn");
-    if (btn) {
-      btn.focus();
-    }
-  }, time ? time: 500);
+  setTimeout(
+    () => {
+      let btn = document.getElementById(
+        addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+      );
+      if (btn) {
+        btn.focus();
+      }
+    },
+    time ? time : 500
+  );
 };
 
-export const assignAriaLabelsToDataTable = (containerSelector, ariaLiveData) => {
-  const table = document.querySelector(containerSelector).querySelector('[role="table"]')
+export const assignAriaLabelsToDataTable = (
+  containerSelector,
+  ariaLiveData
+) => {
+  const table = document
+    .querySelector(containerSelector)
+    .querySelector('[role="table"]');
 
-  const rowGroups = table.querySelectorAll('[role="rowgroup"]')
+  const rowGroups = table.querySelectorAll('[role="rowgroup"]');
 
   if (rowGroups.length > 1) {
-    rowGroups[0].querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-all-rows-for-${containerSelector.split('-')[1]}`);
-    const tableRows = rowGroups[1].querySelectorAll('[role="row"]')
+    rowGroups[0]
+      .querySelector('input[type="checkbox"]')
+      .setAttribute(
+        "aria-label",
+        `select-all-rows-for-${containerSelector.split("-")[1]}`
+      );
+    const tableRows = rowGroups[1].querySelectorAll('[role="row"]');
 
     tableRows.forEach((row, idx) => {
-      row.querySelector('input[type="checkbox"]').setAttribute('aria-label', `select-row-for-Unit/StackPipeID ${ariaLiveData[idx]}`)
+      row
+        .querySelector('input[type="checkbox"]')
+        .setAttribute(
+          "aria-label",
+          `select-row-for-Unit/StackPipeID ${ariaLiveData[idx]}`
+        );
 
-      row.querySelectorAll('[role="gridcell"').forEach(cell => {
-        cell.setAttribute('role', `cell`)
-      })
-    })
+      row.querySelectorAll('[role="gridcell"').forEach((cell) => {
+        cell.setAttribute("role", `cell`);
+      });
+    });
   }
-}
+};
 
 export const assignAriaLabelsToDataTableColumns = () => {
-  setTimeout(function() {
-    const columns = document.querySelectorAll(`.rdt_TableCol_Sortable`)
+  setTimeout(function () {
+    const columns = document.querySelectorAll(`.rdt_TableCol_Sortable`);
     columns.forEach((column) => {
-      const sortIcons = column.querySelectorAll(".__rdt_custom_sort_icon__")
+      const sortIcons = column.querySelectorAll(".__rdt_custom_sort_icon__");
       if (sortIcons.length > 0) {
-        let columnName = column?.innerText
-        column.setAttribute('aria-label', `Click to sort by ${columnName}`)
+        let columnName = column?.innerText;
+        column.setAttribute("aria-label", `Click to sort by ${columnName}`);
       }
-    })
+    });
   }, 500);
-}
+};
 
-export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) =>{
-  datePickerInputIds.forEach(id=>{
+export const addAriaLabelOnDatePickerCalendar = (datePickerInputIds) => {
+  datePickerInputIds.forEach((id) => {
     const calendarBtn = document.getElementById(id).nextElementSibling;
     calendarBtn.setAttribute("aria-label", id.replaceAll("-", " "));
-  })
-}
+  });
+};
