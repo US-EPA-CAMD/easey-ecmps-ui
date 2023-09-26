@@ -166,6 +166,7 @@ export const refreshToken = async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       waitDuration += 100;
     }
+    localStorage.setItem("ecmps_refreshing_token", "false");
 
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
 

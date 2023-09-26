@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
@@ -38,6 +44,7 @@ export const ExportTab = ({
   orisCode,
   workspaceSection,
 }) => {
+  const [canExport, setCanExport] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
   const [tableData, setTableData] = useState([]);
@@ -134,6 +141,7 @@ export const ExportTab = ({
       ...exportState,
       reportingPeriodId: id,
     };
+
     dispatch(
       setExportState(selectedConfig.id, newExportState, workspaceSection)
     );
@@ -196,8 +204,6 @@ export const ExportTab = ({
 
     // export emissions
     if (dataTypes[4].selectedRows.current.length > 0) {
-      console.log(dataTypes[4].selectedRows);
-
       promises.push(
         exportEmissionsDataDownload(
           facility,
@@ -218,6 +224,15 @@ export const ExportTab = ({
       setExportState(selectedConfig.id, newExportState, workspaceSection)
     );
   };
+
+  const canToggleExport = useCallback(() => {
+    let selectedItems = 0;
+    for (const dataChunk of dataTypes) {
+      selectedItems += dataChunk.selectedRows.current.length;
+    }
+
+    setCanExport(selectedItems > 0);
+  }, []);
 
   return (
     <div>
@@ -241,6 +256,7 @@ export const ExportTab = ({
           </div>
           <center className="grid-col-3 margin-y-auto =">
             <Button
+              disabled={!canExport}
               type={"button"}
               size="big"
               className="width-full maxw-card-lg"
@@ -256,7 +272,8 @@ export const ExportTab = ({
         {dataTypes.map((dt, index) => {
           return (
             <ExportTable
-              key={uuidv4}
+              toggleExportCallback={canToggleExport}
+              key={dt.uniqueIdField}
               title={dt.title}
               columns={dt.columns}
               providedData={tableData[index]}
@@ -273,6 +290,7 @@ export const ExportTab = ({
       <div className="grid-row">
         <center className="grid-col-3 grid-offset-9 margin-y-auto padding-top-2">
           <Button
+            disabled={!canExport}
             type={"button"}
             size="big"
             className="width-full maxw-card-lg"
