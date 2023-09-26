@@ -12,7 +12,13 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { addAriaLabelToDatatable, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
+import {
+  addAriaLabelToDatatable,
+  assignAriaSortHandlersToDatatable,
+  assignAriaLabelsToDataTableColumns,
+  removeAriaSortHandlersFromDatatable,
+  returnsFocusDatatableViewBTN,
+} from "../../../additional-functions/ensure-508";
 
 export const ErrorSuppressionDataContainer = () => {
   const {
@@ -31,6 +37,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedViewModalData, setSelectedViewModalData] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null);
 
   const [tableData, setTableData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -60,8 +67,8 @@ export const ErrorSuppressionDataContainer = () => {
         data.forEach((d) => (d.selected = false));
         setTableData(data);
         setSelectedRows([]);
-        assignAriaSortHandlersToDatatable()
-        assignAriaLabelsToDataTableColumns()
+        assignAriaSortHandlersToDatatable();
+        assignAriaLabelsToDataTableColumns();
       })
       .catch((err) => {
         console.log("error", err);
@@ -77,7 +84,7 @@ export const ErrorSuppressionDataContainer = () => {
     }, 1000);
     return () => {
       setTableData([]);
-      removeAriaSortHandlersFromDatatable()
+      removeAriaSortHandlersFromDatatable();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -114,7 +121,7 @@ export const ErrorSuppressionDataContainer = () => {
       const mainDropdownResult = [];
       const hasMainDropdown = false;
       const prefilteredTotalName = null;
-
+      setSelectedRowId(row.id);
       setSelectedViewModalData(
         modalViewData(
           selectedData,
@@ -250,12 +257,15 @@ export const ErrorSuppressionDataContainer = () => {
         "error-suppres-deactivate-btn"
       );
       deactiveaBtn?.focus();
+    } else if (showViewModal) {
+      returnsFocusDatatableViewBTN("-error-suppression-", selectedRowId, true);
     }
     setErrorMsgs([]);
+
     setShowAddModal(false);
     setShowCloneModal(false);
     setShowDeactivateModal(false);
-    setShowViewModal(false)
+    setShowViewModal(false);
   };
 
   const columns = [
@@ -354,7 +364,7 @@ export const ErrorSuppressionDataContainer = () => {
           values={showCloneModal ? selectedRows[0] : undefined}
           close={closeModal}
           isClone={showCloneModal}
-          errorMsgs= {errorMsgs}
+          errorMsgs={errorMsgs}
           setErrorMsgs={setErrorMsgs}
         />
       ) : null}
@@ -422,7 +432,7 @@ export const ErrorSuppressionDataContainer = () => {
           </div>
         </div>
         <div className="es-datatable">
-        <span data-aria-label={'Error Suppression'}></span>
+          <span data-aria-label={"Error Suppression"}></span>
           {isTableLoading ? (
             <Preloader />
           ) : (
