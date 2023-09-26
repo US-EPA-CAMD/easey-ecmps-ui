@@ -19,13 +19,18 @@ import {
   getQATeeReviewSubmit,
   exportQA,
 } from "../../../utils/api/qaCertificationsAPI";
-import { getEmissionsReviewSubmit, exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
-import { getMonitoringPlans, exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
+import {
+  getEmissionsReviewSubmit,
+  exportEmissionsDataDownload,
+} from "../../../utils/api/emissionsApi";
+import {
+  getMonitoringPlans,
+  exportMonitoringPlanDownload,
+} from "../../../utils/api/monitoringPlansApi";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
-
 
 export const ExportTab = ({
   facility,
@@ -35,13 +40,18 @@ export const ExportTab = ({
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
 
-  const exportState = useSelector(state => {
-    const exportTabs = state.openedFacilityTabs.export
-    const curTabObj = exportTabs.find((tab) => tab.selectedConfig.id === selectedConfig.id)
-    return curTabObj?.exportState ?? null
-  })
+  const storedYear = useRef();
+  const storedQuarter = useRef();
+
+  const exportState = useSelector((state) => {
+    const exportTabs = state.openedFacilityTabs.export;
+    const curTabObj = exportTabs.find(
+      (tab) => tab.selectedConfig.id === selectedConfig.id
+    );
+    return curTabObj?.exportState ?? null;
+  });
 
   const dispatch = useDispatch();
 
@@ -78,7 +88,7 @@ export const ExportTab = ({
       dataFetch: getQACertEventReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "QCE",
-      uniqueIdField: "qaCertEventIdentifier"
+      uniqueIdField: "qaCertEventIdentifier",
     },
     {
       title: "Test Extension Exemptions Data",
@@ -95,36 +105,45 @@ export const ExportTab = ({
       dataFetch: getEmissionsReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "EM",
-      uniqueIdField: "submissionId"
+      uniqueIdField: "submissionId",
     },
   ];
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const promises = dataTypes.map(dt => dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod]))
-      const responses = await Promise.all(promises)
+      const promises = dataTypes.map((dt) =>
+        dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod])
+      );
+      const responses = await Promise.all(promises);
 
-      const tableData = responses.map(resp => resp.data)
-      setTableData(tableData)
-    }
+      const tableData = responses.map((resp) => resp.data);
+      setTableData(tableData);
+    };
     fetchTableData();
     // causes inf rerender: dataTypes (dataTypes is not a primitive)
-  }, [reportingPeriod, orisCode, selectedConfig.id])
+  }, [reportingPeriod, orisCode, selectedConfig.id]);
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
     const { id, calendarYear, quarter } = selectedObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
 
+    storedYear.current = calendarYear;
+    storedQuarter.current = quarter;
+
     const newExportState = {
       ...exportState,
-      reportingPeriodId: id
-    }
-    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
+      reportingPeriodId: id,
+    };
+    dispatch(
+      setExportState(selectedConfig.id, newExportState, workspaceSection)
+    );
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { calendarYear, quarter } = reportingPeriodObj
+    const { calendarYear, quarter } = reportingPeriodObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
+    storedYear.current = calendarYear;
+    storedQuarter.current = quarter;
   };
 
   const downloadQaData = async () => {
@@ -177,12 +196,14 @@ export const ExportTab = ({
 
     // export emissions
     if (dataTypes[4].selectedRows.current.length > 0) {
+      console.log(dataTypes[4].selectedRows);
+
       promises.push(
         exportEmissionsDataDownload(
           facility,
           selectedConfig.id,
-          dataTypes[4].selectedRows.current.calendarYear,
-          dataTypes[4].selectedRows.current.quarter,
+          storedYear.current,
+          storedQuarter.current,
           getUser() !== null
         )
       );
@@ -193,8 +214,10 @@ export const ExportTab = ({
   };
 
   const dispatchSetExportState = (newExportState) => {
-    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
-  }
+    dispatch(
+      setExportState(selectedConfig.id, newExportState, workspaceSection)
+    );
+  };
 
   return (
     <div>
