@@ -8,6 +8,10 @@ import App from "./components/App/App";
 import * as serviceWorker from "./serviceWorker";
 import configureStore from "./store/configureStore.dev";
 
+import { ErrorBoundary  } from 'react-error-boundary';
+import ErrorFallbackModal from "./components/ErrorFallbackModal/ErrorFallbackModal";
+import { logServerError } from "./utils/api/apiUtils";
+
 import "@trussworks/react-uswds/lib/index.css";
 import "./styles/index.scss";
 
@@ -20,7 +24,21 @@ root.render(
   <Provider store={store}>
     <React.StrictMode>
       <BrowserRouter basename={config.app.path}>
-        <App />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallbackModal}
+          onReset={() => {
+            console.info("reloading the page...");
+            window.location.reload();
+          }}
+          onError={(error, info) =>{
+            console.error("error message", error.message);
+            console.error("error componentStack", info.componentStack);
+            //AG: log to an external API currently not working
+            //logServerError(error.message, info);
+          }}
+        >
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </React.StrictMode>
   </Provider>

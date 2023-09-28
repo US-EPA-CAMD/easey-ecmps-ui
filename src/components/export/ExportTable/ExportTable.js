@@ -1,25 +1,50 @@
 import { Button } from "@trussworks/react-uswds";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
 
 //Selectable data table that automatically refreshes its data based on the dataFetchCall whenever dataFetchParams are changed
 export const ExportTable = ({
+  toggleExportCallback,
   title,
   columns,
   dataFetchCall,
   dataFetchParams,
   selectedDataRef,
   reportCode,
+  uniqueIdField = "id",
+  exportState,
+  providedData,
+  dispatchSetExportState,
 }) => {
   const [hasSelected, setHasSelected] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleSelectionChange = (rows) => {
-    setHasSelected(rows.selectedRows.length > 0);
-    selectedDataRef.current = rows.selectedRows;
-  };
+  const handleSelectionChange = useCallback(
+    (rows) => {
+      setHasSelected(rows.selectedRows.length > 0);
+      selectedDataRef.current = rows.selectedRows;
+
+      const selectedIds = rows.selectedRows.map((row) => row[uniqueIdField]);
+      const newExportState = {
+        ...exportState,
+        [title]: selectedIds,
+      };
+
+      dispatchSetExportState(newExportState);
+      toggleExportCallback();
+    },
+    [
+      dispatchSetExportState,
+      exportState,
+      selectedDataRef,
+      title,
+      uniqueIdField,
+      toggleExportCallback,
+    ]
+  );
 
   const handleReportLoad = () => {
     let additionalParams = "";
@@ -66,6 +91,8 @@ export const ExportTable = ({
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
+  const selectedIds = useMemo(() => exportState?.[title] ?? [], []);
+
   return (
     <div className="grid-row">
       <div className="grid-col-1">
@@ -100,9 +127,11 @@ export const ExportTable = ({
       <div style={{ display: isVisible ? "block" : "none", width: "100%" }}>
         <SelectableDataTable
           columns={columns}
-          dataFetchCall={dataFetchCall}
-          dataFetchParams={dataFetchParams}
           changedCallback={handleSelectionChange}
+          selectedIds={selectedIds}
+          providedData={providedData}
+          tableTitle={title}
+          uniqueIdField={uniqueIdField}
         ></SelectableDataTable>
       </div>
     </div>

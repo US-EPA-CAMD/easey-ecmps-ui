@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { forwardRef } from "react";
@@ -12,6 +12,8 @@ export const SelectableDataTable = ({
   dataFetchCall = null,
   dataFetchParams = null,
   changedCallback,
+  uniqueIdField,
+  selectedIds
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(providedData);
@@ -57,6 +59,10 @@ export const SelectableDataTable = ({
     );
   });
 
+  const rowIsSelected = useCallback(row => {
+    return selectedIds.includes(row[uniqueIdField])
+  }, [selectedIds, uniqueIdField])
+
   return (
     <>
       {loading && <Preloader />}
@@ -64,10 +70,11 @@ export const SelectableDataTable = ({
         <div className="data-display-table-export fixed-table-header grid-col-12">
           <DataTable
             columns={columns}
-            data={data}
+            data={providedData}
             selectableRowsComponent={DataTableCheckbox}
             selectableRows
             onSelectedRowsChange={changedCallback}
+            selectableRowSelected={rowIsSelected}
           />
         </div>
       )}

@@ -8,18 +8,17 @@ import {
 import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
-  GridContainer,
-  Grid,
   Label,
-  ComboBox,
   Button,
 } from "@trussworks/react-uswds";
+import { ComboBox } from "../../ComboBox/ComboBox";
 import {
   getEmSubmissionRecords,
   getQaTestMaintenanceRecords,
   getQaCertEventMaintenanceRecords,
   getQaExtensionExemptionMaintenanceRecords,
 } from "../../../utils/api/adminManagementApi";
+import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 
 export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
@@ -168,6 +167,9 @@ const FilterFormAdmin = ({
 
         setTableData(newData);
       }
+
+      assignAriaSortHandlersToDatatable()
+      assignAriaLabelsToDataTableColumns()
     } catch (e) {
       console.error(e);
     } finally {
@@ -191,6 +193,7 @@ const FilterFormAdmin = ({
 
   useEffect(() => {
     if (reloadTableData) {
+      removeAriaSortHandlersFromDatatable()
       applyFilters();
       setReloadTableData(false);
     }
