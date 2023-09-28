@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
@@ -19,13 +25,18 @@ import {
   getQATeeReviewSubmit,
   exportQA,
 } from "../../../utils/api/qaCertificationsAPI";
-import { getEmissionsReviewSubmit, exportEmissionsDataDownload } from "../../../utils/api/emissionsApi";
-import { getMonitoringPlans, exportMonitoringPlanDownload } from "../../../utils/api/monitoringPlansApi";
+import {
+  getEmissionsReviewSubmit,
+  exportEmissionsDataDownload,
+} from "../../../utils/api/emissionsApi";
+import {
+  getMonitoringPlans,
+  exportMonitoringPlanDownload,
+} from "../../../utils/api/monitoringPlansApi";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
-
 
 export const ExportTab = ({
   facility,
@@ -33,15 +44,21 @@ export const ExportTab = ({
   orisCode,
   workspaceSection,
 }) => {
+  const [canExport, setCanExport] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
 
-  const exportState = useSelector(state => {
-    const exportTabs = state.openedFacilityTabs.export
-    const curTabObj = exportTabs.find((tab) => tab.selectedConfig.id === selectedConfig.id)
-    return curTabObj?.exportState ?? null
-  })
+  const storedYear = useRef();
+  const storedQuarter = useRef();
+
+  const exportState = useSelector((state) => {
+    const exportTabs = state.openedFacilityTabs.export;
+    const curTabObj = exportTabs.find(
+      (tab) => tab.selectedConfig.id === selectedConfig.id
+    );
+    return curTabObj?.exportState ?? null;
+  });
 
   const dispatch = useDispatch();
 
@@ -78,7 +95,7 @@ export const ExportTab = ({
       dataFetch: getQACertEventReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "QCE",
-      uniqueIdField: "qaCertEventIdentifier"
+      uniqueIdField: "qaCertEventIdentifier",
     },
     {
       title: "Test Extension Exemptions Data",
@@ -95,36 +112,46 @@ export const ExportTab = ({
       dataFetch: getEmissionsReviewSubmit,
       selectedRows: useRef([]),
       reportCode: "EM",
-      uniqueIdField: "submissionId"
+      uniqueIdField: "submissionId",
     },
   ];
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const promises = dataTypes.map(dt => dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod]))
-      const responses = await Promise.all(promises)
+      const promises = dataTypes.map((dt) =>
+        dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod])
+      );
+      const responses = await Promise.all(promises);
 
-      const tableData = responses.map(resp => resp.data)
-      setTableData(tableData)
-    }
+      const tableData = responses.map((resp) => resp.data);
+      setTableData(tableData);
+    };
     fetchTableData();
     // causes inf rerender: dataTypes (dataTypes is not a primitive)
-  }, [reportingPeriod, orisCode, selectedConfig.id])
+  }, [reportingPeriod, orisCode, selectedConfig.id]);
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
     const { id, calendarYear, quarter } = selectedObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
 
+    storedYear.current = calendarYear;
+    storedQuarter.current = quarter;
+
     const newExportState = {
       ...exportState,
-      reportingPeriodId: id
-    }
-    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
+      reportingPeriodId: id,
+    };
+
+    dispatch(
+      setExportState(selectedConfig.id, newExportState, workspaceSection)
+    );
   };
 
   const getInitSelection = (reportingPeriodObj) => {
-    const { calendarYear, quarter } = reportingPeriodObj
+    const { calendarYear, quarter } = reportingPeriodObj;
     setReportingPeriod(`${calendarYear} Q${quarter}`);
+    storedYear.current = calendarYear;
+    storedQuarter.current = quarter;
   };
 
   const downloadQaData = async () => {
@@ -181,8 +208,8 @@ export const ExportTab = ({
         exportEmissionsDataDownload(
           facility,
           selectedConfig.id,
-          dataTypes[4].selectedRows.current.calendarYear,
-          dataTypes[4].selectedRows.current.quarter,
+          storedYear.current,
+          storedQuarter.current,
           getUser() !== null
         )
       );
@@ -193,8 +220,19 @@ export const ExportTab = ({
   };
 
   const dispatchSetExportState = (newExportState) => {
-    dispatch(setExportState(selectedConfig.id, newExportState, workspaceSection))
-  }
+    dispatch(
+      setExportState(selectedConfig.id, newExportState, workspaceSection)
+    );
+  };
+
+  const canToggleExport = useCallback(() => {
+    let selectedItems = 0;
+    for (const dataChunk of dataTypes) {
+      selectedItems += dataChunk.selectedRows.current.length;
+    }
+
+    setCanExport(selectedItems > 0);
+  }, []);
 
   return (
     <div>
@@ -218,6 +256,7 @@ export const ExportTab = ({
           </div>
           <center className="grid-col-3 margin-y-auto =">
             <Button
+              disabled={!canExport}
               type={"button"}
               size="big"
               className="width-full maxw-card-lg"
@@ -233,7 +272,8 @@ export const ExportTab = ({
         {dataTypes.map((dt, index) => {
           return (
             <ExportTable
-              key={uuidv4}
+              toggleExportCallback={canToggleExport}
+              key={dt.uniqueIdField}
               title={dt.title}
               columns={dt.columns}
               providedData={tableData[index]}
@@ -250,6 +290,7 @@ export const ExportTab = ({
       <div className="grid-row">
         <center className="grid-col-3 grid-offset-9 margin-y-auto padding-top-2">
           <Button
+            disabled={!canExport}
             type={"button"}
             size="big"
             className="width-full maxw-card-lg"

@@ -58,6 +58,7 @@ export const DropdownSelection = ({
                   : options[0][selectKey]
               }
               onChange={(e) => handleChange(e)}
+              tabIndex={0}
             >
               {populateOptions(options)}
             </Dropdown>
@@ -79,6 +80,7 @@ export const DropdownSelection = ({
                 : options[0][selectKey]
             }
             onChange={(e) => handleChange(e)}
+            tabIndex={0}
           >
             {populateOptions(options)}
           </Dropdown>
