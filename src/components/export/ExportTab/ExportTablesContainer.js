@@ -72,13 +72,8 @@ export const ExportTablesContainer = ({
         console.log(err);
       }
     };
-<<<<<<< Updated upstream
-    fetchTableData();
-  }, [beginDate, dataKey, divId, endDate, monitoringLocationData, orisCode]);
-=======
     fetchTableData().catch((error) => console.log('Error fetching table data:', error));
   }, [beginDate, dataKey, divId, endDate, locations, orisCode]);
->>>>>>> Stashed changes
 
   const onSelectRowsHandler = ({
     selectedRows,

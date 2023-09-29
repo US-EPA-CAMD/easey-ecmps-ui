@@ -394,13 +394,13 @@ export const DataTableSystems = ({
   };
 
   const createSystems = async () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
+    }
     try {
-      const userInput = extractUserInput(sysPayload, ".modalUserInput");
-      const validationErrors = validateUserInput(userInput, dataTableName);
-      if (validationErrors.length > 0) {
-        setErrorMsgs(validationErrors);
-        return;
-      }
       const resp = await mpApi
         .createSystems(userInput, locationSelectValue)
         .catch((error) => console.log("createSystems failed", error));
@@ -635,36 +635,18 @@ export const DataTableSystems = ({
    * @returns true if component saved successfully, false otherwise
    */
   const saveComponent = async () => {
-<<<<<<< Updated upstream
-    const userInput = extractUserInput(componentPayload, ".modalUserInput");
-
-    userInput.componentId = selectedRangeInFirst.componentId;
-    userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
-    userInput.basisCode = selectedRangeInFirst.basisCode;
-    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
-    userInput.sampleAcquisitionMethodCode =
-      selectedRangeInFirst.sampleAcquisitionMethodCode;
-    userInput.analyticalPrincipleCode =
-      selectedRangeInFirst.analyticalPrincipleCode;
-
-    const sysCompTable = "System Components";
-    const validationErrors = validateUserInput(userInput, sysCompTable);
-    if (validationErrors.length > 0) {
-      setErrorMsgs(validationErrors);
-      return false;
-    }
-=======
->>>>>>> Stashed changes
     try {
       const userInput = extractUserInput(componentPayload, ".modalUserInput");
-
+  
       userInput.componentId = selectedRangeInFirst.componentId;
       userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
       userInput.basisCode = selectedRangeInFirst.basisCode;
       userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
       userInput.sampleAcquisitionMethodCode =
         selectedRangeInFirst.sampleAcquisitionMethodCode;
-
+      userInput.analyticalPrincipleCode =
+        selectedRangeInFirst.analyticalPrincipleCode;
+  
       const sysCompTable = "System Components";
       const validationErrors = validateUserInput(userInput, sysCompTable);
       if (validationErrors.length > 0) {
@@ -826,8 +808,8 @@ export const DataTableSystems = ({
               secondLevel && !thirdLevel
                 ? secondLevelName === "Add Component"
                   ? () => {
-                    setAddCompThirdLevelCreateTrigger(true);
-                  }
+                      setAddCompThirdLevelCreateTrigger(true);
+                    }
                   : null
                 : null
             }
@@ -835,72 +817,72 @@ export const DataTableSystems = ({
             save={
               !secondLevel && !thirdLevel // first level at systems
                 ? () => {
-                  saveSystems();
-                }
+                    saveSystems();
+                  }
                 : secondLevel && !thirdLevel // second level at components or fuel flows
-                  ? // at system fuel flows
+                ? // at system fuel flows
                   secondLevelName === "Fuel Flow"
-                    ? createFuelFlowFlag
-                      ? async () => {
+                  ? createFuelFlowFlag
+                    ? async () => {
                         const createSuccess = await createFuelFlows();
                         if (createSuccess) {
                           backToFirstLevelLevelBTN(false);
                           setOpenFuelFlowsView(false);
                         }
                       }
-                      : async () => {
+                    : async () => {
                         const saveSuccess = await saveFuelFlows();
                         if (saveSuccess) {
                           backToFirstLevelLevelBTN(false);
                           setOpenFuelFlowsView(false);
                         }
                       }
-                    : secondLevelName === "Component" && !createNewComponentFlag
-                      ? // at system components
-                      // need to hide analyzer range table on create
-                      async () => {
-                        const saveSuccess = await saveComponent();
-                        if (saveSuccess) {
-                          backToFirstLevelLevelBTN(false);
-                        }
-                      }
-                      : secondLevelName === "Component" && createNewComponentFlag
-                        ? // at system components
-                        async () => {
-                          const createSuccess = await createComponent();
-                          if (createSuccess) {
-                            setCreateNewComponentFlag(false);
-                            setAddComponentFlag(false);
-                            backToFirstLevelLevelBTN(false);
-                          }
-                        }
-                        : // at add component level page
-                        secondLevelName === "Add Component"
-                          ? () => {
-                            setAddCompThirdLevelTrigger(true);
-                          }
-                          : () => { }
-                  : // at analyzer ranges in components at third level
-                  createAnalyzerRangesFlag
-                    ? // in creating a range
+                  : secondLevelName === "Component" && !createNewComponentFlag
+                  ? // at system components
+                    // need to hide analyzer range table on create
                     async () => {
-                      const createSuccess = await createAnalyzerRange();
-                      if (createSuccess) {
-                        backToSecondLevelBTN(false);
-                        setBread(true, "Component");
-                        setCreateAnalyzerRangesFlag(false);
-                        setDisableExitBtn(false);
-                      }
-                    }
-                    : // in just editing a range
-                    async () => {
-                      const saveSuccess = await saveAnalyzerRanges();
+                      const saveSuccess = await saveComponent();
                       if (saveSuccess) {
-                        backToSecondLevelBTN(false);
-                        setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
-                        setDisableExitBtn(false);
+                        backToFirstLevelLevelBTN(false);
                       }
                     }
+                  : secondLevelName === "Component" && createNewComponentFlag
+                  ? // at system components
+                    async () => {
+                      const createSuccess = await createComponent();
+                      if (createSuccess) {
+                        setCreateNewComponentFlag(false);
+                        setAddComponentFlag(false);
+                        backToFirstLevelLevelBTN(false);
+                      }
+                    }
+                  : // at add component level page
+                  secondLevelName === "Add Component"
+                  ? () => {
+                      setAddCompThirdLevelTrigger(true);
+                    }
+                  : () => {}
+                : // at analyzer ranges in components at third level
+                createAnalyzerRangesFlag
+                ? // in creating a range
+                  async () => {
+                    const createSuccess = await createAnalyzerRange();
+                    if (createSuccess) {
+                      backToSecondLevelBTN(false);
+                      setBread(true, "Component");
+                      setCreateAnalyzerRangesFlag(false);
+                      setDisableExitBtn(false);
+                    }
+                  }
+                : // in just editing a range
+                  async () => {
+                    const saveSuccess = await saveAnalyzerRanges();
+                    if (saveSuccess) {
+                      backToSecondLevelBTN(false);
+                      setBread(true, "Component"); // fixes systems component "save and close" not working after saving analyzer range edit
+                      setDisableExitBtn(false);
+                    }
+                  }
             }
             close={closeModalHandler}
             showCancel={!(user && checkout)}
@@ -909,20 +891,20 @@ export const DataTableSystems = ({
               createAnalyzerRangesFlag
                 ? "Create Analyzer Range"
                 : createFuelFlowFlag
-                  ? "Create Fuel Flow"
-                  : // add componentmodal page
-                  addComponentFlag && !createNewComponentFlag
-                    ? "Continue"
-                    : createNewComponentFlag &&
-                      addComponentFlag &&
-                      addExistingComponentFlag
-                      ? "Add Existing Component"
-                      : // /: // create a new comp page
-                      createNewComponentFlag &&
-                        addComponentFlag &&
-                        !addExistingComponentFlag
-                        ? "Create New Component"
-                        : null
+                ? "Create Fuel Flow"
+                : // add componentmodal page
+                addComponentFlag && !createNewComponentFlag
+                ? "Continue"
+                : createNewComponentFlag &&
+                  addComponentFlag &&
+                  addExistingComponentFlag
+                ? "Add Existing Component"
+                : // /: // create a new comp page
+                createNewComponentFlag &&
+                  addComponentFlag &&
+                  !addExistingComponentFlag
+                ? "Create New Component"
+                : null
             }
             // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
