@@ -14,6 +14,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import QAMaintenanceModalPopout, { QA_MAINTENANCE_MODAL_DELETE, QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION } from "./QAMaintenanceModalPopout";
+import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 
 let controlInputs;
 
@@ -202,6 +203,10 @@ const QAMaintenanceData = ({
     setModalState({ isOpen: false, type: null });
   };
 
+  setTimeout(() => {
+    addAriaLabelToDatatable();
+  }, 500);
+
   return (
     <div>
       {modalState.isOpen === true ? (
@@ -257,6 +262,7 @@ const QAMaintenanceData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
+        <span data-aria-label={"QA/Cert Data Maintenance"}></span>
           <DataTable
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
