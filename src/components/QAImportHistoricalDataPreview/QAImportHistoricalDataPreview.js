@@ -146,7 +146,7 @@ export const QAImportHistoricalDataPreview = ({
         <div className="grid-col-fill padding-x-9 padding-top-3">
           <Button
             className="width-card"
-            onClick={() => fetchDataPreviewRecords()}
+            onClick={fetchDataPreviewRecords}
           >
             Preview
           </Button>

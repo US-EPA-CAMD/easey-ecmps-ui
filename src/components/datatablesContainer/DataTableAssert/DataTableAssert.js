@@ -154,7 +154,7 @@ export const DataTableAssert = ({
               .then((locAtt) => {
                 setComplimentaryData(locAtt.data);
                 finishedLoadingData(res.data);
-              });
+              }).catch(error => console.log(error));
           }
 
           // Unit Information tables
@@ -179,12 +179,12 @@ export const DataTableAssert = ({
                       secondTableData.concat(thirdTableData)
                     );
                     finishedLoadingData(res.data);
-                  });
-              });
+                  }).catch(error => console.log(error));
+              }).catch(error => console.log(error));
           } else {
             finishedLoadingData(res.data);
           }
-        });
+        }).catch(error => console.log('Error inn getDataTableApis', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

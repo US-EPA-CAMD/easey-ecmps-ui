@@ -106,22 +106,20 @@ export const SubmissionModal = ({
 
   const submitAuth = async (event) => {
     event.preventDefault();
+    try {
+      const isFormValid = await authFormSchema.isValid(
+        { username, password },
+        {
+          abortEarly: false,
+        }
+      );
 
-    const isFormValid = await authFormSchema.isValid(
-      { username, password },
-      {
-        abortEarly: false,
-      }
-    );
-
-    // *** display clientside errors
-    if (!isFormValid) {
-      setShowError(true);
-      setFormErrorMessage("Please enter your username and password");
-    } else {
-      setLoading(true);
-
-      try {
+      // *** display clientside errors
+      if (!isFormValid) {
+        setShowError(true);
+        setFormErrorMessage("Please enter your username and password");
+      } else {
+        setLoading(true);
         const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
         const result = await credentialsAuth({
@@ -137,12 +135,16 @@ export const SubmissionModal = ({
 
         setStage(2);
         setShowError(false);
-      } catch (e) {
-        setShowError(true);
-        setFormErrorMessage(e.message);
+
+
       }
+    } catch (e) {
+      setShowError(true);
+      setFormErrorMessage(e.message);
+    } finally {
       setLoading(false);
     }
+
   };
 
   const submitAnswer = async (event) => {
@@ -154,26 +156,23 @@ export const SubmissionModal = ({
       answer: answer,
       activityId: activityId,
     };
-
-    const isFormValid = await answerFormSchema.isValid(
-      { answer },
-      {
-        abortEarly: false,
-      }
-    );
-
-    // *** display clientside errors
-    if (!isFormValid) {
-      setShowError(true);
-      setFormErrorMessage(
-        "Please enter an answer to the challenge / pin verification"
+    try {
+      const isFormValid = await answerFormSchema.isValid(
+        { answer },
+        {
+          abortEarly: false,
+        }
       );
-    } else {
-      setLoading(true);
 
-      try {
+      // *** display clientside errors
+      if (!isFormValid) {
+        setShowError(true);
+        setFormErrorMessage(
+          "Please enter an answer to the challenge / pin verification"
+        );
+      } else {
+        setLoading(true);
         await verifyChallenge(payload);
-
         const result = await getCredentials(monitorPlanIds);
 
         const list = result.data.map((el) => {
@@ -187,13 +186,13 @@ export const SubmissionModal = ({
         });
 
         setStatements(list);
-
         setStage(3);
         setShowError(false);
-      } catch (e) {
-        setShowError(true);
-        setFormErrorMessage("Error Authenticating Answer");
       }
+    } catch (e) {
+      setShowError(true);
+      setFormErrorMessage("Error Authenticating Answer");
+    } finally {
       setLoading(false);
     }
   };
@@ -259,8 +258,8 @@ export const SubmissionModal = ({
                     stage === 2
                       ? "current"
                       : stage < 2
-                      ? "incomplete"
-                      : "complete"
+                        ? "incomplete"
+                        : "complete"
                   }
                 />
                 <StepIndicatorStep

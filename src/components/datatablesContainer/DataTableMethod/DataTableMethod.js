@@ -116,7 +116,7 @@ export const DataTableMethod = ({
       revertedState ||
       updateRelatedTables
     ) {
-      fetchMethods();
+      fetchMethods().catch((error) => console.log('Error in fetchMethods', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -217,7 +217,7 @@ export const DataTableMethod = ({
 
   const testing = () => {
     openMethodModal(false, false, true);
-    saveMethods();
+    saveMethods().catch((error) => console.log('Error in saveMethods', error));
   };
 
   const testing2 = () => {
@@ -230,7 +230,7 @@ export const DataTableMethod = ({
 
   const testing3 = () => {
     openMethodModal(false, false, true);
-    createMethods();
+    createMethods().catch((error) => console.log('Error in createMethods', error));
   };
 
   const openMethodModal = (row, bool, create) => {

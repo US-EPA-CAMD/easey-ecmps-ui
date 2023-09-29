@@ -131,6 +131,7 @@ export const AddErrorSupressionModal = ({
       // split the locations coming from the table row
       const splitLocationList = locations?.split(",");
 
+<<<<<<< Updated upstream
       if (splitLocationList) {
         splitLocationList.forEach((locName) => {
           const found = availLoc.find((datum) => datum.label === locName);
@@ -146,16 +147,148 @@ export const AddErrorSupressionModal = ({
           availLoc.map((l) => l.id)
         ).then((universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
+=======
+    // Locations multiselect items
+    const [locationData, setLocationData] = useState([]);
+
+    const [showLoader, setShowLoader] = useState(false);
+
+    const hoursInADay = [...Array(24).keys()]
+
+    const yearQuarters = useMemo(getReportingPeriods, [])
+
+    // Time Criteria booleans
+    const showDateHour = selectedCheckResultObj?.timeTypeCode === 'HOUR';
+    const showDate = selectedCheckResultObj?.timeTypeCode === 'DATE';
+    const showQuarter = selectedCheckResultObj?.timeTypeCode === 'QUARTER';
+    const showHistorical = selectedCheckResultObj?.timeTypeCode === 'HISTIND';
+
+
+
+    useEffect(() => {
+        const uniqueTypeCodeAndDesc = getUniqueCheckTypeDescription(transformedData);
+        setCheckTypeList(uniqueTypeCodeAndDesc);
+    }, [transformedData]);
+
+
+    // When the clone button is clicked and values is set, this useEffect takes care of prepopulating
+    // all the form fields with the values of the row that was selected
+    useEffect(() => {
+        if (!values)
+            return;
+
+        const { checkTypeCode, checkNumber, checkResultCode, facilityId, orisCode, matchDataTypeCode,
+            locations, reasonCode, severityCode, note, matchTimeTypeCode,
+            matchTimeBeginValue, matchTimeEndValue, matchHistoricalIndicator } = values;
+
+        // The onchange functions load the dropdown values and set the values for selectedCheckType and selectedCheckNumber
+        onCheckTypeChange({ target: { value: checkTypeCode } });
+        onCheckNumberChange({ target: { value: checkNumber } }, checkTypeCode);
+        setSelectedCheckResult(checkResultCode);
+        setSelectedFacility(facilityId);
+        setSelectedReasonCode(reasonCode);
+        setSelectedSeverityCode(severityCode);
+        setSelectedNotes(note);
+
+        const checkResultObj = transformedData[checkTypeCode][checkNumber].find(r => r.checkResult === checkResultCode);
+        setSelectedCheckResultObj(checkResultObj);
+
+        getLocations(orisCode, checkResultObj).then((availLoc) => {
+            // split the locations coming from the table row
+            const splitLocationList = locations?.split(",");
+
+            if (splitLocationList) {
+                splitLocationList.forEach(locName => {
+                    const found = availLoc.find(datum => datum.label === locName);
+                    if (found)
+                        found.selected = true
+                })
+            }
+
+            setLocationData(availLoc);
+            if (matchDataTypeCode === "TESTNUM") {
+                createMatchTypeDropdownLists(checkResultObj, orisCode, availLoc.map(l => l.id)).then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                }).catch(error => console.log('Error in createMatchTypeDropdownLists', error))
+            }
+        }).catch(error => console.log('Error in getLocations', error));
+
+        if (matchDataTypeCode !== "TESTNUM") {
+            createMatchTypeDropdownLists(checkResultObj, orisCode).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            }).catch(error => console.log('Error in createMatchTypeDropdownLists', error))
+        }
+
+        // Match time values
+        switch (matchTimeTypeCode) {
+            case ("HISTIND"):
+                setSelectedIsHistorical(matchHistoricalIndicator)
+                break;
+            case ("HOUR"):
+                setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
+                setSelectedBeginHour(matchTimeBeginValue ? new Date(matchTimeBeginValue).getHours() : undefined);
+                setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
+                setSelectedEndHour(matchTimeEndValue ? new Date(matchTimeEndValue).getHours() : undefined);
+                break;
+            case ("DATE"):
+                setSelectedBeginDate(matchTimeBeginValue ? formatDate(matchTimeBeginValue, "/") : undefined);
+                setSelectedEndDate(matchTimeEndValue ? formatDate(matchTimeEndValue, "/") : undefined);
+                break;
+            case ("QUARTER"):
+                const beginYearQuarter = matchTimeBeginValue ? `${new Date(matchTimeBeginValue).getFullYear()} Q${getQuarter(new Date(matchTimeBeginValue), true)}` : undefined;
+                setSelectedBeginQuarter(beginYearQuarter);
+                const endYearQuarter = matchTimeEndValue ? `${new Date(matchTimeEndValue).getFullYear()} Q${getQuarter(new Date(matchTimeEndValue), true)}` : undefined;
+                setSelectedEndQuarter(endYearQuarter);
+                break;
+            default:
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [values])
+
+    // API Calls
+    useEffect(() => {
+
+        getSeverityCodes().then(({ data }) => {
+            setSeverityCodeList(data);
+        }).catch(error => {
+            console.log("Error getting Severity Codes", error);
+>>>>>>> Stashed changes
         });
       }
     });
 
+<<<<<<< Updated upstream
     if (matchDataTypeCode !== "TESTNUM") {
       createMatchTypeDropdownLists(checkResultObj, orisCode).then(
         (universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
         }
       );
+=======
+    const onChangeOfLocationMultiSelect = (id, changeType) => {
+        const uniqueLocations = [
+            ...new Set([...selectedLocations, id]),
+        ];
+
+        if (changeType === "add") {
+            createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, uniqueLocations)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                }).catch(error => console.log('Error in createMatchTypeDropdownLists', error))
+            setSelectedLocations(uniqueLocations);
+        }
+        else if (changeType === "remove") {
+            const selected = locationData.filter((l) => l.selected).map(l => l.id);
+            createMatchTypeDropdownLists(selectedCheckResultObj, selectedFacility, selected)
+                .then(universalMatchDataList => {
+                    setMatchDataList(universalMatchDataList)
+                }).catch(error => console.log('Error in createMatchTypeDropdownLists', error))
+
+            setSelectedLocations(selected);
+        }
+        else
+            return;
+>>>>>>> Stashed changes
     }
 
     // Match time values
@@ -245,6 +378,7 @@ export const AddErrorSupressionModal = ({
     } else return;
   };
 
+<<<<<<< Updated upstream
   const onCheckTypeChange = (e) => {
     let { value } = e.target;
     value = value === "false" ? false : value;
@@ -310,6 +444,15 @@ export const AddErrorSupressionModal = ({
         });
     }
   };
+=======
+        // set the actual catalog result object
+        const checkCatalogList = transformedData[selectedCheckType][selectedCheckNumber];
+        const checkCatalogResult = checkCatalogList.find(c => c.checkResult === value);
+        setSelectedCheckResultObj(checkCatalogResult);
+        createMatchTypeDropdownLists(checkCatalogResult).then(universalMatchDataList => {
+            setMatchDataList(universalMatchDataList)
+        }).catch(error => console.log('Error in createMatchTypeDropdownLists', error));
+>>>>>>> Stashed changes
 
   const onFacilityChange = (value) => {
     value = value === "false" ? false : value;
@@ -403,6 +546,7 @@ export const AddErrorSupressionModal = ({
 
     setShowLoader(true);
 
+<<<<<<< Updated upstream
     try {
       const resp = await createErrorSuppression(payload).catch((error) =>
         console.log("create failed", error)
@@ -415,6 +559,32 @@ export const AddErrorSupressionModal = ({
       }
     } catch (error) {
       setErrorMsgs([JSON.stringify(error.message)]);
+=======
+        value = value === "false" ? false : value;
+        let prevSelectedFacility = selectedFacility
+
+        setSelectedFacility(value);
+        if (!value) return;
+
+        if (selectedCheckType && selectedCheckNumber && selectedCheckResult && prevSelectedFacility !== value) {
+            createMatchTypeDropdownLists(selectedCheckResultObj, value).then(universalMatchDataList => {
+                setMatchDataList(universalMatchDataList)
+            }).catch(error => console.log('Error in createMatchTypeDropdownLists', error));
+            const facility = facilityList.find(f => f.value === value);
+
+            const checkResultObj = transformedData[selectedCheckType][selectedCheckNumber].find(r => r.checkResult === selectedCheckResult)
+            getLocations(facility.orisCode, checkResultObj).then(availLoc => {
+                setLocationData([...availLoc]);
+            }).catch(error => console.log('Error in getLocations', error));
+        }
+    };
+
+    const onMatchDataTypeChange = (e) => {
+        let { value } = e.target;
+        value = value === "false" ? false : value;
+
+        setSelectedMatchDataValue(value);
+>>>>>>> Stashed changes
     }
     setShowLoader(false);
   };

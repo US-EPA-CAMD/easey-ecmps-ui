@@ -49,7 +49,7 @@ export const MonitoringPlanHome = ({
     dispatch(setWorkspaceState(workspaceSection));
   });
   useEffect(() => {
-    obtainCheckedOutLocations().then();
+    obtainCheckedOutLocations()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanIdForTab]);
 
@@ -82,30 +82,34 @@ export const MonitoringPlanHome = ({
     return () => {
       setTitleName(""); // This worked for me
     };
-  }, [workspaceSection,dispatch]);
+  }, [workspaceSection, dispatch]);
 
   const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations();
+    try {
+      const checkedOutLocationResult = await getCheckedOutLocations();
 
-    let checkedOutLocationList = [];
-    if (checkedOutLocationResult) {
-      if (checkedOutLocationResult.data) {
-        checkedOutLocationList = checkedOutLocationResult.data;
-      }
-      // *** find locations currently checked out by the user
-      const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
-        (element) => element["checkedOutBy"] === user.firstName
-      )[0]
-        ? checkedOutLocationList.filter(
+      let checkedOutLocationList = [];
+      if (checkedOutLocationResult) {
+        if (checkedOutLocationResult.data) {
+          checkedOutLocationList = checkedOutLocationResult.data;
+        }
+        // *** find locations currently checked out by the user
+        const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
+          (element) => element["checkedOutBy"] === user.firstName
+        )[0]
+          ? checkedOutLocationList.filter(
             (element) => element["checkedOutBy"] === user.firstName
           )[0]["monPlanId"]
-        : null;
+          : null;
 
-      if (currentlyCheckedOutMonPlanId) {
-        window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+        if (currentlyCheckedOutMonPlanId) {
+          window.currentlyCheckedOutMonPlanId = currentlyCheckedOutMonPlanId;
+        }
       }
+      setCheckedOutLocations(checkedOutLocationList);
+    } catch (error) {
+      console.log(error);
     }
-    setCheckedOutLocations(checkedOutLocationList);
   };
 
   const checkInAll = () => {
@@ -114,7 +118,7 @@ export const MonitoringPlanHome = ({
         .deleteCheckInMonitoringPlanConfiguration(
           window.currentlyCheckedOutMonPlanId
         )
-        .then((res) => {})
+        .then((res) => { })
         .catch((error) =>
           console.log("deleteCheckInMonitoringPlanConfiguration failed", error)
         );

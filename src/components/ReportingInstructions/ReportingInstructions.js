@@ -15,7 +15,7 @@ export const ReportingInstructions = () => {
 
     getContent("/ecmps/reporting-instructions/index.md").then((resp) =>
       setMainContent(resp.data)
-    );
+    ).catch(error => console.log(error));
   }, []);
 
   return (
