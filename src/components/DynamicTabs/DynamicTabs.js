@@ -1,4 +1,4 @@
-import React, { useState, cloneElement } from "react";
+import React, { useState, cloneElement, useEffect } from "react";
 import { connect } from "react-redux";
 import Tabs from "../Tabs/Tabs";
 import TabPane from "../TabPane/TabPane";
@@ -31,7 +31,6 @@ export const DynamicTabs = ({
   removeFacility,
   addFacility,
   setMostRecentlyCheckedInMonitorPlanId,
-  mostRecentlyCheckedInMonitorPlanId,
   workspaceSection,
   setCurrentTabIndex,
   currentTabIndex,
@@ -39,7 +38,11 @@ export const DynamicTabs = ({
   mostRecentlyCheckedInMonitorPlanIdForTab,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
-  const [tabs, setTabs] = useState(tabsProps);
+  const [tabs, setTabs] = useState([]);
+
+  useEffect(()=>{
+    setTabs(tabsProps())
+  }, [tabsProps])
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
