@@ -4,10 +4,14 @@ import {
 
 
 export const getDropDownFacilities = async () => {
-  const facilities = (await getAllFacilities()).data;
-  const formattedFacilities = facilities.map(({ facilityId, facilityName }) => ({
-    id: facilityId,
-    facilityName,
-  }));
-  return formattedFacilities;
+  try {
+    const facilities = (await getAllFacilities()).data;
+    const formattedFacilities = facilities.map(({ facilityId, facilityName }) => ({
+      id: facilityId,
+      facilityName,
+    }));
+    return formattedFacilities;
+  } catch (error) {
+    return [];
+  }
 };

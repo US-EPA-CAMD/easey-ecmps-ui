@@ -21,22 +21,22 @@ export const Resources = () => {
 
     getContent("/ecmps/resources/index.md").then((resp) =>
       setMainContent(resp.data)
-    );
+    ).catch(error => console.log('Error in index.md', error));
     getContent("/ecmps/resources/glossary.md").then((resp) =>
       setGlossaryContent(resp.data)
-    );
+    ).catch(error => console.log('Error in glossary.md', error));
     getContent("/ecmps/resources/reporting-instructions.md").then((resp) =>
       setReportingInsContent(resp.data)
-    );
+    ).catch(error => console.log('Error in instructions.md', error));
     getContent("/ecmps/resources/cam-api.md").then((resp) =>
       setCamApiContent(resp.data)
-    );
+    ).catch(error => console.log('Error in cam-api.md', error));
     getContent("/ecmps/resources/additional-resources.md").then((resp) =>
       setAdditionalResContent(resp.data)
-    );
+    ).catch(error => console.log('Error in additional-resources.md', error));
     getContent("/ecmps/resources/resources-links.json").then((resp) =>
       setResourcesLinks(resp.data)
-    );
+    ).catch(error => console.log('Error in resources-links.md', error));
   }, []);
 
   return (

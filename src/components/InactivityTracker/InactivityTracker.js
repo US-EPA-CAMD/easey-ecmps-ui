@@ -72,7 +72,7 @@ export const InactivityTracker = () => {
     if (!signingOut.current) {
       signingOut.current = true;
       //Callback to sign user out when timer is finished
-      logOut();
+      logOut().catch((error) => console.log(error));
     }
   };
 
@@ -106,7 +106,7 @@ export const InactivityTracker = () => {
 
     const activityInterval = setInterval(() => {
       if (wasActiveInWindow.current) {
-        refreshLastActivity();
+        refreshLastActivity().catch((error) => console.log(error));
       }
 
       wasActiveInWindow.current = false;

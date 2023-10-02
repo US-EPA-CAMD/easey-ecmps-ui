@@ -22,7 +22,7 @@ const Layout = (props) => {
   useEffect(() => {
     getContent("/ecmps/layout/outage-message.json").then((resp) => {
       setOutageMsgContent(resp.data);
-    });
+    }).catch(error => console.log('Error in outage-message.json', error));
   }, []);
 
   useEffect(() => {

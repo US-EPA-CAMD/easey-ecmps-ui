@@ -9,7 +9,7 @@ const useGetContent = (endpoint) => {
       getContent(endpoint).then((resp) => {
         setContent(resp.data);
         contentRef.current = resp.data;
-      });
+      }).catch(error => console.log('Error in getContent', error));
     } //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { content: content || contentRef.current };

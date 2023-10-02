@@ -9,10 +9,10 @@ const useGetCheckedOutLocations = () => {
   const checkedOutLocationsRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch }).then();
+    obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch });
     const interval = setInterval(
       () =>
-        obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch }).then(),
+        obtainCheckedOutLocations({ checkedOutLocationsRef, dispatch }),
       fiveSeconds
     );
     return () => clearInterval(interval); //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,32 +23,36 @@ export const obtainCheckedOutLocations = async ({
   checkedOutLocationsRef,
   dispatch,
 }) => {
-  const checkedOutLocationResult = await getCheckedOutLocations().then();
   let checkedOutLocationsList = [];
-  if (checkedOutLocationResult) {
-    const checkedOutLocationResultData = checkedOutLocationResult.data;
-    if (!dispatch) {
-      return checkedOutLocationResultData;
+  try {
+    const checkedOutLocationResult = await getCheckedOutLocations().then().catch(error => console.log(error));
+    if (checkedOutLocationResult) {
+      const checkedOutLocationResultData = checkedOutLocationResult.data;
+      if (!dispatch) {
+        return checkedOutLocationResultData;
+      }
+      if (!checkedOutLocationsRef) {
+        dispatch({
+          type: types.SET_CHECKED_OUT_LOCATIONS,
+          checkedOutLocations: checkedOutLocationResultData,
+        });
+        return checkedOutLocationResultData;
+      }
+      if (
+        checkedOutLocationResultData &&
+        !_.isEqual(checkedOutLocationsRef.current, checkedOutLocationResultData)
+      ) {
+        checkedOutLocationsList = checkedOutLocationResultData;
+        dispatch({
+          type: types.SET_CHECKED_OUT_LOCATIONS,
+          checkedOutLocations: checkedOutLocationsList,
+        });
+        checkedOutLocationsRef.current = checkedOutLocationResultData;
+      }
+        return checkedOutLocationResultData;
     }
-    if (!checkedOutLocationsRef) {
-      dispatch({
-        type: types.SET_CHECKED_OUT_LOCATIONS,
-        checkedOutLocations: checkedOutLocationResultData,
-      });
-      return checkedOutLocationResultData;
-    }
-    if (
-      checkedOutLocationResultData &&
-      !_.isEqual(checkedOutLocationsRef.current, checkedOutLocationResultData)
-    ) {
-      checkedOutLocationsList = checkedOutLocationResultData;
-      dispatch({
-        type: types.SET_CHECKED_OUT_LOCATIONS,
-        checkedOutLocations: checkedOutLocationsList,
-      });
-      checkedOutLocationsRef.current = checkedOutLocationResultData;
-    }
-      return checkedOutLocationResultData;
+  } catch (error) {
+    console.log(error);
   }
 };
 

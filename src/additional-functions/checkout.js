@@ -1,7 +1,7 @@
 import * as mpApi from "../utils/api/monitoringPlansApi";
 import { MONITORING_PLAN_STORE_NAME } from "../additional-functions/workspace-section-and-store-names";
 // Takes a direction to check a record in or out,the configID, and a dispatcher to the redux store
-export const checkoutAPI = (
+export const checkoutAPI = async (
   direction,
   configID,
   monitorPlanId,
@@ -19,7 +19,7 @@ export const checkoutAPI = (
         if (res === undefined) {
           console.log("error");
         }
-      });
+      }).catch(error => console.log('Error in deleteCheckInMonitoringPlanConfiguration', error));
   } else {
     return mpApi
       .postCheckoutMonitoringPlanConfiguration(monitorPlanId, user.userId)
@@ -30,6 +30,6 @@ export const checkoutAPI = (
         if (res === undefined) {
           console.log("this configuration is already checked out ");
         }
-      });
+      }).catch(error => console.log('Error in postCheckoutMonitoringPlanConfiguration', error));
   }
 };

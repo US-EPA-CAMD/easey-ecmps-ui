@@ -26,13 +26,13 @@ export const HelpSupport = () => {
 
     getContent("/ecmps/help-support/index.md").then((resp) =>
       setMainContent(resp.data)
-    );
+    ).catch(error => console.log('Error in index.md', error));
     getContent("/ecmps/help-support/faqs.md").then((resp) =>
       setFaqsContent(resp.data)
-    );
+    ).catch(error => console.log('Error in faqs.md', error));
     getContent("/ecmps/help-support/tutorials.md").then((resp) =>
       setTutorialsContent(resp.data)
-    );
+    ).catch(error => console.log('Error in tutorials.md', error));
   }, []);
 
   const commentTypes = [
