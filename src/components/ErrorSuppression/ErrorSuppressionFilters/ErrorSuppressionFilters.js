@@ -88,7 +88,7 @@ export const getLocations = (facilityValue, checkResultObj) => {
       .filter(({ label }, index) => !locName.includes(label, index + 1))
       .filter(({ label }) => label !== null)
       .sort((a, b) => a.label - b.label);
-  }).catch(error => console.log('Error in getMonitoringPlans', error));
+  });
 };
 
 export const ErrorSuppressionFilters = () => {
@@ -220,7 +220,7 @@ export const ErrorSuppressionFilters = () => {
 
       getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
         setLocationData([...availLoc])
-      ).catch(error => console.log('Error in getLocations', error));
+      );
     }
   };
 
@@ -277,7 +277,7 @@ export const ErrorSuppressionFilters = () => {
 
       getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
         setLocationData([...availLoc])
-      ).catch(error => console.log('Error in getLocations', error));
+      );
     }
   };
 

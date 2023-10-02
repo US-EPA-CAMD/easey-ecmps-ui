@@ -146,16 +146,16 @@ export const AddErrorSupressionModal = ({
           availLoc.map((l) => l.id)
         ).then((universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
-        }).catch((error) => console.log(error));
+        });
       }
-    }).catch((error) => console.log(error));
+    });
 
     if (matchDataTypeCode !== "TESTNUM") {
       createMatchTypeDropdownLists(checkResultObj, orisCode).then(
         (universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
         }
-      ).catch((error) => console.log(error));
+      );
     }
 
     // Match time values
@@ -229,7 +229,7 @@ export const AddErrorSupressionModal = ({
         uniqueLocations
       ).then((universalMatchDataList) => {
         setMatchDataList(universalMatchDataList);
-      }).catch((error) => console.log(error));
+      });
       setSelectedLocations(uniqueLocations);
     } else if (changeType === "remove") {
       const selected = locationData.filter((l) => l.selected).map((l) => l.id);
@@ -239,7 +239,7 @@ export const AddErrorSupressionModal = ({
         selected
       ).then((universalMatchDataList) => {
         setMatchDataList(universalMatchDataList);
-      }).catch((error) => console.log(error));
+      });
 
       setSelectedLocations(selected);
     } else return;
@@ -292,7 +292,7 @@ export const AddErrorSupressionModal = ({
       (universalMatchDataList) => {
         setMatchDataList(universalMatchDataList);
       }
-    ).catch((error) => console.log(error));
+    );
 
     const facility = facilityList.find((f) => f.value === selectedFacility);
 
@@ -328,7 +328,7 @@ export const AddErrorSupressionModal = ({
         (universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
         }
-      ).catch((error) => console.log(error));
+      );
       const facility = facilityList.find((f) => f.value === value);
 
       const checkResultObj = transformedData[selectedCheckType][
@@ -336,7 +336,7 @@ export const AddErrorSupressionModal = ({
       ].find((r) => r.checkResult === selectedCheckResult);
       getLocations(facility.orisCode, checkResultObj).then((availLoc) => {
         setLocationData([...availLoc]);
-      }).catch((error) => console.log(error));
+      });
     }
   };
 

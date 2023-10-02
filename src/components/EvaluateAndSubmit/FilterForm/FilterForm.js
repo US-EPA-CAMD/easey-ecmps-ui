@@ -25,33 +25,28 @@ const FilterForm = ({
   const selectedReportingPeriods = useRef([]);
 
   async function fetchReportingPeriods() {
-    try {
+    const reportingPeriodList = (await getReportingPeriods()).data;
 
-      const reportingPeriodList = (await getReportingPeriods()).data;
+    const availReportingPeriods = [];
 
-      const availReportingPeriods = [];
+    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
+      const period = reportingPeriodList[i];
+      const objectMapping = {
+        id: period.periodAbbreviation,
+        label: period.periodAbbreviation,
+        selected: false,
+        enabled: true,
+      };
 
-      for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
-        const period = reportingPeriodList[i];
-        const objectMapping = {
-          id: period.periodAbbreviation,
-          label: period.periodAbbreviation,
-          selected: false,
-          enabled: true,
-        };
-
-        if (i === reportingPeriodList.length - 1) {
-          objectMapping.selected = true;
-          selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
-        }
-
-        availReportingPeriods.push(objectMapping);
+      if (i === reportingPeriodList.length - 1) {
+        objectMapping.selected = true;
+        selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
       }
 
-      setAvailableReportingPeriods(availReportingPeriods);
-    } catch (error) {
-      console.log(error);
+      availReportingPeriods.push(objectMapping);
     }
+
+    setAvailableReportingPeriods(availReportingPeriods);
   }
 
   useEffect(() => {

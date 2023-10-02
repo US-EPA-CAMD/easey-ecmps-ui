@@ -87,7 +87,7 @@ const App = () => {
     if (localStorage.getItem("ecmps_user")) {
       return setInterval(async () => {
         let refreshCheckouts = false;
-        
+
         for (const loc of validCheckoutRefreshPaths) {
           if (window.location.href.indexOf(loc) > -1) {
             refreshCheckouts = true;
@@ -95,22 +95,18 @@ const App = () => {
           }
         }
         if (refreshCheckouts) {
-                getCheckedOutLocations()
-                .then(({data: checkedOutLocationResult}) => {
-                  if (
-                    checkedOutLocationResult &&
-                    !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
-                    ) {
-                      dispatch({
-                type: types.SET_CHECKED_OUT_LOCATIONS,
-                checkedOutLocations: checkedOutLocationResult,
-              });
-              checkedOutLocationsCache = checkedOutLocationResult;
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching checked out locations:", error);
-          });
+          const checkedOutLocationResult = (await getCheckedOutLocations())
+            ?.data;
+          if (
+            checkedOutLocationResult &&
+            !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
+          ) {
+            dispatch({
+              type: types.SET_CHECKED_OUT_LOCATIONS,
+              checkedOutLocations: checkedOutLocationResult,
+            });
+            checkedOutLocationsCache = checkedOutLocationResult;
+          }
         }
       }, 10000);
     }

@@ -371,13 +371,13 @@ export const DataTableSystems = ({
     React.useState(false);
 
   const saveSystems = async () => {
+    const userInput = extractUserInput(sysPayload, ".modalUserInput");
+    const validationErrors = validateUserInput(userInput, dataTableName);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return;
+    }
     try {
-      const userInput = extractUserInput(sysPayload, ".modalUserInput");
-      const validationErrors = validateUserInput(userInput, dataTableName);
-      if (validationErrors.length > 0) {
-        setErrorMsgs(validationErrors);
-        return;
-      }
       const resp = await mpApi
         .saveSystems(userInput, locationSelectValue, selectedSystem.id)
         .catch((error) => console.log("saveSystems failed", error));
@@ -433,16 +433,16 @@ export const DataTableSystems = ({
       endDate: "string",
       endHour: 0,
     };
+    const userInput = extractUserInput(payload, ".modalUserInput", [
+      "dualRangeIndicator",
+    ]);
+    const analyzerRangesTable = "Analyzer Ranges";
+    const validationErrors = validateUserInput(userInput, analyzerRangesTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
+    }
     try {
-      const userInput = extractUserInput(payload, ".modalUserInput", [
-        "dualRangeIndicator",
-      ]);
-      const analyzerRangesTable = "Analyzer Ranges";
-      const validationErrors = validateUserInput(userInput, analyzerRangesTable);
-      if (validationErrors.length > 0) {
-        setErrorMsgs(validationErrors);
-        return false;
-      }
       const resp = await mpApi
         .saveAnalyzerRanges(userInput)
         .catch((error) => console.log("saveAnalyzerRanges failed", error));
@@ -519,14 +519,14 @@ export const DataTableSystems = ({
    * @returns true if saved successfully, false otherwise
    */
   const saveFuelFlows = async () => {
+    const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
+    const fuelFlowTable = "Fuel Flows";
+    const validationErrors = validateUserInput(userInput, fuelFlowTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
+    }
     try {
-      const userInput = extractUserInput(fuelFlowsPayload, ".modalUserInput");
-      const fuelFlowTable = "Fuel Flows";
-      const validationErrors = validateUserInput(userInput, fuelFlowTable);
-      if (validationErrors.length > 0) {
-        setErrorMsgs(validationErrors);
-        return false;
-      }
       const resp = await mpApi
         .saveSystemsFuelFlows(
           userInput,
@@ -635,24 +635,24 @@ export const DataTableSystems = ({
    * @returns true if component saved successfully, false otherwise
    */
   const saveComponent = async () => {
+    const userInput = extractUserInput(componentPayload, ".modalUserInput");
+
+    userInput.componentId = selectedRangeInFirst.componentId;
+    userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
+    userInput.basisCode = selectedRangeInFirst.basisCode;
+    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
+    userInput.sampleAcquisitionMethodCode =
+      selectedRangeInFirst.sampleAcquisitionMethodCode;
+    userInput.analyticalPrincipleCode =
+      selectedRangeInFirst.analyticalPrincipleCode;
+
+    const sysCompTable = "System Components";
+    const validationErrors = validateUserInput(userInput, sysCompTable);
+    if (validationErrors.length > 0) {
+      setErrorMsgs(validationErrors);
+      return false;
+    }
     try {
-      const userInput = extractUserInput(componentPayload, ".modalUserInput");
-  
-      userInput.componentId = selectedRangeInFirst.componentId;
-      userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
-      userInput.basisCode = selectedRangeInFirst.basisCode;
-      userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
-      userInput.sampleAcquisitionMethodCode =
-        selectedRangeInFirst.sampleAcquisitionMethodCode;
-      userInput.analyticalPrincipleCode =
-        selectedRangeInFirst.analyticalPrincipleCode;
-  
-      const sysCompTable = "System Components";
-      const validationErrors = validateUserInput(userInput, sysCompTable);
-      if (validationErrors.length > 0) {
-        setErrorMsgs(validationErrors);
-        return false;
-      }
       const resp = await mpApi
         .saveSystemsComponents(
           userInput,

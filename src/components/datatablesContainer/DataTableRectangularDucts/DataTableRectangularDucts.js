@@ -109,7 +109,7 @@ export const DataTableRectangularDucts = ({
         setTotalOptions(resp);
         setDataLoaded(true);
         setUpdateTable(false);
-      }).catch((error) => console.log('error in UseRetrieveDropdownApi', error));
+      })
 
       setRevertedState(false);
     }
