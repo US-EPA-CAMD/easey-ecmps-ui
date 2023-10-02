@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -66,7 +66,7 @@ export const SelectFacilitiesDataTable = ({
     obtainCheckedOutLocations().then();
   }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
   const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations().then();
+    const checkedOutLocationResult = await getCheckedOutLocations().then().catch(error => console.log(error));
     let checkedOutLocationsList = [];
     if (checkedOutLocationResult) {
       if (
@@ -88,17 +88,16 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    const title = `${info[0].col1} (${info[1].name}) ${
-      info[1].active ? "" : "Inactive"
-    }`;
+    const title = `${info[0].col1} (${info[1].name}) ${info[1].active ? "" : "Inactive"
+      }`;
 
     // if user has THIS plan checkedout
     const isCheckedOutByUser = (configs) => {
       return (
         configs.map((location) => location["monPlanId"]).indexOf(info[1].id) >
-          -1 &&
+        -1 &&
         configs[
-          configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
+        configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
         ]["checkedOutBy"] === user["userId"]
       );
     };
@@ -109,7 +108,7 @@ export const SelectFacilitiesDataTable = ({
       {
         title,
         component:
-        workspaceState === MONITORING_PLAN_STORE_NAME ? (
+          workspaceState === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
               <MonitoringPlanTab
                 orisCode={info[0].col2}
@@ -177,7 +176,7 @@ export const SelectFacilitiesDataTable = ({
         // info[2] shows true if "open and checkout" was click first time
         // checkedoutvalue shows true if user already had it checked out but navigates away
         checkout: info[2] || checkedOutValue,
-        workspaceSection:workspaceState
+        workspaceSection: workspaceState
       },
     ]);
   };
@@ -230,7 +229,7 @@ export const SelectFacilitiesDataTable = ({
           workspaceSection: workspaceState,
         }}
         headerStyling="padding-top-0 padding-left-2"
-        setShowInactive={() => {}}
+        setShowInactive={() => { }}
         setMostRecentlyCheckedInMonitorPlanId={
           setMostRecentlyCheckedInMonitorPlanId
         }

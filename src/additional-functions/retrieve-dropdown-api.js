@@ -461,7 +461,7 @@ export const UseRetrieveDropdownApi = async (
               name: option["qualificationTypeDescription"],
             };
           });
-
+  
           setDefaultOptions(options, fieldName);
         })
         .catch(error => console.log('getAllQualificationTypeCodes failed', error));
@@ -480,7 +480,7 @@ export const UseRetrieveDropdownApi = async (
           });
 
           setDefaultOptions(options, fieldName);
-        });
+        }).catch(error => console.log('getAllQualificationDataYear failed', error));
 
         break;
       case "yr1QualificationDataTypeCode":

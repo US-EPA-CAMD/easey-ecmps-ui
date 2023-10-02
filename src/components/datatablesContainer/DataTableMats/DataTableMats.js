@@ -111,9 +111,9 @@ export const DataTableMats = ({
             setUpdateTable(false);
             setDataLoaded(true);
             setUpdateRelatedTables(false);
-          });
+          }).catch(error => console.log('Error in getMonitoringMethods', error));
         }
-      });
+      }).catch(error => console.log('Error in getMonitoringMatsMethods', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
