@@ -9,9 +9,6 @@ import "./EmSubmissionData.scss";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import {
-  addAriaLabelToDatatable,
-} from "../../../additional-functions/ensure-508";
 
 export const EmSubmissionData = ({
   data = [],
@@ -218,10 +215,6 @@ export const EmSubmissionData = ({
     setShowApproveModal(false);
     setShowViewEditModal(false);
   };
-
-  setTimeout(() => {
-    addAriaLabelToDatatable();
-  }, 500);
 
   return (
     <div>

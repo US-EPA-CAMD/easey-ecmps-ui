@@ -259,6 +259,7 @@ const QAMaintenanceData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
+        <span data-aria-label={"QA/Cert Data Maintenance"}></span>
           <DataTable
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
