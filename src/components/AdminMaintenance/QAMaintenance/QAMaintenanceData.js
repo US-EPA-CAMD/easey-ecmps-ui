@@ -99,6 +99,7 @@ const QAMaintenanceData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
+            aria-label={`view row for QA/Cert Maintainance record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={(e) => {
@@ -122,6 +123,7 @@ const QAMaintenanceData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewModalHandler(row, idx, false)}
+            aria-label={`view row for QA/Cert Maintainance record with id ${row.id}`}
           >
             View
           </Button>

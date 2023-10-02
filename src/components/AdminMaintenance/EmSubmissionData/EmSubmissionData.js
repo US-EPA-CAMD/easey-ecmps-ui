@@ -96,6 +96,7 @@ export const EmSubmissionData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
+            aria-label={`select row for EM Submission Access record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={(e) => {
@@ -120,6 +121,7 @@ export const EmSubmissionData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewEditModalHandler(row, idx, false)}
+            aria-label={`view row for EM Submission Access record with id ${row.id}`}
           >
             View
           </Button>
@@ -220,23 +222,23 @@ export const EmSubmissionData = ({
         showExtendModal ||
         showCloseModal ||
         showApproveModal) && (
-        <EmSubmissionModal
-          showModal={
-            showOpenModal ||
-            showExtendModal ||
-            showCloseModal ||
-            showApproveModal
-          }
-          close={closeModal}
-          isOpenModal={showOpenModal}
-          isExtendModal={showExtendModal}
-          isCloseModal={showCloseModal}
-          isApproveModal={showApproveModal}
-          selectedRows={selectedRows}
-          setReloadTableData={setReloadTableData}
-          reportingPeriods={reportingPeriods}
-        />
-      )}
+          <EmSubmissionModal
+            showModal={
+              showOpenModal ||
+              showExtendModal ||
+              showCloseModal ||
+              showApproveModal
+            }
+            close={closeModal}
+            isOpenModal={showOpenModal}
+            isExtendModal={showExtendModal}
+            isCloseModal={showCloseModal}
+            isApproveModal={showApproveModal}
+            selectedRows={selectedRows}
+            setReloadTableData={setReloadTableData}
+            reportingPeriods={reportingPeriods}
+          />
+        )}
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-4">
@@ -328,7 +330,7 @@ export const EmSubmissionData = ({
               cols={3}
               title="Maintain EM Submission Access"
               viewOnly={true}
-              // create={createNewData}
+            // create={createNewData}
             />
           </Modal>
         )}

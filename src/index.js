@@ -10,6 +10,7 @@ import configureStore from "./store/configureStore.dev";
 
 import { ErrorBoundary  } from 'react-error-boundary';
 import ErrorFallbackModal from "./components/ErrorFallbackModal/ErrorFallbackModal";
+import { v4 as uuidv4 } from 'uuid';
 import { logServerError } from "./utils/api/apiUtils";
 
 import "@trussworks/react-uswds/lib/index.css";
@@ -19,22 +20,25 @@ const store = configureStore();
 document.title = config.app.title;
 const container = document.getElementById("root");
 const root = createRoot(container);
+const errorBoundaryId = uuidv4();
 
 root.render(
   <Provider store={store}>
     <React.StrictMode>
       <BrowserRouter basename={config.app.path}>
         <ErrorBoundary
-          FallbackComponent={ErrorFallbackModal}
+          FallbackComponent={({ error, resetErrorBoundary }) => (
+            <ErrorFallbackModal error={error} resetErrorBoundary={resetErrorBoundary} errorId={errorBoundaryId} />
+          )}
           onReset={() => {
             console.info("reloading the page...");
             window.location.reload();
           }}
           onError={(error, info) =>{
-            console.error("error message", error.message);
-            console.error("error componentStack", info.componentStack);
-            //AG: log to an external API currently not working
-            //logServerError(error.message, info);
+            console.debug("error id", errorBoundaryId);
+            console.debug("error message", error.message);
+            console.debug("error componentStack", info.componentStack);
+            logServerError(errorBoundaryId, error.message, info.componentStack);
           }}
         >
           <App />
