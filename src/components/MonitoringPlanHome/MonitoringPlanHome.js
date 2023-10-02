@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
@@ -32,6 +32,7 @@ export const MonitoringPlanHome = ({
   // openedFacilityTabs,
   workspaceSection,
 }) => {
+
   const dispatch = useDispatch();
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceSection]
@@ -136,6 +137,7 @@ export const MonitoringPlanHome = ({
 
   // works if you go from modules to home back and then back
   const handleTabState = () => {
+
     const tabArr = [
       {
         title: "Select Configurations",
@@ -287,7 +289,7 @@ export const MonitoringPlanHome = ({
         break;
     }
     return tabArr;
-  };
+  }
 
   return (
     <div className="react-transition fade-in padding-x-3">
@@ -310,7 +312,7 @@ export const MonitoringPlanHome = ({
       {/* updates in react 18 redux properly  */}
       <div>
         <DynamicTabs
-          tabsProps={() => handleTabState()}
+          tabsProps={handleTabState}
           checkedOutLocations={checkedOutLocations}
           user={user}
           workspaceSection={workspaceSection}

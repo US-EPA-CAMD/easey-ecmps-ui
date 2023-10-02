@@ -17,23 +17,6 @@ export async function handleResponse(response) {
   }
 }
 
-export async function logServerError(message, metadata = {}) {
-  const url = config.services.camd.uri + "/logging/error";
-
-  try {
-    await clientTokenAxios({
-      method: "POST",
-      url: url,
-      data: {
-        errorMessage: message,
-        metadata: metadata,
-      },
-    });
-  } catch (error) {
-    handleError(error);
-  }
-}
-
 export function handleError(error) {
   let errorMessage = "";
 
@@ -86,5 +69,23 @@ export function handleImportError(error) {
   // sonarcloud doesnt want to return anything
   if (error.response) {
     return error.response.data.message;
+  }
+}
+
+export async function logServerError(errorId, message, stackTrace) {
+  const url = config.services.camd.uri + "/logging/error";
+
+  try {
+    await clientTokenAxios({
+      method: "POST",
+      url: url,
+      data: {
+        errorId,
+        message,
+        stackTrace
+      }
+    });
+  } catch (error) {
+    handleError(error);
   }
 }
