@@ -1437,11 +1437,11 @@ export const HeaderInfo = ({
                         : true
                     }
                     onClick={() =>
-                      {applyFilters(
+                      applyFilters(
                         configID,
                         selectedUnitId,
                         selectedStackPipeId
-                      ).catch(handleError)}
+                      ).catch(handleError)
                     }
                   >
                     {"Apply Filter(s)"}

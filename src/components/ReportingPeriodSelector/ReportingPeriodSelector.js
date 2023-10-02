@@ -49,7 +49,7 @@ const ReportingPeriodSelector = ({
       }
     };
 
-    fetchReportingPeriods().catch((error) => console.log('error fetching reporting periods', error));
+    fetchReportingPeriods();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

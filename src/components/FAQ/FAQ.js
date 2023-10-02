@@ -13,17 +13,13 @@ const FAQ = () => {
     document.title = 'ECMPS FAQs';
 
     async function fetchData() {
-      try {
-        const content = await getContent('/ecmps/faqs/index.md');
-        setMainContent(content.data);
+      const content = await getContent('/ecmps/faqs/index.md');
+      setMainContent(content.data);
 
-        const questionsAnswers = await getContent(
-          '/ecmps/faqs/questions-answers.json',
-        );
-        setQuestionsAnswers(questionsAnswers.data);
-      } catch (error) {
-        console.log(error);
-      }
+      const questionsAnswers = await getContent(
+        '/ecmps/faqs/questions-answers.json',
+      );
+      setQuestionsAnswers(questionsAnswers.data);
     }
 
     fetchData();

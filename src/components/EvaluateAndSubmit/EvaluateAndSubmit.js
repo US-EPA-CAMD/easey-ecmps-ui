@@ -170,19 +170,18 @@ export const EvaluateAndSubmit = ({
     dataList = dataList.filter((f) => f.rowId !== "matsBulkFileIdentifier");
   }
 
-  const getUserPlans = () => {
-    getCheckedOutLocations().then((data) => {
-      userCheckedOutPlans.current = new Set(
-        data.filter((l) => l.checkedOutBy === userId).map((m) => m.monPlanId)
-      );
-    }).catch(error => console.log('Error in getUserPlans', error))
+  const getUserPlans = async () => {
+    const data = (await getCheckedOutLocations()).data;
+
+    userCheckedOutPlans.current = new Set(
+      data.filter((l) => l.checkedOutBy === userId).map((m) => m.monPlanId)
+    );
   };
 
   const idToPermissionsMap = useRef(new Map());
   const userPermissions = user.facilities || [];
-  const populateDropdown = () => {
-    getDropDownFacilities().then((data) => setDropdownFacilities(data))
-      .catch(error => console.log('Error in getDropDownFacilities', error));
+  const populateDropdown = async () => {
+    setDropdownFacilities(await getDropDownFacilities());
   };
   useEffect(() => {
     // Get permissions from user object here
@@ -360,16 +359,12 @@ export const EvaluateAndSubmit = ({
     }
   };
 
-  const checkInAllCheckedOutLocations = async () => {
+  const checkInAllCheckedOutLocations = () => {
     for (let [key, value] of monitorPlanIdToSelectedMap.current) {
-      try {
-        getUserPlans();
-        // doesn't check in any configuration that the current user has checked out via UI
-        if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
-          await checkoutAPI(false, value[0], key);
-        }
-      } catch (error) {
-        console.error("Error handling plans:", error);
+      getUserPlans();
+      // doesnt check in any configuration that the current user has checked out via UI
+      if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
+        checkoutAPI(false, value[0], key);
       }
     }
   };

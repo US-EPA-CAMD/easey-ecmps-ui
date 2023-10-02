@@ -23,19 +23,19 @@ const AboutHome = ({ user, setCurrentLink }) => {
 
     getContent("/ecmps/home/index.md").then((resp) =>
       setMainContent(resp.data)
-    ).catch(error => console.log(error));
+    );
     getContent("/ecmps/home/emissions.md").then((resp) =>
       setEmissionsContent(resp.data)
-    ).catch(error => console.log(error));
+    );
     getContent("/ecmps/home/what-is-new.md").then((resp) =>
       setWhatIsNewContent(resp.data)
-    ).catch(error => console.log(error));
+    );
     getContent("/ecmps/home/monitoring-plans.md").then((resp) =>
       setMonitorPlanContent(resp.data)
-    ).catch(error => console.log(error));
+    );
     getContent("/ecmps/home/qa-certifications.md").then((resp) =>
       setQACertificationContent(resp.data)
-    ).catch(error => console.log(error));
+    );
   }, []);
 
   const handleRouteChange = (event, url) => {
