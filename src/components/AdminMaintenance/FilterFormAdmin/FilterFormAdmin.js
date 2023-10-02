@@ -69,6 +69,8 @@ const FilterFormAdmin = ({
     { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
   ];
 
+  addAriaLabelToDatatable();
+
   const processReportingPeriods = useCallback(async () => {
     const availReportingPeriods = reportingPeriods.map((rp) => {
       return {
