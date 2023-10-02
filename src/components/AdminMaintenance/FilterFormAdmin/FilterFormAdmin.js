@@ -19,6 +19,7 @@ import {
   getQaExtensionExemptionMaintenanceRecords,
 } from "../../../utils/api/adminManagementApi";
 import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
+import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 
 export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
@@ -167,7 +168,9 @@ const FilterFormAdmin = ({
 
         setTableData(newData);
       }
-
+      setTimeout(() => {
+        addAriaLabelToDatatable();
+        }, 500);
       assignAriaSortHandlersToDatatable()
       assignAriaLabelsToDataTableColumns()
     } catch (e) {
