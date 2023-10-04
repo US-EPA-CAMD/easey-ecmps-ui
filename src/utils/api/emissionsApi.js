@@ -48,6 +48,7 @@ export const exportEmissionsData = async (
     monitorPlanId,
     year,
     quarter,
+    reportedValuesOnly: true,
   });
 
   try {

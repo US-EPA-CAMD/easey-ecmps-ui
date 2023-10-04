@@ -224,7 +224,7 @@ export const exportQA = async (
   qceIds = null,
   teeIds = null
 ) => {
-  const path = `/export?facilityId=${facilityId}`;
+  const path = `/export?facilityId=${facilityId}reportedValuesOnly=true`;
   let url;
 
   if (options.isOfficial) {
