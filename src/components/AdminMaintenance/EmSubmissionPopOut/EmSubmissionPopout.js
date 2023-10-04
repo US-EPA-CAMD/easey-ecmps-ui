@@ -75,7 +75,7 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
     }
   }
 
-  const extendSubmissionRecord = async ()=>{
+  const extendSubmissionRecord = async () => {
     const putPayloads = selectedRows.map(row => {
       // append reason if it exists
       let resubExplanation = resubExplanationUpdate(row);
@@ -180,6 +180,19 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
 
   }, [isOpenModal, isExtendModal, isCloseModal, isApproveModal, selectedRow.openDate, selectedRow.closeDate])
 
+  useEffect(() => {
+
+    if (isOpenModal || isExtendModal) {
+      setTimeout(() => {
+        let openDateTglBtn = document.querySelector('#open-date')?.parentElement?.querySelector('button')
+        let closeDateTglBtn = document.querySelector('#close-date')?.parentElement?.querySelector('button')
+        
+        openDateTglBtn.setAttribute('aria-label', 'Toggle calendar for Open Date')
+        closeDateTglBtn.setAttribute('aria-label', 'Toggle calendar for Close Date')
+      }, 500)
+    }
+  }, [isOpenModal, isExtendModal, showModal])
+
   const updateDates = (e) => {
     let date = new Date(e)
     setSelectedOpenDate(getDateString(e))
@@ -207,12 +220,12 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
             {(isOpenModal || isExtendModal) && selectedOpenDate && selectedCloseDate ? <Grid row gap={2} className='maxw-mobile-lg'>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
-                  htmlFor="open-date-label"
+                  htmlFor="open-date"
                 >
                   Open Date
                 </Label>
                 <DatePicker
-                  aria-labelledby="open-date"
+                  aria-label="open-date"
                   id="open-date"
                   name="open-date"
                   epa-testid={"open-date"}
@@ -226,12 +239,12 @@ export const EmSubmissionModal = ({ showModal, close, isOpenModal, isExtendModal
               </Grid>
               <Grid col={6} mobile={{ col: 12 }} desktop={{ col: 6 }} className='margin-top-1'>
                 <Label
-                  htmlFor="close-date-label"
+                  htmlFor="close-date"
                 >
                   Close Date
                 </Label>
                 <DatePicker
-                  aria-labelledby="close-date"
+                  aria-label="close-date"
                   id="close-date"
                   name="close-date"
                   placeholder="Select Close Date"
