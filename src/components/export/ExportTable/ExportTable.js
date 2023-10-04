@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 
 //Selectable data table that automatically refreshes its data based on the dataFetchCall whenever dataFetchParams are changed
 export const ExportTable = ({
+  toggleExportCallback,
   title,
   columns,
   dataFetchCall,
@@ -21,19 +22,29 @@ export const ExportTable = ({
   const [hasSelected, setHasSelected] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleSelectionChange = useCallback((rows) => {
-    setHasSelected(rows.selectedRows.length > 0);
-    selectedDataRef.current = rows.selectedRows;
+  const handleSelectionChange = useCallback(
+    (rows) => {
+      setHasSelected(rows.selectedRows.length > 0);
+      selectedDataRef.current = rows.selectedRows;
 
+      const selectedIds = rows.selectedRows.map((row) => row[uniqueIdField]);
+      const newExportState = {
+        ...exportState,
+        [title]: selectedIds,
+      };
 
-    const selectedIds = rows.selectedRows.map((row) => row[uniqueIdField])
-    const newExportState = {
-      ...exportState,
-      [title]: selectedIds
-    }
-
-    dispatchSetExportState(newExportState)
-  }, [dispatchSetExportState, exportState, selectedDataRef, title, uniqueIdField]);
+      dispatchSetExportState(newExportState);
+      toggleExportCallback();
+    },
+    [
+      dispatchSetExportState,
+      exportState,
+      selectedDataRef,
+      title,
+      uniqueIdField,
+      toggleExportCallback,
+    ]
+  );
 
   const handleReportLoad = () => {
     let additionalParams = "";
@@ -61,8 +72,9 @@ export const ExportTable = ({
     } else {
       const yearQuarter =
         selectedDataRef.current[0].periodAbbreviation.split(" ");
-      additionalParams = `&monitorPlanId=${selectedDataRef.current[0].monPlanId
-        }&year=${yearQuarter[0]}&quarter=${yearQuarter[1].charAt(1)}`;
+      additionalParams = `&monitorPlanId=${
+        selectedDataRef.current[0].monPlanId
+      }&year=${yearQuarter[0]}&quarter=${yearQuarter[1].charAt(1)}`;
       reportTitle = "Emissions Printout Report";
     }
 
@@ -79,7 +91,7 @@ export const ExportTable = ({
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  const selectedIds = useMemo(() => exportState?.[title] ?? [], [])
+  const selectedIds = useMemo(() => exportState?.[title] ?? [], []);
 
   return (
     <div className="grid-row">
@@ -94,8 +106,8 @@ export const ExportTable = ({
           onKeyDown={(e) =>
             e.key === "Enter"
               ? () => {
-                setIsVisible(!isVisible);
-              }
+                  setIsVisible(!isVisible);
+                }
               : null
           }
           tabIndex={0}
