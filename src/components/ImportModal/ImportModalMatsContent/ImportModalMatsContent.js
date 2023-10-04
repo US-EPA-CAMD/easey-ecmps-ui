@@ -43,6 +43,7 @@ const ImportModalMatsContent = ({
     if (value[0] !== 0) {
       try {
         const resp = await getQATestSummary(value[1]);
+
         testSummaryRecords.current = resp.data; //Store these for later us when filtering by test type as well
 
         const groupCodes = Array.from(
@@ -96,8 +97,6 @@ const ImportModalMatsContent = ({
       testNumber: testNums[value[0]].key,
     };
 
-    console.log(selectedTestNumberRef.current);
-
     if (value[0] !== 0 && importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
@@ -130,7 +129,7 @@ const ImportModalMatsContent = ({
         </div>
         <div className="grid-col-8">
           <DropdownSelection
-            caption={"Test Type Group"}
+            caption={"Test Type"}
             options={testTypes}
             viewKey={"name"}
             selectKey={"key"}
