@@ -638,7 +638,7 @@ export const QACertTestSummaryHeaderInfo = ({
           close={closeImportModalHandler}
           showCancel={true}
           showSave={true}
-          title={importTestTitle}
+          title="Import MATS PDF/XML Data"
           mainBTN={"Import"}
           disablePortBtn={disableMatsImportButton}
           port={() => importMats(importedFile)}
