@@ -175,6 +175,9 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
+
+  const [submissionStatus, setSubmissionStatus] = useState("");
+
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -255,7 +258,7 @@ export const HeaderInfo = ({
     if (currentTab === undefined || currentTab?.reportingPeriods) {
       return;
     }
-    
+
     let selectedRptPeriods;
     if (inWorkspace) {
       selectedRptPeriods = reportingPeriods
@@ -309,7 +312,7 @@ export const HeaderInfo = ({
         locationSelect: currentTab.locationSelect,
       });
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   useEffect(() => {
@@ -359,7 +362,7 @@ export const HeaderInfo = ({
         console.log(e);
       });
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -522,6 +525,7 @@ export const HeaderInfo = ({
           if (res.data.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
+            setSubmissionStatus(res.data.submissionAvailabilityCode);
             setEvalStatusLoaded(true);
           }
         })
@@ -715,6 +719,22 @@ export const HeaderInfo = ({
     return "";
   };
 
+  const submissionStatusStyle = (status) => {
+    switch (status) {
+      case "GRANTED":
+      case "PENDING":
+      case "WIP":
+      case "INQ":
+      case "REQUIRE":
+        return "usa-alert--warning";
+      case "UPDATED":
+        return "usa-alert--success";
+      default:
+        break;
+    }
+    return "";
+  };
+
   // returns evaluation status (full text) from code
   const evalStatusText = (status) => {
     switch (status) {
@@ -728,6 +748,25 @@ export const HeaderInfo = ({
         return "In Queue";
       case "WIP":
         return "In Progress";
+      default:
+        break;
+    }
+    return "Needs Evaluation";
+  };
+
+  // returns evaluation status (full text) from code
+  const submissionStatusText = (status) => {
+    switch (status) {
+      case "PENDING":
+        return "Pending Submission";
+      case "REQUIRE":
+        return "Submission Required";
+      case "UPDATED":
+        return "Submission Updated";
+      case "GRANTED":
+        return "Submission Granted";
+      case "WIP":
+        return "Submission in Progress";
       default:
         break;
     }
@@ -759,6 +798,16 @@ export const HeaderInfo = ({
     } else {
       return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>;
     }
+  };
+
+  const submissionStatusContent = () => {
+    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${submissionStatusStyle(
+      submissionStatus
+    )} margin-y-0`;
+
+    return (
+      <p className={alertStyle}>{submissionStatusText(submissionStatus)}</p>
+    );
   };
 
   const showHyperLink = (status) => {
@@ -1024,7 +1073,7 @@ export const HeaderInfo = ({
       inWorkspace
     );
 
-    console.log('response',response)
+    console.log("response", response);
     if (
       response &&
       response.status === 200 &&
@@ -1230,13 +1279,7 @@ export const HeaderInfo = ({
                     <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
                       Submission Status:{" "}
                     </label>
-                    <p
-                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                        evalStatus
-                      )} margin-0`}
-                    >
-                      Resubmission required
-                    </p>
+                    {submissionStatusContent()}
                   </div>
                 </Grid>
               )}

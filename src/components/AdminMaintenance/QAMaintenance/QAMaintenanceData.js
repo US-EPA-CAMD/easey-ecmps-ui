@@ -94,26 +94,29 @@ const QAMaintenanceData = ({
     {
       name: "Select",
       width: "95px",
-      cell: (row, idx) => (
-        <div>
-          <Checkbox
-            data-testid={`select-cb-${idx}`}
-            className="margin-bottom-5"
-            aria-label={`view row for QA/Cert Maintainance record with id ${row.id}`}
-            id={idx}
-            key={idx}
-            onChange={(e) => {
-              onRowSelection(row, e.target.checked);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.target.checked = !event.target.checked;
-              }
-            }}
-            defaultChecked={row.selected}
-          />
-        </div>
-      ),
+      cell: (row, idx) =>{ 
+
+        const id = row.testSumId ?? row.certEventId ?? row.testExtensionExemptionId;
+        return (
+          <div>
+            <Checkbox
+              data-testid={`select-cb-${idx}`}
+              className="margin-bottom-5"
+              aria-label={`view row for QA/Cert Maintainance record with id ${id}`}
+              id={idx}
+              key={idx}
+              onChange={(e) => {
+                onRowSelection(row, e.target.checked);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.target.checked = !event.target.checked;
+                }
+              }}
+              defaultChecked={row.selected}
+            />
+          </div>
+      )},
     },
     {
       name: "",
