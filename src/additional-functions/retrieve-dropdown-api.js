@@ -454,17 +454,24 @@ export const UseRetrieveDropdownApi = async (
         .catch(error => console.log('getAllControlTechnologies failed', error));
         break;
       case "qualificationTypeCode":
-        await dmApi.getAllQualificationTypeCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["qualificationTypeCode"],
-              name: option["qualificationTypeDescription"],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
+        const { data } = await dmApi.getAllQualificationTypeCodes()
+        options = data.map((option) => {
+          return {
+            code: option["qualificationTypeCode"],
+            name: option["qualificationTypeDescription"],
+          };
         })
-        .catch(error => console.log('getAllQualificationTypeCodes failed', error));
+        setDefaultOptions(options, fieldName);
+        // .then((response) => {
+        //   options = response.data.map((option) => {
+        //     return {
+        //       code: option["qualificationTypeCode"],
+        //       name: option["qualificationTypeDescription"],
+        //     };
+        //   });
+
+        // })
+        // .catch(error => console.log('getAllQualificationTypeCodes failed', error));
         break;
       case "qualificationYear":
       case "yr1QualificationDataYear":
