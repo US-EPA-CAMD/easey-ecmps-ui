@@ -46,7 +46,7 @@ export const DataTableAnalyzerRanges = ({
         .then((res) => {
           setRanges(res.data);
           setRangesLoaded(true);
-        }).catch(error => console.log('Error In getMonitoringAnalyzerRanges', error));
+        });
       setUpdateAnalyzerRangeTable(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

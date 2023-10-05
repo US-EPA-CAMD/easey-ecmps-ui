@@ -45,59 +45,55 @@ const Login = ({ isModal }) => {
 
   const submitForm = async (event) => {
     event.preventDefault();
-    try {
 
-      // *** trigger yup validation
-      const isFormValid = await formSchema.isValid(
-        { username, password },
-        {
-          abortEarly: false, // *** prevent aborting validation after first error
-        }
-      );
-
-      // *** display clientside errors
-      if (!isFormValid) {
-        await formSchema
-          .validate({ username, password }, { abortEarly: false })
-          .catch((jsonErrors) => {
-            // *** NOTE: we are NOT displaying actual individual messages that go with each field,
-            // ***       instead displaying a general message for both fields.  Individual messages are available
-            // ***       in commented out object below
-            // console.log(jsonErrors.errors);
-            setShowError(true);
-            setFormErrorMessage(standardFormErrorMessage);
-          });
-      } else {
-        setFormErrorMessage("");
-        setLoading(true);
-        setShowError(false);
-
-        await authenticate({ userId: username, password })
-          .then((response) => {
-            if (response && response.error) {
-              throw response.error;
-            }
-          })
-          // *** display serverside errors
-          .catch((err) => {
-            setLoading(false);
-            setShowError(true);
-            if (err.response) {
-              setFormErrorMessage(err.response.data.message);
-            } else {
-              setFormErrorMessage(err.message);
-            }
-          });
+    // *** trigger yup validation
+    const isFormValid = await formSchema.isValid(
+      { username, password },
+      {
+        abortEarly: false, // *** prevent aborting validation after first error
       }
-    } catch (error) {
-      console.log(error);
+    );
+
+    // *** display clientside errors
+    if (!isFormValid) {
+      await formSchema
+        .validate({ username, password }, { abortEarly: false })
+        .catch((jsonErrors) => {
+          // *** NOTE: we are NOT displaying actual individual messages that go with each field,
+          // ***       instead displaying a general message for both fields.  Individual messages are available
+          // ***       in commented out object below
+          // console.log(jsonErrors.errors);
+          setShowError(true);
+          setFormErrorMessage(standardFormErrorMessage);
+        });
+    } else {
+      setFormErrorMessage("");
+      setLoading(true);
+      setShowError(false);
+
+      await authenticate({ userId: username, password })
+        .then((response) => {
+          if (response && response.error) {
+            throw response.error;
+          }
+        })
+        // *** display serverside errors
+        .catch((err) => {
+          setLoading(false);
+          setShowError(true);
+          if (err.response) {
+            setFormErrorMessage(err.response.data.message);
+          } else {
+            setFormErrorMessage(err.message);
+          }
+        });
     }
   };
 
   return (
     <div className="" data-test="component-login">
       <div className="padding-1">
-        <Form onSubmit={submitForm} large>
+        <Form onSubmit={async (event) => await submitForm(event)} large>
           <Fieldset legend="Log In" legendStyle="large">
             <span>
               or{" "}

@@ -75,7 +75,7 @@ export const DataTableConfigurations = ({
           // *** do nothing.  this is just in case someone tries to check in a facility
           // *** that does not have an open tab
         }
-      }).catch(error => console.log(error));;
+      });
   };
 
   const [openAndCheckoutBTNFocus, setOpenAndCheckoutBTNFocus] = useState("");
@@ -93,7 +93,7 @@ export const DataTableConfigurations = ({
                 setCheckoutState(true, selectedConfigData.id, workspaceSection)
               );
             } catch {}
-          }).catch(error => console.log(error));;
+          });
       } else {
         setSelectedConfig([data, selectedConfigData, checkout]);
       }
