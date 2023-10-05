@@ -31,7 +31,6 @@ export const EmSubmissionData = ({
   const [modalDataSelections, setModalDataSelections] = useState(null);
 
   const [disableApproveBtn, setDisableApproveBtn] = useState(false);
-  const [disableOpenBtn, setDisableOpenBtn] = useState(false);
 
   const openViewEditModalHandler = useCallback(
     (row, index, isCreate = false) => {
@@ -102,7 +101,7 @@ export const EmSubmissionData = ({
             onChange={(e) => {
               onRowSelection(row, e.target.checked);
             }}
-            onKeyPress={(event) => {
+            onKeyUp={(event) => {
               if (event.key === "Enter") {
                 onRowSelection(row, !event.target.checked);
                 event.target.checked = !event.target.checked;
@@ -204,6 +203,11 @@ export const EmSubmissionData = ({
       name: "Severity Level",
       width: "200px",
       selector: (row) => row.severityLevel,
+      sortable: true,
+    },
+    {
+      name: "ID",
+      selector: (row) => row.id,
       sortable: true,
     },
   ];
