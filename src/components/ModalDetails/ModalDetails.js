@@ -30,6 +30,34 @@ const ModalDetails = ({
   mainDropdownChange,
   setDisableExitBtnStatus
 }) => {
+
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+   if(windowSize.width <= 1700){
+      cols = 2; // any lower than 2 and the modal gets long
+      // MP uses 2 columns by default 
+      // QA uses 3 columns by default 
+    }
+  // changes the columns to 2 from 3 when the browser resizes
+  // edge case for when user moves browser from large monitor to small one 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+ 
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
     let found = false;
