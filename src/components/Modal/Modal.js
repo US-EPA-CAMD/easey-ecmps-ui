@@ -31,12 +31,6 @@ export const Modal = ({
   const modalRef = createRef();
 
 
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  console.log('windowSize',windowSize)
   useEffect(() => {
     const { handleKeyPress } = focusTrap(".modal-content", close);
 

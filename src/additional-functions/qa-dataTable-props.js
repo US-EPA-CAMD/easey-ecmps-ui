@@ -8,7 +8,7 @@ export const qaProtocalGasProps = (selectedRow) => {
       vendorIdentifier: "string",
       expirationDate: "string",
     },
-    dropdownArray: ["gasLevelCode", "gasTypeCode"],
+    dropdownArray: ["gasLevelCode", "gasTypeCode","vendorIdentifier"],
     columnNames: [
       "Gas Level Code",
       "Gas Type Code",
@@ -20,7 +20,7 @@ export const qaProtocalGasProps = (selectedRow) => {
       gasLevelCode: ["Gas Level Code", "dropdown", "", ""],
       gasTypeCode: ["Gas Type Code", "multiSelectDropdown", "", ""],
       cylinderIdentifier: ["Cylinder Identification", "input", "", ""],
-      vendorIdentifier: ["Vendor Identification", "input", "", ""],
+      vendorIdentifier: ["Vendor Identification", "nonFilteredDropdown", "", ""],
       expirationDate: ["Expiration Date", "date", "", ""],
       skip: ["", "skip", "", ""],
     },

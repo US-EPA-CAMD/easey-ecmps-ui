@@ -10,5 +10,15 @@
 .colMaxWidth {
 
   max-width: 75%;
-  min-width: 40%;
+  min-width: 20%;
+}
+
+.usa-date-picker__wrapper {
+ max-width: 10rem !important;
+}
+
+.usa-date-picker__button {
+
+  margin: 0 !important;
+  padding: 0 !important;
 }

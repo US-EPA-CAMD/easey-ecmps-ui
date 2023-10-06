@@ -307,7 +307,6 @@ export const removeDataSwitch = async (
   id,
   extraIdsArr
 ) => {
-  console.log('name',name)
   switch (name) {
     case lineTest:
       return qaApi
