@@ -225,6 +225,7 @@ const ModalDetails = ({
             item.label = valueItem.name;
             item.selected = (modalData?.[value[0]].split(',').includes(item.id) && !create) ? modalData?.[value[0]].split(',').includes(item.id) : false;
             item.enabled = true;
+            item.disabled = valueItem.disabled
             items.push(item);
           }
         }
