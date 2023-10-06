@@ -174,9 +174,12 @@ export const HeaderInfo = ({
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
+  const [evalStatusDescription, setEvalStatusDescription] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
   const [submissionStatus, setSubmissionStatus] = useState("");
+  const [submissionStatusDescription, setSubmissionStatusDescription] =
+    useState("");
 
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
@@ -525,7 +528,13 @@ export const HeaderInfo = ({
           if (res.data.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
+            setEvalStatusDescription(res.data.evalStatusCodeDescription);
+
             setSubmissionStatus(res.data.submissionAvailabilityCode);
+            setSubmissionStatusDescription(
+              res.data.submissionAvailabilityCodeDescription
+            );
+
             setEvalStatusLoaded(true);
           }
         })
@@ -722,6 +731,7 @@ export const HeaderInfo = ({
   const submissionStatusStyle = (status) => {
     switch (status) {
       case "GRANTED":
+        return "usa-alert--info";
       case "PENDING":
       case "WIP":
       case "INQ":
@@ -733,44 +743,6 @@ export const HeaderInfo = ({
         break;
     }
     return "";
-  };
-
-  // returns evaluation status (full text) from code
-  const evalStatusText = (status) => {
-    switch (status) {
-      case "ERR":
-        return "Critical Errors";
-      case "INFO":
-        return "Informational Message";
-      case "PASS":
-        return "Passed";
-      case "INQ":
-        return "In Queue";
-      case "WIP":
-        return "In Progress";
-      default:
-        break;
-    }
-    return "Needs Evaluation";
-  };
-
-  // returns evaluation status (full text) from code
-  const submissionStatusText = (status) => {
-    switch (status) {
-      case "PENDING":
-        return "Pending Submission";
-      case "REQUIRE":
-        return "Submission Required";
-      case "UPDATED":
-        return "Submission Updated";
-      case "GRANTED":
-        return "Submission Granted";
-      case "WIP":
-        return "Submission in Progress";
-      default:
-        break;
-    }
-    return "Needs Evaluation";
   };
 
   const evalStatusContent = () => {
@@ -788,7 +760,7 @@ export const HeaderInfo = ({
           className={"hyperlink-btn cursor-pointer"}
           onClick={() => displayReport(params)}
         >
-          {evalStatusText(evalStatus)}
+          {evalStatusDescription}
         </button>
       </div>
     );
@@ -796,7 +768,7 @@ export const HeaderInfo = ({
     if (showHyperLink(evalStatus)) {
       return evalStatusHyperlink;
     } else {
-      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>;
+      return <p className={alertStyle}>{evalStatusDescription}</p>;
     }
   };
 
@@ -805,9 +777,7 @@ export const HeaderInfo = ({
       submissionStatus
     )} margin-y-0`;
 
-    return (
-      <p className={alertStyle}>{submissionStatusText(submissionStatus)}</p>
-    );
+    return <p className={alertStyle}>{submissionStatusDescription}</p>;
   };
 
   const showHyperLink = (status) => {
@@ -1073,7 +1043,6 @@ export const HeaderInfo = ({
       inWorkspace
     );
 
-    console.log("response", response);
     if (
       response &&
       response.status === 200 &&
