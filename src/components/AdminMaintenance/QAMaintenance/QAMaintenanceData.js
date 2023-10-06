@@ -118,7 +118,7 @@ const QAMaintenanceData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
-            aria-label={`view row for QA/Cert Maintainance record with id ${row.id}`}
+            aria-label={`select row for QA/Cert Maintainance record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={e => {
