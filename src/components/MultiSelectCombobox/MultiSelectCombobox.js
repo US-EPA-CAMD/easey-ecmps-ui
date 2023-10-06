@@ -273,9 +273,11 @@ const MultiSelectCombobox = ({
                   data-label={item.label}
                   data-testid={`${entity}-multi-select-option-${i}`}
                   className={
-                    item.selected
+                    (item.selected
                       ? "item selected padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify"
-                      : "item padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify"
+                      : "item padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify") +
+                    " " +
+                    (item.disabled ? "disabled " : "")
                   }
                   onClick={optionClickHandler}
                   onKeyDown={(e) => handleKeyDown(e)}

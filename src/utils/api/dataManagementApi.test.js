@@ -709,6 +709,17 @@ describe("Test Data Management API calls", () => {
     expect(mock.history.get.length).toBe(1);
     expect(resp.data).toStrictEqual(gasTypeCodesObject);
   });
+  test("getAllGasComponentCodes", async () => {
+    const gasComponentCodesObject = [{ gasComponentCodes: "data" }];
+
+    const gasComponentCodesUrl = `${dataManagementBaseUrl}/gas-component-codes`;
+    mock.onGet(gasComponentCodesUrl).reply(200, gasComponentCodesObject);
+
+    const resp = await dataManagementApi.getAllGasComponentCodes();
+
+    expect(mock.history.get.length).toBe(1);
+    expect(resp.data).toStrictEqual(gasComponentCodesObject);
+  });
 
   test("getAllTestTypeGroupCodes", async () => {
     const testTypeGroupCodesObject = [{ testTypeGroupCodes: "data" }];
