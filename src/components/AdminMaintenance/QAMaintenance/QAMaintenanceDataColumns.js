@@ -83,8 +83,8 @@ export const testSummaryCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
-    selector: row => row.testSumId,
+    name: 'Record ID',
+    selector: row => row.id,
     sortable: true,
   },
 ];
@@ -126,8 +126,8 @@ export const certEventsCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
-    selector: row => row.certEventId,
+    name: 'Record ID',
+    selector: row => row.id,
     sortable: true,
   },
 ];
@@ -163,8 +163,8 @@ export const testExtensionExemptionCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
-    selector: row => row.testExtensionExemptionId,
+    name: 'Record ID',
+    selector: row => row.id,
     sortable: true,
   },
 ];
