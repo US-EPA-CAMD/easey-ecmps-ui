@@ -16,7 +16,10 @@ import {
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
-import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
+import {
+  extractUserInput,
+  validateUserInput,
+} from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -206,7 +209,6 @@ const QAExpandableRowsRender = ({
     };
   };
 
-
   const populateStaticDropdowns = (tableName, dropdowns) => {
     if (tableName === "Flow To Load Check") {
       dropdowns["biasAdjustedIndicator"] = [
@@ -227,9 +229,55 @@ const QAExpandableRowsRender = ({
     const allPromises = [];
     switch (name) {
       case "Protocol Gas":
+        allPromises.push(dmApi.getAllGasLevelCodes());
+        allPromises.push(dmApi.getAllGasComponentCodes());
+        allPromises.push(dmApi.getAllVendorIdentificationCodes());
+        Promise.all(allPromises)
+          .then((values) => {
+            values.forEach((val, i) => {
+              if (i === 0) {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["gasLevelCode"],
+                    name: d["gasLevelDescription"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              } else if (i === 1) {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["gasComponentCode"],
+                    name: d["gasComponentDescription"],
+                    groupCode: d["groupCode"],
+                    disabled: d["groupCode"] === "GTC" ? true : false,
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              } else {
+                dropdowns[dropdownArray[i]] = val.data.map((d) => {
+                  return {
+                    code: d["vendorId"],
+                    name: d["vendorName"],
+                  };
+                });
+                dropdowns[dropdownArray[i]].unshift({
+                  code: "",
+                  name: "-- Select a value --",
+                });
+              }
+            });
+            setMdmData(dropdowns);
+          })
+          .catch((error) => console.log(error));
+        break;
       case "Linearity Test":
       case "Linearity Injection":
-
         allPromises.push(dmApi.getAllGasLevelCodes());
         allPromises.push(dmApi.getAllGasTypeCodes());
         Promise.all(allPromises)
@@ -781,7 +829,7 @@ const QAExpandableRowsRender = ({
 
     const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
-      console.log('valid errors', validationErrors);
+      console.log("valid errors", validationErrors);
       setErrorMsgs(validationErrors);
       return;
     }
@@ -939,9 +987,7 @@ const QAExpandableRowsRender = ({
               dataTableName
             )
           }
-          expandableRowComp={
-            expandable ? QAExpandableRowsRender : false
-          }
+          expandableRowComp={expandable ? QAExpandableRowsRender : false}
           expandableRowProps={nextExpandableRow(dataTableName)}
           // shows empty table with add if user is logged in
           noDataComp={
@@ -990,8 +1036,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user && isCheckedOut
-                ? ` Edit ${dataTableName}`
-                : ` ${dataTableName}`
+              ? ` Edit ${dataTableName}`
+              : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           errorMsgs={errorMsgs}
