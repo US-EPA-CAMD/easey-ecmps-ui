@@ -83,7 +83,7 @@ export const testSummaryCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
+    name: 'Record ID',
     selector: row => row.id,
     sortable: true,
   },
@@ -126,7 +126,7 @@ export const certEventsCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
+    name: 'Record ID',
     selector: row => row.id,
     sortable: true,
   },
@@ -163,7 +163,7 @@ export const testExtensionExemptionCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'ID',
+    name: 'Record ID',
     selector: row => row.id,
     sortable: true,
   },
