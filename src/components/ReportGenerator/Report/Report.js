@@ -59,6 +59,15 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   let columnNames = [];
   let columnGroups = [];
 
+  const sanitizeChars = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    "/": '&#x2F;',
+  };
+
   reportData.details.forEach((detail) => {
     let groups = [];
     const detailColumns = reportData.columns.find(
@@ -109,6 +118,9 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
 
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {
+            if (columnValue.includes('\r\n')) {
+              return `${columnNumber}"${columnValue.replace(/\r\n/gi, '\\r\\n')}"`;
+            }
             if (columnValue.includes('"')) {
               return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
             }

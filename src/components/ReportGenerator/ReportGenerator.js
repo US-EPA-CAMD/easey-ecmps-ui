@@ -11,37 +11,15 @@ import * as camdApi from "../../utils/api/camdServices";
 import "./ReportGenerator.scss";
 
 export const ReportGenerator = ({ user, requireAuth = false }) => {
+  const paramsObject = useRef([]);
   const search = useLocation().search;
-
   const [error, setError] = useState();
   const [reportData, setReportData] = useState();
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const paramsObject = useRef({});
-
   useEffect(() => {
     const searchParams = new URLSearchParams(search);
-
-    const year = searchParams.get("year");
-    const teeId = searchParams.get("teeId");
-    const qceId = searchParams.get("qceId");
-    const testId = searchParams.get("testId");
-    const quarter = searchParams.get("quarter");
-    const facilityId = searchParams.get("facilityId");
-    const reportCode = searchParams.get("reportCode");
-    const monitorPlanId = searchParams.get("monitorPlanId");
-
-    const params = {
-      reportCode,
-      facilityId,
-      monitorPlanId,
-      testId,
-      qceId,
-      teeId,
-      year,
-      quarter,
-    };
-
+    const params = Array.from(searchParams);
     paramsObject.current = params;
 
     if (((requireAuth && user) || !requireAuth) && !dataLoaded) {
@@ -55,7 +33,7 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
           setError(error.response?.data?.message);
         });
     }
-  }, []);
+  }, [requireAuth, user, dataLoaded, search]);
 
   if (error) {
     return <ErrorMessage error={error} />;
