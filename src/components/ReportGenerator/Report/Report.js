@@ -59,15 +59,6 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   let columnNames = [];
   let columnGroups = [];
 
-  const sanitizeChars = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    "/": '&#x2F;',
-  };
-
   reportData.details.forEach((detail) => {
     let groups = [];
     const detailColumns = reportData.columns.find(
