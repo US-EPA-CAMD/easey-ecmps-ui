@@ -160,16 +160,11 @@ export const reportWindowParams = [
 ].join(",");
 
 export const formatReportUrl = (params, service) => {
-  const year = params.year ? `&year=${params.year}` : "";
-  const tee = params.teeId ? `&teeId=${params.teeId}` : "";
-  const qce = params.qceId ? `&qceId=${params.qceId}` : "";
-  const test = params.testId ? `&testId=${params.testId}` : "";
-  const quarter = params.quarter ? `&quarter=${params.quarter}` : "";
-  const facility = params.facilityId ? `&facilityId=${params.facilityId}` : "";
-  const monitorPlan = params.monitorPlanId
-    ? `&monitorPlanId=${params.monitorPlanId}`
-    : "";
-  let url = `/${service}?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
+  const urlParams = params.map(([key, value]) => {
+    return `${key}=${[value]}`;
+  })
+
+  const url = `/${service}?${urlParams.join('&')}`;
 
   if (window.location.href.includes("/workspace")) {
     return url.replace(`/${service}`, `/workspace/${service}`);
