@@ -206,7 +206,8 @@ export const EmSubmissionData = ({
       sortable: true,
     },
     {
-      name: "ID",
+      name: "Record Id",
+      width: "160px",
       selector: (row) => row.id,
       sortable: true,
     },
