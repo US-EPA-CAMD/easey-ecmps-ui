@@ -28,8 +28,40 @@ const ModalDetails = ({
   create,
   setMainDropdownChange,
   mainDropdownChange,
-  setDisableExitBtnStatus
+  setDisableExitBtnStatus,
 }) => {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  if (windowSize.width <= 1700) {
+    const modalWrapper = document.querySelector(".modal-wrapper");
+    if (modalWrapper) {
+      const usaLabels = modalWrapper.querySelectorAll(".usa-hint");
+      const newFontSize = "12px";
+      usaLabels.forEach((label) => {
+        label.style.fontSize = newFontSize;
+      });
+    } 
+  }
+
+  // edge case for when user moves browser from large monitor to small one
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
     let found = false;
@@ -88,11 +120,11 @@ const ModalDetails = ({
   }
 
   const makeViewOnlyComp = (value, locked) => {
-    let displayVal
+    let displayVal;
     if (value[4] === "radio") {
-      displayVal = value[2] ? "Yes" : "No"
+      displayVal = value[2] ? "Yes" : "No";
     } else {
-      displayVal = value[2] ?? ''
+      displayVal = value[2] ?? "";
     }
     return (
       <div key={`${value[1]}`} className="grid-col">
@@ -111,7 +143,11 @@ const ModalDetails = ({
               >
                 {value[1]}
               </h3>
-              <div id={`${value[4] !== "skip" ? value[1] : ""}`} className="modalLockedInput" epadataname={value[0]}>
+              <div
+                id={`${value[4] !== "skip" ? value[1] : ""}`}
+                className="modalLockedInput"
+                epadataname={value[0]}
+              >
                 {displayVal}
               </div>
             </FormGroup>
@@ -213,29 +249,34 @@ const ModalDetails = ({
 
       case "multiSelectDropdown":
         const items = [];
-        for (let valueItem of value[6]){
-          if(valueItem.code !== ""){
+        for (let valueItem of value[6]) {
+          if (valueItem.code !== "") {
             let item = {
               id: "",
               label: "",
               selected: "",
-              enabled: ""
+              enabled: "",
             };
             item.id = valueItem.code;
             item.label = valueItem.name;
-            item.selected = (modalData?.[value[0]].split(',').includes(item.id) && !create) ? modalData?.[value[0]].split(',').includes(item.id) : false;
+            item.selected =
+              modalData?.[value[0]].split(",").includes(item.id) && !create
+                ? modalData?.[value[0]].split(",").includes(item.id)
+                : false;
             item.enabled = true;
+            item.disabled = valueItem.disabled;
             items.push(item);
           }
         }
-        let selectedOptions = (modalData?.[value[0]].split(',') && !create) ? modalData?.[value[0]].split(',') : [];
+        let selectedOptions =
+          modalData?.[value[0]].split(",") && !create
+            ? modalData?.[value[0]].split(",")
+            : [];
         const handleCodes = (id, updateType) => {
-          const uniqueOptions = [
-            ...new Set([...selectedOptions, id]),
-          ];
+          const uniqueOptions = [...new Set([...selectedOptions, id])];
           let item;
-          for(let i = 0; i < items.length; i++){
-            if(items[i].id === id){
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].id === id) {
               item = i;
             }
           }
@@ -255,12 +296,14 @@ const ModalDetails = ({
           }
           document.getElementById(value[1]).value = selectedOptions.toString();
         };
-        let styles={
-          listbox:"list-box bg-white display-block height-15 width-card-lg overflow-y-scroll overflow-x-hidden border-top",
-          combobox:"margin-top-1 margin-bottom-2 border-1px width-card-lg bg-white multi-select-combobox"
-        }
+        let styles = {
+          listbox:
+            "list-box bg-white display-block height-15 width-card-lg overflow-y-scroll overflow-x-hidden border-top",
+          combobox:
+            "margin-top-1 margin-bottom-2 border-1px width-card-lg bg-white multi-select-combobox",
+        };
         comp = (
-          <div 
+          <div
             className="modalUserInput"
             value={selectedOptions.toString()}
             id={value[1]}
@@ -343,7 +386,11 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            maxDate={title !== "Protocol Gas" ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}` : null}
+            maxDate={
+              title !== "Protocol Gas"
+                ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+                : null
+            }
           />
         );
         break;
@@ -445,7 +492,11 @@ const ModalDetails = ({
             name={value[0]}
             type="text"
             defaultValue={value[2] ? value[2] : ""}
-            disabled={value[0] === "unitId" || value[0] === "stackPipeId" ? "disabled" : undefined}
+            disabled={
+              value[0] === "unitId" || value[0] === "stackPipeId"
+                ? "disabled"
+                : undefined
+            }
           />
         );
         break;
@@ -495,15 +546,24 @@ const ModalDetails = ({
     return (
       <div className="grid-col">
         <FormGroup className="margin-top-0 colMaxWidth">
-          {value[4] !== "radio" &&
+          {value[4] !== "radio" && (
             // For all inputs except for radio buttons:
             <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
               {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
-              {value[4] === "date" &&
-                <span className="usa-hint d-block" id="appointment-date-hint"> - mm/dd/yyyy</span>}
-              {value[4] === "time" &&
-                <span className="usa-hint d-block" id="appointment-date-hint"> - hh</span>}
-            </Label>}
+              {value[4] === "date" && (
+                <span className="usa-hint d-block" id="appointment-date-hint">
+                  {" "}
+                  - mm/dd/yyyy
+                </span>
+              )}
+              {value[4] === "time" && (
+                <span className="usa-hint d-block" id="appointment-date-hint">
+                  {" "}
+                  - hh
+                </span>
+              )}
+            </Label>
+          )}
           {comp}
         </FormGroup>
       </div>
@@ -525,9 +585,9 @@ const ModalDetails = ({
       if (value[4] === "locked") {
         if (!create) {
           row.push(makeViewOnlyComp(value, true));
-          const lockedInputs = document.querySelectorAll(`.modalLockedInput`)
-          if(lockedInputs){
-            for(let lockedInput of lockedInputs){
+          const lockedInputs = document.querySelectorAll(`.modalLockedInput`);
+          if (lockedInputs) {
+            for (let lockedInput of lockedInputs) {
               lockedInput.value = value[2];
             }
           }
@@ -604,7 +664,7 @@ const ModalDetails = ({
                 }
                 onChange={(e) => {
                   if (setDisableExitBtnStatus && e.target.value !== item) {
-                    setDisableExitBtnStatus(false)
+                    setDisableExitBtnStatus(false);
                   }
                 }}
               >

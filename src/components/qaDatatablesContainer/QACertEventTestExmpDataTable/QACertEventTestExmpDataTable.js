@@ -190,7 +190,7 @@ const QACertEventTestExmpDataTable = ({
                 );
               } else if (i === 2) {
                 dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                  getOptions(d, "qaCertEventCode", "qaCertEventDescription")
+                  getOptions(d, "certificationEventCode", "certificationEventDescription")
                 );
               } else if (i === 3) {
                 dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
