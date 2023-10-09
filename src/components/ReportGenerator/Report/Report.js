@@ -109,6 +109,9 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
 
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {
+            if (columnValue.includes('\r\n')) {
+              return `${columnNumber}"${columnValue.replace(/\r\n/gi, '\\r\\n')}"`;
+            }
             if (columnValue.includes('"')) {
               return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
             }

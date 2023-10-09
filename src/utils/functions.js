@@ -160,16 +160,11 @@ export const reportWindowParams = [
 ].join(",");
 
 export const formatReportUrl = (params, service) => {
-  const year = params.year ? `&year=${params.year}` : "";
-  const tee = params.teeId ? `&teeId=${params.teeId}` : "";
-  const qce = params.qceId ? `&qceId=${params.qceId}` : "";
-  const test = params.testId ? `&testId=${params.testId}` : "";
-  const quarter = params.quarter ? `&quarter=${params.quarter}` : "";
-  const facility = params.facilityId ? `&facilityId=${params.facilityId}` : "";
-  const monitorPlan = params.monitorPlanId
-    ? `&monitorPlanId=${params.monitorPlanId}`
-    : "";
-  let url = `/${service}?reportCode=${params.reportCode}${facility}${monitorPlan}${test}${qce}${tee}${year}${quarter}`;
+  const urlParams = params.map(([key, value]) => {
+    return `${key}=${[value]}`;
+  })
+
+  const url = `/${service}?${urlParams.join('&')}`;
 
   if (window.location.href.includes("/workspace")) {
     return url.replace(`/${service}`, `/workspace/${service}`);
@@ -179,44 +174,9 @@ export const formatReportUrl = (params, service) => {
 };
 
 export const displayReport = (params) => {
-  let reportTitle;
+  const url = `/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
 
-  switch (params.reportCode) {
-    case "QCE":
-      reportTitle = "QA/Cert Events Printout";
-      break;
-    case "QCE_EVAL":
-      reportTitle = "QA/Cert Events Evaluation";
-      break;
-    case "TEE":
-      reportTitle = "Test Ext/Exemptions Printout";
-      break;
-    case "TEE_EVAL":
-      reportTitle = "Test Ext/Exemptions Evaluation";
-      break;
-    case "MPP":
-      reportTitle = "Monitoring Plan Printout";
-      break;
-    case "MP_EVAL":
-      reportTitle = "Monitoring Plan Evaluation";
-      break;
-    case "TEST_EVAL":
-      reportTitle = "QA/Cert Test Evaluation";
-      break;
-    case "TEST_DETAIL":
-      reportTitle = "QA/Cert Test Detail";
-      break;
-    case "EM_EVAL":
-      reportTitle = "Emissions Evaluation";
-      break;
-    default:
-      reportTitle = null;
-      break;
-  }
-
-  reportTitle += " Report";
-  const url = formatReportUrl(params);
-  window.open(url, reportTitle ?? "ECMPS Report", reportWindowParams);
+  window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
 export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);
