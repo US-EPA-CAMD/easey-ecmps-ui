@@ -16,4 +16,9 @@
   li.item.selected {
     background: #e6e6e6;
   }
+  li.item.disabled{
+    pointer-events:none; 
+    opacity:0.6;     
+    background: #e6e6e6;    
+  }
 }

@@ -174,7 +174,13 @@ export const HeaderInfo = ({
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
+  const [evalStatusDescription, setEvalStatusDescription] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
+
+  const [submissionStatus, setSubmissionStatus] = useState("");
+  const [submissionStatusDescription, setSubmissionStatusDescription] =
+    useState("");
+
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -255,7 +261,7 @@ export const HeaderInfo = ({
     if (currentTab === undefined || currentTab?.reportingPeriods) {
       return;
     }
-    
+
     let selectedRptPeriods;
     if (inWorkspace) {
       selectedRptPeriods = reportingPeriods
@@ -309,7 +315,7 @@ export const HeaderInfo = ({
         locationSelect: currentTab.locationSelect,
       });
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   useEffect(() => {
@@ -359,7 +365,7 @@ export const HeaderInfo = ({
         console.log(e);
       });
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emissionDropdownState]);
 
   // gets the data required to build the emissions dropdown
@@ -522,6 +528,13 @@ export const HeaderInfo = ({
           if (res.data.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
+            setEvalStatusDescription(res.data.evalStatusCodeDescription);
+
+            setSubmissionStatus(res.data.submissionAvailabilityCode);
+            setSubmissionStatusDescription(
+              res.data.submissionAvailabilityCodeDescription
+            );
+
             setEvalStatusLoaded(true);
           }
         })
@@ -715,23 +728,21 @@ export const HeaderInfo = ({
     return "";
   };
 
-  // returns evaluation status (full text) from code
-  const evalStatusText = (status) => {
+  const submissionStatusStyle = (status) => {
     switch (status) {
-      case "ERR":
-        return "Critical Errors";
-      case "INFO":
-        return "Informational Message";
-      case "PASS":
-        return "Passed";
-      case "INQ":
-        return "In Queue";
+      case "GRANTED":
+        return "usa-alert--info";
+      case "PENDING":
       case "WIP":
-        return "In Progress";
+      case "INQ":
+      case "REQUIRE":
+        return "usa-alert--warning";
+      case "UPDATED":
+        return "usa-alert--success";
       default:
         break;
     }
-    return "Needs Evaluation";
+    return "";
   };
 
   const evalStatusContent = () => {
@@ -749,7 +760,7 @@ export const HeaderInfo = ({
           className={"hyperlink-btn cursor-pointer"}
           onClick={() => displayReport(params)}
         >
-          {evalStatusText(evalStatus)}
+          {evalStatusDescription}
         </button>
       </div>
     );
@@ -757,8 +768,16 @@ export const HeaderInfo = ({
     if (showHyperLink(evalStatus)) {
       return evalStatusHyperlink;
     } else {
-      return <p className={alertStyle}>{evalStatusText(evalStatus)}</p>;
+      return <p className={alertStyle}>{evalStatusDescription}</p>;
     }
+  };
+
+  const submissionStatusContent = () => {
+    const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${submissionStatusStyle(
+      submissionStatus
+    )} margin-y-0`;
+
+    return <p className={alertStyle}>{submissionStatusDescription}</p>;
   };
 
   const showHyperLink = (status) => {
@@ -1024,7 +1043,6 @@ export const HeaderInfo = ({
       inWorkspace
     );
 
-    console.log('response',response)
     if (
       response &&
       response.status === 200 &&
@@ -1230,13 +1248,7 @@ export const HeaderInfo = ({
                     <label className="text-bold margin-right-1 desktop:width-10 desktop:margin-left-5 desktop-lg:width-10 widescreen:width-card widescreen:margin-right-neg-3 widescreen:margin-top-2">
                       Submission Status:{" "}
                     </label>
-                    <p
-                      className={`padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-                        evalStatus
-                      )} margin-0`}
-                    >
-                      Resubmission required
-                    </p>
+                    {submissionStatusContent()}
                   </div>
                 </Grid>
               )}

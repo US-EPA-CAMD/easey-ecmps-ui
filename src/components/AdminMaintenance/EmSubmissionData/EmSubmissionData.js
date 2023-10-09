@@ -10,7 +10,6 @@ import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 
-
 export const EmSubmissionData = ({
   data = [],
   isLoading = false,
@@ -29,42 +28,43 @@ export const EmSubmissionData = ({
   //   const [selectedRows, setSelectedRows] = useState([]);
 
   const [selectedModalData, setSelectedModalData] = useState(null);
-  const [modalDataSelections, setModalDataSelections] = useState(null)
+  const [modalDataSelections, setModalDataSelections] = useState(null);
 
   const [disableApproveBtn, setDisableApproveBtn] = useState(false);
-  const [disableOpenBtn, setDisableOpenBtn] = useState(false);
 
+  const openViewEditModalHandler = useCallback(
+    (row, index, isCreate = false) => {
+      const selectedData = data[index];
+      const { facilityName, facilityId } = selectedData;
+      selectedData.facilityNameAndId = `${facilityName} (${facilityId})`;
 
-  const openViewEditModalHandler = useCallback((row, index, isCreate = false) => {
-    const selectedData = data[index]
-    const { facilityName, facilityId } = selectedData
-    selectedData.facilityNameAndId = `${facilityName} (${facilityId})`
+      const mdmData = {};
+      const prefilteredDataName = false;
+      const mainDropdownName = null;
+      const mainDropdownResult = [];
+      const hasMainDropdown = false;
+      const prefilteredTotalName = null;
+      const extraControls = false;
 
-    const mdmData = {}
-    const prefilteredDataName = false
-    const mainDropdownName = null
-    const mainDropdownResult = []
-    const hasMainDropdown = false;
-    const prefilteredTotalName = null
-    const extraControls = false
-
-    setSelectedModalData(
-      modalViewData(
-        selectedData,
-        controlInputs,
-        controlDatePickerInputs,
-        isCreate,
-        mdmData,
-        prefilteredDataName ? mdmData[prefilteredDataName] : "",
-        mainDropdownName,
-        mainDropdownResult,
-        hasMainDropdown,
-        prefilteredTotalName,
-        extraControls
-      )
-    )
-    setShowViewEditModal(true);
-  }, [data])
+      setSelectedModalData(
+        modalViewData(
+          selectedData,
+          controlInputs,
+          controlDatePickerInputs,
+          isCreate,
+          mdmData,
+          prefilteredDataName ? mdmData[prefilteredDataName] : "",
+          mainDropdownName,
+          mainDropdownResult,
+          hasMainDropdown,
+          prefilteredTotalName,
+          extraControls
+        )
+      );
+      setShowViewEditModal(true);
+    },
+    [data]
+  );
 
   const onRowSelection = (row, checked) => {
     row.selected = checked;
@@ -83,7 +83,7 @@ export const EmSubmissionData = ({
 
   // returns true if any row in list has status of closed
   const checkClosedStatus = (list) => {
-    return list.some(row => row.status === closedTxt)
+    return list.some((row) => row.status === closedTxt);
   };
 
   const columns = [
@@ -95,12 +95,13 @@ export const EmSubmissionData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
+            aria-label={`select row for EM Submission Access record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={(e) => {
               onRowSelection(row, e.target.checked);
             }}
-            onKeyPress={(event) => {
+            onKeyUp={(event) => {
               if (event.key === "Enter") {
                 onRowSelection(row, !event.target.checked);
                 event.target.checked = !event.target.checked;
@@ -119,6 +120,7 @@ export const EmSubmissionData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewEditModalHandler(row, idx, false)}
+            aria-label={`view row for EM Submission Access record with id ${row.id}`}
           >
             View
           </Button>
@@ -203,6 +205,12 @@ export const EmSubmissionData = ({
       selector: (row) => row.severityLevel,
       sortable: true,
     },
+    {
+      name: "Record Id",
+      width: "160px",
+      selector: (row) => row.id,
+      sortable: true,
+    },
   ];
 
   const closeModal = () => {
@@ -215,24 +223,27 @@ export const EmSubmissionData = ({
 
   return (
     <div>
-      {(showOpenModal || showExtendModal || showCloseModal || showApproveModal) &&
-        <EmSubmissionModal
-          showModal={
-            showOpenModal ||
-            showExtendModal ||
-            showCloseModal ||
-            showApproveModal
-          }
-          close={closeModal}
-          isOpenModal={showOpenModal}
-          isExtendModal={showExtendModal}
-          isCloseModal={showCloseModal}
-          isApproveModal={showApproveModal}
-          selectedRows={selectedRows}
-          setReloadTableData={setReloadTableData}
-          reportingPeriods={reportingPeriods}
-        />
-      }
+      {(showOpenModal ||
+        showExtendModal ||
+        showCloseModal ||
+        showApproveModal) && (
+          <EmSubmissionModal
+            showModal={
+              showOpenModal ||
+              showExtendModal ||
+              showCloseModal ||
+              showApproveModal
+            }
+            close={closeModal}
+            isOpenModal={showOpenModal}
+            isExtendModal={showExtendModal}
+            isCloseModal={showCloseModal}
+            isApproveModal={showApproveModal}
+            selectedRows={selectedRows}
+            setReloadTableData={setReloadTableData}
+            reportingPeriods={reportingPeriods}
+          />
+        )}
       <div className="padding-left-0 margin-left-0 padding-right-0">
         <div className="grid-row row-width">
           <div className="grid-col-4">
@@ -294,8 +305,9 @@ export const EmSubmissionData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
+          <span data-aria-label={"Maintain EM Submission Access"}></span>
           {isLoading && <Preloader />}
-          {!isLoading &&
+          {!isLoading && (
             <DataTable
               sortIcon={
                 <ArrowDownwardSharp className="margin-left-2 text-primary" />
@@ -307,9 +319,9 @@ export const EmSubmissionData = ({
               data={data}
               className={`data-display-table react-transition fade-in`}
             />
-          }
+          )}
         </div>
-        {showViewEditModal &&
+        {showViewEditModal && (
           <Modal
             title={"Maintain EM Submission Access"}
             show={showViewEditModal}
@@ -326,7 +338,7 @@ export const EmSubmissionData = ({
             // create={createNewData}
             />
           </Modal>
-        }
+        )}
       </div>
     </div>
   );
@@ -346,6 +358,6 @@ const controlInputs = {
   lastSubmissionId: ["Last Submission ID", "input", ""],
   submissionTypeDescription: ["Submission Type", "input", ""],
   severityLevel: ["Severity Level", "input", ""],
-}
+};
 
-const controlDatePickerInputs = {}
+const controlDatePickerInputs = {};

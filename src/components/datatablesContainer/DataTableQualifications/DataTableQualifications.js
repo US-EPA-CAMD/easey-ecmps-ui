@@ -42,6 +42,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+import "./DataTableQualifications.scss";
 
 export const DataTableQualifications = ({
   mdmData,

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, createRef } from "react";
+import React, { createContext, useEffect, createRef,useState } from "react";
 import ReactDom from "react-dom";
 import { Alert, Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
@@ -29,6 +29,8 @@ export const Modal = ({
   returnFocus,
 }) => {
   const modalRef = createRef();
+
+
   useEffect(() => {
     const { handleKeyPress } = focusTrap(".modal-content", close);
 

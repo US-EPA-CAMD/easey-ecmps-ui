@@ -1,11 +1,12 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { Modal, ModalFooter, ModalHeading, Alert, Button } from "@trussworks/react-uswds";
 import "./ErrorFallbackModal.scss";
 
 
-const ErrorFallbackModal = ({ error, resetErrorBoundary }) => {
+const ErrorFallbackModal = (props) => {
+  const { error, resetErrorBoundary, errorId } = props;
   const modalRef = useRef(null);
-  
+
   const closeHandler = (evt) => {
     modalRef.current.toggleModal(evt, false);
     resetErrorBoundary();
@@ -30,7 +31,9 @@ const ErrorFallbackModal = ({ error, resetErrorBoundary }) => {
             {error.message}
           </Alert>
           <p id="error-fallback-modal-description">
-           An error has occurred. If the problem persists, please contact the help desk.
+            <b>Error Id: </b>{errorId}
+            <br/> 
+            <p>An error has occurred. If the problem persists, please contact the help desk.</p>
           </p>
         </div>
         <ModalFooter>
