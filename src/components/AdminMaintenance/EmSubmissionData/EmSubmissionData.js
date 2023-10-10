@@ -9,6 +9,7 @@ import "./EmSubmissionData.scss";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 
 export const EmSubmissionData = ({
   data = [],
@@ -24,6 +25,7 @@ export const EmSubmissionData = ({
   const [showCloseModal, setShowCloseModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showViewEditModal, setShowViewEditModal] = useState(false);
+  const [selectedRowId, setSelectedRowId] = useState(null);
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
   //   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -45,6 +47,7 @@ export const EmSubmissionData = ({
       const hasMainDropdown = false;
       const prefilteredTotalName = null;
       const extraControls = false;
+      setSelectedRowId(row.id);
 
       setSelectedModalData(
         modalViewData(
@@ -120,6 +123,7 @@ export const EmSubmissionData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewEditModalHandler(row, idx, false)}
+            id={`btnView-em-submission-${row.id}`}
             aria-label={`view row for EM Submission Access record with id ${row.id}`}
           >
             View
@@ -214,6 +218,26 @@ export const EmSubmissionData = ({
   ];
 
   const closeModal = () => {
+
+    if (showOpenModal) {
+      const openBtn = document.getElementById("em-submission-open-btn");
+      openBtn?.focus();
+    } else if (showExtendModal) {
+      const extendBtn = document.getElementById("em-submission-extend-btn");
+      extendBtn?.focus();
+    } else if (showCloseModal) {
+      const closeBtn = document.getElementById(
+        "em-submission-close-btn"
+      );
+      closeBtn?.focus();
+    } else if (showApproveModal) {
+      const approveBtn = document.getElementById(
+        "em-submission-approve-btn"
+      );
+      approveBtn?.focus();
+    } else if (showViewEditModal) {
+      returnsFocusDatatableViewBTN("-em-submission-", selectedRowId, true);
+    } 
     setShowOpenModal(false);
     setShowExtendModal(false);
     setShowCloseModal(false);
@@ -263,6 +287,7 @@ export const EmSubmissionData = ({
                       setShowOpenModal(true);
                     }
                   }}
+                  id="em-submission-open-btn"
                   disabled={selectedRows.length !== 1}
                 >
                   Open
@@ -274,6 +299,7 @@ export const EmSubmissionData = ({
                   data-testid="es-clone"
                   className="usa-button usa-button--outline"
                   onClick={() => setShowExtendModal(true)}
+                  id="em-submission-extend-btn"
                   disabled={disableApproveBtn || selectedRows.length === 0}
                 >
                   Extend
@@ -285,6 +311,7 @@ export const EmSubmissionData = ({
                   data-testid="es-deactivate"
                   className="usa-button usa-button--outline"
                   onClick={() => setShowCloseModal(true)}
+                  id="em-submission-close-btn"
                   disabled={selectedRows.length === 0}
                 >
                   Close
@@ -297,6 +324,7 @@ export const EmSubmissionData = ({
                   disabled={disableApproveBtn || selectedRows.length === 0}
                   className="usa-button usa-button--outline"
                   onClick={() => setShowApproveModal(true)}
+                  id="em-submission-approve-btn"
                 >
                   Approve
                 </Button>
