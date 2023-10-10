@@ -22,6 +22,8 @@ export const ExportTable = ({
   const [hasSelected, setHasSelected] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  columns = columns.slice(2);
+
   const handleSelectionChange = useCallback(
     (rows) => {
       setHasSelected(rows.selectedRows.length > 0);

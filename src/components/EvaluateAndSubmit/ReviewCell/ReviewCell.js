@@ -7,7 +7,6 @@ const ReviewCell = ({
   idx,
   row,
   handleRowSelection,
-  handleRowView,
   type,
   getRowState,
   setSelectAllState,
@@ -58,14 +57,7 @@ const ReviewCell = ({
         )}
         {cellState === "View" &&
           !row["matsBulkFileIdentifier"] && ( //Don't show view button for MATS bulk files
-            <Button
-              data-testid="ViewButton"
-              onClick={() => {
-                handleRowView(row, true);
-              }}
-            >
-              View
-            </Button>
+            <div></div>
           )}
       </div>
     )
