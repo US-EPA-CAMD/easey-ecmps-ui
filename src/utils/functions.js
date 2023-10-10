@@ -148,9 +148,8 @@ export const evalStatusStyle = (status) => {
 };
 
 export const alertStyle = (evalStatus) =>
-  `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-    evalStatus
-  )} margin-y-0 maintainBorder`;
+  `usa-alert usa-alert--slim usa-alert--no-icon ${evalStatusStyle(evalStatus)}`;
+
 export const reportWindowParams = [
   // eslint-disable-next-line no-restricted-globals
   `height=${screen.height}`,
@@ -162,9 +161,9 @@ export const reportWindowParams = [
 export const formatReportUrl = (params, service) => {
   const urlParams = params.map(([key, value]) => {
     return `${key}=${[value]}`;
-  })
+  });
 
-  const url = `/${service}?${urlParams.join('&')}`;
+  const url = `/${service}?${urlParams.join("&")}`;
 
   if (window.location.href.includes("/workspace")) {
     return url.replace(`/${service}`, `/workspace/${service}`);

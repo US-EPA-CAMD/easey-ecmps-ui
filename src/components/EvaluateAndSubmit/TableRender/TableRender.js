@@ -8,7 +8,7 @@ import {
 } from "../../../additional-functions/ensure-508";
 import { oneSecond } from "../../../config";
 import ReviewCell from "../ReviewCell/ReviewCell";
-import { Checkbox } from "@trussworks/react-uswds";
+import { Checkbox, Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import { addEvalStatusCell } from "../../../utils/functions";
 import _ from "lodash";
@@ -36,6 +36,10 @@ const TableRender = forwardRef(
       `width=${screen.width}`,
       //`fullscreen=yes`,
     ].join(",");
+
+    columns = columns.map((c) => {
+      return { ...c, wrap: true };
+    });
 
     const [selectAllState, setSelectAllState] = useState(false);
     const [selectAllVisible, setSelectAllVisible] = useState(true);
@@ -145,7 +149,6 @@ const TableRender = forwardRef(
             idx={idx}
             row={row}
             handleRowSelection={selectIndividual}
-            handleRowView={handleRowView}
             type={type}
             getRowState={getRowState}
             setSelectAllState={setSelectAllState}
@@ -155,13 +158,27 @@ const TableRender = forwardRef(
         width: "100px",
         button: true,
       },
-      ...columns,
-      {
-        name: "Submission Status",
-        selector: (row) => row.submissionAvailabilityCode,
-        sortable: true,
-      },
     ];
+
+    if (rowId !== "matsBulkFileIdentifier") {
+      mappings.push({
+        name: "Report",
+        cell: (row, idx) => (
+          <Button
+            data-testid="ViewButton"
+            onClick={() => {
+              handleRowView(row, true);
+            }}
+          >
+            View
+          </Button>
+        ),
+        width: "100px",
+        button: true,
+      });
+    }
+
+    mappings.push(...columns);
 
     addEvalStatusCell(mappings, handleRowView);
 

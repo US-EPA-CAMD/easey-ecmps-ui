@@ -39,6 +39,10 @@
 }
 
 .data-display-table-export {
+  .brFloq {
+    white-space: pre-wrap !important;
+  }
+
   .rdt_Table {
     width: 99%;
     margin: 0.5% 0.5%;
@@ -98,6 +102,10 @@
 }
 
 .data-display-table {
+  .brFloq {
+    white-space: pre-wrap !important;
+  }
+
   .rdt_Table {
     width: 99%;
     margin: 0.5% 0.5%;

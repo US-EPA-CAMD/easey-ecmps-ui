@@ -117,6 +117,16 @@ export const formatTimeStamp = (timeStamp) => {
 
 export const monPlanColumns = [
   {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+  },
+  {
+    name: "Submission Status",
+    selector: (row) => row.submissionAvailabilityCodeDescription,
+    sortable: true,
+  },
+  {
     name: "ORIS Code",
     selector: (row) => row.orisCode,
     sortable: true,
@@ -143,14 +153,20 @@ export const monPlanColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+];
+
+export const qaTestSummaryColumns = [
   {
     name: "Eval Status",
     selector: (row) => row.evalStatusCodeDescription,
     sortable: true,
   },
-];
-
-export const qaTestSummaryColumns = [
+  {
+    name: "Submission Status",
+    selector: (row) => row.submissionCodeDescription,
+    sortable: true,
+    wrap: true,
+  },
   {
     name: "ORIS Code",
     selector: (row) => row.orisCode,
@@ -180,7 +196,6 @@ export const qaTestSummaryColumns = [
     name: "Test Number",
     selector: (row) => row.testNum,
     sortable: true,
-    width: "180px",
   },
   {
     name: "Year/Quarter",
@@ -213,13 +228,6 @@ export const qaTestSummaryColumns = [
     sortable: true,
     // sortFunction: sortByUpdateDate,
   },
-  {
-    name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
-    sortable: true,
-    allowOverflow: true,
-    wrap: true,
-  },
 ];
 
 export const matsBulkFilesColumns = [
@@ -242,7 +250,6 @@ export const matsBulkFilesColumns = [
     name: "Test Type Code",
     selector: (row) => row.testTypeCodeDescription,
     sortable: true,
-    width: "400px",
   },
   {
     name: "Test Number",
@@ -253,7 +260,6 @@ export const matsBulkFilesColumns = [
     name: "File Name",
     selector: (row) => row.filename,
     sortable: true,
-    width: "180px",
   },
   {
     name: "Last Modified By",
@@ -270,6 +276,17 @@ export const matsBulkFilesColumns = [
 ];
 
 export const qaCertEventColumns = [
+  {
+    name: "Eval Status",
+    selector: (row) => row.evalStatusCodeDescription,
+    sortable: true,
+  },
+  {
+    name: "Submission Status",
+    selector: (row) => row.submissionAvailabilityDescription,
+    sortable: true,
+    wrap: true,
+  },
   {
     name: "ORIS Code",
     selector: (row) => row.orisCode,
@@ -333,14 +350,20 @@ export const qaCertEventColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+];
+
+export const qaTeeColumns = [
   {
     name: "Eval Status",
     selector: (row) => row.evalStatusCodeDescription,
     sortable: true,
   },
-];
-
-export const qaTeeColumns = [
+  {
+    name: "Submission Status",
+    selector: (row) => row.submissionAvailabilityCodeDescription,
+    sortable: true,
+    wrap: true,
+  },
   {
     name: "ORIS Code",
     selector: (row) => row.orisCode,
@@ -399,19 +422,28 @@ export const qaTeeColumns = [
     wrap: true,
     // sortFunction: sortByUpdateDate,
   },
+];
+
+export const emissionsColumns = [
   {
     name: "Eval Status",
     selector: (row) => row.evalStatusCodeDescription,
     sortable: true,
   },
-];
-
-export const emissionsColumns = [
+  {
+    name: "Submission Status",
+    selector: (row) => row.submissionAvailabilityCodeDescription,
+    sortable: true,
+  },
+  {
+    name: "Submission Window",
+    selector: (row) => formatSubmissionWindow(row.windowStatus),
+    sortable: true,
+  },
   {
     name: "ORIS Code",
     selector: (row) => row.orisCode,
     sortable: true,
-    maxWidth: "100px",
   },
   {
     name: "Facility Name",
@@ -440,15 +472,5 @@ export const emissionsColumns = [
     sortable: true,
     wrap: true,
     // sortFunction: sortByUpdateDate,
-  },
-  {
-    name: "Submission Window",
-    selector: (row) => formatSubmissionWindow(row.windowStatus),
-    sortable: true,
-  },
-  {
-    name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
-    sortable: true,
   },
 ];
