@@ -235,7 +235,7 @@ const FilterForm = ({
             />
           </div>
         </div>
-        <div className="buttons grid-col-9 desktop:grid-col-2 padding-top-1">
+        <div className="buttons grid-col-9 desktop:grid-col-3 padding-top-1">
           <div
             id="submit-button-group"
             className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-top-5 margin-right-1"
