@@ -58,6 +58,8 @@ import {
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
+  displayAppWarning,
+  hideAppWarning,
   hideAppError,
 } from "../../additional-functions/app-error";
 import { cloneDeep } from "lodash";
@@ -375,8 +377,8 @@ export const HeaderInfo = ({
 
     // This will filter the dropdown values for the views by the ones that have a count > 0
     return viewData.filter(
-      (v) => codesWithData.find((d) => d === v.code) !== undefined
-    );
+      (vd) => codesWithData.find((d) => d === vd.code) !== undefined
+    ).filter(vd => vd.code !== "COUNTS");
   }
 
   const filterViewDataForGlobal = (countData, viewData) => {
@@ -384,8 +386,8 @@ export const HeaderInfo = ({
       // filter vd records that have a count of 0
       const match = countData.find(cd => cd.dataSetCode === vd.code && cd.count === 0)
 
-      return match === undefined
-    })
+      return match === undefined 
+    }).filter(vd => vd.code !== "COUNTS")
   }
 
   // gets the data required to build the emissions dropdown
@@ -1057,6 +1059,7 @@ export const HeaderInfo = ({
     handleSelectReportingPeriod();
     setLocationSelect(emissionDropdownState.locationSelect);
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+    displayAppWarning("testing 123")
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
@@ -1065,6 +1068,8 @@ export const HeaderInfo = ({
       stackPipeIds,
       inWorkspace
     );
+    console.log("filter results")
+    console.log(response)
 
     if (
       response &&

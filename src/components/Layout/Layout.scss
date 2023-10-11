@@ -39,6 +39,13 @@ div.row.column1 {
 #appErrorMessageText {
   white-space: pre-wrap;
 }
+#appWarningMessage {
+  color: #FFBE2E;
+  border-color: #FFBE2E;
+}
+#appWarningMessageText {
+  white-space: pre-wrap;
+}
 .skip-to-content-link:focus {
   transform: translateY(0%);
 }
