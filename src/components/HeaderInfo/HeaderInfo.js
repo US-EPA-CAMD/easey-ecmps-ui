@@ -368,6 +368,26 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emissionDropdownState]);
 
+  const filterViewDataForWorkspace = (countData, viewData) =>{
+    const codesWithData = countData
+    .filter((c) => c.count > 0)
+    .map((c) => c.dataSetCode);
+
+    // This will filter the dropdown values for the views by the ones that have a count > 0
+    return viewData.filter(
+      (v) => codesWithData.find((d) => d === v.code) !== undefined
+    );
+  }
+
+  const filterViewDataForGlobal = (countData, viewData) => {
+    return viewData.filter(vd =>{
+      // filter vd records that have a count of 0
+      const match = countData.find(cd => cd.dataSetCode === vd.code && cd.count === 0)
+
+      return match === undefined
+    })
+  }
+
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
     const isSelectedReportingPeriodsEmpty =
@@ -394,30 +414,33 @@ export const HeaderInfo = ({
         selectedStackPipeId,
         inWorkspace
       );
-      const codesWithData = countData
-        .filter((c) => c.count > 0)
-        .map((c) => c.dataSetCode);
-
+      
+      console.log("countData")
+      console.log(countData)
+      
       let { data: viewData } = await emApi.getViews();
+      console.log("viewData")
+      console.log(viewData)
+        
+      let filteredViewData;
+      if( inWorkspace )
+        filteredViewData = filterViewDataForWorkspace(countData, viewData);
+      else 
+        filteredViewData = filterViewDataForGlobal(countData, viewData);
 
-      // This will filter the dropdown values for the views by the ones that have a count > 0
-      viewData = viewData.filter(
-        (v) => codesWithData.find((d) => d === v.code) !== undefined
-      );
-
-      if (viewData.length === 0) {
-        viewData.push(defaultTemplateValue);
+      if (filteredViewData.length === 0) {
+        filteredViewData.push(defaultTemplateValue);
         setViewTemplateSelect(null);
       } else {
         if (
           !viewTemplateSelect ||
           viewTemplateSelect?.code === defaultTemplateValue.code
         )
-          setViewTemplateSelect(viewData[0]);
+          setViewTemplateSelect(filteredViewData[0]);
       }
-      setViewTemplates(viewData);
-      if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
-        setViewTemplateSelect(viewData[0]);
+      setViewTemplates(filteredViewData);
+      if (!currentTab?.viewTemplateSelect && filteredViewData?.length > 0) {
+        setViewTemplateSelect(filteredViewData[0]);
       }
 
       setIsLoading(false);
