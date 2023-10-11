@@ -30,37 +30,13 @@ const ModalDetails = ({
   mainDropdownChange,
   setDisableExitBtnStatus,
 }) => {
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  // fixes resizing issue with calendar date picker along with help in CSS file
+  const containerStyle = {
+    whiteSpace: "nowrap", // Prevent text from wrapping
 
-  if (windowSize.width <= 1700) {
-    const modalWrapper = document.querySelector(".modal-wrapper");
-    if (modalWrapper) {
-      const usaLabels = modalWrapper.querySelectorAll(".usa-hint");
-      const newFontSize = "12px";
-      usaLabels.forEach((label) => {
-        label.style.fontSize = newFontSize;
-      });
-    } 
-  }
-
-  // edge case for when user moves browser from large monitor to small one
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+    textOverflow: "ellipsis",
+    overflow: "auto",
+  };
 
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
@@ -603,7 +579,7 @@ const ModalDetails = ({
 
   return (
     <div className=" padding-top-0 systemsCompTable">
-      <div className="grid-container margin-bottom-2">
+      <div className="grid-container margin-bottom-2" style={containerStyle}>
         <div className="display-inline-flex">
           {backBtn ? (
             <div className="display-block">
@@ -639,13 +615,13 @@ const ModalDetails = ({
         </div>
         <div>
           {hasMainDropdown && !viewOnly && showInitialHelpText ? (
-            <div className="margin-bottom-2">
+            <div className="margin-bottom-2" className="modal-help">
               <p className="margin-top-0">
                 <b>{initialDropdownText}</b>
               </p>
             </div>
           ) : hasMainDropdown && !viewOnly && !showInitialHelpText ? (
-            <div className="margin-bottom-2">
+            <div className="margin-bottom-2" className="modal-help">
               <p className="margin-top-0">
                 <b>{selectedDropdownText}</b>
               </p>

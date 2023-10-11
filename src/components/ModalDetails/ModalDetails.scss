@@ -14,11 +14,33 @@
 }
 
 .usa-date-picker__wrapper {
- max-width: 10rem !important;
+ max-width: 58% !important;
+ 
+ .usa-date-picker__external-input{
+  margin-right: 0 !important;
+ }
 }
 
+.usa-date-picker__calendar {
+  min-width: 17rem !important;
+ }
+ 
 .usa-date-picker__button {
 
   margin: 0 !important;
-  padding: 0 !important;
+  padding-right: 15px !important;
+}
+
+.usa-date-picker__calendar {
+
+  transform: translate(50%, -30%); 
+}
+
+.modal-help{
+  white-space: normal !important;
+  overflow:  normal !important;
+}
+
+.usa-hint{
+  font-size: 11px !important;
 }
