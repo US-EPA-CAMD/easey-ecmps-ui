@@ -29,7 +29,7 @@ export const EmissionsTabRender = ({
       (t) => t.selectedConfig.id === configID
     )
   );
-
+  
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
@@ -43,10 +43,11 @@ export const EmissionsTabRender = ({
   useEffect(() => {
     setViewColumns(currentTab?.viewColumns || []);
     setViewData(currentTab?.viewData || []);
+   
     setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab]);
+  }, [currentTab.viewColumns, currentTab.viewData, currentTab.isViewDataLoaded, currentTab.viewTemplateSelect]);
 
   const handleDownload = async () => {
     const selectedUnitId = selectedConfig?.monitoringLocationData

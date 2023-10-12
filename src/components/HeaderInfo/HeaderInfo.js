@@ -59,10 +59,8 @@ import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
   displayAppWarning,
-  hideAppWarning,
   hideAppError,
 } from "../../additional-functions/app-error";
-import { cloneDeep } from "lodash";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -217,15 +215,12 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-  const [emissionDropdownState, setEmissionDropdownState] = useState({
-    locationSelect,
-    selectedReportingPeriods,
-  });
+
   const selectedUnitId = selectedConfig?.monitoringLocationData
-    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.unitId);
   const selectedStackPipeId = selectedConfig?.monitoringLocationData
-    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.stackPipeId);
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
@@ -282,10 +277,7 @@ export const HeaderInfo = ({
     }
 
     setSelectedReportingPeriods(selectedRptPeriods);
-    setEmissionDropdownState({
-      ...cloneDeep(emissionDropdownState),
-      selectedReportingPeriods: selectedRptPeriods,
-    });
+
     dispatch(
       setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
@@ -299,23 +291,17 @@ export const HeaderInfo = ({
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
     if (currentTab?.reportingPeriods) {
-      const selectedReportingPeriods = currentTab.reportingPeriods;
+      const reduxReportingPeriods = currentTab.reportingPeriods;
       for (const reportingPeriod of reportingPeriods) {
         if (currentTab.reportingPeriods.includes(reportingPeriod.id)) {
           reportingPeriod.selected = true;
         }
       }
-      setEmissionDropdownState({
-        ...cloneDeep(emissionDropdownState),
-        selectedReportingPeriods,
-      });
+
+      setSelectedReportingPeriods(reduxReportingPeriods)
     }
     if (currentTab?.locationSelect) {
       setLocationSelect(currentTab.locationSelect);
-      setEmissionDropdownState({
-        ...cloneDeep(emissionDropdownState),
-        locationSelect: currentTab.locationSelect,
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
@@ -368,7 +354,7 @@ export const HeaderInfo = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [emissionDropdownState]);
+  }, [selectedReportingPeriods]);
 
   const filterViewDataForWorkspace = (countData, viewData) =>{
     const codesWithData = countData
@@ -392,8 +378,9 @@ export const HeaderInfo = ({
 
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
-    const isSelectedReportingPeriodsEmpty =
-      emissionDropdownState.selectedReportingPeriods.length === 0;
+
+    console.log("calling getEmissionsViewDropdownData")
+    const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
     const isBothSelectedStackPipeIdAndUnitIdEmpty =
       selectedStackPipeId?.length === 0 && selectedUnitId?.length === 0;
 
@@ -411,7 +398,7 @@ export const HeaderInfo = ({
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
-        emissionDropdownState.selectedReportingPeriods,
+        selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
         inWorkspace
@@ -429,17 +416,15 @@ export const HeaderInfo = ({
         filteredViewData = filterViewDataForWorkspace(countData, viewData);
       else 
         filteredViewData = filterViewDataForGlobal(countData, viewData);
+      
+      filteredViewData.unshift(defaultTemplateValue);
 
-      if (filteredViewData.length === 0) {
-        filteredViewData.push(defaultTemplateValue);
-        setViewTemplateSelect(null);
-      } else {
-        if (
-          !viewTemplateSelect ||
-          viewTemplateSelect?.code === defaultTemplateValue.code
-        )
-          setViewTemplateSelect(filteredViewData[0]);
-      }
+      if (
+        !viewTemplateSelect ||
+        viewTemplateSelect?.code === defaultTemplateValue.code
+      )
+        setViewTemplateSelect(filteredViewData[1]);
+      
       setViewTemplates(filteredViewData);
       if (!currentTab?.viewTemplateSelect && filteredViewData?.length > 0) {
         setViewTemplateSelect(filteredViewData[0]);
@@ -489,7 +474,7 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    for (const selectedReportingPeriod of emissionDropdownState.selectedReportingPeriods) {
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
@@ -900,12 +885,6 @@ export const HeaderInfo = ({
         });
 
         setSelectedReportingPeriods([importedReportingPeriod]);
-        setEmissionDropdownState((prevEmissionDropdownState) => {
-          return {
-            ...cloneDeep(prevEmissionDropdownState),
-            selectedReportingPeriods: [importedReportingPeriod],
-          };
-        });
       })
       .catch((err) => {
         console.log(err);
@@ -946,12 +925,7 @@ export const HeaderInfo = ({
       rp.selected = rp.label === importedReportingPeriod;
     });
 
-    setEmissionDropdownState((prevEmissionDropdownState) => {
-      return {
-        ...cloneDeep(prevEmissionDropdownState),
-        selectedReportingPeriods: [importedReportingPeriod],
-      };
-    });
+    setSelectedReportingPeriods([importedReportingPeriod])
   };
 
   // Create audit message for header info
@@ -978,9 +952,10 @@ export const HeaderInfo = ({
   };
 
   const handleSelectReportingPeriod = () => {
-    if (!emissionDropdownState.selectedReportingPeriods.length) return;
+    console.log("selected reporting periods", selectedReportingPeriods)
+    if (!selectedReportingPeriods.length) return;
     const uniqueReportingPeriods = [
-      ...new Set([...emissionDropdownState.selectedReportingPeriods]),
+      ...new Set([...selectedReportingPeriods]),
     ];
     setSelectedReportingPeriods(uniqueReportingPeriods);
     dispatch(
@@ -994,7 +969,7 @@ export const HeaderInfo = ({
 
   const reportingPeriodOnChangeUpdate = (id) => {
     const uniqueReportingPeriods = [
-      ...new Set([...emissionDropdownState.selectedReportingPeriods, id]),
+      ...new Set([...selectedReportingPeriods, id]),
     ];
 
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
@@ -1005,16 +980,13 @@ export const HeaderInfo = ({
       return;
     }
     hideAppError();
-    const selectedReportingPeriods = reportingPeriods
+    const filteredReportingPeriods = reportingPeriods
       .filter((el) => el.selected)
       .map((rp) => rp.id);
-    setEmissionDropdownState({
-      ...cloneDeep(emissionDropdownState),
-      selectedReportingPeriods,
-    });
+    setSelectedReportingPeriods(filteredReportingPeriods);
     dispatch(
       setReportingPeriods(
-        selectedReportingPeriods,
+        filteredReportingPeriods,
         currentTab.name,
         workspaceSection
       )
@@ -1056,14 +1028,13 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
-    handleSelectReportingPeriod();
-    setLocationSelect(emissionDropdownState.locationSelect);
+    // handleSelectReportingPeriod();
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
-    displayAppWarning("testing 123")
+    
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
-      emissionDropdownState.selectedReportingPeriods,
+      selectedReportingPeriods,
       unitIds,
       stackPipeIds,
       inWorkspace
@@ -1093,6 +1064,12 @@ export const HeaderInfo = ({
         formattedResults.push(formattedObject);
       }
 
+      if( results.length === 0 ){
+        // locations.find(l => l.id === locationSelect[1])
+        displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods} location ${locations[locationSelect[0]]?.name}`);
+        getEmissionsViewDropdownData();
+      }
+      
       dispatch(
         setViewTemplateSelectionAction(
           viewTemplateSelect,
@@ -1421,12 +1398,9 @@ export const HeaderInfo = ({
                     options={locations}
                     viewKey="name"
                     selectKey="id"
-                    initialSelection={emissionDropdownState.locationSelect[0]}
+                    initialSelection={locationSelect[0]}
                     selectionHandler={(location) =>
-                      setEmissionDropdownState({
-                        ...cloneDeep(emissionDropdownState),
-                        locationSelect: location,
-                      })
+                      setLocationSelect(location)
                     }
                     workspaceSection={workspaceSection}
                     changeFunc={getEmissionsViewDropdownData}
@@ -1469,7 +1443,7 @@ export const HeaderInfo = ({
                     className="cursor-pointer text-no-wrap apply-filter-position"
                     disabled={
                       locationSelect &&
-                      emissionDropdownState.selectedReportingPeriods.length !==
+                      selectedReportingPeriods.length !==
                         0 &&
                       viewTemplateSelect?.code !== defaultTemplateValue.code &&
                       viewTemplateSelect !== null
