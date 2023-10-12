@@ -20,6 +20,7 @@ import {
 } from "../../../utils/api/adminManagementApi";
 import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
+import useScreenSize from "../../../customHooks/useScreenSize/useScreenSize";
 
 export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
@@ -39,6 +40,8 @@ const FilterFormAdmin = ({
   reportingPeriods,
   setQaMaintenanceTypeSelection,
 }) => {
+  const screenSize = useScreenSize();
+
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState([
     initialSelectOption,
   ]);
@@ -322,8 +325,8 @@ const FilterFormAdmin = ({
             />
           </div>
         
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
-            <div className="margin-left-4 width-card display-none widescreen:display-flex">
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && screenSize.width >= 1400 && (
+            <div className="margin-left-4 width-card">
               <DropdownSelection
                 caption="Type"
                 selectionHandler={setTypeSelection}
@@ -338,8 +341,8 @@ const FilterFormAdmin = ({
 
           )}
     
-          {section === SUBMISSION_ACCESS_STORE_NAME && (
-            <div className="display-none widescreen:display-flex">
+          {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width >= 1400 &&(
+            <>
               <div className="margin-left-4 width-card">
                 <DropdownSelection
                   caption="Reporting Period"
@@ -365,29 +368,27 @@ const FilterFormAdmin = ({
                   extraSpace
                 />
               </div>
-            </div>
+            </>
           )}
         </div>
         <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
-          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && (
-            <div className="widescreen:display-none desktop:display-flex">
-              <div className="width-card">
-                <DropdownSelection
-                  caption="Type"
-                  selectionHandler={setTypeSelection}
-                  options={testTypeGroupOptions}
-                  viewKey="name"
-                  selectKey="name"
-                  initialSelection={typeSelection ? typeSelection[0] : null}
-                  workspaceSection={section}
-                  extraSpace
-                />
-              </div>
+          {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && screenSize.width < 1400 && (
+            <div className="width-card">
+              <DropdownSelection
+                caption="Type"
+                selectionHandler={setTypeSelection}
+                options={testTypeGroupOptions}
+                viewKey="name"
+                selectKey="name"
+                initialSelection={typeSelection ? typeSelection[0] : null}
+                workspaceSection={section}
+                extraSpace
+              />
             </div>
           )}
 
-          {section === SUBMISSION_ACCESS_STORE_NAME && (
-            <div className="widescreen:display-none desktop:display-flex">
+          {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width < 1400 &&(
+            <>
               <div className="width-card">
                 <DropdownSelection
                   caption="Reporting Period"
@@ -413,7 +414,7 @@ const FilterFormAdmin = ({
                   extraSpace
                 />
               </div>
-            </div>
+            </>
           )}
           <div className="flex-align-self-end">
             <Button 

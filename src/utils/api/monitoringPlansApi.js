@@ -16,7 +16,7 @@ export const getApiUrl = (path, workspaceOnly = false) => {
 };
 
 export const getMonitoringPlanById = async (id) => {
-  const url = getApiUrl(`/plans/export?planId=${id}`);
+  const url = getApiUrl(`/plans/export?planId=${id}&reportedValuesOnly=true`);
 
   return secureAxios({
     method: "GET",

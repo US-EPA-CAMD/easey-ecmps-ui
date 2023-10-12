@@ -401,6 +401,21 @@ export const getAllGasTypeCodes = async () => {
     .catch(handleError);
 };
 
+export const getAllGasComponentCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/gas-component-codes`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getAllVendorIdentificationCodes = async () => {
+  return axios
+    .get(`${config.services.mdm.uri}/protocol-gas-vendors`)
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+
 export const getAllTestTypeGroupCodes = async () => {
   return axios
     .get(`${config.services.mdm.uri}/test-type-group-codes`)

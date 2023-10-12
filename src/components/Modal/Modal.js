@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, createRef } from "react";
+import React, { createContext, useEffect, createRef, useState } from "react";
 import ReactDom from "react-dom";
 import { Alert, Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
@@ -29,6 +29,31 @@ export const Modal = ({
   returnFocus,
 }) => {
   const modalRef = createRef();
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  
+  if (windowSize.width <= 1300) {
+    width = "650px";
+  } else {
+    width = "50%";
+  }
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }); 
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const { handleKeyPress } = focusTrap(".modal-content", close);
 
@@ -55,9 +80,9 @@ export const Modal = ({
   useEffect(
     () => () => {
       // * re-selecting the element because it is sometimes rerendered
-      const openModalBtn = window.openModalBtn?.id ? document.querySelector(
-        `#${window.openModalBtn?.id}`
-      ) : null
+      const openModalBtn = window.openModalBtn?.id
+        ? document.querySelector(`#${window.openModalBtn?.id}`)
+        : null;
       if (returnFocus && openModalBtn) {
         openModalBtn.focus();
       }
@@ -113,14 +138,8 @@ export const Modal = ({
 
                   {breadCrumbBar ? breadCrumbBar : ""}
 
-                  {errorMsgs.map(error => (
-                    <Alert
-                      type="error"
-                      slim
-                      noIcon
-                      key={error}
-                      role="alert"
-                    >
+                  {errorMsgs.map((error) => (
+                    <Alert type="error" slim noIcon key={error} role="alert">
                       {error}
                     </Alert>
                   ))}

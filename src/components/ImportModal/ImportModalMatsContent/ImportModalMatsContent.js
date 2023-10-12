@@ -3,7 +3,7 @@ import { FormGroup, Label } from "@trussworks/react-uswds";
 
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 import { FileInput } from "../../FileInput/FileInput";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { getQATestSummary, getQATestSummaryOfficial } from "../../../utils/api/qaCertificationsAPI";
 
 const initialStateLocations = {
   id: "select-0",
@@ -42,9 +42,11 @@ const ImportModalMatsContent = ({
 
     if (value[0] !== 0) {
       try {
-        const resp = await getQATestSummary(value[1]);
-        testSummaryRecords.current = resp.data; //Store these for later us when filtering by test type as well
+        const workspaceResp = await getQATestSummary(value[1], null, null, null, true);
+        const officialResp = await getQATestSummaryOfficial(value[1]);
 
+        testSummaryRecords.current = [...workspaceResp.data, ...officialResp.data]; //Store these for later us when filtering by test type as well
+        
         const groupCodes = Array.from(
           new Set(testSummaryRecords.current.map((ts) => ts.testTypeCode))
         ); //Extract group codes and remove duplicates
@@ -61,7 +63,7 @@ const ImportModalMatsContent = ({
 
         setTestTypes(testTypeOptions);
       } catch (e) {
-        console.log("error fetching test numbers", e);
+        console.log("error fetching test summary records", e);
       }
     }
   };
@@ -77,10 +79,13 @@ const ImportModalMatsContent = ({
       const testSummaryFiltered = testSummaryRecords.current.filter(
         (f) => f.testTypeCode === value[1]
       );
-
-      const options = testSummaryFiltered.map((m) => ({
-        key: m.testNumber,
-        name: m.testNumber,
+      
+      const uniqueTestNumbers = Array.from(
+        new Set(testSummaryFiltered.map(f => f.testNumber))
+      )
+      const options = uniqueTestNumbers.map((testNumber) => ({
+        key: testNumber,
+        name: testNumber,
       }));
 
       setTestNums([initialStateNums, ...options]);
@@ -95,8 +100,6 @@ const ImportModalMatsContent = ({
       testTypeGroup: testTypes[testGroupSelection].key,
       testNumber: testNums[value[0]].key,
     };
-
-    console.log(selectedTestNumberRef.current);
 
     if (value[0] !== 0 && importedFile.length !== 0) {
       setDisablePortBtn(false);
@@ -130,7 +133,7 @@ const ImportModalMatsContent = ({
         </div>
         <div className="grid-col-8">
           <DropdownSelection
-            caption={"Test Type Group"}
+            caption={"Test Type"}
             options={testTypes}
             viewKey={"name"}
             selectKey={"key"}
