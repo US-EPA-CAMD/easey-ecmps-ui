@@ -217,6 +217,8 @@ export const DataTableRender = ({
           width: "20%", // Set the column width to 30%
           cell: (row) => (
             <div
+              className="usa-tooltip"
+              title={row[`col${index + 1}`]}
               style={{
                 width: "100%",
                 whiteSpace: "nowrap",
@@ -266,7 +268,7 @@ export const DataTableRender = ({
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
 
           return (
-            <div >
+            <div>
               {/* user is logged in  */}
               {user ? (
                 // user is at the configuration table main page
