@@ -401,11 +401,14 @@ export const DataTableQualifications = ({
       )[0];
       setSelectedQualificationData(qualData);
     }
+
+    const isQualTypeCodeLocked = !create ? "locked" : ""
+
     setSelectedModalData(
       modalViewData(
         qualData,
         {
-          qualificationTypeCode: ["Qualification Type Code", "dropdown", ""],
+          qualificationTypeCode: ["Qualification Type Code", "dropdown", "", isQualTypeCodeLocked],
           skip: ["", "skip", "", ""],
         },
         {
@@ -446,6 +449,12 @@ export const DataTableQualifications = ({
       removeChangeEventListeners(".modalUserInput");
     }
   };
+
+  const isDataTableVisibleForGroupCode = (datatableGroupCode) => {
+    const qualCodeData = mdmData.qualificationTypeCode
+    const selectedCodeData = qualCodeData.find(codeData => codeData.code === selectedQualificationData.qualificationTypeCode)
+    return selectedCodeData.groupCode === datatableGroupCode
+  }
 
   return (
     <div className="methodTable">
@@ -513,84 +522,101 @@ export const DataTableQualifications = ({
                   {openLEE || openLME || openCPMS ? (
                     ""
                   ) : (
-                    <DataTablePCTQualifications
-                      locationSelectValue={locationSelectValue}
-                      user={user}
-                      checkout={checkout}
-                      inactive={inactive}
-                      settingInactiveCheckBox={settingInactiveCheckBox}
-                      revertedState={revertedState}
-                      setRevertedState={setRevertedState}
-                      selectedLocation={selectedLocation}
-                      qualSelectValue={selectedQualificationData["id"]}
-                      setOpenPCT={setOpenPCT}
-                      openPCT={openPCT}
-                      setUpdatePCT={setUpdatePCT}
-                      updatePCT={updatePCT}
-                      setCreatingChild={setCreatingChild}
-                    />
+                    <>
+                      {
+                        isDataTableVisibleForGroupCode('PCT') &&
+                        <DataTablePCTQualifications
+                          locationSelectValue={locationSelectValue}
+                          user={user}
+                          checkout={checkout}
+                          inactive={inactive}
+                          settingInactiveCheckBox={settingInactiveCheckBox}
+                          revertedState={revertedState}
+                          setRevertedState={setRevertedState}
+                          selectedLocation={selectedLocation}
+                          qualSelectValue={selectedQualificationData["id"]}
+                          setOpenPCT={setOpenPCT}
+                          openPCT={openPCT}
+                          setUpdatePCT={setUpdatePCT}
+                          updatePCT={updatePCT}
+                          setCreatingChild={setCreatingChild}
+                        />
+                      }
+                    </>
                   )}
                   {openPCT || openLME || openCPMS ? (
                     ""
                   ) : (
-                    <DataTableLEEQualifications
-                      locationSelectValue={locationSelectValue}
-                      user={user}
-                      checkout={checkout}
-                      inactive={inactive}
-                      settingInactiveCheckBox={settingInactiveCheckBox}
-                      revertedState={revertedState}
-                      setRevertedState={setRevertedState}
-                      selectedLocation={selectedLocation}
-                      qualSelectValue={selectedQualificationData["id"]}
-                      setOpenLEE={setOpenLEE}
-                      openLEE={openLEE}
-                      setUpdateLEE={setUpdateLEE}
-                      updateLEE={updateLEE}
-                      setCreatingChild={setCreatingChild}
-                    />
+                    <>
+                      {isDataTableVisibleForGroupCode('LEE') &&
+                        <DataTableLEEQualifications
+                          locationSelectValue={locationSelectValue}
+                          user={user}
+                          checkout={checkout}
+                          inactive={inactive}
+                          settingInactiveCheckBox={settingInactiveCheckBox}
+                          revertedState={revertedState}
+                          setRevertedState={setRevertedState}
+                          selectedLocation={selectedLocation}
+                          qualSelectValue={selectedQualificationData["id"]}
+                          setOpenLEE={setOpenLEE}
+                          openLEE={openLEE}
+                          setUpdateLEE={setUpdateLEE}
+                          updateLEE={updateLEE}
+                          setCreatingChild={setCreatingChild}
+                        />
+                      }
+                    </>
                   )}
 
                   {openLEE || openPCT || openCPMS ? (
                     ""
                   ) : (
-                    <DataTableLMEQualifications
-                      locationSelectValue={locationSelectValue}
-                      user={user}
-                      checkout={checkout}
-                      inactive={inactive}
-                      settingInactiveCheckBox={settingInactiveCheckBox}
-                      revertedState={revertedState}
-                      setRevertedState={setRevertedState}
-                      selectedLocation={selectedLocation}
-                      qualSelectValue={selectedQualificationData["id"]}
-                      setOpenLME={setOpenLME}
-                      openLME={openLME}
-                      setUpdateLME={setUpdateLME}
-                      updateLME={updateLME}
-                      setCreatingChild={setCreatingChild}
-                    />
+                    <>
+                      {isDataTableVisibleForGroupCode("LME") &&
+                        <DataTableLMEQualifications
+                          locationSelectValue={locationSelectValue}
+                          user={user}
+                          checkout={checkout}
+                          inactive={inactive}
+                          settingInactiveCheckBox={settingInactiveCheckBox}
+                          revertedState={revertedState}
+                          setRevertedState={setRevertedState}
+                          selectedLocation={selectedLocation}
+                          qualSelectValue={selectedQualificationData["id"]}
+                          setOpenLME={setOpenLME}
+                          openLME={openLME}
+                          setUpdateLME={setUpdateLME}
+                          updateLME={updateLME}
+                          setCreatingChild={setCreatingChild}
+                        />}
+                    </>
                   )}
 
                   {openLEE || openPCT || openLME ? (
                     ""
                   ) : (
-                    <DataTableCPMSQualifications
-                      locationSelectValue={locationSelectValue}
-                      user={user}
-                      checkout={checkout}
-                      inactive={inactive}
-                      settingInactiveCheckBox={settingInactiveCheckBox}
-                      revertedState={revertedState}
-                      setRevertedState={setRevertedState}
-                      selectedLocation={selectedLocation}
-                      qualSelectValue={selectedQualificationData["id"]}
-                      setOpenCPMS={setOpenCPMS}
-                      openCPMS={openCPMS}
-                      setUpdateCPMS={setUpdateCPMS}
-                      updateCPMS={updateCPMS}
-                      setCreatingChild={setCreatingChild}
-                    />
+                    <>
+                      {
+                        isDataTableVisibleForGroupCode("CPMS") &&
+                        <DataTableCPMSQualifications
+                          locationSelectValue={locationSelectValue}
+                          user={user}
+                          checkout={checkout}
+                          inactive={inactive}
+                          settingInactiveCheckBox={settingInactiveCheckBox}
+                          revertedState={revertedState}
+                          setRevertedState={setRevertedState}
+                          selectedLocation={selectedLocation}
+                          qualSelectValue={selectedQualificationData["id"]}
+                          setOpenCPMS={setOpenCPMS}
+                          openCPMS={openCPMS}
+                          setUpdateCPMS={setUpdateCPMS}
+                          updateCPMS={updateCPMS}
+                          setCreatingChild={setCreatingChild}
+                        />
+                      }
+                    </>
                   )}
                 </div>
               )}
