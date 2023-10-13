@@ -459,6 +459,7 @@ export const UseRetrieveDropdownApi = async (
             return {
               code: option["qualificationTypeCode"],
               name: option["qualificationTypeDescription"],
+              groupCode: option["qualificationTypeGroupCode"]
             };
           });
 
