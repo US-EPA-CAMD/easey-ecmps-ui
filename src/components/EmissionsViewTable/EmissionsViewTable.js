@@ -23,7 +23,7 @@ export const EmissionsViewTable = ({ viewData, viewColumnInfo, isLoading, monito
     const getFormattedCellForFirstRow = (row) => {
 
         let cell;
-        if (row.errorCodes !== null) {
+        if (row.errorCodes) {
             cell = (
                 <div>
                     <button
