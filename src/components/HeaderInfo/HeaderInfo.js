@@ -1029,6 +1029,7 @@ export const HeaderInfo = ({
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
     // handleSelectReportingPeriod();
+    setLocationSelect(locationSelect)
     dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     
     const response = await emApi.getEmissionViewData(
@@ -1051,21 +1052,7 @@ export const HeaderInfo = ({
       const columns = JSON.parse(response.headers["x-field-mappings"]);
       const results = response.data;
 
-      const names = columns.map((column) => column.label);
-
-      const formattedResults = [];
-      for (const result of results) {
-        let id = 1;
-        const formattedObject = {};
-        for (const resultKey in result) {
-          formattedObject[`col${id}`] = result[resultKey];
-          id += 1;
-        }
-        formattedResults.push(formattedObject);
-      }
-
       if( results.length === 0 ){
-        // locations.find(l => l.id === locationSelect[1])
         displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods} location ${locations[locationSelect[0]]?.name}`);
         getEmissionsViewDropdownData();
       }
@@ -1077,12 +1064,12 @@ export const HeaderInfo = ({
           EMISSIONS_STORE_NAME
         )
       );
-      dispatch(setViewDataColumns(names, currentTab.name, workspaceSection));
+      dispatch(setViewDataColumns(columns, currentTab.name, workspaceSection));
       dispatch(
-        setViewData(formattedResults, currentTab.name, workspaceSection)
+        setViewData(results, currentTab.name, workspaceSection)
       );
-      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
-    } else {
+    } 
+    else {
       dispatch(
         setViewTemplateSelectionAction(
           viewTemplateSelect,
@@ -1092,8 +1079,9 @@ export const HeaderInfo = ({
       );
       dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
       dispatch(setViewData([], currentTab.name, workspaceSection));
-      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
     }
+    dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
+
   };
 
   return (

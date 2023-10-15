@@ -5,9 +5,9 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import "./EmissionsTabRender.scss";
 import { getEmissionViewData } from "../../utils/api/emissionsApi";
-import { DataTableRender } from "../DataTableRender/DataTableRender";
 import { useSelector } from "react-redux";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { EmissionsViewTable } from "../EmissionsViewTable/EmissionsViewTable";
 
 export const EmissionsTabRender = ({
   title,
@@ -41,7 +41,11 @@ export const EmissionsTabRender = ({
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
   useEffect(() => {
-    setViewColumns(currentTab?.viewColumns || []);
+    console.log("viewColumns")
+    console.log(currentTab?.viewColumns)
+    console.log(currentTab?.viewData)
+
+    setViewColumns( currentTab?.viewColumns || []);
     setViewData(currentTab?.viewData || []);
    
     setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
@@ -117,7 +121,7 @@ export const EmissionsTabRender = ({
       </div>
       <hr />
       {!isInitialLoadOfPage && 
-      (viewTemplateSelect?.code === "SELECT" || !viewTemplateSelect) ? (
+      (!viewTemplateSelect || viewTemplateSelect?.code === "SELECT") ? (
         <div>
           <div className="grid-row overflow-x-auto">
             {!user ? (
@@ -136,11 +140,11 @@ export const EmissionsTabRender = ({
               headerButtonClickHandler={handleDownload}
               table={[
                 [
-                  <DataTableRender
-                    dataLoaded={isDataLoaded}
-                    columnNames={viewColumns ?? []}
-                    data={viewData ?? []}
-                    headerButtonText
+                  <EmissionsViewTable
+                    viewData={viewData}
+                    viewColumnInfo={viewColumns}
+                    isLoading={!isDataLoaded}
+                    monitorPlanId={configID}
                   />,
                   viewTemplateSelect?.name ?? "",
                 ],
