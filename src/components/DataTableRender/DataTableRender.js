@@ -248,7 +248,6 @@ export const DataTableRender = ({
         columns.push({
           id: `col${index + 1}`,
           name,
-          width: "20%", // Set the column width to 30%
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           style: { whiteSpace: "normal" },
