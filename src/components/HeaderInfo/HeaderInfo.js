@@ -230,8 +230,8 @@ export const HeaderInfo = ({
     workspaceSection === MONITORING_PLAN_STORE_NAME
       ? "Monitoring Plan"
       : workspaceSection === EMISSIONS_STORE_NAME
-      ? "Emissions"
-      : "Test";
+        ? "Emissions"
+        : "Test";
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -357,24 +357,32 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedReportingPeriods]);
 
-  const filterViewDataForWorkspace = (countData, viewData) =>{
+  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in workspace
+  const filterViewDataForWorkspace = (countData, allViews) => {
     const codesWithData = countData
-    .filter((c) => c.count > 0)
-    .map((c) => c.dataSetCode);
+      .filter((c) => c.count > 0)
+      .map((c) => c.dataSetCode);
 
     // This will filter the dropdown values for the views by the ones that have a count > 0
-    return viewData.filter(
-      (vd) => codesWithData.find((d) => d === vd.code) !== undefined
-    ).filter(vd => vd.code !== "COUNTS");
+    return allViews
+      .filter(view => view.code !== "COUNTS")
+      .filter(
+        (view) => codesWithData.find((d) => d === view.code) !== undefined
+      );
   }
 
-  const filterViewDataForGlobal = (countData, viewData) => {
-    return viewData.filter(vd =>{
-      // filter vd records that have a count of 0
-      const match = countData.find(cd => cd.dataSetCode === vd.code && cd.count === 0)
-
-      return match === undefined 
-    }).filter(vd => vd.code !== "COUNTS")
+  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in global
+  const filterViewDataForGlobal = (countData, allViews) => {
+    return allViews
+    .filter(view => view.code !== "COUNTS")
+    .filter(view => {
+      
+      const matches = countData.filter(cd => cd.dataSetCode === view.code && cd.count === 0)
+      // The counts data comes back with multiple records for the same view code but in order for a
+      // view template to be filtered out of the View Templates dropdown, the number of 0 count records
+      // has to be the same as the number of reporting periods that are selected
+        return matches.length !== selectedReportingPeriods.length
+      })
   }
 
   // gets the data required to build the emissions dropdown
@@ -383,7 +391,7 @@ export const HeaderInfo = ({
     const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
 
     if (isSelectedReportingPeriodsEmpty) {
-      
+
       setViewTemplates([defaultTemplateValue]);
       setViewTemplateSelect(defaultTemplateValue)
       return;
@@ -400,16 +408,15 @@ export const HeaderInfo = ({
         selectedStackPipeId,
         inWorkspace
       );
-            
-      let { data: viewData } = await emApi.getViews();
-      
-      console.log("getEmissionsViewDropdownData(): got count and view data")
+
+      let { data: allViews } = await emApi.getViews();
+
       let filteredViewData;
-      if( inWorkspace )
-        filteredViewData = filterViewDataForWorkspace(countData, viewData);
-      else 
-        filteredViewData = filterViewDataForGlobal(countData, viewData);
-      
+      if (inWorkspace)
+        filteredViewData = filterViewDataForWorkspace(countData, allViews);
+      else
+        filteredViewData = filterViewDataForGlobal(countData, allViews);
+
       filteredViewData.unshift(defaultTemplateValue);
 
       if (
@@ -417,7 +424,7 @@ export const HeaderInfo = ({
         viewTemplateSelect?.code === defaultTemplateValue.code
       )
         setViewTemplateSelect(filteredViewData[1]);
-      
+
       setViewTemplates(filteredViewData);
       if (!currentTab?.viewTemplateSelect && filteredViewData?.length > 0) {
         setViewTemplateSelect(filteredViewData[0]);
@@ -688,9 +695,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -927,9 +934,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -944,10 +950,10 @@ export const HeaderInfo = ({
     )}`;
   };
 
-  const resetEmissionsViewTable = ()=>{
+  const resetEmissionsViewTable = () => {
     dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
     dispatch(setViewData([], currentTab.name, workspaceSection));
-    dispatch(setViewTemplateSelectionAction( null, currentTab.name, EMISSIONS_STORE_NAME));
+    dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
   }
 
   const handleSelectReportingPeriod = () => {
@@ -977,13 +983,13 @@ export const HeaderInfo = ({
       .filter((el) => el.selected)
       .map((rp) => rp.id);
     setSelectedReportingPeriods(filteredReportingPeriods);
-    
+
     dispatch(setReportingPeriods(filteredReportingPeriods, currentTab.name, workspaceSection));
-    
-    resetEmissionsViewTable(); 
+
+    resetEmissionsViewTable();
   };
 
-  const emissionsLocationOnchange = (location) =>{
+  const emissionsLocationOnchange = (location) => {
     setLocationSelect(location);
     setViewTemplateSelect(defaultTemplateValue)
     resetEmissionsViewTable();
@@ -1047,12 +1053,12 @@ export const HeaderInfo = ({
       const columns = JSON.parse(response.headers["x-field-mappings"]);
       const results = response.data;
 
-      if( results.length === 0 ){
-        displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods} location ${locations[locationSelect[0]]?.name}`);
+      if (results.length === 0) {
+        displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
         getEmissionsViewDropdownData();
       }
-      
-      results.forEach((o,idx)=>o.id=idx)
+
+      results.forEach((o, idx) => o.id = idx)
       dispatch(
         setViewTemplateSelectionAction(
           results.length === 0 ? null : viewTemplateSelect,
@@ -1062,7 +1068,7 @@ export const HeaderInfo = ({
       );
       dispatch(setViewDataColumns(columns, currentTab.name, workspaceSection));
       dispatch(setViewData(results, currentTab.name, workspaceSection));
-    } 
+    }
     else {
       dispatch(
         setViewTemplateSelectionAction(
@@ -1082,9 +1088,8 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal && (
@@ -1344,7 +1349,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1403,7 +1408,7 @@ export const HeaderInfo = ({
                         );
                         resetEmissionsViewTable()
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
@@ -1424,10 +1429,10 @@ export const HeaderInfo = ({
                     className="cursor-pointer text-no-wrap apply-filter-position"
                     disabled={
                       locationSelect &&
-                      selectedReportingPeriods.length !==
+                        selectedReportingPeriods.length !==
                         0 &&
-                      viewTemplateSelect?.code !== defaultTemplateValue.code &&
-                      viewTemplateSelect !== null
+                        viewTemplateSelect?.code !== defaultTemplateValue.code &&
+                        viewTemplateSelect !== null
                         ? false
                         : true
                     }
