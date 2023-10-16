@@ -44,7 +44,7 @@ export const DefaultTemplate = ({
       {titleBreak && (
         <div>
           <hr className="border border-dashed" />
-          <h3> {title} </h3>
+          {title}
           <hr className="border border-dashed" />
         </div>
       )}
