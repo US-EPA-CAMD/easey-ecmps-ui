@@ -195,20 +195,5 @@ export const DataTableConfigurations = ({
   );
 };
 
-// const mapStateToProps = (state) => {
-//   return {
-//     monitoringPlans: state.monitoringPlans,
-//   };
-// };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     loadMonitoringPlansData: async (orisCode) => {
-//       dispatch(loadMonitoringPlansArray(orisCode));
-//     },
-//     setCheckout: (value, configID, workspaceSection) =>
-//       dispatch(setCheckoutState(value, configID, workspaceSection)),
-//   };
-// };
 export default DataTableConfigurations;
-// export { mapStateToProps };
