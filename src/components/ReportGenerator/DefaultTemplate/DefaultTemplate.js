@@ -7,6 +7,7 @@ export const DefaultTemplate = ({
   codeGroups,
   columnNames,
   dataLoaded,
+  titleBreak,
 }) => {
   if (!data || data.length === 0) {
     return <></>;
@@ -34,9 +35,19 @@ export const DefaultTemplate = ({
 
   return (
     <div className="margin-bottom-3">
-      <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
-        {title}
-      </h3>
+      {!titleBreak && (
+        <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+          {title}
+        </h3>
+      )}
+
+      {titleBreak && (
+        <div>
+          <hr className="border border-dashed" />
+          <h3> {title} </h3>
+          <hr className="border border-dashed" />
+        </div>
+      )}
 
       <div className="width-auto margin-top-0 data-display-table-report">
         <DataTable
