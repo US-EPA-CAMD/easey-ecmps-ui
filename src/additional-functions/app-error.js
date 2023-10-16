@@ -83,7 +83,6 @@ export const hideAppError = () =>{
 }
 
 export const displayAppError = (error) =>{
-  console.log("was here")
   displayAppMessage(error, "Error", hideAppError)
 }
 

@@ -33,25 +33,18 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [viewColumns, setViewColumns] = useState();
-  const [viewData, setViewData] = useState();
-  const [isDataLoaded, setIsDataLoaded] = useState();
+  // const [viewColumns, setViewColumns] = useState();
+  // const [viewData, setViewData] = useState();
+  // const [isDataLoaded, setIsDataLoaded] = useState();
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
   useEffect(() => {
-    console.log("viewColumns")
-    console.log(currentTab?.viewColumns)
-    console.log(currentTab?.viewData)
-
-    setViewColumns( currentTab?.viewColumns || []);
-    setViewData(currentTab?.viewData || []);
    
-    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab.viewColumns, currentTab.viewData, currentTab.isViewDataLoaded, currentTab.viewTemplateSelect]);
+  }, [currentTab.viewTemplateSelect]);
 
   const handleDownload = async () => {
     const selectedUnitId = selectedConfig?.monitoringLocationData
@@ -140,12 +133,7 @@ export const EmissionsTabRender = ({
               headerButtonClickHandler={handleDownload}
               table={[
                 [
-                  <EmissionsViewTable
-                    viewData={viewData}
-                    viewColumnInfo={viewColumns}
-                    isLoading={!isDataLoaded}
-                    monitorPlanId={configID}
-                  />,
+                  <EmissionsViewTable monitorPlanId={configID} />,
                   viewTemplateSelect?.name ?? "",
                 ],
               ]}

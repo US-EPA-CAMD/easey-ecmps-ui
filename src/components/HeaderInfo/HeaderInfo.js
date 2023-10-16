@@ -347,6 +347,7 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setTestDataOptionSelect]);
 
+  // Initially loads the view dropdown
   useEffect(() => {
     if (workspaceSection === EMISSIONS_STORE_NAME) {
       getEmissionsViewDropdownData().catch((e) => {
@@ -379,16 +380,12 @@ export const HeaderInfo = ({
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
 
-    console.log("calling getEmissionsViewDropdownData")
     const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
-    const isBothSelectedStackPipeIdAndUnitIdEmpty =
-      selectedStackPipeId?.length === 0 && selectedUnitId?.length === 0;
 
-    if (
-      isSelectedReportingPeriodsEmpty ||
-      isBothSelectedStackPipeIdAndUnitIdEmpty
-    ) {
+    if (isSelectedReportingPeriodsEmpty) {
+      
       setViewTemplates([defaultTemplateValue]);
+      setViewTemplateSelect(defaultTemplateValue)
       return;
     }
 
@@ -403,14 +400,10 @@ export const HeaderInfo = ({
         selectedStackPipeId,
         inWorkspace
       );
-      
-      console.log("countData")
-      console.log(countData)
-      
+            
       let { data: viewData } = await emApi.getViews();
-      console.log("viewData")
-      console.log(viewData)
-        
+      
+      console.log("getEmissionsViewDropdownData(): got count and view data")
       let filteredViewData;
       if( inWorkspace )
         filteredViewData = filterViewDataForWorkspace(countData, viewData);
@@ -951,20 +944,20 @@ export const HeaderInfo = ({
     )}`;
   };
 
+  const resetEmissionsViewTable = ()=>{
+    dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
+    dispatch(setViewData([], currentTab.name, workspaceSection));
+    dispatch(setViewTemplateSelectionAction( null, currentTab.name, EMISSIONS_STORE_NAME));
+  }
+
   const handleSelectReportingPeriod = () => {
-    console.log("selected reporting periods", selectedReportingPeriods)
+
     if (!selectedReportingPeriods.length) return;
     const uniqueReportingPeriods = [
       ...new Set([...selectedReportingPeriods]),
     ];
     setSelectedReportingPeriods(uniqueReportingPeriods);
-    dispatch(
-      setReportingPeriods(
-        uniqueReportingPeriods,
-        currentTab.name,
-        workspaceSection
-      )
-    );
+    dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
   };
 
   const reportingPeriodOnChangeUpdate = (id) => {
@@ -984,14 +977,18 @@ export const HeaderInfo = ({
       .filter((el) => el.selected)
       .map((rp) => rp.id);
     setSelectedReportingPeriods(filteredReportingPeriods);
-    dispatch(
-      setReportingPeriods(
-        filteredReportingPeriods,
-        currentTab.name,
-        workspaceSection
-      )
-    );
+    
+    dispatch(setReportingPeriods(filteredReportingPeriods, currentTab.name, workspaceSection));
+    
+    resetEmissionsViewTable(); 
   };
+
+  const emissionsLocationOnchange = (location) =>{
+    setLocationSelect(location);
+    setViewTemplateSelect(defaultTemplateValue)
+    resetEmissionsViewTable();
+    getEmissionsViewDropdownData();
+  }
 
   const handleExport = async () => {
     try {
@@ -1029,9 +1026,9 @@ export const HeaderInfo = ({
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
     // handleSelectReportingPeriod();
-    setLocationSelect(locationSelect)
-    dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
-    
+    // setLocationSelect(locationSelect)
+    // dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+    setIsLoading(true)
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
@@ -1040,8 +1037,6 @@ export const HeaderInfo = ({
       stackPipeIds,
       inWorkspace
     );
-    console.log("filter results")
-    console.log(response)
 
     if (
       response &&
@@ -1057,22 +1052,21 @@ export const HeaderInfo = ({
         getEmissionsViewDropdownData();
       }
       
+      results.forEach((o,idx)=>o.id=idx)
       dispatch(
         setViewTemplateSelectionAction(
-          viewTemplateSelect,
+          results.length === 0 ? null : viewTemplateSelect,
           currentTab.name,
           EMISSIONS_STORE_NAME
         )
       );
       dispatch(setViewDataColumns(columns, currentTab.name, workspaceSection));
-      dispatch(
-        setViewData(results, currentTab.name, workspaceSection)
-      );
+      dispatch(setViewData(results, currentTab.name, workspaceSection));
     } 
     else {
       dispatch(
         setViewTemplateSelectionAction(
-          viewTemplateSelect,
+          null,
           currentTab.name,
           EMISSIONS_STORE_NAME
         )
@@ -1080,8 +1074,9 @@ export const HeaderInfo = ({
       dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
       dispatch(setViewData([], currentTab.name, workspaceSection));
     }
-    dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
+    setIsLoading(false)
 
+    // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
 
   return (
@@ -1387,11 +1382,8 @@ export const HeaderInfo = ({
                     viewKey="name"
                     selectKey="id"
                     initialSelection={locationSelect[0]}
-                    selectionHandler={(location) =>
-                      setLocationSelect(location)
-                    }
+                    selectionHandler={emissionsLocationOnchange}
                     workspaceSection={workspaceSection}
-                    changeFunc={getEmissionsViewDropdownData}
                   />
                 </Grid>
                 <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
@@ -1409,6 +1401,7 @@ export const HeaderInfo = ({
                         setViewTemplateSelect(
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
+                        resetEmissionsViewTable()
                       }}
                       // className="mobile-lg:view-template-dropdown-maxw"
                     >
