@@ -136,7 +136,7 @@ const DataTables = ({
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
       ["PASS", "INFO"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
-      permissions.current.get(row.orisCode)?.includes(`DS${type}`)
+      permissions.current.get(parseInt(row.orisCode))?.includes(`DS${type}`)
     ) {
       if (
         type === "EM" &&

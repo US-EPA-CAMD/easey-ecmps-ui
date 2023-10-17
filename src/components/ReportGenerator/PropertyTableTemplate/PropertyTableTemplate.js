@@ -32,7 +32,7 @@ export const PropertyTableTemplate = ({ data, title, columnGroups }) => {
                       <td className="text-bold text-no-wrap grid-col-2 desktop:grid-col-1">
                         {column.displayName !== "HIDDEN"
                           ? column.displayName
-                          : ""}
+                          : "\u00A0"}
                       </td>
                       <td className="text-no-wrap grid-col-2 desktop:grid-col-1">
                         {data[column.name] ?? ""}

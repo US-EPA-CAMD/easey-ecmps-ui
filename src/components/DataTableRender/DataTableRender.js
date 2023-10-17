@@ -214,7 +214,21 @@ export const DataTableRender = ({
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
-          cell: (row) => <AddPencil row={row} />,
+          width: "20%", // Set the column width to 30%
+          cell: (row) => (
+            <div
+              className="usa-tooltip"
+              title={row[`col${index + 1}`]}
+              style={{
+                width: "100%",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              <AddPencil row={row} />
+            </div>
+          ),
         });
         break;
 
@@ -501,7 +515,7 @@ export const DataTableRender = ({
         />
       );
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection]);
 
@@ -533,11 +547,13 @@ export const DataTableRender = ({
               keyField={!uniqueKey ? `col${columnNames.length + 1}` : "col1"}
               className={`data-display-table react-transition fade-in`}
               sortIcon={
-                hasSortIcon ? <ArrowDownwardSharp className="margin-left-2 text-primary" /> : null
+                hasSortIcon ? (
+                  <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                ) : null
               }
               // props
               defaultSortFieldId={defaultSort ? defaultSort : "col1"}
-              defaultSortAsc={defaultSortDir === 'asc'}
+              defaultSortAsc={defaultSortDir === "asc"}
               expandableRows={expandableRows}
               pagination={pagination}
               columns={columns}
@@ -599,10 +615,11 @@ export const DataTableRender = ({
           <div>
             {tableTitle ? (
               <h4
-                className={`margin-top-5 text-bold ${tableStyling
+                className={`margin-top-5 text-bold ${
+                  tableStyling
                     ? "mobile:font-body-md mobile:text-bold"
                     : "mobile:font-body-xl mobile:text-bold"
-                  }`}
+                }`}
               >
                 {tableTitle}
               </h4>
@@ -626,7 +643,8 @@ export const DataTableRender = ({
                         addBtn(false, false, true);
                       }}
                       id={
-                        addBtnName.toLowerCase().split(" ").join("-") + "-add-btn"
+                        addBtnName.toLowerCase().split(" ").join("-") +
+                        "-add-btn"
                       }
                     >
                       {addBtnName}
