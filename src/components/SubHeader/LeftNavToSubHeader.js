@@ -18,7 +18,6 @@ import {
   systemAdmin,
 } from "../../utils/constants/menuTopics";
 
-const appNavItems = getAppNavItems();
 const workSpace = getWorkspacePaths();
 export const LeftNavToSubHeader = (props) => {
   const [navDropdownOpen, setNavDropdownOpen] = useState([
@@ -65,14 +64,27 @@ export const LeftNavToSubHeader = (props) => {
               }}
               className={`font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems`}
               label={`${el.name}`}
-            
             />
             <Menu
               className="font-sans-md mobile-lg:font-sans-sm usa-current "
               items={el.children.map((item, index) => (
                 <Link
-                  key={index}
+                  key={item.name}
                   to={item.url}
+                  aria-label={
+                    item.name !== "Home"
+                      ? isWorkspace
+                        ? `${item.name} - Workspace`
+                        : `${item.name} - Global-View`
+                      : "Go to Home"
+                  }
+                  title={
+                    item.name !== "Home"
+                      ? isWorkspace
+                        ? ` Go to ${item.name} - Workspace page`
+                        : `Go to ${item.name} - Global-View page`
+                      : "Go to Home page"
+                  }
                   onClick={() => handleCloseSubMenus(i)}
                 >
                   {item.name}
@@ -85,8 +97,22 @@ export const LeftNavToSubHeader = (props) => {
       } else {
         return (
           <Link
-          isCurrent={true}
-            key={i}
+            isCurrent={true}
+            key={el.name}
+            aria-label={
+              el.name !== "Home"
+                ? isWorkspace
+                  ? `${el.name} - Workspace`
+                  : `${el.name} - Global-View`
+                : "Go to Home"
+            }
+            title={
+              el.name !== "Home"
+                ? isWorkspace
+                  ? ` Go to ${el.name} - Workspace page`
+                  : `Go to ${el.name} - Global-View page`
+                : "Go to Home page"
+            }
             to={el.url}
             onClick={() => handleCloseSubMenus(i)}
           >
@@ -148,16 +174,16 @@ export const LeftNavToSubHeader = (props) => {
           <div className="text-center desktop:margin-top-1 desktop-lg:margin-top-0 display-inline-flex padding-left-1">
             <PrimaryNav items={makeHeader(home, true, false)}></PrimaryNav>
             {props.user ? (
-              <NavList
+              <PrimaryNav
                 items={makeWKspaceSubHeader()}
-                mobileExpanded={true}
+                mobileExpanded={false}
                 type="primary"
               />
             ) : (
-              <NavList
-              type="primary"
+              <PrimaryNav
+                type="primary"
                 items={makeHeader(globalView, true, false)}
-                mobileExpanded={true}
+                mobileExpanded={false}
               />
             )}
           </div>
