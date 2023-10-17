@@ -97,7 +97,7 @@ const Layout = (props) => {
               id="appWarningMessage"
               tabIndex="-1"
               aria-live="polite"
-              className="border-1px margin-y-2 padding-2 bg-secondary-lighter
+              className="border-1px margin-y-2 padding-2 bg-accent-warm-lighter
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <WarningSharp className="margin-right-2" />
