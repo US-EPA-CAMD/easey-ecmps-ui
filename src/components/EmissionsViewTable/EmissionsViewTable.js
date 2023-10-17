@@ -5,6 +5,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { orderBy } from "lodash";
 
 export const EmissionsViewTable = ({ monitorPlanId }) => {
 
@@ -31,7 +32,7 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
 
         let cell;
         if (row.errorCodes) {
-            cell = (
+            return (
                 <div>
                     <button
                         className={"hyperlink-btn cursor-pointer"}
@@ -39,14 +40,11 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
                     >
                         View Error
                     </button>
-                    <span>{" " + row[viewColumnInfo[0].value]}</span>
                 </div>
             )
         }
         else
-            cell = <div>{row[viewColumnInfo[0].value]}</div>
-
-        return cell;
+            return null;
     }
 
     const createTableColumns = () => {
@@ -57,13 +55,29 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
             // wrapping the header and cell in div makes it so that the the table lib doesn't cut off the text
             return {
                 name: <div>{vc.label}</div>,
+                selector: (row)=>row[vc.value],
                 cell: (row) => <span>{row[vc.value]}</span>,
                 sortable: true,
             }
         });
 
-        tableColumns[0].cell = (row) => getFormattedCellForFirstRow(row);
-        tableColumns[0].width = "250px";
+        tableColumns.unshift({
+            name: <div>Report Errors</div>,
+            cell: (row) => getFormattedCellForFirstRow(row),
+            sortable: true,
+            sortFunction: (rowA, rowB) => {
+                // The errorCodes field can only be either Y or null
+                if (rowA.errorCodes === 'Y' && rowB.errorCodes === null) {
+                    return 1;
+                }
+            
+                if (rowB.errorCodes === 'Y' && rowA.errorCodes === null) {
+                    return -1;
+                }
+            
+                return 0;
+            }
+        })
 
         return tableColumns;
     }
