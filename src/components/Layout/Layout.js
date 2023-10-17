@@ -50,7 +50,12 @@ const Layout = (props) => {
           <SubHeader user={props.user} setCurrentLink={props.setCurrentLink} />
         </div>
         <div id="leftNavToSubHeader">
-          <LeftNavToSubHeader />
+          <LeftNavToSubHeader
+            user={props.user}
+            logOut={props.logOut}
+            currentLink={props.currentLink}
+            setCurrentLink={props.setCurrentLink}
+          />
         </div>
         <div className="grid-row">
           <div

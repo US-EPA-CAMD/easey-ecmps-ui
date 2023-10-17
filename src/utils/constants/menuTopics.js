@@ -285,10 +285,10 @@ export const getAppNavItems = () => {
       items: [],
     });
   }
-  appNavItems.push({
-    label: "Workspace",
-    items: [],
-  });
+  // appNavItems.push({
+  //   label: "Workspace",
+  //   items: [],
+  // });
 
   return appNavItems;
 };
