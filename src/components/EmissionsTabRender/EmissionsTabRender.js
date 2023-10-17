@@ -33,9 +33,6 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  // const [viewColumns, setViewColumns] = useState();
-  // const [viewData, setViewData] = useState();
-  // const [isDataLoaded, setIsDataLoaded] = useState();
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;

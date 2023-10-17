@@ -197,7 +197,6 @@ export const displayEmissionsReport = (orisCode, mpId, year, quarter, dateHr) =>
   const ws = window.location.href.includes("/workspace") ? "/workspace":"";
 
   const url = `${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(dateHr)}&hour=${new Date(dateHr).getHours()}`;
-  console.log("displayEmReport url: " + url)
   window.open(url, "Emissions Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 

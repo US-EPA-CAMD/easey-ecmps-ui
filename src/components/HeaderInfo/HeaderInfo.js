@@ -1031,9 +1031,6 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
-    // handleSelectReportingPeriod();
-    // setLocationSelect(locationSelect)
-    // dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
     setIsLoading(true)
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
