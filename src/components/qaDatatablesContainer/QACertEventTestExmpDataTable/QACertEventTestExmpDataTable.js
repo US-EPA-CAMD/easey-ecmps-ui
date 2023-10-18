@@ -190,9 +190,14 @@ const QACertEventTestExmpDataTable = ({
                   getOptions(d, "monitoringSystemId", "monitoringSystemId")
                 );
               } else if (i === 2) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                  getOptions(d, "certificationEventCode", "certificationEventDescription")
-                );
+                const codeField = "certificationEventCode"
+                const descriptionField = "certificationEventDescription"
+                dropdowns[dropdownArray[0][i]] = response[i].data
+                  .sort((obj1, obj2) => obj1[codeField].localeCompare(obj2[codeField], 'en', { numeric: true }))
+                  .map((d) => {
+                    d[descriptionField] = `${d[codeField]} (${d[descriptionField]})`
+                    return getOptions(d, codeField, descriptionField)
+                  });
               } else if (i === 3) {
                 const code = "requiredTestCode"
                 const description = "requiredTestDescription"
