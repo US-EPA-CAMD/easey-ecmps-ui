@@ -5,9 +5,9 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import "./EmissionsTabRender.scss";
 import { getEmissionViewData } from "../../utils/api/emissionsApi";
-import { DataTableRender } from "../DataTableRender/DataTableRender";
 import { useSelector } from "react-redux";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { EmissionsViewTable } from "../EmissionsViewTable/EmissionsViewTable";
 
 export const EmissionsTabRender = ({
   title,
@@ -29,24 +29,19 @@ export const EmissionsTabRender = ({
       (t) => t.selectedConfig.id === configID
     )
   );
-
+  
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [viewColumns, setViewColumns] = useState();
-  const [viewData, setViewData] = useState();
-  const [isDataLoaded, setIsDataLoaded] = useState();
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
   useEffect(() => {
-    setViewColumns(currentTab?.viewColumns || []);
-    setViewData(currentTab?.viewData || []);
-    setIsDataLoaded(isInitialLoadOfPage ? true : currentTab?.isViewDataLoaded);
+   
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab]);
+  }, [currentTab.viewTemplateSelect]);
 
   const handleDownload = async () => {
     const selectedUnitId = selectedConfig?.monitoringLocationData
@@ -116,7 +111,7 @@ export const EmissionsTabRender = ({
       </div>
       <hr />
       {!isInitialLoadOfPage && 
-      (viewTemplateSelect?.code === "SELECT" || !viewTemplateSelect) ? (
+      (!viewTemplateSelect || viewTemplateSelect?.code === "SELECT") ? (
         <div>
           <div className="grid-row overflow-x-auto">
             {!user ? (
@@ -135,12 +130,7 @@ export const EmissionsTabRender = ({
               headerButtonClickHandler={handleDownload}
               table={[
                 [
-                  <DataTableRender
-                    dataLoaded={isDataLoaded}
-                    columnNames={viewColumns ?? []}
-                    data={viewData ?? []}
-                    headerButtonText
-                  />,
+                  <EmissionsViewTable monitorPlanId={configID} />,
                   viewTemplateSelect?.name ?? "",
                 ],
               ]}

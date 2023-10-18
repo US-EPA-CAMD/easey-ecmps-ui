@@ -7,12 +7,12 @@ import { AppVersion } from "@us-epa-camd/easey-design-system";
 import { SubHeader } from "../SubHeader/SubHeader";
 import { LeftNavigation } from "../LeftNavigation/LeftNavigation";
 import { LeftNavToSubHeader } from "../SubHeader/LeftNavToSubHeader";
-import { ErrorSharp, CloseSharp } from "@material-ui/icons";
+import { ErrorSharp, CloseSharp, WarningSharp } from "@material-ui/icons";
 
 import config from "../../config";
 
 import "./Layout.scss";
-import { hideAppError } from "../../additional-functions/app-error";
+import { hideAppError, hideAppWarning } from "../../additional-functions/app-error";
 
 import { getContent } from "../../utils/api/contentApi";
 
@@ -87,7 +87,7 @@ const Layout = (props) => {
                 aria-label="close error alert message"
                 className="float-right cursor-pointer"
                 onClick={() => hideAppError()}
-                onKeyPress={(event) => {
+                onKeyUp={(event) => {
                   if (event.key === "Enter") {
                     hideAppError();
                   }
@@ -98,6 +98,30 @@ const Layout = (props) => {
                 className="position-relative top-neg-1"
               />
             </div>
+            <div
+              id="appWarningMessage"
+              tabIndex="-1"
+              aria-live="polite"
+              className="border-1px margin-y-2 padding-2 bg-accent-warm-lighter
+                         text-bold text-secondary-vivid react-transition display-none"
+            >
+              <WarningSharp className="margin-right-2" />
+              <CloseSharp
+                aria-label="close warning alert message"
+                className="float-right cursor-pointer"
+                onClick={() => hideAppWarning()}
+                onKeyUp={(event) => {
+                  if (event.key === "Enter") {
+                    hideAppWarning();
+                  }
+                }}
+              />
+              <span
+                id="appWarningMessageText"
+                className="position-relative top-neg-1"
+              >testing 123</span>
+            </div>
+
             <main className="mainContent" id="main-content" role="main">
               {childrenWithProps}
             </main>
