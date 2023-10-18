@@ -51,7 +51,9 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         if (!Array.isArray(viewColumnInfo) || viewColumnInfo.length === 0)
             return [];
 
-        const tableColumns = viewColumnInfo.map((vc) => {
+        let tableColumns = viewColumnInfo
+                            .filter(vc=>vc.value !== "errorCodes")
+                            .map((vc) => {
             // wrapping the header and cell in div makes it so that the the table lib doesn't cut off the text
             return {
                 name: <div>{vc.label}</div>,
@@ -79,6 +81,7 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
             }
         })
 
+        // tableColumns.filter()
         return tableColumns;
     }
 

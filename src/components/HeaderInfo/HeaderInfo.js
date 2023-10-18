@@ -1051,7 +1051,7 @@ export const HeaderInfo = ({
       const results = response.data;
 
       if (results.length === 0) {
-        displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
+        displayAppWarning(`The ${viewTemplateSelect.name} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
         getEmissionsViewDropdownData();
       }
 
