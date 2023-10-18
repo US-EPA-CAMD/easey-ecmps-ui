@@ -51,7 +51,6 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         if (!Array.isArray(viewColumnInfo) || viewColumnInfo.length === 0)
             return [];
 
-            console.log(viewColumnInfo)
         let tableColumns = viewColumnInfo
                             .filter(vc=>vc.value !== "errorCodes")
                             .map((vc) => {
