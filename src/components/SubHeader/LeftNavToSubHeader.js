@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Menu,
   Header,
   NavDropDownButton,
   PrimaryNav,
-  NavList,
 } from "@trussworks/react-uswds";
 import "./SubHeader.scss";
-import { getAppNavItems } from "../../utils/constants/menuTopics";
 import { MenuSharp } from "@material-ui/icons";
 import config from "../../config";
 import {
@@ -49,7 +47,6 @@ export const LeftNavToSubHeader = (props) => {
     }
 
     return arr.map((el, i) => {
-      const workspaceText = isWorkspace ? "_wks" : "";
 
       if (el.children) {
         return (
@@ -62,8 +59,12 @@ export const LeftNavToSubHeader = (props) => {
               onToggle={() => {
                 handleToggleNavDropdown(i);
               }}
-              className={`font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems`}
-              label={`${el.name}`}
+              className={
+                window.location.href.indexOf(`${el.url}`) > -1
+                  ? "wkspaceMainMenu current-app-subitem font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
+                  : " font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
+              }
+              isCurrent={true}
             />
             <Menu
               className="font-sans-md mobile-lg:font-sans-sm usa-current "
@@ -78,6 +79,11 @@ export const LeftNavToSubHeader = (props) => {
                         : `${item.name} - Global-View`
                       : "Go to Home"
                   }
+                  className={
+                    window.location.href.indexOf(`${item.url}`) > -1
+                      ? "wkspaceMainMenu current-app-subitem"
+                      : ""
+                  }
                   title={
                     item.name !== "Home"
                       ? isWorkspace
@@ -85,7 +91,7 @@ export const LeftNavToSubHeader = (props) => {
                         : `Go to ${item.name} - Global-View page`
                       : "Go to Home page"
                   }
-                  onClick={() => handleCloseSubMenus(i)}
+                  onClick={() => handleCloseSubMenus(i, item.url)}
                 >
                   {item.name}
                 </Link>
@@ -97,7 +103,6 @@ export const LeftNavToSubHeader = (props) => {
       } else {
         return (
           <Link
-            isCurrent={true}
             key={el.name}
             aria-label={
               el.name !== "Home"
@@ -105,6 +110,11 @@ export const LeftNavToSubHeader = (props) => {
                   ? `${el.name} - Workspace`
                   : `${el.name} - Global-View`
                 : "Go to Home"
+            }
+            className={
+              props.currentLink === `/${el.url}` || props.currentLink === el.url
+                ? " current-app-subitem"
+                : ""
             }
             title={
               el.name !== "Home"
@@ -114,7 +124,7 @@ export const LeftNavToSubHeader = (props) => {
                 : "Go to Home page"
             }
             to={el.url}
-            onClick={() => handleCloseSubMenus(i)}
+            onClick={() => handleCloseSubMenus(i, el.url)}
           >
             {el.name}
           </Link>
@@ -131,7 +141,7 @@ export const LeftNavToSubHeader = (props) => {
       props.user?.roles?.includes(config.app.submitterRole) ||
       props.user?.roles?.includes(config.app.preparerRole)
     ) {
-      workspaceLinks = makeHeader(workSpace, true, false);
+      workspaceLinks = makeHeader(workSpace, true, true);
     }
 
     if (
@@ -152,12 +162,9 @@ export const LeftNavToSubHeader = (props) => {
     });
   };
 
-  const handleSubMenuClick = (column) => {
-    handleToggleNavDropdown(column);
-  };
-
-  const handleCloseSubMenus = () => {
+  const handleCloseSubMenus = (i, url) => {
     const updatedArray = navDropdownOpen.map(() => false);
+    props.setCurrentLink(url);
     setNavDropdownOpen(updatedArray);
   };
   return (
