@@ -56,8 +56,7 @@ export const ImportHistoricalDataModal = ({
       setImportedFileErrorMsgs([]);
       portCallback(selectedYear, selectedQuarter)
     } catch (error) {
-      console.log(JSON.stringify(error))
-      const errorMsgs = error?.data?.message ?? ['There was an error importing historical data']
+      const errorMsgs = error?.response?.data?.message ?? ['There was an error importing historical data']
       setImportedFileErrorMsgs(errorMsgs)
     } finally {
       setIsLoading(false);

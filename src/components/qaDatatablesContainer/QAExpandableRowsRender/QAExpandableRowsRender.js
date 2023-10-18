@@ -119,14 +119,17 @@ const QAExpandableRowsRender = ({
       case "Protocol Gas":
         extraIDsProps = [locationId, id];
         objProps = qaProtocalGasProps(data);
+        expand = false;
         break;
       case "Air Emissions":
         extraIDsProps = [locationId, id];
         objProps = qaAirEmissionsProps(data);
+        expand = false;
         break;
       case "Test Qualification":
         extraIDsProps = [locationId, id];
         objProps = qaTestQualificationProps(data);
+        expand = false;
         break;
       // test  > injections
       case "Linearity Test":
