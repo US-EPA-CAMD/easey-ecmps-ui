@@ -74,7 +74,7 @@ const ModalDetails = ({
 
   const [hasMainDropdown, setHasMainDropdown] = useState(false);
 
-  const largeWidthCardStyle = " ";
+  const largeWidthCardStyle = "width-card-lg";
 
   const initialDropdownText = `You must make a selection for the '${mainDropdown}' field to enable dropdowns for the other fields.`;
   const selectedDropdownText = `Changing the selection for the '${mainDropdown}' field shall update the dropdown options available for the other fields.`;
