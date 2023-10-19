@@ -241,10 +241,9 @@ export const ExportTab = ({
           <div className="grid-row">
             <div className="grid-col">
               <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
-              <h3 className="facility-header-text-cutoff margin-y-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
+              <h3 className="facility-header-text-cutoff margin-top-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
                 {facilityAdditionalName}
               </h3>
-              <p className="text-bold font-body-2xs margin-top-0"> asdfasdf </p>
             </div>
           </div>
 
