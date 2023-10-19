@@ -132,28 +132,6 @@ export const EmSubmissionData = ({
       ),
     },
     {
-      name: "Facility Name / ID",
-      width: "210px",
-      // facilityName isn't in api response and will have to be added
-      selector: (row) =>
-        row.facilityName
-          ? `${row.facilityName} (${row.orisCode})`
-          : row.orisCode,
-      sortable: true,
-    },
-    {
-      name: "State",
-      width: "150px",
-      selector: (row) => row.state,
-      sortable: true,
-    },
-    {
-      name: "MP Location(s)",
-      width: "200px",
-      selector: (row) => row.locations,
-      sortable: true,
-    },
-    {
       name: "Reporting Period",
       width: "210px",
       // We need to add reporting period to the api response.
@@ -165,6 +143,12 @@ export const EmSubmissionData = ({
       width: "230px",
       // We need to add reporting period to the api response.
       selector: (row) => row.reportingFrequencyCode,
+      sortable: true,
+    },
+    {
+      name: "Submission Type",
+      width: "150px",
+      selector: (row) => row.submissionTypeCode,
       sortable: true,
     },
     {
