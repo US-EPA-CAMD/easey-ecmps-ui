@@ -61,6 +61,7 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   const years = generateArrayOfYears(2009).map((year, index) => {
     return {
@@ -491,7 +492,7 @@ const QACertEventTestExmpDataTable = ({
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
+          setErrorMsgs(res);
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
@@ -578,6 +579,7 @@ const QACertEventTestExmpDataTable = ({
           //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
