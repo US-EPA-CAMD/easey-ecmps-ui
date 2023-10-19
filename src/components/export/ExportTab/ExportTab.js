@@ -237,14 +237,18 @@ export const ExportTab = ({
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-        <div className="grid-row">
-          <h3 className="grid-col-3">
-            <span className="font-body-lg">{facilityMainName}</span>
-            <span className="text-bold font-body-xl display-block">
-              {facilityAdditionalName}
-            </span>
-          </h3>
-          <div className="grid-col-6 padding-left-5 margin-y-auto">
+        <div>
+          <div className="grid-row">
+            <div className="grid-col">
+              <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
+              <h3 className="facility-header-text-cutoff margin-y-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
+                {facilityAdditionalName}
+              </h3>
+              <p className="text-bold font-body-2xs margin-top-0"> asdfasdf </p>
+            </div>
+          </div>
+
+          <div className="display-flex flex-row flex-justify">
             <ReportingPeriodSelector
               isExport={true}
               dataTypes={dataTypes.filter((e) => e.checked)}
@@ -253,18 +257,19 @@ export const ExportTab = ({
               getInitSelection={getInitSelection}
               isQaCert={true}
             />
+
+            <div className="flex-align-self-center">
+              <Button
+                disabled={!canExport}
+                type={"button"}
+                // size="big"
+                className="padding-x-6 padding-y-1.5"
+                onClick={exportClickHandler}
+              >
+                Export
+              </Button>
+            </div>
           </div>
-          <center className="grid-col-3 margin-y-auto =">
-            <Button
-              disabled={!canExport}
-              type={"button"}
-              size="big"
-              className="width-full maxw-card-lg"
-              onClick={exportClickHandler}
-            >
-              Export
-            </Button>
-          </center>
         </div>
       </div>
 
