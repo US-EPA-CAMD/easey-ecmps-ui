@@ -221,7 +221,7 @@
     button {
       font-family: "Source Sans Pro Web", serif !important;
       color: $epa-black;
-      font-weight: normal;
+      // font-weight: normal;
     }
   }
   .usa-accordion__button:hover {
@@ -261,7 +261,7 @@
 
 .current-app-subitem {
   font-weight: bold;
-  border-bottom: solid 0.3em $epa-blue-base;
+  border-bottom: solid 0.3em $epa-blue-base !important;
   color: $epa-blue-base;
 }
 

@@ -58,9 +58,9 @@ import {
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
+  displayAppWarning,
   hideAppError,
 } from "../../additional-functions/app-error";
-import { cloneDeep } from "lodash";
 
 // Helper function that generates an array of years from this year until the year specified in min param
 export const generateArrayOfYears = (min) => {
@@ -215,15 +215,12 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-  const [emissionDropdownState, setEmissionDropdownState] = useState({
-    locationSelect,
-    selectedReportingPeriods,
-  });
+
   const selectedUnitId = selectedConfig?.monitoringLocationData
-    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.unitId);
   const selectedStackPipeId = selectedConfig?.monitoringLocationData
-    ?.filter((l) => l.id === emissionDropdownState.locationSelect[1])
+    ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.stackPipeId);
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
   const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
@@ -233,8 +230,8 @@ export const HeaderInfo = ({
     workspaceSection === MONITORING_PLAN_STORE_NAME
       ? "Monitoring Plan"
       : workspaceSection === EMISSIONS_STORE_NAME
-      ? "Emissions"
-      : "Test";
+        ? "Emissions"
+        : "Test";
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -280,10 +277,7 @@ export const HeaderInfo = ({
     }
 
     setSelectedReportingPeriods(selectedRptPeriods);
-    setEmissionDropdownState({
-      ...cloneDeep(emissionDropdownState),
-      selectedReportingPeriods: selectedRptPeriods,
-    });
+
     dispatch(
       setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
@@ -297,23 +291,17 @@ export const HeaderInfo = ({
     if (currentTab?.viewTemplateSelect)
       setViewTemplateSelect(currentTab.viewTemplateSelect);
     if (currentTab?.reportingPeriods) {
-      const selectedReportingPeriods = currentTab.reportingPeriods;
+      const reduxReportingPeriods = currentTab.reportingPeriods;
       for (const reportingPeriod of reportingPeriods) {
         if (currentTab.reportingPeriods.includes(reportingPeriod.id)) {
           reportingPeriod.selected = true;
         }
       }
-      setEmissionDropdownState({
-        ...cloneDeep(emissionDropdownState),
-        selectedReportingPeriods,
-      });
+
+      setSelectedReportingPeriods(reduxReportingPeriods)
     }
     if (currentTab?.locationSelect) {
       setLocationSelect(currentTab.locationSelect);
-      setEmissionDropdownState({
-        ...cloneDeep(emissionDropdownState),
-        locationSelect: currentTab.locationSelect,
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
@@ -359,6 +347,7 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceSection, setTestDataOptionSelect]);
 
+  // Initially loads the view dropdown
   useEffect(() => {
     if (workspaceSection === EMISSIONS_STORE_NAME) {
       getEmissionsViewDropdownData().catch((e) => {
@@ -366,20 +355,45 @@ export const HeaderInfo = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [emissionDropdownState]);
+  }, [selectedReportingPeriods]);
+
+  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in workspace
+  const filterViewDataForWorkspace = (countData, allViews) => {
+    const codesWithData = countData
+      .filter((c) => c.count > 0)
+      .map((c) => c.dataSetCode);
+
+    // This will filter the dropdown values for the views by the ones that have a count > 0
+    return allViews
+      .filter(view => view.code !== "COUNTS")
+      .filter(
+        (view) => codesWithData.find((d) => d === view.code) !== undefined
+      );
+  }
+
+  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in global
+  const filterViewDataForGlobal = (countData, allViews) => {
+    return allViews
+    .filter(view => view.code !== "COUNTS")
+    .filter(view => {
+      
+      const matches = countData.filter(cd => cd.dataSetCode === view.code && cd.count === 0)
+      // The counts data comes back with multiple records for the same view code but in order for a
+      // view template to be filtered out of the View Templates dropdown, the number of 0 count records
+      // has to be the same as the number of reporting periods that are selected
+        return matches.length !== selectedReportingPeriods.length
+      })
+  }
 
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async () => {
-    const isSelectedReportingPeriodsEmpty =
-      emissionDropdownState.selectedReportingPeriods.length === 0;
-    const isBothSelectedStackPipeIdAndUnitIdEmpty =
-      selectedStackPipeId?.length === 0 && selectedUnitId?.length === 0;
 
-    if (
-      isSelectedReportingPeriodsEmpty ||
-      isBothSelectedStackPipeIdAndUnitIdEmpty
-    ) {
+    const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
+
+    if (isSelectedReportingPeriodsEmpty) {
+
       setViewTemplates([defaultTemplateValue]);
+      setViewTemplateSelect(defaultTemplateValue)
       return;
     }
 
@@ -389,35 +403,31 @@ export const HeaderInfo = ({
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
-        emissionDropdownState.selectedReportingPeriods,
+        selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
         inWorkspace
       );
-      const codesWithData = countData
-        .filter((c) => c.count > 0)
-        .map((c) => c.dataSetCode);
 
-      let { data: viewData } = await emApi.getViews();
+      let { data: allViews } = await emApi.getViews();
 
-      // This will filter the dropdown values for the views by the ones that have a count > 0
-      viewData = viewData.filter(
-        (v) => codesWithData.find((d) => d === v.code) !== undefined
-      );
+      let filteredViewData;
+      if (inWorkspace)
+        filteredViewData = filterViewDataForWorkspace(countData, allViews);
+      else
+        filteredViewData = filterViewDataForGlobal(countData, allViews);
 
-      if (viewData.length === 0) {
-        viewData.push(defaultTemplateValue);
-        setViewTemplateSelect(null);
-      } else {
-        if (
-          !viewTemplateSelect ||
-          viewTemplateSelect?.code === defaultTemplateValue.code
-        )
-          setViewTemplateSelect(viewData[0]);
-      }
-      setViewTemplates(viewData);
-      if (!currentTab?.viewTemplateSelect && viewData?.length > 0) {
-        setViewTemplateSelect(viewData[0]);
+      filteredViewData.unshift(defaultTemplateValue);
+
+      if (
+        !viewTemplateSelect ||
+        viewTemplateSelect?.code === defaultTemplateValue.code
+      )
+        setViewTemplateSelect(filteredViewData[1]);
+
+      setViewTemplates(filteredViewData);
+      if (!currentTab?.viewTemplateSelect && filteredViewData?.length > 0) {
+        setViewTemplateSelect(filteredViewData[0]);
       }
 
       setIsLoading(false);
@@ -464,7 +474,7 @@ export const HeaderInfo = ({
   };
 
   const handleEmissionsExport = async () => {
-    for (const selectedReportingPeriod of emissionDropdownState.selectedReportingPeriods) {
+    for (const selectedReportingPeriod of selectedReportingPeriods) {
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
@@ -685,9 +695,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -857,12 +867,8 @@ export const HeaderInfo = ({
     emApi
       .importEmissionsData(payload)
       .then(({ data, status }) => {
-        if (status === 201) {
-          setImportedFileErrorMsgs([]);
-        } else if (status === 400)
+        if (!successResponses.includes(status)) {
           setImportedFileErrorMsgs(data?.message || ["HTTP 400 Error"]);
-        else {
-          setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
 
         // set relevant reporting periods state to rerender which will call
@@ -875,12 +881,6 @@ export const HeaderInfo = ({
         });
 
         setSelectedReportingPeriods([importedReportingPeriod]);
-        setEmissionDropdownState((prevEmissionDropdownState) => {
-          return {
-            ...cloneDeep(prevEmissionDropdownState),
-            selectedReportingPeriods: [importedReportingPeriod],
-          };
-        });
       })
       .catch((err) => {
         console.log(err);
@@ -921,12 +921,7 @@ export const HeaderInfo = ({
       rp.selected = rp.label === importedReportingPeriod;
     });
 
-    setEmissionDropdownState((prevEmissionDropdownState) => {
-      return {
-        ...cloneDeep(prevEmissionDropdownState),
-        selectedReportingPeriods: [importedReportingPeriod],
-      };
-    });
+    setSelectedReportingPeriods([importedReportingPeriod])
   };
 
   // Create audit message for header info
@@ -935,9 +930,8 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${
-          currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -952,24 +946,25 @@ export const HeaderInfo = ({
     )}`;
   };
 
+  const resetEmissionsViewTable = () => {
+    dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
+    dispatch(setViewData([], currentTab.name, workspaceSection));
+    dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
+  }
+
   const handleSelectReportingPeriod = () => {
-    if (!emissionDropdownState.selectedReportingPeriods.length) return;
+
+    if (!selectedReportingPeriods.length) return;
     const uniqueReportingPeriods = [
-      ...new Set([...emissionDropdownState.selectedReportingPeriods]),
+      ...new Set([...selectedReportingPeriods]),
     ];
     setSelectedReportingPeriods(uniqueReportingPeriods);
-    dispatch(
-      setReportingPeriods(
-        uniqueReportingPeriods,
-        currentTab.name,
-        workspaceSection
-      )
-    );
+    dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
   };
 
   const reportingPeriodOnChangeUpdate = (id) => {
     const uniqueReportingPeriods = [
-      ...new Set([...emissionDropdownState.selectedReportingPeriods, id]),
+      ...new Set([...selectedReportingPeriods, id]),
     ];
 
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
@@ -980,21 +975,22 @@ export const HeaderInfo = ({
       return;
     }
     hideAppError();
-    const selectedReportingPeriods = reportingPeriods
+    const filteredReportingPeriods = reportingPeriods
       .filter((el) => el.selected)
       .map((rp) => rp.id);
-    setEmissionDropdownState({
-      ...cloneDeep(emissionDropdownState),
-      selectedReportingPeriods,
-    });
-    dispatch(
-      setReportingPeriods(
-        selectedReportingPeriods,
-        currentTab.name,
-        workspaceSection
-      )
-    );
+    setSelectedReportingPeriods(filteredReportingPeriods);
+
+    dispatch(setReportingPeriods(filteredReportingPeriods, currentTab.name, workspaceSection));
+
+    resetEmissionsViewTable();
   };
+
+  const emissionsLocationOnchange = (location) => {
+    setLocationSelect(location);
+    setViewTemplateSelect(defaultTemplateValue)
+    resetEmissionsViewTable();
+    getEmissionsViewDropdownData();
+  }
 
   const handleExport = async () => {
     try {
@@ -1031,13 +1027,11 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
-    handleSelectReportingPeriod();
-    setLocationSelect(emissionDropdownState.locationSelect);
-    dispatch(setIsViewDataLoaded(false, currentTab.name, workspaceSection));
+    setIsLoading(true)
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
-      emissionDropdownState.selectedReportingPeriods,
+      selectedReportingPeriods,
       unitIds,
       stackPipeIds,
       inWorkspace
@@ -1052,51 +1046,43 @@ export const HeaderInfo = ({
       const columns = JSON.parse(response.headers["x-field-mappings"]);
       const results = response.data;
 
-      const names = columns.map((column) => column.label);
-
-      const formattedResults = [];
-      for (const result of results) {
-        let id = 1;
-        const formattedObject = {};
-        for (const resultKey in result) {
-          formattedObject[`col${id}`] = result[resultKey];
-          id += 1;
-        }
-        formattedResults.push(formattedObject);
+      if (results.length === 0) {
+        displayAppWarning(`The ${viewTemplateSelect.name} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
+        getEmissionsViewDropdownData();
       }
 
+      results.forEach((o, idx) => o.id = idx)
       dispatch(
         setViewTemplateSelectionAction(
-          viewTemplateSelect,
+          results.length === 0 ? null : viewTemplateSelect,
           currentTab.name,
           EMISSIONS_STORE_NAME
         )
       );
-      dispatch(setViewDataColumns(names, currentTab.name, workspaceSection));
-      dispatch(
-        setViewData(formattedResults, currentTab.name, workspaceSection)
-      );
-      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
-    } else {
+      dispatch(setViewDataColumns(columns, currentTab.name, workspaceSection));
+      dispatch(setViewData(results, currentTab.name, workspaceSection));
+    }
+    else {
       dispatch(
         setViewTemplateSelectionAction(
-          viewTemplateSelect,
+          null,
           currentTab.name,
           EMISSIONS_STORE_NAME
         )
       );
       dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
       dispatch(setViewData([], currentTab.name, workspaceSection));
-      dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
     }
+    setIsLoading(false)
+
+    // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
 
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
-        } `}
+        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
+          } `}
       />
 
       {showRevertModal && (
@@ -1356,7 +1342,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1393,15 +1379,9 @@ export const HeaderInfo = ({
                     options={locations}
                     viewKey="name"
                     selectKey="id"
-                    initialSelection={emissionDropdownState.locationSelect[0]}
-                    selectionHandler={(location) =>
-                      setEmissionDropdownState({
-                        ...cloneDeep(emissionDropdownState),
-                        locationSelect: location,
-                      })
-                    }
+                    initialSelection={locationSelect[0]}
+                    selectionHandler={emissionsLocationOnchange}
                     workspaceSection={workspaceSection}
-                    changeFunc={getEmissionsViewDropdownData}
                   />
                 </Grid>
                 <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
@@ -1419,8 +1399,9 @@ export const HeaderInfo = ({
                         setViewTemplateSelect(
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
+                        resetEmissionsViewTable()
                       }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
+                    // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
@@ -1441,10 +1422,10 @@ export const HeaderInfo = ({
                     className="cursor-pointer text-no-wrap apply-filter-position"
                     disabled={
                       locationSelect &&
-                      emissionDropdownState.selectedReportingPeriods.length !==
+                        selectedReportingPeriods.length !==
                         0 &&
-                      viewTemplateSelect?.code !== defaultTemplateValue.code &&
-                      viewTemplateSelect !== null
+                        viewTemplateSelect?.code !== defaultTemplateValue.code &&
+                        viewTemplateSelect !== null
                         ? false
                         : true
                     }

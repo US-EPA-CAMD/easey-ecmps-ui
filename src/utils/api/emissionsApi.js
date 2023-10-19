@@ -51,16 +51,12 @@ export const exportEmissionsData = async (
     reportedValuesOnly: true,
   });
 
-  try {
-    const response = await secureAxios({
-      url: `${url.toString()}?${searchParams.toString()}`,
-      method: "GET",
-    });
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-    return error.response;
-  }
+  const response = await secureAxios({
+    url: `${url.toString()}?${searchParams.toString()}`,
+    method: "GET",
+   });
+
+  return handleResponse(response);
 };
 
 export const exportEmissionsDataDownload = async (
@@ -71,15 +67,21 @@ export const exportEmissionsDataDownload = async (
   isWorkspace = false
 ) => {
   const fileName = `Emissions | Export - ${facility} - ${year} - Q${quarter}.json`;
-  const response = await exportEmissionsData(
-    monitorPlanId,
-    year,
-    quarter,
-    isWorkspace
-  );
 
-  if (response.status === 200)
-    download(JSON.stringify(response.data, null, "\t"), fileName);
+  try {
+    const response = await exportEmissionsData(
+        monitorPlanId,
+        year,
+        quarter,
+        isWorkspace
+    );
+
+    if (response.status === 200)
+      download(JSON.stringify(response.data, null, "\t"), fileName);
+
+  } catch(error) {
+    handleError(error);
+  }
 };
 
 export const getEmissionViewData = async (

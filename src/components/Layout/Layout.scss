@@ -33,10 +33,17 @@ div.row.column1 {
   z-index: 99999;
 }
 #appErrorMessage {
-  color: #d10000;
+  color: black;
   border-color: #d10000;
 }
 #appErrorMessageText {
+  white-space: pre-wrap;
+}
+#appWarningMessage {
+  color: black;
+  border-color: #FFBE2E;
+}
+#appWarningMessageText {
   white-space: pre-wrap;
 }
 .skip-to-content-link:focus {
