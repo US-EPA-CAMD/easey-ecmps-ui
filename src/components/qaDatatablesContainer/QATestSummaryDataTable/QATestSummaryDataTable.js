@@ -79,6 +79,7 @@ const QATestSummaryDataTable = ({
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const [createdId, setCreatedId] = useState(null);
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   const [mainDropdownChange, setMainDropdownChange] = useState("");
 
@@ -547,7 +548,7 @@ const QATestSummaryDataTable = ({
     updateQALinearityTestSummary(locationSelectValue, userInput.id, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
+          setErrorMsgs(res);
         } else {
           setUpdateTable(true);
           executeOnClose();
@@ -589,7 +590,7 @@ const QATestSummaryDataTable = ({
     createQATestData(selectedLocationId, userInput)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
+          setErrorMsgs(res);
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
@@ -767,6 +768,7 @@ const QATestSummaryDataTable = ({
           //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>
