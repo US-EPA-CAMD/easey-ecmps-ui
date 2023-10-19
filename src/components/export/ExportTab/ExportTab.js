@@ -237,37 +237,34 @@ export const ExportTab = ({
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-        <div>
-          <div className="grid-row">
-            <div className="grid-col">
-              <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
-              <h3 className="facility-header-text-cutoff margin-top-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
-                {facilityAdditionalName}
-              </h3>
-            </div>
+        <div className="grid-row">
+          <div className="grid-col">
+            <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
+            <h3 className="facility-header-text-cutoff margin-top-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
+              {facilityAdditionalName}
+            </h3>
           </div>
+        </div>
 
-          <div className="display-flex flex-row flex-justify">
-            <ReportingPeriodSelector
-              isExport={true}
-              dataTypes={dataTypes.filter((e) => e.checked)}
-              reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
-              exportState={exportState}
-              getInitSelection={getInitSelection}
-              isQaCert={true}
-            />
+        <div className="display-flex flex-row flex-justify">
+          <ReportingPeriodSelector
+            isExport={true}
+            dataTypes={dataTypes.filter((e) => e.checked)}
+            reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
+            exportState={exportState}
+            getInitSelection={getInitSelection}
+            isQaCert={true}
+          />
 
-            <div className="flex-align-self-center">
-              <Button
-                disabled={!canExport}
-                type={"button"}
-                // size="big"
-                className="padding-x-6 padding-y-1.5"
-                onClick={exportClickHandler}
-              >
-                Export
-              </Button>
-            </div>
+          <div className="flex-align-self-center">
+            <Button
+              disabled={!canExport}
+              type={"button"}
+              className="padding-x-6 padding-y-1.5"
+              onClick={exportClickHandler}
+            >
+              Export
+            </Button>
           </div>
         </div>
       </div>
