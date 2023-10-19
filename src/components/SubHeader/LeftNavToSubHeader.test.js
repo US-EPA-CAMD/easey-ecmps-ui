@@ -5,14 +5,14 @@ import { BrowserRouter } from "react-router-dom";
 import { LeftNavToSubHeader } from "./LeftNavToSubHeader";
 
 jest.mock('../../utils/constants/menuTopics', () => ({
-  getAppNavItems: jest.fn().mockReturnValue([
+  getWorkspacePaths: jest.fn().mockReturnValue([
     {
-      label: "Home",
-      items: [],
+      name: "Home",
+      children: [],
     },
     {
-      label: "QA & Certification",
-      items: [{ link: "/qa/test-data", menu: "Test Data" }],
+      name: "QA & Certification",
+      children: [{ url: "/qa/test-data", name: "Test Data" }],
     }])
 }))
 

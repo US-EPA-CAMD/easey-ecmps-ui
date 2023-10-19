@@ -259,36 +259,3 @@ export const getWorkspacePaths = () => {
   return workSpace;
 };
 
-export const getAppNavItems = () => {
-  const appNavItems = [
-    {
-      label: "Home",
-      items: [],
-    },
-    {
-      label: "Monitoring Plans",
-      items: [],
-    },
-    {
-      label: "QA & Certifications",
-      items: [],
-    },
-    {
-      label: "Emissions",
-      items: [],
-    },
-  ];
-
-  if (config.app.enableSystemAdminModule) {
-    appNavItems.push({
-      label: "Error Suppression",
-      items: [],
-    });
-  }
-  appNavItems.push({
-    label: "Workspace",
-    items: [],
-  });
-
-  return appNavItems;
-};
