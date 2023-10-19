@@ -194,9 +194,14 @@ const QACertEventTestExmpDataTable = ({
                   getOptions(d, "certificationEventCode", "certificationEventDescription")
                 );
               } else if (i === 3) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                  getOptions(d, "requiredTestCode", "requiredTestDescription")
-                );
+                const code = "requiredTestCode"
+                const description = "requiredTestDescription"
+                dropdowns[dropdownArray[0][i]] = response[i].data
+                  .sort((obj1, obj2) => obj1[code].localeCompare(obj2[code], 'en', { numeric: true }))
+                  .map((d) => {
+                    d[description] = `${d[code]} (${d[description]})`
+                    return getOptions(d, code, description);
+                  });
               }
               dropdowns[dropdownArray[0][i]].unshift({
                 code: "",
