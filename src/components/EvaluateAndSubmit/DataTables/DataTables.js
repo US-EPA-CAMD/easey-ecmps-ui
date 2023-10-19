@@ -140,7 +140,7 @@ const DataTables = ({
     ) {
       if (
         type === "EM" &&
-        (row.windowStatus !== "REQUIRE" || row.windowStatus !== "GRANTED")
+        !(row.windowStatus === "REQUIRE" || row.windowStatus === "GRANTED")
       ) {
         row.selected = false;
         return "View";
