@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import _ from "lodash";
+
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
@@ -405,7 +407,9 @@ export const DataTableQualifications = ({
     const isQualTypeCodeLocked = !create ? "locked" : ""
 
     const availableDropdownGroupCodes = ['LEE', 'CPMS', 'PCT', 'LME']
-    mdmData.qualificationTypeCode = mdmData.qualificationTypeCode.filter(qualData => availableDropdownGroupCodes.includes(qualData.groupCode))
+    const clonedMdmData = _.cloneDeep(mdmData)
+    clonedMdmData.qualificationTypeCode = clonedMdmData.qualificationTypeCode.filter(qualData => availableDropdownGroupCodes.includes(qualData.groupCode))
+    clonedMdmData.qualificationTypeCode.unshift({ code: "", name: "-- Select a value --" })
 
     setSelectedModalData(
       modalViewData(
@@ -419,7 +423,7 @@ export const DataTableQualifications = ({
           endDate: ["End Date", "date", ""],
         },
         create,
-        mdmData
+        clonedMdmData
       )
     );
     setShow(true);
