@@ -354,7 +354,7 @@ const ModalDetails = ({
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
           <DatePicker
-            className="margin-0 modalUserInput width-card-lg"
+            className="margin-0 modalUserInput"
             id={value[1]}
             name={value[1]}
             epadataname={value[0]}
@@ -457,9 +457,7 @@ const ModalDetails = ({
       case "input":
         comp = (
           <TextInput
-            className={`modalUserInput ${
-              cols === 3 ? "" : largeWidthCardStyle
-            }`}
+            className={`modalUserInput `}
             id={value[1]}
             epa-testid={value[0].split(" ").join("-")}
             epadataname={value[0]}
@@ -525,9 +523,9 @@ const ModalDetails = ({
             <Label className=" margin-bottom-0" htmlFor={`${value[1]}`}>
               {value[3] === "required" ? `${value[1]} (Required)` : value[1]}
               {value[4] === "date" && (
-                <span className="usa-hint d-block" id="appointment-date-hint">
-                  {" "}
-                  - mm/dd/yyyy
+                <span className="usa-hint" id="appointment-date-hint">
+                  {<br/>}
+                   mm/dd/yyyy
                 </span>
               )}
               {value[4] === "time" && (
@@ -642,6 +640,7 @@ const ModalDetails = ({
                   }
                 }}
               >
+                {<br/>}
                 {item}
               </div>
             );

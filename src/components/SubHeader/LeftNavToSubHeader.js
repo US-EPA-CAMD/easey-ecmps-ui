@@ -53,7 +53,7 @@ export const LeftNavToSubHeader = (props) => {
           <div>
             <NavDropDownButton
               key={i}
-              label={el.label}
+              label={el.name}
               menuId={`menu-${el.name}`}
               isOpen={navDropdownOpen[i]}
               onToggle={() => {
@@ -84,6 +84,7 @@ export const LeftNavToSubHeader = (props) => {
                       ? "wkspaceMainMenu current-app-subitem"
                       : ""
                   }
+                  
                   title={
                     item.name !== "Home"
                       ? isWorkspace
