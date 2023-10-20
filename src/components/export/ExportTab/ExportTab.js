@@ -161,7 +161,7 @@ export const ExportTab = ({
       selectedStacks,
       null,
       null,
-      { isOfficial: getUser() !== null, isHistoricalImport: false },
+      { isOfficial: !getUser(), isHistoricalImport: false },
       dataTypes[1].selectedRows.current.map((d) => d.testSumId),
       dataTypes[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
       dataTypes[3].selectedRows.current.map(
