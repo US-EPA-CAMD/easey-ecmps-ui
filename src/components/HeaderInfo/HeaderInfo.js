@@ -867,12 +867,8 @@ export const HeaderInfo = ({
     emApi
       .importEmissionsData(payload)
       .then(({ data, status }) => {
-        if (status === 201) {
-          setImportedFileErrorMsgs([]);
-        } else if (status === 400)
+        if (!successResponses.includes(status)) {
           setImportedFileErrorMsgs(data?.message || ["HTTP 400 Error"]);
-        else {
-          setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
 
         // set relevant reporting periods state to rerender which will call
