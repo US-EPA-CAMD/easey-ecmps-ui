@@ -15,7 +15,6 @@ const workSpace = getWorkspacePaths();
 export const LeftNavigation = (props) => {
   const handleRouteChange = (event, url) => {
     props.setCurrentLink(url);
-    console.log('props',props.currentLink)
   };
 
   const makeHeader = (arr, noActive, isWorkspace) => {
