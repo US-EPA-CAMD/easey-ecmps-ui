@@ -83,12 +83,7 @@ const QAMaintenanceData = ({
     if (checked) {
       setSelectedRows(prev => [...prev, row]);
     } else {
-      const currSelectedRows = selectedRows.filter(
-        r =>
-          r.testSumId !== row.testSumId ||
-          r.testExtensionExemptionId !== row.testExtensionExemptionId ||
-          r.certEventId !== row.certEventId,
-      );
+      const currSelectedRows = selectedRows.filter((r) => r.id !== row.id);
       setSelectedRows(currSelectedRows);
     }
   };
