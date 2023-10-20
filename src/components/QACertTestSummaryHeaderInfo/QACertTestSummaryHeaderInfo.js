@@ -61,6 +61,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
+  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -410,17 +411,20 @@ export const QACertTestSummaryHeaderInfo = ({
 
   return (
     <div className="header QACertHeader ">
-      {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
       <div className="grid-container width-full clearfix position-relative">
-        <div className="display-flex flex-row flex-justify flex-align-center height-2">
-          <div className="grid-row">
-            <h3 className="margin-y-auto font-body-lg margin-right-2">
-              {facilityMainName}
+
+        <div className="grid-row">
+          <div className="grid-col-9">
+            <h3 className="font-body-lg margin-y-0" data-testid="facility-name-header">{facilityMainName}</h3>
+            <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+              {facilityAdditionalName}
             </h3>
+            <p className="text-bold font-body-2xs margin-top-0">{createAuditMessage()}</p>
           </div>
+
+          <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
           {user && isCheckedOut && (
             <Button
-              // className="padding-x-5"
               type="button"
               outline={false}
               onClick={() => openSelectionTypeImportModal()}
@@ -429,9 +433,9 @@ export const QACertTestSummaryHeaderInfo = ({
               Import Data
             </Button>
           )}
+          </div>
         </div>
 
-        <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
         <div className="grid-row">
           {user && (
             <>

@@ -152,12 +152,13 @@ const QAExpandableRowsRender = ({
 
       case "RATA Run Data":
         extraIDsProps = [...extraIDs, id];
-        expand = false;
+        expand = true;
         objProps = qaFlowRataRunProps();
         break;
       case "Flow":
         extraIDsProps = [...extraIDs, id];
         objProps = qaRataTraverseProps();
+        expand = false;
         break;
       // appendix E correlation test summary  > run
       case "Appendix E Correlation Summary":

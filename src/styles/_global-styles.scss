@@ -103,3 +103,10 @@ h2 {
     color: $epa-blue-base !important;
   }
 }
+
+.facility-header-text-cutoff {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 66%;
+}
