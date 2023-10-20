@@ -708,7 +708,7 @@ export const DataTableSystemsComponents = ({
                       mainDropdownChange={mainSystemComponentDropdownChange}
                       viewOnly={!(user && checkout)}
                     />
-                    {createNewComponentFlag || !['NOX', 'HG', 'HCl', 'HF', 'SO2', 'CO2', 'O2'].includes(selectedComponent?.componentTypeCode) ? (
+                    {createNewComponentFlag || !['NOX', 'HG', 'HCL', 'HF', 'SO2', 'CO2', 'O2'].includes(selectedComponent?.componentTypeCode) ? (
                       ""
                     ) : (
                       <DataTableAnalyzerRanges
