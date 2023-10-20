@@ -161,7 +161,7 @@ export const ExportTab = ({
       selectedStacks,
       null,
       null,
-      { isOfficial: getUser() !== null, isHistoricalImport: false },
+      { isOfficial: !getUser(), isHistoricalImport: false },
       dataTypes[1].selectedRows.current.map((d) => d.testSumId),
       dataTypes[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
       dataTypes[3].selectedRows.current.map(
@@ -238,33 +238,34 @@ export const ExportTab = ({
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
         <div className="grid-row">
-          <h3 className="grid-col-3">
-            <span className="font-body-lg">{facilityMainName}</span>
-            <span className="text-bold font-body-xl display-block">
+          <div className="grid-col">
+            <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
+            <h3 className="facility-header-text-cutoff margin-top-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
               {facilityAdditionalName}
-            </span>
-          </h3>
-          <div className="grid-col-6 padding-left-5 margin-y-auto">
-            <ReportingPeriodSelector
-              isExport={true}
-              dataTypes={dataTypes.filter((e) => e.checked)}
-              reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
-              exportState={exportState}
-              getInitSelection={getInitSelection}
-              isQaCert={true}
-            />
+            </h3>
           </div>
-          <center className="grid-col-3 margin-y-auto =">
+        </div>
+
+        <div className="display-flex flex-row flex-justify">
+          <ReportingPeriodSelector
+            isExport={true}
+            dataTypes={dataTypes.filter((e) => e.checked)}
+            reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
+            exportState={exportState}
+            getInitSelection={getInitSelection}
+            isQaCert={true}
+          />
+
+          <div className="flex-align-self-center">
             <Button
               disabled={!canExport}
               type={"button"}
-              size="big"
-              className="width-full maxw-card-lg"
+              className="padding-x-6 padding-y-1.5"
               onClick={exportClickHandler}
             >
               Export
             </Button>
-          </center>
+          </div>
         </div>
       </div>
 
