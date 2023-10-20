@@ -404,6 +404,9 @@ export const DataTableQualifications = ({
 
     const isQualTypeCodeLocked = !create ? "locked" : ""
 
+    const availableDropdownGroupCodes = ['LEE', 'CPMS', 'PCT', 'LME']
+    mdmData.qualificationTypeCode = mdmData.qualificationTypeCode.filter(qualData => availableDropdownGroupCodes.includes(qualData.groupCode))
+
     setSelectedModalData(
       modalViewData(
         qualData,
