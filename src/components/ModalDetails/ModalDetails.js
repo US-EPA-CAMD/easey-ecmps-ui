@@ -32,8 +32,6 @@ const ModalDetails = ({
 }) => {
   // fixes resizing issue with calendar date picker along with help in CSS file
   const containerStyle = {
-    whiteSpace: "nowrap", // Prevent text from wrapping
-
     textOverflow: "ellipsis",
     overflow: "auto",
   };
