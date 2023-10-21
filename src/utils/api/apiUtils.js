@@ -43,11 +43,6 @@ export function handleError(error) {
   if (errorMessage !== "") {
     displayAppError(errorMessage);
   }
-
-  // sonarcloud doesnt want to return anything
-  // if (error.response) {
-  //   return error.response.data.message;
-  // }
 }
 
 export function handleImportError(error) {

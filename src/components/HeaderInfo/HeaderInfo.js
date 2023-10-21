@@ -374,13 +374,13 @@ export const HeaderInfo = ({
   // See zenhub ticket#5756 for info on business logic of View Templates dropdown in global
   const filterViewDataForGlobal = (countData, allViews) => {
     return allViews
-    .filter(view => view.code !== "COUNTS")
-    .filter(view => {
-      
-      const matches = countData.filter(cd => cd.dataSetCode === view.code && cd.count === 0)
-      // The counts data comes back with multiple records for the same view code but in order for a
-      // view template to be filtered out of the View Templates dropdown, the number of 0 count records
-      // has to be the same as the number of reporting periods that are selected
+      .filter(view => view.code !== "COUNTS")
+      .filter(view => {
+
+        const matches = countData.filter(cd => cd.dataSetCode === view.code && cd.count === 0)
+        // The counts data comes back with multiple records for the same view code but in order for a
+        // view template to be filtered out of the View Templates dropdown, the number of 0 count records
+        // has to be the same as the number of reporting periods that are selected
         return matches.length !== selectedReportingPeriods.length
       })
   }
@@ -867,12 +867,8 @@ export const HeaderInfo = ({
     emApi
       .importEmissionsData(payload)
       .then(({ data, status }) => {
-        if (status === 201) {
-          setImportedFileErrorMsgs([]);
-        } else if (status === 400)
+        if (!successResponses.includes(status)) {
           setImportedFileErrorMsgs(data?.message || ["HTTP 400 Error"]);
-        else {
-          setImportedFileErrorMsgs(`HTTP ${status} Error`);
         }
 
         // set relevant reporting periods state to rerender which will call
@@ -1051,7 +1047,7 @@ export const HeaderInfo = ({
       const results = response.data;
 
       if (results.length === 0) {
-        displayAppWarning(`The ${viewTemplateSelect.code} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
+        displayAppWarning(`The ${viewTemplateSelect.name} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
         getEmissionsViewDropdownData();
       }
 
@@ -1120,44 +1116,42 @@ export const HeaderInfo = ({
 
       {evalModuleLoadedStatus && dataLoaded ? (
         <div>
-          <div className="display-flex flex-row flex-justify flex-align-center height-2">
-            <div className="grid-row">
-              <h3 className="margin-y-auto font-body-md margin-right-2">
-                {facilityMainName}
-                <span className=" font-body-lg margin-left-1 ">
-                  {facilityAdditionalName}
-                </span>
+          <div className="grid-row">
+            <div className="grid-col-9">
+              <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
+              <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+                {facilityAdditionalName}
               </h3>
+              {dataLoaded && (
+                <p className="text-bold font-body-2xs margin-top-0">{auditInformation}</p>
+              )}
             </div>
-            <div>
-              <Button
-                type="button"
-                className="margin-right-2 float-left margin-bottom-2"
-                outline={true}
-                onClick={() => {
-                  handleExport().catch(handleError);
-                  return;
-                }}
-              >
-                Export Data
-              </Button>
-              {user && checkedOutByUser && (
+            <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
+              <div className="display-flex grid-row">
                 <Button
                   type="button"
-                  className="margin-right-2 float-right"
-                  outline={false}
-                  onClick={() => openModal()}
-                  id="importBtn"
+                  className="margin-y-1"
+                  outline={true}
+                  onClick={() => handleExport().catch(handleError)}
                 >
-                  Import Data
+                  Export Data
                 </Button>
-              )}
+                {user && checkedOutByUser && (
+                  <Button
+                    type="button"
+                    className="margin-y-1"
+                    outline={false}
+                    onClick={() => openModal()}
+                    id="importBtn"
+                  >
+                    Import Data
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
-          {dataLoaded && (
-            <p className="text-bold font-body-2xs">{auditInformation}</p>
-          )}
+
 
           <GridContainer
             className="padding-left-0 margin-left-0 padding-right-0"

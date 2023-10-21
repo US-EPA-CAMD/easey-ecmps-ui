@@ -61,6 +61,7 @@ const QACertEventTestExmpDataTable = ({
   const [createdId, setCreatedId] = useState(null);
   const [mainDropdownChange, setMainDropdownChange] = useState("");
   const [createNewData, setCreateNewData] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([]);
 
   const years = generateArrayOfYears(2009).map((year, index) => {
     return {
@@ -189,13 +190,23 @@ const QACertEventTestExmpDataTable = ({
                   getOptions(d, "monitoringSystemId", "monitoringSystemId")
                 );
               } else if (i === 2) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                  getOptions(d, "certificationEventCode", "certificationEventDescription")
-                );
+                const codeField = "certificationEventCode"
+                const descriptionField = "certificationEventDescription"
+                dropdowns[dropdownArray[0][i]] = response[i].data
+                  .sort((obj1, obj2) => obj1[codeField].localeCompare(obj2[codeField], 'en', { numeric: true }))
+                  .map((d) => {
+                    d[descriptionField] = `${d[codeField]} (${d[descriptionField]})`
+                    return getOptions(d, codeField, descriptionField)
+                  });
               } else if (i === 3) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
-                  getOptions(d, "requiredTestCode", "requiredTestDescription")
-                );
+                const code = "requiredTestCode"
+                const description = "requiredTestDescription"
+                dropdowns[dropdownArray[0][i]] = response[i].data
+                  .sort((obj1, obj2) => obj1[code].localeCompare(obj2[code], 'en', { numeric: true }))
+                  .map((d) => {
+                    d[description] = `${d[code]} (${d[description]})`
+                    return getOptions(d, code, description);
+                  });
               }
               dropdowns[dropdownArray[0][i]].unshift({
                 code: "",
@@ -486,7 +497,7 @@ const QACertEventTestExmpDataTable = ({
       .createDataSwitch(userInput, dataTableName, locationSelectValue)
       .then((res) => {
         if (Object.prototype.toString.call(res) === "[object Array]") {
-          alert(res[0]);
+          setErrorMsgs(res);
         } else {
           setCreatedId(res.data.id);
           setUpdateTable(true);
@@ -573,6 +584,7 @@ const QACertEventTestExmpDataTable = ({
           //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
           exitBTN={`Save and Close`}
+          errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (
               <div>

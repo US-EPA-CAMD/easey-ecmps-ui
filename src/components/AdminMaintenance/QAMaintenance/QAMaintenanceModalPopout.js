@@ -52,21 +52,18 @@ const QAMaintenanceModalPopout = ({
 const getFunctionsAndIdentifiers = (typeSelection) => {
   let updateFunc;
   let deleteFunc;
-  let identifier; // name of id field for each type
+  const identifier = 'id';
 
   switch (typeSelection) {
     case testSummaryLabel:
-      identifier = 'testSumId';
       updateFunc = updateQaTestMaintenanceRecords;
       deleteFunc = deleteQaTestMaintenanceRecords;
       break
     case certEventLabel:
-      identifier = 'certEventId';
       updateFunc = updateQaCertEventMaintenanceRecords;
       deleteFunc = deleteQaCertEventMaintenanceRecords;
       break
     case testExtensionExemptionLabel:
-      identifier = 'testExtensionExemptionId';
       updateFunc = updateQaExtensionExemptionMaintenanceRecords;
       deleteFunc = deleteQaExtensionExemptionMaintenanceRecords;
       break
