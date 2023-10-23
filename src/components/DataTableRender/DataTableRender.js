@@ -248,6 +248,7 @@ export const DataTableRender = ({
         columns.push({
           id: `col${index + 1}`,
           name,
+          maxWidth: "20%",
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           style: { whiteSpace: "normal" },
