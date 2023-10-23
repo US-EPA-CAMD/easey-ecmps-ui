@@ -51,6 +51,7 @@ export const QACertEventHeaderInfo = ({
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
+  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -160,9 +161,9 @@ export const QACertEventHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -175,9 +176,9 @@ export const QACertEventHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
+        checkedOutConfigs
+          .map((con) => con["monPlanId"])
+          .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -298,9 +299,8 @@ export const QACertEventHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -337,27 +337,31 @@ export const QACertEventHeaderInfo = ({
 
   return (
     <div className="header QACertHeader ">
-      {/* // adding display-block here allows buttons to be clickable ( has somesort of hidden overlay without it) */}
       <div className="grid-container width-full clearfix position-relative">
-        <div className="display-flex flex-row flex-justify flex-align-center height-2">
-          <div className="grid-row">
-            <h3 className="margin-y-auto font-body-lg margin-right-2" data-testid="facility-name-header">
-              {facilityMainName}
+
+        <div className="grid-row">
+          <div className="grid-col-9">
+            <h3 className="font-body-lg margin-y-0" data-testid="facility-name-header">{facilityMainName}</h3>
+            <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+              {facilityAdditionalName}
             </h3>
+            <p className="text-bold font-body-2xs margin-top-0">{createAuditMessage()}</p>
           </div>
-          {user && isCheckedOut && (
-            <Button
-              type="button"
-              outline={false}
-              onClick={() => openSelectionTypeImportModal()}
-              id="importSelectionQAModal"
-            >
-              Import Data
-            </Button>
-          )}
+
+          <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
+            {user && isCheckedOut && (
+              <Button
+                type="button"
+                outline={false}
+                onClick={() => openSelectionTypeImportModal()}
+                id="importSelectionQAModal"
+              >
+                Import Data
+              </Button>
+            )}
+          </div>
         </div>
 
-        <p className="text-bold font-body-2xs">{createAuditMessage()}</p>
         <div className="grid-row">
           {user && (
             <>
@@ -431,14 +435,13 @@ export const QACertEventHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (

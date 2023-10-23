@@ -154,7 +154,7 @@ export const UseRetrieveDropdownApi = async (
         await dmApi.getAllMaxRateSourceCodes().then((response) => {
           options = response.data.map((option) => {
             return {
-              code: option["mMaxRateSourceCode"],
+              code: option["maxRateSourceCode"],
               name: option["maxRateSourceDescription"],
             };
           });
