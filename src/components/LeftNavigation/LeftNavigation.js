@@ -69,8 +69,8 @@ export const LeftNavigation = (props) => {
                   : "text-wrap"
                 : props.currentLink === `/${item.url}` ||
                   props.currentLink === item.url
-                ? "emulateCurrentLink "
-                : "text-wrap "
+                  ? "emulateCurrentLink "
+                  : "text-wrap "
             }
             aria-label={
               item.name !== "Home"
@@ -93,9 +93,8 @@ export const LeftNavigation = (props) => {
             }
             key={item.url}
             id={`${item.name
-              .split(" ")
-              .join("")
-              .replace("&", "And")}${workspaceText}`}
+              .replaceAll(" ", "")
+              .replaceAll("&", "And")}${workspaceText}`}
             onClick={(event) => handleRouteChange(event, item.url)}
           >
             {item.name}
