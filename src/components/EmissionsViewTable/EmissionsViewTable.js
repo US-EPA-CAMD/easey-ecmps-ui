@@ -26,7 +26,7 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         const timeout = setTimeout(() => {
             setViewData(reduxCurrentTab?.viewData || []);
             setPending(false)
-        }, 2000)
+        })
 
         return () => clearTimeout(timeout)
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
