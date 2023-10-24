@@ -16,13 +16,12 @@ export async function getReport(params) {
 }
 
 export async function downloadReport(params) {
-  let url = `${config.services.camd.uri}${formatReportUrl(
+  const url = `${config.services.camd.uri}${formatReportUrl(
     params,
     "copy-of-record"
   )}`;
 
-  console.log(url);
-// url = "https://api.epa.gov/easey/dev/camd-services/workspace/copy-of-record?reportCode=MPP&facilityId=7&monitorPlanId=MDC-D8E17710621F4B0AA133B851F13BB481"
+
   return secureAxios({
     method: "GET",
     url,
