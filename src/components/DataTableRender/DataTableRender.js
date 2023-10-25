@@ -203,6 +203,7 @@ export const DataTableRender = ({
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
+          maxWidth: "30%",
           cell: (row) => <AddLock row={row} />,
         });
         break;
@@ -214,7 +215,7 @@ export const DataTableRender = ({
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
-          width: "20%", // Set the column width to 30%
+          maxWidth: "32%", // Set the column width to 30%
           cell: (row) => (
             <div
               className="usa-tooltip"
@@ -239,6 +240,7 @@ export const DataTableRender = ({
           wrap: true,
           selector: (row) => row.col2,
           sortable: true,
+          maxWidth: "20%",
           sortFunction: (a, b) =>
             parseFloat(a[`col${index + 1}`]) - parseFloat(b[`col${index + 1}`]),
         });
@@ -248,6 +250,7 @@ export const DataTableRender = ({
         columns.push({
           id: `col${index + 1}`,
           name,
+          maxWidth: "22%",
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           style: { whiteSpace: "normal" },
