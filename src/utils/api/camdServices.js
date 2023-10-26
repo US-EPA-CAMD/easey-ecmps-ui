@@ -21,7 +21,6 @@ export async function downloadReport(params) {
     "copy-of-record"
   )}`;
 
-  console.log(url);
 
   return secureAxios({
     method: "GET",
