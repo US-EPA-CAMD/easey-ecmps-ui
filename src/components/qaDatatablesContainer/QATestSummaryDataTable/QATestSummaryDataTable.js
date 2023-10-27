@@ -475,9 +475,11 @@ const QATestSummaryDataTable = ({
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         executeOnClose();
+        setErrorMsgs([]);
       }
     } else {
       executeOnClose();
+      setErrorMsgs([]);
     }
     if (createNewData) {
       returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
