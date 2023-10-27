@@ -139,7 +139,11 @@ export const SubmissionModal = ({
         setShowError(false);
       } catch (e) {
         setShowError(true);
-        setFormErrorMessage(e.message);
+        if (e.response?.data?.message) {
+          setFormErrorMessage(e.response.data.message);
+        } else {
+          setFormErrorMessage(e.message);
+        }
       }
       setLoading(false);
     }
@@ -192,7 +196,11 @@ export const SubmissionModal = ({
         setShowError(false);
       } catch (e) {
         setShowError(true);
-        setFormErrorMessage("Error Authenticating Answer");
+        if (e.response?.data?.message) {
+          setFormErrorMessage(e.response.data.message);
+        } else {
+          setFormErrorMessage(e.message);
+        }
       }
       setLoading(false);
     }
