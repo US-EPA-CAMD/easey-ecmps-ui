@@ -402,9 +402,11 @@ const QACertEventTestExmpDataTable = ({
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         executeOnClose();
+        setErrorMsgs([]);
       }
     } else {
       executeOnClose();
+      setErrorMsgs([]);
     }
     if (createNewData) {
       returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
@@ -475,8 +477,12 @@ const QACertEventTestExmpDataTable = ({
         selectedRow.id
       )
       .then((res) => {
-        setUpdateTable(true);
-        executeOnClose();
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          setErrorMsgs(res);
+        } else {
+          setUpdateTable(true);
+          executeOnClose();
+        }
       })
       .catch((error) => {
         console.log(error);
