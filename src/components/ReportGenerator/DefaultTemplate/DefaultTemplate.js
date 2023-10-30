@@ -17,7 +17,7 @@ export const DefaultTemplate = ({
   columnNames.forEach((name, index) => {
     columns.push({
       id: `col${index + 1}`,
-      name,
+      name: <span>{name}</span>,
       selector: (row) => row[`col${index + 1}`],
       sortable: false,
       wrap: true,

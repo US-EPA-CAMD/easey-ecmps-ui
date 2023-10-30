@@ -1,12 +1,12 @@
 const unitStackCol = {
-  name: 'Unit Stack',
+  name: <span>{'Unit Stack'}</span>,
   width: '175px',
   selector: row => row.unitStack,
   sortable: true,
 };
 
 const systemComponentIdCol = {
-  name: 'System/Component ID',
+  name: <span>{'System/Component ID'}</span>,
   width: '250px',
   selector: row => {
     const systemIdentifier = row.systemIdentifier;
@@ -26,21 +26,21 @@ const systemComponentIdCol = {
 };
 
 const submissionAvailabilityDescriptionCol = {
-  name: 'Submission Availability Description',
+  name: <span>{'Submission Availability Description'}</span>,
   width: '350px',
   selector: row => row.submissionAvailabilityDescription,
   sortable: true,
 };
 
 const severityDescriptionCol = {
-  name: 'Severity Description',
+  name: <span>{'Severity Description'}</span>,
   width: '250px',
   selector: row => row.severityDescription,
   sortable: true,
 };
 
 const requireResubmissionReasonCol = {
-  name: 'Resubmission Reason',
+  name: <span>{'Resubmission Reason'}</span>,
   width: '250pxpx',
   selector: row => row.resubExplanation,
   sortable: true,
@@ -50,31 +50,31 @@ export const testSummaryCols = [
   unitStackCol,
   systemComponentIdCol,
   {
-    name: 'Test Number',
+    name: <span>{'Test Number'}</span>,
     width: '200px',
     selector: row => row.testNumber,
     sortable: true,
   },
   {
-    name: 'Test Type Code',
+    name: <span>{'Test Type Code'}</span>,
     width: '200px',
     selector: row => row.testTypeCode,
     sortable: true,
   },
   {
-    name: 'Reporting Period',
+    name: <span>{'Reporting Period'}</span>,
     width: '225px',
     selector: row => row.yearQuarter,
     sortable: true,
   },
   {
-    name: 'Begin Date/Time',
+    name: <span>{'Begin Date/Time'}</span>,
     width: '225px',
     selector: row => row.beginDateTime,
     sortable: true,
   },
   {
-    name: 'End Date/Time',
+    name: <span>{'End Date/Time'}</span>,
     width: '200px',
     selector: row => row.endDateTime,
     sortable: true,
@@ -83,7 +83,7 @@ export const testSummaryCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'Record Id',
+    name: <span>{'Record Id'}</span>,
     selector: row => row.id,
     sortable: true,
   },
@@ -93,31 +93,31 @@ export const certEventsCols = [
   unitStackCol,
   systemComponentIdCol,
   {
-    name: 'Cert Event Code',
+    name: <span>{'Cert Event Code'}</span>,
     width: '200px',
     selector: row => row.certEventCode,
     sortable: true,
   },
   {
-    name: 'Event Date/Time',
+    name: <span>{'Event Date/Time'}</span>,
     width: '215px',
     selector: row => row.eventDateTime,
     sortable: true,
   },
   {
-    name: 'Required Test Code',
+    name: <span>{'Required Test Code'}</span>,
     width: '225px',
     selector: row => row.requiredTestCode,
     sortable: true,
   },
   {
-    name: 'Conditional Date/Time',
+    name: <span>{'Conditional Date/Time'}</span>,
     width: '250px',
     selector: row => row.conditionalDateTime,
     sortable: true,
   },
   {
-    name: 'Last Completed Date/Time',
+    name: <span>{'Last Completed Date/Time'}</span>,
     width: '275px',
     selector: row => row.lastCompletedDateTime,
     sortable: true,
@@ -126,7 +126,7 @@ export const certEventsCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'Record Id',
+    name: <span>{'Record Id'}</span>,
     selector: row => row.id,
     sortable: true,
   },
@@ -136,25 +136,25 @@ export const testExtensionExemptionCols = [
   unitStackCol,
   systemComponentIdCol,
   {
-    name: 'Fuel Code',
+    name: <span>{'Fuel Code'}</span>,
     width: '160px',
     selector: row => row.fuelCode,
     sortable: true,
   },
   {
-    name: 'Extension Exemption Code',
+    name: <span>{'Extension Exemption Code'}</span>,
     width: '275px',
     selector: row => row.extensionExemptionCode,
     sortable: true,
   },
   {
-    name: 'Hours Used',
+    name: <span>{'Hours Used'}</span>,
     width: '175px',
     selector: row => row.hoursUsed,
     sortable: true,
   },
   {
-    name: 'Span Scale Code',
+    name: <span>{'Span Scale Code'}</span>,
     width: '200px',
     selector: row => row.spanScaleCode,
     sortable: true,
@@ -163,7 +163,7 @@ export const testExtensionExemptionCols = [
   severityDescriptionCol,
   requireResubmissionReasonCol,
   {
-    name: 'Record Id',
+    name: <span>{'Record Id'}</span>,
     selector: row => row.id,
     sortable: true,
   },
