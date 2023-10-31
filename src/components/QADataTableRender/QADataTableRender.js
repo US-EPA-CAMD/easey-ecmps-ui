@@ -21,6 +21,7 @@ import {
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
+import { qaFlowRataRunProps } from "../../additional-functions/qa-dataTable-props";
 
 const QADataTableRender = ({
   columnNames,
@@ -98,7 +99,7 @@ const QADataTableRender = ({
   };
 
   const createExpandBTNS = (index, row) => {
-    if(dataTableName === "Flow"){
+    if(dataTableName === qaFlowRataRunProps().dataTableName){
       if(row.expandable)
         return renderExpandableIcon();
       else
