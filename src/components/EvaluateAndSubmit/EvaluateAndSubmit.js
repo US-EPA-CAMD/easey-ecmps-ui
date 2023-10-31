@@ -184,7 +184,6 @@ export const EvaluateAndSubmit = ({
     setDropdownFacilities(await getDropDownFacilities());
   };
   useEffect(() => {
-    // Get permissions from user object here
     populateDropdown();
     return () => {
       checkInAllCheckedOutLocations();
@@ -193,6 +192,7 @@ export const EvaluateAndSubmit = ({
     //eslint-disable-next-line
   }, []);
   useEffect(() => {
+    // Get permissions from user object here
     for (const p of userPermissions) {
       idToPermissionsMap.current.set(p.orisCode, p.permissions);
     }//eslint-disable-next-line
