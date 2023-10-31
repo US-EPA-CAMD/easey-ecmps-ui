@@ -134,7 +134,7 @@ const DataTables = ({
       return "Lock";
     } else if (
       //Can only submit records if not ERR eval code, submissionStatus is REQUIRE or blank, and they have permissions
-      ["PASS", "INFO"].includes(row.evalStatusCode) &&
+      ["PASS", "INFO", "ERR"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&
       permissions.current.get(parseInt(row.orisCode))?.includes(`DS${type}`)
     ) {
