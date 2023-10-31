@@ -32,6 +32,7 @@ import {
   returnsFocusDatatableViewBTN,
   returnsFocusToAddBtn,
 } from "../../../additional-functions/ensure-508.js";
+import { successResponses } from "../../../utils/api/apiUtils.js";
 
 // contains test summary data table
 
@@ -466,30 +467,24 @@ const QACertEventTestExmpDataTable = ({
     }
   };
 
-  const saveData = async (row) => {
+  const saveData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
 
-    assertSelector
-      .saveDataSwitch(
-        userInput,
-        dataTableName,
-        locationSelectValue,
-        selectedRow.id
-      )
-      .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          setErrorMsgs(res);
-        } else {
-          setUpdateTable(true);
-          executeOnClose();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, selectedRow.id)
+      if (successResponses.includes(resp.status)) {
+        setUpdateTable(true)
+        executeOnClose()
+      } else {
+        const errorMsgs = Object.prototype.toString.call(resp) === "[object Array]" ? resp : [resp]
+        setErrorMsgs(errorMsgs)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   };
 
-  const createData = () => {
+  const createData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
     if (userInput.unitId) {
       userInput.unitId = String(userInput.unitId);
@@ -499,21 +494,20 @@ const QACertEventTestExmpDataTable = ({
       userInput.unitId = null;
     }
 
-    assertSelector
-      .createDataSwitch(userInput, dataTableName, locationSelectValue)
-      .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          setErrorMsgs(res);
-        } else {
-          setCreatedId(res.data.id);
-          setUpdateTable(true);
-          executeOnClose();
-        }
-      })
-      .catch((error) => {
-        console.error("error", error);
-        returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
-      });
+    try {
+      const resp = await assertSelector.createDataSwitch(userInput, dataTableName, locationSelectValue)
+      if (successResponses.includes(resp.status)) {
+        setCreatedId(resp.data.id);
+        setUpdateTable(true);
+        executeOnClose();
+      } else {
+        const errorMsgs = Object.prototype.toString.call(resp) === "[object Array]" ? resp : [resp]
+        setErrorMsgs(errorMsgs)
+      }
+    } catch (error) {
+      console.error(error);
+      returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
+    }
   };
 
   return (
