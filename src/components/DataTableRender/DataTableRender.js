@@ -199,7 +199,7 @@ export const DataTableRender = ({
       case "Facility":
         columns.push({
           id: `col${index + 1}`,
-          name,
+          name: <span>{name}</span>,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
@@ -211,7 +211,7 @@ export const DataTableRender = ({
       case "Configurations":
         columns.push({
           id: `col${index + 1}`,
-          name,
+          name: <span>{name}</span>,
           wrap: true,
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
@@ -236,7 +236,7 @@ export const DataTableRender = ({
       case "ORIS":
         columns.push({
           id: `col${index + 1}`,
-          name,
+          name: <span>{name}</span>,
           wrap: true,
           selector: (row) => row.col2,
           sortable: true,
@@ -249,7 +249,7 @@ export const DataTableRender = ({
       default:
         columns.push({
           id: `col${index + 1}`,
-          name,
+          name: <span>{name}</span>,
           maxWidth: "22%",
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
@@ -262,7 +262,7 @@ export const DataTableRender = ({
   if (actionsBtn) {
     if (actionsBtn === "Open") {
       columns.push({
-        name: "Actions",
+        name: <span>{"Actions"}</span>,
         button: true,
         width: "25%",
         cell: (row) => {
@@ -394,7 +394,7 @@ export const DataTableRender = ({
     }
     if (actionsBtn === "View") {
       columns.unshift({
-        name: "Actions",
+        name: <span>{"Actions"}</span>,
         button: true,
         width: "15%",
         cell: (row, index) => {

@@ -39,7 +39,7 @@ const severityDescriptionCol = {
   sortable: true,
 };
 
-const requireResubmissionReasonCol = {
+const    requireResubmissionReasonCol = {
   name: <span>{'Resubmission Reason'}</span>,
   width: '250pxpx',
   selector: row => row.resubExplanation,

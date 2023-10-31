@@ -9,16 +9,16 @@ import { oneSecond } from "../../config";
 
 const columnMappings = [
   {
-    name: "Facility ID (ORISPL)",
+    name: <span>{"Facility ID (ORISPL)"}</span>,
     selector: (row) => row.oris,
   },
   {
-    name: "Facility Name",
+    name: <span>{"Facility Name"}</span>,
     selector: (row) => row.facName,
   },
 
   {
-    name: "Unit Info",
+    name: <span>{"Unit Info"}</span>,
     selector: (row) => row.unitInfo,
   },
 ];

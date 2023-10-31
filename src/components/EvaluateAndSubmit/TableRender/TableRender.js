@@ -162,7 +162,7 @@ const TableRender = forwardRef(
 
     if (rowId !== "matsBulkFileIdentifier") {
       mappings.push({
-        name: "Report",
+        name: <span>{"Report"}</span>,
         cell: (row, idx) => (
           <Button
             data-testid="ViewButton"
