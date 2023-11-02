@@ -49,7 +49,6 @@ import {
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
-  setIsViewDataLoaded,
   setReportingPeriods,
   setViewData,
   setViewDataColumns,
@@ -114,6 +113,8 @@ export const HeaderInfo = ({
   updateRelatedTables,
   workspaceSection,
 }) => {
+
+  console.log('updateRelatedTables',updateRelatedTables)
   //MP
   const sections = [
     { name: "Defaults" },
