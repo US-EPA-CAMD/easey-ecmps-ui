@@ -184,17 +184,19 @@ export const EvaluateAndSubmit = ({
     setDropdownFacilities(await getDropDownFacilities());
   };
   useEffect(() => {
-    // Get permissions from user object here
     populateDropdown();
-    for (const p of userPermissions) {
-      idToPermissionsMap.current.set(p.orisCode, p.permissions);
-    }
     return () => {
       checkInAllCheckedOutLocations();
     };
 
     //eslint-disable-next-line
   }, []);
+  useEffect(() => {
+    // Get permissions from user object here
+    for (const p of userPermissions) {
+      idToPermissionsMap.current.set(p.orisCode, p.permissions);
+    } //eslint-disable-next-line
+  }, [emissions, monPlans, qaCertEvent, qaTestSummary, qaTee, matsBulkFiles]);
 
   useEffect(() => {
     const planToOwnerCheckouts = new Map();
@@ -287,6 +289,7 @@ export const EvaluateAndSubmit = ({
     payload.userEmail = user.email;
 
     payload.items = [];
+    payload.hasCritErrors = false;
 
     for (const monPlanId of activeMPSet) {
       const newItem = {};
@@ -297,6 +300,14 @@ export const EvaluateAndSubmit = ({
           (f) => f.monPlanId === monPlanId && f.selected
         ).length > 0
       ) {
+        const plan = monPlanRef.current.find(
+          (f) => f.monPlanId === monPlanId && f.selected
+        );
+
+        if (plan.evalStatusCode === "ERR") {
+          payload.hasCritErrors = true;
+        }
+
         newItem.submitMonPlan = true;
       } else {
         newItem.submitMonPlan = false;
@@ -306,23 +317,40 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.testExtensionExemptionIdentifier;
         });
 
       //Final step to add emissions data for specific monPlan
       newItem.emissionsReportingPeriods = emissionsRef.current
         .filter((f) => f.monPlanId === monPlanId && f.selected)
-        .map((m) => m.periodAbbreviation);
+        .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+          return m.periodAbbreviation;
+        });
 
       if (componentType === "Submission") {
         // Iterate MATs bulk files and append them to the submission payload

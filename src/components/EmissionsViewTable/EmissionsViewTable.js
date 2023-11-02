@@ -58,7 +58,7 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
             .map((vc) => {
                 // wrapping the header and cell in div makes it so that the the table lib doesn't cut off the text
                 return {
-                    name: <div>{vc.label}</div>,
+                    name: <span>{vc.label}</span>,
                     selector: (row) => row[vc.value],
                     cell: (row) => <span>{row[vc.value]}</span>,
                     sortable: true,
