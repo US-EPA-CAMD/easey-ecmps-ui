@@ -611,13 +611,13 @@ const ModalDetails = ({
         </div>
         <div>
           {hasMainDropdown && !viewOnly && showInitialHelpText ? (
-            <div className="margin-bottom-2" className="modal-help">
+            <div className="margin-bottom-2 modal-help">
               <p className="margin-top-0">
                 <b>{initialDropdownText}</b>
               </p>
             </div>
           ) : hasMainDropdown && !viewOnly && !showInitialHelpText ? (
-            <div className="margin-bottom-2" className="modal-help">
+            <div className="margin-bottom-2 modal-help">
               <p className="margin-top-0">
                 <b>{selectedDropdownText}</b>
               </p>

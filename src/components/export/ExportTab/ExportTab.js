@@ -1,13 +1,11 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
-import { v4 as uuidv4 } from "uuid";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
