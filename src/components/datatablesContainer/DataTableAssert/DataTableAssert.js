@@ -350,7 +350,7 @@ export const DataTableAssert = ({
   const [createNewData, setCreateNewData] = useState(false);
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {debugger;
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
@@ -390,7 +390,7 @@ export const DataTableAssert = ({
   }, [mainDropdownChange, selectedModalData]);
 
   // Executed when "View" action is clicked
-  const openModal = (row, bool, create) => {
+  const openModal = (row, bool, create) => {debugger;
     let selectedData = null;
     setCreateNewData(create);
     if (dataPulled.length > 0 && !create) {
@@ -459,6 +459,9 @@ export const DataTableAssert = ({
     }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    if(hasMainDropdown && selectedData){
+      setMainDropdownChange(selectedData[mainDropdownName]);
+    }
     setSelectedModalData(
       modalViewData(
         selectedData,
