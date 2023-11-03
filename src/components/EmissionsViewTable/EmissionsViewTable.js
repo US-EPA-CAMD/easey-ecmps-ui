@@ -26,7 +26,8 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         const timeout = setTimeout(() => {
             setViewData(reduxCurrentTab?.viewData || []);
             setPending(false)
-        })
+        }, 500)
+        // add short delay of 500, without short delay sometimes empty table appears before loading spinner
 
         return () => clearTimeout(timeout)
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
