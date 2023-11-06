@@ -26,10 +26,10 @@ export const getMonitoringPlansSystemsComponentsTableRecords = (data) => {
       present = formatDateTime(el.endDate, el.endHour);
     }
     records.push({
+      id: el.id,
       col1: el.componentId,
       col2: el.componentTypeCode,
       col3: `${formatDateTime(el.beginDate, el.beginHour)} ➜ ${present}`.trim(),
-      col4: el.id,
     });
   });
   return records;
@@ -47,10 +47,10 @@ export const getMonitoringPlansSystemsFuelFlowsComponentsTableRecords = (
       present = formatDateTime(el.endDate, el.endHour);
     }
     records.push({
+      id: el.id,
       col1: el.fuelCode,
       col2: el.systemTypeCode,
       col3: `${formatDateTime(el.beginDate, el.beginHour)} ➜ ${present}`.trim(),
-      col4: el.id,
     });
   });
   return records;

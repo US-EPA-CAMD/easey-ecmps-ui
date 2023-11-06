@@ -43,6 +43,7 @@ import {
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import { successResponses } from "../../../utils/api/apiUtils";
+import "./DataTableSystems.scss"
 
 export const DataTableSystems = ({
   mdmData,
@@ -269,7 +270,7 @@ export const DataTableSystems = ({
           }}
         >
           <BreadcrumbLink>
-            <span>System</span>
+            <span className="margin-left-2 dt-systems-returnLink">System</span>
           </BreadcrumbLink>
         </Breadcrumb>
 
