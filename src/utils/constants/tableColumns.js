@@ -3,23 +3,23 @@ import { sortByPeriodAbbreviation } from '../../components/EvaluateAndSubmit/Col
 
 export const qaTestSummaryCols = [
 	{
-		name: "Unit/Stack Pipe ID",
+		name: <span>{"Unit/Stack Pipe ID"}</span>,
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System/Component ID",
+		name: <span>{"System/Component ID"}</span>,
 		selector: (row) =>
 			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{
-		name: "Test Type Code",
+		name: <span>{"Test Type Code"}</span>,
 		selector: (row) => row.testTypeCode,
 		sortable: true,
 	},
 	{
-		name: "Test Number",
+		name: <span>{"Test Number"}</span>,
 		selector: (row) => row.testNumber,
 		sortable: true,
 		// wrap: true,
@@ -27,30 +27,30 @@ export const qaTestSummaryCols = [
 		minWidth: '180px'
 	},
 	{
-		name: "Test Reason Code",
+		name: <span>{"Test Reason Code"}</span>,
 		selector: (row) => row.testReasonCode,
 		sortable: true,
 	},
 	{
-		name: "Test Result Code",
+		name: <span>{"Test Result Code"}</span>,
 		selector: (row) => row.testResultCode,
 		sortable: true,
 	},
 	{
-		name: "Year/Quarter",
+		name: <span>{"Year/Quarter"}</span>,
 		selector: (row) => row.year && row.quarter ? `${row.year} Q${row.quarter}` : "",
 		sortFunction: sortByPeriodAbbreviation,
 		sortable: true,
 	},
 	{
-		name: "Begin Date/Time",
+		name: <span>{"Begin Date/Time"}</span>,
 		selector: (row) =>
 			formatDateTime(row.beginDate, row.beginHour, row.beginMinute),
 		sortable: true,
 		wrap: true
 	},
 	{
-		name: "End Date/Time",
+		name: <span>{"End Date/Time"}</span>,
 		selector: (row) =>
 			formatDateTime(row.endDate, row.endHour, row.endMinute),
 		sortable: true,
@@ -60,28 +60,28 @@ export const qaTestSummaryCols = [
 
 export const qaCertificationEventDataCols = [
 	{
-		name: "Unit/Stack Pipe ID",
+		name: <span>{"Unit/Stack Pipe ID"}</span>,
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System/Component ID",
+		name: <span>{"System/Component ID"}</span>,
 		selector: (row) =>
 			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{
-		name: "Event Code",
+		name: <span>{"Event Code"}</span>,
 		selector: (row) => row.certificationEventCode,
 		sortable: true,
 	},
 	{
-		name: "Event Date/Time",
+		name: <span>{"Event Date/Time"}</span>,
 		selector: (row) => formatDateTime(row.certificaitonEventDate, row.certificationEventHour, null),
 		sortable: true,
 	},
 	{
-		name: "Required Test Code",
+		name: <span>{"Required Test Code"}</span>,
 		selector: (row) => row.requiredTestCode,
 		sortable: true,
 	},
@@ -89,39 +89,39 @@ export const qaCertificationEventDataCols = [
 
 export const qaTestExtensionExemptionDataCols = [
 	{
-		name: "Unit/Stack Pipe ID",
+		name: <span>{"Unit/Stack Pipe ID"}</span>,
 		selector: (row) => (row.unitId ? row.unitId : row.stackPipeId),
 		sortable: true,
 	},
 	{
-		name: "System/Component ID",
+		name: <span>{"System/Component ID"}</span>,
 		selector: (row) =>
 			row.monitoringSystemId ? row.monitoringSystemId : row.componentId,
 		sortable: true,
 	},
 	{
-		name: "Submission Availability Code",
+		name: <span>{"Submission Availability Code"}</span>,
 		selector: (row) => row.submissionAvailabilityCode,
 		sortable: true,
 	},
 	{
-		name: "Pending Status Code",
+		name: <span>{"Pending Status Code"}</span>,
 		selector: (row) => row.pendingStatusCode,
 		sortable: true,
 	},
 	{
-		name: "Year/Quarter",
+		name: <span>{"Year/Quarter"}</span>,
 		selector: (row) => row.year && row.quarter ? `${row.year} Q${row.quarter}` : "",
 		sortFunction: sortByPeriodAbbreviation,
 		sortable: true,
 	},
 	{
-		name: "Fuel Code",
+		name: <span>{"Fuel Code"}</span>,
 		selector: (row) => row.fuelCode,
 		sortable: true,
 	},
 	{
-		name: "Extension/ Exemption Code",
+		name: <span>{"Extension/ Exemption Code"}</span>,
 		selector: (row) => row.extensionOrExemptionCode,
 		sortable: true,
 	},

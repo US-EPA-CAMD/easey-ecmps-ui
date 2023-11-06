@@ -6,7 +6,7 @@ import DataTableSystemsComponents from "../DataTableSystemsComponents/DataTableS
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import ModalDetails from "../../ModalDetails/ModalDetails";
-import NotFound from "../../NotFound/NotFound";
+
 import {
   extractUserInput,
   validateUserInput,
@@ -43,6 +43,7 @@ import {
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import { successResponses } from "../../../utils/api/apiUtils";
+import "./DataTableSystems.scss"
 
 export const DataTableSystems = ({
   mdmData,
@@ -55,6 +56,7 @@ export const DataTableSystems = ({
   revertedState,
   setRevertedState,
   selectedRangeInFirstTest,
+  setUpdateRelatedTables,
   currentTabIndex,
   //
 
@@ -267,7 +269,7 @@ export const DataTableSystems = ({
           }}
         >
           <BreadcrumbLink>
-            <span>System</span>
+            <span className="margin-left-2 dt-systems-returnLink">System</span>
           </BreadcrumbLink>
         </Breadcrumb>
 
@@ -383,6 +385,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("saveSystems failed", error));
       if (successResponses.includes(resp.status)) {
         setUpdateSystemTable(true);
+        setUpdateRelatedTables(true);
         executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -407,6 +410,7 @@ export const DataTableSystems = ({
       if (successResponses.includes(resp.status)) {
         setSecondLevel(false);
         setUpdateSystemTable(true);
+        setUpdateRelatedTables(true);
         executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -448,6 +452,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("saveAnalyzerRanges failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -490,6 +495,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("createAnalyzerRanges failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -536,6 +542,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("saveSystemsFuelFlows failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -569,6 +576,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("createSystemsFuelFlows failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -619,6 +627,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("createSystemsComponents failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -663,6 +672,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("saveSystemsComponents failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
+        setUpdateRelatedTables(true);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
