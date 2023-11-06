@@ -7,7 +7,7 @@ export const DefaultTemplate = ({
   codeGroups,
   columnNames,
   dataLoaded,
-  titleBreak,
+  opLevelRefMethod,
 }) => {
   if (!data || data.length === 0) {
     return <></>;
@@ -35,16 +35,17 @@ export const DefaultTemplate = ({
 
   return (
     <div className="margin-bottom-3">
-      {!titleBreak && (
+      {!opLevelRefMethod && (
         <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
           {title}
         </h3>
       )}
 
-      {titleBreak && (
+      {opLevelRefMethod && (
         <div>
           <hr className="border border-dashed" />
-          {title}
+          <div>{title}</div>
+          <div>Reference Method Used: {`${opLevelRefMethod["referenceMethodCode"]} - ${opLevelRefMethod["referenceMethodDescription"]}`}</div>
           <hr className="border border-dashed" />
         </div>
       )}
