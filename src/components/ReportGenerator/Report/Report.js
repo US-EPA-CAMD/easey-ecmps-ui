@@ -193,7 +193,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                     columnNames={columnNames[index]}
                     data={results[index]}
                     dataLoaded={dataLoaded}
-                    titleBreak={detail.templateType === "DEFAULT2"}
+                    opLevelRefMethod={detail.results[0]}
                   />
                 );
               }
