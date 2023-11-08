@@ -2,13 +2,18 @@ import React, { useEffect } from "react";
 import config from "../../config";
 import _ from "lodash";
 
-export const EvaluateRefresh = ({ dataList, storedFilters, lastEvalTime }) => {
+export const EvaluateRefresh = ({
+  dataList,
+  storedFilters,
+  lastEvalTime,
+  forceReloadTables,
+}) => {
   const refreshPage = async () => {
     if (storedFilters.current !== null) {
       for (const [key, value] of Object.entries(dataList)) {
         let data;
 
-        const { ref, rowId, call, setState } = value;
+        const { ref, rowId, call } = value;
 
         if (key !== "MP") {
           //Filter emissions by quarter as well
@@ -52,7 +57,7 @@ export const EvaluateRefresh = ({ dataList, storedFilters, lastEvalTime }) => {
         }
 
         if (changes > 0) {
-          setState(_.cloneDeep(ref.current));
+          forceReloadTables();
         }
       }
     }
