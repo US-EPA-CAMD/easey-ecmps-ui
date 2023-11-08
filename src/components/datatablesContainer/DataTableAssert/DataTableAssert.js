@@ -459,6 +459,9 @@ export const DataTableAssert = ({
     }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    if(hasMainDropdown && selectedData){
+      setMainDropdownChange(selectedData[mainDropdownName]);
+    }
     setSelectedModalData(
       modalViewData(
         selectedData,
