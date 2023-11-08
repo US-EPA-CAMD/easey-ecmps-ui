@@ -638,7 +638,7 @@ export const DataTableSystemsComponents = ({
                 locationId={locationSelectValue}
                 systemId={selected.id}
                 selectionHandler={setSelectedUnlinkedComponent}
-                caption={"Select Component by ID or Type"}
+                caption={"Select from list of components not already associated with the system."}
                 data={selectedComponentsModalData}
                 backBtn={() => {
                   setCreateNewComponentFlag(false);
