@@ -262,7 +262,7 @@ const FilterForm = ({
             <Button
               data-testid="filter-callback-button"
               onClick={filterClick}
-              disabled={filesSelected === 0}
+              disabled={!filesSelected}
             >
               {buttonText}
             </Button>
