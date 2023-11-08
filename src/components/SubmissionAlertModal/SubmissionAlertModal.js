@@ -13,9 +13,12 @@ if (!modalRoot) {
   document.body.appendChild(modalRoot);
 }
 
-export const SubmissionSuccessModal = ({
+export const SubmissionAlertModal = ({
   width = "30%",
   left = "35%",
+  type,
+  heading,
+  message,
   callback,
 }) => {
   const modalRef = createRef();
@@ -66,9 +69,8 @@ export const SubmissionSuccessModal = ({
 
             <div className="modal-body margin-x-2 padding-top-0 modal-color maxh-tablet overflow-y-auto">
               <div className="display-flex flex-column flex-align-center padding-y-2">
-                <Alert type="success" heading="Success" headingLevel="h4">
-                  The records you submitted have successfully been queued for
-                  submission.
+                <Alert type={type} heading={heading} headingLevel="h4">
+                  {message}
                 </Alert>
                 <div className="margin-top-2">
                   <Button
@@ -89,4 +91,4 @@ export const SubmissionSuccessModal = ({
     modalRoot
   );
 };
-export default SubmissionSuccessModal;
+export default SubmissionAlertModal;
