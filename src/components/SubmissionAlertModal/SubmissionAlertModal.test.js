@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import SubmissionSuccessModal from "./SubmissionSuccessModal";
+import SubmissionSuccessModal from "./SubmissionAlertModal";
 
 window.scrollTo = jest.fn();
 

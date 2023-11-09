@@ -193,7 +193,11 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                     columnNames={columnNames[index]}
                     data={results[index]}
                     dataLoaded={dataLoaded}
-                    opLevelRefMethod={detail.results[0]}
+                    opLevelRefMethod={
+                      detail.templateType === "DEFAULT2"
+                        ? detail.results[0]
+                        : null
+                    }
                   />
                 );
               }

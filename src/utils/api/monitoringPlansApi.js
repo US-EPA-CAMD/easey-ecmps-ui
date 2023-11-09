@@ -129,17 +129,27 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
     .catch(handleError);
 };
 
-export const postCheckoutMonitoringPlanConfiguration = async (id) => {
+export const postCheckoutMonitoringPlanConfiguration = async (
+  id,
+  handleError = true
+) => {
   const url = getApiUrl(`/check-outs/plans/${id}`, true);
-  try {
-    return (
-      await secureAxios({
-        method: "POST",
-        url: url,
-      })
-    ).data;
-  } catch (error) {
-    return handleError(error);
+  if (handleError) {
+    try {
+      return (
+        await secureAxios({
+          method: "POST",
+          url: url,
+        })
+      ).data;
+    } catch (error) {
+      return handleError(error);
+    }
+  } else {
+    return await secureAxios({
+      method: "POST",
+      url: url,
+    });
   }
 };
 

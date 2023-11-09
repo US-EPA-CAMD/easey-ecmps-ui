@@ -199,12 +199,10 @@ export const getAirEmissionsRecords = (data) => {
 
 export const getFlowRunRecords = (data) => {
   const records = [];
-  const foundOneTraversePoint = data.find(f=> f.numberOfTraversePoints > 0);
   data.forEach((el) => {
     records.push({
       id: el.id,
       rataRunId: el.rataRunId,
-      expandable: foundOneTraversePoint === undefined ? true : el.id === foundOneTraversePoint.id,
       col1: el.numberOfTraversePoints,
       col2: el.barometricPressure,
       col3: el.staticStackPressure,

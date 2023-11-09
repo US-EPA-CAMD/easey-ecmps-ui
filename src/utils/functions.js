@@ -67,17 +67,15 @@ export const formatDate = (dateString, delim = "-") => {
 // Returns date in yyyy-mm-dd
 export const formatDateToISO = (date) => {
   var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
 
-  if (month.length < 2) 
-      month = '0' + month;
-  if (day.length < 2) 
-      day = '0' + day;
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
 
-  return [year, month, day].join('-');
-}
+  return [year, month, day].join("-");
+};
 
 export const getConfigValue = (key, defaultValue = "") => {
   let returnValue;
@@ -193,10 +191,18 @@ export const displayReport = (params) => {
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
-export const displayEmissionsReport = (orisCode, mpId, year, quarter, dateHr) => {
-  const ws = window.location.href.includes("/workspace") ? "/workspace":"";
+export const displayEmissionsReport = (
+  orisCode,
+  mpId,
+  year,
+  quarter,
+  dateHr
+) => {
+  const ws = window.location.href.includes("/workspace") ? "/workspace" : "";
 
-  const url = `${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(dateHr)}&hour=${new Date(dateHr).getHours()}`;
+  const url = `${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(
+    dateHr
+  )}&hour=${new Date(dateHr).getHours()}`;
   window.open(url, "Emissions Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
@@ -209,7 +215,9 @@ export const addEvalStatusCell = (columns, callback) =>
           {evalStatusesWithLinks.has(row.evalStatusCode) ? (
             <button
               className={"hyperlink-btn cursor-pointer"}
-              onClick={() => callback(row, false)}
+              onClick={() => {
+                callback(row, false);
+              }}
             >
               {row.evalStatusCodeDescription}
             </button>
