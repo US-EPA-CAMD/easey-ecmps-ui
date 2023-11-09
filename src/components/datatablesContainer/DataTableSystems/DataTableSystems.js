@@ -386,6 +386,7 @@ export const DataTableSystems = ({
       if (successResponses.includes(resp.status)) {
         setUpdateSystemTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -411,6 +412,7 @@ export const DataTableSystems = ({
         setSecondLevel(false);
         setUpdateSystemTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         executeOnClose();
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -453,6 +455,7 @@ export const DataTableSystems = ({
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -496,6 +499,7 @@ export const DataTableSystems = ({
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -543,6 +547,7 @@ export const DataTableSystems = ({
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -576,6 +581,7 @@ export const DataTableSystems = ({
         .catch((error) => console.log("createSystemsFuelFlows failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
+        setErrorMsgs([]);
         setUpdateRelatedTables(true);
         return true;
       } else {
@@ -628,6 +634,7 @@ export const DataTableSystems = ({
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
@@ -673,6 +680,7 @@ export const DataTableSystems = ({
       if (resp.status >= 200 && resp.status < 300) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
         return true;
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
