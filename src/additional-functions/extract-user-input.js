@@ -171,7 +171,12 @@ const checkFormulaBeginDateAndHour = (userInput, dataTableName, errors) => {
  * // returns true
  * checkBeginBeforeEndDate("2023-08-03", "2023-08-04");
  */
-const checkBeginBeforeEndDate = (beginDate, endDate, beginHour = 0, endHour = 0, beginMinute = 0, endMinute = 0) => {
+const checkBeginBeforeEndDate = (beginDate, endDate, beginHour, endHour, beginMinute, endMinute) => {
+  // set default values to 0 if null/undefined
+  beginHour ??= 0;
+  endHour ??= 0;
+  beginMinute ??= 0;
+  endMinute ??= 0;
   // Create Date objects using the provided begin and end dates, hours, and minutes
   const begin = new Date(`${beginDate}T${String(beginHour).padStart(2, '0')}:${String(beginMinute).padStart(2, '0')}:00`);
   const end = new Date(`${endDate}T${String(endHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}:00`);
