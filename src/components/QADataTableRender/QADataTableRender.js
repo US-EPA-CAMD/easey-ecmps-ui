@@ -21,7 +21,6 @@ import {
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
-import { qaFlowRataRunProps } from "../../additional-functions/qa-dataTable-props";
 
 const QADataTableRender = ({
   columnNames,
@@ -99,19 +98,21 @@ const QADataTableRender = ({
   };
 
   const createExpandBTNS = (index, row) => {
-    if(dataTableName === qaFlowRataRunProps().dataTableName){
-      if(row.expandable)
-        return renderExpandableIcon();
-      else
-        return null;
-    }else{
-      return renderExpandableIcon();
-    }
-    function renderExpandableIcon () {
-      return !totalExpand[index] || totalExpand[index] === 0 ? (
-        <Add
-          className="expandBTN "
-          onClick={() => {
+    return !totalExpand[index] || totalExpand[index] === 0 ? (
+      <Add
+        className="expandBTN "
+        onClick={() => {
+          expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(
+            dataTableName.replaceAll(" ", "-"),
+            index,
+            false,
+            row.col1
+          );
+          row.expanded = true;
+        }}
+        onKeyPress={(event) => {
+          if (event.key === "Enter") {
             expandRowBTN(index);
             returnsFocusDatatableExpandBTN(
               dataTableName.replaceAll(" ", "-"),
@@ -120,32 +121,32 @@ const QADataTableRender = ({
               row.col1
             );
             row.expanded = true;
-          }}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              expandRowBTN(index);
-              returnsFocusDatatableExpandBTN(
-                dataTableName.replaceAll(" ", "-"),
-                index,
-                false,
-                row.col1
-              );
-              row.expanded = true;
-            }
-          }}
-          title={`Click to expand row ${index + 1}`}
-          name={`expand row ${index + 1}`}
-          id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
-            }`}
-          aria-expanded={false}
-          role="button"
-          tabIndex="0"
-          aria-hidden="false"
-        />
-      ) : (
-        <Remove
-          className="expandBTN "
-          onClick={() => {
+          }
+        }}
+        title={`Click to expand row ${index + 1}`}
+        name={`expand row ${index + 1}`}
+        id={`expandRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
+          }`}
+        aria-expanded={false}
+        role="button"
+        tabIndex="0"
+        aria-hidden="false"
+      />
+    ) : (
+      <Remove
+        className="expandBTN "
+        onClick={() => {
+          expandRowBTN(index);
+          returnsFocusDatatableExpandBTN(
+            dataTableName.replaceAll(" ", "-"),
+            index,
+            true,
+            row.col1
+          );
+          row.expanded = false;
+        }}
+        onKeyPress={(event) => {
+          if (event.key === "Enter") {
             expandRowBTN(index);
             returnsFocusDatatableExpandBTN(
               dataTableName.replaceAll(" ", "-"),
@@ -154,30 +155,18 @@ const QADataTableRender = ({
               row.col1
             );
             row.expanded = false;
-          }}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              expandRowBTN(index);
-              returnsFocusDatatableExpandBTN(
-                dataTableName.replaceAll(" ", "-"),
-                index,
-                true,
-                row.col1
-              );
-              row.expanded = false;
-            }
-          }}
-          title={`Click to collapse row ${index + 1}`}
-          name={`collapse row ${index + 1}`}
-          id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
-            }`}
-          role="button"
-          tabIndex="0"
-          aria-expanded={true}
-          aria-hidden="false"
-        />
-      );
-    }
+          }
+        }}
+        title={`Click to collapse row ${index + 1}`}
+        name={`collapse row ${index + 1}`}
+        id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
+          }`}
+        role="button"
+        tabIndex="0"
+        aria-expanded={true}
+        aria-hidden="false"
+      />
+    );
     
   };
 
