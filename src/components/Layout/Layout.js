@@ -32,10 +32,23 @@ const Layout = (props) => {
     }
   }, [outageMsgContent]);
 
+  useEffect(() => {
+    var elem = document.querySelector("#navRightSide");
+    if (elem) {
+      let form = elem.querySelector('form.usa-search');
+      let sField = elem.querySelector('[data-testid="searchField"]');
+      if (form && sField) {
+        form?.classList.add('usa-search--small');
+        form.innerHTML = sField.innerHTML;
+      }
+    }
+  }, []);
+
   // noinspection JSCheckFunctionSignatures
   const childrenWithProps = React.Children.map(props.children, (child) =>
     React.cloneElement(child)
   );
+
   return (
     <div id="layoutContainer">
       <div className="react-transition fade-in padding-bottom-5" id="layout">

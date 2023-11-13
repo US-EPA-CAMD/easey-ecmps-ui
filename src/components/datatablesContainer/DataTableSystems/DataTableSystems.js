@@ -141,6 +141,7 @@ export const DataTableSystems = ({
         })
         .catch((error) => console.log("getMonitoringSystems failed", error));
       setUpdateSystemTable(false);
+      setUpdateRelatedTables(false);
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

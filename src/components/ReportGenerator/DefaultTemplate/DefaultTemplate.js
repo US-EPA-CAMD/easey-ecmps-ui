@@ -6,12 +6,15 @@ export const DefaultTemplate = ({
   title,
   codeGroups,
   columnNames,
-  dataLoaded,
-  opLevelRefMethod,
+  templateType,
+  referenceMethod,
 }) => {
   if (!data || data.length === 0) {
     return <></>;
   }
+
+  const refMethodCode = referenceMethod["referenceMethodCode"];
+  const refMethodDescription = referenceMethod["referenceMethodDescription"];
 
   const columns = [];
   columnNames.forEach((name, index) => {
@@ -35,19 +38,17 @@ export const DefaultTemplate = ({
 
   return (
     <div className="margin-bottom-3">
-      {!opLevelRefMethod && (
-        <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
-          {title}
-        </h3>
-      )}
-
-      {opLevelRefMethod && (
+      {templateType === "DEFAULT2" ? (
         <div>
           <hr className="border border-dashed" />
           <div>{title}</div>
-          <div>Reference Method Used: {`${opLevelRefMethod["referenceMethodCode"]} - ${opLevelRefMethod["referenceMethodDescription"]}`}</div>
+          <div>Reference Method Used: {`${refMethodCode} - ${refMethodDescription}`}</div>
           <hr className="border border-dashed" />
         </div>
+      ): (
+        <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+          {title}
+        </h3>
       )}
 
       <div className="width-auto margin-top-0 data-display-table-report">
