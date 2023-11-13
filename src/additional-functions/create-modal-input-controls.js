@@ -28,7 +28,6 @@ export const modalViewData = (
 
   //for independent dropdowns
   const setInitialPreFilter = (
-    dropdownType,
     propertyName,
     singleMDMCodeList
   ) => {
@@ -36,14 +35,16 @@ export const modalViewData = (
 
     const selectedFilteredCodeArray = allFilteredMDMCodesArray[0];
 
-    const filteredOutSingleMDMCodeList = singleMDMCodeList.filter((code) =>
-      selectedFilteredCodeArray[propertyName].includes(code.code)
-    );
-    filteredOutSingleMDMCodeList.unshift({
-      code: "",
-      name: "-- Select a value --",
-    });
-    totalOptionsClone[propertyName] = filteredOutSingleMDMCodeList;
+    if (selectedFilteredCodeArray[propertyName] != null) {
+      const filteredOutSingleMDMCodeList = singleMDMCodeList.filter((code) =>
+        selectedFilteredCodeArray[propertyName].includes(code.code)
+      );
+      filteredOutSingleMDMCodeList.unshift({
+        code: "",
+        name: "-- Select a value --",
+      });
+      totalOptionsClone[propertyName] = filteredOutSingleMDMCodeList;
+    }
   };
 
   const setInitialPreFilterDependent = (propertyName) => {
