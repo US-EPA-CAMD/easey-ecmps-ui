@@ -41,7 +41,7 @@ export const defaultsDataTableProps = (location) => {
       defaultValue: ["Default Value", "input", "", ""],
       defaultUnitsOfMeasureCode: ["Units of Measure", "dropdown", "", ""],
       defaultPurposeCode: ["Purpose", "dropdown", "", ""],
-      fuelCode: ["Fuel Code", "dropdown", "", ""],
+      fuelCode: ["Fuel Code", "independentDropdown", "", ""],
       operatingConditionCode: ["Operating Condition", "dropdown", "", ""],
       defaultSourceCode: ["Source of Value", "dropdown", "", ""],
       groupID: ["Group ID", "input", "", ""],
