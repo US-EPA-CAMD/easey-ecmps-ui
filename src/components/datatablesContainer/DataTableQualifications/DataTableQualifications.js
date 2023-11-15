@@ -283,6 +283,7 @@ export const DataTableQualifications = ({
           setOpenCPMS(false);
         }
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
