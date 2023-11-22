@@ -106,7 +106,7 @@ const QAMaintenanceData = ({
 
   const baseStaticCols = [
     {
-      name: 'Select',
+      name: <span>{'Select'}</span>,
       width: '95px',
       cell: (row, idx) => (
         <div>
@@ -145,14 +145,14 @@ const QAMaintenanceData = ({
       ),
     },
     {
-      name: 'Facility Name / ID',
+      name: <span>{'Facility Name / ID'}</span>,
       width: '210px',
       selector: row => row.facilityName,
 
       sortable: true,
     },
     {
-      name: 'MP Location',
+      name: <span>{'MP Location'}'</span>,
       width: '200px',
       selector: row => row.locationId,
       sortable: true,

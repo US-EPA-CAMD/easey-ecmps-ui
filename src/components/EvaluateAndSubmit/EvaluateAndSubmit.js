@@ -10,10 +10,11 @@ import {
   getMatsBulkFilesReviewSubmit,
 } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
-import DataTables from "./DataTables/DataTables";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
+import SubmissionAlertModal from "../SubmissionAlertModal/SubmissionAlertModal";
 import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
 import {
   submitData,
   triggerBulkEvaluation,
@@ -31,10 +32,11 @@ import {
   qaTeeColumns,
   matsBulkFilesColumns,
 } from "./ColumnMappings";
-import { checkoutAPI } from "../../additional-functions/checkout";
-import { getDropDownFacilities } from "./utils/functions";
+import { canSelectRow, getDropDownFacilities } from "./utils/functions";
 import useGetContent from "./utils/useGetContent";
-import SubmissionSuccessModal from "../SubmissionSuccessModal/SubmissionSuccessModal";
+import { CategoryTable } from "./CategoryTable/CategoryTable";
+import { v4 } from "uuid";
+import { displayAppWarning } from "../../additional-functions/app-error";
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
@@ -49,41 +51,37 @@ export const EvaluateAndSubmit = ({
 
   const storedFilters = useRef(null);
 
+  const [reloadTables, setReloadTables] = useState(false);
+
+  const [selectable, setSelectable] = useState(true);
+
   const evalClickedAtTime = useRef(0);
   const [dropdownFacilities, setDropdownFacilities] = useState([]);
   const [activityId, setActivityId] = useState("");
   const [excludeErrors, setExcludeErrors] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [showSuccesModal, setShowSuccessModal] = useState(false);
   const [hasClickedSubmit, setHasClickedSubmit] = useState(false);
 
-  const [numFilesSelected, setNumFilesSelected] = useState(0);
-  const filesSelected = useRef(0);
+  const [filesSelected, setFilesSelected] = useState(false);
 
-  const [qaTestSummary, setQaTestSummary] = useState([]);
   const qaTestSumRef = useRef([]);
-
-  const [qaCertEvent, setQaCertEvent] = useState([]);
   const qaCertEventRef = useRef([]);
-
-  const [qaTee, setQaTee] = useState([]);
   const qaTeeRef = useRef([]);
-
-  const [emissions, setEmissions] = useState([]);
   const emissionsRef = useRef([]);
-
-  const [matsBulkFiles, setMatsBulkFiles] = useState([]);
   const matsBulkFilesRef = useRef([]);
-
-  const [monPlans, setMonPlans] = useState([]);
   const monPlanRef = useRef([]);
 
+  const [showSuccesModal, setShowSuccessModal] = useState(false);
+  const modalType = useRef("");
+  const modalHeading = useRef("");
+  const modalMessage = useRef("");
+
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+
   const { userId } = user;
 
   const monitorPlanIdToSelectedMap = useRef(new Map()); // Map each monitor plan to a count of how many times it has been selected
-  const userCheckedOutPlans = useRef(new Set());
 
   useEffect(() => {
     if (finalSubmitStage && componentType === "Submission") {
@@ -97,12 +95,28 @@ export const EvaluateAndSubmit = ({
     }
   }, [finalSubmitStage, componentType]);
 
+  useEffect(() => {
+    const mapping = new Map();
+    for (const obj of checkedOutLocations) {
+      mapping.set(obj.monPlanId, obj.checkedOutBy);
+    }
+
+    for (const list of dataList) {
+      for (const curr of list.ref.current) {
+        if (mapping.has(curr.monPlanId)) {
+          curr.checkedOutBy = mapping.get(curr.monPlanId);
+        } else {
+          curr.checkedOutBy = "";
+        }
+      }
+    }
+    forceReloadTables();
+  }, [checkedOutLocations]);
+
   let dataList = [
     {
       columns: monPlanColumns,
       ref: monPlanRef,
-      state: monPlans,
-      setState: setMonPlans,
       call: getMonitoringPlans,
       rowId: "monPlanId",
       name: "Monitoring Plan",
@@ -112,8 +126,6 @@ export const EvaluateAndSubmit = ({
     {
       columns: qaTestSummaryColumns,
       ref: qaTestSumRef,
-      state: qaTestSummary,
-      setState: setQaTestSummary,
       call: getQATestSummaryReviewSubmit,
       rowId: "testSumId",
       name: "Test Data",
@@ -123,8 +135,6 @@ export const EvaluateAndSubmit = ({
     {
       columns: qaCertEventColumns,
       ref: qaCertEventRef,
-      state: qaCertEvent,
-      setState: setQaCertEvent,
       call: getQACertEventReviewSubmit,
       rowId: "qaCertEventIdentifier",
       name: "QA Certification Events",
@@ -134,8 +144,6 @@ export const EvaluateAndSubmit = ({
     {
       columns: qaTeeColumns,
       ref: qaTeeRef,
-      state: qaTee,
-      setState: setQaTee,
       call: getQATeeReviewSubmit,
       rowId: "testExtensionExemptionIdentifier",
       name: "Test Extension Exemptions Data",
@@ -145,8 +153,6 @@ export const EvaluateAndSubmit = ({
     {
       columns: emissionsColumns,
       ref: emissionsRef,
-      state: emissions,
-      setState: setEmissions,
       call: getEmissionsReviewSubmit,
       rowId: "periodAbbreviation",
       name: "Emissions",
@@ -156,8 +162,6 @@ export const EvaluateAndSubmit = ({
     {
       columns: matsBulkFilesColumns,
       ref: matsBulkFilesRef,
-      state: matsBulkFiles,
-      setState: setMatsBulkFiles,
       call: getMatsBulkFilesReviewSubmit,
       rowId: "matsBulkFileIdentifier",
       name: "MATS Bulk Files",
@@ -170,71 +174,35 @@ export const EvaluateAndSubmit = ({
     dataList = dataList.filter((f) => f.rowId !== "matsBulkFileIdentifier");
   }
 
-  const getUserPlans = async () => {
-    const data = (await getCheckedOutLocations()).data;
-
-    userCheckedOutPlans.current = new Set(
-      data.filter((l) => l.checkedOutBy === userId).map((m) => m.monPlanId)
-    );
-  };
-
   const idToPermissionsMap = useRef(new Map());
-  const userPermissions = user.facilities || [];
+  useEffect(() => {
+    idToPermissionsMap.current = new Map();
+    const userPermissions = user.facilities || null;
+    if (userPermissions) {
+      for (const p of userPermissions) {
+        idToPermissionsMap.current.set(p.orisCode, p.permissions);
+      } //eslint-disable-next-line
+    } else {
+      idToPermissionsMap.current = null;
+    }
+  });
+
   const populateDropdown = async () => {
     setDropdownFacilities(await getDropDownFacilities());
   };
+
   useEffect(() => {
-    // Get permissions from user object here
     populateDropdown();
-    for (const p of userPermissions) {
-      idToPermissionsMap.current.set(p.orisCode, p.permissions);
-    }
-    return () => {
-      checkInAllCheckedOutLocations();
-    };
-
-    //eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    const planToOwnerCheckouts = new Map();
-    for (const loc of checkedOutLocations) {
-      planToOwnerCheckouts.set(loc.monPlanId, loc.checkedOutBy);
-    }
-
-    getUserPlans();
-
-    for (const cat of dataList) {
-      for (const chunk of cat.ref.current) {
-        if (planToOwnerCheckouts.has(chunk.monPlanId)) {
-          chunk.checkedOut = true;
-          if (planToOwnerCheckouts.get(chunk.monPlanId) === userId) {
-            chunk.userCheckedOut = true;
-          }
-        } else {
-          chunk.checkedOut = false;
-          chunk.userCheckedOut = false;
-        }
-      }
-      cat.setState(_.cloneDeep(cat.ref.current));
-    } //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedOutLocations, userId]);
 
   const filterClick = () => {
     if (componentType === "Submission") {
       setShowModal(true);
+      console.log("Submission Evaluation");
     } else {
       finalSubmission(triggerBulkEvaluation);
+      console.log("Emission Evaluation");
     }
-  };
-
-  const updateFilesSelected = (bool) => {
-    if (bool) {
-      filesSelected.current = filesSelected.current + 1;
-    } else {
-      filesSelected.current = filesSelected.current - 1;
-    }
-    setNumFilesSelected(filesSelected.current);
   };
 
   const closeModal = () => {
@@ -247,24 +215,89 @@ export const EvaluateAndSubmit = ({
     setFinalSubmitStage(true);
 
     for (const value of dataList) {
-      const { ref, setState } = value;
-      ref.current = ref.current.filter((d) => d.selected);
-      for (const item of ref.current) {
-        item.viewOnly = true;
-      }
-      setState(_.cloneDeep(ref.current));
+      value.ref.current = value.ref.current.filter((r) => r.isSelected);
     }
+
+    setSelectable(false);
+
+    forceReloadTables();
+  };
+
+  const checkOutLocationsOrRollback = async () => {
+    const checkedOutLocations = (await getCheckedOutLocations()).data;
+
+    console.log(checkedOutLocations);
+
+    const checkOutMapping = new Map();
+    for (const loc of checkedOutLocations) {
+      checkOutMapping.set(loc.monPlanId, loc.checkedOutBy);
+    }
+
+    const mps = getSelectedMPIds();
+
+    const promises = [];
+    for (const mp of mps) {
+      //Check for a different userId here and also prevent checking in or out
+      if (checkOutMapping.has(mp) && checkOutMapping.get(mp) !== userId) {
+        return false;
+      } else if (!checkOutMapping.has(mp)) {
+        promises.push(mpApi.postCheckoutMonitoringPlanConfiguration(mp, false));
+      }
+    }
+
+    //Determine if we need to rollback the submission
+    const promiseStatuses = await Promise.allSettled(promises);
+    if (promiseStatuses.find((ps) => ps.status === "rejected")) {
+      const successes = promiseStatuses.filter((f) => f.status === "fulfilled");
+      for (const success of successes) {
+        //Check back in the other records that succeeded
+        mpApi.deleteCheckInMonitoringPlanConfiguration(
+          success.value.data.monPlanId
+        );
+      }
+      return false;
+    }
+
+    return true;
   };
 
   const finalSubmission = async (callback) => {
+    if (!(await checkOutLocationsOrRollback())) {
+      if (componentType === "Submission") {
+        modalType.current = "warning";
+        modalHeading.current = "Alert";
+        modalMessage.current =
+          "One or more of the locations you attempted to evaluate or submit has been checked out by a different user. None of the files were submitted / evaluated as a result. Please try again.";
+        setShowSuccessModal(true);
+
+        return;
+      } else {
+        window.scrollTo(0, 0);
+
+        displayAppWarning(
+          "One or more of the locations you attempted to evaluate or submit has been checked out by a different user. None of the files were submitted / evaluated as a result. Please try again."
+        );
+
+        //Rollback selections
+        for (const list of dataList) {
+          for (const current of list.ref.current) {
+            current.isSelected = false;
+          }
+        }
+
+        forceReloadTables();
+        return;
+      }
+    }
+
     evalClickedAtTime.current = new Date().getTime();
     setSubmitting(true);
     const activeMPSet = new Set();
     // Compile one master set of monitor plan ids that are being submitted
     for (const value of dataList) {
-      const { ref, setState } = value;
+      const { ref } = value;
       for (const chunk of ref.current) {
-        if (chunk.selected) {
+        if (chunk.isSelected) {
           if (componentType === "Evaluate") {
             chunk.evalStatusCode = "INQ";
             chunk.evalStatusCodeDescription = "In Queue";
@@ -273,7 +306,8 @@ export const EvaluateAndSubmit = ({
         }
       }
       if (componentType === "Evaluate") {
-        setState(_.cloneDeep(ref.current));
+        //Master state change
+        forceReloadTables();
       }
     }
 
@@ -287,6 +321,7 @@ export const EvaluateAndSubmit = ({
     payload.userEmail = user.email;
 
     payload.items = [];
+    payload.hasCritErrors = false;
 
     for (const monPlanId of activeMPSet) {
       const newItem = {};
@@ -294,9 +329,17 @@ export const EvaluateAndSubmit = ({
       //First check the monitor plan to see if we should be submitting it
       if (
         monPlanRef.current.filter(
-          (f) => f.monPlanId === monPlanId && f.selected
+          (f) => f.monPlanId === monPlanId && f.isSelected
         ).length > 0
       ) {
+        const plan = monPlanRef.current.find(
+          (f) => f.monPlanId === monPlanId && f.isSelected
+        );
+
+        if (plan.evalStatusCode === "ERR") {
+          payload.hasCritErrors = true;
+        }
+
         newItem.submitMonPlan = true;
       } else {
         newItem.submitMonPlan = false;
@@ -304,30 +347,47 @@ export const EvaluateAndSubmit = ({
 
       //Build QA datasets for payload
       newItem.testSumIds = qaTestSumRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.selected)
+        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.selected)
+        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.selected)
+        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+
           return m.testExtensionExemptionIdentifier;
         });
 
       //Final step to add emissions data for specific monPlan
       newItem.emissionsReportingPeriods = emissionsRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.selected)
-        .map((m) => m.periodAbbreviation);
+        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+        .map((m) => {
+          if (m.evalStatusCode === "ERR") {
+            payload.hasCritErrors = true;
+          }
+          return m.periodAbbreviation;
+        });
 
       if (componentType === "Submission") {
         // Iterate MATs bulk files and append them to the submission payload
         newItem.matsBulkFiles = matsBulkFilesRef.current
-          .filter((f) => f.monPlanId === monPlanId && f.selected)
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
           .map((m) => m.matsBulkFileIdentifier);
       }
 
@@ -337,122 +397,141 @@ export const EvaluateAndSubmit = ({
 
     try {
       await callback(payload);
-      checkInAllCheckedOutLocations();
+      //checkInAllCheckedOutLocations();
       setSubmitting(false);
       if (componentType === "Submission") {
-        //TODO Pop submission modal / hide submission buttons
         setHasClickedSubmit(true);
+        modalType.current = "success";
+        modalHeading.current = "Success";
+        modalMessage.current = "Successfully submitted files to the queue";
         setShowSuccessModal(true);
       } else {
         for (const value of dataList) {
           const { ref } = value;
           for (const chunk of ref.current) {
-            chunk.selected = false;
+            chunk.isSelected = false;
+            chunk.isDisabled = true;
           }
         }
         monitorPlanIdToSelectedMap.current = new Map();
-        setNumFilesSelected(0);
+        forceReloadTables();
       }
     } catch (e) {
-      handleError(e);
+      if (componentType === "Submission") {
+        modalType.current = "error";
+        modalHeading.current = "Error";
+        modalMessage.current = e.message;
+        setShowSuccessModal(true);
+      } else {
+        handleError(e);
+      }
       setSubmitting(false);
     }
   };
 
-  const checkInAllCheckedOutLocations = () => {
-    for (let [key, value] of monitorPlanIdToSelectedMap.current) {
-      getUserPlans();
-      // doesnt check in any configuration that the current user has checked out via UI
-      if (value[1] > 0 && !userCheckedOutPlans.current.has(key)) {
-        checkoutAPI(false, value[0], key);
+  const forceReloadTables = () => {
+    setReloadTables(v4());
+  };
+
+  const formatDataRows = (ref, rows, rowType, activeSet = null) => {
+    for (const r of rows) {
+      //Formatting to align names for easier reference [Ideally would change the back end to make all of these match, but these apis are being used in lots of locations, so conformity is best solution]
+      if (r["id"]) {
+        r.monPlanId = r["id"];
+      }
+
+      if (r["monPlanIdentifier"]) {
+        r.monPlanId = r["monPlanIdentifier"];
+      }
+
+      if (r["submissionCode"]) {
+        r.submissionAvailabilityCode = r["submissionCode"];
       }
     }
+
+    let formattedData = rows.map((chunk) => {
+      return {
+        isSelected: false,
+        isDisabled: !canSelectRow(
+          chunk,
+          rowType,
+          componentType,
+          idToPermissionsMap,
+          userId
+        ), //Determine if a record is checked out [If not by user then disable and set isSelected to false]
+        checkedOutBy: "",
+        // Add an optional iCheckedOut Flag
+        ...chunk,
+      };
+    });
+
+    if (activeSet) {
+      formattedData = formattedData.filter((d) => {
+        return activeSet.has(d.monPlanId);
+      });
+    }
+
+    if (excludeErrors && componentType === "Submission") {
+      //We don't care about errors on evaluations page
+      formattedData = formattedData.filter(
+        (mpd) => mpd.evalStatusCode !== "ERR"
+      );
+    }
+
+    ref.current = formattedData;
+    forceReloadTables();
+  };
+
+  const retrieveAndFormatData = async (dataListIndex, activeSet) => {
+    const data = (
+      await dataList[dataListIndex].call(
+        storedFilters.current.orisCodes,
+        storedFilters.current.monPlanIds,
+        storedFilters.current.submissionPeriods
+      )
+    ).data;
+
+    formatDataRows(
+      dataList[dataListIndex].ref,
+      data,
+      dataList[dataListIndex].type,
+      activeSet
+    );
+
+    dataList[dataListIndex].progressPending.current = false;
+    forceReloadTables();
   };
 
   const applyFilter = async (orisCodes, monPlanIds, submissionPeriods) => {
-    checkInAllCheckedOutLocations();
-    monitorPlanIdToSelectedMap.current = new Map();
-    filesSelected.current = 0;
-    setNumFilesSelected(filesSelected.current);
-
-    // Pull latest checked out records
-    const data = (await getCheckedOutLocations()).data;
-    userCheckedOutPlans.current = new Set(
-      data.filter((l) => l.checkedOutBy === userId).map((m) => m.monPlanId)
-    );
-
-    const totalCheckOuts = new Set(data.map((m) => m.monPlanId));
-
     storedFilters.current = {
       orisCodes: orisCodes,
       monPlanIds: monPlanIds,
       submissionPeriods: submissionPeriods,
     };
 
-    let activePlans = new Set();
-    const filterActive = (d) => {
-      return activePlans.has(d.monPlanId);
-    };
-
+    // Reset all of the tables to a refreshing state
     for (const value of dataList) {
       //Iterate here to show the client tables are loading
-      const { setState, progressPending } = value;
+      const { progressPending } = value;
       progressPending.current = true;
-      setState([]);
     }
+    forceReloadTables();
 
-    for (const value of dataList) {
-      const { ref, setState, call, type, progressPending } = value;
+    // We have to load monitor plans first to get all of the active locations
+    let monitorPlans = (await dataList[0].call(orisCodes, monPlanIds)).data;
+    monitorPlans = monitorPlans.filter((mp) => mp.active); //We only want the active monitor plans
+    const activePlanIdSet = new Set(monitorPlans.map((mp) => mp.id));
+    formatDataRows(dataList[0].ref, monitorPlans, "MP");
 
-      let data;
-      if (type !== "MP") {
-        //Filter emissions by quarter as well
-        data = (await call(orisCodes, monPlanIds, submissionPeriods)).data;
-      } else {
-        data = (await call(orisCodes, monPlanIds)).data;
-      }
+    dataList[0].progressPending.current = false;
+    forceReloadTables();
 
-      // Extra formatting to make all data sets uniform
-      for (const r of data) {
-        if (r["id"]) {
-          r.monPlanId = r["id"];
-        }
-
-        if (r["monPlanIdentifier"]) {
-          r.monPlanId = r["monPlanIdentifier"];
-        }
-
-        if (r["submissionCode"]) {
-          r.submissionAvailabilityCode = r["submissionCode"];
-        }
-      }
-
-      data = data.map((chunk) => {
-        return {
-          selected: false,
-          checkedOut: totalCheckOuts.has(chunk.monPlanId),
-          userCheckedOut: userCheckedOutPlans.current.has(chunk.monPlanId),
-          viewOnly: false,
-          ...chunk,
-        };
-      });
-
-      if (type === "MP") {
-        data = data.filter((mpd) => mpd.active);
-        activePlans = new Set(data.map((d) => d.monPlanId));
-      } else {
-        data = data.filter(filterActive);
-      }
-
-      if (excludeErrors && componentType === "Submission") {
-        //We don't care about errors on evaluations page
-        data = data.filter((mpd) => mpd.evalStatusCode !== "ERR");
-      }
-
-      ref.current = data; //Set ref and state [ref drives logic, state drives ui updates]
-      progressPending.current = false;
-      setState(data);
+    const promises = [];
+    for (let i = 1; i < dataList.length; i++) {
+      //Iterate over other non monitor plan sets of data
+      promises.push(retrieveAndFormatData(i, activePlanIdSet));
     }
+    await Promise.all(promises);
   };
 
   const getSelectedMPIds = () => {
@@ -460,7 +539,7 @@ export const EvaluateAndSubmit = ({
     for (const value of dataList) {
       const { ref } = value;
       for (const chunk of ref.current) {
-        if (chunk.selected) {
+        if (chunk.isSelected) {
           monPlanIds.add(chunk.monPlanId);
         }
       }
@@ -469,14 +548,129 @@ export const EvaluateAndSubmit = ({
     return Array.from(monPlanIds);
   };
 
+  const populateSelectedFiles = () => {
+    for (let i = 0; i < dataList.length; i++) {
+      for (const row of dataList[i].ref.current) {
+        if (row.isSelected) {
+          setFilesSelected(true);
+          return;
+        }
+      }
+    }
+    setFilesSelected(false);
+  };
+
+  const handleSelectionChange = (selectionEvent, type, index) => {
+    //First select the ref values corresponding to the current table
+    //Select all of the actual rows from the current table that an event was triggered on
+    let hasRenderingChanges = false;
+
+    const tableIdentifier = dataList[index].rowId;
+    const selectedItems = new Set(
+      selectionEvent.selectedRows.map((row) => row[tableIdentifier])
+    );
+
+    const oldValueOfTable = JSON.stringify(dataList[index].ref.current);
+
+    for (const row of dataList[index].ref.current) {
+      //Handle updating of the current dataList Ref
+      if (
+        selectedItems.has(row[tableIdentifier]) ||
+        (row.isDisabled && row.isSelected)
+      ) {
+        row.isSelected = true;
+      } else {
+        row.isSelected = false;
+      }
+
+      if (!canSelectRow(row, type, componentType, idToPermissionsMap, userId)) {
+        row.isDisabled = true;
+        row.isSelected = false;
+      }
+    }
+
+    if (oldValueOfTable !== JSON.stringify(dataList[index].ref.current)) {
+      //Only update this state when we have changes
+      hasRenderingChanges = true;
+    }
+
+    if (index > 0) {
+      //Iterate and get all of the external MP records that are selected
+      const selectedMonitorPlans = new Set();
+      const selectedMonitorPlansFromEmissions = new Set();
+      for (let i = 1; i < dataList.length; i++) {
+        if (dataList[i].rowId !== "matsBulkFileIdentifier") {
+          //Treat mats seperately
+          for (const row of dataList[i].ref.current) {
+            if (row.isSelected) {
+              selectedMonitorPlans.add(row.monPlanId);
+              if (i === 4) {
+                //For emissions create a sep set that drives the QA record selections
+                selectedMonitorPlansFromEmissions.add(row.monPlanId);
+              }
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < 3; i++) {
+        //Determine MP + QA Rerenders
+        const oldVal = JSON.stringify(dataList[i].ref.current);
+        //Force MP selections
+        for (const row of dataList[i].ref.current) {
+          //Handle updating of the current dataList Ref
+          let setDisable = false;
+          if (i === 0) {
+            setDisable = selectedMonitorPlans.has(row.monPlanId);
+          } else {
+            setDisable = selectedMonitorPlansFromEmissions.has(row.monPlanId);
+          }
+
+          if (setDisable) {
+            row.isSelected = true;
+            row.isDisabled = true;
+          } else {
+            row.isDisabled = false;
+          }
+
+          if (
+            !canSelectRow(
+              row,
+              dataList[i].type,
+              componentType,
+              idToPermissionsMap,
+              userId
+            )
+          ) {
+            row.isDisabled = true;
+            row.isSelected = false;
+          }
+        }
+
+        if (oldVal !== JSON.stringify(dataList[i].ref.current)) {
+          hasRenderingChanges = true;
+        }
+      }
+    }
+    populateSelectedFiles();
+
+    if (hasRenderingChanges) {
+      //Determine if we need to rerender the tables in case any changed were processed
+      forceReloadTables();
+    }
+  };
+
   return (
     <div className="react-transition fade-in padding-x-3">
       {showSuccesModal && (
-        <SubmissionSuccessModal
+        <SubmissionAlertModal
+          type={modalType.current}
+          heading={modalHeading.current}
+          message={modalMessage.current}
           callback={() => {
             window.location.reload();
           }}
-        ></SubmissionSuccessModal>
+        ></SubmissionAlertModal>
       )}
 
       <div className="text-black flex-justify margin-top-1 grid-row flex-column">
@@ -518,6 +712,7 @@ export const EvaluateAndSubmit = ({
           dataList={dataList}
           storedFilters={storedFilters}
           lastEvalTime={evalClickedAtTime}
+          forceReloadTables={forceReloadTables}
         />
       )}
 
@@ -527,21 +722,31 @@ export const EvaluateAndSubmit = ({
           queryCallback={applyFilter}
           setExcludeErrors={setExcludeErrors}
           facilities={dropdownFacilities}
-          filesSelected={numFilesSelected}
+          filesSelected={filesSelected}
           buttonText={buttonText}
           filterClick={filterClick}
           componentType={componentType}
         />
       )}
 
-      <DataTables
-        dataList={dataList}
-        permissions={idToPermissionsMap} //Map of oris codes to user permissions
-        updateFilesSelected={updateFilesSelected}
-        componentType={componentType}
-        monitorPlanIdToSelectedMap={monitorPlanIdToSelectedMap}
-        userCheckedOutPlans={userCheckedOutPlans}
-      />
+      {reloadTables && <div />}
+
+      {dataList.map((category, idx) => {
+        return (
+          <CategoryTable
+            categoryTitle={category.name}
+            columns={category.columns}
+            data={category.ref.current}
+            onChange={handleSelectionChange}
+            type={category.type}
+            rowId={category.rowId}
+            index={idx}
+            loading={category.progressPending.current}
+            selectable={selectable}
+            userId={userId}
+          />
+        );
+      })}
 
       <LoadingModal type="Loading" loading={submitting} />
 
@@ -561,7 +766,7 @@ export const EvaluateAndSubmit = ({
           <div className="grid-col-10"></div>
           <div className="grid-col-2">
             <div className="display-flex flex-row flex-justify-end desktop:flex-justify-center margin-y-5 margin-right-2 float-left">
-              <Button onClick={filterClick} disabled={numFilesSelected === 0}>
+              <Button onClick={filterClick} disabled={!filesSelected}>
                 {buttonText}
               </Button>
             </div>

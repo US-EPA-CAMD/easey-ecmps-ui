@@ -71,8 +71,8 @@ export const DataTableSystemsComponents = ({
   setCurrentBar,
   openFuelFlowsView,
   setOpenFuelFlowsView,
-  setSelectedUnlinkedComponent ,
-  selectedUnlinkedComponent ,
+  setSelectedUnlinkedComponent,
+  selectedUnlinkedComponent,
   openComponentViewTest = false,
   openAddComponentTest = false,
   setDisableExitBtn
@@ -205,25 +205,25 @@ export const DataTableSystemsComponents = ({
   }, [systemID]);
 
   useEffect(() => {
-  if(selected?.locationId && selected?.id){
-    mpApi
-      .getMonitoringSystemsComponents(selected.locationId, selected.id)
-      .then((res) => {
-        setMonitoringSystemsComponents(res.data);
-        setDataLoaded(true);
-        setupdateComponentTable(false);
-      })
-      .catch(error => console.log('getMonitoringSystemsComponents failed', error));
+    if (selected?.locationId && selected?.id) {
+      mpApi
+        .getMonitoringSystemsComponents(selected.locationId, selected.id)
+        .then((res) => {
+          setMonitoringSystemsComponents(res.data);
+          setDataLoaded(true);
+          setupdateComponentTable(false);
+        })
+        .catch(error => console.log('getMonitoringSystemsComponents failed', error));
 
-    mpApi
-      .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
-      .then((res) => {
-        setMonitoringSystemsFuelFlows(res.data);
-        setFuelDataLoaded(true);
-        setUpdateFuelFlowTable(false);
-      })
-      .catch(error => console.log('getMonitoringSystemsFuelFlows failed', error));
-  }
+      mpApi
+        .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
+        .then((res) => {
+          setMonitoringSystemsFuelFlows(res.data);
+          setFuelDataLoaded(true);
+          setUpdateFuelFlowTable(false);
+        })
+        .catch(error => console.log('getMonitoringSystemsFuelFlows failed', error));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable]);
 
@@ -238,7 +238,7 @@ export const DataTableSystemsComponents = ({
       if (result.length > 0) {
         const selectedCodes = result[0];
         for (const modalDetailData of selectedComponentsModalData) {
-          if (modalDetailData[4] === "dropdown" && Object.keys(selectedCodes).includes(modalDetailData[0])) {        
+          if (modalDetailData[4] === "dropdown" && Object.keys(selectedCodes).includes(modalDetailData[0])) {
             let filteredOutSubDropdownOptions = systemComponentsMdmData[
               modalDetailData[0]
             ] || [];
@@ -246,11 +246,11 @@ export const DataTableSystemsComponents = ({
               selectedCodes[modalDetailData[0]].includes(option.code)
             );
 
-              filteredOutSubDropdownOptions.unshift({
-                code: "",
-                name: selectText,
-              });
-              modalDetailData[6] = filteredOutSubDropdownOptions;
+            filteredOutSubDropdownOptions.unshift({
+              code: "",
+              name: selectText,
+            });
+            modalDetailData[6] = filteredOutSubDropdownOptions;
           }
         }
       }
@@ -330,7 +330,7 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", ""],
           basisCode: ["Basis Description", "dropdown", "", ""],
-          analyticalPrincipleCode:["Analytical Principle", "dropdown","",""],
+          analyticalPrincipleCode: ["Analytical Principle", "dropdown", "", ""],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
@@ -367,18 +367,17 @@ export const DataTableSystemsComponents = ({
     setBread(true, "Component");
   };
 
-  const openComponent = (row, bool, create) => {
+  const openComponent = (row, create) => {
     let selectComponents = null;
     const prefilteredDataName = "prefilteredSystemsComponents";
     setCreateNewComponentFlag(create);
     setOpenFuelFlowsView(false);
     setComponentView(true);
-    if (monitoringSystemsComponents.length > 0 && !create) {
-      selectComponents = monitoringSystemsComponents.filter(
-        (element) => element.componentId === row.col1
-      )[0];
-      setSelectedComponent(selectComponents);
 
+    if (monitoringSystemsComponents.length > 0 && !create) {
+      selectComponents = monitoringSystemsComponents.find(sysComp => sysComp.id === row.id)
+
+      setSelectedComponent(selectComponents);
       setOpenAnalyzer(selectComponents);
       setSelectedRangeInFirst(selectComponents); // for saving
     }
@@ -409,7 +408,7 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", "locked"],
           basisCode: ["Basis Description", "dropdown", "", "locked"],
-          analyticalPrincipleCode:["Analytical Principle", "dropdown","","locked"],
+          analyticalPrincipleCode: ["Analytical Principle", "dropdown", "", "locked"],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
@@ -447,6 +446,7 @@ export const DataTableSystemsComponents = ({
   };
   const [prefilteredMdmDataFuelFlows, setPrefilteredMdmDataFuelFlows] =
     useState(false);
+
   const openFuelFlows = (row, bool, create) => {
     let selectFuelFlows = null;
     setCreateFuelFlowFlag(create);
@@ -454,9 +454,7 @@ export const DataTableSystemsComponents = ({
     setOpenFuelFlowsView(true);
     setDisableExitBtn(false);
     if (monitoringSystemsFuelFlows.length > 0 && !create) {
-      selectFuelFlows = monitoringSystemsFuelFlows.filter(
-        (element) => element.id === row.col4
-      )[0];
+      selectFuelFlows = monitoringSystemsFuelFlows.find(fuelFlow => fuelFlow.id === row.id)
       setSelectedFuelFlows(selectFuelFlows);
     }
 
@@ -622,8 +620,8 @@ export const DataTableSystemsComponents = ({
                   createFuelFlowFlag
                     ? "Create Fuel Flow"
                     : user && checkout
-                    ? "Edit Fuel Flow"
-                    : `Fuel Code: ${selectedFuelFlows["fuelCode"]}, System Type Code: ${selectedFuelFlows["systemTypeCode"]}`
+                      ? "Edit Fuel Flow"
+                      : `Fuel Code: ${selectedFuelFlows["fuelCode"]}, System Type Code: ${selectedFuelFlows["systemTypeCode"]}`
                 }
                 viewOnly={!(user && checkout)}
               />
@@ -638,7 +636,7 @@ export const DataTableSystemsComponents = ({
                 locationId={locationSelectValue}
                 systemId={selected.id}
                 selectionHandler={setSelectedUnlinkedComponent}
-                caption={"Select Component by ID or Type"}
+                caption={"Select from list of components not already associated with the system."}
                 data={selectedComponentsModalData}
                 backBtn={() => {
                   setCreateNewComponentFlag(false);
@@ -698,8 +696,8 @@ export const DataTableSystemsComponents = ({
                         createNewComponentFlag
                           ? "Create Component"
                           : user && checkout
-                          ? `Edit Component: ${selectedComponent?.componentId}`
-                          : `Component: ${selectedComponent?.componentId}`
+                            ? `Edit Component: ${selectedComponent?.componentId}`
+                            : `Component: ${selectedComponent?.componentId}`
                       }
                       create={createNewComponentFlag}
                       setMainDropdownChange={
@@ -736,20 +734,20 @@ export const DataTableSystemsComponents = ({
                   //EDIT ANALYZER RANGES
                   <ModalDetails
                     modalData={selectedRange}
-                      backBtn={() => {
-                        setThirdLevel()
-                        if (createAnalyzerRangesFlag) {
-                          returnsFocusMpDatatableCreateBTN("Create New Analyzer Range", 1000)
-                        }
-                      }}
+                    backBtn={() => {
+                      setThirdLevel()
+                      if (createAnalyzerRangesFlag) {
+                        returnsFocusMpDatatableCreateBTN("Create New Analyzer Range", 1000)
+                      }
+                    }}
                     data={selectedModalData}
                     cols={2}
                     title={
                       createAnalyzerRangesFlag
                         ? "Create Analyzer Range"
                         : user && checkout
-                        ? `Edit  Analyzer Range `
-                        : ` Analyzer Range `
+                          ? `Edit  Analyzer Range `
+                          : ` Analyzer Range `
                     }
                     viewOnly={!(user && checkout)}
                   />

@@ -270,19 +270,19 @@ export const ErrorSuppressionDataContainer = () => {
 
   const columns = [
     {
-      name: "Select",
+      name: <span>{"Select"}</span>,
       width: "150px",
       cell: (row, idx) => getActions(row, idx),
       sortable: true,
     },
     {
-      name: "Severity",
+      name: <span>{"Severity"}</span>,
       width: "200px",
       selector: (row) => row.severityCode,
       sortable: true,
     },
     {
-      name: "Facility Name (ID)",
+      name: <span>{"Facility Name (ID)"}</span>,
       width: "210px",
       selector: (row) =>
         (row.facilityName ? row.facilityName : "") +
@@ -290,13 +290,13 @@ export const ErrorSuppressionDataContainer = () => {
       sortable: true,
     },
     {
-      name: "Locations",
+      name: <span>{"Locations"}</span>,
       width: "200px",
       selector: (row) => row.locations,
       sortable: true,
     },
     {
-      name: "Match Data Criteria",
+      name: <span>{"Match Data Criteria"}</span>,
       width: "250px",
       selector: (row) =>
         "" +
@@ -305,51 +305,51 @@ export const ErrorSuppressionDataContainer = () => {
       sortable: true,
     },
     {
-      name: "Match Time Criteria",
+      name: <span>{"Match Time Criteria"}</span>,
       width: "300px",
       selector: (row) => formatMatchTimeCriteriaCell(row),
       sortable: true,
     },
     {
-      name: "Reason",
+      name: <span>{"Reason"}</span>,
       width: "200px",
       maxWidth: "150px",
       selector: (row) => row.reasonCode,
       sortable: true,
     },
     {
-      name: "Status",
+      name: <span>{"Status"}</span>,
       width: "150px",
       selector: (row) => (row.active ? "Active" : "Inactive"),
       sortable: true,
     },
     {
-      name: "Note",
+      name: <span>{"Note"}</span>,
       width: "200px",
       maxWidth: "1000px",
       selector: (row) => row.note,
       sortable: true,
     },
     {
-      name: "User",
+      name: <span>{"User"}</span>,
       selector: (row) => row.userId,
       sortable: true,
       width: "150px",
     },
     {
-      name: "Add Date & Hour",
+      name: <span>{"Add Date & Hour"}</span>,
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate),
       sortable: true,
     },
     {
-      name: "Update Date",
+      name: <span>{"Update Date"}</span>,
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
       sortable: true,
     },
     {
-      name: "Record Id",
+      name: <span>{"Record Id"}</span>,
       width: "200px",
       selector: (row) => row.id,
       sortable: true,

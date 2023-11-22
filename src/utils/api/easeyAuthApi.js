@@ -201,7 +201,7 @@ export const refreshToken = async () => {
 };
 
 export const credentialsAuth = async (payload) => {
-  return axios({
+  return secureAxios({
     method: "POST",
     url: `${config.services.authApi.uri}/sign/authenticate`,
     data: payload,

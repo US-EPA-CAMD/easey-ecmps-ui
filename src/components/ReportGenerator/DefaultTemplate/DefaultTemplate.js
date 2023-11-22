@@ -6,18 +6,21 @@ export const DefaultTemplate = ({
   title,
   codeGroups,
   columnNames,
-  dataLoaded,
-  titleBreak,
+  templateType,
+  referenceMethod,
 }) => {
   if (!data || data.length === 0) {
     return <></>;
   }
 
+  const refMethodCode = referenceMethod["referenceMethodCode"];
+  const refMethodDescription = referenceMethod["referenceMethodDescription"];
+
   const columns = [];
   columnNames.forEach((name, index) => {
     columns.push({
       id: `col${index + 1}`,
-      name,
+      name: <span>{name}</span>,
       selector: (row) => row[`col${index + 1}`],
       sortable: false,
       wrap: true,
@@ -35,18 +38,17 @@ export const DefaultTemplate = ({
 
   return (
     <div className="margin-bottom-3">
-      {!titleBreak && (
+      {templateType === "DEFAULT2" ? (
+        <div>
+          <hr className="border border-dashed" />
+          <div>{title}</div>
+          <div>Reference Method Used: {`${refMethodCode} - ${refMethodDescription}`}</div>
+          <hr className="border border-dashed" />
+        </div>
+      ): (
         <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
           {title}
         </h3>
-      )}
-
-      {titleBreak && (
-        <div>
-          <hr className="border border-dashed" />
-          {title}
-          <hr className="border border-dashed" />
-        </div>
       )}
 
       <div className="width-auto margin-top-0 data-display-table-report">

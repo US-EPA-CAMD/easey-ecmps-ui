@@ -26,7 +26,8 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         const timeout = setTimeout(() => {
             setViewData(reduxCurrentTab?.viewData || []);
             setPending(false)
-        })
+        }, 500)
+        // add short delay of 500, without short delay sometimes empty table appears before loading spinner
 
         return () => clearTimeout(timeout)
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
@@ -58,7 +59,7 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
             .map((vc) => {
                 // wrapping the header and cell in div makes it so that the the table lib doesn't cut off the text
                 return {
-                    name: <div>{vc.label}</div>,
+                    name: <span>{vc.label}</span>,
                     selector: (row) => row[vc.value],
                     cell: (row) => <span>{row[vc.value]}</span>,
                     sortable: true,

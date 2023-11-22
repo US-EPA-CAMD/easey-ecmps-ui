@@ -120,7 +120,7 @@ export const DataTableAssert = ({
     } else {
       assignFocusEventListeners();
     }
-    
+
     return () => {
       setReturnedFocusToLast(true);
     };
@@ -360,11 +360,12 @@ export const DataTableAssert = ({
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];
-            const filteredOutSubDropdownOptions = mdmData[
-              modalDetailData[0]
-            ].filter((option) =>
-              selectedCodes[modalDetailData[0]].includes(option.code)
-            );
+            const codeName = modalDetailData[0]
+
+            const filteredOutSubDropdownOptions = mdmData[codeName]
+              .filter((option) =>
+                selectedCodes[codeName].includes(option.code)
+              );
             filteredOutSubDropdownOptions.unshift({
               code: "",
               name: selectText,
@@ -459,6 +460,10 @@ export const DataTableAssert = ({
     }
 
     const prefilteredTotalName = dropdownArray[0][dropdownArray[0].length - 1];
+    if (hasMainDropdown && selectedData) {
+      setMainDropdownChange(selectedData[mainDropdownName]);
+    }
+
     setSelectedModalData(
       modalViewData(
         selectedData,
@@ -489,6 +494,7 @@ export const DataTableAssert = ({
       executeOnClose();
     }
   };
+
   const executeOnClose = () => {
     setReturnedFocusToLast(false);
     setErrorMsgs([]);
@@ -501,11 +507,10 @@ export const DataTableAssert = ({
   if (document) {
     changeGridCellAttributeValue();
   }
+
   return (
     <div className="methodTable">
-    
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
-
       <DataTableRender
         openHandler={openModal}
         columnNames={columnNames}

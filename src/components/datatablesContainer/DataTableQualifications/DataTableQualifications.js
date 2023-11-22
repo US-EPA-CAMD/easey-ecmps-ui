@@ -57,6 +57,7 @@ export const DataTableQualifications = ({
   revertedState,
   setRevertedState,
   selectedLocation,
+  setUpdateRelatedTables,
   currentTabIndex,
   //
 
@@ -262,6 +263,7 @@ export const DataTableQualifications = ({
           // update qual table, then close qual modal
           setDataLoaded(false);
           setUpdateTable(true);
+          setUpdateRelatedTables(true);
           setShow(false);
         } else if (dataType === "pct") {
           // update pct modal, then return to parent qual page
@@ -280,6 +282,8 @@ export const DataTableQualifications = ({
           setUpdateCPMS(true);
           setOpenCPMS(false);
         }
+        setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
