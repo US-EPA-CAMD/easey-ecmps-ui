@@ -452,7 +452,8 @@ const QAExpandableRowsRender = ({
           .catch(error => console.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Gas':
-        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
+        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(
+            extraIDs[0], ['GAS', 'LTGS', 'NOXE']));
         Promise.all(allPromises)
           .then(responses => {
             responses.forEach((curResp, i) => {
@@ -478,7 +479,8 @@ const QAExpandableRowsRender = ({
           .catch(error => console.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Oil':
-        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0]));
+        allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0],
+            ['OILV', 'OILM', 'LTOL']));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
         Promise.all(allPromises)
           .then(responses => {
