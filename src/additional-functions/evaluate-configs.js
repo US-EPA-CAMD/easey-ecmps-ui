@@ -49,7 +49,7 @@ const evalStatusStyle = (status) => {
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport(params)}
+          onClick={() => displayReport(params, status)}
         >
           {evalStatusText(status)}
         </button>

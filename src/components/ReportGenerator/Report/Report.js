@@ -6,6 +6,9 @@ import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplat
 import config from "../../../config";
 import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
+import { getEvalResultMessage } from "../../../utils/functions";
+import { getQACertEventReviewSubmit, getQATeeReviewSubmit, getQATestSummaryReviewSubmit } from "../../../utils/api/qaCertificationsAPI";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 
 export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   const displayCloseButton = useState(true);
@@ -126,6 +129,30 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
       })
     );
   });
+  
+
+  const tableRowApi = {
+    "teeId" : getQATeeReviewSubmit,
+    "monitorPlanId": getMonitoringPlans,
+    "qceId" : getQACertEventReviewSubmit,
+    "testSumId": getQATestSummaryReviewSubmit,
+  }
+
+  const paramsArray = paramsObject.current
+  const orisCode = paramsArray[1][1]
+  , id = paramsArray[2][1], type = paramsArray[2][0], api = tableRowApi[type];
+  const getEvalStatus = async() => {
+    console.log({orisCode, type, api});
+    const response = await api([orisCode], [id])
+     console.log(response);
+   }
+   getEvalStatus()
+  const evalStatus = localStorage.getItem("evalStatus")? JSON.parse(localStorage.getItem("evalStatus")) : null;
+  const evalResultMessage = getEvalResultMessage(
+    reportData,
+    paramsObject,
+    evalStatus
+  );
 
   return (
     <>
@@ -199,6 +226,15 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                 );
               }
             })}
+
+            {evalResultMessage && (
+              <div>
+                <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+                  Evaluation Results
+                </h3>
+                <div>{evalResultMessage}</div>
+              </div>
+            )}
 
             <div className="position-fixed bottom-0 right-0 width-full do-not-print">
               <AppVersion

@@ -185,9 +185,9 @@ export const formatReportUrl = (params, service) => {
   return url;
 };
 
-export const displayReport = (params) => {
+export const displayReport = (params, evalStatus) => {
   const url = `/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
-
+  storeEvalStatusInLocalStorage(evalStatus)
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
@@ -232,6 +232,23 @@ export const addEvalStatusCell = (columns, callback) =>
     return col;
   });
 
+export const storeEvalStatusInLocalStorage = (evalStatus) => localStorage.setItem("evalStatus", JSON.stringify(evalStatus));
+export const getEvalResultMessage = (reportData, paramsObject, evalStatus) => {
+  if (evalStatus === null) return;
+  const reportCode = paramsObject.current[0][1];
+  let message;
+  if (reportCode.includes("EVAL")) {
+    const isPassing = evalStatus === "PASS";
+    console.log({evalStatus});
+    if (isPassing) {
+      message = "Evaluation has passed without errors";
+    } else if (reportData.details.length < 2) {
+      message =
+        "Evaluation is old or expired and error data is no longer available";
+    }
+    return message;
+  }
+};
 // Returns the previously fully submitted quarter (reporting period).
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
 // For every month in between it is the previous quarter.
