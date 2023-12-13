@@ -464,7 +464,7 @@ export const getAllPressureMeasureCodes = async () => {
     .catch(handleError);
 };
 
-export const getAllMonitoringSystemIDCodes = async (locationId) => {
+export const getAllMonitoringSystemIDCodes = async (locationId, systemTypeCodes) => {
   let url = config.services.monitorPlans.uri;
 
   if (window.location.href.includes("/workspace")) {
@@ -478,8 +478,7 @@ export const getAllMonitoringSystemIDCodes = async (locationId) => {
       const dataArray = [];
       response.data.map((monitorCode) => {
         if (
-          monitorCode.systemTypeCode === "OILV" ||
-          monitorCode.systemTypeCode === "OILM"
+            systemTypeCodes.includes(monitorCode.systemTypeCode)
         ) {
           dataArray.push({
             monitoringSystemIDCode: monitorCode.monitoringSystemId,

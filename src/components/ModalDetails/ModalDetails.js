@@ -35,7 +35,7 @@ const ModalDetails = ({
     textOverflow: "ellipsis",
     overflow: "auto",
   };
-
+  const [comboBoxItems, setComboBoxItems] = useState([]);
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
     let found = false;
@@ -222,30 +222,34 @@ const ModalDetails = ({
         break;
 
       case "multiSelectDropdown":
-        const items = [];
-        for (let valueItem of value[6]) {
-          if (valueItem.code !== "") {
-            let item = {
-              id: "",
-              label: "",
-              selected: "",
-              enabled: "",
-            };
-            item.id = valueItem.code;
-            item.label = valueItem.name;
-            item.selected =
-              modalData?.[value[0]].split(",").includes(item.id) && !create
-                ? modalData?.[value[0]].split(",").includes(item.id)
-                : false;
-            item.enabled = true;
-            item.disabled = valueItem.disabled;
-            items.push(item);
+        const items = [...comboBoxItems];
+        if(items.length === 0){
+          for (let valueItem of value[6]) {
+            if (valueItem.code !== "") {
+              let item = {
+                id: "",
+                label: "",
+                selected: "",
+                enabled: "",
+              };
+              item.id = valueItem.code;
+              item.label = valueItem.name;
+              item.selected =
+                modalData?.[value[0]].split(",").includes(item.id) && !create
+                  ? modalData?.[value[0]].split(",").includes(item.id)
+                  : false;
+              item.enabled = true;
+              item.disabled = valueItem.disabled;
+              items.push(item);
+              setComboBoxItems([...items]);
+            }
           }
         }
+        
         let selectedOptions =
           modalData?.[value[0]].split(",") && !create
             ? modalData?.[value[0]].split(",")
-            : [];
+            : comboBoxItems.filter(i => i.selected).map(s => s.id);
         const handleCodes = (id, updateType) => {
           const uniqueOptions = [...new Set([...selectedOptions, id])];
           let item;
@@ -268,6 +272,7 @@ const ModalDetails = ({
               });
             selectedOptions = selected;
           }
+          setComboBoxItems([...items]);
           document.getElementById(value[1]).value = selectedOptions.toString();
         };
         let styles = {
