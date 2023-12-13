@@ -768,7 +768,7 @@ export const HeaderInfo = ({
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
-          onClick={() => displayReport(params, evalStatus)}
+          onClick={() => displayReport(params)}
         >
           {evalStatusDescription}
         </button>

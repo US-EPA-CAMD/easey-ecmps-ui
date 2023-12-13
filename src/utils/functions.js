@@ -142,7 +142,7 @@ export const formatReportUrl = (params, service) => {
   return url;
 };
 
-export const displayReport = (params, evalStatus) => {
+export const displayReport = (params) => {
   const url = `/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
