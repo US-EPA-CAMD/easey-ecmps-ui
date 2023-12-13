@@ -2,7 +2,11 @@ import React, { useState, useCallback } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { addEvalStatusCell, storeEvalStatusInLocalStorage } from "../../../utils/functions";
+import {
+  addEvalStatusCell,
+  getYearQuarterParams,
+  isoToYearQuarter,
+} from "../../../utils/functions";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { LockSharp } from "@material-ui/icons";
@@ -69,13 +73,13 @@ export const CategoryTable = ({
       }&quarter=${yearQuarter[1].charAt(1)}`;
     }
 
+    const yearQuarterParams = getYearQuarterParams(row);
     url =
       `/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
-      additionalParams;
+      additionalParams +
+      yearQuarterParams;
 
-    //set redux state with row info
     // localStorage.setItem("reportRow", JSON.stringify(row));
-    storeEvalStatusInLocalStorage(row.evalStatusCode);
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

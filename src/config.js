@@ -2,7 +2,7 @@ import {
   getConfigValue,
   getConfigValueNumber,
   getConfigValueBoolean,
-} from "./utils/functions";
+} from "./utils/configFunctions";
 
 export const oneSecond = 1000;
 export const fiveSeconds = 5000;

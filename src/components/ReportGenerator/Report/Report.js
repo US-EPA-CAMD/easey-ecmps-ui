@@ -1,16 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, GovBanner } from "@trussworks/react-uswds";
-import { AppVersion } from "@us-epa-camd/easey-design-system";
+import { AppVersion, Preloader } from "@us-epa-camd/easey-design-system";
 import DefaultTemplate from "../DefaultTemplate/DefaultTemplate";
 import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplate";
 import config from "../../../config";
 import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
-import { getEvalResultMessage } from "../../../utils/functions";
-import { getQACertEventReviewSubmit, getQATeeReviewSubmit, getQATestSummaryReviewSubmit } from "../../../utils/api/qaCertificationsAPI";
-import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { getEvalResultMessage, getEvalStatus } from "../../../utils/functions";
 
 export const Report = ({ reportData, dataLoaded, paramsObject }) => {
+  const [evalResultMessage, setEvalResultMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvalStatusData = async () => {
+      try {
+        const status = await getEvalStatus(paramsObject.current);
+        const resultMessage = getEvalResultMessage(
+          reportData,
+          paramsObject,
+          status
+        );
+        setEvalResultMessage(resultMessage);
+      } catch (error) {
+        console.error("Error fetching eval status", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvalStatusData();
+  }, [paramsObject, reportData]);
   const displayCloseButton = useState(true);
 
   const displayCurrentDate = () => {
@@ -129,32 +149,12 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
       })
     );
   });
-  
 
-  const tableRowApi = {
-    "teeId" : getQATeeReviewSubmit,
-    "monitorPlanId": getMonitoringPlans,
-    "qceId" : getQACertEventReviewSubmit,
-    "testSumId": getQATestSummaryReviewSubmit,
-  }
-
-  const paramsArray = paramsObject.current
-  const orisCode = paramsArray[1][1]
-  , id = paramsArray[2][1], type = paramsArray[2][0], api = tableRowApi[type];
-  const getEvalStatus = async() => {
-    console.log({orisCode, type, api});
-    const response = await api([orisCode], [id])
-     console.log(response);
-   }
-   getEvalStatus()
-  const evalStatus = localStorage.getItem("evalStatus")? JSON.parse(localStorage.getItem("evalStatus")) : null;
-  const evalResultMessage = getEvalResultMessage(
-    reportData,
-    paramsObject,
-    evalStatus
-  );
-
-  return (
+  return loading ? (
+    <div className="height-viewport display-flex flex-justify-center flex-align-center text-center">
+      <Preloader />
+    </div>
+  ) : (
     <>
       <div>
         <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
