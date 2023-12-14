@@ -5,6 +5,7 @@ import {
   getQATestSummaryReviewSubmit,
 } from "./api/qaCertificationsAPI";
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
+import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -205,29 +206,46 @@ export const getIdentfierAndIds = (type, id) => {
       ids = [];
       identifier = "testExtensionExemptionIdentifier";
       break;
+    case "testId":
+      ids = [];
+      identifier = "testSumId";
+      break;
     case "qceId":
       ids = [];
       identifier = "qaCertEventIdentifier";
+      break;
+    case "emissions":
+      ids = [id];
+      identifier = "monPlanId";
       break;
     default:
       ids = [id];
       identifier = null;
   }
   return { ids, identifier };
-
 };
 
-const getYearQuarter = (type, yearQuarter) => {
+const getYearQuarter = (type, paramsArray) => {
+  if (type === "emissions") {
+    return [paramsArray.find((el) => el[0] === "yearQuarter")[1]];
+  }
+  const yearQuarter = paramsArray.length > 3 && paramsArray[3][1];
   let yearQuarterVal;
   switch (type) {
     case "teeId":
-      yearQuarterVal = [yearQuarter]
+      yearQuarterVal = [yearQuarter];
+      break;
+    case "testId":
+      yearQuarterVal = [yearQuarter];
       break;
     case "qceId":
-      yearQuarterVal = [yearQuarter]
+      yearQuarterVal = [yearQuarter];
+      break;
+    case "emissions":
+      yearQuarterVal = [yearQuarter];
       break;
     default:
-      yearQuarterVal = null
+      yearQuarterVal = null;
   }
   return yearQuarterVal;
 };
@@ -235,19 +253,22 @@ const tableRowApi = {
   teeId: getQATeeReviewSubmit,
   monitorPlanId: getMonitoringPlans,
   qceId: getQACertEventReviewSubmit,
-  testSumId: getQATestSummaryReviewSubmit,
-  // emmisions: getEmissionsReviewSubmit,
-  //matsBulk: getMatsBulkFilesReviewSubmit,
+  testId: getQATestSummaryReviewSubmit,
+  emissions: getEmissionsReviewSubmit,
 };
 export const getEvalStatus = async (paramsArray) => {
   const orisCode = paramsArray[1][1],
+    isEmissions = paramsArray[0][1] === "EM_EVAL",
     id = paramsArray[2][1],
-    type = paramsArray[2][0],
-    yearQuarter = paramsArray.length > 3 && paramsArray[3][1],
+    type = isEmissions ? "emissions" : paramsArray[2][0],
     api = tableRowApi[type];
   if (!api) return;
   const { ids, identifier } = getIdentfierAndIds(type, id);
-  const response = await api([orisCode], ids, getYearQuarter(type, yearQuarter));
+  const response = await api(
+    [orisCode],
+    ids,
+    getYearQuarter(type, paramsArray)
+  );
   const items = response?.data.filter((el) => el[identifier] === id);
   if (!response?.data?.length) return;
   if (identifier) return items[0].evalStatusCode;
@@ -282,8 +303,7 @@ export const getYearQuarterParams = (row) => {
   } else {
     return "";
   }
-}
-
+};
 
 // Returns the previously fully submitted quarter (reporting period).
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
