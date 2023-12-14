@@ -1,14 +1,11 @@
 import React from "react";
-
-export const debugLog = (message, object = null) => {
-  if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
-    if (object) {
-      console.log(message, object);
-    } else {
-      console.log(message);
-    }
-  }
-};
+import {
+  getQACertEventReviewSubmit,
+  getQATeeReviewSubmit,
+  getQATestSummaryReviewSubmit,
+} from "./api/qaCertificationsAPI";
+import { getMonitoringPlans } from "./api/monitoringPlansApi";
+import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -16,25 +13,6 @@ export const getUser = () => {
     : null;
 
   return ecmpsUser && ecmpsUser.firstName ? ecmpsUser : null;
-};
-
-export const parseBool = (value, defaultValue = false) => {
-  if (typeof value == "number" || value instanceof Number) {
-    return value > 0;
-  }
-
-  if (typeof value == "boolean" || value instanceof Boolean) {
-    return Boolean(value);
-  }
-
-  if (typeof value == "string" || value instanceof String) {
-    value = value.trim().toLowerCase();
-    if (value === "true" || value === "false") {
-      return value === "true";
-    }
-  }
-
-  return defaultValue;
 };
 
 export const dateToEstString = (value) => {
@@ -75,26 +53,6 @@ export const formatDateToISO = (date) => {
   if (day.length < 2) day = "0" + day;
 
   return [year, month, day].join("-");
-};
-
-export const getConfigValue = (key, defaultValue = "") => {
-  let returnValue;
-
-  if (window._env_ && window._env_[key]) {
-    returnValue = window._env_[key];
-  } else if (!returnValue && process.env[key]) {
-    returnValue = process.env[key];
-  }
-
-  return returnValue || defaultValue;
-};
-
-export const getConfigValueNumber = (key, defaultValue = "") => {
-  return Number(getConfigValue(key, defaultValue));
-};
-
-export const getConfigValueBoolean = (key, defaultValue = "") => {
-  return parseBool(getConfigValue(key, defaultValue));
 };
 
 //** review and submit utility functions
@@ -187,7 +145,6 @@ export const formatReportUrl = (params, service) => {
 
 export const displayReport = (params) => {
   const url = `/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
-
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
@@ -231,6 +188,122 @@ export const addEvalStatusCell = (columns, callback) =>
     }
     return col;
   });
+
+export const isoToYearQuarter = (dateString) => {
+  if (!dateString) return;
+  const date = new Date(dateString);
+
+  const year = date.getUTCFullYear();
+  const quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
+
+  return `${year} Q${quarter}`;
+};
+
+export const getIdentfierAndIds = (type, id) => {
+  let ids, identifier;
+  switch (type) {
+    case "teeId":
+      ids = [];
+      identifier = "testExtensionExemptionIdentifier";
+      break;
+    case "testId":
+      ids = [];
+      identifier = "testSumId";
+      break;
+    case "qceId":
+      ids = [];
+      identifier = "qaCertEventIdentifier";
+      break;
+    case "emissions":
+      ids = [id];
+      identifier = "monPlanId";
+      break;
+    default:
+      ids = [id];
+      identifier = null;
+  }
+  return { ids, identifier };
+};
+
+const getYearQuarter = (type, paramsArray) => {
+  if (type === "emissions") {
+    return [paramsArray.find((el) => el[0] === "yearQuarter")[1]];
+  }
+  const yearQuarter = paramsArray.length > 3 && paramsArray[3][1];
+  let yearQuarterVal;
+  switch (type) {
+    case "teeId":
+      yearQuarterVal = [yearQuarter];
+      break;
+    case "testId":
+      yearQuarterVal = [yearQuarter];
+      break;
+    case "qceId":
+      yearQuarterVal = [yearQuarter];
+      break;
+    case "emissions":
+      yearQuarterVal = [yearQuarter];
+      break;
+    default:
+      yearQuarterVal = null;
+  }
+  return yearQuarterVal;
+};
+const tableRowApi = {
+  teeId: getQATeeReviewSubmit,
+  monitorPlanId: getMonitoringPlans,
+  qceId: getQACertEventReviewSubmit,
+  testId: getQATestSummaryReviewSubmit,
+  emissions: getEmissionsReviewSubmit,
+};
+export const getEvalStatus = async (paramsArray) => {
+  const orisCode = paramsArray[1][1],
+    isEmissions = paramsArray[0][1] === "EM_EVAL",
+    id = paramsArray[2][1],
+    type = isEmissions ? "emissions" : paramsArray[2][0],
+    api = tableRowApi[type];
+  if (!api) return;
+  const { ids, identifier } = getIdentfierAndIds(type, id);
+  const response = await api(
+    [orisCode],
+    ids,
+    getYearQuarter(type, paramsArray)
+  );
+  const items = response?.data.filter((el) => el[identifier] === id);
+  if (!response?.data?.length) return;
+  if (identifier) return items[0].evalStatusCode;
+  return response.data[0]?.evalStatusCode;
+};
+
+export const getEvalResultMessage = (reportData, paramsObject, evalStatus) => {
+  if (!evalStatus) return;
+
+  const reportCode = paramsObject.current[0][1];
+  let message;
+  if (reportCode.includes("EVAL")) {
+    const isPassing = evalStatus === "PASS";
+    if (isPassing) {
+      message = "Evaluation has passed without errors";
+    } else if (reportData.details.length < 2) {
+      message =
+        "Evaluation is old or expired and error data is no longer available";
+    }
+    return message;
+  }
+};
+
+export const getYearQuarterParams = (row) => {
+  const evaluatedDate = isoToYearQuarter(row.lastEvaluatedDate);
+  const abbreviation = row.periodAbbreviation;
+
+  if (evaluatedDate) {
+    return `&yearQuarter=${evaluatedDate}`;
+  } else if (abbreviation) {
+    return `&yearQuarter=${abbreviation}`;
+  } else {
+    return "";
+  }
+};
 
 // Returns the previously fully submitted quarter (reporting period).
 // For the first month of every quarter, the previusly submitted reporting period is actually two quarters ago.
