@@ -269,6 +269,11 @@ describe("testing monitoring plans data fetching APIs", () => {
     expect(apiCall["data"]).toEqual(mockData);
   });
 
+  test("tests createComponents ", async () => {
+    const apiCall = await mpApi.createComponents(monitoringLocationId);
+    expect(apiCall["data"]).toEqual(mockData);
+  });
+
   test("tests getMonitoringSpans workspace", async () => {
     delete window.location;
     window.location = new URL(`https://test.com/workspace/monitoring-plans`);
