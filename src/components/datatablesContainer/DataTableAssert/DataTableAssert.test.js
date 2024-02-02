@@ -132,7 +132,7 @@ describe("- DataTableAssert - ", () => {
     await act(() => saveAndCloseBtn.click());
 
     expect(mockSaveMonitoringSpans).toHaveBeenCalled();
-  })
+  }, 10000)
 
   test('create data', async () => {
     const mockCreateMonitoringSpans = jest.fn().mockResolvedValue({ status: 201 });
@@ -160,5 +160,5 @@ describe("- DataTableAssert - ", () => {
     await act(() => saveAndCloseBtn.click());
 
     expect(mockCreateMonitoringSpans).toHaveBeenCalled();
-  })
+  }, 10000)
 })

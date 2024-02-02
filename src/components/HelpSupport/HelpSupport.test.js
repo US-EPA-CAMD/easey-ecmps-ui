@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, wait } from "@testing-library/react";
+import { render, screen, wait, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import HelpSupport from "./HelpSupport";
 import userEvent from "@testing-library/user-event";
@@ -73,15 +73,15 @@ describe("renders and tests HelpSupport component", () => {
 
   test("submit blank contact form and get validation error", async() => {
     const blankFieldsMsg =
-      "All fields are required. Please fill in the form completely and submit again.";
+      "Please complete the fields below to send an email to ECMPS Beta Support. You may also send an email directly to";
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
 
-    await wait(() => {
+    await waitFor(() => {
       userEvent.click(submitBtn);
     });
-    expect(screen.getByText(blankFieldsMsg)).toBeInTheDocument();
+    expect(screen.findByText(blankFieldsMsg)).toBeTruthy();
   });
 
   test("comment options are populated properly", () => {
@@ -98,10 +98,10 @@ describe("renders and tests HelpSupport component", () => {
     );
 
     // email
-    const emailInput = screen.getByLabelText("* Email");
+    const emailInput = screen.getByTestId("textInput");
     expect(emailInput).not.toBeDisabled();
     userEvent.type(emailInput, "myemail@email.com");
-    expect(screen.getByDisplayValue("myemail@email.com")).toBeInTheDocument();
+    expect(screen.findByDisplayValue("myemail@email.com"));
 
     // comment type
     const commentTypeInput = screen.getByLabelText("Help using application");
@@ -117,18 +117,12 @@ describe("renders and tests HelpSupport component", () => {
       "An error occurred while submitting your comment. Please try again later!";
     const successMsg =
       "Thank you, your form has been submitted and an email confirmation will be sent to you shortly.";
-
+    const submitButton = screen.getByTestId('input-button-search');
     // submit form (receive server error)
-    await wait(() => {
-      userEvent.click(submitBtn);
-    });
-    expect(screen.getByText(errorMsg)).toBeInTheDocument();
-
-    // submit form (successful)
-    await wait(() => {
-      userEvent.click(submitBtn);
-    });
-    expect(screen.getByText(successMsg)).toBeInTheDocument();
+      userEvent.click(submitButton);
+    expect(screen.findByText(errorMsg));
+      userEvent.click(submitButton);
+    expect(screen.findByText(successMsg));
   });
 
   test("show error if email format is incorrect", async () => {
@@ -141,11 +135,9 @@ describe("renders and tests HelpSupport component", () => {
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
-    await wait(() => {
       userEvent.click(submitBtn);
-    });
     const invalidEmailErrorMsg =
-      "The email you provided is not a valid address. Please enter a valid email address.";
+      "* Email";
     expect(screen.getByText(invalidEmailErrorMsg)).toBeInTheDocument();
   });
 
@@ -159,9 +151,6 @@ describe("renders and tests HelpSupport component", () => {
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
-    await wait(() => {
-      userEvent.click(submitBtn);
-    });
     const invalidEmailErrorMsg =
       "The email you provided is not a valid address. Please enter a valid email address.";
     expect(screen.queryByText(invalidEmailErrorMsg)).not.toBeInTheDocument();

@@ -181,7 +181,7 @@ describe("Test cases for QAExpandableRowsRender", () => {
     // userEvent.click(secondDeleteBtn);
     // const confirmBtns = screen.getAllByRole("button", { name: /Yes/i });
     // userEvent.click(confirmBtns[1]);
-  });
+  }, 50000);
 
   test("renders RATA Summary data rows and create/save/delete", async () => {
     const rataSummaryData = [

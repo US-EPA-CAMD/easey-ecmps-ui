@@ -50,7 +50,7 @@ export const getMockDynamicTabsProps = () => {
     user: { firstName: "test" },
     setMostRecentlyCheckedInMonitorPlanId: jest.fn(),
     mostRecentlyCheckedInMonitorPlanId: "",
-    tabsProps: [
+    tabsProps: () => ([
       {
         title: "Welcome ( test )",
         component: <Welcome name="Addis" />,
@@ -60,7 +60,7 @@ export const getMockDynamicTabsProps = () => {
         title: "Welcome ( test )",
         component: <Welcome name="Addis" />,
       },
-    ],
+    ]),
     setCurrentTabIndex: jest.fn(),
     currentTabIndex: 0,
     setCheckout: jest.fn(),

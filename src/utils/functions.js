@@ -6,6 +6,7 @@ import {
 } from "./api/qaCertificationsAPI";
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
+import { isNumber } from "lodash";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -408,3 +409,12 @@ export const currentSecondsTilInactive = () => {
     1000
   );
 };
+
+export const parseBool = (str) => {
+  if(isNumber(str)){
+    return str > 0;
+  }
+  else{
+    return String(str).toLocaleLowerCase() == "true"
+  }
+}
