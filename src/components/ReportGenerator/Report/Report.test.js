@@ -67,7 +67,7 @@ test('renders SummaryReport', () => {
 })
 
 test('when user clicks button to close then report is closed', async() => {
-  // Arrange
+  // Arrange 
   render(<SummaryReport reportData={reportData} dataLoaded={true} />)
 
   // Act
