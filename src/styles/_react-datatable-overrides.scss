@@ -23,7 +23,7 @@
       font-weight: bold;
       border: solid 1px $epa-white;
       justify-content: left !important;
-      // display: inline-table;
+      overflow: visible !important;
       width: max-content;
       :focus {
         outline: none;
