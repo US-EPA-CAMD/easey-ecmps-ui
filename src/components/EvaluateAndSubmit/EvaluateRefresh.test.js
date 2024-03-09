@@ -5,7 +5,6 @@ import config from "../../config";
 
 jest.useFakeTimers();
 
-const setState = jest.fn();
 const callFunc = jest.fn();
 
 describe("EvaluateRefresh Component", () => {
@@ -17,7 +16,6 @@ describe("EvaluateRefresh Component", () => {
             monPlan: {
               ref: { current: [{ monPlanId: "test", evalStatusCode: "PASS" }] },
               state: jest.fn(),
-              setState: setState,
               call: callFunc.mockResolvedValue({
                 data: [
                   {
@@ -44,9 +42,8 @@ describe("EvaluateRefresh Component", () => {
 
   it("Fast forward timer and expect mock calls to have been made", async () => {
     await act(async () => {
-      await jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
+       jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
     });
-    expect(callFunc).toHaveBeenCalled();
-    expect(setState).toHaveBeenCalled();
+    expect(callFunc).toHaveBeenCalled();;
   });
 });

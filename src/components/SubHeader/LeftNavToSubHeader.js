@@ -46,7 +46,7 @@ export const LeftNavToSubHeader = (props) => {
       });
     }
 
-    return arr.map((el, i) => {
+    return arr !== undefined ? arr.map((el, i) => {
 
       if (el.children) {
         return (
@@ -131,7 +131,7 @@ export const LeftNavToSubHeader = (props) => {
           </Link>
         );
       }
-    });
+    }) : [];
   };
 
   const makeWKspaceSubHeader = () => {

@@ -31,10 +31,10 @@ describe("Left Navigation links", () => {
     const emissionsLink = screen.getByLabelText("Emissions - Workspace");
     expect(emissionsLink).toBeInTheDocument();
     expect(emissionsLink).toHaveAttribute('href','/workspace/emissions');
-
-    const exportLink = screen.getByLabelText("Export - Workspace");
-    expect(exportLink).toBeInTheDocument();
-    expect(exportLink).toHaveAttribute('href','/workspace/export');
+ //this test case is not updated after UI this does not exist in UI
+    // const exportLink = screen.getByLabelText("Export - Workspace");
+    // expect(exportLink).toBeInTheDocument();
+    // expect(exportLink).toHaveAttribute('href','/workspace/export');
 
     const evaluateLink = screen.getByLabelText("Evaluate - Workspace");
     expect(evaluateLink).toBeInTheDocument();
