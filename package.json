@@ -91,6 +91,33 @@
     "react-test-renderer": "^18.2.0",
     "redux-mock-store": "^1.5.4"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/*.config.ts",
+      "!**/*.module.ts",
+      "!routes.ts",
+      "!main.ts"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
