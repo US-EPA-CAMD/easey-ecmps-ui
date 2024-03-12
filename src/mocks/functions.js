@@ -30,6 +30,7 @@ export const getMockEcmpsUser = () => {
     lastName: "mockUserLast",
     roles: [
       config.app.sponsorRole,
+      config.app.initialAuthorizerRole,
       config.app.submitterRole,
       config.app.preparerRole,
       config.app.adminRole,
