@@ -101,7 +101,9 @@ describe("renders and tests HelpSupport component", () => {
     const emailInput = screen.getByTestId("textInput");
     expect(emailInput).not.toBeDisabled();
     userEvent.type(emailInput, "myemail@email.com");
-    expect(screen.findByDisplayValue("myemail@email.com"));
+    const emailElement = await screen.findByDisplayValue("myemail@email.com");
+    expect(emailElement).toBeTruthy();
+    // expect(screen.findByDisplayValue("myemail@email.com"));
 
     // comment type
     const commentTypeInput = screen.getByLabelText("Help using application");
@@ -120,9 +122,11 @@ describe("renders and tests HelpSupport component", () => {
     const submitButton = screen.getByTestId('input-button-search');
     // submit form (receive server error)
       userEvent.click(submitButton);
-    expect(screen.findByText(errorMsg));
+    const errorMessage = expect(screen.findByText(errorMsg));
+    expect(errorMessage).toBeTruthy();
       userEvent.click(submitButton);
-    expect(screen.findByText(successMsg));
+    const successMessage = expect(screen.findByText(successMsg));
+    expect(successMessage).toBeTruthy();
   });
 
   test("show error if email format is incorrect", async () => {

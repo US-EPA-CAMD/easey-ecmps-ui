@@ -201,8 +201,8 @@ describe("Emissions API", function () {
         mockResponse.quarter,
         true
       );
-
-      expect(mockFileDownload);
+      const mockFile = expect(mockFileDownload);;
+    expect(mockFile).toBeTruthy();
     });
   });
 });

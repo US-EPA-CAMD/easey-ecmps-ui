@@ -113,15 +113,36 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
           const codeGroup = row[column.name + "Group"];
           const codeDescription = row[column.name + "Description"];
 
-          if (codeGroup) {
-            let group = groups.find((i) => i.name === codeGroup);
+          // if (codeGroup) {
+          //   let group = groups.find((i) => i.name === codeGroup);
 
+          //   if (!group) {
+          //     group = { name: codeGroup, items: [] };
+          //     groups.push(group);
+          //   }
+
+          //   const code = group.items.find((i) => i.code === columnValue);
+          //   if (!code && columnValue !== null && columnValue !== undefined) {
+          //     group.items.push({
+          //       code: columnValue,
+          //       description: codeDescription,
+          //     });
+          //   }
+          // }
+
+          if (codeGroup) {
+            updateGroupItems(groups, codeGroup, columnValue, codeDescription);
+          }
+          
+          function updateGroupItems(groups, codeGroup, columnValue, codeDescription) {
+            let group = findGroupByName(groups, codeGroup);
+          
             if (!group) {
               group = { name: codeGroup, items: [] };
               groups.push(group);
             }
-
-            const code = group.items.find((i) => i.code === columnValue);
+          
+            const code = findItemByCode(group.items, columnValue);
             if (!code && columnValue !== null && columnValue !== undefined) {
               group.items.push({
                 code: columnValue,
@@ -129,6 +150,15 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
               });
             }
           }
+          
+          function findGroupByName(groups, name) {
+            return groups.find((group) => group.name === name);
+          }
+          
+          function findItemByCode(items, code) {
+            return items.find((item) => item.code === code);
+          }
+          
 
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {

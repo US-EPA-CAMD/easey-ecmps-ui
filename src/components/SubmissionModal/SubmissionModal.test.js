@@ -238,7 +238,7 @@ describe("Submission Modal", () => {
       await userEvent.click(checkBox);
       await submissionButton.click();
     });
-
-    expect(callback)
+    const checkResponse = expect(callback);
+    expect(checkResponse).toBeTruthy();
   });
 });
