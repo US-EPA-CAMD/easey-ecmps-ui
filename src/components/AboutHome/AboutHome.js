@@ -61,6 +61,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
     return (
       !user ||
       user?.roles?.includes(config.app.sponsorRole) ||
+      user?.roles?.includes(config.app.initialAuthorizerRole) ||
       user?.roles?.includes(config.app.submitterRole) ||
       user?.roles?.includes(config.app.preparerRole)
     );

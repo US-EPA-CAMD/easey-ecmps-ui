@@ -28,7 +28,7 @@ export const checkoutAPI = (
           setCheckout(true, configID, MONITORING_PLAN_STORE_NAME);
         }
         if (res === undefined) {
-          console.log("this configuration is already checked out ");
+          console.log("this configuration is already checked out");
         }
       });
   }
