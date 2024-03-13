@@ -8,7 +8,7 @@ import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
 import { getEvalResultMessage, getEvalStatus } from "../../../utils/functions";
 
-export const Report = ({ reportData, dataLoaded, paramsObject }) => {
+const Report = ({ reportData, dataLoaded, paramsObject }) => {
   const [evalResultMessage, setEvalResultMessage] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     fetchEvalStatusData();
   }, [paramsObject, reportData]);
 
-  const displayCloseButton = useState(true);
+  const displayCloseButton = true;
 
   const displayCurrentDate = () => {
     const date = new Date();
@@ -79,64 +79,46 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     window.close();
   };
 
-  let results = [];
-  let codeGroups = [];
-  let columnNames = [];
-  let columnGroups = [];
+  const processData = (detailColumns, detail) => {
+    let results = [];
+    let codeGroups = [];
+    let columnNames = [];
+    let columnGroups = [];
 
-  reportData.details.forEach((detail) => {
-    let groups = [];
-    const detailColumns = reportData.columns.find(
-      (x) => x.code === detail.templateCode
-    );
-    columnNames.push(
-      detailColumns.values.map((column, index) => {
-        let mod = 1;
-        if (detail.templateType.endsWith("COLTBL")) {
-          mod = Number(detail.templateType.charAt(0));
-        }
-        let columnGroup = groups[index % mod];
-        if (columnGroup === null || columnGroup === undefined) {
-          columnGroup = [];
-          groups.push(columnGroup);
-        }
-        columnGroup.push(column);
-        return column.displayName;
-      })
-    );
-    columnGroups.push(groups);
-
-    groups = [];
-    codeGroups.push(groups);
     detail.results.forEach((row) => {
+      let groups = [];
+      columnNames.push(
+        detailColumns.values.map((column, index) => {
+          let mod = 1;
+          if (detail.templateType.endsWith("COLTBL")) {
+            mod = Number(detail.templateType.charAt(0));
+          }
+          let columnGroup = groups[index % mod];
+          if (columnGroup === null || columnGroup === undefined) {
+            columnGroup = [];
+            groups.push(columnGroup);
+          }
+          columnGroup.push(column);
+          return column.displayName;
+        })
+      );
+      columnGroups.push(groups);
+
+      groups = [];
+      codeGroups.push(groups);
       const columnData = detailColumns.values.map((column, index) => {
         const columnValue = row[column.name];
         const codeGroup = row[column.name + "Group"];
         const codeDescription = row[column.name + "Description"];
 
         if (codeGroup) {
-          // let group = groups.find((i) => i.name === codeGroup);
-          let group;
-          for (let i = 0; i < groups.length; i++) {
-            if (groups[i].name === codeGroup) {
-              group = groups[i];
-              break;
-            }
-          }
-
+          let group = groups.find((i) => i.name === codeGroup);
           if (!group) {
             group = { name: codeGroup, items: [] };
             groups.push(group);
           }
 
-          // const code = group.items.find((i) => i.code === columnValue);
-          let code;
-          for (let i = 0; i < group.items.length; i++) {
-            if (group.items[i].code === columnValue) {
-              code = group.items[i];
-              break;
-            }
-          }
+          let code = group.items.find((i) => i.code === columnValue);
           if (!code && columnValue !== null && columnValue !== undefined) {
             group.items.push({
               code: columnValue,
@@ -162,7 +144,14 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
       });
       results.push(JSON.parse(`{${columnData.join(",")}}`));
     });
-  });
+
+    return { results, codeGroups, columnNames, columnGroups };
+  };
+
+  const { results, codeGroups, columnNames, columnGroups } = processData(
+    reportData.columns,
+    reportData.details
+  );
 
   return loading ? (
     <div className="height-viewport display-flex flex-justify-center flex-align-center text-center">
