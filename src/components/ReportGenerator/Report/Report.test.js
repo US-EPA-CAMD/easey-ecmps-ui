@@ -87,7 +87,6 @@ test('when user clicks button to print then report is printed, line 103', async(
   await act(async() => await userEvent.click(printBtn))
 
   // Assert
-  expect(window.print)
   const printResponse = expect(window.print);
     expect(printResponse).toBeTruthy();
 }, 10000)
