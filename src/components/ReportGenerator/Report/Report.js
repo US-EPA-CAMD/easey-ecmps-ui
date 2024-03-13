@@ -115,14 +115,28 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
         const codeDescription = row[column.name + "Description"];
 
         if (codeGroup) {
-          let group = groups.find((i) => i.name === codeGroup);
+          // let group = groups.find((i) => i.name === codeGroup);
+          let group;
+          for (let i = 0; i < groups.length; i++) {
+            if (groups[i].name === codeGroup) {
+              group = groups[i];
+              break;
+            }
+          }
 
           if (!group) {
             group = { name: codeGroup, items: [] };
             groups.push(group);
           }
 
-          const code = group.items.find((i) => i.code === columnValue);
+          // const code = group.items.find((i) => i.code === columnValue);
+          let code;
+          for (let i = 0; i < group.items.length; i++) {
+            if (group.items[i].code === columnValue) {
+              code = group.items[i];
+              break;
+            }
+          }
           if (!code && columnValue !== null && columnValue !== undefined) {
             group.items.push({
               code: columnValue,

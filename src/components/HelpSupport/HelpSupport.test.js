@@ -8,7 +8,7 @@ jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
 });
 
-jest.mock("remark-gfm", () => () => {});
+jest.mock("remark-gfm", () => () => { });
 
 jest.mock("../../utils/api/contentApi", () => {
   const testContent = {
@@ -71,7 +71,7 @@ describe("renders and tests HelpSupport component", () => {
     helpSupport = null;
   });
 
-  test("submit blank contact form and get validation error", async() => {
+  test("submit blank contact form and get validation error", async () => {
     const blankFieldsMsg =
       "Please complete the fields below to send an email to ECMPS Beta Support. You may also send an email directly to";
     const submitBtn = helpSupport.container.querySelector(
@@ -121,10 +121,10 @@ describe("renders and tests HelpSupport component", () => {
       "Thank you, your form has been submitted and an email confirmation will be sent to you shortly.";
     const submitButton = screen.getByTestId('input-button-search');
     // submit form (receive server error)
-      userEvent.click(submitButton);
-    expect(errorMsg);
-      userEvent.click(submitButton);
-    expect(successMsg);
+    userEvent.click(submitButton);
+    expect(screen.findByText(errorMsg)).toBeTruthy();
+    userEvent.click(submitButton);
+    expect(screen.findByText(successMsg)).toBeTruthy();
   });
 
   test("show error if email format is incorrect", async () => {
@@ -137,7 +137,7 @@ describe("renders and tests HelpSupport component", () => {
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
-      userEvent.click(submitBtn);
+    userEvent.click(submitBtn);
     const invalidEmailErrorMsg =
       "* Email";
     expect(screen.getByText(invalidEmailErrorMsg)).toBeInTheDocument();
