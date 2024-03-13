@@ -31,6 +31,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
 
     fetchEvalStatusData();
   }, [paramsObject, reportData]);
+
   const displayCloseButton = useState(true);
 
   const displayCurrentDate = () => {
@@ -73,6 +74,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
         handleError(error);
       });
   };
+
   const closeReport = () => {
     window.close();
   };
@@ -106,78 +108,46 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
 
     groups = [];
     codeGroups.push(groups);
-    results.push(
-      detail.results.map((row) => {
-        const columnData = detailColumns.values.map((column, index) => {
-          const columnValue = row[column.name];
-          const codeGroup = row[column.name + "Group"];
-          const codeDescription = row[column.name + "Description"];
+    detail.results.forEach((row) => {
+      const columnData = detailColumns.values.map((column, index) => {
+        const columnValue = row[column.name];
+        const codeGroup = row[column.name + "Group"];
+        const codeDescription = row[column.name + "Description"];
 
-          // if (codeGroup) {
-          //   let group = groups.find((i) => i.name === codeGroup);
+        if (codeGroup) {
+          let group = groups.find((i) => i.name === codeGroup);
 
-          //   if (!group) {
-          //     group = { name: codeGroup, items: [] };
-          //     groups.push(group);
-          //   }
+          if (!group) {
+            group = { name: codeGroup, items: [] };
+            groups.push(group);
+          }
 
-          //   const code = group.items.find((i) => i.code === columnValue);
-          //   if (!code && columnValue !== null && columnValue !== undefined) {
-          //     group.items.push({
-          //       code: columnValue,
-          //       description: codeDescription,
-          //     });
-          //   }
-          // }
+          const code = group.items.find((i) => i.code === columnValue);
+          if (!code && columnValue !== null && columnValue !== undefined) {
+            group.items.push({
+              code: columnValue,
+              description: codeDescription,
+            });
+          }
+        }
 
-          if (codeGroup) {
-            updateGroupItems(groups, codeGroup, columnValue, codeDescription);
+        const columnNumber = `"col${index + 1}": `;
+        if (columnValue !== null && columnValue !== undefined) {
+          if (columnValue.includes("\r\n")) {
+            return `${columnNumber}"${columnValue.replace(
+              /\r\n/gi,
+              "\\r\\n"
+            )}"`;
           }
-          
-          function updateGroupItems(groups, codeGroup, columnValue, codeDescription) {
-            let group = findGroupByName(groups, codeGroup);
-          
-            if (!group) {
-              group = { name: codeGroup, items: [] };
-              groups.push(group);
-            }
-          
-            const code = findItemByCode(group.items, columnValue);
-            if (!code && columnValue !== null && columnValue !== undefined) {
-              group.items.push({
-                code: columnValue,
-                description: codeDescription,
-              });
-            }
+          if (columnValue.includes('"')) {
+            return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
           }
-          
-          function findGroupByName(groups, name) {
-            return groups.find((group) => group.name === name);
-          }
-          
-          function findItemByCode(items, code) {
-            return items.find((item) => item.code === code);
-          }
-          
-
-          const columnNumber = `"col${index + 1}": `;
-          if (columnValue !== null && columnValue !== undefined) {
-            if (columnValue.includes("\r\n")) {
-              return `${columnNumber}"${columnValue.replace(
-                /\r\n/gi,
-                "\\r\\n"
-              )}"`;
-            }
-            if (columnValue.includes('"')) {
-              return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
-            }
-            return `${columnNumber}"${columnValue}"`;
-          }
-          return `${columnNumber}null`;
-        });
-        return JSON.parse(`{${columnData.join(",")}}`);
-      })
-    );
+          return `${columnNumber}"${columnValue}"`;
+        }
+        return `${columnNumber}null`;
+      });
+      results.push(JSON.parse(`{${columnData.join(",")}}`));
+    });
   });
 
   return loading ? (

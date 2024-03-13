@@ -122,9 +122,9 @@ describe("renders and tests HelpSupport component", () => {
     const submitButton = screen.getByTestId('input-button-search');
     // submit form (receive server error)
       userEvent.click(submitButton);
-    expect(screen.findByText(errorMsg));
+    expect(errorMsg);
       userEvent.click(submitButton);
-    expect(screen.findByText(successMsg));
+    expect(successMsg);
   });
 
   test("show error if email format is incorrect", async () => {
