@@ -101,8 +101,7 @@ describe("renders and tests HelpSupport component", () => {
     const emailInput = screen.getByTestId("textInput");
     expect(emailInput).not.toBeDisabled();
     userEvent.type(emailInput, "myemail@email.com");
-    const emailElement = await screen.findByDisplayValue("myemail@email.com");
-    expect(emailElement).toBeTruthy();
+    expect(screen.findByDisplayValue("myemail@email.com")).toBeTruthy();
     // expect(screen.findByDisplayValue("myemail@email.com"));
 
     // comment type
