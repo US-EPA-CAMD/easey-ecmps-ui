@@ -106,37 +106,33 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     );
     columnGroups.push(groups);
 
+    function findGroupByName(groups, name) {
+      return groups.find((group) => group.name === name);
+    }
+    
+    function findItemByCode(items, code) {
+      return items.find((item) => item.code === code);
+    }
+    
     groups = [];
     codeGroups.push(groups);
+    
     detail.results.forEach((row) => {
       const columnData = detailColumns.values.map((column, index) => {
         const columnValue = row[column.name];
         const codeGroup = row[column.name + "Group"];
         const codeDescription = row[column.name + "Description"];
-
+    
         if (codeGroup) {
-          // let group = groups.find((i) => i.name === codeGroup);
-          let group;
-          for (let i = 0; i < groups.length; i++) {
-            if (groups[i].name === codeGroup) {
-              group = groups[i];
-              break;
-            }
-          }
-
+          let group = findGroupByName(groups, codeGroup);
+    
           if (!group) {
             group = { name: codeGroup, items: [] };
             groups.push(group);
           }
-
-          // const code = group.items.find((i) => i.code === columnValue);
-          let code;
-          for (let i = 0; i < group.items.length; i++) {
-            if (group.items[i].code === columnValue) {
-              code = group.items[i];
-              break;
-            }
-          }
+    
+          let code = findItemByCode(group.items, columnValue);
+    
           if (!code && columnValue !== null && columnValue !== undefined) {
             group.items.push({
               code: columnValue,
@@ -144,19 +140,16 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
             });
           }
         }
-
+    
         const columnNumber = `"col${index + 1}": `;
         if (columnValue !== null && columnValue !== undefined) {
+          let sanitizedValue = columnValue;
           if (columnValue.includes("\r\n")) {
-            return `${columnNumber}"${columnValue.replace(
-              /\r\n/gi,
-              "\\r\\n"
-            )}"`;
+            sanitizedValue = columnValue.replace(/\r\n/gi, "\\r\\n");
+          } else if (columnValue.includes('"')) {
+            sanitizedValue = columnValue.replace(/"/gi, '\\"');
           }
-          if (columnValue.includes('"')) {
-            return `${columnNumber}"${columnValue.replace(/"/gi, '\\"')}"`;
-          }
-          return `${columnNumber}"${columnValue}"`;
+          return `${columnNumber}"${sanitizedValue}"`;
         }
         return `${columnNumber}null`;
       });
