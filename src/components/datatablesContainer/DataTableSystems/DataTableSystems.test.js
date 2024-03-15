@@ -20,6 +20,7 @@ jest.mock('../../../utils/api/monitoringPlansApi', () => ({
   saveSystemsFuelFlows: jest.fn(),
   createSystemsFuelFlows: jest.fn(),
   createSystemsComponents: jest.fn(),
+  createComponents: jest.fn(),
   saveSystemsComponents: jest.fn(),
 }));
 const systemsDataActiveOnly = [

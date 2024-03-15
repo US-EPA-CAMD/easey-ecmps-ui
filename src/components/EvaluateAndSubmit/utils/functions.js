@@ -21,6 +21,7 @@ export const canSelectRow = (
   const rowSubmissionAllowed =
     row.submissionAvailabilityCode === "REQUIRE" ||
     row.submissionAvailabilityCode === "GRANTED" ||
+    row.submissionAvailabilityCode === "CRITERR" ||
     row.submissionAvailabilityCode === null ||
     row.submissionAvailabilityCode === undefined ||
     row.submissionAvailabilityCode === "";

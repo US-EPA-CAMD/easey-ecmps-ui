@@ -469,6 +469,22 @@ export const createSystemsComponents = async (payload, locId, sysId) => {
   }
 };
 
+export const createComponents = async (payload, locId) => {
+  const url = getApiUrl(`/locations/${locId}/components`);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getMonitoringSpans = async (locationId) => {
   const url = getApiUrl(`/locations/${locationId}/spans`);
   return secureAxios({
