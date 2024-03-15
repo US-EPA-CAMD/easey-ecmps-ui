@@ -509,7 +509,7 @@ export const DataTableRender = ({
     if (title === "") {
       title = sectionTitle ? sectionTitle : null;
     }
-    if (data.length >= 0) {
+    if (data.length > 0) {
       return (
         <FilterComponent
           onSearch={handleSearch}

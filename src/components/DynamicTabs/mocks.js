@@ -22,7 +22,14 @@ class Welcome extends React.Component {
     return (
       <div>
         <h1>Hello, {this.props.name}</h1>
-        <a onClick={this.clickHandler}>Add Tab</a>
+        <a onClick={this.clickHandler}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              this.clickHandler();
+            }
+          }}>
+          Add Tab
+        </a>
       </div>
     );
   }
