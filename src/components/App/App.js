@@ -191,7 +191,8 @@ const App = () => {
       validUser() &&
       (cdxUser?.roles?.includes(config.app.sponsorRole) ||
         cdxUser?.roles?.includes(config.app.submitterRole) ||
-        cdxUser?.roles?.includes(config.app.preparerRole))
+        cdxUser?.roles?.includes(config.app.preparerRole) ||
+        cdxUser?.roles?.includes(config.app.initialAuthorizerRole))
     );
   };
 
