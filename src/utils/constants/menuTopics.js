@@ -247,7 +247,11 @@ export const getWorkspacePaths = () => {
     {
       name: "Submit",
       url: "/workspace/submit",
-      requiredRoles: [config.app.submitterRole],
+      requiredRoles: [
+        config.app.submitterRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+      ],
     },
     {
       name: "Export & Report",
