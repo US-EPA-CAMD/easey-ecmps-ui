@@ -97,17 +97,14 @@ export const sortByCompletionDateHour = (a, b) => {
 };
 
 export const formatSubmissionWindow = (window) => {
-  if (window === "REQUIRE" || window === "GRANTED") {
-    return "Open";
-  }
-
+  if (!window) return "None";
+  if (window === "REQUIRE" || window === "GRANTED") return "Open";
   return "Closed";
 };
 
 export const formatTimeStamp = (timeStamp) => {
   const date = new Date(timeStamp);
-  return `${date.getFullYear()}-${(date
-    .getMonth() + 1)
+  return `${date.getFullYear()}-${(date.getMonth() + 1)
     .toString()
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
     .getHours()
@@ -433,7 +430,7 @@ export const emissionsColumns = [
   },
   {
     name: <span>{"Submission Status"}</span>,
-    selector: (row) => row.submissionAvailabilityCodeDescription,
+    selector: (row) => row.submissionAvailabilityCodeDescription || "None",
     sortable: true,
   },
   {
