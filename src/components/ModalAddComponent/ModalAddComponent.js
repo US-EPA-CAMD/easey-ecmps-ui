@@ -36,8 +36,8 @@ const ModalAddComponent = ({
       main = comps;
 
       if (sysComps.length >= 1) {
-        const sys = sysComps.filter((sy)=>sy.endDate && new Date(sy.endDate) < new Date());
-        main = main.filter(({ componentId: compId }) => sys.some(({ componentId: sysCompId }) => sysCompId === compId));
+        const sys = sysComps.filter((sy)=> !sy.endDate || new Date(sy.endDate) < new Date());
+        main = main.filter(({ id: compId }) => sys.some(({ componentRecordId: sysCompId }) => sysCompId === compId));
         setFilteredComps(main);
       }
     }
