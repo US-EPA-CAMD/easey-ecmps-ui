@@ -626,7 +626,7 @@ export const DataTableSystems = ({
     }
     try {
       let resp;
-      if (!addExistingComponentFlag){
+      let response;
         resp = await mpApi
         .createComponents(
           userInput,
@@ -634,17 +634,15 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .catch((error) => console.log("createComponents failed", error));
-      } else {
-       resp = await mpApi
+        response = await mpApi
         .createSystemsComponents(
           userInput,
           selectedSystem.locationId,
           selectedSystem.id
         )
         .catch((error) => console.log("createSystemsComponents failed", error));
-      }
       
-      if (resp?.status >= 200 && resp?.status < 300) {
+      if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
