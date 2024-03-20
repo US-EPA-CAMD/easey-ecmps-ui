@@ -23,6 +23,8 @@
       font-weight: bold;
       border: solid 1px $epa-white;
       justify-content: left !important;
+      // display: inline-table;
+      width: max-content;
       :focus {
         outline: none;
         border: solid 3.8px #2672de;
@@ -114,6 +116,7 @@
     color: $epa-black !important;
     /*white-space: nowrap !important;*/
     margin-right: 1em !important;
+    overflow: visible !important;
   }
   .rdt_TableRow {
     /**/

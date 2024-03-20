@@ -199,6 +199,7 @@ export const getWorkspacePaths = () => {
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
         config.app.submitterRole,
       ],
     },
@@ -218,6 +219,7 @@ export const getWorkspacePaths = () => {
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
         config.app.submitterRole,
       ],
     },
@@ -227,6 +229,7 @@ export const getWorkspacePaths = () => {
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
         config.app.submitterRole,
       ],
     },
@@ -237,13 +240,18 @@ export const getWorkspacePaths = () => {
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
         config.app.submitterRole,
       ],
     },
     {
       name: "Submit",
       url: "/workspace/submit",
-      requiredRoles: [config.app.submitterRole],
+      requiredRoles: [
+        config.app.submitterRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+      ],
     },
     {
       name: "Export & Report",
@@ -251,6 +259,7 @@ export const getWorkspacePaths = () => {
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
         config.app.submitterRole,
       ],
     },

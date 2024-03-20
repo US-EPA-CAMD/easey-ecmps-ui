@@ -216,10 +216,10 @@ export const HeaderInfo = ({
     currentTab?.reportingPeriods ?? []
   );
 
-  const selectedUnitId = selectedConfig?.monitoringLocationData
+  let selectedUnitId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.unitId);
-  const selectedStackPipeId = selectedConfig?.monitoringLocationData
+  let selectedStackPipeId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.stackPipeId);
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
@@ -386,7 +386,7 @@ export const HeaderInfo = ({
   }
 
   // gets the data required to build the emissions dropdown
-  const getEmissionsViewDropdownData = async () => {
+  const getEmissionsViewDropdownData = async (location) => {
 
     const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
 
@@ -400,6 +400,15 @@ export const HeaderInfo = ({
     // First get view counts
     try {
       setIsLoading(true);
+      if (location) {
+        selectedUnitId = selectedConfig?.monitoringLocationData
+          ?.filter((l) => l.id === location[1])
+          .map((l) => l.unitId);
+
+        selectedStackPipeId = selectedConfig?.monitoringLocationData
+          ?.filter((l) => l.id === location[1])
+          .map((l) => l.stackPipeId);
+      }
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
         configID,
@@ -989,7 +998,7 @@ export const HeaderInfo = ({
     setLocationSelect(location);
     setViewTemplateSelect(defaultTemplateValue)
     resetEmissionsViewTable();
-    getEmissionsViewDropdownData();
+    getEmissionsViewDropdownData(location);
   }
 
   const handleExport = async () => {

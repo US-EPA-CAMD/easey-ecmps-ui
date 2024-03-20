@@ -1,13 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, GovBanner } from "@trussworks/react-uswds";
-import { AppVersion } from "@us-epa-camd/easey-design-system";
+import { AppVersion, Preloader } from "@us-epa-camd/easey-design-system";
 import DefaultTemplate from "../DefaultTemplate/DefaultTemplate";
 import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplate";
 import config from "../../../config";
 import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
+import { getEvalResultMessage, getEvalStatus } from "../../../utils/functions";
 
 export const Report = ({ reportData, dataLoaded, paramsObject }) => {
+  const [evalResultMessage, setEvalResultMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvalStatusData = async () => {
+      try {
+        const status = await getEvalStatus(paramsObject.current);
+        const resultMessage = getEvalResultMessage(
+          reportData,
+          paramsObject,
+          status
+        );
+        setEvalResultMessage(resultMessage);
+      } catch (error) {
+        console.error("Error fetching eval status", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvalStatusData();
+  }, [paramsObject, reportData]);
   const displayCloseButton = useState(true);
 
   const displayCurrentDate = () => {
@@ -127,7 +150,11 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     );
   });
 
-  return (
+  return loading ? (
+    <div className="height-viewport display-flex flex-justify-center flex-align-center text-center">
+      <Preloader />
+    </div>
+  ) : (
     <>
       <div>
         <GovBanner className="padding-y-2px bg-base-lighter do-not-print" />
@@ -199,6 +226,15 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                 );
               }
             })}
+
+            {evalResultMessage && (
+              <div>
+                <h3 className="subheader-wrapper bg-epa-blue-base text-white text-normal padding-left-1 padding-y-2px">
+                  Evaluation Results
+                </h3>
+                <div>{evalResultMessage}</div>
+              </div>
+            )}
 
             <div className="position-fixed bottom-0 right-0 width-full do-not-print">
               <AppVersion

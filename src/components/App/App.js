@@ -185,13 +185,16 @@ const App = () => {
     );
   };
 
+  const roles = JSON.parse(localStorage.getItem("ecmps_user"))?.roles;
+
   const facilityCheckoutPermission = () => {
     const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
     return (
       validUser() &&
       (cdxUser?.roles?.includes(config.app.sponsorRole) ||
         cdxUser?.roles?.includes(config.app.submitterRole) ||
-        cdxUser?.roles?.includes(config.app.preparerRole))
+        cdxUser?.roles?.includes(config.app.preparerRole) ||
+        cdxUser?.roles?.includes(config.app.initialAuthorizerRole))
     );
   };
 
@@ -402,10 +405,9 @@ const App = () => {
             path="/workspace/submit"
             element={
               !validUser() ||
-              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
-                config.app.submitterRole
-              ) ? (
-                <Navigate to="/" />
+              roles?.every(role => !["Sponsor", "Submitter", "Initial Authorizer"].includes(role))
+              ? (
+                <Navigate key="navigate" to="/" />
               ) : (
                 <div key={"Submit-Component"}>
                   <EvaluateAndSubmit user={user} componentType="Submission" />

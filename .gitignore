@@ -10,8 +10,10 @@
 .DS_Store
 .env
 .env.*
+.envrc
 
 npm-debug.log*
+.npmrc
 
 # Logs
 logs

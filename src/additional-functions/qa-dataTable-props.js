@@ -652,8 +652,8 @@ export const qaFuelFlowToLoadBaselineProps = () => {
   return {
     dataTableName: 'Fuel Flow to Load Baseline',
     payload: {
-      accuracyTestNumber: 0,
-      peiTestNumber: 0,
+      accuracyTestNumber: 'string',
+      peiTestNumber: 'string',
       averageFuelFlowRate: 0,
       averageLoad: 0,
       baselineFuelFlowToLoadRatio: 0,
