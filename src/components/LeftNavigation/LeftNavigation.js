@@ -109,6 +109,7 @@ export const LeftNavigation = (props) => {
 
     if (
       props.user?.roles?.includes(config.app.sponsorRole) ||
+      props.user?.roles?.includes(config.app.initialAuthorizerRole) ||
       props.user?.roles?.includes(config.app.submitterRole) ||
       props.user?.roles?.includes(config.app.preparerRole)
     ) {

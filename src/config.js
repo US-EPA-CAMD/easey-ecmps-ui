@@ -2,7 +2,7 @@ import {
   getConfigValue,
   getConfigValueNumber,
   getConfigValueBoolean,
-} from "./utils/functions";
+} from "./utils/configFunctions";
 
 export const oneSecond = 1000;
 export const fiveSeconds = 5000;
@@ -112,6 +112,7 @@ export const config = {
     preparerRole: getConfigValue("EASEY_AUTH_API_PREPARER_ROLE", "Preparer"),
     analystRole: getConfigValue("EASEY_AUTH_API_ANALYST_ROLE", "ECMPS Analyst"),
     adminRole: getConfigValue("EASEY_AUTH_API_ADMIN_ROLE", "ECMPS Admin"),
+    initialAuthorizerRole: getConfigValue("EASEY_AUTH_API_INITIAL_AUTHORIZER_ROLE", "Initial Authorizer"),
   },
   services: {
     mdm: {

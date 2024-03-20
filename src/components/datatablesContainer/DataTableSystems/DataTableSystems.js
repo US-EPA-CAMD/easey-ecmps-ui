@@ -625,14 +625,24 @@ export const DataTableSystems = ({
       return false;
     }
     try {
-      const resp = await mpApi
+      let resp;
+      let response;
+        resp = await mpApi
+        .createComponents(
+          userInput,
+          selectedSystem.locationId,
+          selectedSystem.id
+        )
+        .catch((error) => console.log("createComponents failed", error));
+        response = await mpApi
         .createSystemsComponents(
           userInput,
           selectedSystem.locationId,
           selectedSystem.id
         )
         .catch((error) => console.log("createSystemsComponents failed", error));
-      if (resp.status >= 200 && resp.status < 300) {
+      
+      if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);

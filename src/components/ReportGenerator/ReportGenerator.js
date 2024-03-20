@@ -35,7 +35,7 @@ export const ReportGenerator = ({ user, requireAuth = false }) => {
     }
   }, [requireAuth, user, dataLoaded, search]);
 
-  if (error) {
+  if (error || (dataLoaded && !reportData?.details.length)) {
     return <ErrorMessage error={error} />;
   }
 
@@ -94,7 +94,8 @@ export const ErrorMessage = ({ error }) => (
       </div>
       <div className="padding-x-5">
         <h1 className="text-bold">
-          An error occurred while generating the report
+          An error has occurred therefore a report cannot be generated at this
+          time. Please check back later or contact support.
         </h1>
         <p>{error}</p>
       </div>
