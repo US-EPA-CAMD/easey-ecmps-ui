@@ -29,6 +29,7 @@ const ModalDetails = ({
   setMainDropdownChange,
   mainDropdownChange,
   setDisableExitBtnStatus,
+  disableColoums
 }) => {
   // fixes resizing issue with calendar date picker along with help in CSS file
   const containerStyle = {
@@ -322,6 +323,7 @@ const ModalDetails = ({
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
+            viewOnly={disableColoums && disableColoums.includes(value[0])}
           />
         );
         break;
