@@ -1,7 +1,7 @@
 import React from "react";
 import {
   render,
-  waitForElement,
+  waitFor,
   screen,
 } from "@testing-library/react";
 
@@ -37,7 +37,7 @@ const componentRenderer = (back) => {
 
 
 test("renders ModalAddComponent with back button", async () => {
-  let { container } = await waitForElement(() => componentRenderer(true));
+  let { container } = await waitFor(() => componentRenderer(true));
 
   const backBtn = await screen.findAllByRole('button', { name: /Back/i });
   expect(backBtn[0]).toBeEnabled();
@@ -47,7 +47,7 @@ test("renders ModalAddComponent with back button", async () => {
 });
 
 test("renders ModalAddComponent with no back button", async () => {
-  let { container } = await waitForElement(() => componentRenderer(false));
+  let { container } = await waitFor(() => componentRenderer(false));
   expect(container).toBeDefined();
 });
 

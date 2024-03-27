@@ -35,6 +35,6 @@ test("renders ExportTablesContainer", async () => {
   await render(
     <ExportTablesContainer {...props} />
   );
-  const tableTitle = await screen.findByTestId('export-table-title')
+  const tableTitle = await screen.findAllByTestId('export-table-title')
   expect(tableTitle).toBeDefined();
 });

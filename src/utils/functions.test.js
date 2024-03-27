@@ -259,9 +259,7 @@ describe("functions.js", function () {
       it("returns returns correct string with eval status", () => {
         const evalStatus = "PASS";
         const result = alertStyle(evalStatus);
-        const expectedResult = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-          evalStatus
-        )} margin-y-0 maintainBorder`;
+        const expectedResult = `usa-alert usa-alert--slim usa-alert--no-icon usa-alert--success`;
         expect(result).toBe(expectedResult);
       });
     });

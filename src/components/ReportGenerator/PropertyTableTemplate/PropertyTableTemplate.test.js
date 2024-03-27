@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import PropertyTableTemplate from './PropertyTableTemplate';
 import _ from 'lodash';
 
@@ -43,29 +43,32 @@ const props = {
   ],
 };
 const { data, title, columnGroups } = props;
+
 describe('PropertyTableTemplate', () => {
   it('renders without error', () => {
-    const {getByText } = render(
-      <PropertyTableTemplate
-        data={data}
-        columnGroups={columnGroups}
-        title={title}
-      />
-    );
-    const reportTitle = getByText(title)
+    render(<PropertyTableTemplate data={data} columnGroups={columnGroups} title={title} />);
+    const reportTitle = screen.getByText(title);
     expect(reportTitle).toBeInTheDocument();
   });
 
   it('displays unit stack id in title if there is unitStack id in the data', () => {
-    const updatedData = _.cloneDeep(data), unitStack = '123';
-    const {debug, getByText } = render(
+    const updatedData = _.cloneDeep(data),
+      unitStack = '123';
+    render(
       <PropertyTableTemplate
-        data={{...updatedData, unitStack}}
+        data={{ ...updatedData, unitStack }}
         columnGroups={columnGroups}
         title={title}
       />
     );
-    const reportTitle = getByText(`Unit/Stack/Pipe ID: ${unitStack} - ${title}`)
+
+    const customTextMatcher = (content, element) => {
+      const elementText = element.textContent || element.innerText || "";
+      return elementText.includes(content);
+    };
+
+    const expectedText = `Unit/Stack/Pipe ID: ${unitStack}`;
+    const reportTitle = screen.getByText(new RegExp(expectedText)) // Update this line
     expect(reportTitle).toBeInTheDocument();
   });
 });

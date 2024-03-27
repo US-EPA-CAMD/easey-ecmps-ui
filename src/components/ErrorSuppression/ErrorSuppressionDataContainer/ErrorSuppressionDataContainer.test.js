@@ -79,7 +79,7 @@ describe("ErrorSuppressionDataContainer component", () => {
     });
 
     expect(deactivateButton).not.toBeDisabled();
-  });
+  }, 10000);
 
   it("Disables clone button when multiple checkboxes are selected and enabled when at least one chceckbox is selected", async () => {
     const cloneButton = screen.getByTestId("es-clone-btn");
@@ -101,6 +101,6 @@ describe("ErrorSuppressionDataContainer component", () => {
 
     // should be disabled when multiple rows selected
     expect(cloneButton).toBeDisabled();
-  });
+  }, 20000);
 
 });

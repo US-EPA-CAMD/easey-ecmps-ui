@@ -6,8 +6,9 @@ export const EvaluateRefresh = ({
   dataList,
   storedFilters,
   lastEvalTime,
-  forceReloadTables,
+  forceReloadTables
 }) => {
+  
   const refreshPage = async () => {
     if (storedFilters.current !== null) {
       for (const [key, value] of Object.entries(dataList)) {
@@ -57,7 +58,9 @@ export const EvaluateRefresh = ({
         }
 
         if (changes > 0) {
-          forceReloadTables();
+          if (typeof forceReloadTables === 'function') {
+            forceReloadTables();
+          }
         }
       }
     }

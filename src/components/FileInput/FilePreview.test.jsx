@@ -64,19 +64,19 @@ describe('FilePreview component', () => {
     })
 
     // TODO - how to force an image error on load? test each file type class
-    describe.skip('for a PDF file', () => {
-      it('shows the PDF generic preview', async () => {
-        const { getByTestId } = await waitFor(() =>
-          render(
-            <FilePreview {...testProps} file={INVALID_TEST_PDF_FILE} />
-          )
-        )
+    // describe.skip('for a PDF file', () => {
+    //   it('shows the PDF generic preview', async () => {
+    //     const { getByTestId } = await waitFor(() =>
+    //       render(
+    //         <FilePreview {...testProps} file={INVALID_TEST_PDF_FILE} />
+    //       )
+    //     )
 
-        const imageEl = getByTestId('file-input-preview-image')
-        await waitFor(() => expect(imageEl).not.toHaveClass('is-loading'))
-        await waitFor(() => expect(imageEl).toHaveAttribute('src', SPACER_GIF))
-        expect(imageEl).toHaveClass('usa-file-input__preview-image--pdf')
-      })
-    })
+    //     const imageEl = getByTestId('file-input-preview-image')
+    //     await waitFor(() => expect(imageEl).not.toHaveClass('is-loading'))
+    //     await waitFor(() => expect(imageEl).toHaveAttribute('src', SPACER_GIF))
+    //     expect(imageEl).toHaveClass('usa-file-input__preview-image--pdf')
+    //   })
+    // })
   })
 })

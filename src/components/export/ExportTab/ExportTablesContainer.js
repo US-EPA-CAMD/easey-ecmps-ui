@@ -73,6 +73,7 @@ export const ExportTablesContainer = ({
       }
     };
     fetchTableData();
+    setLoading(false)
   }, [beginDate, dataKey, divId, endDate, monitoringLocationData, orisCode]);
 
   const onSelectRowsHandler = ({

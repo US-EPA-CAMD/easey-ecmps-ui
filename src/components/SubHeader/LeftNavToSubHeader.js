@@ -46,92 +46,78 @@ export const LeftNavToSubHeader = (props) => {
       });
     }
 
-    return arr.map((el, i) => {
-
+    return arr !== undefined ? arr.map((el, i) => {
       if (el.children) {
-        return (
-          <div>
-            <NavDropDownButton
-              key={i}
-              label={el.name}
-              menuId={`menu-${el.name}`}
-              isOpen={navDropdownOpen[i]}
-              onToggle={() => {
-                handleToggleNavDropdown(i);
-              }}
-              className={
-                window.location.href.indexOf(`${el.url}`) > -1
-                  ? "wkspaceMainMenu current-app-subitem font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
-                  : " font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
-              }
-              isCurrent={true}
-            />
-            <Menu
-              className="font-sans-md mobile-lg:font-sans-sm usa-current "
-              items={el.children.map((item, index) => (
-                <Link
-                  key={item.name}
-                  to={item.url}
-                  aria-label={
-                    item.name !== "Home"
-                      ? isWorkspace
-                        ? `${item.name} - Workspace`
-                        : `${item.name} - Global-View`
-                      : "Go to Home"
-                  }
-                  className={
-                    window.location.href.indexOf(`${item.url}`) > -1
-                      ? "wkspaceMainMenu current-app-subitem"
-                      : ""
-                  }
-                  
-                  title={
-                    item.name !== "Home"
-                      ? isWorkspace
-                        ? ` Go to ${item.name} - Workspace page`
-                        : `Go to ${item.name} - Global-View page`
-                      : "Go to Home page"
-                  }
-                  onClick={() => handleCloseSubMenus(i, item.url)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              isOpen={navDropdownOpen[i]}
-            />
-          </div>
-        );
+        return renderNavDropDown(el, i);
       } else {
-        return (
-          <Link
-            key={el.name}
-            aria-label={
-              el.name !== "Home"
-                ? isWorkspace
-                  ? `${el.name} - Workspace`
-                  : `${el.name} - Global-View`
-                : "Go to Home"
-            }
-            className={
-              props.currentLink === `/${el.url}` || props.currentLink === el.url
-                ? " current-app-subitem"
-                : ""
-            }
-            title={
-              el.name !== "Home"
-                ? isWorkspace
-                  ? ` Go to ${el.name} - Workspace page`
-                  : `Go to ${el.name} - Global-View page`
-                : "Go to Home page"
-            }
-            to={el.url}
-            onClick={() => handleCloseSubMenus(i, el.url)}
-          >
-            {el.name}
-          </Link>
-        );
+        return renderLink(el, i);
       }
-    });
+    }) : [];
+    
+    function renderNavDropDown(el, i) {
+      return (
+        <div>
+          <NavDropDownButton
+            key={i}
+            label={el.name}
+            menuId={`menu-${el.name}`}
+            isOpen={navDropdownOpen[i]}
+            onToggle={() => handleToggleNavDropdown(i)}
+            className={getNavDropDownButtonClassName(el)}
+            isCurrent={true}
+          />
+          <Menu
+            className="font-sans-md mobile-lg:font-sans-sm usa-current "
+            items={el.children.map((item) => renderLink(item, item.name))}
+            isOpen={navDropdownOpen[i]}
+          />
+        </div>
+      );
+    }
+    
+    function renderLink(el, i) {
+      return (
+        <Link
+          key={i}
+          aria-label={getAriaLabel(el)}
+          className={getLinkClassName(el)}
+          title={getTitle(el)}
+          to={el.url}
+          onClick={() => handleCloseSubMenus(i, el.url)}
+        >
+          {el.name}
+        </Link>
+      );
+    }
+    
+    function getNavDropDownButtonClassName(el) {
+      return window.location.href.indexOf(`${el.url}`) > -1
+        ? "wkspaceMainMenu current-app-subitem font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
+        : " font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems";
+    }
+    
+    function getAriaLabel(el) {
+      return el.name !== "Home"
+        ? isWorkspace
+          ? `${el.name} - Workspace`
+          : `${el.name} - Global-View`
+        : "Go to Home";
+    }
+    
+    function getLinkClassName(el) {
+      return props.currentLink === `/${el.url}` || props.currentLink === el.url
+        ? " current-app-subitem"
+        : "";
+    }
+    
+    function getTitle(el) {
+      return el.name !== "Home"
+        ? isWorkspace
+          ? ` Go to ${el.name} - Workspace page`
+          : `Go to ${el.name} - Global-View page`
+        : "Go to Home page";
+    }
+    
   };
 
   const makeWKspaceSubHeader = () => {

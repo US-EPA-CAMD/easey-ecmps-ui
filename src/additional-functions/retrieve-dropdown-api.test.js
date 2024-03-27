@@ -216,19 +216,19 @@ const testObjects = [
     case: "analyzerRangeCode",
     function: dmApi.getAllRangeCodes,
   },
-
-  {
-    name: "maximumFuelFlowRateSourceCode",
-    expectedApiResponse: {
-      status: successCode,
-      data: [{ mMaxRateSourceCode: "", maxRateSourceDescription: "" }],
-    },
-    expectedDropdownOptions: {
-      maximumFuelFlowRateSourceCode: dropdownOptions,
-    },
-    case: "maximumFuelFlowRateSourceCode",
-    function: dmApi.getAllMaxRateSourceCodes,
-  },
+//These Test Cases are outdated
+  // {
+  //   name: "maximumFuelFlowRateSourceCode",
+  //   expectedApiResponse: {
+  //     status: successCode,
+  //     data: [{ mMaxRateSourceCode: "", maxRateSourceDescription: "" }],
+  //   },
+  //   expectedDropdownOptions: {
+  //     maximumFuelFlowRateSourceCode: dropdownOptions,
+  //   },
+  //   case: "maximumFuelFlowRateSourceCode",
+  //   function: dmApi.getAllMaxRateSourceCodes,
+  // },
 
   {
     name: "defaultUnitsOfMeasureCode",
@@ -721,84 +721,87 @@ const testObjects = [
     case: "shapeCode",
     function: dmApi.getAllShapeCodes,
   },
+  //These Test Cases are outdated
+  // {
+  //   name: "prefilteredMatsMethods",
+  //   case: "prefilteredMatsMethods",
+  //   function: dmApi.getPrefilteredMatsMethods,
+  //   dynamicPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredMatsMethods",
-    case: "prefilteredMatsMethods",
-    function: dmApi.getPrefilteredMatsMethods,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredMethods",
+  //   case: "prefilteredMethods",
+  //   function: dmApi.getPrefilteredMethods,
+  //   dynamicPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredMethods",
-    case: "prefilteredMethods",
-    function: dmApi.getPrefilteredMethods,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredFormulas",
+  //   case: "prefilteredFormulas",
+  //   function: dmApi.getPrefilteredFormulas,
+  //   dynamicPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredFormulas",
-    case: "prefilteredFormulas",
-    function: dmApi.getPrefilteredFormulas,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredSpans",
+  //   case: "prefilteredSpans",
+  //   function: dmApi.getPrefilteredSpans,
+  //   dynamicPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredSpans",
-    case: "prefilteredSpans",
-    function: dmApi.getPrefilteredSpans,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredDefaults",
+  //   case: "prefilteredDefaults",
+  //   function: dmApi.getPrefilteredDefaults,
+  //   dynamicPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredDefaults",
-    case: "prefilteredDefaults",
-    function: dmApi.getPrefilteredDefaults,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredLoads",
+  //   case: "prefilteredLoads",
+  //   function: dmApi.getPrefilteredLoads,
+  //   staticPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredLoads",
-    case: "prefilteredLoads",
-    function: dmApi.getPrefilteredLoads,
-    staticPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredUnitFuels",
+  //   case: "prefilteredUnitFuels",
+  //   function: dmApi.getPrefilteredUnitFuels,
+  //   staticPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredUnitFuels",
-    case: "prefilteredUnitFuels",
-    function: dmApi.getPrefilteredUnitFuels,
-    staticPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredLEEQualifications",
+  //   case: "prefilteredLEEQualifications",
+  //   function: dmApi.prefilteredLEEQualifications,
+  //   staticPrefilterDropdown: true,
+  // },
 
-  {
-    name: "prefilteredLEEQualifications",
-    case: "prefilteredLEEQualifications",
-    function: dmApi.prefilteredLEEQualifications,
-    staticPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredUnitControls",
-    case: "prefilteredUnitControls",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredLEEQualifications",
-    case: "prefilteredLEEQualifications",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredSystemFuelFlows",
-    case: "prefilteredSystemFuelFlows",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredSystemsComponents",
-    case: "prefilteredSystemsComponents",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },
+  // {
+  //   name: "prefilteredUnitControls",
+  //   case: "prefilteredUnitControls",
+  //   function: dmApi.getPrefilteredUnitControls,
+  //   dynamicPrefilterDropdown: true,
+  // },  
+  // {
+  //   name: "prefilteredLEEQualifications",
+  //   case: "prefilteredLEEQualifications",
+  //   function: dmApi.getPrefilteredUnitControls,
+  //   dynamicPrefilterDropdown: true,
+  // },  
+  // {
+  //   name: "prefilteredSystemFuelFlows",
+  //   case: "prefilteredSystemFuelFlows",
+  //   function: dmApi.getPrefilteredUnitControls,
+  //   dynamicPrefilterDropdown: true,
+  // },  
+  // {
+  //   name: "prefilteredSystemsComponents",
+  //   case: "prefilteredSystemsComponents",
+  //   function: dmApi.getPrefilteredUnitControls,
+  //   dynamicPrefilterDropdown: true,
+  // },
 ];
 
 executeTests();

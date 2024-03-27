@@ -77,7 +77,7 @@ const reducer = (state, action) => {
         ...currentState,
         [`${action.workspaceSection}`]: currentState[
           `${action.workspaceSection}`
-        ].map((x) =>
+        ]?.map((x) =>
           x.selectedConfig.id === action.configId
             ? {
                 ...x,

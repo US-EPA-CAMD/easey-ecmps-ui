@@ -13,8 +13,8 @@ export const DefaultTemplate = ({
     return <></>;
   }
 
-  const refMethodCode = referenceMethod["referenceMethodCode"];
-  const refMethodDescription = referenceMethod["referenceMethodDescription"];
+  const refMethodCode = referenceMethod ? referenceMethod["referenceMethodCode"] : '';
+  const refMethodDescription =referenceMethod ? referenceMethod["referenceMethodDescription"] : '';
 
   const columns = [];
   columnNames.forEach((name, index) => {

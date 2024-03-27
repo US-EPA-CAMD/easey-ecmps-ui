@@ -400,7 +400,7 @@ export const mockSelectedConfig = {
       active: true,
     },
   ],
-  locations: [
+  monitoringLocationData: [
     {
       id: "6",
       unitRecordId: 1,

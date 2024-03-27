@@ -4,13 +4,25 @@ import { Link } from "react-router-dom";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { ContactForm } from "@us-epa-camd/easey-design-system";
 import * as yup from 'yup';
-
+import axios from "axios";
 import "./HelpSupport.scss";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getContent } from "../../utils/api/contentApi";
 import { sendSupportEmail } from "../../utils/api/camdServices";
+import config from "../../config";
+import { handleResponse, handleError } from "../../utils/api/apiUtils";
+
+const getContent = async (path) => {
+  const url = `${config.services.content.uri}${path}`;
+  return axios
+    .get(url)
+    .then(handleResponse)
+    .catch((error) => {
+      handleError(error);
+      throw new Error(error);
+    });
+};
 
 export const HelpSupport = () => {
   const [submitted, setSubmitted] = useState(false);

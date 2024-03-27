@@ -19,7 +19,7 @@ describe("Facility Async Actions", () => {
     jest.spyOn(facilitiesApi, "getAllFacilities").mockImplementation(mockFacilitiesResponse); 
     const expectedActions = [
       { type: types.BEGIN_FACILITIES_API_CALL },
-      { type: types.LOAD_FACILITIES_SUCCESS, mockFacilities },
+      { type: types.LOAD_FACILITIES_SUCCESS, facilities: mockFacilities },
     ];
 
     const store = mockStore({ facilities: [] });

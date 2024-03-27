@@ -6,9 +6,9 @@ import "@testing-library/jest-dom/extend-expect";
 describe("<AdminMaintenance />", () => {
   test("renders component with correct title and facilities", async () => {
 
-    render(<AdminMaintenance user="test" />);
+    render(<AdminMaintenance user="test" section="emSubmissionAccess" />);
    
-    jest.mock("../../../utils/api/facilityApi", () => ({
+    jest.mock("../../utils/api/facilityApi", () => ({
       getAllFacilities: jest.fn().mockResolvedValue({
         data: [
           {
@@ -23,8 +23,8 @@ describe("<AdminMaintenance />", () => {
       }),
     }));
 
-    const titleElement = screen.getByText("Maintain EM Submission Access");
-    expect(titleElement).toBeInTheDocument();
+    const titleElement = screen.getAllByText("Maintain EM Submission Access");
+    expect(titleElement[0]).toBeInTheDocument();
 
   });
 });

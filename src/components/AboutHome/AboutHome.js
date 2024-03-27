@@ -2,15 +2,26 @@ import React, { useEffect, useState } from "react";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getContent } from "../../utils/api/contentApi";
 
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import Login from "../Login/Login";
 import { resetTabOrder } from "../../utils/functions";
 import { config } from "../../config";
-
+import axios from "axios";
+import { handleResponse, handleError } from "../../utils/api/apiUtils";
 import "./AboutHome.scss";
+
+const getContent = async (path) => {
+  const url = `${config.services.content.uri}${path}`;
+  return axios
+    .get(url)
+    .then(handleResponse)
+    .catch((error) => {
+      handleError(error);
+      throw new Error(error);
+    });
+};
 const AboutHome = ({ user, setCurrentLink }) => {
   const [mainContent, setMainContent] = useState();
   const [emissionsContent, setEmissionsContent] = useState();

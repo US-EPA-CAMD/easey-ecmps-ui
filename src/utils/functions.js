@@ -6,6 +6,7 @@ import {
 } from "./api/qaCertificationsAPI";
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
+import { isNumber } from "lodash";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -44,7 +45,7 @@ export const formatDate = (dateString, delim = "-") => {
 
 // Returns date in yyyy-mm-dd
 export const formatDateToISO = (date) => {
-  var d = new Date(date),
+  let d = new Date(date),
     month = "" + (d.getMonth() + 1),
     day = "" + d.getDate(),
     year = d.getFullYear();
@@ -408,3 +409,12 @@ export const currentSecondsTilInactive = () => {
     1000
   );
 };
+
+export const parseBool = (str) => {
+  if(isNumber(str)){
+    return str > 0;
+  }
+  else{
+    return String(str).toLocaleLowerCase() == "true"
+  }
+}

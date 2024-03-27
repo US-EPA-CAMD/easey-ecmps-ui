@@ -3,7 +3,7 @@ import Accessories from "./Accessories";
 import "@testing-library/jest-dom/extend-expect";
 import Layout from "../Layout/Layout";
 import { render, fireEvent } from "@testing-library/react";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 // cannot use link outside router
 jest.mock("@us-epa-camd/easey-design-system", () => ({
   ...jest.requireActual("@us-epa-camd/easey-design-system"),
@@ -13,7 +13,7 @@ test("renders accesory links ", () => {
   const { container } = render(
     <BrowserRouter>
       <Layout>
-        <Switch>
+        <Routes>
           <Route
             path="/"
             exact
@@ -24,7 +24,7 @@ test("renders accesory links ", () => {
               />
             )}
           />
-        </Switch>
+        </Routes>
       </Layout>
     </BrowserRouter>
   );
@@ -38,13 +38,13 @@ test("renders accesory links ", () => {
   const { container } = render(
     <BrowserRouter>
       <Layout>
-        <Switch>
+        <Routes>
           <Route
             path="/"
             exact
             component={() => <Accessories logOut={jest.fn()} />}
           />
-        </Switch>
+        </Routes>
       </Layout>
     </BrowserRouter>
   );

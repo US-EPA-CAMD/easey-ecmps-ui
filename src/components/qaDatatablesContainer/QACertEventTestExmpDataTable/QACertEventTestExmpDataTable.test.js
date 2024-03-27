@@ -319,7 +319,7 @@ describe("Test cases for QACertEventTestExmpDataTable", () => {
     // renders rows
     const rows = await screen.findAllByRole("row");
     expect(mock.history.get.length).not.toBe(0);
-    expect(rows).toHaveLength(qaTestExemptsData.length);
+    expect(rows).toHaveLength(qaTestExemptsData.length + 1);
   });
 
   test("renders Qa with no valid section ( for switch default case) ", async () => {

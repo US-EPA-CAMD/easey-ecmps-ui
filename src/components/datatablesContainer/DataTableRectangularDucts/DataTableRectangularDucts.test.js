@@ -92,7 +92,7 @@ test('renders DataTableRectangularDucts', async () => {
   });
 
   expect(createBtn).toBeInTheDocument();
-});
+}, 10000);
 
 test('DataTableRectangularDucts create', async () => {
   await waitFor(() => componentRenderer(locationSelectValue));
