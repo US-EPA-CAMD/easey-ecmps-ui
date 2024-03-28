@@ -36,9 +36,11 @@ const ModalAddComponent = ({
       main = comps;
 
       if (sysComps.length >= 1) {
-        const sys = sysComps.filter((sy)=> !sy.endDate || new Date(sy.endDate) < new Date());
-        main = main.filter(({ id: compId }) => sys.some(({ componentRecordId: sysCompId }) => sysCompId === compId));
-        setFilteredComps(main);
+        const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
+        const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
+        main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
+        const filterCompos = [...main, ...componetWithSystemEndDate];
+        setFilteredComps(filterCompos);
       }
     }
 
@@ -100,8 +102,8 @@ const ModalAddComponent = ({
             <SelectBox
               options={
                 unlinkedComponentsOptions !== null ||
-                unlinkedComponentsOptions !== undefined ||
-                unlinkedComponentsOptions.length < 1
+                  unlinkedComponentsOptions !== undefined ||
+                  unlinkedComponentsOptions.length < 1
                   ? unlinkedComponentsOptions
                   : [{ code: "", name: "" }]
               }
