@@ -63,30 +63,6 @@ describe("Emissions API", function () {
           orisCode: 9999,
         });
     });
-    //The test of these APIs are outdated.
-    // describe("exportEmissionsData", function () {
-    //   it("should get emissions data given year, quarter and monitoringPlanId", async function () {
-    //     const result = await emissionsApi.exportEmissionsData(
-    //       mockResponse.monitorPlanId,
-    //       mockResponse.year,
-    //       mockResponse.quarter
-    //     );
-    //     expect(result["data"]).toEqual(mockResponse);
-    //   });
-
-      // it("should get emissions data given year, quarter and monitoringPlanId", async function () {
-      //   const result = await emissionsApi.exportEmissionsData(
-      //     mockResponse.monitorPlanId,
-      //     mockResponse.year,
-      //     mockResponse.quarter,
-      //     true
-      //   );
-      //   expect(result["data"]).toEqual({
-      //     ...mockResponse,
-      //     orisCode: 9999,
-      //   });
-      // });
-    // });
 
   });
 

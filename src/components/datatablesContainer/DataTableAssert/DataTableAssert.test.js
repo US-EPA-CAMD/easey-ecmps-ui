@@ -106,34 +106,6 @@ describe("- DataTableAssert - ", () => {
     expect(table).toBeDefined()
   })
 
-  // test('save data', async () => {
-  //   const mockSaveMonitoringSpans = jest.fn().mockResolvedValue({ status: 200 });
-  //   jest
-  //     .spyOn(monitorPlanApi, "saveMonitoringSpans")
-  //     .mockImplementation(mockSaveMonitoringSpans); //Our final evaluation call that needs to be processed
-
-  //   const props = getDataTableAssertProps();
-  //   props.checkout = true
-  //   await act(() => {
-  //     render(
-  //       <Provider store={store}>
-  //         <DataTableAssert {...props} />
-  //       </Provider>
-  //     )
-  //   })
-
-  //   const firstViewEditBtn = screen.getByTestId("viewEditBtn-0")
-  //   await act(() => {
-  //     firstViewEditBtn.click();
-  //   });
-
-  //   const saveAndCloseBtn = screen.getByTestId("saveBtn")
-
-  //   await act(() => saveAndCloseBtn.click());
-
-  //   expect(mockSaveMonitoringSpans).toHaveBeenCalled();
-  // }, 10000)
-
   test('create data', async () => {
     const mockCreateMonitoringSpans = jest.fn().mockResolvedValue({ status: 201 });
     jest

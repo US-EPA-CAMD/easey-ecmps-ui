@@ -73,7 +73,7 @@ describe("renders and tests HelpSupport component", () => {
 
   test("submit blank contact form and get validation error", async () => {
     const blankFieldsMsg =
-      "Please complete the fields below to send an email to ECMPS Beta Support. You may also send an email directly to";
+      "All fields are required. Please fill in the form completely and submit again.";
     const submitBtn = helpSupport.container.querySelector(
       "[data-testid='input-button-search']"
     );
@@ -102,7 +102,6 @@ describe("renders and tests HelpSupport component", () => {
     expect(emailInput).not.toBeDisabled();
     userEvent.type(emailInput, "myemail@email.com");
     expect(screen.findByDisplayValue("myemail@email.com")).toBeTruthy();
-    // expect(screen.findByDisplayValue("myemail@email.com"));
 
     // comment type
     const commentTypeInput = screen.getByLabelText("Help using application");

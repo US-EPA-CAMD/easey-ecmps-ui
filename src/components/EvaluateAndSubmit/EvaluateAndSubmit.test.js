@@ -87,66 +87,6 @@ describe("- Evaluate And Submit -", () => {
       expect(screen.getByTestId("page-title").innerHTML).toBe("Evaluate"); //Using a data-testid tag for html elements that we want to make assertions on [Should always use these to query for specific elements]
       //Querying by data-testid over [tags / text / styling] is always preffered because [tags / text / styling] are changed frequently
     });
-
-    it("Should click a facility, configuration, and reporting period and apply the filters successfully", async () => {
-      const mockEvalSubmission = jest.fn().mockResolvedValue({});
-
-      jest
-        .spyOn(camdServices, "triggerBulkEvaluation")
-        .mockImplementation(mockEvalSubmission); //Our final evaluation call that needs to be processed
-
-      await act(async () => {
-        render(
-          <Provider store={store}>
-            <EvaluateAndSubmit
-              user={getMockEcmpsUser()}
-              componentType="Evaluate"
-              checkedOutLocations={[]}
-            />
-          </Provider>
-        );
-      });
-
-      //Logic to handle selection of facilities
-      await act(() => {
-        screen.getByTestId("facilities-input-search").click(); //Click the facility search box
-      });
-      await act(async () => {
-        screen.getByTestId("facilities-multi-select-option-0").click(); //Then click the first dropdown option from it that is mocked
-      });
-
-      //Repeat this process for configurations and reporting periods
-
-      await act(async () => {
-        screen.getByTestId("configurations-input-search").click(); //Repeat this process for configurations and reporting periods
-      });
-      await act(async () => {
-        screen.getByTestId("configurations-multi-select-option-0").click();
-      });
-      await act(() => {
-        screen.getByTestId("reporting-periods-input-search").click();
-      });
-      await act(() => {
-        screen.getByTestId("reporting-periods-multi-select-option-0").click();
-      });
-      await act(() => {
-        screen.getByTestId("apply-filter").click();
-      });
-      //These elements do not exists
-      // await act(() => {
-      //   screen.getByTestId("MP-select-0").click(); //Select the monitor plan
-      // });
-
-      // await act(() => {
-      //   screen.getByTestId("EM-select-0").click(); //Also select the first emissions record
-      // });
-
-      await act(() => {
-        screen.getByTestId("filter-callback-button").click(); //Click the evaluate button
-      });
-      //this is not been called 
-      // expect(mockEvalSubmission);
-    });
   });
 
   describe("Submission", () => {

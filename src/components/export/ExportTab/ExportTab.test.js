@@ -37,40 +37,6 @@ describe("ExportTab", () => {
   afterEach(() => {
     jest.clearAllMocks();
   })
-  //This UI does not exists
-  // describe("Emissions Export", function () {
-  //   it("should enable export button when the emissions checkbox is checked, and download when export is clicked", async () => {
-  //     jest.setTimeout(10000)
-
-  //     await render(
-  //       <Provider store={store}>
-  //         <ExportTab
-  //           orisCode={3}
-  //           exportState={EXPORT_TAB_TEST_EXPORT_STATE}
-  //           setExportState={() => null}
-  //           workspaceSection={"export"}
-  //           selectedConfig={mockSelectedConfig}
-  //           facility={"Barry (1, 2, CS0AAN)"}
-  //         />
-  //       </Provider>
-  //     );
-
-  //     const emissionsCheckbox = screen.getByRole("checkbox", {
-  //       name: "Emissions",
-  //     });
-  //     const exportButton = screen.getByRole("button", {
-  //       name: "Export",
-  //     });
-
-  //     await act(async () => emissionsCheckbox.click())
-
-  //     expect(exportButton).toBeEnabled();
-
-  //     await act(async () => exportButton.click())
-
-  //     expect(monitoringPlansApi.exportMonitoringPlanDownload).toHaveBeenCalledTimes(1)
-  //   });
-  // });
 
   describe("QA & Cert Export", () => {
     test("when qa&cert is checked and no rows are selected then export should be disabled", async () => {

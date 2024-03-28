@@ -83,7 +83,7 @@ export const getLocations = (facilityValue, checkResultObj) => {
       }));
       availLoc = [...availLoc, ...availStackPipe];
     }
-    const locName = availLoc.map((l) => l?.label);
+    const locName = availLoc.map((l) => l.label);
     return availLoc
       .filter(({ label }, index) => !locName.includes(label, index + 1))
       .filter(({ label }) => label !== null)
