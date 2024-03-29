@@ -48,7 +48,8 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   };
 
   const onDownloadHandler = () => {
-    downloadReport(paramsObject?.current)
+    if (!paramsObject) return;
+    downloadReport(paramsObject.current)
       .then((response) => {
         const disposition = response.headers["content-disposition"];
         const parts =

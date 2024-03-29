@@ -15,7 +15,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test:cov": "craco test --coverage",
+    "test": "craco test",
+    "test:cov": "craco test --watchAll=false",
     "up": "yarn && yarn start"
   },
   "resolutions": {
