@@ -18,7 +18,6 @@ module.exports = {
   },
   jest: {
     configure: (jestConfig) => {
-      jestConfig.reporters= [ "default", "@casualbot/jest-sonar-reporter" ],
       jestConfig.transformIgnorePatterns = ["node_modules/(?!(axios)/)"];
       jestConfig.collectCoverageFrom = [
         "src/**/*.{js,jsx,ts,tsx}",
