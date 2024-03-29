@@ -784,6 +784,7 @@ const QATestSummaryDataTable = ({
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
+                  disabledColumns={!createNewData ? ['componentId','monitoringSystemId']:[]}
                 />
               </div>
             ) : (
