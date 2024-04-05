@@ -35,13 +35,11 @@ const ModalAddComponent = ({
     } else {
       main = comps;
 
-      if (sysComps.length >= 1) {
-        const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
-        const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
-        main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
-        const filterCompos = [...main, ...componetWithSystemEndDate];
-        setFilteredComps(filterCompos);
-      }
+      const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
+      const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
+      main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
+      const filterCompos = [...main, ...componetWithSystemEndDate];
+      setFilteredComps(filterCompos);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
