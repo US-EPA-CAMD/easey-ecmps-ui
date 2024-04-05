@@ -13,7 +13,7 @@ export const getMonitoringPlansLoadsTableRecords = (totalData) => {
         secondNormalIndicator = "No";
       }
     } else {
-      secondNormalIndicator = "";
+      secondNormalIndicator = null;
     }
 
     let maximumLoadUnitsOfMeasureCode;
