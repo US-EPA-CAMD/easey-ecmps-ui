@@ -38,7 +38,7 @@ const ModalAddComponent = ({
       const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
       const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
       main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
-      const filterCompos = [...main, ...componetWithSystemEndDate];
+      const filterCompos = [...main, ...componetWithSystemEndDate].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId', 'componentTypeCode'].every(item => obj2[item] === obj1[item])) === index);
       setFilteredComps(filterCompos);
     }
 
