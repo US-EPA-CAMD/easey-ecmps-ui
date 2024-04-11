@@ -47,17 +47,15 @@ const ModalAddComponent = ({
   useEffect(() => {
     let options = [];
 
-    if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
-      options = filteredComps.map((option) => {
-        return {
-          code: option["id"],
-          name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
-        };
-      });
+    options = filteredComps.map((option) => {
+      return {
+        code: option["id"],
+        name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
+      };
+    });
 
-      options.unshift({ code: "", name: "--- Select a value ---" });
-      setUnlinkedComponentsOptions(options);
-    }
+    options.unshift({ code: "", name: "--- Select a value ---" });
+    setUnlinkedComponentsOptions(options);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredComps]);
 
