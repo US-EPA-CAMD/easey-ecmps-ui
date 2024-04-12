@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
 import TagManager from "react-gtm-module";
+import SignUpMigrate from "../Login/SignUpMigrate";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
@@ -461,6 +462,7 @@ const App = () => {
             }
           />
           <Route path={`/faqs`} element={<FAQ />} />
+          <Route path="/signup-migrate" element={<SignUpMigrate />} />
           <Route path="/tutorials" element={<ComingSoon />} />
           <Route path="/cam-api" element={<ComingSoon />} />
           <Route path="/glossary" element={<ComingSoon />} />

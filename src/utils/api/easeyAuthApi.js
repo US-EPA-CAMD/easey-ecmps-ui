@@ -83,6 +83,15 @@ export const refreshLastActivity = async () => {
   }
 };
 
+export const determinePolicy = async (payload) => {
+    try {
+      const response = await axios.post(`${config.services.authApi.uri}/authentication/determinePolicy`, payload);
+      return response;
+    } catch (e) {
+      throw e;
+    }
+};
+
 export const authenticate = async (payload) => {
   return axios({
     method: "POST",

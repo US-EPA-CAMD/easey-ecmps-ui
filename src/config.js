@@ -104,6 +104,20 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE",
       true
     ),
+
+    cdxIcamSignupPath: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_SIGNUP_PATH",
+        "https://idp.int.identitysandbox.gov/"
+    ),
+    cdxIcamMigratePath: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_MIGRATE_PATH",
+        "https://dev.epacdx.net/Migration/Migrate?oidcType=LDG"
+    ),
+    cdxIcamSigninPath: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_SIGNIN_PATH",
+        "https://idp.int.identitysandbox.gov/"
+    ),
+
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
     enableDebug: getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG"),

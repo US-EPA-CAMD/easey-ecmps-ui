@@ -327,7 +327,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     show={show}
                     close={closeModalHandler}
                     returnFocus={true}
-                    children={<Login isModal={true} />}
+                    children={<Login isModal={true} closeModalHandler={closeModalHandler} />}
                   />
                 ) : null}
               </span>
