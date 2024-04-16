@@ -35,9 +35,16 @@ const ModalAddComponent = ({
     } else {
       main = comps;
 
+      //Filtering system component with system endDate
       const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
+
+      // selecting component from main. that has componentId is equal to sysWithEndDate's componentId
       const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
+
+      // components associated with a monitor location that are NOT already active at the system.
       main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
+
+      // merge main and componetWithSystemEndDate. then unique with 'componentId', 'componentTypeCode'
       const filterCompos = [...main, ...componetWithSystemEndDate].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId', 'componentTypeCode'].every(item => obj2[item] === obj1[item])) === index);
       setFilteredComps(filterCompos);
     }
