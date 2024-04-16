@@ -931,6 +931,7 @@ export const HeaderInfo = ({
     });
 
     setSelectedReportingPeriods([importedReportingPeriod])
+    dispatch(setReportingPeriods([importedReportingPeriod], currentTab.name, workspaceSection));
   };
 
   // Create audit message for header info
