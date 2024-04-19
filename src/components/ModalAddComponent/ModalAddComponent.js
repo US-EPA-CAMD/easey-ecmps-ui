@@ -45,13 +45,12 @@ const ModalAddComponent = ({
       const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
 
       // remove active components 
-      const componentWithNonActive = componetWithSystemEndDate.filter(({ componentId, componentTypeCode }) => !activeSystem.some(({ componentId: sysCompId, componentTypeCode: sysCompType }) => sysCompId === componentId && componentTypeCode === sysCompType))
-      
+      const componentWithNonActive = componetWithSystemEndDate.filter(({ componentId }) => !activeSystem.some(({ componentId: sysCompId }) => sysCompId === componentId))
       // components associated with a monitor location that are NOT already active at the system.
       main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
 
-      // merge main and componetWithSystemEndDate. then unique with 'componentId', 'componentTypeCode' | Sort by componentId
-      const filterCompos = [...main, ...componentWithNonActive].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId', 'componentTypeCode'].every(item => obj2[item] === obj1[item])) === index).sort((a,b)=>a.componentId - b.componentId);
+      // merge main and componetWithSystemEndDate. then unique with 'componentId' | Sort by componentId
+      const filterCompos = [...main, ...componentWithNonActive].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId'].every(item => obj2[item] === obj1[item])) === index).sort((a, b) => a.componentId - b.componentId || a.componentId.localeCompare(b.componentId));
       setFilteredComps(filterCompos);
     }
 
