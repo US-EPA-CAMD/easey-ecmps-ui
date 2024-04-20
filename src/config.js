@@ -105,9 +105,9 @@ export const config = {
       true
     ),
 
-    cdxIcamSignupPath: getConfigValue(
-        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_SIGNUP_PATH",
-        "https://idp.int.identitysandbox.gov/"
+    redirectUri: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_REDIRECT_URI",
+        "http://localhost:3000/ecmps/oauth2/code"
     ),
     cdxIcamMigratePath: getConfigValue(
         "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_MIGRATE_PATH",

@@ -3,29 +3,25 @@ import {
 } from "@trussworks/react-uswds";
 
 import { useLocation } from "react-router-dom";
+import signUpMigrateProps from './signUpMigrateProps';
 import config from "../../config";
 
-const SignUpMigrate = () => {
+const SignUpMigrate = ({ viewProps, policyResponse, pageState }) => {
 
-  const location = useLocation();
-  const viewProps = location.state ? location.state.viewProps : null;
+  viewProps = viewProps ? viewProps : signUpMigrateProps['_DEFAULT'];
 
-  // Fallback values in case viewProps is null
-  const defaultViewProps = {
-    title: "Welcome",
-    verbiage: "Plesae proceed to CDX to login or sign up",
-    url: `${config.app.cdxIcamSignupPath}`,
-    buttonLabel: "Login/Signup"
-  };
-
-  const { title, url, verbiage, buttonLabel } = viewProps || defaultViewProps;
+  const urlWithState = addStateToUrl(policyResponse.url, pageState);
 
   return (
     <div className="">
       <div className="padding-1">
-          <Fieldset legend={title} legendStyle="large">
-          <p> {verbiage} </p>
-          <a id="signupMigrate" name="Button" className="usa-button margin-bottom-2" data-testid="component-signup-migrate-button" href={url}>{buttonLabel}</a>
+          <Fieldset legend={viewProps.title} legendStyle="large">
+          <p> {viewProps.verbiage} </p>
+          <a id="signupMigrate"
+             name="Button"
+             className="usa-button margin-bottom-2"
+             data-testid="component-signup-migrate-button"
+             href={urlWithState}>{viewProps.buttonLabel}</a>
         </Fieldset>
       </div>
     </div>
@@ -33,3 +29,18 @@ const SignUpMigrate = () => {
 };
 
 export default SignUpMigrate;
+
+function generateNonce(length = 32) {
+    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    return Array.from(array).map(b => validChars[b % validChars.length]).join('');
+}
+
+// Function to append state to URL
+const addStateToUrl = (baseUrl, state) => {
+    // Ensure the base URL and state are not null
+    if (!baseUrl || !state) return baseUrl; // Return the base URL if no state to append
+    const delimiter = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${delimiter}state=${encodeURIComponent(state)}`;
+};

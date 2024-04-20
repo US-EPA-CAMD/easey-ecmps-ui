@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import {authenticate, determinePolicy} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
+import signUpMigrateProps from './signUpMigrateProps'; // Adjust the import path as necessary
 import config from "../../config";
 
 // *** validation
@@ -23,8 +24,9 @@ const Login = ({ isModal, closeModalHandler }) => {
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
   const [username, setUsername] = useState("");
-  // We render login content vs SignUpMigrate content based on wether viewProps has a value or not
-  const [viewProps, setViewProps] = useState(null);
+  const [viewProps, setViewProps] = useState(null); // State to hold the props for SignUpMigrate
+  const [policyResponse, setPolicyResponse] = useState(null);
+  const [pageState, setPageState] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -78,37 +80,16 @@ const Login = ({ isModal, closeModalHandler }) => {
             throw error;
           }
 
-          // Proceed with handling a valid policy response
-          const policy = response.data.policy;
-
-          let viewProps = {};
-
-          if (policy.endsWith("_SIGNUP")) {
-            viewProps = {
-              title: "Leaving CDX (_SIGNUP new user)",
-              url: `${config.app.cdxIcamSignupPath}`,
-              verbiage: "You are being redirected to EPA Gateway (EIAM) to initialize authentication and authorization. Once completed successfully, you will return to CDX as a logged-in user.",
-              buttonLabel: "Register with CDX"
-            };
-          } else if (policy.endsWith("_MIGRATE")) {
-            viewProps = {
-              title: "Your account must be migrated (_MIGRATE user to be migrated)",
-              url: `${config.app.cdxIcamMigratePath}`,
-              verbiage: "Agency-wide mandates require your CDX account to be migrated to a new login method. Select the Login with Login.gov button below to migrate your account to Login.gov. Once migrated, you will no longer need your CDX password to login and will instead use your Login.gov credentials for authentication.",
-              buttonLabel: "Login with Login.gov"
-            };
-          } else {
-            viewProps = {
-              title: "Leaving CDX (_SIGNIN existing migrated user)",
-              url: `${config.app.cdxIcamSigninPath}`,
-              verbiage: "You are being redirected to EPA Gateway (EIAM) to initialize authentication and authorization. Once completed successfully, you will return to CDX as a logged-in user.",
-              buttonLabel: "Sign In"
-            };
-          }
+          //Extract the policy match
+          const policyMatch = response.data.policy.match(/_(SIGNUP|MIGRATE|SIGNIN)$/);
+          const policySuffix = policyMatch ? policyMatch[0] : "_DEFAULT";
 
           //Disable the loading overlay
           setLoading(false);
-          setViewProps(viewProps);
+          setViewProps( signUpMigrateProps[policySuffix] );
+          setPolicyResponse(response.data);
+          setPageState("test state");
+
         })
         // *** display serverside errors
         .catch((err) => {
@@ -120,7 +101,13 @@ const Login = ({ isModal, closeModalHandler }) => {
   };
 
   if (viewProps) {
-    return <SignUpMigrate {...viewProps} />;
+      return (
+          <SignUpMigrate
+              viewProps={viewProps}
+              policyResponse={policyResponse}
+              pageState={pageState}
+          />
+      );
   }
 
   return (
@@ -143,7 +130,7 @@ const Login = ({ isModal, closeModalHandler }) => {
               {showError && (
                   <Alert
                       type="error"
-                      heading="Log In Errors"
+                      heading="Error"
                       headingLevel="h4"
                       role="alert"
                   >
@@ -176,18 +163,10 @@ const Login = ({ isModal, closeModalHandler }) => {
                   rel="noopener noreferrer"
                   target="_blank"
               >
-                Forgot username?
+                Forgot User ID?
               </a>
             </p>
-            <p>
-              <a
-                  href={`${config.app.cdxBaseUrl}${config.app.cdxForgotPasswordPath}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-              >
-                Forgot password?
-              </a>
-            </p>
+
           </Fieldset>
         </Form>
       </div>
