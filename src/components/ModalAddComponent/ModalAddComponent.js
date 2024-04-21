@@ -35,13 +35,23 @@ const ModalAddComponent = ({
     } else {
       main = comps;
 
-      if (sysComps.length >= 1) {
-        const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
-        const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
-        main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
-        const filterCompos = [...main, ...componetWithSystemEndDate];
-        setFilteredComps(filterCompos);
-      }
+      //Filtering system component with system endDate
+      const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
+
+      //Filtering system component with active | no endDate
+      const activeSystem = sysComps.filter((sy) => !sy.endDate || new Date(sy?.endDate) > new Date());
+
+      // selecting component from main. that has componentId is equal to sysWithEndDate's componentId
+      const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
+
+      // remove active components 
+      const componentWithNonActive = componetWithSystemEndDate.filter(({ componentId }) => !activeSystem.some(({ componentId: sysCompId }) => sysCompId === componentId))
+      // components associated with a monitor location that are NOT already active at the system.
+      main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
+
+      // merge main and componetWithSystemEndDate. then unique with 'componentId' | Sort by componentId
+      const filterCompos = [...main, ...componentWithNonActive].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId'].every(item => obj2[item] === obj1[item])) === index).sort((a, b) => a.componentId - b.componentId || a.componentId.localeCompare(b.componentId));
+      setFilteredComps(filterCompos);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,17 +59,15 @@ const ModalAddComponent = ({
   useEffect(() => {
     let options = [];
 
-    if (filteredComps.length >= 1 && unlinkedComponentsOptions.length < 1) {
-      options = filteredComps.map((option) => {
-        return {
-          code: option["id"],
-          name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
-        };
-      });
+    options = filteredComps.map((option) => {
+      return {
+        code: option["id"],
+        name: `${option["componentId"]} / ${option["componentTypeCode"]}`,
+      };
+    });
 
-      options.unshift({ code: "", name: "--- Select a value ---" });
-      setUnlinkedComponentsOptions(options);
-    }
+    options.unshift({ code: "", name: "--- Select a value ---" });
+    setUnlinkedComponentsOptions(options);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredComps]);
 

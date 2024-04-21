@@ -119,7 +119,7 @@ export const getMonitoringComponents = async (locId) => {
 
 export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
   const url = getApiUrl(
-    `/locations/${locId}​/components/${componentRecordId}/analyzer-ranges`
+    `/locations/${locId}/components/${componentRecordId}/analyzer-ranges`
   );
   return secureAxios({
     method: "GET",
