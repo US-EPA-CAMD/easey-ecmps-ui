@@ -148,7 +148,6 @@ export const MonitoringPlanTabRender = ({
                   "controlDatePickerInputs"
                 ]
               }
-              radioNames={["secondNormalIndicator"]}
               dataTableName={"Load"}
               revertedState={revertedState}
               setRevertedState={setRevertedState}
