@@ -1,8 +1,7 @@
 import config from "../../config";
 
-const signUpMigrateProps = {
+const userAccountStatusProps = {
     _SIGNUP: {
-        redirect_uri: config.app.redirectUri,
         title: "Register with CDX",
         verbiage: "You must have a CDX account to use ECMPS. Select the \"Proceed to CDX\" button below to go to CDX to create your CDX account.",
         buttonLabel: "Register with CDX"
@@ -24,4 +23,4 @@ const signUpMigrateProps = {
     }
 };
 
-export default signUpMigrateProps;
+export default userAccountStatusProps;

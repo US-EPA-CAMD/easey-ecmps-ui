@@ -12,21 +12,20 @@ import { useNavigate } from "react-router-dom";
 import {authenticate, determinePolicy} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
-import signUpMigrateProps from './signUpMigrateProps'; // Adjust the import path as necessary
+import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary
 import config from "../../config";
 
 // *** validation
 import * as yup from "yup";
-import SignUpMigrate from "./SignUpMigrate";
+import UserAccountStatus from "./UserAccountStatus";
 
 const Login = ({ isModal, closeModalHandler }) => {
   const standardFormErrorMessage = "Please enter your username";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
   const [username, setUsername] = useState("");
-  const [viewProps, setViewProps] = useState(null); // State to hold the props for SignUpMigrate
+  const [viewProps, setViewProps] = useState(null); // State to hold the props for UserAccountStatus
   const [policyResponse, setPolicyResponse] = useState(null);
-  const [pageState, setPageState] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -86,9 +85,8 @@ const Login = ({ isModal, closeModalHandler }) => {
 
           //Disable the loading overlay
           setLoading(false);
-          setViewProps( signUpMigrateProps[policySuffix] );
+          setViewProps( userAccountStatusProps[policySuffix] );
           setPolicyResponse(response.data);
-          setPageState("test state");
 
         })
         // *** display serverside errors
@@ -102,10 +100,9 @@ const Login = ({ isModal, closeModalHandler }) => {
 
   if (viewProps) {
       return (
-          <SignUpMigrate
+          <UserAccountStatus
               viewProps={viewProps}
               policyResponse={policyResponse}
-              pageState={pageState}
           />
       );
   }
@@ -114,63 +111,73 @@ const Login = ({ isModal, closeModalHandler }) => {
     <div className="" data-test="component-login">
       <div className="padding-1">
         <Form onSubmit={async (event) => await submitForm(event)} large>
-          <Fieldset legend="Log In" legendStyle="large">
+            <Fieldset legend="Log In" legendStyle="large">
             <span>
               or{" "}
-              <a
-                  href={`${config.app.cdxBaseUrl}${config.app.cdxRegisterPath}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-              >
+                <a
+                    href={`${config.app.cdxBaseUrl}${config.app.cdxRegisterPath}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
                 create an account
               </a>
             </span>
 
-            <div aria-live="polite">
-              {showError && (
-                  <Alert
-                      type="error"
-                      heading="Error"
-                      headingLevel="h4"
-                      role="alert"
-                  >
-                    {formErrorMessage}
-                  </Alert>
-              )}
-            </div>
+                <div aria-live="polite">
+                    {showError && (
+                        <Alert
+                            type="error"
+                            heading="Error"
+                            headingLevel="h4"
+                            role="alert"
+                        >
+                            {formErrorMessage}
+                        </Alert>
+                    )}
+                </div>
 
-            <Label htmlFor={usernameText}>CDX User ID</Label>
-            <TextInput
-                data-testid="component-login-username"
-                id={usernameText}
-                name={usernameText}
-                type="text"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-            />
+                <Label htmlFor={usernameText}>CDX User ID</Label>
+                <TextInput
+                    data-testid="component-login-username"
+                    id={usernameText}
+                    name={usernameText}
+                    type="text"
+                    value={username}
+                    onChange={(event) => setUsername(event.target.value)}
+                />
 
-            <Button
-                data-testid="component-login-submit-button"
-                className="margin-bottom-2"
-                type="submit"
-            >
-              Log In
-            </Button>
+                <Button
+                    data-testid="component-login-submit-button"
+                    className="margin-bottom-2"
+                    type="submit"
+                >
+                    Log In
+                </Button>
 
-            <p>
-              <a
-                  href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUserIdPath}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-              >
-                Forgot User ID?
-              </a>
-            </p>
+                <p>
+                    <a
+                        href={`${config.app.cdxBaseUrl}${config.app.cdxForgotUserIdPath}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        Forgot User ID?
+                    </a>
+                </p>
 
-          </Fieldset>
+                <p>
+                    <a
+                        href={`${config.app.cdxHowToGetAccessPath}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        How do I obtain access?
+                    </a>
+                </p>
+
+            </Fieldset>
         </Form>
       </div>
-      <LoadingModal type="Auth" loading={loading}/>
+        <LoadingModal type="Auth" loading={loading}/>
     </div>
   );
 };

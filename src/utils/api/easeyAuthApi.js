@@ -1,9 +1,9 @@
 import axios from "axios";
 import config from "../../config";
-import { checkoutAPI } from "../../additional-functions/checkout";
-import { getCheckedOutLocations } from "./monitoringPlansApi";
-import { displayAppError } from "../../additional-functions/app-error";
-import { currentDateTime } from "../functions";
+import {checkoutAPI} from "../../additional-functions/checkout";
+import {getCheckedOutLocations} from "./monitoringPlansApi";
+import {displayAppError} from "../../additional-functions/app-error";
+import {currentDateTime} from "../functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -85,11 +85,24 @@ export const refreshLastActivity = async () => {
 
 export const determinePolicy = async (payload) => {
     try {
-      const response = await axios.post(`${config.services.authApi.uri}/authentication/determinePolicy`, payload);
-      return response;
+      return await axios.post(`${config.services.authApi.uri}/authentication/determinePolicy`, payload);
     } catch (e) {
       throw e;
     }
+};
+
+export const validateAuthRedirect = async (payload) => {
+  return axios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/authentication/sign-in`,
+    data: payload,
+  })
+      .then((response) => {
+        storeUser(response);
+      })
+      .catch((e) => {
+        throw e;
+      });
 };
 
 export const authenticate = async (payload) => {
@@ -99,29 +112,33 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
-      localStorage.setItem("ecmps_user", JSON.stringify(response.data));
-
-      const currDate = currentDateTime();
-      currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
-      localStorage.setItem(
-        "ecmps_session_expiration",
-        currDate.toLocaleString()
-      );
-
-      if (
-        window.location.pathname.includes("/workspace") ||
-        window.location.pathname.endsWith("/home") ||
-        window.location.pathname.endsWith("/")
-      ) {
-        window.location.reload();
-      } else {
-        window.location.assign(`/workspace${window.location.pathname}`);
-      }
+      storeUser(response);
     })
     .catch((e) => {
       throw e;
     });
 };
+
+function storeUser(response) {
+  localStorage.setItem("ecmps_user", JSON.stringify(response.data));
+
+  const currDate = currentDateTime();
+  currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
+  localStorage.setItem(
+      "ecmps_session_expiration",
+      currDate.toLocaleString()
+  );
+
+  if (
+      window.location.pathname.includes("/workspace") ||
+      window.location.pathname.endsWith("/home") ||
+      window.location.pathname.endsWith("/")
+  ) {
+    window.location.reload();
+  } else {
+    window.location.assign(`/workspace${window.location.pathname}`);
+  }
+}
 
 const handleSignOut = () => {
   localStorage.removeItem("ecmps_user");

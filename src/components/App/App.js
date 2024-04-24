@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
 import TagManager from "react-gtm-module";
-import SignUpMigrate from "../Login/SignUpMigrate";
+import UserAccountStatus from "../Login/UserAccountStatus";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
@@ -45,6 +45,8 @@ import { currentDateTime } from "../../utils/functions";
 import WhatHasData from "../WhatHasData/WhatHasData";
 import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
+import useAuthRedirect from './useAuthRedirect';
+
 const App = () => {
   const queryParams = useLocation().search;
 
@@ -83,6 +85,9 @@ const App = () => {
     "workspace/evaluate",
     "workspace/submit",
   ];
+
+  // Use the custom hook to handle auth redirect and validation
+  useAuthRedirect(queryParams);
 
   const refreshCheckoutInterval = () => {
     if (localStorage.getItem("ecmps_user")) {
@@ -462,7 +467,7 @@ const App = () => {
             }
           />
           <Route path={`/faqs`} element={<FAQ />} />
-          <Route path="/signup-migrate" element={<SignUpMigrate />} />
+          <Route path="/signup-migrate" element={<UserAccountStatus />} />
           <Route path="/tutorials" element={<ComingSoon />} />
           <Route path="/cam-api" element={<ComingSoon />} />
           <Route path="/glossary" element={<ComingSoon />} />

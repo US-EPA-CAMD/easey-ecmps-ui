@@ -89,6 +89,10 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH",
       "/AccountRecovery/ForgotUserId"
     ),
+    cdxHowToGetAccessPath: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH",
+        "https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs"
+    ),
     cdxForgotPasswordPath: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH",
       "/PasswordReset/GetResetCode"
@@ -105,18 +109,15 @@ export const config = {
       true
     ),
 
-    redirectUri: getConfigValue(
-        "REACT_APP_EASEY_ECMPS_UI_REDIRECT_URI",
-        "http://localhost:3000/ecmps/oauth2/code"
-    ),
-    cdxIcamMigratePath: getConfigValue(
-        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_MIGRATE_PATH",
-        "https://dev.epacdx.net/Migration/Migrate?oidcType=LDG"
-    ),
-    cdxIcamSigninPath: getConfigValue(
-        "REACT_APP_EASEY_ECMPS_UI_CDX_ICAM_SIGNIN_PATH",
-        "https://idp.int.identitysandbox.gov/"
-    ),
+
+    oidcClientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID"),
+    oidcAuthEndpoint: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT"),
+    oidcAuthResponseType: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE"),
+    oidcAuthResponseMode: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE"),
+    oidcAuthStateHmacSecretKey: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_STATE_HMAC_SECRET_KEY"),
+    oidcAuthRedirectUri: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_REDIRECT_URI"),
+    oidcAuthScopes: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES"),
+    cdxUserAccountStatusAuthEndpoint: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CDX_USER_ACCT_STATUS_AUTH_ENDPOINT"),
 
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
