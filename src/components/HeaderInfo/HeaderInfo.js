@@ -215,8 +215,8 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-  /* defaultReportingPeriodChanged is a flage; user selecte a reporing date or not;
-    it's changed when user manually change location or viewTemplate or when import data
+  /* defaultReportingPeriodChanged is a flag for whether a user has selected a reporing date or not;
+    it's changed when user manually changes location or viewTemplate or imports data
   */
   const [defaultReportingPeriodChanged, setDefaultReportingPeriodChanged] = useState(false);
 
@@ -892,7 +892,7 @@ export const HeaderInfo = ({
           importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${year} Q${quarter}`]))];
         }
 
-        // Select the reporting period that user was selected
+        // Select the reporting period that user has selected
         reportingPeriods.forEach((rp) => {
           rp.selected = importedReportingPeriod.includes(rp.label);
         });
@@ -939,7 +939,7 @@ export const HeaderInfo = ({
       importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${historicYear} Q${historicQuarter}`]))];
     }
 
-    // Select the reporting period that user was selected
+    // Select the reporting period that user has selected
     reportingPeriods.forEach((rp) => {
       rp.selected = importedReportingPeriod.includes(rp.label);
     });
