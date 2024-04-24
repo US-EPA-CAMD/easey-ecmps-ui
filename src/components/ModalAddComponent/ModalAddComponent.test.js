@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  render,
-  waitFor,
-  screen,
-} from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
 import ModalAddComponent from "./ModalAddComponent";
@@ -13,15 +9,19 @@ import config from "../../config";
 
 const mock = new MockAdapter(axios);
 
-const idRegex = '[\\w\\-]+';
+const idRegex = "[\\w\\-]+";
 
-const comps = {};
+const comps = [];
 
-const getMonitoringComponents = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/components`)
-const getMonitoringSystemsComponentsUrl = new RegExp(`${config.services.monitorPlans.uri}/locations/${idRegex}/systems/${idRegex}/components`)
+const getMonitoringComponents = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${idRegex}/components`
+);
+const getMonitoringSystemsComponentsUrl = new RegExp(
+  `${config.services.monitorPlans.uri}/locations/${idRegex}/systems/${idRegex}/components`
+);
 
-mock.onGet(getMonitoringComponents).reply(200, comps)
-mock.onGet(getMonitoringSystemsComponentsUrl).reply(200, comps)
+mock.onGet(getMonitoringComponents).reply(200, comps);
+mock.onGet(getMonitoringSystemsComponentsUrl).reply(200, comps);
 
 const componentRenderer = (back) => {
   const props = {
@@ -35,11 +35,10 @@ const componentRenderer = (back) => {
   return render(<ModalAddComponent {...props} />);
 };
 
-
 test("renders ModalAddComponent with back button", async () => {
   let { container } = await waitFor(() => componentRenderer(true));
 
-  const backBtn = await screen.findAllByRole('button', { name: /Back/i });
+  const backBtn = await screen.findAllByRole("button", { name: /Back/i });
   expect(backBtn[0]).toBeEnabled();
   userEvent.click(backBtn[0]);
 
@@ -50,4 +49,3 @@ test("renders ModalAddComponent with no back button", async () => {
   let { container } = await waitFor(() => componentRenderer(false));
   expect(container).toBeDefined();
 });
-
