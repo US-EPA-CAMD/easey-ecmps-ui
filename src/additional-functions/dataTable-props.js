@@ -9,7 +9,7 @@ export const defaultsDataTableProps = (location) => {
       fuelCode: "string",
       operatingConditionCode: "string",
       defaultSourceCode: "string",
-      groupID: "string",
+      groupId: "string",
       beginDate: "string",
       beginHour: 0,
       endDate: "string",
@@ -44,7 +44,7 @@ export const defaultsDataTableProps = (location) => {
       fuelCode: ["Fuel Code", "independentDropdown", "", ""],
       operatingConditionCode: ["Operating Condition", "dropdown", "", ""],
       defaultSourceCode: ["Source of Value", "dropdown", "", ""],
-      groupID: ["Group ID", "input", "", ""],
+      groupId: ["Group ID", "input", "", ""],
     },
     controlDatePickerInputs: {
       beginDate: ["Begin Date", "date", "", ""],
@@ -141,7 +141,17 @@ export const loadsDataTableProps = (location) => {
       upperOperationBoundary: ["Upper Operation Boundary", "input", "", ""],
       normalLevelCode: ["Normal Level", "independentDropdown", "", ""],
       secondLevelCode: ["Second Level", "independentDropdown", "", ""],
-      secondNormalIndicator: ["Second Normal Indicator", "radio", "", ""],
+      secondNormalIndicator: [
+        "Second Normal Indicator",
+        "customDropdown",
+        "",
+        "",
+        [
+          { code: null, name: "--- Select a Value ---" },
+          { code: 1, name: "Yes" },
+          { code: 0, name: "No" },
+        ],
+      ],
     },
     controlDatePickerInputs: {
       loadAnalysisDate: ["Load Analysis Date", "date", "", ""],
