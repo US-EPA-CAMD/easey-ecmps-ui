@@ -18,14 +18,7 @@ describe("ReportGenerator Component", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  beforeEach(() => {
-    getReportSpy = jest.spyOn(camdApi, "getReport").mockResolvedValue({
-      data: {
-        report: {},
-      },
-    })
-  });
-
+  
   it("renders login component when auth is required and user is not provided", async () => {
     const mockReportData = jest.fn().mockResolvedValue({data: getMockReportData()});
     jest

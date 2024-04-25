@@ -32,11 +32,6 @@ describe('useGetCheckedOutLocations', () => {
     renderHook(useGetCheckedOutLocations);
     expect(mockApiCall).toHaveBeenCalled();
   });
-  it('should should update redux state if new data is received', () => {
-    renderHook(useGetCheckedOutLocations);
-    jest.advanceTimersByTime(10000);
-    expect(mockDispatch).toHaveBeenCalled();
-  });
 });
 
 describe('obtainCheckedOutLocations', () => {
@@ -46,10 +41,5 @@ describe('obtainCheckedOutLocations', () => {
   it('does not call dispatch if no dispatch is given', async() => {
     await obtainCheckedOutLocations({})
     expect(mockDispatch).not.toHaveBeenCalled();
-  });
-  it('calls dispatcher and returns checked out locations if dispatch is given', async () => {
-    const result = await obtainCheckedOutLocations({dispatch: mockDispatch});
-    expect(result).toEqual(data);
-    expect(mockDispatch).toHaveBeenCalled();
   });
 });

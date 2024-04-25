@@ -509,7 +509,7 @@ export const DataTableRender = ({
     if (title === "") {
       title = sectionTitle ? sectionTitle : null;
     }
-    if (data.length >= 0) {
+    if (data.length > 0) {
       return (
         <FilterComponent
           onSearch={handleSearch}
@@ -529,6 +529,7 @@ export const DataTableRender = ({
         aria-live="polite"
         className={`${tableStyling}`}
         id="datatableContainer"
+        data-testid="datatableContainer"
       >
         {dataLoaded && data.length > 0 ? (
           <div>
@@ -614,7 +615,7 @@ export const DataTableRender = ({
               )}
             </div>
           </div>
-        ) : dataLoaded && data.length === 0 ? (
+        ) : data.length === 0 ? (
           <div>
             {tableTitle ? (
               <h4

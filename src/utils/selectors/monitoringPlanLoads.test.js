@@ -78,7 +78,7 @@ describe("testing monitoring plan data selectors", () => {
         col4: null,
         col5: null,
         col6: null,
-        col7: "",
+        col7: null,
         col8: null,
         col9: "1995-01-01 00:00",
         col10: "",

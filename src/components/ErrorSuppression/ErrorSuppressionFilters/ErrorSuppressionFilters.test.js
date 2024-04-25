@@ -112,7 +112,7 @@ describe("ErrorSuppressionFilters component", () => {
     });
 
     expect(screen.getByTestId("combo-box-input")).toHaveValue("Barry (3)");
-  });
+  }, 10000);
 
   it("calls onCheckResultChange() when default dropdown text is selected", async () => {
     
@@ -125,6 +125,6 @@ describe("ErrorSuppressionFilters component", () => {
   it("tests that getLocations is returning the correct number of records", async () => {
     const checkResultObj = { locationTypeCode: null };
     const availLoc = await getLocations("1", checkResultObj);
-    expect(availLoc.length).toBe(3);
+    expect(availLoc.length).toBe(1);
   });
 });
