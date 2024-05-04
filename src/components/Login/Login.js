@@ -9,7 +9,7 @@ import {
 } from "@trussworks/react-uswds";
 
 import { useNavigate } from "react-router-dom";
-import {authenticate, determinePolicy} from "../../utils/api/easeyAuthApi";
+import {determinePolicy} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary

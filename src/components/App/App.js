@@ -45,7 +45,10 @@ import { currentDateTime } from "../../utils/functions";
 import WhatHasData from "../WhatHasData/WhatHasData";
 import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
-import useAuthRedirect from './useAuthRedirect';
+import {validUser} from "../../utils/api/easeyAuthApi";
+import {displayAppError} from "../../additional-functions/app-error";
+import {signInUser} from "./useAuthRedirect";
+import LoadingModal from "../LoadingModal/LoadingModal";
 
 const App = () => {
   const queryParams = useLocation().search;
@@ -54,6 +57,8 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+  const [isSignInReady, setSignInReady] = useState(false);
+  const [signInError, setSignInError] = useState(null); // State to hold any error messages
 
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
@@ -86,9 +91,6 @@ const App = () => {
     "workspace/submit",
   ];
 
-  // Use the custom hook to handle auth redirect and validation
-  useAuthRedirect(queryParams);
-
   const refreshCheckoutInterval = () => {
     if (localStorage.getItem("ecmps_user")) {
       return setInterval(async () => {
@@ -117,6 +119,27 @@ const App = () => {
       }, 10000);
     }
   };
+
+  // Use the custom hook to handle auth redirect and validation
+  useEffect(() => {
+    signInUser()
+      .then(() => {
+        setSignInReady(true);
+      })
+      .catch(err => {
+        setSignInError(err.message); // Store the error message
+        setSignInReady(true);
+      });
+  }, []);
+
+  //Display sign in errors once all is loaded
+  useEffect(() => {
+    // This useEffect will trigger once `isSignInReady` is true and if there is an signInError
+    if (isSignInReady && signInError) {
+      displayAppError(signInError);
+    }
+  }, [isSignInReady, signInError]); // Depend on `isSignInReady` and `signInError`
+
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
@@ -182,15 +205,6 @@ const App = () => {
     };
   }, []);
 
-  const validUser = () => {
-    const expDate = localStorage.getItem("ecmps_session_expiration");
-    return (
-      JSON.parse(localStorage.getItem("ecmps_user")) &&
-      expDate &&
-      new Date(expDate) > currentDateTime()
-    );
-  };
-
   const roles = JSON.parse(localStorage.getItem("ecmps_user"))?.roles;
 
   const facilityCheckoutPermission = () => {
@@ -215,6 +229,11 @@ const App = () => {
       }
     }
   }, [user]);
+
+  if (!isSignInReady) {
+    return <LoadingModal type="Auth" loading={true}/>
+  }
+
 
   return (
     <div>

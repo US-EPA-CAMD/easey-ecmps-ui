@@ -91,20 +91,6 @@ export const determinePolicy = async (payload) => {
     }
 };
 
-export const validateAuthRedirect = async (payload) => {
-  return axios({
-    method: "POST",
-    url: `${config.services.authApi.uri}/authentication/sign-in`,
-    data: payload,
-  })
-      .then((response) => {
-        storeUser(response);
-      })
-      .catch((e) => {
-        throw e;
-      });
-};
-
 export const authenticate = async (payload) => {
   return axios({
     method: "POST",
@@ -128,6 +114,15 @@ function storeUser(response) {
       "ecmps_session_expiration",
       currDate.toLocaleString()
   );
+
+  // Remove the sessionID and other extraneous from the URL if we just logged in
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  if (params.has('sessionId')) {
+    url.search = "";
+    // Replace the current URL in the history without reloading the page
+    window.history.replaceState({}, '', url.toString());
+  }
 
   if (
       window.location.pathname.includes("/workspace") ||
@@ -257,4 +252,13 @@ export const getCredentials = async (monitorPlans) => {
       config.services.authApi.uri
     }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
+};
+
+export const validUser = () => {
+  const expDate = localStorage.getItem("ecmps_session_expiration");
+  return (
+    JSON.parse(localStorage.getItem("ecmps_user")) &&
+    expDate &&
+    new Date(expDate) > currentDateTime()
+  );
 };
