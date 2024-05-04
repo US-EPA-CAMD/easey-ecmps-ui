@@ -28,7 +28,7 @@ initialState.openedFacilityTabs.export = [
       endReportPeriodId: null,
       active: true,
       reportingFrequencies: [],
-      locations: [
+      monitoringLocationData: [
         {
           id: '6',
           unitRecordId: 1,

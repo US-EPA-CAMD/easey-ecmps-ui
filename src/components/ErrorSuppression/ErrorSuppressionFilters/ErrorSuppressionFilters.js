@@ -69,15 +69,15 @@ export const getLocations = (facilityValue, checkResultObj) => {
     // TODO: 5609 this might fail
 
     let availLoc = locations?.map((l) => ({
-      id: l.id,
-      label: l.unitId,
+      id: l?.id,
+      label: l?.unitId,
       selected: false,
       enabled: true,
     }));
     if (checkResultObj.locationTypeCode === "LOC") {
       const availStackPipe = locations?.map((l) => ({
-        id: l.id,
-        label: l.stackPipeId,
+        id: l?.id,
+        label: l?.stackPipeId,
         selected: false,
         enabled: true,
       }));

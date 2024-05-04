@@ -15,7 +15,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --coverage --testResultsProcessor=jest-sonar-reporter",
     "test:cov": "craco test --coverage",
     "up": "yarn && yarn start"
   },

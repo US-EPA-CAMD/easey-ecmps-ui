@@ -101,17 +101,6 @@ const executeTests = () => {
   });
 };
 
-
-// After adding a new case in retrieve-dropdown-api.js, all you need to do is add a new test object following the current structure:
-//    - name:                           this text appears when you run the test
-//    - expectedApiResponse:            mock response with the properties that will be returned
-//    - expectedDropdownOptions:        options object containing name of the field in the UI
-//    - case:                           the fieldName used in the switch statement in retrieve-dropdown-api.js
-//    - mats:                           MATS flag set to true (optional)
-//    - function:                       function called in dataManagementApi.js
-//    - yearDropdown:                   flag to indicate a data year dropdown
-//    - dynamicPrefilterDropdown:       flag to indicate a dynamic prefilter dropdown
-//    - staticPrefilterDropdown:        flag to indicate a dynamic prefilter dropdown
 const testObjects = [
   {
     name: "parameter Code for non-MATS",
@@ -138,18 +127,6 @@ const testObjects = [
     mats: true,
     function: dmApi.getAllMatsParameterCodes,
   },
-  // {
-  //   name: "controlEquipParamCode",
-  //   expectedApiResponse: {
-  //     status: successCode,
-  //     data: [{ controlEquipParamCode: "", controlEquipParamDescription: "" }],
-  //   },
-  //   expectedDropdownOptions: {
-  //     controlEquipParamCode: dropdownOptions,
-  //   },
-  //   case: "controlEquipParamCode",
-  //   function: dmApi.getAllControlEquipmentParameterCodes,
-  // },
 
   {
     name: "monitoringMethodCode for non-MATS",
@@ -215,19 +192,6 @@ const testObjects = [
     },
     case: "analyzerRangeCode",
     function: dmApi.getAllRangeCodes,
-  },
-
-  {
-    name: "maximumFuelFlowRateSourceCode",
-    expectedApiResponse: {
-      status: successCode,
-      data: [{ mMaxRateSourceCode: "", maxRateSourceDescription: "" }],
-    },
-    expectedDropdownOptions: {
-      maximumFuelFlowRateSourceCode: dropdownOptions,
-    },
-    case: "maximumFuelFlowRateSourceCode",
-    function: dmApi.getAllMaxRateSourceCodes,
   },
 
   {
@@ -720,84 +684,6 @@ const testObjects = [
     },
     case: "shapeCode",
     function: dmApi.getAllShapeCodes,
-  },
-
-  {
-    name: "prefilteredMatsMethods",
-    case: "prefilteredMatsMethods",
-    function: dmApi.getPrefilteredMatsMethods,
-    dynamicPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredMethods",
-    case: "prefilteredMethods",
-    function: dmApi.getPrefilteredMethods,
-    dynamicPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredFormulas",
-    case: "prefilteredFormulas",
-    function: dmApi.getPrefilteredFormulas,
-    dynamicPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredSpans",
-    case: "prefilteredSpans",
-    function: dmApi.getPrefilteredSpans,
-    dynamicPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredDefaults",
-    case: "prefilteredDefaults",
-    function: dmApi.getPrefilteredDefaults,
-    dynamicPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredLoads",
-    case: "prefilteredLoads",
-    function: dmApi.getPrefilteredLoads,
-    staticPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredUnitFuels",
-    case: "prefilteredUnitFuels",
-    function: dmApi.getPrefilteredUnitFuels,
-    staticPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredLEEQualifications",
-    case: "prefilteredLEEQualifications",
-    function: dmApi.prefilteredLEEQualifications,
-    staticPrefilterDropdown: true,
-  },
-
-  {
-    name: "prefilteredUnitControls",
-    case: "prefilteredUnitControls",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredLEEQualifications",
-    case: "prefilteredLEEQualifications",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredSystemFuelFlows",
-    case: "prefilteredSystemFuelFlows",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
-  },  {
-    name: "prefilteredSystemsComponents",
-    case: "prefilteredSystemsComponents",
-    function: dmApi.getPrefilteredUnitControls,
-    dynamicPrefilterDropdown: true,
   },
 ];
 

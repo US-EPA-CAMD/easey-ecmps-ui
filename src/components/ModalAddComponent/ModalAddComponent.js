@@ -22,35 +22,69 @@ const ModalAddComponent = ({
   useEffect(() => {
     let main = [];
     if (comps.length < 1) {
-      mpApi.getMonitoringComponents(locationId).then((res) => {
-        setComps(res.data);
-      })
-        .catch(error => console.log('getMonitoringComponents failed', error));
+      mpApi
+        .getMonitoringComponents(locationId)
+        .then((res) => {
+          setComps(res.data);
+        })
+        .catch((error) => console.log("getMonitoringComponents failed", error));
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
+          console.log("ress", ress);
           setSysComps(ress.data);
         })
-        .catch(error => console.log('getMonitoringSystemsComponents failed', error));
+        .catch((error) =>
+          console.log("getMonitoringSystemsComponents failed", error)
+        );
     } else {
       main = comps;
 
       //Filtering system component with system endDate
-      const sysWithEndDate = sysComps.filter((sy) => sy.endDate && new Date(sy.endDate) < new Date());
+      const sysWithEndDate = sysComps.filter(
+        (sy) => sy.endDate && new Date(sy.endDate) < new Date()
+      );
 
       //Filtering system component with active | no endDate
-      const activeSystem = sysComps.filter((sy) => !sy.endDate || new Date(sy?.endDate) > new Date());
+      const activeSystem = sysComps.filter(
+        (sy) => !sy.endDate || new Date(sy?.endDate) > new Date()
+      );
 
       // selecting component from main. that has componentId is equal to sysWithEndDate's componentId
-      const componetWithSystemEndDate = main.filter(({ componentId }) => sysWithEndDate.some(({ componentId: sysCompId }) => sysCompId === componentId));
+      const componetWithSystemEndDate = main.filter(({ componentId }) =>
+        sysWithEndDate.some(
+          ({ componentId: sysCompId }) => sysCompId === componentId
+        )
+      );
 
-      // remove active components 
-      const componentWithNonActive = componetWithSystemEndDate.filter(({ componentId }) => !activeSystem.some(({ componentId: sysCompId }) => sysCompId === componentId))
+      // remove active components
+      const componentWithNonActive = componetWithSystemEndDate.filter(
+        ({ componentId }) =>
+          !activeSystem.some(
+            ({ componentId: sysCompId }) => sysCompId === componentId
+          )
+      );
       // components associated with a monitor location that are NOT already active at the system.
-      main = main.filter(({ componentId }) => !sysComps.some(({ componentId: sysCompId }) => sysCompId === componentId));
+      main = main.filter(
+        ({ componentId }) =>
+          !sysComps.some(
+            ({ componentId: sysCompId }) => sysCompId === componentId
+          )
+      );
 
       // merge main and componetWithSystemEndDate. then unique with 'componentId' | Sort by componentId
-      const filterCompos = [...main, ...componentWithNonActive].filter((obj1, index, arr) => arr.findIndex(obj2 => ['componentId'].every(item => obj2[item] === obj1[item])) === index).sort((a, b) => a.componentId - b.componentId || a.componentId.localeCompare(b.componentId));
+      const filterCompos = [...main, ...componentWithNonActive]
+        .filter(
+          (obj1, index, arr) =>
+            arr.findIndex((obj2) =>
+              ["componentId"].every((item) => obj2[item] === obj1[item])
+            ) === index
+        )
+        .sort(
+          (a, b) =>
+            a.componentId - b.componentId ||
+            a.componentId.localeCompare(b.componentId)
+        );
       setFilteredComps(filterCompos);
     }
 
@@ -110,8 +144,8 @@ const ModalAddComponent = ({
             <SelectBox
               options={
                 unlinkedComponentsOptions !== null ||
-                  unlinkedComponentsOptions !== undefined ||
-                  unlinkedComponentsOptions.length < 1
+                unlinkedComponentsOptions !== undefined ||
+                unlinkedComponentsOptions.length < 1
                   ? unlinkedComponentsOptions
                   : [{ code: "", name: "" }]
               }

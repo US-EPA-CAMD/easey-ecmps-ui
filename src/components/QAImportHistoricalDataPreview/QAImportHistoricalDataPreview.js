@@ -20,7 +20,7 @@ const TEST_EXT_EXE_KEY = "testExtensionExemptionData";
 export const getUnitIdAndStackPipeIds = (locs) => {
   const unitIds = [];
   const stackPipeIds = [];
-  locs.forEach((e) => {
+  locs?.forEach((e) => {
     if (e.type === "stack") {
       stackPipeIds.push(e.stackPipeId);
     }

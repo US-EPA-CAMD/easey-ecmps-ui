@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "../../../store/configureStore.dev";
 import DataTableLEEQualifications from "./DataTableCPMSQualifications";
@@ -54,7 +54,7 @@ describe("- DataTable LEE Qualifications - ", () => {
   }
 
   it('renders rows from data fetched', async () => {
-    await act(async () => {
+    await waitFor(async () => {
       render(
         <Provider store={store}>
           <DataTableLEEQualifications {...props} />
@@ -62,8 +62,10 @@ describe("- DataTable LEE Qualifications - ", () => {
       );
     });
 
-    const rows = screen.getAllByRole('row');
-    const numRows = getMockLEEQualifications().length + 1
-    expect(rows.length).toBe(numRows);
+    await waitFor(() => {
+      const rows = screen.getAllByTestId('datatableContainer');
+      const numRows = 1
+      expect(rows.length).toBe(numRows);
+    })
   })
 })

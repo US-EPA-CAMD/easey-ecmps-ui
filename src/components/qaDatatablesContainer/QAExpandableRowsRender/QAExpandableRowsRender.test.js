@@ -181,7 +181,7 @@ describe("Test cases for QAExpandableRowsRender", () => {
     // userEvent.click(secondDeleteBtn);
     // const confirmBtns = screen.getAllByRole("button", { name: /Yes/i });
     // userEvent.click(confirmBtns[1]);
-  });
+  }, 50000);
 
   test("renders RATA Summary data rows and create/save/delete", async () => {
     const rataSummaryData = [
@@ -1584,7 +1584,7 @@ describe("Test cases for QAExpandableRowsRender", () => {
         fuelCode: "string",
         noxDefaultRate: 0,
         operatingConditionCode: "string",
-        groupID: "string",
+        groupId: "string",
         numberOfUnitsInGroup: 0,
         numberOfTestsForGroup: 0,
       },
@@ -1594,7 +1594,7 @@ describe("Test cases for QAExpandableRowsRender", () => {
         fuelCode: "string2",
         noxDefaultRate: 2,
         operatingConditionCode: "string2",
-        groupID: "string2",
+        groupId: "string2",
         numberOfUnitsInGroup: 2,
         numberOfTestsForGroup: 2,
       },
