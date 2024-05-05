@@ -1,6 +1,6 @@
 import { isEqual } from "lodash";
 import { useDispatch } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
 import TagManager from "react-gtm-module";
@@ -57,8 +57,13 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
-  const [isSignInReady, setSignInReady] = useState(false);
+
+  const urlParams = new URLSearchParams(queryParams);
+  const message = urlParams.get('message');
+  const sessionId = urlParams.get('sessionId');
+  const signInAction = Boolean(message || sessionId);
   const [signInError, setSignInError] = useState(null); // State to hold any error messages
+  const signInStarted = useRef(false);
 
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
@@ -119,27 +124,29 @@ const App = () => {
       }, 10000);
     }
   };
-
-  // Use the custom hook to handle auth redirect and validation
+  
+  //Handles auth redirect and validation
   useEffect(() => {
-    signInUser()
-      .then(() => {
-        setSignInReady(true);
-      })
-      .catch(err => {
-        setSignInError(err.message); // Store the error message
-        setSignInReady(true);
-      });
+    if (signInAction && !signInStarted.current) {
+      signInStarted.current = true;
+      signInUser(message, sessionId)
+        .then(() => {
+          setSignInError(null);
+          signInStarted.current = false;
+        })
+        .catch(err => {
+          setSignInError(err.message);
+          signInStarted.current = false;
+        });
+    }
   }, []);
 
-  //Display sign in errors once all is loaded
+  //Display sign in errors if there are any errors.
   useEffect(() => {
-    // This useEffect will trigger once `isSignInReady` is true and if there is an signInError
-    if (isSignInReady && signInError) {
+    if (signInError) {
       displayAppError(signInError);
     }
-  }, [isSignInReady, signInError]); // Depend on `isSignInReady` and `signInError`
-
+  }, [signInError]); // Depend on `isSignInReady` and `signInError`
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
@@ -230,10 +237,9 @@ const App = () => {
     }
   }, [user]);
 
-  if (!isSignInReady) {
+  if (signInAction) { //page reloads if sign-in is successful; at that point signInAction will be false
     return <LoadingModal type="Auth" loading={true}/>
   }
-
 
   return (
     <div>

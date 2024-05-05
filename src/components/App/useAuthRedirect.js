@@ -1,14 +1,6 @@
-import {displayAppError} from "../../additional-functions/app-error";
 import {authenticate} from "../../utils/api/easeyAuthApi";
 
-export async function signInUser() {
-  // Create a URL object from the current location
-  const url = new URL(window.location.href);
-
-  // Extract the sessionId from query parameters
-  const sessionId = url.searchParams.get('sessionId');
-  const message = url.searchParams.get('message');
-
+export async function signInUser(message, sessionId) {
   if (message) {
     throw new Error(message);
   }

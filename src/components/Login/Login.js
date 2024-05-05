@@ -8,7 +8,6 @@ import {
   Fieldset,
 } from "@trussworks/react-uswds";
 
-import { useNavigate } from "react-router-dom";
 import {determinePolicy} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
