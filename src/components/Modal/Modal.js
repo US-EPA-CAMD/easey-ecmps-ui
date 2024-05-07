@@ -33,7 +33,7 @@ export const Modal = ({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  
+
   if (windowSize.width <= 1300) {
     width = "650px";
   } else {
@@ -44,7 +44,7 @@ export const Modal = ({
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
-      }); 
+      });
     };
 
     window.addEventListener("resize", handleResize);
@@ -138,11 +138,19 @@ export const Modal = ({
 
                   {breadCrumbBar ? breadCrumbBar : ""}
 
-                  {errorMsgs.map((error) => (
-                    <Alert type="error" slim noIcon key={error} role="alert">
-                      {error}
-                    </Alert>
-                  ))}
+                  {errorMsgs
+                    .flatMap((error) => {
+                      try {
+                        return JSON.parse(error); // May be a stringified array
+                      } catch {
+                        return error;
+                      }
+                    })
+                    .map((error) => (
+                      <Alert type="error" slim noIcon key={error} role="alert">
+                        {error}
+                      </Alert>
+                    ))}
                 </div>
               </div>
 
