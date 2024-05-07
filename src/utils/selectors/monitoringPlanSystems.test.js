@@ -147,19 +147,19 @@ describe("testing monitoring plan data selectors", () => {
         col1: "PNG",
         col2: "GAS",
         col3: "2019-07-01 00:00 ➜ 2019-07-01 00:00",
-        col4: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
+        id: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
       },
       {
         col1: "PNG",
         col2: "GAS",
         col3: "➜",
-        col4: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
+        id: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
       },
       {
         col1: "PNG",
         col2: "GAS",
         col3: "➜ Present",
-        col4: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
+        id: "TWCORNEL5-346B541485484501A5C748F8CAAABC22",
       },
     ];
 
@@ -168,19 +168,19 @@ describe("testing monitoring plan data selectors", () => {
         col1: "AFA",
         col2: "GFFM",
         col3: "2019-07-01 00:00 ➜ 2019-07-01 00:00",
-        col4: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
+        id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       },
       {
         col1: "AFA",
         col2: "GFFM",
         col3: "➜",
-        col4: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
+        id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       },
       {
         col1: "AFA",
         col2: "GFFM",
         col3: "➜ Present",
-        col4: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
+        id: "TWCORNEL5-902F83FCDE244546ABB2E2F46EC873E3",
       },
     ];
 

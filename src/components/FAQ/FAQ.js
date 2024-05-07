@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Accordion } from '@trussworks/react-uswds';
-
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getContent } from '../../utils/api/contentApi';
+import axios from "axios";
+import { handleResponse, handleError } from "../../utils/api/apiUtils";
+import config from "../../config";
+
+export const getContent = async (path) => {
+  const url = `${config.services.content.uri}${path}`;
+  return axios
+    .get(url)
+    .then(handleResponse)
+    .catch((error) => {
+      handleError(error);
+      throw new Error(error);
+    });
+};
 
 const FAQ = () => {
   const [mainContent, setMainContent] = useState();
@@ -55,7 +67,7 @@ const FAQ = () => {
           children={mainContent}
           remarkPlugins={[remarkGfm]}
         />
-        {questionsAnswers.map(item => {
+        {questionsAnswers?.map(item => {
           return (
             <div className=" padding-top-2 padding-bottom-2" key={item.name}>
               {' '}

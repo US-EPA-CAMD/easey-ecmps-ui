@@ -215,6 +215,10 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
+  /* defaultReportingPeriodChanged is a flag for whether a user has selected a reporing date or not;
+    it's changed when user manually changes location or viewTemplate or imports data
+  */
+  const [defaultReportingPeriodChanged, setDefaultReportingPeriodChanged] = useState(false);
 
   let selectedUnitId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === locationSelect[1])
@@ -883,13 +887,19 @@ export const HeaderInfo = ({
         // set relevant reporting periods state to rerender which will call
         // getEmissionsViewDropdownData w/ new reporting periods state
         const { year, quarter } = payload;
-        const importedReportingPeriod = `${year} Q${quarter}`;
-        // Select only the reporting period that was uploaded
+        let importedReportingPeriod = [`${year} Q${quarter}`];
+        if (defaultReportingPeriodChanged) {
+          importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${year} Q${quarter}`]))];
+        }
+
+        // Select the reporting period that user has selected
         reportingPeriods.forEach((rp) => {
-          rp.selected = rp.label === importedReportingPeriod;
+          rp.selected = importedReportingPeriod.includes(rp.label);
         });
 
-        setSelectedReportingPeriods([importedReportingPeriod]);
+        setSelectedReportingPeriods(importedReportingPeriod);
+        dispatch(setReportingPeriods(importedReportingPeriod, currentTab.name, workspaceSection));
+        setDefaultReportingPeriodChanged(true);
       })
       .catch((err) => {
         console.log(err);
@@ -924,14 +934,19 @@ export const HeaderInfo = ({
   const historicalImportCallback = (historicYear, historicQuarter) => {
     // set relevant reporting periods state to rerender which will call
     // getEmissionsViewDropdownData w/ new reporting periods state
-    const importedReportingPeriod = `${historicYear} Q${historicQuarter}`;
-    // Select only the reporting period that was uploaded
+    let importedReportingPeriod = [`${historicYear} Q${historicQuarter}`];
+    if (defaultReportingPeriodChanged) {
+      importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${historicYear} Q${historicQuarter}`]))];
+    }
+
+    // Select the reporting period that user has selected
     reportingPeriods.forEach((rp) => {
-      rp.selected = rp.label === importedReportingPeriod;
+      rp.selected = importedReportingPeriod.includes(rp.label);
     });
 
-    setSelectedReportingPeriods([importedReportingPeriod])
-    dispatch(setReportingPeriods([importedReportingPeriod], currentTab.name, workspaceSection));
+    setSelectedReportingPeriods(importedReportingPeriod);
+    dispatch(setReportingPeriods(importedReportingPeriod, currentTab.name, workspaceSection));
+    setDefaultReportingPeriodChanged(true)
   };
 
   // Create audit message for header info
@@ -960,6 +975,7 @@ export const HeaderInfo = ({
     dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
     dispatch(setViewData([], currentTab.name, workspaceSection));
     dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
+    setDefaultReportingPeriodChanged(true);
   }
 
   const handleSelectReportingPeriod = () => {

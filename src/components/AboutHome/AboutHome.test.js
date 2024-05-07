@@ -2,6 +2,7 @@ import React from "react";
 import AboutHome from "./AboutHome";
 import { render, fireEvent, screen, wait } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
+import userEvent from '@testing-library/user-event';
 
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
@@ -21,7 +22,6 @@ jest.mock("../../utils/api/contentApi", () => {
 
 describe("testing home page ", () => {
   it("should not show a log in box ", async () => {
-    await wait(() => {
       const { container } = render(
         <BrowserRouter>
           <AboutHome user={{ firstName: "test" }} setCurrentLink={jest.fn()} />
@@ -30,20 +30,18 @@ describe("testing home page ", () => {
 
       const monPlansBtn = container.querySelector("#monitoringPlansBtn");
       expect(monPlansBtn).toBeDefined();
-      fireEvent.click(monPlansBtn);
+      userEvent.click(monPlansBtn);
 
       const emissionsBtn = container.querySelector("#emissionsBtn");
       expect(emissionsBtn).toBeDefined();
-      fireEvent.click(emissionsBtn);
+      userEvent.click(emissionsBtn);
 
       const qaCertsBtn = container.querySelector("#qaCertificationsBtn");
       expect(qaCertsBtn).toBeDefined();
-      fireEvent.click(qaCertsBtn);
-    });
+      userEvent.click(qaCertsBtn);
   });
 
   it("should show a log in box ", async () => {
-    await wait(() => {
       const { container } = render(
         <BrowserRouter>
           <AboutHome setCurrentLink={jest.fn()} />
@@ -52,6 +50,5 @@ describe("testing home page ", () => {
 
       const loginBox = screen.getByTestId("homeLogIn");
       expect(loginBox).toBeDefined();
-    });
   });
 });

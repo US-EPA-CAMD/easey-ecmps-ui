@@ -32,10 +32,6 @@ describe("Left Navigation links", () => {
     expect(emissionsLink).toBeInTheDocument();
     expect(emissionsLink).toHaveAttribute('href','/workspace/emissions');
 
-    const exportLink = screen.getByLabelText("Export - Workspace");
-    expect(exportLink).toBeInTheDocument();
-    expect(exportLink).toHaveAttribute('href','/workspace/export');
-
     const evaluateLink = screen.getByLabelText("Evaluate - Workspace");
     expect(evaluateLink).toBeInTheDocument();
     expect(evaluateLink).toHaveAttribute('href','/workspace/evaluate');

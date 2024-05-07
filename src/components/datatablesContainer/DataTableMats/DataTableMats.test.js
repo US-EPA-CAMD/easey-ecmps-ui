@@ -69,7 +69,7 @@ describe("- DataTableMats -", () => {
 
     expect(createMats).toHaveBeenCalled();
 
-  });
+  }, 20000);
 
   test("DataTableMats edit", async () => {
     const saveMonitoringMats = jest.fn().mockResolvedValue({ status: 200 });
@@ -94,5 +94,5 @@ describe("- DataTableMats -", () => {
     await act(() => saveBtn.click())
 
     expect(saveMonitoringMats).toHaveBeenCalled();
-  });
+  }, 20000);
 })

@@ -33,6 +33,8 @@ module.exports = {
         "!src/utils/api/axiosSetup.js",
         "!src/utils/api/setupTests.js",
       ];
+      jestConfig.coverageReporters = ["html", "text", "clover", "json", "lcov"];
+      jestConfig.collectCoverage = true;
       jestConfig.moduleNameMapper = {
         "\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
       };
