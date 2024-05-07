@@ -138,19 +138,11 @@ export const Modal = ({
 
                   {breadCrumbBar ? breadCrumbBar : ""}
 
-                  {errorMsgs
-                    .flatMap((error) => {
-                      try {
-                        return JSON.parse(error); // May be a stringified array
-                      } catch {
-                        return error;
-                      }
-                    })
-                    .map((error) => (
-                      <Alert type="error" slim noIcon key={error} role="alert">
-                        {error}
-                      </Alert>
-                    ))}
+                  {errorMsgs.map((error) => (
+                    <Alert type="error" slim noIcon key={error} role="alert">
+                      {error}
+                    </Alert>
+                  ))}
                 </div>
               </div>
 
