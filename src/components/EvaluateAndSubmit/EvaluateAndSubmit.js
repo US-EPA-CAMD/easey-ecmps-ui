@@ -187,13 +187,23 @@ export const EvaluateAndSubmit = ({
     }
   });
 
-  const populateDropdown = async () => {
-    setDropdownFacilities(await getDropDownFacilities());
-  };
-
   useEffect(() => {
-    populateDropdown();
+    let isMounted = true;  // Track the mounting status
+
+    const fetchDropdownFacilities = async () => {
+      const facilities = await getDropDownFacilities();
+      if (isMounted) {
+        setDropdownFacilities(facilities);
+      }
+    };
+
+    fetchDropdownFacilities();
+
+    return () => {
+      isMounted = false;  // Set false when the component unmounts
+    };
   }, []);
+
 
   const filterClick = () => {
     if (componentType === "Submission") {

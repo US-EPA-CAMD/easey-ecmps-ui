@@ -5,7 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, credentialsAuth, verifyChallenge, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios, refreshToken, createActivity, verifyChallenge, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -240,7 +240,7 @@ describe("Easey Auth API", () => {
       .onPost(`${config.services.authApi.uri}/sign/authenticate`)
       .reply(200, {});
 
-    expect((await credentialsAuth()).data).toEqual({});
+    expect((await createActivity()).data).toEqual({});
   });
 
   it("verifyChallenge", async () => {

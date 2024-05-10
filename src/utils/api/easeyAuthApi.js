@@ -221,10 +221,11 @@ export const refreshToken = async () => {
   }
 };
 
-export const credentialsAuth = async (payload) => {
+export const createActivity = async (payload) => {
   return secureAxios({
     method: "POST",
-    url: `${config.services.authApi.uri}/sign/authenticate`,
+    url: `${config.services.authApi.uri}/sign/create-activity`,
+    /*headers: { "Id-Token": "test" },*/
     data: payload,
   });
 };
