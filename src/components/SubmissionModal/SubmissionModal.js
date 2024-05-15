@@ -75,31 +75,36 @@ export const SubmissionModal = ({
 
   const verifyClicked = async (event) => {
 
-    //Create the CROMERR activity here
-    const user = JSON.parse(localStorage.getItem("ecmps_user"));
+    try {
+      //Create the CROMERR activity here
+      const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
-    const result = await createActivity({
-      userId: user.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      middleInitial: '',
-      activityDescription: 'test description',
-    });
+      const result = await createActivity({
+        userId: user.userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        middleInitial: '',
+        activityDescription: `ECMPS Submission for ${user.userId}`,
+      });
 
-    if (result?.message) {
+      if (result?.message) {
+        setShowError(true);
+        setFormErrorMessage(result.message);
+        return;
+      }
+
+      setActivityId(result.data.activityId);
+
+      //Go back to the EvaluateAndSubmit
+      setSubmissionActionLog({
+        ...submissionActionLog,
+        verified: new Date(),
+      });
+      submissionCallback(submissionActionLog);
+    } catch (err) {
       setShowError(true);
-      setFormErrorMessage(result.message);
-      return;
+      setFormErrorMessage(err.response?.data?.message || err.message);
     }
-
-    setActivityId(result.data.activityId);
-
-    //Go back to the EvaluateAndSubmit
-    setSubmissionActionLog({
-      ...submissionActionLog,
-      verified: new Date(),
-    });
-    submissionCallback(submissionActionLog);
   };
 
   useEffect(() => {
@@ -153,7 +158,7 @@ export const SubmissionModal = ({
               {showError && (
                 <Alert
                   type="error"
-                  heading="Authentication Errors"
+                  heading="Certification Error"
                   headingLevel="h4"
                   role="alert"
                 >

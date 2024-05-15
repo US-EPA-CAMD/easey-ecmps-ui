@@ -135,7 +135,8 @@ const App = () => {
           signInStarted.current = false;
         })
         .catch(err => {
-          setSignInError(err.message);
+          const message = err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message;
+          setSignInError(message);
           signInStarted.current = false;
         });
     }
@@ -237,7 +238,7 @@ const App = () => {
     }
   }, [user]);
 
-  if (signInAction) { //page reloads if sign-in is successful; at that point signInAction will be false
+  if (signInAction  && !signInError) { //page reloads if sign-in is successful; at that point signInAction will be false
     return <LoadingModal type="Auth" loading={true}/>
   }
 
