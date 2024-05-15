@@ -15,6 +15,14 @@ const UserAccountStatus = ({ viewProps, policyResponse }) => {
   useEffect(() => {
     const generateUrl = async () => {
       let url = "";
+
+      // Handle redirection for policies ending with "_BYPASS"
+      if (policyResponse.policy.endsWith("_BYPASS")) {
+        const url = `${window.location.origin}/?sessionId=${encodeURIComponent(policyResponse.userId)}`;
+        window.location.href = url;
+        return; // Stop further execution since we're redirecting
+      }
+
       if (policyResponse.policy.endsWith("_SIGNUP") || policyResponse.policy.endsWith("_MIGRATE")) {
         url = `${config.app.cdxUserAccountStatusAuthEndpoint}`;
       } else {
