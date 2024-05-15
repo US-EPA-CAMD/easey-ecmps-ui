@@ -24,7 +24,7 @@ const UserAccountStatus = ({ viewProps, policyResponse }) => {
       }
 
       if (policyResponse.policy.endsWith("_SIGNUP") || policyResponse.policy.endsWith("_MIGRATE")) {
-        url = `${config.app.cdxUserAccountStatusAuthEndpoint}`;
+        url = `${config.app.cdxUserSignupMigrateUrl}`;
       } else {
         url = `${config.app.oidcAuthEndpoint}`.replace('%s', policyResponse.policy);
         url = await buildUrl(url, policyResponse);

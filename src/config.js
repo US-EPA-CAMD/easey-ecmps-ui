@@ -116,7 +116,7 @@ export const config = {
     oidcAuthResponseMode: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE"),
     oidcAuthStateHmacSecretKey: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_STATE_HMAC_SECRET_KEY"),
     oidcAuthScopes: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES"),
-    cdxUserAccountStatusAuthEndpoint: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CDX_USER_ACCT_STATUS_AUTH_ENDPOINT"),
+    cdxUserSignupMigrateUrl: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL"),
 
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
