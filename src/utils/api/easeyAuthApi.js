@@ -1,9 +1,9 @@
 import axios from "axios";
 import config from "../../config";
-import { checkoutAPI } from "../../additional-functions/checkout";
-import { getCheckedOutLocations } from "./monitoringPlansApi";
-import { displayAppError } from "../../additional-functions/app-error";
-import { currentDateTime } from "../functions";
+import {checkoutAPI} from "../../additional-functions/checkout";
+import {getCheckedOutLocations} from "./monitoringPlansApi";
+import {displayAppError} from "../../additional-functions/app-error";
+import {currentDateTime} from "../functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -83,6 +83,14 @@ export const refreshLastActivity = async () => {
   }
 };
 
+export const determinePolicy = async (payload) => {
+    try {
+      return await axios.post(`${config.services.authApi.uri}/authentication/determinePolicy`, payload);
+    } catch (e) {
+      throw e;
+    }
+};
+
 export const authenticate = async (payload) => {
   return axios({
     method: "POST",
@@ -90,29 +98,42 @@ export const authenticate = async (payload) => {
     data: payload,
   })
     .then((response) => {
-      localStorage.setItem("ecmps_user", JSON.stringify(response.data));
-
-      const currDate = currentDateTime();
-      currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
-      localStorage.setItem(
-        "ecmps_session_expiration",
-        currDate.toLocaleString()
-      );
-
-      if (
-        window.location.pathname.includes("/workspace") ||
-        window.location.pathname.endsWith("/home") ||
-        window.location.pathname.endsWith("/")
-      ) {
-        window.location.reload();
-      } else {
-        window.location.assign(`/workspace${window.location.pathname}`);
-      }
+      storeUser(response);
     })
     .catch((e) => {
       throw e;
     });
 };
+
+function storeUser(response) {
+  localStorage.setItem("ecmps_user", JSON.stringify(response.data));
+
+  const currDate = currentDateTime();
+  currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
+  localStorage.setItem(
+      "ecmps_session_expiration",
+      currDate.toLocaleString()
+  );
+
+  // Remove the sessionID and other extraneous from the URL if we just logged in
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  if (params.has('sessionId')) {
+    url.search = "";
+    // Replace the current URL in the history without reloading the page
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  if (
+      window.location.pathname.includes("/workspace") ||
+      window.location.pathname.endsWith("/home") ||
+      window.location.pathname.endsWith("/")
+  ) {
+    window.location.reload();
+  } else {
+    window.location.assign(`/workspace${window.location.pathname}`);
+  }
+}
 
 const handleSignOut = () => {
   localStorage.removeItem("ecmps_user");
@@ -200,10 +221,11 @@ export const refreshToken = async () => {
   }
 };
 
-export const credentialsAuth = async (payload) => {
+export const createActivity = async (payload) => {
   return secureAxios({
     method: "POST",
-    url: `${config.services.authApi.uri}/sign/authenticate`,
+    url: `${config.services.authApi.uri}/sign/create-activity`,
+    /*headers: { "Id-Token": "test" },*/
     data: payload,
   });
 };
@@ -231,4 +253,13 @@ export const getCredentials = async (monitorPlans) => {
       config.services.authApi.uri
     }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
+};
+
+export const validUser = () => {
+  const expDate = localStorage.getItem("ecmps_session_expiration");
+  return (
+    JSON.parse(localStorage.getItem("ecmps_user")) &&
+    expDate &&
+    new Date(expDate) > currentDateTime()
+  );
 };
