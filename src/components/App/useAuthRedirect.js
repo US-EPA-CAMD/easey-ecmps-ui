@@ -12,8 +12,10 @@ export async function signInUser(message, sessionId) {
         throw new Error(response.error);
       } else {
         //successful login
+        console.log("Login successful", response);
       }
     } catch (err) {
+      console.error("Error during authentication:", err.message);
       throw err;
     }
   }

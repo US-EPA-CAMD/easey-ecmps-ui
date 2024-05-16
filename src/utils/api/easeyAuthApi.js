@@ -68,7 +68,7 @@ export const refreshClientToken = async () => {
     localStorage.setItem("client_token", response.data.token);
     localStorage.setItem("client_token_expiration", response.data.expiration);
   } catch (err) {
-    displayAppError(err);
+    displayAppError(err.response?.data?.message || err?.message || err);
   }
 };
 

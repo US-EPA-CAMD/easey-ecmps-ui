@@ -81,6 +81,16 @@ To run application on a specific route path other than root...
 - PUBLIC_URL: https://((host))/((path))
 - REACT_APP_EASEY_ECMPS_UI_PATH: /((path))
 
+Required by the OIDC provider for Authentication/Authorization.
+
+- REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH=((CBS Faq URL))
+- REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID=((Oidc Configured Client ID))
+- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT=((OIDC Auth endpoint))
+- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE=code 
+- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE=form_post
+- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES='openid profile email phone address offline_access'
+- REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL=((Cdx Url))
+- 
 REST API URL's required by the application...
 
 - REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
@@ -92,6 +102,9 @@ REST API URL's required by the application...
 Other application environment variables:
 
 - REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
+- REACT_APP_EASEY_ECMPS_UI_API_KEY=((api key)) 
+- REACT_APP_EASEY_ECMPS_UI_CLIENT_ID=((client id)) 
+- REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET=((client secret))
 - REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
 - REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
 - REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
