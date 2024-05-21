@@ -79,7 +79,7 @@ const Login = ({ isModal, closeModalHandler }) => {
           }
 
           //Extract the policy match
-          const policyMatch = response.data.policy.match(/_(SIGNUP|MIGRATE|SIGNIN)$/);
+          const policyMatch = response.data.policy.match(/_(SIGNUP|MIGRATE|SIGNIN)/);
           const policySuffix = policyMatch ? policyMatch[0] : "_DEFAULT";
 
           //Disable the loading overlay
