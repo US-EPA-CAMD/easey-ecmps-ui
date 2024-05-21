@@ -3,14 +3,18 @@ import {
 } from "@trussworks/react-uswds";
 
 import React, { useEffect, useState } from 'react';
-import userAccountStatusProps from './userAccountStatusProps';
+import userAccountStatusProps, {getVerbiage} from './userAccountStatusProps';
 import config from "../../config";
 
 const UserAccountStatus = ({ viewProps, policyResponse }) => {
 
+  const [authUrl, setAuthUrl] = useState('');
   viewProps = viewProps ? viewProps : userAccountStatusProps['_DEFAULT'];
 
-  const [authUrl, setAuthUrl] = useState('');
+
+  const verbiageType = getVerbiage(policyResponse.policy);
+  const verbiage = typeof viewProps.verbiage === 'string' ? viewProps.verbiage : viewProps.verbiage[verbiageType];
+
 
   useEffect(() => {
     const generateUrl = async () => {
@@ -39,7 +43,7 @@ const UserAccountStatus = ({ viewProps, policyResponse }) => {
     <div className="">
       <div className="padding-1">
           <Fieldset legend={viewProps.title} legendStyle="large">
-          <p> {viewProps.verbiage} </p>
+          <p> {verbiage} </p>
           <a id="userAccountStatus"
              name="Button"
              className="usa-button margin-bottom-2"

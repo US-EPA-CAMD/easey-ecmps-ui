@@ -13,14 +13,24 @@ const userAccountStatusProps = {
     },
     _SIGNIN: {
         title: "Leaving ECMPS",
-        verbiage: "You are being redirected to Login.gov for authentication and will return to ECMPS upon successful login.",
+        verbiage: {
+            loginGov: "You are being redirected to Login.gov for authentication and will return to ECMPS upon successful login.",
+            epa: "You are being redirected to EPA Gateway (EIAM) for authentication and will return to ECMPS upon successful login."
+        },
         buttonLabel: "Sign In"
     },
     _DEFAULT: {
         title: "Leaving ECMPS",
-        verbiage: "You are being redirected to Login.gov for authentication and will return to ECMPS upon successful login.",
+        verbiage: {
+            loginGov: "You are being redirected to Login.gov for authentication and will return to ECMPS upon successful login.",
+            epa: "You are being redirected to EPA Gateway (EIAM) for authentication and will return to ECMPS upon successful login."
+        },
         buttonLabel: "Sign In"
     }
 };
 
 export default userAccountStatusProps;
+
+export function getVerbiage(policy) {
+    return policy.includes('EIAM') ? 'epa' : 'loginGov';
+}
