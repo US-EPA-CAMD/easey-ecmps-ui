@@ -360,6 +360,7 @@ export const DataTableSystems = ({
     useState(false);
   const [updateFuelFlowTable, setUpdateFuelFlowTable] = useState(false);
   const [updateComponentTable, setupdateComponentTable] = useState(false);
+  const [updateComponentList, setupdateComponentList] = useState(false);
   const [createAnalyzerRangesFlag, setCreateAnalyzerRangesFlag] =
     useState(false);
   const [createFuelFlowFlag, setCreateFuelFlowFlag] = useState(false);
@@ -967,6 +968,8 @@ export const DataTableSystems = ({
                   // setCreateBtnAPI={setCreateBtnAPI}
                   updateComponentTable={updateComponentTable}
                   setupdateComponentTable={setupdateComponentTable}
+                  updateComponentList={updateComponentList}
+                  setupdateComponentList={setupdateComponentList}
                   updateAnalyzerRangeTable={updateAnalyzerRangeTable}
                   setUpdateAnalyzerRangeTable={setUpdateAnalyzerRangeTable}
                   setCreateAnalyzerRangesFlag={setCreateAnalyzerRangesFlag}
