@@ -49,7 +49,7 @@ export const SelectableAccordion = ({
           <div key={idx}>
             <DataTable
               noHeader={true}
-              className={`data-display-table react-transition fade-in`}
+              className={`data-display-table react-transition fade-in data-display-table-no-vertical`}
               columns={columnMappings}
               fixedHeader
               fixedHeaderScrollHeight="150px"

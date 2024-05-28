@@ -78,6 +78,7 @@ export const EvaluateAndSubmit = ({
   const modalMessage = useRef("");
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
+  const [shouldAutoSubmit, setShouldAutoSubmit] = useState(false);
 
   const { userId } = user;
 
@@ -88,7 +89,7 @@ export const EvaluateAndSubmit = ({
       setTitle("Review & Submit");
     } else if (!finalSubmitStage && componentType === "Submission") {
       setTitle("Submit");
-      setButtonText("Sign & Submit");
+      setButtonText("Sign & Submit Selected Files");
     } else {
       setTitle("Evaluate");
       setButtonText("Evaluate");
@@ -219,6 +220,13 @@ export const EvaluateAndSubmit = ({
     setShowModal(false);
   };
 
+  useEffect(() => {
+    if (shouldAutoSubmit) {
+      finalSubmission(submitData);
+      setShouldAutoSubmit(false); // Reset the auto submit flag
+    }
+  }, [activityId, shouldAutoSubmit]);
+
   const submission = () => {
     closeModal();
 
@@ -231,6 +239,9 @@ export const EvaluateAndSubmit = ({
     setSelectable(false);
 
     forceReloadTables();
+
+    //Submit the certifications, documents. Set the flag to and allow useEffect to process once activityId is available
+    setShouldAutoSubmit(true);
   };
 
   const checkOutLocationsOrRollback = async () => {
