@@ -79,6 +79,6 @@ async function buildUrl(authUrl, policyResponse) {
     `p=${encodeURIComponent(p)}&` +
     `acr_values=${encodeURIComponent(acrValues)}&` +
     `scope=${encodeURIComponent(scope)}&` +
-    `userId=${encodeURIComponent(policyResponse.userId)}&` +
+    `userId=${encodeURIComponent(policyResponse.userId.toUpperCase())}&` +
     `userRoleId=${encodeURIComponent(policyResponse.userRoleId)}`;
 }
