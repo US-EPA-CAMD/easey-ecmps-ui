@@ -234,3 +234,8 @@
 .rdt_TableRow:nth-child(even) {
   background-color: $epa-white !important;
 }
+
+.data-display-table-no-vertical {
+  overflow-y: hidden !important;
+  overflow-x: auto !important;
+}
