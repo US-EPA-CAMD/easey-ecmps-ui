@@ -5,7 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, verifyChallenge, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -243,12 +243,6 @@ describe("Easey Auth API", () => {
 
     await logOut();
     expect(localStorage.getItem("ecmps_user")).toBe(null);
-  });
-
-  it("verifyChallenge", async () => {
-    mock.onPost(`${config.services.authApi.uri}/sign/validate`).reply(200, {});
-
-    expect((await verifyChallenge()).data).toEqual({});
   });
 
   it("getCredentials", async () => {
