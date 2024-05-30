@@ -34,7 +34,17 @@ import {
   removeChangeEventListeners,
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
-import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+
+const getErrorListFromResponse = (resp) => {
+  let errors;
+  try {
+    errors = JSON.parse(resp);
+  } catch {
+    errors = resp;
+  }
+  return Array.isArray(errors) ? errors : [errors];
+};
 
 export const DataTableAssert = ({
   mdmData,
@@ -111,7 +121,6 @@ export const DataTableAssert = ({
     }
   }, [dataLoaded, dropdownsLoaded]);
   // *** Reassign handlers when inactive checkbox is toggled
-
 
   // *** Reassign handlers after pop-up modal is closed
   useEffect(() => {
@@ -305,8 +314,7 @@ export const DataTableAssert = ({
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
+        setErrorMsgs(getErrorListFromResponse(resp));
       }
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)]);
@@ -338,8 +346,7 @@ export const DataTableAssert = ({
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
+        setErrorMsgs(getErrorListFromResponse(resp));
       }
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)]);
@@ -360,12 +367,11 @@ export const DataTableAssert = ({
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];
-            const codeName = modalDetailData[0]
+            const codeName = modalDetailData[0];
 
-            const filteredOutSubDropdownOptions = mdmData[codeName]
-              .filter((option) =>
-                selectedCodes[codeName].includes(option.code)
-              );
+            const filteredOutSubDropdownOptions = mdmData[codeName].filter(
+              (option) => selectedCodes[codeName].includes(option.code)
+            );
             filteredOutSubDropdownOptions.unshift({
               code: "",
               name: selectText,
@@ -501,9 +507,10 @@ export const DataTableAssert = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     if (createNewData) {
-      returnsFocusMpDatatableCreateBTN(`Create ${dataTableName}`)
+      returnsFocusMpDatatableCreateBTN(`Create ${dataTableName}`);
     }
   };
+
   if (document) {
     changeGridCellAttributeValue();
   }

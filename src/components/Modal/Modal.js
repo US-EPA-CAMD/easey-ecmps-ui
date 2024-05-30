@@ -33,7 +33,7 @@ export const Modal = ({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  
+
   if (windowSize.width <= 1300) {
     width = "650px";
   } else {
@@ -44,7 +44,7 @@ export const Modal = ({
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
-      }); 
+      });
     };
 
     window.addEventListener("resize", handleResize);
