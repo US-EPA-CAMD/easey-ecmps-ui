@@ -16,6 +16,7 @@ import {
   getMonitoringSystems,
   getMonitoringSystemsComponents,
   getMonitoringSystemsFuelFlows,
+  getMonitoringComponents
 } from '../../../utils/api/monitoringPlansApi';
 const axios = require('axios');
 
@@ -23,6 +24,7 @@ jest.mock('axios');
 jest.mock('../../../utils/api/monitoringPlansApi', () => ({
   getMonitoringSystems: jest.fn(),
   getMonitoringSystemsComponents: jest.fn(),
+  getMonitoringComponents:jest.fn(),
   getMonitoringSystemsFuelFlows: jest.fn(),
 }));
 const selectedSystem = [
@@ -377,6 +379,7 @@ describe('DatatableSystemsComponents test suit', () => {
   test('tests a getMonitoringSystemsComponents', async () => {
     const createMock = data => jest.fn().mockResolvedValue({ data });
     getMonitoringSystemsComponents.mockImplementation(createMock(apiComp));
+    getMonitoringComponents.mockImplementation(createMock(apiComp));
     getMonitoringSystems.mockImplementation(createMock(selectedSystem));
     getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel));
 
@@ -417,6 +420,7 @@ describe('DatatableSystemsComponents test suit', () => {
   test('tests a getMonitoringSystemsFuelFlows', async () => {
     const createMock = data => jest.fn().mockResolvedValue({ data });
     getMonitoringSystemsComponents.mockImplementation(createMock(apiComp));
+    getMonitoringComponents.mockImplementation(createMock(apiComp));
     getMonitoringSystems.mockImplementation(createMock(selectedSystem));
     getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel));
     // axios.get.mockImplementation(() =>
@@ -445,6 +449,7 @@ describe('DatatableSystemsComponents test suit', () => {
     // );
     const createMock = data => jest.fn().mockResolvedValue({ data });
     getMonitoringSystemsComponents.mockImplementation(createMock(apiComp));
+    getMonitoringComponents.mockImplementation(createMock(apiComp));
     getMonitoringSystems.mockImplementation(createMock(selectedSystem));
     getMonitoringSystemsFuelFlows.mockImplementation(createMock(apiFuel));
     const title = await getMonitoringSystemsFuelFlows(

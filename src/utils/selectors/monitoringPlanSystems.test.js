@@ -9,6 +9,7 @@ describe("testing monitoring plan data selectors", () => {
   let selectedMonitoringSystemsFuelFlow;
   let selectedMonitoringSystemsRanges;
   let monitoringSystemsRangesTableRecods;
+  let monitoringComponents;
 
   beforeAll(() => {
     selectedMonitoringSystems = [
@@ -89,6 +90,33 @@ describe("testing monitoring plan data selectors", () => {
         beginHour: null,
       },
     ];
+
+    monitoringComponents = [
+      {
+        componentId: "AFA",
+        componentTypeCode: "GFFM",
+        analyticalPrincipleCode : null,
+        sampleAcquisitionMethodCode: "ORF",
+        basisCode : null,
+        manufacturer: "SCHNEIDER",
+        modelVersion: "RTT1SS-T1SA1-EN",
+        serialNumber: 17301602,
+        hgConverterIndicator : null,
+        analyzerRangeData : []
+      },
+      {
+        componentId: "AFG",
+        componentTypeCode: "TEMP",
+        analyticalPrincipleCode: null,
+        sampleAcquisitionMethodCode: "ORF",
+        basisCode: null,
+        manufacturer: "SCHNEIDER",
+        modelVersion: "RTT1SS-T1SA1-EN",
+        serialNumber: "17301603",
+        hgConverterIndicator: null,
+        analyzerRangeData: []
+      },
+    ]
 
     selectedMonitoringSystemsFuelFlow = [
       {
@@ -264,7 +292,7 @@ describe("testing monitoring plan data selectors", () => {
   test("should generate data table records for monitoring systems components", () => {
     expect(
       fs.getMonitoringPlansSystemsComponentsTableRecords(
-        selectedMonitoringSystemsComponents
+        selectedMonitoringSystemsComponents, monitoringComponents
       )
     ).toEqual(monitoringSystemsComponentsTableRecods);
   });
