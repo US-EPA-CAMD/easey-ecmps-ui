@@ -89,6 +89,10 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH",
       "/AccountRecovery/ForgotUserId"
     ),
+    cdxHowToGetAccessPath: getConfigValue(
+        "REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH",
+        "https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs"
+    ),
     cdxForgotPasswordPath: getConfigValue(
       "REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH",
       "/PasswordReset/GetResetCode"
@@ -104,6 +108,16 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE",
       true
     ),
+
+
+    oidcClientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID"),
+    oidcAuthEndpoint: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT"),
+    oidcAuthResponseType: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE"),
+    oidcAuthResponseMode: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE"),
+    oidcAuthStateHmacSecretKey: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_STATE_HMAC_SECRET_KEY"),
+    oidcAuthScopes: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES"),
+    cdxUserSignupMigrateUrl: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL"),
+
     clientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_ID"),
     clientSecret: getConfigValue("REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET"),
     enableDebug: getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG"),

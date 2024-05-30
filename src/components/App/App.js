@@ -1,9 +1,10 @@
 import { isEqual } from "lodash";
 import { useDispatch } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
 import TagManager from "react-gtm-module";
+import UserAccountStatus from "../Login/UserAccountStatus";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
@@ -44,6 +45,11 @@ import { currentDateTime } from "../../utils/functions";
 import WhatHasData from "../WhatHasData/WhatHasData";
 import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
+import {validUser} from "../../utils/api/easeyAuthApi";
+import {displayAppError} from "../../additional-functions/app-error";
+import {signInUser} from "./useAuthRedirect";
+import LoadingModal from "../LoadingModal/LoadingModal";
+
 const App = () => {
   const queryParams = useLocation().search;
 
@@ -51,6 +57,13 @@ const App = () => {
   const [user, setUser] = useState(false);
   const [expired, setExpired] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+
+  const urlParams = new URLSearchParams(queryParams);
+  const message = urlParams.get('message');
+  const sessionId = urlParams.get('sessionId');
+  const signInAction = Boolean(message || sessionId);
+  const [signInError, setSignInError] = useState(null); // State to hold any error messages
+  const signInStarted = useRef(false);
 
   const [currentLink, setCurrentLink] = useState(
     window.location.href.replace(`${window.location.origin}`, "")
@@ -111,6 +124,30 @@ const App = () => {
       }, 10000);
     }
   };
+  
+  //Handles auth redirect and validation
+  useEffect(() => {
+    if (signInAction && !signInStarted.current) {
+      signInStarted.current = true;
+      signInUser(message, sessionId)
+        .then(() => {
+          setSignInError(null);
+          signInStarted.current = false;
+        })
+        .catch(err => {
+          const message = err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message;
+          setSignInError(message);
+          signInStarted.current = false;
+        });
+    }
+  }, []);
+
+  //Display sign in errors if there are any errors.
+  useEffect(() => {
+    if (signInError) {
+      displayAppError(signInError);
+    }
+  }, [signInError]); // Depend on `isSignInReady` and `signInError`
 
   useEffect(() => {
     const interval = refreshCheckoutInterval();
@@ -176,15 +213,6 @@ const App = () => {
     };
   }, []);
 
-  const validUser = () => {
-    const expDate = localStorage.getItem("ecmps_session_expiration");
-    return (
-      JSON.parse(localStorage.getItem("ecmps_user")) &&
-      expDate &&
-      new Date(expDate) > currentDateTime()
-    );
-  };
-
   const roles = JSON.parse(localStorage.getItem("ecmps_user"))?.roles;
 
   const facilityCheckoutPermission = () => {
@@ -209,6 +237,10 @@ const App = () => {
       }
     }
   }, [user]);
+
+  if (signInAction  && !signInError) { //page reloads if sign-in is successful; at that point signInAction will be false
+    return <LoadingModal type="Auth" loading={true}/>
+  }
 
   return (
     <div>
@@ -461,6 +493,7 @@ const App = () => {
             }
           />
           <Route path={`/faqs`} element={<FAQ />} />
+          <Route path="/signup-migrate" element={<UserAccountStatus />} />
           <Route path="/tutorials" element={<ComingSoon />} />
           <Route path="/cam-api" element={<ComingSoon />} />
           <Route path="/glossary" element={<ComingSoon />} />
