@@ -400,6 +400,7 @@ export const DataTableSystemsComponents = ({
       selectComponents['serialNumber'] = associatedComponent?.serialNumber;
       selectComponents['hgConverterIndicator'] = associatedComponent?.hgConverterIndicator;
       selectComponents['analyzerRangeData'] = associatedComponent?.analyzerRangeData;
+      selectComponents['componentRecordId'] = associatedComponent?.id;
 
       setSelectedComponent(selectComponents);
       setOpenAnalyzer(selectComponents);
