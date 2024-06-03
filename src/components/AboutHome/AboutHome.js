@@ -29,7 +29,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
   const [whatIsNewContent, setWhatIsNewContent] = useState();
   const [monitorPlanContent, setMonitorPlanContent] = useState();
   const [qaCertificationContent, setQACertificationContent] = useState();
-  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     document.title = "ECMPS Home";
@@ -49,17 +48,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
     getContent("/ecmps/home/qa-certifications.md").then((resp) =>
       setQACertificationContent(resp.data)
     );
-  }, []);
-
-  //Determines login state and disables login if system is down.
-  useEffect(() => {
-    getLoginState()
-        .then((response) => {
-          setIsDisabled(response.data.isDisabled);
-        })
-        .catch(err => {
-          setIsDisabled(false);
-        });
   }, []);
 
   const handleRouteChange = (event, url) => {
@@ -225,7 +213,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
         </div>
 
         <div className="bg-base-lighter" data-testid="homeLogIn">
-          {!user ? <Login isModal={false} disableLogin={isDisabled} /> : ""}
+          {!user ? <Login isModal={false} /> : ""}
         </div>
       </div>
     </div>
