@@ -41,5 +41,13 @@ applications:
       EASEY_AUTH_API_ANALYST_ROLE: ECMPS Analyst
       EASEY_AUTH_API_ADMIN_ROLE: ECMPS Admin
       EASEY_AUTH_API_INITIAL_AUTHORIZER_ROLE: Initial Authorizer
+      REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH: ((cdxHowToGetAccessPath))
+      REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID: ((oidcClientId))
+      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT: ((oidcAuthEndpoint))
+      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE: ((oidcAuthResponseType))
+      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE: ((oidcAuthResponseMode))
+      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES: ((oidcAuthScopes))
+      REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL: ((cdxUserSignupMigrateUrl))
+
     routes:
       - route: ((host))

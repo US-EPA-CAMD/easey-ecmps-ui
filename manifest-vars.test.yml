@@ -6,3 +6,12 @@ cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
 enableSystemAdminstrationModule: true
 tokenRefreshThresholdSeconds: 5
+
+#ICAM changes
+cdxHowToGetAccessPath: https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs
+oidcClientId: 46a635fe-cf19-4e0c-9dc9-b17e3d6544b9
+oidcAuthEndpoint: https://icamauthdev.epacdx.net/cdxidbridgedev.onmicrosoft.com/%s/oauth2/v2.0/authorize
+oidcAuthResponseType: code
+oidcAuthResponseMode: form_post
+oidcAuthScopes: "openid profile email phone address offline_access"
+cdxUserSignupMigrateUrl: https://dev.epacdx.net
