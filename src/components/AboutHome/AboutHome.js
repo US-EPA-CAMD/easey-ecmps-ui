@@ -11,6 +11,7 @@ import { config } from "../../config";
 import axios from "axios";
 import { handleResponse, handleError } from "../../utils/api/apiUtils";
 import "./AboutHome.scss";
+import {getLoginState} from "../../utils/api/easeyAuthApi";
 
 const getContent = async (path) => {
   const url = `${config.services.content.uri}${path}`;

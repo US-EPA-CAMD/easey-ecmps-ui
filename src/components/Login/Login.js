@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Button,
   Label,
@@ -8,7 +8,7 @@ import {
   Fieldset,
 } from "@trussworks/react-uswds";
 
-import {determinePolicy} from "../../utils/api/easeyAuthApi";
+import {determinePolicy, getLoginState} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary
@@ -27,7 +27,7 @@ const Login = ({ isModal, closeModalHandler }) => {
   const [policyResponse, setPolicyResponse] = useState(null);
 
   const [loading, setLoading] = useState(false);
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const usernameText = isModal ? "modal-username" : "username";
 
   // *** VALIDATION
@@ -97,9 +97,29 @@ const Login = ({ isModal, closeModalHandler }) => {
     }
   };
 
-  if (viewProps) {
-      return (
-          <UserAccountStatus
+    //Determines login state and disables login if system is down.
+    useEffect(() => {
+        getLoginState()
+            .then((response) => {
+                setIsDisabled(response.data.isDisabled);
+            })
+            .catch(err => {
+                setIsDisabled(false);
+            });
+    }, [isDisabled]);
+
+    if (isDisabled) {
+        return (
+            <div className="padding-1">
+                <p> ECMPS 2.0 Login is disabled due to Maintenance. Please contact Information for further assistance. </p>
+            </div>
+        )
+            ;
+    }
+
+    if (viewProps) {
+        return (
+            <UserAccountStatus
               viewProps={viewProps}
               policyResponse={policyResponse}
           />

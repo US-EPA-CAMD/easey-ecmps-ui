@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
-import { logOut } from "../../utils/api/easeyAuthApi";
+import {getLoginState, logOut} from "../../utils/api/easeyAuthApi";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
 
