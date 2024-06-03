@@ -11,6 +11,7 @@ import { config } from "../../config";
 import axios from "axios";
 import { handleResponse, handleError } from "../../utils/api/apiUtils";
 import "./AboutHome.scss";
+import {getLoginState} from "../../utils/api/easeyAuthApi";
 
 const getContent = async (path) => {
   const url = `${config.services.content.uri}${path}`;
@@ -28,6 +29,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
   const [whatIsNewContent, setWhatIsNewContent] = useState();
   const [monitorPlanContent, setMonitorPlanContent] = useState();
   const [qaCertificationContent, setQACertificationContent] = useState();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     document.title = "ECMPS Home";
@@ -47,6 +49,17 @@ const AboutHome = ({ user, setCurrentLink }) => {
     getContent("/ecmps/home/qa-certifications.md").then((resp) =>
       setQACertificationContent(resp.data)
     );
+  }, []);
+
+  //Determines login state and disables login if system is down.
+  useEffect(() => {
+    getLoginState()
+        .then((response) => {
+          setIsDisabled(response.data.isDisabled);
+        })
+        .catch(err => {
+          setIsDisabled(false);
+        });
   }, []);
 
   const handleRouteChange = (event, url) => {
@@ -212,7 +225,7 @@ const AboutHome = ({ user, setCurrentLink }) => {
         </div>
 
         <div className="bg-base-lighter" data-testid="homeLogIn">
-          {!user ? <Login isModal={false} /> : ""}
+          {!user ? <Login isModal={false} disableLogin={isDisabled} /> : ""}
         </div>
       </div>
     </div>

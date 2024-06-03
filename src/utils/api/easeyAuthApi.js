@@ -135,6 +135,13 @@ function storeUser(response) {
   }
 }
 
+export const getLoginState = async () => {
+  return secureAxios({
+    method: "GET",
+    url: `${config.services.authApi.uri}/authentication/login-state`,
+  });
+};
+
 const handleSignOut = () => {
   localStorage.removeItem("ecmps_user");
   localStorage.setItem("ecmps_signing_out", "false");

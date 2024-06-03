@@ -18,7 +18,7 @@ import config from "../../config";
 import * as yup from "yup";
 import UserAccountStatus from "./UserAccountStatus";
 
-const Login = ({ isModal, closeModalHandler }) => {
+const Login = ({ isModal, disableLogin, closeModalHandler }) => {
   const standardFormErrorMessage = "Please enter your username";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -97,9 +97,18 @@ const Login = ({ isModal, closeModalHandler }) => {
     }
   };
 
-  if (viewProps) {
-      return (
-          <UserAccountStatus
+    if (disableLogin) {
+        return (
+            <div className="padding-1">
+                <p> ECMPS 2.0 Login is disabled due to Maintenance. Please contact Information for further assistance. </p>
+            </div>
+        )
+            ;
+    }
+
+    if (viewProps) {
+        return (
+            <UserAccountStatus
               viewProps={viewProps}
               policyResponse={policyResponse}
           />

@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
-import { logOut } from "../../utils/api/easeyAuthApi";
+import {getLoginState, logOut} from "../../utils/api/easeyAuthApi";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
 
@@ -21,6 +21,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
   }
 
+  const [isDisabled, setIsDisabled] = useState(false);
   const [userProfileExpanded, setUserProfileExpanded] = useState(false);
 
   const [userProfileIcon, setUserProfileIcon] = useState(
@@ -93,6 +94,17 @@ export const SubHeader = ({ user, setCurrentLink }) => {
 
   useEffect(() => {
     setCategorySelected([false, false, false, false, false]);
+  }, []);
+
+  //Determines login state and disables login if system is down.
+  useEffect(() => {
+    getLoginState()
+        .then((response) => {
+          setIsDisabled(response.data.isDisabled);
+        })
+        .catch(err => {
+          setIsDisabled(false);
+        });
   }, []);
 
   const [navDropdownOpen, setNavDropdownOpen] = useState([
@@ -327,7 +339,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     show={show}
                     close={closeModalHandler}
                     returnFocus={true}
-                    children={<Login isModal={true} closeModalHandler={closeModalHandler} />}
+                    children={<Login isModal={true} disableLogin={isDisabled} closeModalHandler={closeModalHandler} />}
                   />
                 ) : null}
               </span>
