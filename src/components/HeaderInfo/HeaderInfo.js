@@ -852,7 +852,22 @@ export const HeaderInfo = ({
     // this code executes first while we wait for api to finish returning
     setIsReverting(true);
     setShowRevertModal(false);
+    resetEmissionsWorkspace();
   };
+
+  const resetEmissionsWorkspace = () => {
+
+    // set Default Reporting period
+    setSelectedReportingPeriods([reportingPeriods[0]?.id]);
+    dispatch(
+      setReportingPeriods([reportingPeriods[0]?.id], currentTab.name, EMISSIONS_STORE_NAME)
+    );
+
+    dispatch(setViewDataColumns([], currentTab.name, EMISSIONS_STORE_NAME));
+    dispatch(setViewData([], currentTab.name, EMISSIONS_STORE_NAME));
+    dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
+    setDefaultReportingPeriodChanged(true);
+  }
 
   const importMPFile = (payload) => {
     setIsLoading(true);
