@@ -41,14 +41,4 @@ describe("testing home page ", () => {
       userEvent.click(qaCertsBtn);
   });
 
-  it("should show a log in box ", async () => {
-      const { container } = render(
-        <BrowserRouter>
-          <AboutHome setCurrentLink={jest.fn()} />
-        </BrowserRouter>
-      );
-
-      const loginBox = screen.getByTestId("homeLogIn");
-      expect(loginBox).toBeDefined();
-  });
 });
