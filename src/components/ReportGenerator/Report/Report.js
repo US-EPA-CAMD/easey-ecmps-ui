@@ -47,7 +47,8 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   };
 
   const onDownloadHandler = () => {
-    downloadReport(paramsObject?.current)
+    if (!paramsObject) return;
+    downloadReport(paramsObject.current)
       .then((response) => {
         const disposition = response.headers["content-disposition"];
         const parts =
@@ -104,6 +105,14 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     );
     columnGroups.push(groups);
 
+    function findGroupByName(groups, name) {
+      return groups.find((group) => group.name === name);
+    }
+    
+    function findItemByCode(items, code) {
+      return items.find((item) => item.code === code);
+    }
+
     groups = [];
     codeGroups.push(groups);
     results.push(
@@ -114,14 +123,14 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
           const codeDescription = row[column.name + "Description"];
 
           if (codeGroup) {
-            let group = groups.find((i) => i.name === codeGroup);
+            let group = findGroupByName(groups, codeGroup);
 
             if (!group) {
               group = { name: codeGroup, items: [] };
               groups.push(group);
             }
 
-            const code = group.items.find((i) => i.code === columnValue);
+            const code = findItemByCode(group.items, columnValue);
             if (!code && columnValue !== null && columnValue !== undefined) {
               group.items.push({
                 code: columnValue,
