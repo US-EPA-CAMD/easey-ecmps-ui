@@ -5,7 +5,6 @@ import remarkGfm from "remark-gfm";
 
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
-import Login from "../Login/Login";
 import { resetTabOrder } from "../../utils/functions";
 import { config } from "../../config";
 import axios from "axios";
@@ -29,7 +28,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
   const [whatIsNewContent, setWhatIsNewContent] = useState();
   const [monitorPlanContent, setMonitorPlanContent] = useState();
   const [qaCertificationContent, setQACertificationContent] = useState();
-  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     document.title = "ECMPS Home";
@@ -49,17 +47,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
     getContent("/ecmps/home/qa-certifications.md").then((resp) =>
       setQACertificationContent(resp.data)
     );
-  }, []);
-
-  //Determines login state and disables login if system is down.
-  useEffect(() => {
-    getLoginState()
-        .then((response) => {
-          setIsDisabled(response.data.isDisabled);
-        })
-        .catch(err => {
-          setIsDisabled(false);
-        });
   }, []);
 
   const handleRouteChange = (event, url) => {
@@ -224,9 +211,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
           </div>
         </div>
 
-        <div className="bg-base-lighter" data-testid="homeLogIn">
-          {!user ? <Login isModal={false} disableLogin={isDisabled} /> : ""}
-        </div>
       </div>
     </div>
   );

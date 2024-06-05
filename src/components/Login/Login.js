@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Button,
   Label,
@@ -8,7 +8,7 @@ import {
   Fieldset,
 } from "@trussworks/react-uswds";
 
-import {determinePolicy} from "../../utils/api/easeyAuthApi";
+import {determinePolicy, getLoginState} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary
@@ -18,7 +18,7 @@ import config from "../../config";
 import * as yup from "yup";
 import UserAccountStatus from "./UserAccountStatus";
 
-const Login = ({ isModal, disableLogin, closeModalHandler }) => {
+const Login = ({ isModal, closeModalHandler, isLoginDisabled = false, showSystemNotification = true }) => {
   const standardFormErrorMessage = "Please enter your username";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -27,6 +27,8 @@ const Login = ({ isModal, disableLogin, closeModalHandler }) => {
   const [policyResponse, setPolicyResponse] = useState(null);
 
   const [loading, setLoading] = useState(false);
+
+  const [displaySystemUseNotification, setDisplaySystemUseNotification] = useState(showSystemNotification);
 
   const usernameText = isModal ? "modal-username" : "username";
 
@@ -97,22 +99,50 @@ const Login = ({ isModal, disableLogin, closeModalHandler }) => {
     }
   };
 
-    if (disableLogin) {
-        return (
-            <div className="padding-1">
-                <p> ECMPS 2.0 Login is disabled due to Maintenance. Please contact Information for further assistance. </p>
-            </div>
-        )
-            ;
-    }
-
-    if (viewProps) {
-        return (
-            <UserAccountStatus
-              viewProps={viewProps}
-              policyResponse={policyResponse}
-          />
+  if (isLoginDisabled) {
+      return (
+          <div className="padding-1">
+              <p> ECMPS 2.0 Login is disabled due to Maintenance. Please contact Information for further assistance. </p>
+          </div>
       );
+  }
+
+  if (displaySystemUseNotification) {
+    return (
+      <div className="" data-test="component-login">
+        <div className="padding-1">
+          <p>
+            In proceeding and accessing U.S. Government information and information systems, you acknowledge that you fully understand and consent to all of the following: 1) You are accessing U.S. Government information and information systems that are provided for official U.S. Government purposes only; 2) Unauthorized access to or unauthorized use of U.S. Government information or information systems is subject to criminal, civil, administrative, or other lawful action; 3) The term U.S. Government information system includes systems operated on behalf of the U.S. Government; 4) You have no reasonable expectation of privacy regarding any communications or information used, transmitted, or stored on U.S. Government information systems; 5) At any time, the U.S. Government may for any lawful government purpose, without notice, monitor, intercept, search, and seize any authorized or unauthorized communication to or from U.S. Government information systems or information used or stored on U.S. Government information systems; 6) At any time, the U.S. Government may for any lawful government purpose, search and seize any authorized or unauthorized device, to include non-U.S. Government owned devices, that stores U.S. Government information; 7) Any communications or information used, transmitted, or stored on U.S. Government information systems may be used or disclosed for any lawful government purpose, including but not limited to, administrative purposes, penetration testing, communication security monitoring, personnel misconduct measures, law enforcement, and counterintelligence inquiries; and 8) You may not process or store classified national security information on this computer system.
+          </p>
+          <Button
+            data-testid="component-login-continue-button"
+            className="margin-bottom-2"
+            type="submit"
+            onClick={() => setDisplaySystemUseNotification(false)}
+          >
+            Continue
+          </Button>
+
+          <Button
+            data-testid="component-login-cancel-button"
+            className="margin-bottom-2"
+            type="submit"
+            onClick={closeModalHandler}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (viewProps) {
+      return (
+          <UserAccountStatus
+            viewProps={viewProps}
+            policyResponse={policyResponse}
+        />
+    );
   }
 
   return (

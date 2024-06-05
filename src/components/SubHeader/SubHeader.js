@@ -21,8 +21,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
   }
 
-  const [isDisabled, setIsDisabled] = useState(false);
   const [userProfileExpanded, setUserProfileExpanded] = useState(false);
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   const [userProfileIcon, setUserProfileIcon] = useState(
     "/images/icons/menu-item-expand.svg"
@@ -92,19 +92,19 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     // },
   ];
 
-  useEffect(() => {
-    setCategorySelected([false, false, false, false, false]);
-  }, []);
-
   //Determines login state and disables login if system is down.
   useEffect(() => {
     getLoginState()
-        .then((response) => {
-          setIsDisabled(response.data.isDisabled);
-        })
-        .catch(err => {
-          setIsDisabled(false);
-        });
+      .then((response) => {
+        setIsLoginDisabled(response.data.isDisabled);
+      })
+      .catch(err => {
+        setIsLoginDisabled(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    setCategorySelected([false, false, false, false, false]);
   }, []);
 
   const [navDropdownOpen, setNavDropdownOpen] = useState([
@@ -339,7 +339,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     show={show}
                     close={closeModalHandler}
                     returnFocus={true}
-                    children={<Login isModal={true} disableLogin={isDisabled} closeModalHandler={closeModalHandler} />}
+                    children={<Login isModal={true} isLoginDisabled={isLoginDisabled} closeModalHandler={closeModalHandler} />}
                   />
                 ) : null}
               </span>
