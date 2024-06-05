@@ -2,7 +2,7 @@ instances: 2
 environment: production
 host: ecmps.app.cloud.gov
 apiHost: api.epa.gov/easey
-inactivityDurationMinutes: 15
+inactivityDurationMinutes: 30
 googleAnalyticsEnabled: true
 googleAnalyticsPublicContainerId: "GTM-L8ZB"
 cdxBaseUrl: cdx.epa.gov
