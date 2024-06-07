@@ -36,6 +36,15 @@ export const canSelectRow = (
 
   if (componentType === "Submission") {
     //Submission page criteria
+
+    //Ticket 6189. If there is no window status for an EM, users should not be allowed to submit.
+    if (rowType === "EM")
+    {
+      if (!row.windowStatus) {
+        return false;
+      }
+    }
+
     if (
       ["PASS", "INFO", "ERR"].includes(row.evalStatusCode) &&
       rowSubmissionAllowed &&

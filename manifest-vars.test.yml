@@ -2,7 +2,17 @@ instances: 1
 environment: testing
 host: ecmps-tst.app.cloud.gov
 apiHost: api.epa.gov/easey/test
+inactivityDurationMinutes: 30
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
 enableSystemAdminstrationModule: true
 tokenRefreshThresholdSeconds: 5
+
+#ICAM changes
+cdxHowToGetAccessPath: https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs
+oidcClientId: 2ad3e2b8-60d2-4988-b817-c90c60373a68
+oidcAuthEndpoint: https://icamauthtest.epacdx.net/cdxidbridgetest.onmicrosoft.com/%s/oauth2/v2.0/authorize
+oidcAuthResponseType: code
+oidcAuthResponseMode: form_post
+oidcAuthScopes: "openid profile email phone address offline_access"
+cdxUserSignupMigrateUrl: https://test.epacdx.net/

@@ -16,9 +16,10 @@ export const getMonitoringPlansSystemsTableRecords = (data) => {
   return records;
 };
 
-export const getMonitoringPlansSystemsComponentsTableRecords = (data) => {
+export const getMonitoringPlansSystemsComponentsTableRecords = (monitoringSystemsComponents, monitoringComponents) => {
   const records = [];
-  data.forEach((el) => {
+  monitoringSystemsComponents.forEach((el) => {
+    const associatedComponent = monitoringComponents.find((com)=>com.componentId === el.componentId)
     let present;
     if (el.endDate === "" || el.endDate === undefined) {
       present = "Present";
@@ -28,7 +29,7 @@ export const getMonitoringPlansSystemsComponentsTableRecords = (data) => {
     records.push({
       id: el.id,
       col1: el.componentId,
-      col2: el.componentTypeCode,
+      col2: associatedComponent?.componentTypeCode,
       col3: `${formatDateTime(el.beginDate, el.beginHour)} ➜ ${present}`.trim(),
     });
   });

@@ -6,7 +6,7 @@ instances: 1
 environment: development
 host: ecmps-dev.app.cloud.gov
 apiHost: api.epa.gov/easey/dev
-inactivityDurationMinutes: 15
+inactivityDurationMinutes: 30
 activityPollingFrequencySeconds: 5
 paginationPerPage: 100
 googleAnalyticsEnabled: false
@@ -25,3 +25,11 @@ enableManageDelegations: "false"
 refreshLastActivityIntervalMinutes: 1
 tokenRefreshThresholdSeconds: 10
 enableSystemAdminstrationModule: true
+#ICAM changes
+cdxHowToGetAccessPath: https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs
+oidcClientId: 46a635fe-cf19-4e0c-9dc9-b17e3d6544b9
+oidcAuthEndpoint: https://icamauthdev.epacdx.net/cdxidbridgedev.onmicrosoft.com/%s/oauth2/v2.0/authorize
+oidcAuthResponseType: code
+oidcAuthResponseMode: form_post
+oidcAuthScopes: "openid profile email phone address offline_access"
+cdxUserSignupMigrateUrl: https://dev.epacdx.net

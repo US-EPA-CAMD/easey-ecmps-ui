@@ -59,6 +59,8 @@ export const DataTableSystemsComponents = ({
   createNewComponentFlag,
   updateComponentTable,
   setupdateComponentTable,
+  updateComponentList,
+  setupdateComponentList,
   addComponentFlag,
   setAddComponentFlag,
   addExistingComponentFlag,
@@ -82,6 +84,7 @@ export const DataTableSystemsComponents = ({
 
   const selectText = "-- Select a value --";
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataComponentsLoaded, setDataComponentsLoaded] = useState(false);
   const [dataFuelLoaded, setFuelDataLoaded] = useState(false);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [selectedComponentsModalData, setSelectedComponentsModalData] =
@@ -92,6 +95,7 @@ export const DataTableSystemsComponents = ({
 
   const [monitoringSystemsComponents, setMonitoringSystemsComponents] =
     useState("");
+  const [monitoringComponents, setMonitoringComponents] = useState("");
 
   const [fuelFlowDropdownsLoaded, setFuelFlowDropdownsLoaded] = useState(false);
   const [systemComponentDropdownsLoaded, setSystemComponentDropdownsLoaded] =
@@ -199,7 +203,7 @@ export const DataTableSystemsComponents = ({
         }
       }
     })
-    .catch(error => console.log('getMonitoringSystems failed', error));
+      .catch(error => console.log('getMonitoringSystems failed', error));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -216,6 +220,15 @@ export const DataTableSystemsComponents = ({
         .catch(error => console.log('getMonitoringSystemsComponents failed', error));
 
       mpApi
+        .getMonitoringComponents(selected.locationId)
+        .then((res) => {
+          setMonitoringComponents(res.data);
+          setDataComponentsLoaded(true);
+          setupdateComponentList(false);
+        })
+        .catch(error => console.log('getMonitoringComponents failed', error));
+
+      mpApi
         .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
         .then((res) => {
           setMonitoringSystemsFuelFlows(res.data);
@@ -225,7 +238,7 @@ export const DataTableSystemsComponents = ({
         .catch(error => console.log('getMonitoringSystemsFuelFlows failed', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, updateFuelFlowTable, updateComponentTable]);
+  }, [selected, updateFuelFlowTable, updateComponentTable, updateComponentList]);
 
   // triggers on change prefilter of systems component
   useEffect(() => {
@@ -376,6 +389,18 @@ export const DataTableSystemsComponents = ({
 
     if (monitoringSystemsComponents.length > 0 && !create) {
       selectComponents = monitoringSystemsComponents.find(sysComp => sysComp.id === row.id)
+      const associatedComponent = monitoringComponents.find((com) => com.componentId === selectComponents?.componentId)
+
+      selectComponents['sampleAcquisitionMethodCode'] = associatedComponent?.sampleAcquisitionMethodCode;
+      selectComponents['componentTypeCode'] = associatedComponent?.componentTypeCode;
+      selectComponents['basisCode'] = associatedComponent?.basisCode;
+      selectComponents['analyticalPrincipleCode'] = associatedComponent?.analyticalPrincipleCode;
+      selectComponents['manufacturer'] = associatedComponent?.manufacturer;
+      selectComponents['modelVersion'] = associatedComponent?.modelVersion;
+      selectComponents['serialNumber'] = associatedComponent?.serialNumber;
+      selectComponents['hgConverterIndicator'] = associatedComponent?.hgConverterIndicator;
+      selectComponents['analyzerRangeData'] = associatedComponent?.analyzerRangeData;
+      selectComponents['componentRecordId'] = associatedComponent?.id;
 
       setSelectedComponent(selectComponents);
       setOpenAnalyzer(selectComponents);
@@ -507,14 +532,14 @@ export const DataTableSystemsComponents = ({
   };
 
   const data = useMemo(() => {
-    if (monitoringSystemsComponents.length > 0) {
+    if (monitoringSystemsComponents.length > 0 && monitoringComponents.length > 0) {
       return fs.getMonitoringPlansSystemsComponentsTableRecords(
-        monitoringSystemsComponents
+        monitoringSystemsComponents, monitoringComponents
       );
     } else {
       return [];
     }
-  }, [monitoringSystemsComponents]);
+  }, [monitoringSystemsComponents, monitoringComponents]);
 
   const fuelFlowsData = useMemo(() => {
     if (monitoringSystemsFuelFlows.length > 0) {
@@ -566,7 +591,7 @@ export const DataTableSystemsComponents = ({
                   openHandler={openComponent}
                   tableTitle="System Components"
                   componentStyling="systemsCompTable"
-                  dataLoaded={dataLoaded && systemComponentDropdownsLoaded}
+                  dataLoaded={dataLoaded && systemComponentDropdownsLoaded && dataComponentsLoaded}
                   actionsBtn={"View"}
                   user={user}
                   checkout={checkout}

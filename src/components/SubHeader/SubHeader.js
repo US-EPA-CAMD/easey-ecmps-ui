@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 
 import "./SubHeader.scss";
-import { logOut } from "../../utils/api/easeyAuthApi";
+import {getLoginState, logOut} from "../../utils/api/easeyAuthApi";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
 
@@ -22,6 +22,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   }
 
   const [userProfileExpanded, setUserProfileExpanded] = useState(false);
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
 
   const [userProfileIcon, setUserProfileIcon] = useState(
     "/images/icons/menu-item-expand.svg"
@@ -90,6 +91,17 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     //   items: [],
     // },
   ];
+
+  //Determines login state and disables login if system is down.
+  useEffect(() => {
+    getLoginState()
+      .then((response) => {
+        setIsLoginDisabled(response.data.isDisabled);
+      })
+      .catch(err => {
+        setIsLoginDisabled(false);
+      });
+  }, []);
 
   useEffect(() => {
     setCategorySelected([false, false, false, false, false]);
@@ -327,7 +339,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     show={show}
                     close={closeModalHandler}
                     returnFocus={true}
-                    children={<Login isModal={true} />}
+                    children={<Login isModal={true} isLoginDisabled={isLoginDisabled} closeModalHandler={closeModalHandler} />}
                   />
                 ) : null}
               </span>

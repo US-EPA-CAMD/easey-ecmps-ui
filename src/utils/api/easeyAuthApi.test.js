@@ -5,7 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, credentialsAuth, verifyChallenge, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -38,6 +38,17 @@ describe("Easey Auth API", () => {
   afterEach(() => {
     jest.clearAllMocks();
     mock.reset();
+  });
+
+  let originalLocation;
+  beforeAll(() => {
+    originalLocation = window.location;
+    delete window.location;
+    window.location = { ...originalLocation, href: 'http://localhost' }; //mock `location`
+  });
+
+  afterAll(() => {
+    window.location = originalLocation;
   });
 
   it("should return response on success secureAxios call", async () => {
@@ -232,21 +243,6 @@ describe("Easey Auth API", () => {
 
     await logOut();
     expect(localStorage.getItem("ecmps_user")).toBe(null);
-  });
-
-
-  it("credentialsAuth", async () => {
-    mock
-      .onPost(`${config.services.authApi.uri}/sign/authenticate`)
-      .reply(200, {});
-
-    expect((await credentialsAuth()).data).toEqual({});
-  });
-
-  it("verifyChallenge", async () => {
-    mock.onPost(`${config.services.authApi.uri}/sign/validate`).reply(200, {});
-
-    expect((await verifyChallenge()).data).toEqual({});
   });
 
   it("getCredentials", async () => {
