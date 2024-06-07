@@ -59,10 +59,10 @@ const QAExpandableRowsRender = ({
   isCheckedOut,
   mdmProps,
   sectionSelect = null,
-  parentId,
+  parentId = null
 }) => {
-  const { locationId } = data ? data : 1;
-  const id = parentId ? parentId : data?.id;
+  const { locationId } = data || 1;
+  const id = parentId || data?.id;
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
