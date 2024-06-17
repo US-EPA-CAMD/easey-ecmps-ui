@@ -607,6 +607,8 @@ export const mapQaCertEventsDataToRows = (data, orisCode) => {
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
       col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+      isSubmitted: el.isSubmitted,
+      isSavedNotSubmitted: el.isSavedNotSubmitted,
     };
     records.push(row);
   }

@@ -598,6 +598,8 @@ const QACertEventTestExmpDataTable = ({
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
+                  disableSubmittedQaEventFields={selectedRow.isSubmitted || selectedRow.isSavedNotSubmitted}
+                  editableSubmittedQaEventFields={['completionTestDate', 'completionTestHour']}
                 />
               </div>
             ) : (
