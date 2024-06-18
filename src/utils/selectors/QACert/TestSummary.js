@@ -638,6 +638,9 @@ export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
       col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+
+      isSubmitted: el.isSubmitted,
+      isSavedNotSubmitted: el.isSavedNotSubmitted,
     });
   });
 

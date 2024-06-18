@@ -30,9 +30,8 @@ const ModalDetails = ({
   mainDropdownChange,
   setDisableExitBtnStatus,
   disabledColumns,
-  disableSubmittedQaEventFields,
-  editableSubmittedQaEventFields
-
+  disableEditingForSelectedFields,
+  selectedEditingDisabledFields
 }) => {
   // fixes resizing issue with calendar date picker along with help in CSS file
   const containerStyle = {
@@ -161,10 +160,7 @@ const ModalDetails = ({
   const makeEditComp = (value, cols) => {
     let comp;
 
-    let isEditDisabled = false;
-    if (disableSubmittedQaEventFields) {
-      isEditDisabled = !(editableSubmittedQaEventFields && editableSubmittedQaEventFields.includes(value[0]));
-    }
+    let isEditingDisabled = disableEditingForSelectedFields && selectedEditingDisabledFields.includes(value[0]);
 
     const hourArr = [{ code: "", name: "-- Select a value --" }];
     for (let i = 0; i <= 23; i++) {
@@ -196,7 +192,6 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             handler={disableDropdowns}
-            disableDropdownFlag={isEditDisabled}
           />
         );
         break;
@@ -224,8 +219,9 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
+            viewOnly={isEditingDisabled}
             disableDropdownFlag={
-              disableDropdownFlag || (create && mainDropdownUntouched) || isEditDisabled
+              disableDropdownFlag || (create && mainDropdownUntouched)
             }
           />
         );
@@ -305,7 +301,7 @@ const ModalDetails = ({
               onChangeUpdate={handleCodes}
               styling={styles}
               favicon={false}
-              disabled={isEditDisabled}
+              disabled={isEditingDisabled}
             />
           </div>
         );
@@ -333,8 +329,7 @@ const ModalDetails = ({
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
-            viewOnly={disabledColumns && disabledColumns.includes(value[0])}
-            disableDropdownFlag={isEditDisabled}
+            viewOnly={(disabledColumns && disabledColumns.includes(value[0])) || isEditingDisabled}
           />
         );
         break;
@@ -358,7 +353,8 @@ const ModalDetails = ({
             name={value[1]}
             secondOption="name"
             mainDropdownChange={mainDropdownChange}
-            disableDropdownFlag={isEditDisabled}
+            viewOnly={isEditingDisabled}
+            disableDropdownFlag={false}
           />
         );
         break;
@@ -378,7 +374,7 @@ const ModalDetails = ({
             epadataname={value[0]}
             epa-testid={value[0].split(" ").join("-")}
             defaultValue={datePickerValue}
-            disabled={isEditDisabled}
+            disabled={isEditingDisabled}
             maxDate={
               title !== "Protocol Gas"
                 ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
@@ -416,7 +412,8 @@ const ModalDetails = ({
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
-            disableDropdownFlag={isEditDisabled}
+            disableDropdownFlag={false}
+            viewOnly={isEditingDisabled}
           />
         );
         break;
@@ -435,7 +432,8 @@ const ModalDetails = ({
             epa-testid={value[0].split(" ").join("-")}
             name={value[1]}
             secondOption="name"
-            disableDropdownFlag={isEditDisabled}
+            disableDropdownFlag={false}
+            viewOnly={isEditingDisabled}
           />
         );
         break;
@@ -484,7 +482,7 @@ const ModalDetails = ({
             type="text"
             defaultValue={value[2] ? value[2] : ""}
             disabled={
-              value[0] === "unitId" || value[0] === "stackPipeId" || isEditDisabled
+              value[0] === "unitId" || value[0] === "stackPipeId" || isEditingDisabled
                 ? "disabled"
                 : undefined
             }
@@ -511,7 +509,7 @@ const ModalDetails = ({
               defaultChecked={
                 value[2] !== undefined && value[2] !== null && value[2] === 1
               }
-              disabled={isEditDisabled}
+              disabled={isEditingDisabled}
             />
             <Radio
               id={`${value[1].split(" ").join("")}-2`}
@@ -526,7 +524,7 @@ const ModalDetails = ({
                 isNaN(value[2]) ||
                 value[2] === 0
               }
-              disabled={isEditDisabled}
+              disabled={isEditingDisabled}
             />
           </Fieldset>
         );
