@@ -607,6 +607,8 @@ export const mapQaCertEventsDataToRows = (data, orisCode) => {
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
       col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+      isSubmitted: el.isSubmitted,
+      isSavedNotSubmitted: el.isSavedNotSubmitted,
     };
     records.push(row);
   }
@@ -636,6 +638,9 @@ export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
       col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+
+      isSubmitted: el.isSubmitted,
+      isSavedNotSubmitted: el.isSavedNotSubmitted,
     });
   });
 
