@@ -512,7 +512,6 @@ const QACertEventTestExmpDataTable = ({
 
   const createData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    console.log("userInput", userInput);
     if (userInput.unitId) {
       userInput.unitId = String(userInput.unitId);
       userInput.stackPipeId = null;
