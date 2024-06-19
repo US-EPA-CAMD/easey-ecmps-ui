@@ -210,7 +210,7 @@ const QADataTableRender = ({
                         {"Edit"}
                       </Button>
 
-                      {!row.isSubmitted && (
+                      {!row?.isSubmitted && (
                         <RemoveButton
                           row={row}
                           dataTableName={dataTableName}

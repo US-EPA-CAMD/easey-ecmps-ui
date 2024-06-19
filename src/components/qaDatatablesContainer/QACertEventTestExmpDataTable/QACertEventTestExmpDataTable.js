@@ -480,17 +480,28 @@ const QACertEventTestExmpDataTable = ({
   const saveData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
 
+    // check if the monitoring system id and Component id are null or empty
+    if (!userInput.monitoringSystemId || !userInput.componentId) {
+      const errorMsgs = [
+        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" : !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" : !userInput.componentId ? "Component ID should not be empty" : "",
+      ];
+      setErrorMsgs(errorMsgs);
+      return;
+    }
+
     try {
       const resp = await assertSelector.saveDataSwitch(userInput, dataTableName, locationSelectValue, selectedRow.id)
       if (successResponses.includes(resp.status)) {
         setUpdateTable(true)
         executeOnClose()
       } else {
-        const errorMsgs = Object.prototype.toString.call(resp) === "[object Array]" ? resp : [resp]
-        setErrorMsgs(errorMsgs)
+        const errorMsgs = Array.isArray(resp) ? resp : [resp];
+        setErrorMsgs(errorMsgs);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      const errorMsgs = ["Error saving data"];
+      setErrorMsgs(errorMsgs);
     }
   };
 
@@ -502,6 +513,14 @@ const QACertEventTestExmpDataTable = ({
     } else if (userInput.stackPipeId) {
       userInput.stackPipeId = String(userInput.stackPipeId);
       userInput.unitId = null;
+    }
+    // check if the monitoring system id and Component id are null or empty
+    if (!userInput.monitoringSystemId || !userInput.componentId) {
+      const errorMsgs = [
+        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" : !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" : !userInput.componentId ? "Component ID should not be empty" : ""
+      ];
+      setErrorMsgs(errorMsgs);
+      return;
     }
 
     try {
@@ -608,8 +627,8 @@ const QACertEventTestExmpDataTable = ({
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
-                  disableEditingForSelectedFields={selectedRow.isSubmitted || selectedRow.isSavedNotSubmitted}
-                  selectedEditingDisabledFields={ getEditingDisabledFields(dataTableName) }
+                  disableEditingForSelectedFields={selectedRow?.isSubmitted || selectedRow?.isSavedNotSubmitted}
+                  selectedEditingDisabledFields={getEditingDisabledFields(dataTableName)}
                 />
               </div>
             ) : (
