@@ -481,9 +481,14 @@ const QACertEventTestExmpDataTable = ({
     const userInput = extractUserInput(payload, ".modalUserInput");
 
     // check if the monitoring system id and Component id are null or empty
-    if (!userInput.monitoringSystemId || !userInput.componentId) {
+    if (!userInput.monitoringSystemId || !userInput.componentId || !userInput.certificationEventCode || !userInput.requiredTestCode) {
       const errorMsgs = [
-        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" : !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" : !userInput.componentId ? "Component ID should not be empty" : "",
+        !userInput.monitoringSystemId && !userInput.componentId && !userInput.certificationEventCode && !userInput.requiredTestCode ? "Monitoring System ID, Component ID, QA Cert Event Code, and Required Test Code should not be empty" :
+        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" :
+        !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" :
+        !userInput.componentId ? "Component ID should not be empty" :
+        !userInput.certificationEventCode ? "QA Cert Event Code should not be empty" :
+        !userInput.requiredTestCode ? "Required Test Code should not be empty" : ""
       ];
       setErrorMsgs(errorMsgs);
       return;
@@ -507,6 +512,7 @@ const QACertEventTestExmpDataTable = ({
 
   const createData = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
+    console.log("userInput", userInput);
     if (userInput.unitId) {
       userInput.unitId = String(userInput.unitId);
       userInput.stackPipeId = null;
@@ -515,9 +521,14 @@ const QACertEventTestExmpDataTable = ({
       userInput.unitId = null;
     }
     // check if the monitoring system id and Component id are null or empty
-    if (!userInput.monitoringSystemId || !userInput.componentId) {
+    if (!userInput.monitoringSystemId || !userInput.componentId || !userInput.certificationEventCode || !userInput.requiredTestCode) {
       const errorMsgs = [
-        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" : !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" : !userInput.componentId ? "Component ID should not be empty" : ""
+        !userInput.monitoringSystemId && !userInput.componentId && !userInput.certificationEventCode && !userInput.requiredTestCode ? "Monitoring System ID, Component ID, QA Cert Event Code, and Required Test Code should not be empty" :
+        !userInput.monitoringSystemId && !userInput.componentId ? "Monitoring System ID and Component ID should not be empty" :
+        !userInput.monitoringSystemId ? "Monitoring System ID should not be empty" :
+        !userInput.componentId ? "Component ID should not be empty" :
+        !userInput.certificationEventCode ? "QA Cert Event Code should not be empty" :
+        !userInput.requiredTestCode ? "Required Test Code should not be empty" : ""
       ];
       setErrorMsgs(errorMsgs);
       return;
