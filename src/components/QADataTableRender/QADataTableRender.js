@@ -58,7 +58,7 @@ const QADataTableRender = ({
 
   useEffect(() => {
     setTimeout(() => {
-      const header = document.querySelector('[role="heading"');
+      const header = document.querySelector('[role="heading"]');
 
       if (header !== null) {
         header.remove();
@@ -210,7 +210,7 @@ const QADataTableRender = ({
                         {"Edit"}
                       </Button>
 
-                      {!row.isSubmitted && (
+                      {!row?.isSubmitted && (
                         <RemoveButton
                           row={row}
                           dataTableName={dataTableName}

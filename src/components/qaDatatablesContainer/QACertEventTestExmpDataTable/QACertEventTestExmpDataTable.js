@@ -608,7 +608,7 @@ const QACertEventTestExmpDataTable = ({
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
-                  disableEditingForSelectedFields={selectedRow.isSubmitted || selectedRow.isSavedNotSubmitted}
+                  disableEditingForSelectedFields={selectedRow?.isSubmitted || selectedRow?.isSavedNotSubmitted}
                   selectedEditingDisabledFields={ getEditingDisabledFields(dataTableName) }
                 />
               </div>
