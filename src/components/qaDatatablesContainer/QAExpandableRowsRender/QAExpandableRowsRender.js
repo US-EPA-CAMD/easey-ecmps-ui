@@ -59,8 +59,10 @@ const QAExpandableRowsRender = ({
   isCheckedOut,
   mdmProps,
   sectionSelect = null,
+  parentId = null
 }) => {
-  const { locationId, id } = data ? data : 1;
+  const { locationId } = data || 1;
+  const id = parentId || data?.id;
   const [mdmData, setMdmData] = useState(null);
   const [dropdownsLoading, setDropdownsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -111,7 +113,7 @@ const QAExpandableRowsRender = ({
   const dropdownArrayIsEmpty = dropdownArray
     ? dropdownArray.length === 0
     : false;
-  const nextExpandableRow = name => {
+  const nextExpandableRow = (name, parentId) => {
     let objProps = {};
     let extraIDsProps = null;
     let expand = expandable ? expandable : false;
@@ -169,10 +171,11 @@ const QAExpandableRowsRender = ({
       case 'Appendix E Correlation Run':
         extraIDsProps = [...extraIDs, id];
         objProps = qaAppendixECorrelationSummaryHeatInputGasProps();
+        expand = false;
         break;
       case 'Appendix E Correlation Heat Input from Oil':
         extraIDsProps = [...extraIDs, id];
-        expand = true;
+        expand = false;
         objProps = qaAppendixECorrelationSummaryHeatInputOilProps(data);
         break;
       // Test Data --> Cycle Time Summary --> Cycle Time Injection
@@ -210,6 +213,7 @@ const QAExpandableRowsRender = ({
       expandable: expand,
       user: user,
       isCheckedOut: isCheckedOut,
+      parentId: parentId
     };
   };
 
@@ -453,7 +457,7 @@ const QAExpandableRowsRender = ({
         break;
       case 'Appendix E Correlation Heat Input from Gas':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(
-            extraIDs[0], ['GAS', 'LTGS', 'NOXE']));
+          extraIDs[0], ['GAS', 'LTGS', 'NOXE']));
         Promise.all(allPromises)
           .then(responses => {
             responses.forEach((curResp, i) => {
@@ -480,7 +484,7 @@ const QAExpandableRowsRender = ({
         break;
       case 'Appendix E Correlation Heat Input from Oil':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0],
-            ['OILV', 'OILM', 'LTOL']));
+          ['OILV', 'OILM', 'LTOL']));
         allPromises.push(dmApi.getAllUnitsOfMeasureCodes());
         Promise.all(allPromises)
           .then(responses => {
@@ -933,7 +937,7 @@ const QAExpandableRowsRender = ({
       case 'Appendix E Correlation Heat Input from Gas':
         expandables.push(
           <QAExpandableRowsRender
-            {...nextExpandableRow('Appendix E Correlation Heat Input from Oil')}
+            {...nextExpandableRow('Appendix E Correlation Heat Input from Oil', id)}
           />,
         );
 
@@ -1036,8 +1040,8 @@ const QAExpandableRowsRender = ({
             createNewData
               ? `Add  ${dataTableName}`
               : user && isCheckedOut
-              ? ` Edit ${dataTableName}`
-              : ` ${dataTableName}`
+                ? ` Edit ${dataTableName}`
+                : ` ${dataTableName}`
           }
           exitBTN={`Save and Close`}
           errorMsgs={errorMsgs}
