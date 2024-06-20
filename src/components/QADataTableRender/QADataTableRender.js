@@ -209,11 +209,15 @@ const QADataTableRender = ({
                       >
                         {"Edit"}
                       </Button>
-                      <RemoveButton
-                        row={row}
-                        dataTableName={dataTableName}
-                        onConfirm={() => onRemoveHandler(normalizedRow)}
-                      />
+
+                      {!row.isSubmitted && (
+                        <RemoveButton
+                          row={row}
+                          dataTableName={dataTableName}
+                          onConfirm={() => onRemoveHandler(normalizedRow)}
+                        />
+                      )}
+
                       {expandableRowComp ? createExpandBTNS(index, row) : null}
                     </>
                   )}
