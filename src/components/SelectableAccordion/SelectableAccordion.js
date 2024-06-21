@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import DataTable from "react-data-table-component";
 import {
   addScreenReaderLabelForCollapses,
@@ -31,6 +31,17 @@ export const SelectableAccordion = ({
 }) => {
   const [itemStates, setItemStates] = useState(items);
 
+  const itemRefs = useRef([]);  // Initialize with an empty array
+
+  useEffect(() => {
+    // Scroll to the expanded item
+    itemStates.forEach((item, idx) => {
+      if (item.expanded && itemRefs.current[idx]) {
+        itemRefs.current[idx].scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    });
+  }, [itemStates]);
+
   useEffect(() => {
     setTimeout(() => {
       ensure508();
@@ -46,7 +57,12 @@ export const SelectableAccordion = ({
     <div className="usa-accordion" data-testid="selectable-accordion-wrapper">
       {items.map((element, idx) => {
         return (
-          <div key={idx}>
+          <div
+            key={idx}
+            ref={(el) => {
+              itemRefs.current[idx] = el;
+            }}
+          >
             <DataTable
               noHeader={true}
               className={`data-display-table react-transition fade-in data-display-table-no-vertical`}

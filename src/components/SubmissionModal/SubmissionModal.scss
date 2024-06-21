@@ -19,6 +19,31 @@
   border-radius: 1% !important;
 }
 
+.modal-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .break-line-bold {
   display: block;
   width: 100%; /*or whatever width you want the effect of <hr>*/
