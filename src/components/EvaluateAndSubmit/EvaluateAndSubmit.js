@@ -635,7 +635,9 @@ export const EvaluateAndSubmit = ({
         }
       }
 
-      for (let i = 0; i < 3; i++) {
+      const dataListLength = isForceReEvaluation ? dataList.length : 3;
+
+      for (let i = 0; i < dataListLength; i++) {
         //Determine MP + QA Rerenders
         const oldVal = JSON.stringify(dataList[i].ref.current);
         //Force MP selections
@@ -648,7 +650,7 @@ export const EvaluateAndSubmit = ({
             setDisable = selectedMonitorPlansFromEmissions.has(row.monPlanId);
           }
 
-          if (setDisable) {
+          if (setDisable && !isForceReEvaluation) {
             row.isSelected = true;
             row.isDisabled = true;
           } else {
@@ -748,7 +750,7 @@ export const EvaluateAndSubmit = ({
           buttonText={buttonText}
           filterClick={filterClick}
           componentType={componentType}
-          forceReEvaluation={(e)=>setIsForceReEvaluation(e.target.checked)}
+          forceReEvaluation={(e) => setIsForceReEvaluation(e.target.checked)}
           isForceReEvaluation={isForceReEvaluation}
         />
       )}
