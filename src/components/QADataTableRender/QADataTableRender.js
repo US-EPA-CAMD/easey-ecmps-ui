@@ -58,7 +58,7 @@ const QADataTableRender = ({
 
   useEffect(() => {
     setTimeout(() => {
-      const header = document.querySelector('[role="heading"');
+      const header = document.querySelector('[role="heading"]');
 
       if (header !== null) {
         header.remove();
@@ -209,11 +209,15 @@ const QADataTableRender = ({
                       >
                         {"Edit"}
                       </Button>
-                      <RemoveButton
-                        row={row}
-                        dataTableName={dataTableName}
-                        onConfirm={() => onRemoveHandler(normalizedRow)}
-                      />
+
+                      {!row?.isSubmitted && (
+                        <RemoveButton
+                          row={row}
+                          dataTableName={dataTableName}
+                          onConfirm={() => onRemoveHandler(normalizedRow)}
+                        />
+                      )}
+
                       {expandableRowComp ? createExpandBTNS(index, row) : null}
                     </>
                   )}

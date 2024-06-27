@@ -79,6 +79,7 @@ export const EvaluateAndSubmit = ({
 
   const [finalSubmitStage, setFinalSubmitStage] = useState(false);
   const [shouldAutoSubmit, setShouldAutoSubmit] = useState(false);
+  const [isForceReEvaluation, setIsForceReEvaluation] = useState(false);
 
   const { userId } = user;
 
@@ -473,7 +474,7 @@ export const EvaluateAndSubmit = ({
     let formattedData = rows.map((chunk) => {
       return {
         isSelected: false,
-        isDisabled: !canSelectRow(
+        isDisabled: isForceReEvaluation ? false : !canSelectRow(
           chunk,
           rowType,
           componentType,
@@ -604,7 +605,7 @@ export const EvaluateAndSubmit = ({
         row.isSelected = false;
       }
 
-      if (!canSelectRow(row, type, componentType, idToPermissionsMap, userId)) {
+      if (!canSelectRow(row, type, componentType, idToPermissionsMap, userId) && !isForceReEvaluation) {
         row.isDisabled = true;
         row.isSelected = false;
       }
@@ -661,7 +662,7 @@ export const EvaluateAndSubmit = ({
               componentType,
               idToPermissionsMap,
               userId
-            )
+            ) && !isForceReEvaluation
           ) {
             row.isDisabled = true;
             row.isSelected = false;
@@ -747,6 +748,8 @@ export const EvaluateAndSubmit = ({
           buttonText={buttonText}
           filterClick={filterClick}
           componentType={componentType}
+          forceReEvaluation={(e)=>setIsForceReEvaluation(e.target.checked)}
+          isForceReEvaluation={isForceReEvaluation}
         />
       )}
 

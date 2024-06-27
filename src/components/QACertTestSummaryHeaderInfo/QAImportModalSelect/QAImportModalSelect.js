@@ -6,7 +6,7 @@ const QAImportModalSelect = ({ setImportTypeSelection }) => {
     { key: "select", name: "Select Data Type to Import" },
     { key: "file", name: "Import from File" },
     { key: "historical", name: "Import Historical Data" },
-    { key: "mats", name: "MATS PDF/XML" },
+    { key: "mats", name: "MATS PDF/XML/JSON" },
   ];
   const [selection, setSelection] = useState(0);
   useEffect(() => {
