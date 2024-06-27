@@ -138,6 +138,16 @@ const QACertEventTestExmpDataTable = ({
       code: obj[code],
       name: obj[name],
     };
+  }
+
+  const getEditingDisabledFields = (dataTableName) => {
+    if (dataTableName === "QA Certification Event")
+      return ['id', 'unitId', 'monitoringSystemId', 'componentId', 'certificationEventCode', 'requiredTestCode',
+        'certificationEventHour', 'conditionalBeginHour', 'certificationEventDate', 'conditionalBeginDate'];
+    if (dataTableName === "Test Extension Exemption")
+      return ['monitoringSystemId', 'componentId', 'fuelCode', 'extensionOrExemptionCode'];
+
+    return [];
   };
 
   const loadDropdownsData = (name) => {
@@ -598,6 +608,8 @@ const QACertEventTestExmpDataTable = ({
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
                   mainDropdownChange={mainDropdownChange}
+                  disableEditingForSelectedFields={createNewData ? false : selectedRow?.isSubmitted || selectedRow?.isSavedNotSubmitted}
+                  selectedEditingDisabledFields={ createNewData ? [] : getEditingDisabledFields(dataTableName) }
                 />
               </div>
             ) : (
