@@ -7,7 +7,6 @@ import * as fs from "../../../utils/selectors/monitoringPlanQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import DataTablePCTQualifications from "../DataTablePCTQualifications/DataTablePCTQualifications";
 import DataTableLEEQualifications from "../DataTableLEEQualifications/DataTableLEEQualifications";
-import DataTableCPMSQualifications from "../DataTableCPMSQualifications/DataTableCPMSQualifications";
 import DataTableLMEQualifications from "../DataTableLMEQualifications/DataTableLMEQualifications";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -346,16 +345,6 @@ export const DataTableQualifications = ({
         userInput
       );
     }
-    // CPMS qual
-    else if (openCPMS) {
-      return handleRequest(
-        "cpms",
-        creatingChild
-          ? mpApi.createCPMSQualificationData
-          : mpApi.saveCPMSQualificationData,
-        userInput
-      );
-    }
 
     // Parent qual
     return handleRequest(
@@ -604,31 +593,6 @@ export const DataTableQualifications = ({
                     </>
                   )}
 
-                  {openLEE || openPCT || openLME ? (
-                    ""
-                  ) : (
-                    <>
-                      {
-                        isDataTableVisibleForGroupCode("CPMS") &&
-                        <DataTableCPMSQualifications
-                          locationSelectValue={locationSelectValue}
-                          user={user}
-                          checkout={checkout}
-                          inactive={inactive}
-                          settingInactiveCheckBox={settingInactiveCheckBox}
-                          revertedState={revertedState}
-                          setRevertedState={setRevertedState}
-                          selectedLocation={selectedLocation}
-                          qualSelectValue={selectedQualificationData["id"]}
-                          setOpenCPMS={setOpenCPMS}
-                          openCPMS={openCPMS}
-                          setUpdateCPMS={setUpdateCPMS}
-                          updateCPMS={updateCPMS}
-                          setCreatingChild={setCreatingChild}
-                        />
-                      }
-                    </>
-                  )}
                 </div>
               )}
             </div>
