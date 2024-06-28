@@ -144,7 +144,7 @@ const App = () => {
           signInStarted.current = false;
         });
     }
-  }, []);
+  }, [message, sessionId, signInAction]);
 
   //Display sign in errors if there are any errors.
   useEffect(() => {
@@ -457,12 +457,10 @@ const App = () => {
           <Route
             path="/workspace/configuration-management"
             element={
-              !validUser() ||
-              roles?.every(
-                (role) =>
-                  !["Sponsor", "Submitter", "Initial Authorizer"].includes(role)
-              ) ? (
-                <Navigate key="navigate" to="/" />
+              !facilityCheckoutPermission() ? (
+                //<Navigate key="navigate" to="/" />
+                // TODO: Remove when done with development
+                <ConfigurationManagement user={user} />
               ) : (
                 <ConfigurationManagement user={user} />
               )

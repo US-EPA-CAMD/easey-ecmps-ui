@@ -26,6 +26,17 @@ export const getMonitoringPlanById = async (id) => {
     .catch(handleError);
 };
 
+export const getUnitsByFacId = async (facId) => {
+  const url = getApiUrl(`/units?facilityId=${facId}`);
+
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (
   orisCodes,
@@ -131,10 +142,10 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
 export const postCheckoutMonitoringPlanConfiguration = async (
   id,
-  handleError = true
+  catchError = true
 ) => {
   const url = getApiUrl(`/check-outs/plans/${id}`, true);
-  if (handleError) {
+  if (catchError) {
     try {
       return (
         await secureAxios({

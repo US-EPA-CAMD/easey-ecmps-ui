@@ -29,7 +29,7 @@ export const EmissionsTabRender = ({
       (t) => t.selectedConfig.id === configID
     )
   );
-  
+
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
@@ -38,7 +38,6 @@ export const EmissionsTabRender = ({
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
   useEffect(() => {
-   
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab.viewTemplateSelect]);
@@ -110,14 +109,20 @@ export const EmissionsTabRender = ({
         />
       </div>
       <hr />
-      {!isInitialLoadOfPage && 
+      {!isInitialLoadOfPage &&
       (!viewTemplateSelect || viewTemplateSelect?.code === "SELECT") ? (
         <div>
           <div className="grid-row overflow-x-auto">
             {!user ? (
-              <p>There is either no data available for that configuration or you have not applied filters yet (2022 currently has the most data)</p>
+              <p>
+                There is either no data available for that configuration or you
+                have not applied filters yet (2022 currently has the most data)
+              </p>
             ) : (
-              <p>Please import an emissions file for the selected year and quarter or apply filters to view data</p>
+              <p>
+                Please import an emissions file for the selected year and
+                quarter or apply filters to view data
+              </p>
             )}
           </div>
         </div>
@@ -128,11 +133,11 @@ export const EmissionsTabRender = ({
               title={viewTemplateSelect?.name}
               headerButtonText="Download To CSV"
               headerButtonClickHandler={handleDownload}
-              table={[
-                [
-                  <EmissionsViewTable monitorPlanId={configID} />,
-                  viewTemplateSelect?.name ?? "",
-                ],
+              tables={[
+                {
+                  content: <EmissionsViewTable monitorPlanId={configID} />,
+                  title: viewTemplateSelect?.name ?? "",
+                },
               ]}
             ></CustomAccordion>
           </div>

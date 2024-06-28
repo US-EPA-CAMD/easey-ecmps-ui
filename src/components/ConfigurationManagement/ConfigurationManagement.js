@@ -12,7 +12,9 @@ import {
   Button,
 } from "@trussworks/react-uswds";
 
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
+import { getUnitsByFacId } from "../../utils/api/monitoringPlansApi";
 import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
 import { getAllFacilities } from "../../utils/api/facilityApi";
 import { loadFacilitiesSuccess } from "../../store/actions/facilities";
@@ -39,14 +41,30 @@ export const ConfigurationManagement = ({
   const [facilitiesStatus, setFacilitiesStatus] = useState(fetchStatus.IDLE);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState("");
+  const [stackPipes, setStackPipes] = useState([]);
+  const [stackPipesStatus, setStackPipesStatus] = useState(fetchStatus.IDLE);
+  const [units, setUnits] = useState([]);
+  const [unitsStatus, setUnitsStatus] = useState(fetchStatus.IDLE);
+  const [unitStackConfigs, setUnitStackConfigs] = useState([]);
+  const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
+    fetchStatus.IDLE
+  );
+
+  /*
+  ## HELPERS
+  */
+  const resetFacilityData = () => {
+    setUnits([]);
+    setUnitsStatus(fetchStatus.IDLE);
+    setStackPipes([]);
+    setStackPipesStatus(fetchStatus.IDLE);
+    setUnitStackConfigs([]);
+    setUnitStackConfigsStatus(fetchStatus.IDLE);
+  };
 
   /*
   ## SIDE EFFECTS
   */
-
-  useEffect(() => {
-    document.title = configurationManagementTitle;
-  }, []);
 
   // Load facilities.
   useEffect(() => {
@@ -67,6 +85,57 @@ export const ConfigurationManagement = ({
     }
   }, [facilities, facilitiesStatus, setFacilities]);
 
+  // Load units.
+  useEffect(() => {
+    if (!selectedFacility) return;
+
+    if (unitsStatus === fetchStatus.IDLE) {
+      try {
+        setUnitsStatus(fetchStatus.PENDING);
+        getUnitsByFacId(selectedFacility).then((res) => {
+          setUnits(res.data);
+          setUnitsStatus(fetchStatus.SUCCESS);
+        });
+      } catch (err) {
+        setUnitsStatus(fetchStatus.ERROR);
+      }
+    }
+  }, [selectedFacility, unitsStatus]);
+
+  // Load stacks & pipes.
+  useEffect(() => {
+    if (!selectedFacility) return;
+
+    if (stackPipesStatus === fetchStatus.IDLE) {
+      try {
+        setStackPipesStatus(fetchStatus.PENDING);
+        //getStackPipesByFacId(selectedFacility).then((res) => {
+        //  setStackPipes(res.data);
+        //  setStackPipesStatus(fetchStatus.SUCCESS);
+        //});
+      } catch (err) {
+        setStackPipesStatus(fetchStatus.ERROR);
+      }
+    }
+  }, [selectedFacility, stackPipesStatus]);
+
+  // Load unit stack configurations.
+  useEffect(() => {
+    if (!selectedFacility) return;
+
+    if (unitStackConfigsStatus === fetchStatus.IDLE) {
+      try {
+        setUnitStackConfigsStatus(fetchStatus.PENDING);
+        //getUnitStackConfigsByFacId(selectedFacility).then((res) => {
+        //  setUnitStackConfigs(res.data);
+        //  setUnitStackConfigsStatus(fetchStatus.SUCCESS);
+        //});
+      } catch (err) {
+        setUnitStackConfigsStatus(fetchStatus.ERROR);
+      }
+    }
+  }, [selectedFacility, unitStackConfigsStatus]);
+
   /*
   ## EVENT HANDLERS
   */
@@ -74,7 +143,10 @@ export const ConfigurationManagement = ({
   const handleCheckout = () => {};
   const handleCloseModal = () => setModalVisible(false);
   const handleConfirmSave = () => {};
-  const handleFacilityChange = (e) => setSelectedFacility(e.target.value);
+  const handleFacilityChange = (e) => {
+    setSelectedFacility(e.target.value);
+    resetFacilityData();
+  };
   const handleInitialSave = () => {
     setModalVisible(true);
   };
@@ -93,6 +165,10 @@ export const ConfigurationManagement = ({
 
   const isCheckedOut = true;
 
+  if (document.title !== configurationManagementTitle) {
+    document.title = configurationManagementTitle;
+  }
+
   return (
     <>
       <div className="react-transition fade-in padding-x-3">
@@ -100,13 +176,11 @@ export const ConfigurationManagement = ({
         <hr />
         <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
           <Grid row>
-            {facilitiesStatus === fetchStatus.PENDING && <p>Loading...</p>}
-            {facilitiesStatus === fetchStatus.ERROR && (
-              <Alert noIcon slim type="error" headingLevel="h4">
-                Error loading facilities
-              </Alert>
-            )}
-            {facilitiesStatus === fetchStatus.SUCCESS && (
+            <StatusContent
+              headingLevel="h3"
+              status={facilitiesStatus}
+              label="facilities"
+            >
               <p>
                 <Label htmlFor="facility">Facility</Label>
                 <Dropdown
@@ -135,56 +209,74 @@ export const ConfigurationManagement = ({
                   </Button>
                 )}
               </p>
-            )}
+            </StatusContent>
           </Grid>
-          <Grid row>
-            <h3>Units</h3>
-          </Grid>
-          <Grid row>
-            <div className="margin-bottom-2">
-              <SizedPreloader />
-            </div>
-          </Grid>
-          <Grid row>
-            <h3>Stacks & Pipes</h3>
-          </Grid>
-          <Grid row>
-            <div className="margin-bottom-2">
-              <SizedPreloader />
-            </div>
-          </Grid>
-          <Grid row>
-            <h3>Unit Stack Configurations</h3>
-          </Grid>
-          <Grid row>
-            <div className="margin-bottom-2">
-              <SizedPreloader />
-            </div>
-          </Grid>
-          <Grid>
-            <Button
-              className="margin-top-2"
-              id="save-button"
-              onClick={handleInitialSave}
-              type="button"
-            >
-              Save
-            </Button>
-            {modalVisible && (
-              <Modal
-                showDarkBg={true}
-                close={handleCloseModal}
-                exitBtn="Save"
-                save={handleConfirmSave}
-                showCancel={false}
-                showSave={user && isCheckedOut}
-                title="Change Summary"
-                errorMsgs={errorMsgs}
-              >
-                Show monitor plan changes
-              </Modal>
-            )}
-          </Grid>
+          {selectedFacility && (
+            <>
+              <hr />
+              <Grid row>
+                <CustomAccordion
+                  headingLevel="h3"
+                  tables={[
+                    {
+                      title: "Units",
+                      content: (
+                        <StatusContent status={unitsStatus} label="units">
+                          {null}
+                        </StatusContent>
+                      ),
+                    },
+                    {
+                      title: "Stacks & Pipes",
+                      content: (
+                        <StatusContent
+                          status={stackPipesStatus}
+                          label="stacks & pipes"
+                        >
+                          {null}
+                        </StatusContent>
+                      ),
+                    },
+                    {
+                      title: "Unit Stack Configurations",
+                      content: (
+                        <StatusContent
+                          status={unitStackConfigsStatus}
+                          label="unit stack configurations"
+                        >
+                          {null}
+                        </StatusContent>
+                      ),
+                    },
+                  ]}
+                />
+              </Grid>
+              <Grid row>
+                <Button
+                  className="margin-top-2"
+                  id="save-button"
+                  onClick={handleInitialSave}
+                  type="button"
+                >
+                  Save
+                </Button>
+                {modalVisible && (
+                  <Modal
+                    showDarkBg={true}
+                    close={handleCloseModal}
+                    exitBtn="Save"
+                    save={handleConfirmSave}
+                    showCancel={false}
+                    showSave={user && isCheckedOut}
+                    title="Change Summary"
+                    errorMsgs={errorMsgs}
+                  >
+                    Show monitor plan changes
+                  </Modal>
+                )}
+              </Grid>
+            </>
+          )}
         </GridContainer>
       </div>
     </>
@@ -195,6 +287,18 @@ const SizedPreloader = () => (
   <div className="height-9 width-9">
     <Preloader showStopButton={false} />
   </div>
+);
+
+const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
+  <>
+    {status === fetchStatus.PENDING && <SizedPreloader />}
+    {status === fetchStatus.ERROR && (
+      <Alert noIcon slim type="error" headingLevel={headingLevel}>
+        Error loading {label}.
+      </Alert>
+    )}
+    {status === fetchStatus.SUCCESS && children}
+  </>
 );
 
 export const mapStateToProps = (state) => ({
