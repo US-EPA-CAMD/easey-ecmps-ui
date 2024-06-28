@@ -14,9 +14,13 @@ import {
 
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
-import { getUnitsByFacId } from "../../utils/api/monitoringPlansApi";
 import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
-import { getAllFacilities } from "../../utils/api/facilityApi";
+import {
+  getAllFacilities,
+  getUnitStackConfigsByFacId,
+  getStackPipesByFacId,
+  getUnitsByFacId,
+} from "../../utils/api/facilityApi";
 import { loadFacilitiesSuccess } from "../../store/actions/facilities";
 
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
@@ -92,7 +96,7 @@ export const ConfigurationManagement = ({
     if (unitsStatus === fetchStatus.IDLE) {
       try {
         setUnitsStatus(fetchStatus.PENDING);
-        getUnitsByFacId(selectedFacility).then((res) => {
+        getUnitsById(selectedFacility).then((res) => {
           setUnits(res.data);
           setUnitsStatus(fetchStatus.SUCCESS);
         });
@@ -109,10 +113,10 @@ export const ConfigurationManagement = ({
     if (stackPipesStatus === fetchStatus.IDLE) {
       try {
         setStackPipesStatus(fetchStatus.PENDING);
-        //getStackPipesByFacId(selectedFacility).then((res) => {
-        //  setStackPipes(res.data);
-        //  setStackPipesStatus(fetchStatus.SUCCESS);
-        //});
+        getStackPipesById(selectedFacility).then((res) => {
+          setStackPipes(res.data);
+          setStackPipesStatus(fetchStatus.SUCCESS);
+        });
       } catch (err) {
         setStackPipesStatus(fetchStatus.ERROR);
       }
@@ -126,10 +130,10 @@ export const ConfigurationManagement = ({
     if (unitStackConfigsStatus === fetchStatus.IDLE) {
       try {
         setUnitStackConfigsStatus(fetchStatus.PENDING);
-        //getUnitStackConfigsByFacId(selectedFacility).then((res) => {
-        //  setUnitStackConfigs(res.data);
-        //  setUnitStackConfigsStatus(fetchStatus.SUCCESS);
-        //});
+        getUnitStackConfigsById(selectedFacility).then((res) => {
+          setUnitStackConfigs(res.data);
+          setUnitStackConfigsStatus(fetchStatus.SUCCESS);
+        });
       } catch (err) {
         setUnitStackConfigsStatus(fetchStatus.ERROR);
       }

@@ -26,17 +26,6 @@ export const getMonitoringPlanById = async (id) => {
     .catch(handleError);
 };
 
-export const getUnitsByFacId = async (facId) => {
-  const url = getApiUrl(`/units?facilityId=${facId}`);
-
-  return secureAxios({
-    method: "GET",
-    url: url,
-  })
-    .then(handleResponse)
-    .catch(handleError);
-};
-
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (
   orisCodes,
