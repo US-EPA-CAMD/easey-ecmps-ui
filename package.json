@@ -9,7 +9,7 @@
     "url": "git+https://github.com/US-EPA-CAMD/easey-ecmps-ui.git"
   },
   "engines": {
-    "node": ">=16.20.0",
+    "node": ">=20.8.0",
     "yarn": ">=1.22.19"
   },
   "scripts": {
@@ -36,7 +36,7 @@
     "@mui/styled-engine-sc": "^5.12.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@trussworks/react-uswds": "^4.1.1",
-    "@us-epa-camd/easey-design-system": "^1.34.7",
+    "@us-epa-camd/easey-design-system": "../easey-design-system/lib",
     "@uswds/uswds": "^3.4.1",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "axios": "^1.6.0",

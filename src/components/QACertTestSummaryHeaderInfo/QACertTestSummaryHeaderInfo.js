@@ -549,7 +549,7 @@ export const QACertTestSummaryHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            exitBTN={"Import"}
+            exitBtn={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => importQABtn(importedFile)}
             hasFormatError={hasFormatError}
@@ -616,7 +616,7 @@ export const QACertTestSummaryHeaderInfo = ({
           show={showImportDataPreview}
           close={() => setShowImportDataPreview(false)}
           showSave={true}
-          exitBTN={"Import"}
+          exitBtn={"Import"}
           title="Import Historical QA Test Data"
           disableExitBtn={disablePortBtn}
           save={() => {

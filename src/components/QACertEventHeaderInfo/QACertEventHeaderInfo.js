@@ -474,7 +474,7 @@ export const QACertEventHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            exitBTN={"Import"}
+            exitBtn={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
               importQABtn(importedFile);
@@ -546,7 +546,7 @@ export const QACertEventHeaderInfo = ({
           show={showImportDataPreview}
           close={() => setShowImportDataPreview(false)}
           showSave={true}
-          exitBTN={"Import"}
+          exitBtn={"Import"}
           title="Import Historical QA Cert Event, Extension & Exemption Data"
           disableExitBtn={disablePortBtn}
           save={() => {

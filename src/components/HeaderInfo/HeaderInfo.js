@@ -1131,7 +1131,7 @@ export const HeaderInfo = ({
           show={showRevertModal}
           close={closeRevertModal}
           showSave={true}
-          exitBTN={"Yes"}
+          exitBtn={"Yes"}
           save={revert}
           children={
             <div>
@@ -1496,7 +1496,7 @@ export const HeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={`Import ${workspaceSectionName} Data`}
-            exitBTN={"Import"}
+            exitBtn={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
               importFile(importedFile);

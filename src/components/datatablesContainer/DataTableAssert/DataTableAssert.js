@@ -543,7 +543,7 @@ export const DataTableAssert = ({
           showSave={user && checkout && !nonEditable}
           nonEditable={nonEditable}
           title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
-          exitBTN={createNewData ? `Create ${dataTableName}` : `Save and Close`}
+          exitBtn={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (

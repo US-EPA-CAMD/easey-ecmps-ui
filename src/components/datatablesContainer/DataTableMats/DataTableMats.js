@@ -393,7 +393,7 @@ export const DataTableMats = ({
           title={
             createNewMats ? "Create MATS" : "Component: Monitoring MATS Methods"
           }
-          exitBTN={createNewMats ? "Create MATS" : `Save and Close`}
+          exitBtn={createNewMats ? "Create MATS" : `Save and Close`}
           errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (

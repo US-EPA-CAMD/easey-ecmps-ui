@@ -426,7 +426,7 @@ export const AddErrorSupressionModal = ({
         show={showModal}
         errorMsgs={errorMsgs}
         save={saveFunc}
-        exitBTN={"Save and Close"}
+        exitBtn={"Save and Close"}
         showSave
         title={"Add Error Suppression"}
         close={close}

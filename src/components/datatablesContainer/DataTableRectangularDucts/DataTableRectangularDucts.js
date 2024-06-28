@@ -361,7 +361,7 @@ export const DataTableRectangularDucts = ({
               ? "Create Rectangular Duct WAF"
               : "Rectangular Duct WAF"
           }
-          exitBTN={
+          exitBtn={
             createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`
           }
           children={

@@ -19,7 +19,7 @@ export const Modal = ({
   left = "25%",
   cancelButtonText = "Cancel",
   title,
-  exitBTN,
+  exitBtn,
   breadCrumbBar,
   extraBtn,
   extraBtnText,
@@ -163,7 +163,7 @@ export const Modal = ({
                       className="margin-right-2"
                       disabled={disableExitBtn}
                     >
-                      {exitBTN ? exitBTN : "Save and Go Back"}
+                      {exitBtn ? exitBtn : "Save and Go Back"}
                     </Button>
 
                     {extraBtn ? (
@@ -201,7 +201,7 @@ export const Modal = ({
                     epa-testid="closeBtn"
                     className="float-left"
                   >
-                    {"Close"}
+                    Close
                   </Button>
                 ) : null}
               </div>
