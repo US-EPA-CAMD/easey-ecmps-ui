@@ -45,6 +45,7 @@ describe("Selectable Accordion", () => {
 
   it("render component with data table records and expanded accordion interactions", async () => {
     const mockFuncs = jest.fn().mockImplementation();
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
     await render(
       <SelectableAccordion
         items={[

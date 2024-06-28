@@ -1,4 +1,4 @@
-import { Button, Fieldset, Radio } from "@trussworks/react-uswds";
+import { Button, Fieldset, Radio, Checkbox } from "@trussworks/react-uswds";
 import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
@@ -13,6 +13,8 @@ const FilterForm = ({
   filterClick,
   componentType,
   clearBtn,
+  forceReEvaluation,
+  isForceReEvaluation
 }) => {
   const [availableReportingPeriods, setAvailableReportingPeriods] = useState(
     []
@@ -267,6 +269,20 @@ const FilterForm = ({
               {buttonText}
             </Button>
           </div>
+          {componentType === 'Evaluate' ? (
+              <Checkbox
+                id="force-re-evaluation"
+                className="display-flex flex-row flex-justify-center"
+                name="force-re-evaluation"
+                label="Force Re-Evaluation"
+                epa-testid={"force-re-evaluation"}
+                data-testid={"force-re-evaluation"}
+                checked={isForceReEvaluation}
+                value={isForceReEvaluation}
+                onChange={forceReEvaluation}
+                disabled={availableConfigState.length === 0}
+              />
+            ) : ("")}
         </div>
       </div>
     </div>

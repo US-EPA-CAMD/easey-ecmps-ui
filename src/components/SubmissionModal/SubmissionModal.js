@@ -51,15 +51,23 @@ export const SubmissionModal = ({
 
   useEffect(() => {
     async function fetchCredentials() {
-      const result = await getCredentials(monitorPlanIds);
-      const list = result.data.map((el) => ({
-        title: "Certification Statement",
-        content: el.statementText,
-        expanded: false,
-        hasExpanded: false,
-        facData: el.facData,
-      }));
-      setStatements(list);
+      setLoading(true);  // Set loading to true before fetching data
+      try {
+        const result = await getCredentials(monitorPlanIds);
+        const list = result.data.map((el) => ({
+          title: "Certification Statement",
+          content: el.statementText,
+          expanded: false,
+          hasExpanded: false,
+          facData: el.facData,
+        }));
+        setStatements(list);
+      } catch (err) {
+        setShowError(true);
+        setFormErrorMessage(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);  // Set loading to false after fetching data
+      }
     }
 
     fetchCredentials();
@@ -120,6 +128,19 @@ export const SubmissionModal = ({
     }, 1000);
   }, []);
 
+  //Ensure scrolling is only within the modal window
+  useEffect(() => {
+    const body = document.body;
+    if (show) {
+      body.style.overflow = "hidden";
+    } else {
+      body.style.overflow = "auto";
+    }
+    return () => {
+      body.style.overflow = "auto";
+    };
+  }, [show]);
+
   return ReactDom.createPortal(
     <div role="dialog" aria-modal="true">
       <div ref={modalRef}>
@@ -133,6 +154,7 @@ export const SubmissionModal = ({
             width: `${!width ? "50%" : width}`,
             left: `${!left ? "25%" : left}`,
           }}
+
         >
           <div className="modal-content modal-color padding-y-3">
             <div className="modal-header modal-color border-bottom-1px border-base-lighter">
@@ -228,7 +250,7 @@ export const SubmissionModal = ({
           </div>
         </div>
       </div>
-      <LoadingModal type="Auth" loading={loading} />
+      <LoadingModal type="Loading" loading={loading} />
     </div>,
     modalRoot
   );
