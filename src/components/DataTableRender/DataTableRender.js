@@ -510,17 +510,9 @@ export const DataTableRender = ({
       title = sectionTitle ? sectionTitle : null;
     }
     if (data.length > 0) {
-      return (
-        <FilterComponent
-          onSearch={handleSearch}
-          title={title}
-          setShowInactive={setShowInactive}
-        />
-      );
+      return <FilterComponent onSearch={handleSearch} title={title} />;
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection]);
+  }, [data, sectionTitle, tableTitle]);
 
   return (
     <div className={`${componentStyling}`}>
