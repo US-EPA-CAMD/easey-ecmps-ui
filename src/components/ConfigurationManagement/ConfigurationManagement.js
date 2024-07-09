@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import DataTable from "react-data-table-component";
+import { v4 as uuid } from "uuid";
 import { connect } from "react-redux";
 import {
   Alert,
@@ -10,7 +12,9 @@ import {
   DatePicker,
   ButtonGroup,
   Button,
+  TextInput,
 } from "@trussworks/react-uswds";
+import { ArrowDownwardSharp } from "@material-ui/icons";
 
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
@@ -23,6 +27,10 @@ import {
 } from "../../utils/api/facilityApi";
 import { loadFacilitiesSuccess } from "../../store/actions/facilities";
 
+/*
+## CONSTANTS
+*/
+
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
 const fetchStatus = {
   PENDING: "PENDING",
@@ -30,6 +38,325 @@ const fetchStatus = {
   ERROR: "ERROR",
   IDLE: "IDLE",
 };
+const initialFormState = {
+  units: [],
+  stackPipes: [],
+  unitStackConfigs: [],
+};
+
+/*
+## HELPERS
+*/
+
+function formReducer(state, action) {
+  switch (action.type) {
+    case "ADD_STACK_PIPE": {
+      return {
+        ...state,
+        stackPipes: [...state.stackPipes, action.payload],
+      };
+    }
+    case "ADD_UNIT_STACK_CONFIG": {
+      return {
+        ...state,
+        unitStackConfigs: [...state.unitStackConfigs, action.payload],
+      };
+    }
+    case "ADD_UNIT": {
+      return {
+        ...state,
+        units: [...state.units, action.payload],
+      };
+    }
+    case "REMOVE_STACK_PIPE": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.filter((sp) => sp.id !== action.payload),
+      };
+    }
+    case "REMOVE_UNIT_STACK_CONFIG": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.filter(
+          (usc) => usc.id !== action.payload
+        ),
+      };
+    }
+    case "REMOVE_UNIT": {
+      return {
+        ...state,
+        units: state.units.filter((u) => u.id !== action),
+      };
+    }
+    case "RESET_STATE": {
+      return initialFormState;
+    }
+    case "SET_STACK_PIPE": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.map((sp) => {
+          if (sp.id === action.payload.id) {
+            return {
+              ...sp,
+              ...action.payload,
+            };
+          }
+          return sp;
+        }),
+      };
+    }
+    case "SET_STACK_PIPE_ACTIVE_DATE": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.map((sp) => {
+          if (sp.id === action.payload.id) {
+            return {
+              ...sp,
+              activeDate: action.payload.activeDate,
+            };
+          }
+          return sp;
+        }),
+      };
+    }
+    case "SET_STACK_PIPE_RETIRE_DATE": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.map((sp) => {
+          if (sp.id === action.payload.id) {
+            return {
+              ...sp,
+              retireDate: action.payload.retireDate,
+            };
+          }
+          return sp;
+        }),
+      };
+    }
+    case "SET_STACK_PIPE_STACK_PIPE_ID": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.map((sp) => {
+          if (sp.id === action.payload.id) {
+            return {
+              ...sp,
+              stackPipeId: action.payload.stackPipeId,
+            };
+          }
+          return sp;
+        }),
+      };
+    }
+    case "SET_STACK_PIPES": {
+      return {
+        ...state,
+        stackPipes: action.payload,
+      };
+    }
+    case "SET_UNIT": {
+      return {
+        ...state,
+        units: state.units.map((u) => {
+          if (u.id === action.payload.id) {
+            return {
+              ...u,
+              ...action.payload,
+            };
+          }
+          return u;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIG": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload.id) {
+            return {
+              ...usc,
+              ...action.payload,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIG_BEGIN_DATE": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload.id) {
+            return {
+              ...usc,
+              beginDate: action.payload.beginDate,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIG_END_DATE": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload.id) {
+            return {
+              ...usc,
+              endDate: action.payload.endDate,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIG_STACK_PIPE_ID": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload.id) {
+            return {
+              ...usc,
+              stackPipeId: action.payload.stackPipeId,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIG_UNIT_ID": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload.id) {
+            return {
+              ...usc,
+              unitId: action.payload.unitId,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "SET_UNIT_STACK_CONFIGS": {
+      return {
+        ...state,
+        unitStackConfigs: action.payload,
+      };
+    }
+    case "SET_UNITS": {
+      return {
+        ...state,
+        units: action.payload,
+      };
+    }
+    case "TOGGLE_EDIT_STACK_PIPE": {
+      return {
+        ...state,
+        stackPipes: state.stackPipes.map((sp) => {
+          if (sp.id === action.payload) {
+            return {
+              ...sp,
+              isEditing: !sp.isEditing,
+            };
+          }
+          return sp;
+        }),
+      };
+    }
+    case "TOGGLE_EDIT_UNIT_STACK_CONFIG": {
+      return {
+        ...state,
+        unitStackConfigs: state.unitStackConfigs.map((usc) => {
+          if (usc.id === action.payload) {
+            return {
+              ...usc,
+              isEditing: !usc.isEditing,
+            };
+          }
+          return usc;
+        }),
+      };
+    }
+    case "TOGGLE_EDIT_UNIT": {
+      return {
+        ...state,
+        units: state.units.map((u) => {
+          if (u.id === action.payload) {
+            return {
+              ...u,
+              isEditing: !u.isEditing,
+            };
+          }
+          return u;
+        }),
+      };
+    }
+    default: {
+      throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  }
+}
+
+function sortDatesNullsLast(a, b) {
+  if (!a.endDate) return 1;
+  if (!b.endDate) return -1;
+  return new Date(a.endDate) - new Date(b.endDate);
+}
+
+/*
+## COMPONENTS
+*/
+
+const dateCell = (onChange) => {
+  return (row, index, column) =>
+    row.isEditing ? (
+      <DatePicker
+        aria-label={`Edit ${column.name} for row ${index + 1}`}
+        placeholder="Select a date..."
+        value={column.selector(row)}
+        onChange={(e) => onChange(row.id, e)}
+      />
+    ) : (
+      column.selector(row)
+    );
+};
+
+const SizedPreloader = () => (
+  <div className="height-9 width-9">
+    <Preloader showStopButton={false} />
+  </div>
+);
+
+const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
+  <>
+    {status === fetchStatus.PENDING && <SizedPreloader />}
+    {status === fetchStatus.ERROR && (
+      <Alert noIcon slim type="error" headingLevel={headingLevel}>
+        Error loading {label}.
+      </Alert>
+    )}
+    {status === fetchStatus.SUCCESS && children}
+  </>
+);
+
+const textCell = (onChange) => {
+  return (row, index, column) =>
+    row.isEditing ? (
+      <TextInput
+        aria-label={`Edit ${column.name} for row ${index + 1}`}
+        onChange={(e) => onChange(row.id, e.target.value)}
+        placeholder="Enter text..."
+        type="text"
+        value={column.selector(row)}
+      />
+    ) : (
+      column.selector(row)
+    );
+};
+
+/*
+## MAIN COMPONENT
+*/
 
 export const ConfigurationManagement = ({
   checkedOutLocations,
@@ -37,12 +364,11 @@ export const ConfigurationManagement = ({
   setFacilities,
   user,
 }) => {
-  /*
-  ## STATE
-  */
+  /* STATE */
 
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [facilitiesStatus, setFacilitiesStatus] = useState(fetchStatus.IDLE);
+  const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState("");
   const [stackPipes, setStackPipes] = useState([]);
@@ -54,10 +380,10 @@ export const ConfigurationManagement = ({
     fetchStatus.IDLE
   );
 
-  /*
-  ## HELPERS
-  */
+  /* HELPERS */
+
   const resetFacilityData = () => {
+    formDispatch({ type: "RESET_STATE" });
     setUnits([]);
     setUnitsStatus(fetchStatus.IDLE);
     setStackPipes([]);
@@ -66,9 +392,7 @@ export const ConfigurationManagement = ({
     setUnitStackConfigsStatus(fetchStatus.IDLE);
   };
 
-  /*
-  ## SIDE EFFECTS
-  */
+  /* EFFECTS */
 
   // Load facilities.
   useEffect(() => {
@@ -96,9 +420,19 @@ export const ConfigurationManagement = ({
     if (unitsStatus === fetchStatus.IDLE) {
       try {
         setUnitsStatus(fetchStatus.PENDING);
-        getUnitsById(selectedFacility).then((res) => {
+        getUnitsByFacId(selectedFacility).then((res) => {
           setUnits(res.data);
           setUnitsStatus(fetchStatus.SUCCESS);
+          formDispatch({
+            type: "SET_UNITS",
+            payload: res.data.map((u) => ({
+              ...u,
+              id: uuid(),
+              recordId: u.id,
+              isEditing: false,
+              isNew: false,
+            })),
+          });
         });
       } catch (err) {
         setUnitsStatus(fetchStatus.ERROR);
@@ -113,9 +447,19 @@ export const ConfigurationManagement = ({
     if (stackPipesStatus === fetchStatus.IDLE) {
       try {
         setStackPipesStatus(fetchStatus.PENDING);
-        getStackPipesById(selectedFacility).then((res) => {
+        getStackPipesByFacId(selectedFacility).then((res) => {
           setStackPipes(res.data);
           setStackPipesStatus(fetchStatus.SUCCESS);
+          formDispatch({
+            type: "SET_STACK_PIPES",
+            payload: res.data.map((sp) => ({
+              ...sp,
+              id: uuid(),
+              recordId: sp.id,
+              isEditing: false,
+              isNew: false,
+            })),
+          });
         });
       } catch (err) {
         setStackPipesStatus(fetchStatus.ERROR);
@@ -130,9 +474,19 @@ export const ConfigurationManagement = ({
     if (unitStackConfigsStatus === fetchStatus.IDLE) {
       try {
         setUnitStackConfigsStatus(fetchStatus.PENDING);
-        getUnitStackConfigsById(selectedFacility).then((res) => {
+        getUnitStackConfigsByFacId(selectedFacility).then((res) => {
           setUnitStackConfigs(res.data);
           setUnitStackConfigsStatus(fetchStatus.SUCCESS);
+          formDispatch({
+            type: "SET_UNIT_STACK_CONFIGS",
+            payload: res.data.map((usc) => ({
+              ...usc,
+              id: uuid(),
+              recordId: usc.id,
+              isEditing: false,
+              isNew: false,
+            })),
+          });
         });
       } catch (err) {
         setUnitStackConfigsStatus(fetchStatus.ERROR);
@@ -140,9 +494,7 @@ export const ConfigurationManagement = ({
     }
   }, [selectedFacility, unitStackConfigsStatus]);
 
-  /*
-  ## EVENT HANDLERS
-  */
+  /* HANDLERS */
 
   const handleCheckout = () => {};
   const handleCloseModal = () => setModalVisible(false);
@@ -154,10 +506,71 @@ export const ConfigurationManagement = ({
   const handleInitialSave = () => {
     setModalVisible(true);
   };
+  const setStackPipeActiveDate = (rowId, activeDate) => {
+    formDispatch({
+      type: "SET_STACK_PIPE_ACTIVE_DATE",
+      payload: {
+        id: rowId,
+        activeDate,
+      },
+    });
+  };
+  const setStackPipeRetireDate = (rowId, retireDate) => {
+    formDispatch({
+      type: "SET_STACK_PIPE_RETIRE_DATE",
+      payload: {
+        id: rowId,
+        retireDate,
+      },
+    });
+  };
+  const setStackPipeStackPipeId = (rowId, stackPipeId) => {
+    formDispatch({
+      type: "SET_STACK_PIPE_STACK_PIPE_ID",
+      payload: {
+        id: rowId,
+        stackPipeId,
+      },
+    });
+  };
+  const setUnitStackConfigBeginDate = (rowId, beginDate) => {
+    formDispatch({
+      type: "SET_UNIT_STACK_CONFIG_BEGIN_DATE",
+      payload: {
+        id: rowId,
+        beginDate,
+      },
+    });
+  };
+  const setUnitStackConfigEndDate = (rowId, endDate) => {
+    formDispatch({
+      type: "SET_UNIT_STACK_CONFIG_END_DATE",
+      payload: {
+        id: rowId,
+        endDate,
+      },
+    });
+  };
+  const setUnitStackConfigStackPipeId = (rowId, stackPipeId) => {
+    formDispatch({
+      type: "SET_UNIT_STACK_CONFIG_STACK_PIPE_ID",
+      payload: {
+        id: rowId,
+        stackPipeId,
+      },
+    });
+  };
+  const setUnitStackConfigUnitId = (rowId, unitId) => {
+    formDispatch({
+      type: "SET_UNIT_STACK_CONFIG_UNIT_ID",
+      payload: {
+        id: rowId,
+        unitId,
+      },
+    });
+  };
 
-  /*
-  ## CALCULATED VALUES
-  */
+  /* CALCULATED VALUES */
 
   // Format facilities for dropdown.
   const formattedFacilities = useMemo(() => {
@@ -226,7 +639,21 @@ export const ConfigurationManagement = ({
                       title: "Units",
                       content: (
                         <StatusContent status={unitsStatus} label="units">
-                          {null}
+                          <DataTable
+                            className="data-display-table react-transition fade-in"
+                            columns={[
+                              {
+                                name: "Unit ID",
+                                selector: (row) => row.unitId,
+                                sortable: true,
+                              },
+                            ]}
+                            data={formState.units}
+                            defaultSortFieldId={1}
+                            sortIcon={
+                              <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                            }
+                          />
                         </StatusContent>
                       ),
                     },
@@ -237,7 +664,36 @@ export const ConfigurationManagement = ({
                           status={stackPipesStatus}
                           label="stacks & pipes"
                         >
-                          {null}
+                          <DataTable
+                            className="data-display-table react-transition fade-in"
+                            columns={[
+                              {
+                                name: "Stack/Pipe ID",
+                                cell: textCell(setStackPipeStackPipeId),
+                                selector: (row) => row.stackPipeId,
+                                sortable: true,
+                              },
+                              {
+                                name: "Active Date",
+                                cell: dateCell(setStackPipeActiveDate),
+                                selector: (row) => row.activeDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast,
+                              },
+                              {
+                                name: "Retire Date",
+                                cell: dateCell(setStackPipeRetireDate),
+                                selector: (row) => row.retireDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast,
+                              },
+                            ]}
+                            data={formState.stackPipes}
+                            defaultSortFieldId={1}
+                            sortIcon={
+                              <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                            }
+                          />
                         </StatusContent>
                       ),
                     },
@@ -248,7 +704,43 @@ export const ConfigurationManagement = ({
                           status={unitStackConfigsStatus}
                           label="unit stack configurations"
                         >
-                          {null}
+                          <DataTable
+                            className="data-display-table react-transition fade-in"
+                            columns={[
+                              {
+                                name: "Unit ID",
+                                cell: textCell(setUnitStackConfigUnitId),
+                                selector: (row) => row.unitId,
+                                sortable: true,
+                              },
+                              {
+                                name: "Stack/Pipe ID",
+                                cell: textCell(setUnitStackConfigStackPipeId),
+                                selector: (row) => row.stackPipeId,
+                                sortable: true,
+                              },
+                              {
+                                name: "Begin Date",
+                                cell: dateCell(setUnitStackConfigBeginDate),
+                                selector: (row) => row.beginDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast,
+                              },
+                              {
+                                name: "End Date",
+                                cell: dateCell(setUnitStackConfigEndDate),
+                                selector: (row) => row.endDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast,
+                              },
+                            ]}
+                            data={formState.unitStackConfigs}
+                            defaultSortAsc={false}
+                            defaultSortFieldId={4}
+                            sortIcon={
+                              <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                            }
+                          />
                         </StatusContent>
                       ),
                     },
@@ -286,24 +778,6 @@ export const ConfigurationManagement = ({
     </>
   );
 };
-
-const SizedPreloader = () => (
-  <div className="height-9 width-9">
-    <Preloader showStopButton={false} />
-  </div>
-);
-
-const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
-  <>
-    {status === fetchStatus.PENDING && <SizedPreloader />}
-    {status === fetchStatus.ERROR && (
-      <Alert noIcon slim type="error" headingLevel={headingLevel}>
-        Error loading {label}.
-      </Alert>
-    )}
-    {status === fetchStatus.SUCCESS && children}
-  </>
-);
 
 export const mapStateToProps = (state) => ({
   checkedOutLocations: state.checkedOutLocations,

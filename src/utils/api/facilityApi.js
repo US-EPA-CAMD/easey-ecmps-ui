@@ -18,19 +18,16 @@ const fireApiGetRequest = async (path, workspaceOnly = false) => {
   return await secureAxios(payload).then(handleResponse).catch(handleError);
 };
 
-export const getStackPipesByFacId = async (id) => {
-  // return fireApiGetRequest(`/facilities/${id}/stack-pipes`);
-  return Promise.resolve({ data: [] });
+export const getStackPipesByFacId = async (facId) => {
+  return fireApiGetRequest(`/facilities/${facId}/stack-pipes`);
 };
 
-export const getUnitStackConfigsByFacId = async (id) => {
-  // return fireApiGetRequest(`/facilities/${id}/unit-stack-configurations`);
-  return Promise.resolve({ data: [] });
+export const getUnitStackConfigsByFacId = async (facId) => {
+  return fireApiGetRequest(`/facilities/${facId}/unit-stack-configurations`);
 };
 
 export const getUnitsByFacId = async (facId) => {
-  // return fireApiGetRequest(`/facilities/${id}/units`);
-  return Promise.resolve({ data: [] });
+  return fireApiGetRequest(`/facilities/${facId}/units`);
 };
 
 export async function getAllFacilities() {
