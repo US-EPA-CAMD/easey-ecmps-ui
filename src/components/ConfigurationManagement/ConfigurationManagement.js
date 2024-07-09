@@ -324,15 +324,30 @@ function sortDatesNullsLast(a, b) {
 const actionCell = (onToggleEdit, onRemove, onRevert) => {
   return (row, index) => (
     <ButtonGroup>
-      <Button
-        aria-label={`${row.isEditing ? "Save" : "Edit"} row ${index + 1}`}
-        onClick={() => onToggleEdit(row.id)}
-        title={row.isEditing ? "Save" : "Edit"}
-        type="button"
-        unstyled
-      >
-        {row.isEditing ? <CheckSharp /> : <CreateSharp />}
-      </Button>
+      {row.isEditing ? (
+        <>
+          {/* A regular button is used here instead of a Button component to prevent premature form submission. */}
+          <button
+            aria-label={`Save row ${index + 1}`}
+            form={`form-${row.id}`}
+            title="Save"
+            type="submit"
+            className="usa-button usa-button--unstyled"
+          >
+            <CheckSharp />
+          </button>
+        </>
+      ) : (
+        <Button
+          aria-label={`Edit row ${index + 1}`}
+          onClick={() => onToggleEdit(row.id)}
+          title="Edit"
+          type="button"
+          unstyled
+        >
+          <CreateSharp />
+        </Button>
+      )}
       <Button
         aria-label={`${row.originalRecord ? "Revert" : "Delete"} row ${
           index + 1
@@ -356,6 +371,7 @@ const dateCell = (onChange, required = false) => {
       <DatePicker
         aria-label={`Edit ${column.name} for row ${index + 1}`}
         defaultValue={column.selector(row)}
+        form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
         onChange={(e) => onChange(row.id, parseDatePickerString(e))}
@@ -390,6 +406,7 @@ const textCell = (onChange, required = false) => {
     row.isEditing ? (
       <TextInput
         aria-label={`Edit ${column.name} for row ${index + 1}`}
+        form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
         onChange={(e) => onChange(row.id, e.target.value)}
@@ -743,6 +760,16 @@ export const ConfigurationManagement = ({
                           status={stackPipesStatus}
                           label="stacks & pipes"
                         >
+                          {formState.stackPipes.map((sp) => (
+                            <form
+                              key={sp.id}
+                              id={`form-${sp.id}`}
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                toggleEditStackPipe(sp.id);
+                              }}
+                            ></form>
+                          ))}
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
@@ -781,7 +808,11 @@ export const ConfigurationManagement = ({
                               <ArrowDownwardSharp className="margin-left-2 text-primary" />
                             }
                           />
-                          <Button type="button" onClick={createStackPipe}>
+                          <Button
+                            className="margin-y-1"
+                            type="button"
+                            onClick={createStackPipe}
+                          >
                             Add Stack/Pipe
                           </Button>
                         </StatusContent>
@@ -845,7 +876,11 @@ export const ConfigurationManagement = ({
                               <ArrowDownwardSharp className="margin-left-2 text-primary" />
                             }
                           />
-                          <Button type="button" onClick={createUnitStackConfig}>
+                          <Button
+                            className="margin-y-1"
+                            type="button"
+                            onClick={createUnitStackConfig}
+                          >
                             Add Unit Stack Configuration
                           </Button>
                         </StatusContent>
