@@ -175,7 +175,7 @@ export const DataTableQualifications = ({
     qualificationTestDate: "string",
     parameterCode: "string",
     qualificationTestType: "string",
-    potentialAnnualMassEmissions: 0,
+    potentialAnnualHgMassEmissions: 0,
     applicableEmissionStandard: 0,
     unitsOfStandard: "string",
     percentageOfEmissionStandard: 0,
