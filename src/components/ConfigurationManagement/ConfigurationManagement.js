@@ -825,6 +825,16 @@ export const ConfigurationManagement = ({
                           status={unitStackConfigsStatus}
                           label="unit stack configurations"
                         >
+                          {formState.unitStackConfigs.map((usc) => (
+                            <form
+                              key={usc.id}
+                              id={`form-${usc.id}`}
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                toggleEditUnitStackConfig(usc.id);
+                              }}
+                            ></form>
+                          ))}
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
