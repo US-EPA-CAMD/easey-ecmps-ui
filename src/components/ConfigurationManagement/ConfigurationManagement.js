@@ -33,6 +33,7 @@ import {
   getUnitsByFacId,
 } from "../../utils/api/facilityApi";
 import { loadFacilitiesSuccess } from "../../store/actions/facilities";
+import "./ConfigurationManagement.scss";
 
 /*
 ## CONSTANTS
@@ -365,12 +366,17 @@ const actionCell = (onToggleEdit, onRemove, onRevert) => {
   );
 };
 
-const dateCell = (onChange, required = false) => {
+const dateCell = ({
+  disabled = (_row) => false,
+  onChange,
+  required = false,
+}) => {
   return (row, index, column, id) =>
     row.isEditing ? (
       <DatePicker
         aria-label={`Edit ${column.name} for row ${index + 1}`}
         defaultValue={column.selector(row)}
+        disabled={disabled(row)}
         form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
@@ -401,11 +407,16 @@ const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   </>
 );
 
-const textCell = (onChange, required = false) => {
+const textCell = ({
+  disabled = (row) => false,
+  onChange,
+  required = false,
+}) => {
   return (row, index, column, id) =>
     row.isEditing ? (
       <TextInput
         aria-label={`Edit ${column.name} for row ${index + 1}`}
+        disabled={disabled(row)}
         form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
@@ -775,20 +786,32 @@ export const ConfigurationManagement = ({
                             columns={[
                               {
                                 name: "Stack/Pipe ID",
-                                cell: textCell(setStackPipeStackPipeId, true),
+                                cell: textCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setStackPipeStackPipeId,
+                                  required: true,
+                                }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
                               },
                               {
                                 name: "Active Date",
-                                cell: dateCell(setStackPipeActiveDate, true),
+                                cell: dateCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setStackPipeActiveDate,
+                                  required: true,
+                                }),
                                 selector: (row) => row.activeDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast,
                               },
                               {
                                 name: "Retire Date",
-                                cell: dateCell(setStackPipeRetireDate),
+                                cell: dateCell({
+                                  disabled: (row) =>
+                                    row.originalRecord?.retireDate,
+                                  onChange: setStackPipeRetireDate,
+                                }),
                                 selector: (row) => row.retireDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast,
@@ -840,32 +863,42 @@ export const ConfigurationManagement = ({
                             columns={[
                               {
                                 name: "Unit ID",
-                                cell: textCell(setUnitStackConfigUnitId, true),
+                                cell: textCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setUnitStackConfigUnitId,
+                                  required: true,
+                                }),
                                 selector: (row) => row.unitId,
                                 sortable: true,
                               },
                               {
                                 name: "Stack/Pipe ID",
-                                cell: textCell(
-                                  setUnitStackConfigStackPipeId,
-                                  true
-                                ),
+                                cell: textCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setUnitStackConfigStackPipeId,
+                                  required: true,
+                                }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
                               },
                               {
                                 name: "Begin Date",
-                                cell: dateCell(
-                                  setUnitStackConfigBeginDate,
-                                  true
-                                ),
+                                cell: dateCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setUnitStackConfigBeginDate,
+                                  required: true,
+                                }),
                                 selector: (row) => row.beginDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast,
                               },
                               {
                                 name: "End Date",
-                                cell: dateCell(setUnitStackConfigEndDate),
+                                cell: dateCell({
+                                  disabled: (row) =>
+                                    row.originalRecord?.endDate,
+                                  onChange: setUnitStackConfigEndDate,
+                                }),
                                 selector: (row) => row.endDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast,

@@ -36,7 +36,7 @@ const CustomAccordion = ({
   const Heading = headingLevel;
 
   return (
-    <div className="">
+    <div className="" style={{ height: "auto" }}>
       {tables.map((item, index) => (
         <div key={index} className={"clearfix"}>
           <div className="text-bold font-body-xl height-auto display-flex flex-align-center">
