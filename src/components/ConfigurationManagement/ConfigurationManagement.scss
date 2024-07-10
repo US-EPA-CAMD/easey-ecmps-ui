@@ -1,3 +1,11 @@
 input.usa-input {
   margin-top: 0;
 }
+
+#facilities-container {
+  gap: 1em;
+
+  & .preloader-container p {
+    margin: 0;
+  }
+}

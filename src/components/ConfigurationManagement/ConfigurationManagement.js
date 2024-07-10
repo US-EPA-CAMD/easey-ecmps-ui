@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component";
 import { v4 as uuid } from "uuid";
@@ -33,6 +40,13 @@ import {
   getUnitsByFacId,
 } from "../../utils/api/facilityApi";
 import { loadFacilitiesSuccess } from "../../store/actions/facilities";
+import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
+import {
+  deleteCheckInMonitoringPlanConfiguration,
+  getCheckedOutLocations,
+  getMonitoringPlans,
+  postCheckoutMonitoringPlanConfiguration,
+} from "../../utils/api/monitoringPlansApi";
 import "./ConfigurationManagement.scss";
 
 /*
@@ -373,8 +387,9 @@ const dateCell = ({
 }) => {
   return (row, index, column, id) =>
     row.isEditing ? (
-      <DatePicker
+      <input
         aria-label={`Edit ${column.name} for row ${index + 1}`}
+        className="usa-input"
         defaultValue={column.selector(row)}
         disabled={disabled(row)}
         form={`form-${row.id}`}
@@ -383,17 +398,20 @@ const dateCell = ({
         onChange={(e) => onChange(row.id, parseDatePickerString(e))}
         placeholder="Select a date..."
         required={required}
+        type="date"
       />
     ) : (
       column.selector(row)
     );
 };
 
-const SizedPreloader = () => (
-  <div className="height-9 width-9">
-    <Preloader showStopButton={false} />
-  </div>
-);
+const SizedPreloader = ({ size = 9 }) => {
+  return (
+    <div className={`height-${size} preloader-container width-${size}`}>
+      <Preloader showStopButton={false} />
+    </div>
+  );
+};
 
 const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   <>
@@ -408,7 +426,7 @@ const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
 );
 
 const textCell = ({
-  disabled = (row) => false,
+  disabled = (_row) => false,
   onChange,
   required = false,
 }) => {
@@ -438,38 +456,41 @@ const textCell = ({
 export const ConfigurationManagement = ({
   checkedOutLocations,
   facilities,
+  setCheckedOutLocations,
   setFacilities,
   user,
 }) => {
   /* STATE */
 
+  const [checkInOutStatus, setCheckInOutStatus] = useState(fetchStatus.IDLE);
+  const checkedOutLocationsRef = useRef(checkedOutLocations);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [facilitiesStatus, setFacilitiesStatus] = useState(fetchStatus.IDLE);
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState("");
-  const [stackPipes, setStackPipes] = useState([]);
   const [stackPipesStatus, setStackPipesStatus] = useState(fetchStatus.IDLE);
-  const [units, setUnits] = useState([]);
   const [unitsStatus, setUnitsStatus] = useState(fetchStatus.IDLE);
-  const [unitStackConfigs, setUnitStackConfigs] = useState([]);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     fetchStatus.IDLE
   );
 
-  /* HELPERS */
-
-  const resetFacilityData = () => {
-    formDispatch({ type: "RESET_STATE" });
-    setUnits([]);
-    setUnitsStatus(fetchStatus.IDLE);
-    setStackPipes([]);
-    setStackPipesStatus(fetchStatus.IDLE);
-    setUnitStackConfigs([]);
-    setUnitStackConfigsStatus(fetchStatus.IDLE);
-  };
-
   /* HANDLERS */
+
+  const checkInAllPlansForUser = useCallback(async () => {
+    await Promise.all(
+      checkedOutLocationsRef.current
+        .filter((loc) => loc.checkedOutBy === user.userId)
+        .map((loc) => {
+          deleteCheckInMonitoringPlanConfiguration(loc.monPlanId);
+        })
+    );
+    setCheckedOutLocations(
+      checkedOutLocationsRef.current.filter(
+        (loc) => loc.checkedOutBy !== user.userId
+      )
+    );
+  }, [setCheckedOutLocations, user]);
 
   const createStackPipe = () => {
     formDispatch({
@@ -483,6 +504,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const createUnitStackConfig = () => {
     formDispatch({
       type: "ADD_UNIT_STACK_CONFIG",
@@ -496,16 +518,67 @@ export const ConfigurationManagement = ({
       },
     });
   };
-  const handleCheckout = () => {};
+
+  const handleCheckIn = async () => {
+    if (!selectedFacility) return;
+
+    const locationsCheckedOutByUserForFacility = checkedOutLocations
+      .filter((loc) => loc.facId === selectedFacility)
+      .filter((loc) => loc.checkedOutBy === user.userId);
+    try {
+      setCheckInOutStatus(fetchStatus.PENDING);
+      await Promise.all(
+        locationsCheckedOutByUserForFacility.map((loc) =>
+          deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)
+        )
+      );
+      setCheckedOutLocations(
+        checkedOutLocations.filter(
+          (loc) =>
+            loc.facId !== selectedFacility || loc.checkedOutBy !== user.userId
+        )
+      );
+    } finally {
+      setCheckInOutStatus(fetchStatus.IDLE);
+    }
+  };
+
+  const handleCheckOut = async () => {
+    if (!selectedFacility) return;
+
+    try {
+      setCheckInOutStatus(fetchStatus.PENDING);
+      await checkInAllPlansForUser();
+      const orisCode = facilities.find(
+        (f) => f.facilityRecordId === parseInt(selectedFacility)
+      )?.facilityId;
+      if (!orisCode) return;
+
+      const monitoringPlans = await getMonitoringPlans(orisCode);
+      await Promise.all(
+        monitoringPlans.data.map((mp) =>
+          postCheckoutMonitoringPlanConfiguration(mp.id)
+        )
+      );
+      setCheckedOutLocations(await getCheckedOutLocations());
+    } finally {
+      setCheckInOutStatus(fetchStatus.IDLE);
+    }
+  };
+
   const handleCloseModal = () => setModalVisible(false);
+
   const handleConfirmSave = () => {};
+
   const handleFacilityChange = (e) => {
     setSelectedFacility(e.target.value);
     resetFacilityData();
   };
+
   const handleInitialSave = () => {
     setModalVisible(true);
   };
+
   const initializeFormState = (data, type) => {
     formDispatch({
       type,
@@ -517,18 +590,30 @@ export const ConfigurationManagement = ({
       })),
     });
   };
+
   const removeStackPipe = (rowId) => {
     formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
   };
+
+  const resetFacilityData = () => {
+    formDispatch({ type: "RESET_STATE" });
+    setUnitsStatus(fetchStatus.IDLE);
+    setStackPipesStatus(fetchStatus.IDLE);
+    setUnitStackConfigsStatus(fetchStatus.IDLE);
+  };
+
   const removeUnitStackConfig = (rowId) => {
     formDispatch({ type: "REMOVE_UNIT_STACK_CONFIG", payload: rowId });
   };
+
   const revertStackPipe = (rowId) => {
     formDispatch({ type: "REVERT_STACK_PIPE", payload: rowId });
   };
+
   const revertUnitStackConfig = (rowId) => {
     formDispatch({ type: "REVERT_UNIT_STACK_CONFIG", payload: rowId });
   };
+
   const setStackPipeActiveDate = (rowId, activeDate) => {
     formDispatch({
       type: "SET_STACK_PIPE_ACTIVE_DATE",
@@ -538,6 +623,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setStackPipeRetireDate = (rowId, retireDate) => {
     formDispatch({
       type: "SET_STACK_PIPE_RETIRE_DATE",
@@ -547,6 +633,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setStackPipeStackPipeId = (rowId, stackPipeId) => {
     formDispatch({
       type: "SET_STACK_PIPE_STACK_PIPE_ID",
@@ -556,6 +643,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setUnitStackConfigBeginDate = (rowId, beginDate) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_BEGIN_DATE",
@@ -565,6 +653,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setUnitStackConfigEndDate = (rowId, endDate) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_END_DATE",
@@ -574,6 +663,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setUnitStackConfigStackPipeId = (rowId, stackPipeId) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_STACK_PIPE_ID",
@@ -583,6 +673,7 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const setUnitStackConfigUnitId = (rowId, unitId) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_UNIT_ID",
@@ -592,15 +683,44 @@ export const ConfigurationManagement = ({
       },
     });
   };
+
   const toggleEditStackPipe = (rowId) => {
     formDispatch({ type: "TOGGLE_EDIT_STACK_PIPE", payload: rowId });
   };
-  const toggleEditUnit = (rowId) => {
-    formDispatch({ type: "TOGGLE_EDIT_UNIT", payload: rowId });
-  };
+
   const toggleEditUnitStackConfig = (rowId) => {
     formDispatch({ type: "TOGGLE_EDIT_UNIT_STACK_CONFIG", payload: rowId });
   };
+
+  /* CALCULATED VALUES */
+
+  // Format facilities for dropdown.
+  const formattedFacilities = useMemo(() => {
+    return facilities.map((f) => ({
+      value: f.facilityRecordId,
+      label: `${f.facilityName} (${f.facilityId})`,
+    }));
+  }, [facilities]);
+
+  const checkedOutLocationsForFacility = checkedOutLocations.filter(
+    (loc) => loc.facId === selectedFacility
+  );
+  const isCheckedOutByUser =
+    checkedOutLocationsForFacility.length &&
+    checkedOutLocationsForFacility.every(
+      (loc) => loc.checkedOutBy === user.userId
+    );
+  const isCheckedOutByOtherUser = checkedOutLocationsForFacility.some(
+    (loc) => loc.checkedOutBy !== user
+  );
+
+  if (document.title !== configurationManagementTitle) {
+    document.title = configurationManagementTitle;
+  }
+
+  if (checkedOutLocationsRef.current !== checkedOutLocations) {
+    checkedOutLocationsRef.current = checkedOutLocations;
+  }
 
   /* EFFECTS */
 
@@ -631,7 +751,6 @@ export const ConfigurationManagement = ({
       try {
         setUnitsStatus(fetchStatus.PENDING);
         getUnitsByFacId(selectedFacility).then((res) => {
-          setUnits(res.data);
           setUnitsStatus(fetchStatus.SUCCESS);
           initializeFormState(res.data, "SET_UNITS");
         });
@@ -649,7 +768,6 @@ export const ConfigurationManagement = ({
       try {
         setStackPipesStatus(fetchStatus.PENDING);
         getStackPipesByFacId(selectedFacility).then((res) => {
-          setStackPipes(res.data);
           setStackPipesStatus(fetchStatus.SUCCESS);
           initializeFormState(res.data, "SET_STACK_PIPES");
         });
@@ -667,7 +785,6 @@ export const ConfigurationManagement = ({
       try {
         setUnitStackConfigsStatus(fetchStatus.PENDING);
         getUnitStackConfigsByFacId(selectedFacility).then((res) => {
-          setUnitStackConfigs(res.data);
           setUnitStackConfigsStatus(fetchStatus.SUCCESS);
           initializeFormState(res.data, "SET_UNIT_STACK_CONFIGS");
         });
@@ -677,21 +794,13 @@ export const ConfigurationManagement = ({
     }
   }, [selectedFacility, unitStackConfigsStatus]);
 
-  /* CALCULATED VALUES */
-
-  // Format facilities for dropdown.
-  const formattedFacilities = useMemo(() => {
-    return facilities.map((f) => ({
-      value: f.facilityId,
-      label: `${f.facilityName} (${f.facilityId})`,
-    }));
-  }, [facilities]);
-
-  const isCheckedOut = true;
-
-  if (document.title !== configurationManagementTitle) {
-    document.title = configurationManagementTitle;
-  }
+  // Check in all monitoring plan configurations checked out by the user when the user changes or the component unloads.
+  // TODO: This can be removed when we move to checking out by facility rather than monitoring plan.
+  useEffect(() => {
+    return () => {
+      checkInAllPlansForUser();
+    };
+  }, [checkInAllPlansForUser]);
 
   return (
     <>
@@ -705,34 +814,57 @@ export const ConfigurationManagement = ({
               status={facilitiesStatus}
               label="facilities"
             >
-              <p>
+              <div>
                 <Label htmlFor="facility">Facility</Label>
-                <Dropdown
-                  onChange={handleFacilityChange}
-                  id="facility"
-                  name="facility"
-                  value={selectedFacility}
-                >
-                  <option key="" value="">
-                    {DEFAULT_DROPDOWN_TEXT}
-                  </option>
-                  {formattedFacilities.map((f) => (
-                    <option key={f.value} value={f.value}>
-                      {f.label}
-                    </option>
-                  ))}
-                </Dropdown>
-                {selectedFacility && (
-                  <Button
-                    className="margin-top-2"
-                    id="save-button"
-                    onClick={handleCheckout}
-                    type="button"
+                <div className="display-flex" id="facilities-container">
+                  <Dropdown
+                    className="margin-0"
+                    onChange={handleFacilityChange}
+                    id="facility"
+                    name="facility"
+                    value={selectedFacility}
                   >
-                    Check Out
-                  </Button>
-                )}
-              </p>
+                    <option key="" value="">
+                      {DEFAULT_DROPDOWN_TEXT}
+                    </option>
+                    {formattedFacilities.map((f) => (
+                      <option key={f.value} value={f.value}>
+                        {f.label}
+                      </option>
+                    ))}
+                  </Dropdown>
+                  {selectedFacility && (
+                    <>
+                      {checkInOutStatus === fetchStatus.PENDING ? (
+                        <SizedPreloader size={5} />
+                      ) : (
+                        <>
+                          {isCheckedOutByUser ? (
+                            <Button
+                              className="display-inline-flex height-5 margin-0"
+                              id="check-in-button"
+                              onClick={handleCheckIn}
+                              type="button"
+                            >
+                              Check Back In
+                            </Button>
+                          ) : (
+                            <Button
+                              className="display-inline-flex height-5 margin-0"
+                              disabled={isCheckedOutByOtherUser}
+                              id="check-out-button"
+                              onClick={handleCheckOut}
+                              type="button"
+                            >
+                              Check Out
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </StatusContent>
           </Grid>
           {selectedFacility && (
@@ -948,7 +1080,7 @@ export const ConfigurationManagement = ({
                     exitBtn="Save"
                     save={handleConfirmSave}
                     showCancel={false}
-                    showSave={user && isCheckedOut}
+                    showSave={user && isCheckedOutByUser}
                     title="Change Summary"
                     errorMsgs={errorMsgs}
                   >
@@ -971,6 +1103,8 @@ export const mapStateToProps = (state) => ({
 
 export const mapDispatchToProps = (dispatch) => ({
   setFacilities: (facilities) => dispatch(loadFacilitiesSuccess(facilities)),
+  setCheckedOutLocations: (locations) =>
+    dispatch(setCheckedOutLocations(locations)),
 });
 
 export default connect(
