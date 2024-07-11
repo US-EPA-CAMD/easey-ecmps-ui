@@ -16,8 +16,6 @@ import {
   Grid,
   Label,
   Dropdown,
-  DatePicker,
-  Form,
   ButtonGroup,
   Button,
   TextInput,
@@ -69,6 +67,25 @@ const initialFormState = {
 /*
 ## HELPERS
 */
+
+function checkLocationsIntersect(a, b) {
+  for (const unitId of a.unitIds) {
+    if (b.unitIds.has(unitId)) return true;
+  }
+
+  for (const stackPipeId of a.stackPipeIds) {
+    if (b.stackPipeIds.has(stackPipeId)) return true;
+  }
+
+  return false;
+}
+
+function checkPeriodsIntersect(a, b) {
+  if (a.beginYear > b.endYear || a.endYear < b.beginYear) return false;
+  if (a.beginYear === b.endYear && a.beginQuarter > b.endQuarter) return false;
+  if (a.endYear === b.beginYear && a.endQuarter < b.beginQuarter) return false;
+  return true;
+}
 
 function formReducer(state, action) {
   switch (action.type) {
@@ -204,6 +221,20 @@ function formReducer(state, action) {
         stackPipes: action.payload,
       };
     }
+    case "SET_UNIT_BEGIN_DATE": {
+      return {
+        ...state,
+        units: state.units.map((u) => {
+          if (u.id === action.payload.id) {
+            return {
+              ...u,
+              beginDate: action.payload.beginDate,
+            };
+          }
+          return u;
+        }),
+      };
+    }
     case "SET_UNIT_STACK_CONFIG_BEGIN_DATE": {
       return {
         ...state,
@@ -320,16 +351,98 @@ function formReducer(state, action) {
   }
 }
 
+function getMergedConfiguration(a, b) {
+  const combinedLocations = {
+    unitIds: new Set([...a.unitIds, ...b.unitIds]),
+    stackPipeIds: new Set([...a.stackPipeIds, ...b.stackPipeIds]),
+  };
+}
+
+function getYearAndQuarterFromDate(dateString) {
+  if (!dateString) return [null, null];
+
+  const date = new Date(dateString);
+  return [date.getFullYear(), Math.floor(date.getMonth() / 3) + 1];
+}
+
+function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
+  return [...units, ...unitStackConfigs].reduce((acc, item) => {
+    const [beginYear, beginQuarter] = getYearAndQuarterFromDate(item.beginDate);
+    const [endYear, endQuarter] = getYearAndQuarterFromDate(item.endDate);
+    for (const grouping of acc) {
+      if (
+        grouping.unitIds.has(item.unitId) &&
+        grouping.beginYear === beginYear &&
+        grouping.beginQuarter === beginQuarter &&
+        grouping.endYear === endYear &&
+        grouping.endQuarter === endQuarter
+      ) {
+        if (item.stackPipeId) grouping.stackPipeIds.add(item.stackPipeId);
+        return acc;
+      }
+    }
+    return acc.concat({
+      id: uuid(),
+      beginYear,
+      beginQuarter,
+      endYear,
+      endQuarter,
+      unitIds: new Set([item.unitId]),
+      stackPipeIds: item.stackPipeId ? new Set([item.stackPipeId]) : new Set(),
+    });
+  }, []);
+}
+
+function mergePartialConfigurations(partialConfigurations) {
+  if (partialConfigurations.length < 2) return partialConfigurations;
+
+  const currentConfig = partialConfigurations[0];
+  for (const compareConfig of partialConfigurations.slice(1)) {
+    if (
+      !checkLocationsIntersect(currentConfig, compareConfig) ||
+      !checkPeriodsIntersect(currentConfig, compareConfig)
+    ) {
+      continue;
+    }
+
+    const mergedConfig = getMergedConfiguration(currentConfig, compareConfig);
+    if (mergedConfig) {
+      return mergePartialConfigurations(
+        partialConfigurations
+          .filter(
+            (pc) => pc.id !== compareConfig.id && pc.id !== currentConfig.id
+          )
+          .concat(mergedConfig)
+      );
+    } else {
+      return [
+        currentConfig,
+        ...mergePartialConfigurations(partialConfigurations.slice(1)),
+      ];
+    }
+  }
+}
+
 function parseDatePickerString(dateString) {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "";
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
-function sortDatesNullsLast(a, b) {
-  if (!a.endDate) return 1;
-  if (!b.endDate) return -1;
-  return new Date(a.endDate) - new Date(b.endDate);
+function sortTextNullsLast(key) {
+  return (a, b) => {
+    if (!a[key]) return 1;
+    if (!b[key]) return -1;
+    return a[key].localeCompare(b[key]);
+  };
+}
+
+function sortDatesNullsLast(key) {
+  return (a, b) => {
+    if (!a[key]) return 1;
+    if (!b[key]) return -1;
+    return new Date(a[key]) - new Date(b[key]);
+  };
 }
 
 /*
@@ -467,13 +580,45 @@ export const ConfigurationManagement = ({
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [facilitiesStatus, setFacilitiesStatus] = useState(fetchStatus.IDLE);
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
+  const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState("");
   const [stackPipesStatus, setStackPipesStatus] = useState(fetchStatus.IDLE);
+  const [summaryStatus, setSummaryStatus] = useState(fetchStatus.IDLE);
   const [unitsStatus, setUnitsStatus] = useState(fetchStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     fetchStatus.IDLE
   );
+
+  /* CALCULATED VALUES */
+
+  // Format facilities for dropdown.
+  const formattedFacilities = useMemo(() => {
+    return facilities.map((f) => ({
+      value: f.facilityRecordId,
+      label: `${f.facilityName} (${f.facilityId})`,
+    }));
+  }, [facilities]);
+
+  const checkedOutLocationsForFacility = checkedOutLocations.filter(
+    (loc) => loc.facId === selectedFacility
+  );
+  const isCheckedOutByUser =
+    checkedOutLocationsForFacility.length &&
+    checkedOutLocationsForFacility.every(
+      (loc) => loc.checkedOutBy === user.userId
+    );
+  const isCheckedOutByOtherUser = checkedOutLocationsForFacility.some(
+    (loc) => loc.checkedOutBy !== user
+  );
+
+  if (document.title !== configurationManagementTitle) {
+    document.title = configurationManagementTitle;
+  }
+
+  if (checkedOutLocationsRef.current !== checkedOutLocations) {
+    checkedOutLocationsRef.current = checkedOutLocations;
+  }
 
   /* HANDLERS */
 
@@ -491,6 +636,26 @@ export const ConfigurationManagement = ({
       )
     );
   }, [setCheckedOutLocations, user]);
+
+  const createChangeSummary = async () => {
+    setSummaryStatus(fetchStatus.PENDING);
+
+    const partialConfigurations = groupUnitsAndUnitStackConfigsByPeriodAndUnit(
+      formState.units,
+      formState.unitStackConfigs
+    );
+
+    // TODO: Merge partial configurations into full configurations.
+    const fullConfigurations = mergePartialConfigurations(
+      partialConfigurations
+    );
+
+    // TODO: Filter out any plans where items have not been changed.
+
+    // TODO: Fetch the change summary for each plan.
+
+    setSummaryStatus(fetchStatus.SUCCESS);
+  };
 
   const createStackPipe = () => {
     formDispatch({
@@ -560,7 +725,7 @@ export const ConfigurationManagement = ({
           postCheckoutMonitoringPlanConfiguration(mp.id)
         )
       );
-      setCheckedOutLocations(await getCheckedOutLocations());
+      setCheckedOutLocations((await getCheckedOutLocations()).data);
     } finally {
       setCheckInOutStatus(fetchStatus.IDLE);
     }
@@ -571,12 +736,28 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = () => {};
 
   const handleFacilityChange = (e) => {
-    setSelectedFacility(e.target.value);
+    setSelectedFacility(e.target.value ? parseInt(e.target.value) : "");
     resetFacilityData();
   };
 
   const handleInitialSave = () => {
+    const newErrorMsgs = [];
+    if (
+      Object.values(formState)
+        .flat()
+        .some((row) => row.isEditing)
+    ) {
+      newErrorMsgs.push("Please complete any pending edits before continuing.");
+    }
+    if (!isCheckedOutByUser) {
+      newErrorMsgs.push("You must check out the facility before saving.");
+    }
+    if (newErrorMsgs.length) {
+      setErrorMsgs(newErrorMsgs);
+      return;
+    }
     setModalVisible(true);
+    createChangeSummary();
   };
 
   const initializeFormState = (data, type) => {
@@ -644,6 +825,16 @@ export const ConfigurationManagement = ({
     });
   };
 
+  const setUnitBeginDate = (rowId, beginDate) => {
+    formDispatch({
+      type: "SET_UNIT_BEGIN_DATE",
+      payload: {
+        id: rowId,
+        beginDate,
+      },
+    });
+  };
+
   const setUnitStackConfigBeginDate = (rowId, beginDate) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_BEGIN_DATE",
@@ -688,39 +879,13 @@ export const ConfigurationManagement = ({
     formDispatch({ type: "TOGGLE_EDIT_STACK_PIPE", payload: rowId });
   };
 
+  const toggleEditUnit = (rowId) => {
+    formDispatch({ type: "TOGGLE_EDIT_UNIT", payload: rowId });
+  };
+
   const toggleEditUnitStackConfig = (rowId) => {
     formDispatch({ type: "TOGGLE_EDIT_UNIT_STACK_CONFIG", payload: rowId });
   };
-
-  /* CALCULATED VALUES */
-
-  // Format facilities for dropdown.
-  const formattedFacilities = useMemo(() => {
-    return facilities.map((f) => ({
-      value: f.facilityRecordId,
-      label: `${f.facilityName} (${f.facilityId})`,
-    }));
-  }, [facilities]);
-
-  const checkedOutLocationsForFacility = checkedOutLocations.filter(
-    (loc) => loc.facId === selectedFacility
-  );
-  const isCheckedOutByUser =
-    checkedOutLocationsForFacility.length &&
-    checkedOutLocationsForFacility.every(
-      (loc) => loc.checkedOutBy === user.userId
-    );
-  const isCheckedOutByOtherUser = checkedOutLocationsForFacility.some(
-    (loc) => loc.checkedOutBy !== user
-  );
-
-  if (document.title !== configurationManagementTitle) {
-    document.title = configurationManagementTitle;
-  }
-
-  if (checkedOutLocationsRef.current !== checkedOutLocations) {
-    checkedOutLocationsRef.current = checkedOutLocations;
-  }
 
   /* EFFECTS */
 
@@ -752,7 +917,14 @@ export const ConfigurationManagement = ({
         setUnitsStatus(fetchStatus.PENDING);
         getUnitsByFacId(selectedFacility).then((res) => {
           setUnitsStatus(fetchStatus.SUCCESS);
-          initializeFormState(res.data, "SET_UNITS");
+          initializeFormState(
+            res.data.map((d) => ({
+              ...d,
+              beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
+              endDate: d.endDate ? d.endDate.split("T")[0] : null,
+            })),
+            "SET_UNITS"
+          );
         });
       } catch (err) {
         setUnitsStatus(fetchStatus.ERROR);
@@ -878,6 +1050,16 @@ export const ConfigurationManagement = ({
                       title: "Units",
                       content: (
                         <StatusContent status={unitsStatus} label="units">
+                          {formState.units.map((u) => (
+                            <form
+                              key={u.id}
+                              id={`form-${u.id}`}
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                toggleEditUnit(u.id);
+                              }}
+                            ></form>
+                          ))}
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
@@ -885,6 +1067,30 @@ export const ConfigurationManagement = ({
                                 name: "Unit ID",
                                 selector: (row) => row.unitId,
                                 sortable: true,
+                              },
+                              {
+                                name: "Begin Date",
+                                cell: dateCell({
+                                  disabled: (row) => row.originalRecord,
+                                  onChange: setUnitBeginDate,
+                                }),
+                                selector: (row) => row.beginDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast("beginDate"),
+                              },
+                              {
+                                name: "End Date",
+                                selector: (row) => row.endDate,
+                                sortable: true,
+                                sortFunction: sortDatesNullsLast("endDate"),
+                              },
+                              {
+                                name: "Actions",
+                                cell: actionCell(
+                                  toggleEditUnit,
+                                  removeStackPipe,
+                                  revertStackPipe
+                                ),
                               },
                             ]}
                             data={formState.units}
@@ -925,6 +1131,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
+                                sortFunction: sortTextNullsLast("stackPipeId"),
                               },
                               {
                                 name: "Active Date",
@@ -935,7 +1142,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.activeDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast,
+                                sortFunction: sortDatesNullsLast("activeDate"),
                               },
                               {
                                 name: "Retire Date",
@@ -946,7 +1153,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.retireDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast,
+                                sortFunction: sortDatesNullsLast("retireDate"),
                               },
                               {
                                 name: "Actions",
@@ -1002,6 +1209,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.unitId,
                                 sortable: true,
+                                sortFunction: sortTextNullsLast("unitId"),
                               },
                               {
                                 name: "Stack/Pipe ID",
@@ -1012,6 +1220,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
+                                sortFunction: sortTextNullsLast("stackPipeId"),
                               },
                               {
                                 name: "Begin Date",
@@ -1022,7 +1231,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.beginDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast,
+                                sortFunction: sortDatesNullsLast("beginDate"),
                               },
                               {
                                 name: "End Date",
@@ -1033,7 +1242,7 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.endDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast,
+                                sortFunction: sortDatesNullsLast("endDate"),
                               },
                               {
                                 name: "Actions",
@@ -1064,6 +1273,15 @@ export const ConfigurationManagement = ({
                   ]}
                 />
               </Grid>
+              {errorMsgs.length > 0 && (
+                <Grid row>
+                  {errorMsgs.map((msg, i) => (
+                    <Alert key={i} noIcon slim type="error" headingLevel="h4">
+                      {msg}
+                    </Alert>
+                  ))}
+                </Grid>
+              )}
               <Grid row>
                 <Button
                   className="margin-top-2"
@@ -1082,9 +1300,10 @@ export const ConfigurationManagement = ({
                     showCancel={false}
                     showSave={user && isCheckedOutByUser}
                     title="Change Summary"
-                    errorMsgs={errorMsgs}
                   >
-                    Show monitor plan changes
+                    {summaryStatus === fetchStatus.PENDING && (
+                      <SizedPreloader />
+                    )}
                   </Modal>
                 )}
               </Grid>
