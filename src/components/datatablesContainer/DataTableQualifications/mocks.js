@@ -15,7 +15,7 @@ const mockQualifications = [
         qualificationTestDate: "2018-07-15",
         parameterCode: "HG",
         qualificationTestType: "INITIAL",
-        potentialAnnualMassEmissions: 10.2,
+        potentialAnnualHgMassEmissions: 10.2,
         applicableEmissionStandard: 29,
         unitsOfStandard: "LBGWH",
         percentageOfEmissionStandard: 72.8,
