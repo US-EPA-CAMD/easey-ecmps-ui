@@ -356,10 +356,442 @@ function getMergedConfiguration(a, b) {
     unitIds: new Set([...a.unitIds, ...b.unitIds]),
     stackPipeIds: new Set([...a.stackPipeIds, ...b.stackPipeIds]),
   };
+
+  const locationsMatch = (a, b) => {
+    return (
+      a.unitIds.size === b.unitIds.size &&
+      [...a.unitIds].every((id) => b.unitIds.has(id)) &&
+      a.stackPipeIds.size === b.stackPipeIds.size &&
+      [...a.stackPipeIds].every((id) => b.stackPipeIds.has(id))
+    );
+  };
+
+  if (a.beginYear === b.beginYear && a.beginQuarter === b.beginQuarter) {
+    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
+      return {
+        id: uuid(),
+        beginYear: a.beginYear,
+        beginQuarter: a.beginQuarter,
+        endYear: a.endYear,
+        endQuarter: a.endQuarter,
+        ...combinedLocations,
+      };
+    }
+
+    if (
+      a.endYear < b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
+    ) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: a.beginYear,
+          beginQuarter: a.beginQuarter,
+          endYear: b.endYear,
+          endQuarter: b.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
+            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+        ];
+      }
+    }
+
+    if (
+      a.endYear > b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
+    ) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: a.beginYear,
+          beginQuarter: a.beginQuarter,
+          endYear: a.endYear,
+          endQuarter: a.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
+            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+        ];
+      }
+    }
+  }
+
+  if (
+    a.beginYear < b.beginYear ||
+    (a.beginYear === b.beginYear && a.beginQuarter < b.beginQuarter)
+  ) {
+    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: a.beginYear,
+          beginQuarter: a.beginQuarter,
+          endYear: a.endYear,
+          endQuarter: a.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
+            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            ...combinedLocations,
+          },
+        ];
+      }
+    }
+
+    if (
+      a.endYear < b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
+    ) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: a.beginYear,
+          beginQuarter: a.beginQuarter,
+          endYear: b.endYear,
+          endQuarter: b.endQuarter,
+          ...combinedLocations,
+        };
+      } else if (locationsMatch(a, combinedLocations)) {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
+            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipe,
+          },
+        ];
+      } else if (locationsMatch(b, combinedLocations)) {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
+            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+        ];
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
+            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
+            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+        ];
+      }
+    }
+
+    if (
+      a.endYear > b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
+    ) {
+      if (locationsMatch(a, combinedLocations)) {
+        return {
+          id: uuid(),
+          beginYear: a.beginYear,
+          beginQuarter: a.beginQuarter,
+          endYear: b.endYear,
+          endQuarter: b.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
+            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
+            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+        ];
+      }
+    }
+  }
+
+  if (
+    a.beginYear > b.beginYear ||
+    (a.beginYear === b.beginYear && a.beginQuarter > b.beginQuarter)
+  ) {
+    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: b.beginYear,
+          beginQuarter: b.beginQuarter,
+          endYear: b.endYear,
+          endQuarter: b.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
+            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            ...combinedLocations,
+          },
+        ];
+      }
+    }
+
+    if (
+      a.endYear < b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
+    ) {
+      if (locationsMatch(b, combinedLocations)) {
+        return {
+          id: uuid(),
+          beginYear: b.beginYear,
+          beginQuarter: b.beginQuarter,
+          endYear: b.endYear,
+          endQuarter: b.endQuarter,
+          ...combinedLocations,
+        };
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
+            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
+            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+        ];
+      }
+    }
+
+    if (
+      a.endYear > b.endYear ||
+      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
+    ) {
+      if (locationsMatch(a, b)) {
+        return {
+          id: uuid(),
+          beginYear: b.beginYear,
+          beginQuarter: b.beginQuarter,
+          endYear: a.endYear,
+          endQuarter: a.endQuarter,
+          ...combinedLocations,
+        };
+      } else if (locationsMatch(b, combinedLocations)) {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
+            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+        ];
+      } else if (locationsMatch(a, combinedLocations)) {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
+            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            ...combinedLocations,
+          },
+        ];
+      } else {
+        return [
+          {
+            id: uuid(),
+            beginYear: b.beginYear,
+            beginQuarter: b.beginQuarter,
+            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
+            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
+            unitIds: b.unitIds,
+            stackPipeIds: b.stackPipeIds,
+          },
+          {
+            id: uuid(),
+            beginYear: a.beginYear,
+            beginQuarter: a.beginQuarter,
+            endYear: b.endYear,
+            endQuarter: b.endQuarter,
+            ...combinedLocations,
+          },
+          {
+            id: uuid(),
+            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
+            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
+            endYear: a.endYear,
+            endQuarter: a.endQuarter,
+            unitIds: a.unitIds,
+            stackPipeIds: a.stackPipeIds,
+          },
+        ];
+      }
+    }
+  }
 }
 
 function getYearAndQuarterFromDate(dateString) {
-  if (!dateString) return [null, null];
+  if (!dateString) return [Infinity, Infinity];
 
   const date = new Date(dateString);
   return [date.getFullYear(), Math.floor(date.getMonth() / 3) + 1];
@@ -414,13 +846,12 @@ function mergePartialConfigurations(partialConfigurations) {
           )
           .concat(mergedConfig)
       );
-    } else {
-      return [
-        currentConfig,
-        ...mergePartialConfigurations(partialConfigurations.slice(1)),
-      ];
     }
   }
+  return [
+    currentConfig,
+    ...mergePartialConfigurations(partialConfigurations.slice(1)),
+  ];
 }
 
 function parseDatePickerString(dateString) {
@@ -626,9 +1057,7 @@ export const ConfigurationManagement = ({
     await Promise.all(
       checkedOutLocationsRef.current
         .filter((loc) => loc.checkedOutBy === user.userId)
-        .map((loc) => {
-          deleteCheckInMonitoringPlanConfiguration(loc.monPlanId);
-        })
+        .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
     setCheckedOutLocations(
       checkedOutLocationsRef.current.filter(
@@ -1071,7 +1500,8 @@ export const ConfigurationManagement = ({
                               {
                                 name: "Begin Date",
                                 cell: dateCell({
-                                  disabled: (row) => row.originalRecord,
+                                  disabled: (row) =>
+                                    row.originalRecord?.beginDate,
                                   onChange: setUnitBeginDate,
                                 }),
                                 selector: (row) => row.beginDate,
