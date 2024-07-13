@@ -1191,8 +1191,11 @@ export const getMonitoringPlanComments = async (monPlanId) => {
     .catch(handleError);
 };
 
-export const importMP = async (payload) => {
-  const url = getApiUrl(`/plans/import`);
+export const importMP = async (payload, draft) => {
+  let url = getApiUrl(`/plans/import`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
   try {
     return handleResponse(
       await secureAxios({

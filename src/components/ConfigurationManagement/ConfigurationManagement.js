@@ -1,3 +1,21 @@
+import {
+  ArrowDownwardSharp,
+  CheckSharp,
+  CreateSharp,
+  DeleteSharp,
+  UndoSharp,
+} from "@material-ui/icons";
+import {
+  Alert,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  Grid,
+  GridContainer,
+  Label,
+  TextInput,
+} from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 import React, {
   useCallback,
   useEffect,
@@ -6,45 +24,28 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Preloader } from "@us-epa-camd/easey-design-system";
 import DataTable from "react-data-table-component";
-import { v4 as uuid } from "uuid";
 import { connect } from "react-redux";
-import {
-  Alert,
-  GridContainer,
-  Grid,
-  Label,
-  Dropdown,
-  ButtonGroup,
-  Button,
-  TextInput,
-} from "@trussworks/react-uswds";
-import {
-  ArrowDownwardSharp,
-  CheckSharp,
-  CreateSharp,
-  DeleteSharp,
-  UndoSharp,
-} from "@material-ui/icons";
+import { v4 as uuid } from "uuid";
 
-import CustomAccordion from "../CustomAccordion/CustomAccordion";
-import Modal from "../Modal/Modal";
-import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
+import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
+import { loadFacilitiesSuccess } from "../../store/actions/facilities";
 import {
   getAllFacilities,
-  getUnitStackConfigsByFacId,
   getStackPipesByFacId,
   getUnitsByFacId,
+  getUnitStackConfigsByFacId,
 } from "../../utils/api/facilityApi";
-import { loadFacilitiesSuccess } from "../../store/actions/facilities";
-import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import {
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
   getMonitoringPlans,
+  importMP,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
+import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import Modal from "../Modal/Modal";
 import "./ConfigurationManagement.scss";
 
 /*
@@ -52,7 +53,7 @@ import "./ConfigurationManagement.scss";
 */
 
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
-const fetchStatus = {
+const dataStatus = {
   PENDING: "PENDING",
   SUCCESS: "SUCCESS",
   ERROR: "ERROR",
@@ -69,12 +70,19 @@ const initialFormState = {
 */
 
 function checkLocationsIntersect(a, b) {
-  for (const unitId of a.unitIds) {
-    if (b.unitIds.has(unitId)) return true;
+  const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } = getItemLocations(
+    a.items
+  );
+  const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } = getItemLocations(
+    b.items
+  );
+
+  for (const unitId of unitIdsA) {
+    if (unitIdsB.has(unitId)) return true;
   }
 
-  for (const stackPipeId of a.stackPipeIds) {
-    if (b.stackPipeIds.has(stackPipeId)) return true;
+  for (const stackPipeId of stackPipeIdsA) {
+    if (stackPipeIdsB.has(stackPipeId)) return true;
   }
 
   return false;
@@ -351,18 +359,46 @@ function formReducer(state, action) {
   }
 }
 
+function formatDate(dateString) {
+  const date = new Date(
+    new Date(dateString).toLocaleString("en-us", {
+      timeZone: "America/New_York",
+    })
+  );
+
+  return (
+    (date.getMonth() > 8 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) +
+    "/" +
+    (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+    "/" +
+    date.getFullYear()
+  );
+}
+
+function getItemLocations(items) {
+  const unitIds = new Set(items.map((item) => item.unitId));
+  const stackPipeIds = new Set(items.map((item) => item.stackPipeId));
+  stackPipeIds.delete(undefined);
+
+  return { unitIds, stackPipeIds };
+}
+
 function getMergedConfiguration(a, b) {
-  const combinedLocations = {
-    unitIds: new Set([...a.unitIds, ...b.unitIds]),
-    stackPipeIds: new Set([...a.stackPipeIds, ...b.stackPipeIds]),
-  };
+  const combinedItems = [...a.items, ...b.items];
 
   const locationsMatch = (a, b) => {
+    const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } = getItemLocations(
+      a.items
+    );
+    const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } = getItemLocations(
+      b.items
+    );
+
     return (
-      a.unitIds.size === b.unitIds.size &&
-      [...a.unitIds].every((id) => b.unitIds.has(id)) &&
-      a.stackPipeIds.size === b.stackPipeIds.size &&
-      [...a.stackPipeIds].every((id) => b.stackPipeIds.has(id))
+      unitIdsA.size === unitIdsB.size &&
+      [...unitIdsA].every((id) => unitIdsB.has(id)) &&
+      stackPipeIdsA.size === stackPipeIdsB.size &&
+      [...stackPipeIdsA].every((id) => stackPipeIdsB.has(id))
     );
   };
 
@@ -370,11 +406,11 @@ function getMergedConfiguration(a, b) {
     if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
       return {
         id: uuid(),
+        items: combinedItems,
         beginYear: a.beginYear,
         beginQuarter: a.beginQuarter,
         endYear: a.endYear,
         endQuarter: a.endQuarter,
-        ...combinedLocations,
       };
     }
 
@@ -385,24 +421,25 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: a.beginYear,
           beginQuarter: a.beginQuarter,
           endYear: b.endYear,
           endQuarter: b.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: a.endYear,
             endQuarter: a.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: b.items,
             beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
             beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
             endYear: b.endYear,
@@ -421,24 +458,25 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: a.beginYear,
           beginQuarter: a.beginQuarter,
           endYear: a.endYear,
           endQuarter: a.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: b.endYear,
             endQuarter: b.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: a.items,
             beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
             beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
             endYear: a.endYear,
@@ -459,16 +497,17 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: a.beginYear,
           beginQuarter: a.beginQuarter,
           endYear: a.endYear,
           endQuarter: a.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: a.items,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
@@ -478,11 +517,11 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: b.endYear,
             endQuarter: b.endQuarter,
-            ...combinedLocations,
           },
         ];
       }
@@ -495,16 +534,17 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: a.beginYear,
           beginQuarter: a.beginQuarter,
           endYear: b.endYear,
           endQuarter: b.endQuarter,
-          ...combinedLocations,
         };
-      } else if (locationsMatch(a, combinedLocations)) {
+      } else if (locationsMatch(a, { items: combinedItems })) {
         return [
           {
             id: uuid(),
+            items: a.items,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: a.endYear,
@@ -514,6 +554,7 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: b.items,
             beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
             beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
             endYear: b.endYear,
@@ -522,10 +563,11 @@ function getMergedConfiguration(a, b) {
             stackPipeIds: b.stackPipe,
           },
         ];
-      } else if (locationsMatch(b, combinedLocations)) {
+      } else if (locationsMatch(b, { items: combinedItems })) {
         return [
           {
             id: uuid(),
+            items: a.items,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
@@ -535,6 +577,7 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: b.items,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: b.endYear,
@@ -547,6 +590,7 @@ function getMergedConfiguration(a, b) {
         return [
           {
             id: uuid(),
+            items: a.items,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
@@ -556,14 +600,15 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: a.endYear,
             endQuarter: a.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: b.items,
             beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
             beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
             endYear: b.endYear,
@@ -579,19 +624,20 @@ function getMergedConfiguration(a, b) {
       a.endYear > b.endYear ||
       (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
     ) {
-      if (locationsMatch(a, combinedLocations)) {
+      if (locationsMatch(a, { items: combinedItems })) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: a.beginYear,
           beginQuarter: a.beginQuarter,
           endYear: b.endYear,
           endQuarter: b.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: a.items,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
@@ -601,14 +647,15 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: b.endYear,
             endQuarter: b.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: a.items,
             beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
             beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
             endYear: a.endYear,
@@ -629,16 +676,17 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: b.beginYear,
           beginQuarter: b.beginQuarter,
           endYear: b.endYear,
           endQuarter: b.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: b.items,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
@@ -648,11 +696,11 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: a.endYear,
             endQuarter: a.endQuarter,
-            ...combinedLocations,
           },
         ];
       }
@@ -662,19 +710,20 @@ function getMergedConfiguration(a, b) {
       a.endYear < b.endYear ||
       (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
     ) {
-      if (locationsMatch(b, combinedLocations)) {
+      if (locationsMatch(b, { items: combinedItems })) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: b.beginYear,
           beginQuarter: b.beginQuarter,
           endYear: b.endYear,
           endQuarter: b.endQuarter,
-          ...combinedLocations,
         };
       } else {
         return [
           {
             id: uuid(),
+            items: b.items,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
@@ -684,14 +733,15 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: a.endYear,
             endQuarter: a.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: b.items,
             beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
             beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
             endYear: b.endYear,
@@ -710,24 +760,25 @@ function getMergedConfiguration(a, b) {
       if (locationsMatch(a, b)) {
         return {
           id: uuid(),
+          items: combinedItems,
           beginYear: b.beginYear,
           beginQuarter: b.beginQuarter,
           endYear: a.endYear,
           endQuarter: a.endQuarter,
-          ...combinedLocations,
         };
-      } else if (locationsMatch(b, combinedLocations)) {
+      } else if (locationsMatch(b, { items: combinedItems })) {
         return [
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: b.endYear,
             endQuarter: b.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: a.items,
             beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
             beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
             endYear: a.endYear,
@@ -736,10 +787,11 @@ function getMergedConfiguration(a, b) {
             stackPipeIds: a.stackPipeIds,
           },
         ];
-      } else if (locationsMatch(a, combinedLocations)) {
+      } else if (locationsMatch(a, { items: combinedItems })) {
         return [
           {
             id: uuid(),
+            items: b.items,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
@@ -749,17 +801,18 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: a.endYear,
             endQuarter: a.endQuarter,
-            ...combinedLocations,
           },
         ];
       } else {
         return [
           {
             id: uuid(),
+            items: b.items,
             beginYear: b.beginYear,
             beginQuarter: b.beginQuarter,
             endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
@@ -769,14 +822,15 @@ function getMergedConfiguration(a, b) {
           },
           {
             id: uuid(),
+            items: combinedItems,
             beginYear: a.beginYear,
             beginQuarter: a.beginQuarter,
             endYear: b.endYear,
             endQuarter: b.endQuarter,
-            ...combinedLocations,
           },
           {
             id: uuid(),
+            items: a.items,
             beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
             beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
             endYear: a.endYear,
@@ -803,13 +857,13 @@ function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
     const [endYear, endQuarter] = getYearAndQuarterFromDate(item.endDate);
     for (const grouping of acc) {
       if (
-        grouping.unitIds.has(item.unitId) &&
+        grouping.items.find((i) => i.unitId === item.unitId) &&
         grouping.beginYear === beginYear &&
         grouping.beginQuarter === beginQuarter &&
         grouping.endYear === endYear &&
         grouping.endQuarter === endQuarter
       ) {
-        if (item.stackPipeId) grouping.stackPipeIds.add(item.stackPipeId);
+        grouping.items.push(item);
         return acc;
       }
     }
@@ -819,8 +873,7 @@ function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
       beginQuarter,
       endYear,
       endQuarter,
-      unitIds: new Set([item.unitId]),
-      stackPipeIds: item.stackPipeId ? new Set([item.stackPipeId]) : new Set(),
+      items: [item],
     });
   }, []);
 }
@@ -857,7 +910,7 @@ function mergePartialConfigurations(partialConfigurations) {
 function parseDatePickerString(dateString) {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "";
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return date.toISOString().substring(0, 10);
 }
 
 function sortTextNullsLast(key) {
@@ -939,7 +992,9 @@ const dateCell = ({
         form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
-        onChange={(e) => onChange(row.id, parseDatePickerString(e))}
+        onChange={(e) =>
+          onChange(row.id, parseDatePickerString(e.target.value))
+        }
         placeholder="Select a date..."
         required={required}
         type="date"
@@ -959,13 +1014,13 @@ const SizedPreloader = ({ size = 9 }) => {
 
 const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   <>
-    {status === fetchStatus.PENDING && <SizedPreloader />}
-    {status === fetchStatus.ERROR && (
+    {status === dataStatus.PENDING && <SizedPreloader />}
+    {status === dataStatus.ERROR && (
       <Alert noIcon slim type="error" headingLevel={headingLevel}>
         Error loading {label}.
       </Alert>
     )}
-    {status === fetchStatus.SUCCESS && children}
+    {status === dataStatus.SUCCESS && children}
   </>
 );
 
@@ -1006,19 +1061,19 @@ export const ConfigurationManagement = ({
 }) => {
   /* STATE */
 
-  const [checkInOutStatus, setCheckInOutStatus] = useState(fetchStatus.IDLE);
+  const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
   const checkedOutLocationsRef = useRef(checkedOutLocations);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [facilitiesStatus, setFacilitiesStatus] = useState(fetchStatus.IDLE);
+  const [facilitiesStatus, setFacilitiesStatus] = useState(dataStatus.IDLE);
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState("");
-  const [stackPipesStatus, setStackPipesStatus] = useState(fetchStatus.IDLE);
-  const [summaryStatus, setSummaryStatus] = useState(fetchStatus.IDLE);
-  const [unitsStatus, setUnitsStatus] = useState(fetchStatus.IDLE);
+  const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
+  const [summaryStatus, setSummaryStatus] = useState(dataStatus.IDLE);
+  const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
-    fetchStatus.IDLE
+    dataStatus.IDLE
   );
 
   /* CALCULATED VALUES */
@@ -1067,23 +1122,48 @@ export const ConfigurationManagement = ({
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
-    setSummaryStatus(fetchStatus.PENDING);
+    setSummaryStatus(dataStatus.PENDING);
 
-    const partialConfigurations = groupUnitsAndUnitStackConfigsByPeriodAndUnit(
-      formState.units,
-      formState.unitStackConfigs
-    );
+    try {
+      const partialConfigurations =
+        groupUnitsAndUnitStackConfigsByPeriodAndUnit(
+          formState.units,
+          formState.unitStackConfigs
+        );
 
-    // TODO: Merge partial configurations into full configurations.
-    const fullConfigurations = mergePartialConfigurations(
-      partialConfigurations
-    );
+      // Merge partial configurations into full configurations.
+      const fullConfigurations = mergePartialConfigurations(
+        partialConfigurations
+      );
 
-    // TODO: Filter out any plans where items have not been changed.
+      // Filter out any plans where items have not been changed.
+      const changedConfigurations = fullConfigurations.filter((c) =>
+        c.items.some(
+          (item) =>
+            !item.originalRecord ||
+            item.beginDate !== item.originalRecord.beginDate ||
+            item.endDate !== item.originalRecord.endDate
+        )
+      );
 
-    // TODO: Fetch the change summary for each plan.
+      const monitorPlanPayloads = changedConfigurations.map(
+        mapConfigurationToPayload
+      );
+      console.log("monitorPlanPayloads", monitorPlanPayloads); // NOTE: Remove this line.
 
-    setSummaryStatus(fetchStatus.SUCCESS);
+      // Fetch the change summary for each plan.
+      const results = await Promise.all(
+        monitorPlanPayloads.map((payload) => importMP(payload, true))
+      );
+      console.log("results", results); // NOTE: Remove this line.
+
+      // TODO: Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
+
+      setSummaryStatus(dataStatus.SUCCESS);
+    } catch (err) {
+      console.error(err);
+      setSummaryStatus(dataStatus.ERROR);
+    }
   };
 
   const createStackPipe = () => {
@@ -1120,7 +1200,7 @@ export const ConfigurationManagement = ({
       .filter((loc) => loc.facId === selectedFacility)
       .filter((loc) => loc.checkedOutBy === user.userId);
     try {
-      setCheckInOutStatus(fetchStatus.PENDING);
+      setCheckInOutStatus(dataStatus.PENDING);
       await Promise.all(
         locationsCheckedOutByUserForFacility.map((loc) =>
           deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)
@@ -1133,7 +1213,7 @@ export const ConfigurationManagement = ({
         )
       );
     } finally {
-      setCheckInOutStatus(fetchStatus.IDLE);
+      setCheckInOutStatus(dataStatus.IDLE);
     }
   };
 
@@ -1141,7 +1221,7 @@ export const ConfigurationManagement = ({
     if (!selectedFacility) return;
 
     try {
-      setCheckInOutStatus(fetchStatus.PENDING);
+      setCheckInOutStatus(dataStatus.PENDING);
       await checkInAllPlansForUser();
       const orisCode = facilities.find(
         (f) => f.facilityRecordId === parseInt(selectedFacility)
@@ -1156,11 +1236,14 @@ export const ConfigurationManagement = ({
       );
       setCheckedOutLocations((await getCheckedOutLocations()).data);
     } finally {
-      setCheckInOutStatus(fetchStatus.IDLE);
+      setCheckInOutStatus(dataStatus.IDLE);
     }
   };
 
-  const handleCloseModal = () => setModalVisible(false);
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSummaryStatus(dataStatus.IDLE);
+  };
 
   const handleConfirmSave = () => {};
 
@@ -1201,15 +1284,72 @@ export const ConfigurationManagement = ({
     });
   };
 
+  const mapConfigurationToPayload = (configuration) => {
+    const { unitIds, stackPipeIds } = getItemLocations(configuration.items);
+    const unusedMonitoringLocationDataFields = () => ({
+      monitoringLocationAttribData: [],
+      unitCapacityData: [],
+      unitControlData: [],
+      unitFuelData: [],
+      monitoringMethodData: [],
+      supplementalMATSMonitoringMethodData: [],
+      monitoringFormulaData: [],
+      monitoringDefaultData: [],
+      monitoringSpanData: [],
+      rectangularDuctWAFData: [],
+      monitoringLoadData: [],
+      componentData: [],
+      monitoringSystemData: [],
+      monitoringQualificationData: [],
+    });
+    return {
+      monitoringPlanCommentData: [],
+      orisCode: facilities.find((f) => f.facilityRecordId === selectedFacility)
+        .facilityId,
+      unitStackConfigurationData: configuration.items
+        .filter((item) => item.hasOwnProperty("stackPipeId"))
+        .map((item) => ({
+          beginDate: item.beginDate,
+          endDate: item.endDate,
+          stackPipeId: item.stackPipeId,
+          unitId: item.unitId,
+        })),
+      monitoringLocationData: Array.from(unitIds)
+        .map((unitId) => formState.units.find((u) => u.unitId === unitId))
+        .map((unit) => ({
+          unitId: unit.unitId,
+          stackPipeId: null,
+          activeDate: null,
+          retireDate: null,
+          nonLoadBasedIndicator: unit.nonLoadBasedIndicator,
+          ...unusedMonitoringLocationDataFields(),
+        }))
+        .concat(
+          Array.from(stackPipeIds)
+            .map((stackPipeId) =>
+              formState.stackPipes.find((sp) => sp.stackPipeId === stackPipeId)
+            )
+            .map((stackPipe) => ({
+              unitId: null,
+              stackPipeId: stackPipe.stackPipeId,
+              activeDate: stackPipe.activeDate,
+              retireDate: stackPipe.retireDate,
+              nonLoadBasedIndicator: null,
+              ...unusedMonitoringLocationDataFields(),
+            }))
+        ),
+    };
+  };
+
   const removeStackPipe = (rowId) => {
     formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
   };
 
   const resetFacilityData = () => {
     formDispatch({ type: "RESET_STATE" });
-    setUnitsStatus(fetchStatus.IDLE);
-    setStackPipesStatus(fetchStatus.IDLE);
-    setUnitStackConfigsStatus(fetchStatus.IDLE);
+    setUnitsStatus(dataStatus.IDLE);
+    setStackPipesStatus(dataStatus.IDLE);
+    setUnitStackConfigsStatus(dataStatus.IDLE);
   };
 
   const removeUnitStackConfig = (rowId) => {
@@ -1320,18 +1460,18 @@ export const ConfigurationManagement = ({
 
   // Load facilities.
   useEffect(() => {
-    if (facilitiesStatus === fetchStatus.IDLE) {
+    if (facilitiesStatus === dataStatus.IDLE) {
       if (facilities.length > 0) {
-        setFacilitiesStatus(fetchStatus.SUCCESS);
+        setFacilitiesStatus(dataStatus.SUCCESS);
       } else {
         try {
-          setFacilitiesStatus(fetchStatus.PENDING);
+          setFacilitiesStatus(dataStatus.PENDING);
           getAllFacilities().then((res) => {
             setFacilities(res.data);
-            setFacilitiesStatus(fetchStatus.SUCCESS);
+            setFacilitiesStatus(dataStatus.SUCCESS);
           });
         } catch (err) {
-          setFacilitiesStatus(fetchStatus.ERROR);
+          setFacilitiesStatus(dataStatus.ERROR);
         }
       }
     }
@@ -1341,11 +1481,11 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedFacility) return;
 
-    if (unitsStatus === fetchStatus.IDLE) {
+    if (unitsStatus === dataStatus.IDLE) {
       try {
-        setUnitsStatus(fetchStatus.PENDING);
+        setUnitsStatus(dataStatus.PENDING);
         getUnitsByFacId(selectedFacility).then((res) => {
-          setUnitsStatus(fetchStatus.SUCCESS);
+          setUnitsStatus(dataStatus.SUCCESS);
           initializeFormState(
             res.data.map((d) => ({
               ...d,
@@ -1356,7 +1496,7 @@ export const ConfigurationManagement = ({
           );
         });
       } catch (err) {
-        setUnitsStatus(fetchStatus.ERROR);
+        setUnitsStatus(dataStatus.ERROR);
       }
     }
   }, [selectedFacility, unitsStatus]);
@@ -1365,15 +1505,15 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedFacility) return;
 
-    if (stackPipesStatus === fetchStatus.IDLE) {
+    if (stackPipesStatus === dataStatus.IDLE) {
       try {
-        setStackPipesStatus(fetchStatus.PENDING);
+        setStackPipesStatus(dataStatus.PENDING);
         getStackPipesByFacId(selectedFacility).then((res) => {
-          setStackPipesStatus(fetchStatus.SUCCESS);
+          setStackPipesStatus(dataStatus.SUCCESS);
           initializeFormState(res.data, "SET_STACK_PIPES");
         });
       } catch (err) {
-        setStackPipesStatus(fetchStatus.ERROR);
+        setStackPipesStatus(dataStatus.ERROR);
       }
     }
   }, [selectedFacility, stackPipesStatus]);
@@ -1382,15 +1522,15 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedFacility) return;
 
-    if (unitStackConfigsStatus === fetchStatus.IDLE) {
+    if (unitStackConfigsStatus === dataStatus.IDLE) {
       try {
-        setUnitStackConfigsStatus(fetchStatus.PENDING);
+        setUnitStackConfigsStatus(dataStatus.PENDING);
         getUnitStackConfigsByFacId(selectedFacility).then((res) => {
-          setUnitStackConfigsStatus(fetchStatus.SUCCESS);
+          setUnitStackConfigsStatus(dataStatus.SUCCESS);
           initializeFormState(res.data, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
-        setUnitStackConfigsStatus(fetchStatus.ERROR);
+        setUnitStackConfigsStatus(dataStatus.ERROR);
       }
     }
   }, [selectedFacility, unitStackConfigsStatus]);
@@ -1436,7 +1576,7 @@ export const ConfigurationManagement = ({
                   </Dropdown>
                   {selectedFacility && (
                     <>
-                      {checkInOutStatus === fetchStatus.PENDING ? (
+                      {checkInOutStatus === dataStatus.PENDING ? (
                         <SizedPreloader size={5} />
                       ) : (
                         <>
@@ -1465,6 +1605,13 @@ export const ConfigurationManagement = ({
                     </>
                   )}
                 </div>
+                {checkedOutLocationsForFacility.length > 0 && (
+                  <p className="text-bold">
+                    Currently checked-out by:{" "}
+                    {checkedOutLocationsForFacility[0].checkedOutBy}{" "}
+                    {formatDate(checkedOutLocationsForFacility[0].checkedOutOn)}
+                  </p>
+                )}
               </div>
             </StatusContent>
           </Grid>
@@ -1731,9 +1878,7 @@ export const ConfigurationManagement = ({
                     showSave={user && isCheckedOutByUser}
                     title="Change Summary"
                   >
-                    {summaryStatus === fetchStatus.PENDING && (
-                      <SizedPreloader />
-                    )}
+                    {summaryStatus === dataStatus.PENDING && <SizedPreloader />}
                   </Modal>
                 )}
               </Grid>

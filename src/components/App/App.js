@@ -458,9 +458,7 @@ const App = () => {
             path="/workspace/configuration-management"
             element={
               !facilityCheckoutPermission() ? (
-                //<Navigate key="navigate" to="/" />
-                // TODO: Remove when done with development
-                <ConfigurationManagement user={user} />
+                <Navigate key="navigate" to="/" />
               ) : (
                 <ConfigurationManagement user={user} />
               )
