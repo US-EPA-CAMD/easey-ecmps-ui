@@ -121,7 +121,6 @@ export const DataTableSystemsComponents = ({
       "sampleAcquisitionMethodCode",
       "componentTypeCode",
       "basisCode",
-      "analyticalPrincipleCode",
       "prefilteredSystemsComponents",
     ],
   ];
@@ -343,7 +342,6 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", ""],
           basisCode: ["Basis Description", "dropdown", "", ""],
-          analyticalPrincipleCode: ["Analytical Principle", "dropdown", "", ""],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
@@ -394,7 +392,6 @@ export const DataTableSystemsComponents = ({
       selectComponents['sampleAcquisitionMethodCode'] = associatedComponent?.sampleAcquisitionMethodCode;
       selectComponents['componentTypeCode'] = associatedComponent?.componentTypeCode;
       selectComponents['basisCode'] = associatedComponent?.basisCode;
-      selectComponents['analyticalPrincipleCode'] = associatedComponent?.analyticalPrincipleCode;
       selectComponents['manufacturer'] = associatedComponent?.manufacturer;
       selectComponents['modelVersion'] = associatedComponent?.modelVersion;
       selectComponents['serialNumber'] = associatedComponent?.serialNumber;
@@ -433,7 +430,6 @@ export const DataTableSystemsComponents = ({
           ],
           componentTypeCode: ["Component Type", "mainDropdown", "", "locked"],
           basisCode: ["Basis Description", "dropdown", "", "locked"],
-          analyticalPrincipleCode: ["Analytical Principle", "dropdown", "", "locked"],
           manufacturer: ["Manufacturer", "input", "", ""],
           modelVersion: ["Model or Version", "input", "", ""],
           serialNumber: ["Serial Number", "input", "", ""],
