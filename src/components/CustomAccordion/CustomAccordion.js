@@ -15,19 +15,6 @@ const CustomAccordion = ({
 }) => {
   const [open, setOpen] = useState(tables.map((item, index) => true));
 
-  // FIXME: Find if this is necessary, and if so provide a better implementation.
-  /*useEffect(() => {
-    //closes all dropdowns before rendering new section
-
-    // avoids rendering issues when one sections has more datatables than next sections
-    setOpen(tables.map((item, index) => false));
-
-    // reopens dropdowns to mimic past expectations
-    setTimeout(() => {
-      setOpen(tables.map((item, index) => true));
-    }, 600);
-  }, [tables, section]);*/
-
   // updates all tables whenever a location is changed
   const tableState = (index, val) => {
     setOpen(tables.map((item, ind) => (ind === index ? val : open[ind])));

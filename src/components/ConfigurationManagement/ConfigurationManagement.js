@@ -1006,7 +1006,9 @@ const dateCell = ({
 
 const SizedPreloader = ({ size = 9 }) => {
   return (
-    <div className={`height-${size} preloader-container width-${size}`}>
+    <div
+      className={`display-flex flex-align-center height-${size} preloader-container width-${size}`}
+    >
       <Preloader showStopButton={false} />
     </div>
   );
@@ -1061,6 +1063,7 @@ export const ConfigurationManagement = ({
 }) => {
   /* STATE */
 
+  const [changeSummary, setChangeSummary] = useState({});
   const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
   const checkedOutLocationsRef = useRef(checkedOutLocations);
   const [errorMsgs, setErrorMsgs] = useState([]);
@@ -1068,9 +1071,12 @@ export const ConfigurationManagement = ({
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [monitorPlanPayloads, setMonitorPlanPayloads] = useState([]);
   const [selectedFacility, setSelectedFacility] = useState("");
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
-  const [summaryStatus, setSummaryStatus] = useState(dataStatus.IDLE);
+  const [changeSummaryStatus, setChangeSummaryStatus] = useState(
+    dataStatus.IDLE
+  );
   const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     dataStatus.IDLE
@@ -1122,7 +1128,7 @@ export const ConfigurationManagement = ({
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
-    setSummaryStatus(dataStatus.PENDING);
+    setChangeSummaryStatus(dataStatus.PENDING);
 
     try {
       const partialConfigurations =
@@ -1145,24 +1151,43 @@ export const ConfigurationManagement = ({
             item.endDate !== item.originalRecord.endDate
         )
       );
+      console.log("changedConfigurations", changedConfigurations); // TODO: Remove this line.
 
-      const monitorPlanPayloads = changedConfigurations.map(
+      const newMonitorPlanPayloads = changedConfigurations.map(
         mapConfigurationToPayload
       );
-      console.log("monitorPlanPayloads", monitorPlanPayloads); // NOTE: Remove this line.
+      console.log("newMonitorPlanPayloads", newMonitorPlanPayloads); // TODO: Remove this line.
 
       // Fetch the change summary for each plan.
-      const results = await Promise.all(
-        monitorPlanPayloads.map((payload) => importMP(payload, true))
+      const planResults = await Promise.all(
+        newMonitorPlanPayloads.map((payload) => importMP(payload, true))
       );
-      console.log("results", results); // NOTE: Remove this line.
+      console.log("results", planResults); // TODO: Remove this line.
 
-      // TODO: Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
+      // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
+      const affectedStackPipeIds = new Set(
+        newMonitorPlanPayloads
+          .flatMap((p) =>
+            p.unitStackConfigurationData
+              .map((usc) => usc.stackPipeId)
+              .concat(p.monitoringLocationData.map((ml) => ml.stackPipeId))
+          )
+          .filter((id) => id)
+      );
+      const unchangedStackPipes = formState.stackPipes.filter(
+        (sp) => !affectedStackPipeIds.has(sp.stackPipeId)
+      );
 
-      setSummaryStatus(dataStatus.SUCCESS);
+      setChangeSummary({
+        plans: planResults,
+        unchangedStackPipes,
+      });
+      setChangeSummaryStatus(dataStatus.SUCCESS);
+      setModalErrorMsgs(planResults.map((r) => typeof r === "string" && r));
+      setMonitorPlanPayloads(newMonitorPlanPayloads);
     } catch (err) {
       console.error(err);
-      setSummaryStatus(dataStatus.ERROR);
+      setChangeSummaryStatus(dataStatus.ERROR);
     }
   };
 
@@ -1242,7 +1267,7 @@ export const ConfigurationManagement = ({
 
   const handleCloseModal = () => {
     setModalVisible(false);
-    setSummaryStatus(dataStatus.IDLE);
+    setChangeSummaryStatus(dataStatus.IDLE);
   };
 
   const handleConfirmSave = () => {};
@@ -1254,6 +1279,7 @@ export const ConfigurationManagement = ({
 
   const handleInitialSave = () => {
     const newErrorMsgs = [];
+
     if (
       Object.values(formState)
         .flat()
@@ -1261,13 +1287,19 @@ export const ConfigurationManagement = ({
     ) {
       newErrorMsgs.push("Please complete any pending edits before continuing.");
     }
+
     if (!isCheckedOutByUser) {
       newErrorMsgs.push("You must check out the facility before saving.");
     }
-    if (newErrorMsgs.length) {
-      setErrorMsgs(newErrorMsgs);
-      return;
+
+    const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
+    if (new Set(stackPipeIds).size !== stackPipeIds.length) {
+      newErrorMsgs.push("Stack/Pipe IDs must be unique.");
     }
+
+    setErrorMsgs(newErrorMsgs);
+    if (newErrorMsgs.length) return;
+
     setModalVisible(true);
     createChangeSummary();
   };
@@ -1875,10 +1907,14 @@ export const ConfigurationManagement = ({
                     exitBtn="Save"
                     save={handleConfirmSave}
                     showCancel={false}
-                    showSave={user && isCheckedOutByUser}
+                    showSave={
+                      user && isCheckedOutByUser && !modalErrorMsgs.length
+                    }
                     title="Change Summary"
                   >
-                    {summaryStatus === dataStatus.PENDING && <SizedPreloader />}
+                    {changeSummaryStatus === dataStatus.PENDING && (
+                      <SizedPreloader />
+                    )}
                   </Modal>
                 )}
               </Grid>
