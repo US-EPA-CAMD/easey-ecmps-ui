@@ -281,6 +281,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
+  // NOTE:XXX: Why do we need the current user to find all facilities?
   if (!localStorage.getItem("ecmps_user")) {
     return { data: [] };
   }

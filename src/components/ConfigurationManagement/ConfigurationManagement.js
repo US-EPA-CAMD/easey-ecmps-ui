@@ -159,6 +159,27 @@ function formReducer(state, action) {
         }),
       };
     }
+    case "REVERT_UNIT": {
+      return {
+        ...state,
+        units: state.units.map((u) => {
+          if (u.id === action.payload) {
+            return {
+              ...u,
+              ...(u.originalRecord
+                ? {
+                    unitId: u.originalRecord.unitId,
+                    beginDate: u.originalRecord.beginDate,
+                    endDate: u.originalRecord.endDate,
+                  }
+                : {}),
+              isEditing: false,
+            };
+          }
+          return u;
+        }),
+      };
+    }
     case "REVERT_UNIT_STACK_CONFIG": {
       return {
         ...state,
@@ -237,6 +258,20 @@ function formReducer(state, action) {
             return {
               ...u,
               beginDate: action.payload.beginDate,
+            };
+          }
+          return u;
+        }),
+      };
+    }
+    case "SET_UNIT_END_DATE": {
+      return {
+        ...state,
+        units: state.units.map((u) => {
+          if (u.id === action.payload.id) {
+            return {
+              ...u,
+              endDate: action.payload.endDate,
             };
           }
           return u;
@@ -1081,28 +1116,32 @@ export const ConfigurationManagement = ({
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     dataStatus.IDLE
   );
+  const [userFacilities, setUserFacilities] = useState([]);
 
   /* CALCULATED VALUES */
 
   // Format facilities for dropdown.
   const formattedFacilities = useMemo(() => {
-    return facilities.map((f) => ({
+    return userFacilities.map((f) => ({
       value: f.facilityRecordId,
       label: `${f.facilityName} (${f.facilityId})`,
     }));
-  }, [facilities]);
+  }, [userFacilities]);
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
     (loc) => loc.facId === selectedFacility
   );
   const isCheckedOutByUser =
+    user &&
     checkedOutLocationsForFacility.length &&
     checkedOutLocationsForFacility.every(
       (loc) => loc.checkedOutBy === user.userId
     );
-  const isCheckedOutByOtherUser = checkedOutLocationsForFacility.some(
-    (loc) => loc.checkedOutBy !== user
-  );
+  const isCheckedOutByOtherUser =
+    !user ||
+    checkedOutLocationsForFacility.some(
+      (loc) => loc.checkedOutBy !== user.userId
+    );
 
   if (document.title !== configurationManagementTitle) {
     document.title = configurationManagementTitle;
@@ -1117,14 +1156,10 @@ export const ConfigurationManagement = ({
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
       checkedOutLocationsRef.current
-        .filter((loc) => loc.checkedOutBy === user.userId)
+        .filter((loc) => user && loc.checkedOutBy === user.userId)
         .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
-    setCheckedOutLocations(
-      checkedOutLocationsRef.current.filter(
-        (loc) => loc.checkedOutBy !== user.userId
-      )
-    );
+    setCheckedOutLocations((await getCheckedOutLocations()).data);
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
@@ -1223,7 +1258,7 @@ export const ConfigurationManagement = ({
 
     const locationsCheckedOutByUserForFacility = checkedOutLocations
       .filter((loc) => loc.facId === selectedFacility)
-      .filter((loc) => loc.checkedOutBy === user.userId);
+      .filter((loc) => user && loc.checkedOutBy === user.userId);
     try {
       setCheckInOutStatus(dataStatus.PENDING);
       await Promise.all(
@@ -1231,12 +1266,7 @@ export const ConfigurationManagement = ({
           deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)
         )
       );
-      setCheckedOutLocations(
-        checkedOutLocations.filter(
-          (loc) =>
-            loc.facId !== selectedFacility || loc.checkedOutBy !== user.userId
-        )
-      );
+      setCheckedOutLocations((await getCheckedOutLocations()).data);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
     }
@@ -1248,7 +1278,7 @@ export const ConfigurationManagement = ({
     try {
       setCheckInOutStatus(dataStatus.PENDING);
       await checkInAllPlansForUser();
-      const orisCode = facilities.find(
+      const orisCode = userFacilities.find(
         (f) => f.facilityRecordId === parseInt(selectedFacility)
       )?.facilityId;
       if (!orisCode) return;
@@ -1336,8 +1366,9 @@ export const ConfigurationManagement = ({
     });
     return {
       monitoringPlanCommentData: [],
-      orisCode: facilities.find((f) => f.facilityRecordId === selectedFacility)
-        .facilityId,
+      orisCode: userFacilities.find(
+        (f) => f.facilityRecordId === selectedFacility
+      ).facilityId,
       unitStackConfigurationData: configuration.items
         .filter((item) => item.hasOwnProperty("stackPipeId"))
         .map((item) => ({
@@ -1377,6 +1408,14 @@ export const ConfigurationManagement = ({
     formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
   };
 
+  const removeUnit = (rowId) => {
+    formDispatch({ type: "REMOVE_UNIT", payload: rowId });
+  };
+
+  const removeUnitStackConfig = (rowId) => {
+    formDispatch({ type: "REMOVE_UNIT_STACK_CONFIG", payload: rowId });
+  };
+
   const resetFacilityData = () => {
     formDispatch({ type: "RESET_STATE" });
     setUnitsStatus(dataStatus.IDLE);
@@ -1384,12 +1423,12 @@ export const ConfigurationManagement = ({
     setUnitStackConfigsStatus(dataStatus.IDLE);
   };
 
-  const removeUnitStackConfig = (rowId) => {
-    formDispatch({ type: "REMOVE_UNIT_STACK_CONFIG", payload: rowId });
-  };
-
   const revertStackPipe = (rowId) => {
     formDispatch({ type: "REVERT_STACK_PIPE", payload: rowId });
+  };
+
+  const revertUnit = (rowId) => {
+    formDispatch({ type: "REVERT_UNIT", payload: rowId });
   };
 
   const revertUnitStackConfig = (rowId) => {
@@ -1446,6 +1485,16 @@ export const ConfigurationManagement = ({
     });
   };
 
+  const setUnitEndDate = (rowId, endDate) => {
+    formDispatch({
+      type: "SET_UNIT_END_DATE",
+      payload: {
+        id: rowId,
+        endDate,
+      },
+    });
+  };
+
   const setUnitStackConfigEndDate = (rowId, endDate) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_END_DATE",
@@ -1492,14 +1541,28 @@ export const ConfigurationManagement = ({
 
   // Load facilities.
   useEffect(() => {
+    if (!user) return;
+
+    console.log("facilities", facilities);
+    console.log("user.facilities", user.facilities);
     if (facilitiesStatus === dataStatus.IDLE) {
       if (facilities.length > 0) {
+        setUserFacilities(
+          facilities.filter((f) =>
+            user.facilities.some((uf) => uf.facId === f.facilityRecordId)
+          )
+        );
         setFacilitiesStatus(dataStatus.SUCCESS);
       } else {
         try {
           setFacilitiesStatus(dataStatus.PENDING);
-          getAllFacilities().then((res) => {
-            setFacilities(res.data);
+          getAllFacilities().then(({ data }) => {
+            setFacilities(data);
+            setUserFacilities(
+              data.filter((f) =>
+                user.facilities.some((uf) => uf.facId === f.facilityRecordId)
+              )
+            );
             setFacilitiesStatus(dataStatus.SUCCESS);
           });
         } catch (err) {
@@ -1507,7 +1570,7 @@ export const ConfigurationManagement = ({
         }
       }
     }
-  }, [facilities, facilitiesStatus, setFacilities]);
+  }, [facilities, facilitiesStatus, setFacilities, user]);
 
   // Load units.
   useEffect(() => {
@@ -1575,7 +1638,9 @@ export const ConfigurationManagement = ({
     };
   }, [checkInAllPlansForUser]);
 
-  return (
+  return !user ? (
+    <Preloader />
+  ) : (
     <>
       <div className="react-transition fade-in padding-x-3">
         <h2 className="page-header margin-top-2">Configuration Management</h2>
@@ -1682,6 +1747,7 @@ export const ConfigurationManagement = ({
                                   disabled: (row) =>
                                     row.originalRecord?.beginDate,
                                   onChange: setUnitBeginDate,
+                                  required: true,
                                 }),
                                 selector: (row) => row.beginDate,
                                 sortable: true,
@@ -1689,6 +1755,11 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "End Date",
+                                cell: dateCell({
+                                  disabled: (row) =>
+                                    row.originalRecord?.endDate,
+                                  onChange: setUnitEndDate,
+                                }),
                                 selector: (row) => row.endDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast("endDate"),
@@ -1697,8 +1768,8 @@ export const ConfigurationManagement = ({
                                 name: "Actions",
                                 cell: actionCell(
                                   toggleEditUnit,
-                                  removeStackPipe,
-                                  revertStackPipe
+                                  removeUnit,
+                                  revertUnit
                                 ),
                               },
                             ]}

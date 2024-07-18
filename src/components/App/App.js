@@ -457,7 +457,7 @@ const App = () => {
           <Route
             path="/workspace/configuration-management"
             element={
-              !facilityCheckoutPermission() ? (
+              !validUser() || !facilityCheckoutPermission() ? (
                 <Navigate key="navigate" to="/" />
               ) : (
                 <ConfigurationManagement user={user} />
