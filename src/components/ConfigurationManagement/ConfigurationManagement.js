@@ -394,7 +394,15 @@ function formReducer(state, action) {
   }
 }
 
-function formatDate(dateString) {
+function formatDateDashed(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDateSlashed(dateString) {
   const date = new Date(
     new Date(dateString).toLocaleString("en-us", {
       timeZone: "America/New_York",
@@ -944,7 +952,7 @@ function mergePartialConfigurations(partialConfigurations) {
 
 function parseDatePickerString(dateString) {
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return "";
+  if (isNaN(date.getTime())) return null;
   return date.toISOString().substring(0, 10);
 }
 
@@ -1013,30 +1021,37 @@ const actionCell = (onToggleEdit, onRemove, onRevert) => {
 };
 
 const dateCell = ({
+  defaultValue = "",
   disabled = (_row) => false,
-  onChange,
+  onChange = (_id, _value) => {},
   required = false,
 }) => {
-  return (row, index, column, id) =>
-    row.isEditing ? (
-      <input
-        aria-label={`Edit ${column.name} for row ${index + 1}`}
-        className="usa-input"
-        defaultValue={column.selector(row)}
-        disabled={disabled(row)}
-        form={`form-${row.id}`}
-        id={`${id}-input`}
-        name={`${id}-input`}
-        onChange={(e) =>
-          onChange(row.id, parseDatePickerString(e.target.value))
-        }
-        placeholder="Select a date..."
-        required={required}
-        type="date"
-      />
-    ) : (
-      column.selector(row)
-    );
+  return (row, index, column, id) => {
+    if (row.isEditing) {
+      if (required && !column.selector(row) && defaultValue) {
+        onChange(row.id, defaultValue);
+      }
+      return (
+        <input
+          aria-label={`Edit ${column.name} for row ${index + 1}`}
+          className="usa-input"
+          disabled={disabled(row)}
+          form={`form-${row.id}`}
+          id={`${id}-input`}
+          name={`${id}-input`}
+          onChange={(e) =>
+            onChange(row.id, parseDatePickerString(e.target.value))
+          }
+          placeholder="Select a date..."
+          required={required}
+          type="date"
+          value={column.selector(row) ?? ""}
+        />
+      );
+    } else {
+      return column.selector(row);
+    }
+  };
 };
 
 const SizedPreloader = ({ size = 9 }) => {
@@ -1074,11 +1089,11 @@ const textCell = ({
         form={`form-${row.id}`}
         id={`${id}-input`}
         name={`${id}-input`}
-        onChange={(e) => onChange(row.id, e.target.value)}
+        onChange={(e) => onChange(row.id, e.target.value ?? null)}
         placeholder="Enter text..."
         required={required}
         type="text"
-        value={column.selector(row)}
+        value={column.selector(row) ?? ""}
       />
     ) : (
       column.selector(row)
@@ -1107,7 +1122,7 @@ export const ConfigurationManagement = ({
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [monitorPlanPayloads, setMonitorPlanPayloads] = useState([]);
-  const [selectedFacility, setSelectedFacility] = useState("");
+  const [selectedFacility, setSelectedFacility] = useState(undefined);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
     dataStatus.IDLE
@@ -1279,7 +1294,7 @@ export const ConfigurationManagement = ({
       setCheckInOutStatus(dataStatus.PENDING);
       await checkInAllPlansForUser();
       const orisCode = userFacilities.find(
-        (f) => f.facilityRecordId === parseInt(selectedFacility)
+        (f) => f.facilityRecordId === selectedFacility
       )?.facilityId;
       if (!orisCode) return;
 
@@ -1303,7 +1318,7 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = () => {};
 
   const handleFacilityChange = (e) => {
-    setSelectedFacility(e.target.value ? parseInt(e.target.value) : "");
+    setSelectedFacility(e.target.value ? parseInt(e.target.value) : undefined);
     resetFacilityData();
   };
 
@@ -1543,8 +1558,6 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!user) return;
 
-    console.log("facilities", facilities);
-    console.log("user.facilities", user.facilities);
     if (facilitiesStatus === dataStatus.IDLE) {
       if (facilities.length > 0) {
         setUserFacilities(
@@ -1662,7 +1675,7 @@ export const ConfigurationManagement = ({
                     name="facility"
                     value={selectedFacility}
                   >
-                    <option key="" value="">
+                    <option key={undefined} value="">
                       {DEFAULT_DROPDOWN_TEXT}
                     </option>
                     {formattedFacilities.map((f) => (
@@ -1706,7 +1719,9 @@ export const ConfigurationManagement = ({
                   <p className="text-bold">
                     Currently checked-out by:{" "}
                     {checkedOutLocationsForFacility[0].checkedOutBy}{" "}
-                    {formatDate(checkedOutLocationsForFacility[0].checkedOutOn)}
+                    {formatDateSlashed(
+                      checkedOutLocationsForFacility[0].checkedOutOn
+                    )}
                   </p>
                 )}
               </div>
@@ -1744,8 +1759,10 @@ export const ConfigurationManagement = ({
                               {
                                 name: "Begin Date",
                                 cell: dateCell({
-                                  disabled: (row) =>
-                                    row.originalRecord?.beginDate,
+                                  defaultValue: formatDateDashed(
+                                    new Date().toISOString()
+                                  ),
+                                  disabled: (_row) => true, // Don't allow changing from the default
                                   onChange: setUnitBeginDate,
                                   required: true,
                                 }),
