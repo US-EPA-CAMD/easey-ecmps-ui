@@ -1201,12 +1201,10 @@ export const ConfigurationManagement = ({
             item.endDate !== item.originalRecord.endDate
         )
       );
-      console.log("changedConfigurations", changedConfigurations); // TODO: Remove this line.
 
       const newMonitorPlanPayloads = changedConfigurations.map(
         mapConfigurationToPayload
       );
-      console.log("newMonitorPlanPayloads", newMonitorPlanPayloads); // TODO: Remove this line.
 
       // Fetch the change summary for each plan.
       const planResults = await Promise.all(
