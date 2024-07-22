@@ -1,8 +1,10 @@
 import {
+  AddSharp,
   ArrowDownwardSharp,
   CheckSharp,
   CreateSharp,
   DeleteSharp,
+  RemoveSharp,
   UndoSharp,
 } from "@material-ui/icons";
 import {
@@ -29,7 +31,8 @@ import { connect } from "react-redux";
 import { v4 as uuid } from "uuid";
 
 import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
-import { loadFacilitiesSuccess } from "../../store/actions/facilities";
+import { loadFacilities } from "../../store/actions/facilities";
+import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
 import {
   getAllFacilities,
   getStackPipesByFacId,
@@ -129,12 +132,6 @@ function formReducer(state, action) {
         ),
       };
     }
-    case "REMOVE_UNIT": {
-      return {
-        ...state,
-        units: state.units.filter((u) => u.id !== action),
-      };
-    }
     case "RESET_STATE": {
       return initialFormState;
     }
@@ -156,27 +153,6 @@ function formReducer(state, action) {
             };
           }
           return sp;
-        }),
-      };
-    }
-    case "REVERT_UNIT": {
-      return {
-        ...state,
-        units: state.units.map((u) => {
-          if (u.id === action.payload) {
-            return {
-              ...u,
-              ...(u.originalRecord
-                ? {
-                    unitId: u.originalRecord.unitId,
-                    beginDate: u.originalRecord.beginDate,
-                    endDate: u.originalRecord.endDate,
-                  }
-                : {}),
-              isEditing: false,
-            };
-          }
-          return u;
         }),
       };
     }
@@ -248,34 +224,6 @@ function formReducer(state, action) {
       return {
         ...state,
         stackPipes: action.payload,
-      };
-    }
-    case "SET_UNIT_BEGIN_DATE": {
-      return {
-        ...state,
-        units: state.units.map((u) => {
-          if (u.id === action.payload.id) {
-            return {
-              ...u,
-              beginDate: action.payload.beginDate,
-            };
-          }
-          return u;
-        }),
-      };
-    }
-    case "SET_UNIT_END_DATE": {
-      return {
-        ...state,
-        units: state.units.map((u) => {
-          if (u.id === action.payload.id) {
-            return {
-              ...u,
-              endDate: action.payload.endDate,
-            };
-          }
-          return u;
-        }),
       };
     }
     case "SET_UNIT_STACK_CONFIG_BEGIN_DATE": {
@@ -374,14 +322,14 @@ function formReducer(state, action) {
         }),
       };
     }
-    case "TOGGLE_EDIT_UNIT": {
+    case "TOGGLE_ASSOCIATE_UNIT": {
       return {
         ...state,
         units: state.units.map((u) => {
           if (u.id === action.payload) {
             return {
               ...u,
-              isEditing: !u.isEditing,
+              isToggled: !u.isToggled,
             };
           }
           return u;
@@ -392,14 +340,6 @@ function formReducer(state, action) {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
-}
-
-function formatDateDashed(dateString) {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
 }
 
 function formatDateSlashed(dateString) {
@@ -887,6 +827,10 @@ function getMergedConfiguration(a, b) {
   }
 }
 
+function getOrisCodeByFacId(facilities, facId) {
+  return facilities.find((f) => f.facilityRecordId === facId)?.facilityId;
+}
+
 function getYearAndQuarterFromDate(dateString) {
   if (!dateString) return [Infinity, Infinity];
 
@@ -972,11 +916,48 @@ function sortDatesNullsLast(key) {
   };
 }
 
+function unusedMonitoringLocationDataFields() {
+  return {
+    monitoringLocationAttribData: [],
+    unitCapacityData: [],
+    unitControlData: [],
+    unitFuelData: [],
+    monitoringMethodData: [],
+    supplementalMATSMonitoringMethodData: [],
+    monitoringFormulaData: [],
+    monitoringDefaultData: [],
+    monitoringSpanData: [],
+    rectangularDuctWAFData: [],
+    monitoringLoadData: [],
+    componentData: [],
+    monitoringSystemData: [],
+    monitoringQualificationData: [],
+  };
+}
 /*
 ## COMPONENTS
 */
 
-const actionCell = (onToggleEdit, onRemove, onRevert) => {
+const actionCellToggle = (onToggle) => {
+  return (row) =>
+    row.associatedMonitorPlanIds.length === 0 ? (
+      <Button
+        aria-label={
+          row.isToggled
+            ? "Cancel creating initial monitor plan from unit"
+            : "Create initial monitor plan from unit"
+        }
+        onClick={() => onToggle(row.id)}
+        title={row.isToggled ? "Cancel" : "Create"}
+        type="button"
+        unstyled
+      >
+        {row.isToggled ? <RemoveSharp /> : <AddSharp />}
+      </Button>
+    ) : null;
+};
+
+const actionCellEdit = (onToggleEdit, onRemove, onRevert) => {
   return (row, index) => (
     <ButtonGroup>
       {row.isEditing ? (
@@ -1107,8 +1088,10 @@ const textCell = ({
 export const ConfigurationManagement = ({
   checkedOutLocations,
   facilities,
+  loadFacilities,
+  loadMonitoringPlans,
+  monitoringPlans,
   setCheckedOutLocations,
-  setFacilities,
   user,
 }) => {
   /* STATE */
@@ -1122,6 +1105,9 @@ export const ConfigurationManagement = ({
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [monitorPlanPayloads, setMonitorPlanPayloads] = useState([]);
+  const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
+    dataStatus.IDLE
+  );
   const [selectedFacility, setSelectedFacility] = useState(undefined);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
@@ -1131,9 +1117,13 @@ export const ConfigurationManagement = ({
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     dataStatus.IDLE
   );
-  const [userFacilities, setUserFacilities] = useState([]);
 
   /* CALCULATED VALUES */
+
+  const userFacilities = facilities.filter(
+    (f) =>
+      user?.facilities.some((uf) => uf.facId === f.facilityRecordId) ?? false
+  );
 
   // Format facilities for dropdown.
   const formattedFacilities = useMemo(() => {
@@ -1142,6 +1132,9 @@ export const ConfigurationManagement = ({
       label: `${f.facilityName} (${f.facilityId})`,
     }));
   }, [userFacilities]);
+
+  // TODO: Remove this after migrating to checking out by plants.
+  const canCheckOut = monitoringPlans.length > 0;
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
     (loc) => loc.facId === selectedFacility
@@ -1202,9 +1195,11 @@ export const ConfigurationManagement = ({
         )
       );
 
-      const newMonitorPlanPayloads = changedConfigurations.map(
-        mapConfigurationToPayload
-      );
+      const newlyAssociatedUnits = formState.units.filter((u) => u.isToggled);
+
+      const newMonitorPlanPayloads = changedConfigurations
+        .map(mapConfigurationToPayload)
+        .concat(newlyAssociatedUnits.map(mapUnitToPayload));
 
       // Fetch the change summary for each plan.
       const planResults = await Promise.all(
@@ -1290,9 +1285,7 @@ export const ConfigurationManagement = ({
     try {
       setCheckInOutStatus(dataStatus.PENDING);
       await checkInAllPlansForUser();
-      const orisCode = userFacilities.find(
-        (f) => f.facilityRecordId === selectedFacility
-      )?.facilityId;
+      const orisCode = getOrisCodeByFacId(userFacilities, selectedFacility);
       if (!orisCode) return;
 
       const monitoringPlans = await getMonitoringPlans(orisCode);
@@ -1330,7 +1323,7 @@ export const ConfigurationManagement = ({
       newErrorMsgs.push("Please complete any pending edits before continuing.");
     }
 
-    if (!isCheckedOutByUser) {
+    if (canCheckOut && !isCheckedOutByUser) {
       newErrorMsgs.push("You must check out the facility before saving.");
     }
 
@@ -1346,7 +1339,19 @@ export const ConfigurationManagement = ({
     createChangeSummary();
   };
 
-  const initializeFormState = (data, type) => {
+  const initializeToggleableFormState = (data, type) => {
+    formDispatch({
+      type,
+      payload: data.map((d) => ({
+        ...d,
+        id: uuid(),
+        originalRecord: d,
+        isToggled: false,
+      })),
+    });
+  };
+
+  const initializeEditableFormState = (data, type) => {
     formDispatch({
       type,
       payload: data.map((d) => ({
@@ -1360,22 +1365,6 @@ export const ConfigurationManagement = ({
 
   const mapConfigurationToPayload = (configuration) => {
     const { unitIds, stackPipeIds } = getItemLocations(configuration.items);
-    const unusedMonitoringLocationDataFields = () => ({
-      monitoringLocationAttribData: [],
-      unitCapacityData: [],
-      unitControlData: [],
-      unitFuelData: [],
-      monitoringMethodData: [],
-      supplementalMATSMonitoringMethodData: [],
-      monitoringFormulaData: [],
-      monitoringDefaultData: [],
-      monitoringSpanData: [],
-      rectangularDuctWAFData: [],
-      monitoringLoadData: [],
-      componentData: [],
-      monitoringSystemData: [],
-      monitoringQualificationData: [],
-    });
     return {
       monitoringPlanCommentData: [],
       orisCode: userFacilities.find(
@@ -1416,12 +1405,28 @@ export const ConfigurationManagement = ({
     };
   };
 
-  const removeStackPipe = (rowId) => {
-    formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
+  const mapUnitToPayload = (unit) => {
+    return {
+      monitoringPlanCommentData: [],
+      orisCode: userFacilities.find(
+        (f) => f.facilityRecordId === selectedFacility
+      ).facilityId,
+      unitStackConfigurationData: [],
+      monitoringLocationData: [
+        {
+          unitId: unit.unitId,
+          stackPipeId: null,
+          activeDate: null,
+          retireDate: null,
+          nonLoadBasedIndicator: unit.nonLoadBasedIndicator,
+          ...unusedMonitoringLocationDataFields(),
+        },
+      ],
+    };
   };
 
-  const removeUnit = (rowId) => {
-    formDispatch({ type: "REMOVE_UNIT", payload: rowId });
+  const removeStackPipe = (rowId) => {
+    formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
   };
 
   const removeUnitStackConfig = (rowId) => {
@@ -1430,6 +1435,7 @@ export const ConfigurationManagement = ({
 
   const resetFacilityData = () => {
     formDispatch({ type: "RESET_STATE" });
+    setMonitoringPlansStatus(dataStatus.IDLE);
     setUnitsStatus(dataStatus.IDLE);
     setStackPipesStatus(dataStatus.IDLE);
     setUnitStackConfigsStatus(dataStatus.IDLE);
@@ -1437,10 +1443,6 @@ export const ConfigurationManagement = ({
 
   const revertStackPipe = (rowId) => {
     formDispatch({ type: "REVERT_STACK_PIPE", payload: rowId });
-  };
-
-  const revertUnit = (rowId) => {
-    formDispatch({ type: "REVERT_UNIT", payload: rowId });
   };
 
   const revertUnitStackConfig = (rowId) => {
@@ -1477,32 +1479,12 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const setUnitBeginDate = (rowId, beginDate) => {
-    formDispatch({
-      type: "SET_UNIT_BEGIN_DATE",
-      payload: {
-        id: rowId,
-        beginDate,
-      },
-    });
-  };
-
   const setUnitStackConfigBeginDate = (rowId, beginDate) => {
     formDispatch({
       type: "SET_UNIT_STACK_CONFIG_BEGIN_DATE",
       payload: {
         id: rowId,
         beginDate,
-      },
-    });
-  };
-
-  const setUnitEndDate = (rowId, endDate) => {
-    formDispatch({
-      type: "SET_UNIT_END_DATE",
-      payload: {
-        id: rowId,
-        endDate,
       },
     });
   };
@@ -1541,8 +1523,8 @@ export const ConfigurationManagement = ({
     formDispatch({ type: "TOGGLE_EDIT_STACK_PIPE", payload: rowId });
   };
 
-  const toggleEditUnit = (rowId) => {
-    formDispatch({ type: "TOGGLE_EDIT_UNIT", payload: rowId });
+  const toggleAssociateUnit = (rowId) => {
+    formDispatch({ type: "TOGGLE_ASSOCIATE_UNIT", payload: rowId });
   };
 
   const toggleEditUnitStackConfig = (rowId) => {
@@ -1551,36 +1533,43 @@ export const ConfigurationManagement = ({
 
   /* EFFECTS */
 
+  // Load monitoring plans for the selected facility.
+  useEffect(() => {
+    if (!selectedFacility) return;
+
+    if (monitoringPlansStatus === dataStatus.IDLE) {
+      const orisCode = getOrisCodeByFacId(facilities, selectedFacility);
+      try {
+        setMonitoringPlansStatus(dataStatus.PENDING);
+        loadMonitoringPlans(orisCode).then(() =>
+          setMonitoringPlansStatus(dataStatus.SUCCESS)
+        );
+      } catch (err) {
+        setMonitoringPlansStatus(dataStatus.ERROR);
+      }
+    }
+  }, [
+    facilities,
+    loadMonitoringPlans,
+    monitoringPlansStatus,
+    selectedFacility,
+  ]);
+
   // Load facilities.
   useEffect(() => {
-    if (!user) return;
-
     if (facilitiesStatus === dataStatus.IDLE) {
       if (facilities.length > 0) {
-        setUserFacilities(
-          facilities.filter((f) =>
-            user.facilities.some((uf) => uf.facId === f.facilityRecordId)
-          )
-        );
         setFacilitiesStatus(dataStatus.SUCCESS);
       } else {
         try {
           setFacilitiesStatus(dataStatus.PENDING);
-          getAllFacilities().then(({ data }) => {
-            setFacilities(data);
-            setUserFacilities(
-              data.filter((f) =>
-                user.facilities.some((uf) => uf.facId === f.facilityRecordId)
-              )
-            );
-            setFacilitiesStatus(dataStatus.SUCCESS);
-          });
+          loadFacilities().then(() => setFacilitiesStatus(dataStatus.SUCCESS));
         } catch (err) {
           setFacilitiesStatus(dataStatus.ERROR);
         }
       }
     }
-  }, [facilities, facilitiesStatus, setFacilities, user]);
+  }, [facilities, facilitiesStatus, loadFacilities]);
 
   // Load units.
   useEffect(() => {
@@ -1591,7 +1580,7 @@ export const ConfigurationManagement = ({
         setUnitsStatus(dataStatus.PENDING);
         getUnitsByFacId(selectedFacility).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
-          initializeFormState(
+          initializeToggleableFormState(
             res.data.map((d) => ({
               ...d,
               beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
@@ -1615,7 +1604,7 @@ export const ConfigurationManagement = ({
         setStackPipesStatus(dataStatus.PENDING);
         getStackPipesByFacId(selectedFacility).then((res) => {
           setStackPipesStatus(dataStatus.SUCCESS);
-          initializeFormState(res.data, "SET_STACK_PIPES");
+          initializeEditableFormState(res.data, "SET_STACK_PIPES");
         });
       } catch (err) {
         setStackPipesStatus(dataStatus.ERROR);
@@ -1632,7 +1621,7 @@ export const ConfigurationManagement = ({
         setUnitStackConfigsStatus(dataStatus.PENDING);
         getUnitStackConfigsByFacId(selectedFacility).then((res) => {
           setUnitStackConfigsStatus(dataStatus.SUCCESS);
-          initializeFormState(res.data, "SET_UNIT_STACK_CONFIGS");
+          initializeEditableFormState(res.data, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
         setUnitStackConfigsStatus(dataStatus.ERROR);
@@ -1683,29 +1672,34 @@ export const ConfigurationManagement = ({
                   </Dropdown>
                   {selectedFacility && (
                     <>
-                      {checkInOutStatus === dataStatus.PENDING ? (
+                      {checkInOutStatus === dataStatus.PENDING ||
+                      monitoringPlansStatus === dataStatus.PENDING ? (
                         <SizedPreloader size={5} />
                       ) : (
                         <>
-                          {isCheckedOutByUser ? (
-                            <Button
-                              className="display-inline-flex height-5 margin-0"
-                              id="check-in-button"
-                              onClick={handleCheckIn}
-                              type="button"
-                            >
-                              Check Back In
-                            </Button>
-                          ) : (
-                            <Button
-                              className="display-inline-flex height-5 margin-0"
-                              disabled={isCheckedOutByOtherUser}
-                              id="check-out-button"
-                              onClick={handleCheckOut}
-                              type="button"
-                            >
-                              Check Out
-                            </Button>
+                          {canCheckOut && (
+                            <>
+                              {isCheckedOutByUser ? (
+                                <Button
+                                  className="display-inline-flex height-5 margin-0"
+                                  id="check-in-button"
+                                  onClick={handleCheckIn}
+                                  type="button"
+                                >
+                                  Check Back In
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="display-inline-flex height-5 margin-0"
+                                  disabled={isCheckedOutByOtherUser}
+                                  id="check-out-button"
+                                  onClick={handleCheckOut}
+                                  type="button"
+                                >
+                                  Check Out
+                                </Button>
+                              )}
+                            </>
                           )}
                         </>
                       )}
@@ -1735,16 +1729,6 @@ export const ConfigurationManagement = ({
                       title: "Units",
                       content: (
                         <StatusContent status={unitsStatus} label="units">
-                          {formState.units.map((u) => (
-                            <form
-                              key={u.id}
-                              id={`form-${u.id}`}
-                              onSubmit={(e) => {
-                                e.preventDefault();
-                                toggleEditUnit(u.id);
-                              }}
-                            ></form>
-                          ))}
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
@@ -1755,14 +1739,6 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "Begin Date",
-                                cell: dateCell({
-                                  defaultValue: formatDateDashed(
-                                    new Date().toISOString()
-                                  ),
-                                  disabled: (_row) => true, // Don't allow changing from the default
-                                  onChange: setUnitBeginDate,
-                                  required: true,
-                                }),
                                 selector: (row) => row.beginDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast("beginDate"),
@@ -1775,11 +1751,7 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "Actions",
-                                cell: actionCell(
-                                  toggleEditUnit,
-                                  removeUnit,
-                                  revertUnit
-                                ),
+                                cell: actionCellToggle(toggleAssociateUnit),
                               },
                             ]}
                             data={formState.units}
@@ -1846,7 +1818,7 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "Actions",
-                                cell: actionCell(
+                                cell: actionCellEdit(
                                   toggleEditStackPipe,
                                   removeStackPipe,
                                   revertStackPipe
@@ -1935,7 +1907,7 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "Actions",
-                                cell: actionCell(
+                                cell: actionCellEdit(
                                   toggleEditUnitStackConfig,
                                   removeUnitStackConfig,
                                   revertUnitStackConfig
@@ -1988,7 +1960,9 @@ export const ConfigurationManagement = ({
                     save={handleConfirmSave}
                     showCancel={false}
                     showSave={
-                      user && isCheckedOutByUser && !modalErrorMsgs.length
+                      user &&
+                      (!canCheckOut || isCheckedOutByUser) &&
+                      !modalErrorMsgs.length
                     }
                     title="Change Summary"
                   >
@@ -2009,12 +1983,14 @@ export const ConfigurationManagement = ({
 export const mapStateToProps = (state) => ({
   checkedOutLocations: state.checkedOutLocations,
   facilities: state.facilities,
+  monitoringPlans: state.monitoringPlans,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
-  setFacilities: (facilities) => dispatch(loadFacilitiesSuccess(facilities)),
   setCheckedOutLocations: (locations) =>
     dispatch(setCheckedOutLocations(locations)),
+  loadFacilities: () => loadFacilities(dispatch),
+  loadMonitoringPlans: (orisCode) => loadMonitoringPlans(orisCode)(dispatch),
 });
 
 export default connect(

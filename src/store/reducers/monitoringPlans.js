@@ -6,7 +6,9 @@ const reducer = (state, action) => {
   if (action.type === types.LOAD_MONITORING_PLANS_SUCCESS) {
     return action.monitoringPlans;
   } else if (action.type === types.LOAD_MONITORING_PLANS_ARRAY_SUCCESS) {
-    return [...currentState, [action.orisCode, action.monitoringPlans]];
+    return [...currentState, [action.orisCode, action.monitoringPlans]].filter(
+      (item, i, arr) => arr.findIndex((t) => t[0] === item[0]) === i // Remove duplicates
+    );
   } else {
     return currentState;
   }
@@ -14,9 +16,10 @@ const reducer = (state, action) => {
 
 export default reducer;
 
-    // //fixes multiple calls adding same data to redux store
-    // const hasValue = currentState.some((row) => row.includes(action.orisCode));
-    // if (!hasValue) {
-    //   return [...currentState, [action.orisCode, action.monitoringPlans]];
-    // }
-    // return currentState;
+// //fixes multiple calls adding same data to redux store
+// const hasValue = currentState.some((row) => row.includes(action.orisCode));
+// if (!hasValue) {
+//   return [...currentState, [action.orisCode, action.monitoringPlans]];
+// }
+// return currentState;
+
