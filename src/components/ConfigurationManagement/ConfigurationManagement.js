@@ -1210,7 +1210,6 @@ export const ConfigurationManagement = ({
       const planResults = await Promise.all(
         newMonitorPlanPayloads.map((payload) => importMP(payload, true))
       );
-      console.log("results", planResults); // TODO: Remove this line.
 
       // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
       const affectedStackPipeIds = new Set(
@@ -1770,11 +1769,6 @@ export const ConfigurationManagement = ({
                               },
                               {
                                 name: "End Date",
-                                cell: dateCell({
-                                  disabled: (row) =>
-                                    row.originalRecord?.endDate,
-                                  onChange: setUnitEndDate,
-                                }),
                                 selector: (row) => row.endDate,
                                 sortable: true,
                                 sortFunction: sortDatesNullsLast("endDate"),
