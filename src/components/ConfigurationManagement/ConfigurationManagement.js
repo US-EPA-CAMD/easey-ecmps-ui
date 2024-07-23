@@ -11,10 +11,11 @@ import {
   Alert,
   Button,
   ButtonGroup,
-  Dropdown,
+  DatePicker,
   Grid,
   GridContainer,
   Label,
+  Select,
   TextInput,
 } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -1029,19 +1030,15 @@ const dateCell = ({
         onChange(row.id, defaultValue);
       }
       return (
-        <input
+        <DatePicker
           aria-label={`Edit ${column.name} for row ${index + 1}`}
-          className="usa-input"
           disabled={disabled(row)}
           form={`form-${row.id}`}
           id={`${id}-input`}
           name={`${id}-input`}
-          onChange={(e) =>
-            onChange(row.id, parseDatePickerString(e.target.value))
-          }
+          onChange={(e) => onChange(row.id, parseDatePickerString(e))}
           placeholder="Select a date..."
           required={required}
-          type="date"
           value={column.selector(row) ?? ""}
         />
       );
@@ -1789,7 +1786,7 @@ export const ConfigurationManagement = ({
               <div>
                 <Label htmlFor="facility">Facility</Label>
                 <div className="display-flex" id="facilities-container">
-                  <Dropdown
+                  <Select
                     className="margin-0"
                     onChange={handleFacilityChange}
                     id="facility"
@@ -1804,7 +1801,7 @@ export const ConfigurationManagement = ({
                         {f.label}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                   {selectedFacility && (
                     <>
                       {checkInOutStatus === dataStatus.PENDING ||

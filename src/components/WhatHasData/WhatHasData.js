@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
-import { Alert, Button, Dropdown, Radio } from "@trussworks/react-uswds";
+import { Alert, Button, Radio, Select } from "@trussworks/react-uswds";
 
 import config from "../../config";
 import LoadingModal from "../LoadingModal/LoadingModal";
@@ -242,7 +242,7 @@ export const WhatHasData = () => {
       </div>
       <div>
         <div className="display-flex">
-          <Dropdown onChange={(event) => dataTypeChangeHandler(event)}>
+          <Select onChange={(event) => dataTypeChangeHandler(event)}>
             <option key="none" value="none">
               --- select a value ---
             </option>
@@ -251,7 +251,7 @@ export const WhatHasData = () => {
                 {i.value}
               </option>
             ))}
-          </Dropdown>
+          </Select>
           <Button className="margin-left-1" onClick={loadDataHandler}>
             Refresh
           </Button>

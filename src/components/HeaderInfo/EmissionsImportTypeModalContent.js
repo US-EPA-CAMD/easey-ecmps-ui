@@ -1,4 +1,4 @@
-import { Dropdown, Label } from "@trussworks/react-uswds";
+import { Label, Select } from "@trussworks/react-uswds";
 import React from "react";
 
 export const EmissionsImportTypeModalContent = ({ onChange }) => {
@@ -7,7 +7,7 @@ export const EmissionsImportTypeModalContent = ({ onChange }) => {
       <Label htmlFor="emissions-import-type-selector">
         Import Historical or File Data
       </Label>
-      <Dropdown id="emissions-import-type-selector" onChange={onChange}>
+      <Select id="emissions-import-type-selector" onChange={onChange}>
         <option>Select Data Type to Import</option>
         <option key="1" value="file">
           Import From File
@@ -15,7 +15,7 @@ export const EmissionsImportTypeModalContent = ({ onChange }) => {
         <option key="2" value="historical">
           Import From Historical Data
         </option>
-      </Dropdown>
+      </Select>
     </>
   );
 };

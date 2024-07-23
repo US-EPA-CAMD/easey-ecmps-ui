@@ -1,5 +1,5 @@
 import React from "react";
-import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
+import { Label, Select, FormGroup } from "@trussworks/react-uswds";
 export const DropdownSelection = ({
   caption,
   selectKey, // the key in the object property to identify
@@ -47,7 +47,7 @@ export const DropdownSelection = ({
             <Label test-id={caption} htmlFor={caption}>
               {caption}
             </Label>
-            <Dropdown
+            <Select
               id={caption}
               name={caption}
               epa-testid={caption}
@@ -61,7 +61,7 @@ export const DropdownSelection = ({
               tabIndex={0}
             >
               {populateOptions(options)}
-            </Dropdown>
+            </Select>
           </FormGroup>
         </div>
       ) : (
@@ -69,7 +69,7 @@ export const DropdownSelection = ({
           <Label test-id={caption} htmlFor={caption}>
             {caption}
           </Label>
-          <Dropdown
+          <Select
             id={caption}
             name={caption}
             epa-testid={caption}
@@ -83,7 +83,7 @@ export const DropdownSelection = ({
             tabIndex={0}
           >
             {populateOptions(options)}
-          </Dropdown>
+          </Select>
         </div>
       )}
     </div>
