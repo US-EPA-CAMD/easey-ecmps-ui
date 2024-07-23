@@ -61,6 +61,11 @@ const dataStatus = {
   ERROR: "ERROR",
   IDLE: "IDLE",
 };
+const errorMessages = {
+  DUPLICATE_STACKPIPE_IDS: "Stack/Pipe IDs must be unique.",
+  EDITS_PENDING: "Please complete any pending edits before continuing.",
+  NOT_CHECKED_OUT: "You must check out the facility before saving.",
+};
 const initialFormState = {
   units: [],
   stackPipes: [],
@@ -1046,6 +1051,52 @@ const dateCell = ({
   };
 };
 
+const PlanSummary = ({ plan }) => {
+  return (
+    <>
+      <h4>{plan.name}</h4>
+      <GridContainer>
+        <Grid row>
+          <Grid col={4} className="text-bold">
+            Begin Reporting Period:
+          </Grid>
+          <Grid col="auto">{plan.beginReportPeriodDescription}</Grid>
+        </Grid>
+        <Grid row>
+          <Grid col={4} className="text-bold">
+            End Reporting Period:
+          </Grid>
+          <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
+        </Grid>
+      </GridContainer>
+      <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
+      <GridContainer>
+        {plan.reportingFrequencies.map((rf) => (
+          <>
+            <Grid row key={rf.id}>
+              <Grid col={4} className="text-bold">
+                Reporting Period Range:
+              </Grid>
+              <Grid col="auto">
+                {rf.beginReportPeriodDescription} -{" "}
+                {rf.endReportPeriodDescription ?? "Current"}
+              </Grid>
+            </Grid>
+            <Grid row>
+              <Grid col={4} className="text-bold">
+                Reporting Frequency:
+              </Grid>
+              <Grid col="auto">
+                {rf.reportingFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
+              </Grid>
+            </Grid>
+          </>
+        ))}
+      </GridContainer>
+    </>
+  );
+};
+
 const SizedPreloader = ({ size = 9 }) => {
   return (
     <div
@@ -1058,7 +1109,11 @@ const SizedPreloader = ({ size = 9 }) => {
 
 const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   <>
-    {status === dataStatus.PENDING && <SizedPreloader />}
+    {status === dataStatus.PENDING && (
+      <div className="display-flex flex-justify-center">
+        <SizedPreloader />
+      </div>
+    )}
     {status === dataStatus.ERROR && (
       <Alert noIcon slim type="error" headingLevel={headingLevel}>
         Error loading {label}.
@@ -1067,6 +1122,32 @@ const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
     {status === dataStatus.SUCCESS && children}
   </>
 );
+
+const SummarySectionPlan = ({ plans, title }) =>
+  plans.length ? (
+    <section>
+      <h3 className="text-primary">{title}</h3>
+      <ul className="usa-list usa-list--unstyled">
+        {plans.map((plan) => (
+          <li key={plan.id}>
+            <PlanSummary plan={plan} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null;
+
+const SummarySectionStackPipes = ({ stackPipes, title }) =>
+  stackPipes.length ? (
+    <section>
+      <h3 className="text-primary">{title}</h3>
+      <ul className="usa-list usa-list--unstyled">
+        {stackPipes.map((sp) => (
+          <></>
+        ))}
+      </ul>
+    </section>
+  ) : null;
 
 const textCell = ({
   disabled = (_row) => false,
@@ -1107,7 +1188,13 @@ export const ConfigurationManagement = ({
 }) => {
   /* STATE */
 
-  const [changeSummary, setChangeSummary] = useState({});
+  const [changeSummary, setChangeSummary] = useState({
+    plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
+    stackPipes: [],
+  });
+  const [changeSummaryStatus, setChangeSummaryStatus] = useState(
+    dataStatus.IDLE
+  );
   const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
   const checkedOutLocationsRef = useRef(checkedOutLocations);
   const [errorMsgs, setErrorMsgs] = useState([]);
@@ -1121,9 +1208,6 @@ export const ConfigurationManagement = ({
   );
   const [selectedFacility, setSelectedFacility] = useState(undefined);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
-  const [changeSummaryStatus, setChangeSummaryStatus] = useState(
-    dataStatus.IDLE
-  );
   const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
     dataStatus.IDLE
@@ -1243,13 +1327,40 @@ export const ConfigurationManagement = ({
       const planResults = await Promise.all(
         newMonitorPlanPayloads.map((payload) => importMP(payload, true))
       );
+      setModalErrorMsgs(planResults.filter((r) => typeof r === "string"));
+
+      const planSummaries = planResults
+        .filter((r) => typeof r === "object")
+        .map((r) => r.data)
+        .reduce(
+          (acc, { newPlan, endedPlans, unchangedPlans }) => ({
+            newPlans: newPlan ? acc.newPlans.concat(newPlan) : acc.newPlans,
+            unchangedPlans: acc.unchangedPlans.concat(unchangedPlans),
+            endedPlans: acc.endedPlans.concat(endedPlans),
+          }),
+          { newPlans: [], endedPlans: [], unchangedPlans: [] }
+        );
+      const uniquePlanSummaries = Object.entries(planSummaries).reduce(
+        (acc, [key, plans]) => ({
+          ...acc,
+          [key]: plans.filter(
+            (plan, index, self) =>
+              self.findIndex(
+                (p) =>
+                  p.name === plan.name &&
+                  p.beginReportPeriodId === plan.beginReportPeriodId &&
+                  p.endReportPeriodId === plan.endReportPeriodId
+              ) === index
+          ),
+        }),
+        { newPlans: [], endedPlans: [], unchangedPlans: [] }
+      );
 
       setChangeSummary({
-        plans: planResults,
+        plans: uniquePlanSummaries,
         stackPipes: [],
       });
       setChangeSummaryStatus(dataStatus.SUCCESS);
-      setModalErrorMsgs(planResults.map((r) => typeof r === "string" && r));
       setMonitorPlanPayloads(newMonitorPlanPayloads);
     } catch (err) {
       console.error(err);
@@ -1344,16 +1455,16 @@ export const ConfigurationManagement = ({
         .flat()
         .some((row) => row.isEditing)
     ) {
-      newErrorMsgs.push("Please complete any pending edits before continuing.");
+      newErrorMsgs.push(errorMessages.UNSAVED_CHANGES);
     }
 
     if (canCheckOut && !isCheckedOutByUser) {
-      newErrorMsgs.push("You must check out the facility before saving.");
+      newErrorMsgs.push(errorMessages.NOT_CHECKED_OUT);
     }
 
     const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
     if (new Set(stackPipeIds).size !== stackPipeIds.length) {
-      newErrorMsgs.push("Stack/Pipe IDs must be unique.");
+      newErrorMsgs.push(errorMessages.DUPLICATE_STACK_PIPE);
     }
 
     setErrorMsgs(newErrorMsgs);
@@ -1990,9 +2101,39 @@ export const ConfigurationManagement = ({
                     }
                     title="Change Summary"
                   >
-                    {changeSummaryStatus === dataStatus.PENDING && (
-                      <SizedPreloader />
-                    )}
+                    <StatusContent
+                      headingLevel="h3"
+                      label="summary of configuration changes"
+                      status={changeSummaryStatus}
+                    >
+                      {modalErrorMsgs.map((msg, i) => (
+                        <Alert
+                          key={i}
+                          noIcon
+                          slim
+                          type="error"
+                          headingLevel="h3"
+                        >
+                          {msg}
+                        </Alert>
+                      ))}
+                      <SummarySectionPlan
+                        plans={changeSummary.plans.newPlans}
+                        title="New Plans"
+                      />
+                      <SummarySectionPlan
+                        plans={changeSummary.plans.endedPlans}
+                        title="Ended Plans"
+                      />
+                      <SummarySectionPlan
+                        plans={changeSummary.plans.unchangedPlans}
+                        title="Unchanged Plans"
+                      />
+                      <SummarySectionStackPipes
+                        stackPipes={changeSummary.stackPipes}
+                        title="Other Stack/Pipe Changes"
+                      />
+                    </StatusContent>
                   </Modal>
                 )}
               </Grid>
