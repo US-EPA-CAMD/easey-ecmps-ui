@@ -73,8 +73,8 @@ const initialFormState = {
   unitStackConfigs: [],
 };
 const STACK_PIPE_ID_HINT =
-  'Enter an ID that begins with MS, MP, CS, or CP and consists of alphanumeric characters or "-"';
-const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]+$";
+  "Enter an ID that begins with CS, CP, MS, or MP and is followed by 1 to 4 alphanumeric characters or dash (-) characters";
+const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]{1,4}$";
 
 /*
 ## HELPERS
