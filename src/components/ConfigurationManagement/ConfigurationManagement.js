@@ -34,7 +34,6 @@ import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations"
 import { loadFacilities } from "../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
 import {
-  getAllFacilities,
   getStackPipesByFacId,
   getUnitsByFacId,
   getUnitStackConfigsByFacId,
@@ -360,30 +359,17 @@ function formatDateSlashed(dateString) {
 
 function getItemLocations(items) {
   const unitIds = new Set(items.map((item) => item.unitId));
+  unitIds.delete(undefined);
+  unitIds.delete(null);
   const stackPipeIds = new Set(items.map((item) => item.stackPipeId));
   stackPipeIds.delete(undefined);
+  stackPipeIds.delete(null);
 
   return { unitIds, stackPipeIds };
 }
 
 function getMergedConfiguration(a, b) {
   const combinedItems = [...a.items, ...b.items];
-
-  const locationsMatch = (a, b) => {
-    const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } = getItemLocations(
-      a.items
-    );
-    const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } = getItemLocations(
-      b.items
-    );
-
-    return (
-      unitIdsA.size === unitIdsB.size &&
-      [...unitIdsA].every((id) => unitIdsB.has(id)) &&
-      stackPipeIdsA.size === stackPipeIdsB.size &&
-      [...stackPipeIdsA].every((id) => stackPipeIdsB.has(id))
-    );
-  };
 
   if (a.beginYear === b.beginYear && a.beginQuarter === b.beginQuarter) {
     if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
@@ -401,7 +387,7 @@ function getMergedConfiguration(a, b) {
       a.endYear < b.endYear ||
       (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
     ) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -438,7 +424,7 @@ function getMergedConfiguration(a, b) {
       a.endYear > b.endYear ||
       (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
     ) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -477,7 +463,7 @@ function getMergedConfiguration(a, b) {
     (a.beginYear === b.beginYear && a.beginQuarter < b.beginQuarter)
   ) {
     if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -514,7 +500,7 @@ function getMergedConfiguration(a, b) {
       a.endYear < b.endYear ||
       (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
     ) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -523,7 +509,7 @@ function getMergedConfiguration(a, b) {
           endYear: b.endYear,
           endQuarter: b.endQuarter,
         };
-      } else if (locationsMatch(a, { items: combinedItems })) {
+      } else if (locationsMatch(a.items, combinedItems)) {
         return [
           {
             id: uuid(),
@@ -546,7 +532,7 @@ function getMergedConfiguration(a, b) {
             stackPipeIds: b.stackPipe,
           },
         ];
-      } else if (locationsMatch(b, { items: combinedItems })) {
+      } else if (locationsMatch(b.items, combinedItems)) {
         return [
           {
             id: uuid(),
@@ -607,7 +593,7 @@ function getMergedConfiguration(a, b) {
       a.endYear > b.endYear ||
       (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
     ) {
-      if (locationsMatch(a, { items: combinedItems })) {
+      if (locationsMatch(a.items, combinedItems)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -656,7 +642,7 @@ function getMergedConfiguration(a, b) {
     (a.beginYear === b.beginYear && a.beginQuarter > b.beginQuarter)
   ) {
     if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -693,7 +679,7 @@ function getMergedConfiguration(a, b) {
       a.endYear < b.endYear ||
       (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
     ) {
-      if (locationsMatch(b, { items: combinedItems })) {
+      if (locationsMatch(b.items, combinedItems)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -740,7 +726,7 @@ function getMergedConfiguration(a, b) {
       a.endYear > b.endYear ||
       (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
     ) {
-      if (locationsMatch(a, b)) {
+      if (locationsMatch(a.items, b.items)) {
         return {
           id: uuid(),
           items: combinedItems,
@@ -749,7 +735,7 @@ function getMergedConfiguration(a, b) {
           endYear: a.endYear,
           endQuarter: a.endQuarter,
         };
-      } else if (locationsMatch(b, { items: combinedItems })) {
+      } else if (locationsMatch(b.items, combinedItems)) {
         return [
           {
             id: uuid(),
@@ -770,7 +756,7 @@ function getMergedConfiguration(a, b) {
             stackPipeIds: a.stackPipeIds,
           },
         ];
-      } else if (locationsMatch(a, { items: combinedItems })) {
+      } else if (locationsMatch(a.items, combinedItems)) {
         return [
           {
             id: uuid(),
@@ -835,7 +821,7 @@ function getYearAndQuarterFromDate(dateString) {
   if (!dateString) return [Infinity, Infinity];
 
   const date = new Date(dateString);
-  return [date.getFullYear(), Math.floor(date.getMonth() / 3) + 1];
+  return [date.getUTCFullYear(), Math.floor(date.getUTCMonth() / 3) + 1];
 }
 
 function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
@@ -865,6 +851,20 @@ function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
   }, []);
 }
 
+function locationsMatch(a, b) {
+  const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } =
+    getItemLocations(a);
+  const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } =
+    getItemLocations(b);
+
+  return (
+    unitIdsA.size === unitIdsB.size &&
+    [...unitIdsA].every((id) => unitIdsB.has(id)) &&
+    stackPipeIdsA.size === stackPipeIdsB.size &&
+    [...stackPipeIdsA].every((id) => stackPipeIdsB.has(id))
+  );
+}
+
 function mergePartialConfigurations(partialConfigurations) {
   if (partialConfigurations.length < 2) return partialConfigurations;
 
@@ -889,9 +889,20 @@ function mergePartialConfigurations(partialConfigurations) {
     }
   }
   return [
-    currentConfig,
+    normalizeConfigurationPeriods(currentConfig),
     ...mergePartialConfigurations(partialConfigurations.slice(1)),
   ];
+}
+
+function normalizeConfigurationPeriods(configuration) {
+  const numberOrNull = (num) => (Number.isFinite(num) ? num : null);
+  return {
+    ...configuration,
+    beginQuarter: numberOrNull(configuration.beginQuarter),
+    beginYear: numberOrNull(configuration.beginYear),
+    endQuarter: numberOrNull(configuration.endQuarter),
+    endYear: numberOrNull(configuration.endYear),
+  };
 }
 
 function parseDatePickerString(dateString) {
@@ -1185,26 +1196,32 @@ export const ConfigurationManagement = ({
         partialConfigurations
       );
 
-      // Filter out any plans where items have not been changed.
-      const changedConfigurations = fullConfigurations.filter((c) =>
-        c.items.some(
-          (item) =>
-            !item.originalRecord ||
-            item.beginDate !== item.originalRecord.beginDate ||
-            item.endDate !== item.originalRecord.endDate
+      // Filter out any plans where items have not been changed or it is matched to an existing inactive plan.
+      const changedConfigurations = fullConfigurations
+        .filter((c) =>
+          c.items.some(
+            (item) =>
+              !item.originalRecord ||
+              item.beginDate !== item.originalRecord.beginDate ||
+              item.endDate !== item.originalRecord.endDate
+          )
         )
-      );
+        .filter((c) => {
+          const matchedPlan = monitoringPlans.find((mp) => {
+            const configBeginPeriod = `${c.beginYear} Q${c.beginQuarter}`;
+            return (
+              configBeginPeriod === mp.beginReportingPeriodDescription &&
+              locationsMatch(mp.monitoringLocationData, c.items)
+            );
+          });
+          return !matchedPlan || matchedPlan.active;
+        });
 
       const newlyAssociatedUnits = formState.units.filter((u) => u.isToggled);
 
       const newMonitorPlanPayloads = changedConfigurations
         .map(mapConfigurationToPayload)
         .concat(newlyAssociatedUnits.map(mapUnitToPayload));
-
-      // Fetch the change summary for each plan.
-      const planResults = await Promise.all(
-        newMonitorPlanPayloads.map((payload) => importMP(payload, true))
-      );
 
       // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
       const affectedStackPipeIds = new Set(
@@ -1220,9 +1237,16 @@ export const ConfigurationManagement = ({
         (sp) => !affectedStackPipeIds.has(sp.stackPipeId)
       );
 
+      // TODO: Fetch the change summary for each stack/pipe.
+
+      // Fetch the change summary for each plan.
+      const planResults = await Promise.all(
+        newMonitorPlanPayloads.map((payload) => importMP(payload, true))
+      );
+
       setChangeSummary({
         plans: planResults,
-        unchangedStackPipes,
+        stackPipes: [],
       });
       setChangeSummaryStatus(dataStatus.SUCCESS);
       setModalErrorMsgs(planResults.map((r) => typeof r === "string" && r));
