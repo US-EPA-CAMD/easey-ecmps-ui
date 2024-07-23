@@ -11,11 +11,11 @@ import {
   Alert,
   Button,
   ButtonGroup,
+  ComboBox,
   DatePicker,
   Grid,
   GridContainer,
   Label,
-  Select,
   TextInput,
 } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -72,6 +72,9 @@ const initialFormState = {
   stackPipes: [],
   unitStackConfigs: [],
 };
+const STACK_PIPE_ID_HINT =
+  "Enter an ID consisting of alphanumeric characters that begins with MS, MP, CS, or CP";
+const STACK_PIPE_ID_PATTERN = "^[MC][SP][\\w-]+$";
 
 /*
 ## HELPERS
@@ -1149,7 +1152,10 @@ const SummarySectionStackPipes = ({ stackPipes, title }) =>
 const textCell = ({
   disabled = (_row) => false,
   onChange,
+  pattern,
+  placeholder,
   required = false,
+  title,
 }) => {
   return (row, index, column, id) =>
     row.isEditing ? (
@@ -1160,8 +1166,10 @@ const textCell = ({
         id={`${id}-input`}
         name={`${id}-input`}
         onChange={(e) => onChange(row.id, e.target.value ?? null)}
-        placeholder="Enter text..."
+        pattern={pattern}
+        placeholder={placeholder ?? "Enter text..."}
         required={required}
+        title={title}
         type="text"
         value={column.selector(row) ?? ""}
       />
@@ -1440,7 +1448,7 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = () => {};
 
   const handleFacilityChange = (e) => {
-    setSelectedFacility(e.target.value ? parseInt(e.target.value) : undefined);
+    setSelectedFacility(e ? parseInt(e) : undefined);
     resetFacilityData();
   };
 
@@ -1784,24 +1792,21 @@ export const ConfigurationManagement = ({
               label="facilities"
             >
               <div>
-                <Label htmlFor="facility">Facility</Label>
-                <div className="display-flex" id="facilities-container">
-                  <Select
-                    className="margin-0"
-                    onChange={handleFacilityChange}
-                    id="facility"
-                    name="facility"
-                    value={selectedFacility}
-                  >
-                    <option key={undefined} value="">
-                      {DEFAULT_DROPDOWN_TEXT}
-                    </option>
-                    {formattedFacilities.map((f) => (
-                      <option key={f.value} value={f.value}>
-                        {f.label}
-                      </option>
-                    ))}
-                  </Select>
+                <Label htmlFor="facility">Facility Name/ID</Label>
+                <div
+                  className="display-flex flex-align-center margin-top-1"
+                  id="facilities-container"
+                >
+                  <div>
+                    <ComboBox
+                      defaultValue={DEFAULT_DROPDOWN_TEXT}
+                      id="facility"
+                      name="facility"
+                      noResults="No authorized facilities found"
+                      options={formattedFacilities}
+                      onChange={handleFacilityChange}
+                    />
+                  </div>
                   {selectedFacility && (
                     <>
                       {checkInOutStatus === dataStatus.PENDING ||
@@ -1920,7 +1925,9 @@ export const ConfigurationManagement = ({
                                 cell: textCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setStackPipeStackPipeId,
+                                  pattern: STACK_PIPE_ID_PATTERN,
                                   required: true,
+                                  title: STACK_PIPE_ID_HINT,
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
@@ -2009,7 +2016,9 @@ export const ConfigurationManagement = ({
                                 cell: textCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setUnitStackConfigStackPipeId,
+                                  pattern: STACK_PIPE_ID_PATTERN,
                                   required: true,
+                                  title: STACK_PIPE_ID_HINT,
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,

@@ -171,7 +171,7 @@ const QAMaintenanceDeletePopout = ({
     >
       <h3>Are you sure you want to continue?</h3>
 
-      <Alert type="error" slim>
+      <Alert headingLevel="h4" type="error" slim>
         Are you sure you want to Delete? This action cannot be undone.
       </Alert>
     </Modal>

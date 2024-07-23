@@ -97,7 +97,7 @@ const ImportModal = ({
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
   };
-  
+
   const onReaderLoad = (event) => {
     try {
       setSchemaErrors([]);
@@ -132,7 +132,12 @@ const ImportModal = ({
   };
 
   let content;
-  if (complete && importedFileErrorMsgs !== undefined && importedFileErrorMsgs !== null && successResponses.includes(importedFileErrorMsgs.status)) {
+  if (
+    complete &&
+    importedFileErrorMsgs !== undefined &&
+    importedFileErrorMsgs !== null &&
+    successResponses.includes(importedFileErrorMsgs.status)
+  ) {
     // file import was successful
     content = <span id="fileName">{fileName}</span>;
   } else if (complete && importedFileErrorMsgs?.length > 0) {
@@ -140,20 +145,23 @@ const ImportModal = ({
     content = (
       <div className="overflow-y-auto maxh-mobile">
         <div className="padding-right-2 padding-left-3 " aria-live="polite">
-          {Array.isArray(importedFileErrorMsgs) ?
-          importedFileErrorMsgs.map((error, i) => (
+          {Array.isArray(importedFileErrorMsgs) ? (
+            importedFileErrorMsgs.map((error, i) => (
+              <Alert
+                type="error"
+                headingLevel="h4"
+                slim
+                noIcon
+                key={`${i}-${error}`}
+                role="alert"
+              >
+                {error}
+              </Alert>
+            ))
+          ) : (
             <Alert
               type="error"
-              slim
-              noIcon
-              key={`${i}-${error}`}
-              role="alert"
-            >
-              {error}
-            </Alert>
-          )):
-            <Alert
-              type="error"
+              headingLevel="h4"
               slim
               noIcon
               key={`1-${importedFileErrorMsgs}`}
@@ -161,19 +169,20 @@ const ImportModal = ({
             >
               {importedFileErrorMsgs}
             </Alert>
-          }
+          )}
         </div>
       </div>
     );
   } else {
     content = (
       <div>
-        {schemaErrors.length > 0 &&
+        {schemaErrors.length > 0 && (
           <div className="overflow-y-auto maxh-mobile">
             <div className="padding-right-2 padding-left-3 " aria-live="polite">
               {schemaErrors.map((error, i) => (
                 <Alert
                   type="error"
+                  headingLevel="h4"
                   slim
                   noIcon
                   key={`${i}-${error}`}
@@ -184,9 +193,9 @@ const ImportModal = ({
               ))}
             </div>
           </div>
-        }
+        )}
         {/* show file picker if import process not complete */}
-        {!complete &&
+        {!complete && (
           <FormGroup>
             <Label htmlFor="file-input-single">{label}</Label>
             <FileInput
@@ -195,16 +204,12 @@ const ImportModal = ({
               onChange={onChangeHandler}
             />
           </FormGroup>
-        }
+        )}
       </div>
     );
   }
 
-  return (
-    <div className="import-modal-container">
-      {content}
-    </div>
-  );
+  return <div className="import-modal-container">{content}</div>;
 };
 
 export default ImportModal;

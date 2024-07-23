@@ -139,7 +139,14 @@ export const Modal = ({
                   {breadCrumbBar ? breadCrumbBar : ""}
 
                   {errorMsgs.map((error) => (
-                    <Alert type="error" slim noIcon key={error} role="alert">
+                    <Alert
+                      headingLevel="h3"
+                      type="error"
+                      slim
+                      noIcon
+                      key={error}
+                      role="alert"
+                    >
                       {error}
                     </Alert>
                   ))}
