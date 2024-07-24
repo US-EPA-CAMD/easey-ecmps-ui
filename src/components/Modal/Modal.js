@@ -1,32 +1,35 @@
-import React, { createContext, useEffect, createRef, useState } from "react";
-import ReactDom from "react-dom";
-import { Alert, Button } from "@trussworks/react-uswds";
 import { ClearSharp } from "@material-ui/icons";
+import { Alert, Button } from "@trussworks/react-uswds";
+import React, { createContext, createRef, useEffect, useState } from "react";
+import ReactDom from "react-dom";
 
-import "./Modal.scss";
+import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import { focusTrap } from "../../additional-functions/focus-trap";
+import { dataStatus } from "../../utils/constants/dataStatus";
+import "./Modal.scss";
 
 const modalContext = createContext(null, null);
 
 export const Modal = ({
-  show,
-  close,
-  save,
-  children,
-  showCancel,
-  showSave,
-  width = "50%",
-  left = "25%",
-  cancelButtonText = "Cancel",
-  title,
-  exitBtn,
   breadCrumbBar,
+  cancelButtonText = "Cancel",
+  children,
+  close,
+  disableExitBtn,
+  errorMsgs = [],
+  exitBtn,
   extraBtn,
   extraBtnText,
-  disableExitBtn,
-  showDarkBg,
-  errorMsgs = [],
+  left = "25%",
   returnFocus,
+  save,
+  saveStatus = dataStatus.IDLE,
+  show,
+  showCancel,
+  showDarkBg,
+  showSave,
+  title,
+  width = "50%",
 }) => {
   const modalRef = createRef();
   const [windowSize, setWindowSize] = useState({
@@ -159,19 +162,23 @@ export const Modal = ({
               <span className="break-line" />
               <div className="modal-footer  ">
                 {showSave ? (
-                  <div>
-                    <Button
-                      type="button"
-                      onClick={save}
-                      title="Click to save"
-                      epa-testid="saveBtn"
-                      id="saveBtn"
-                      data-testid="saveBtn"
-                      className="margin-right-2"
-                      disabled={disableExitBtn}
-                    >
-                      {exitBtn ? exitBtn : "Save and Go Back"}
-                    </Button>
+                  <div className="display-flex flex-align-center">
+                    {saveStatus === dataStatus.PENDING ? (
+                      <SizedPreloader size={5} className="margin-right-1" />
+                    ) : (
+                      <Button
+                        type="button"
+                        onClick={save}
+                        title="Click to save"
+                        epa-testid="saveBtn"
+                        id="saveBtn"
+                        data-testid="saveBtn"
+                        className="margin-right-2"
+                        disabled={disableExitBtn}
+                      >
+                        {exitBtn ? exitBtn : "Save and Go Back"}
+                      </Button>
+                    )}
 
                     {extraBtn ? (
                       <Button

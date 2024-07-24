@@ -46,9 +46,11 @@ import {
   importStackPipe,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
+import { dataStatus } from "../../utils/constants/dataStatus";
 import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
+import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import "./ConfigurationManagement.scss";
 
 /*
@@ -56,12 +58,6 @@ import "./ConfigurationManagement.scss";
 */
 
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
-const dataStatus = {
-  PENDING: "PENDING",
-  SUCCESS: "SUCCESS",
-  ERROR: "ERROR",
-  IDLE: "IDLE",
-};
 const errorMessages = {
   DUPLICATE_STACKPIPE_IDS: "Stack/Pipe IDs must be unique.",
   EDITS_PENDING: "Please complete any pending edits before continuing.",
@@ -1097,15 +1093,20 @@ const PlanSummary = ({ plan }) => {
   );
 };
 
-const SizedPreloader = ({ size = 9 }) => {
-  return (
-    <div
-      className={`display-flex flex-align-center height-${size} preloader-container width-${size}`}
-    >
-      <Preloader showStopButton={false} />
-    </div>
-  );
-};
+const SaveStatusAlert = ({ status }) => (
+  <>
+    {status === dataStatus.ERROR && (
+      <Alert noIcon slim type="error" headingLevel="h3">
+        Error saving changes.
+      </Alert>
+    )}
+    {status === dataStatus.SUCCESS && (
+      <Alert noIcon slim type="success" headingLevel="h3">
+        Changes saved successfully.
+      </Alert>
+    )}
+  </>
+);
 
 const StackPipeSummary = ({ stackPipe }) => {
   return (
@@ -1221,7 +1222,6 @@ export const ConfigurationManagement = ({
     plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
     stackPipes: [],
   });
-  console.log("changeSummary", changeSummary);
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
     dataStatus.IDLE
   );
@@ -1236,6 +1236,7 @@ export const ConfigurationManagement = ({
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
     dataStatus.IDLE
   );
+  const [saveStatus, setSaveStatus] = useState(dataStatus.IDLE);
   const [selectedFacility, setSelectedFacility] = useState(undefined);
   const [stackPipePayloads, setStackPipePayloads] = useState([]);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
@@ -1501,7 +1502,24 @@ export const ConfigurationManagement = ({
     setChangeSummaryStatus(dataStatus.IDLE);
   };
 
-  const handleConfirmSave = () => {};
+  const handleConfirmSave = async () => {
+    setSaveStatus(dataStatus.PENDING);
+    try {
+      // TODO: Enable when ready for testing.
+      /*await Promise.all([
+        Promise.all(
+          monitorPlanPayloads.map((payload) => importMP(payload, false))
+        ),
+        Promise.all(
+          stackPipePayloads.map((payload) => importStackPipe(payload, false))
+        ),
+      ]);*/
+      setSaveStatus(dataStatus.SUCCESS);
+    } catch (err) {
+      console.error(err);
+      setSaveStatus(dataStatus.ERROR);
+    }
+  };
 
   const handleFacilityChange = (e) => {
     setSelectedFacility(e ? parseInt(e) : undefined);
@@ -2189,11 +2207,14 @@ export const ConfigurationManagement = ({
                   <Modal
                     showDarkBg={true}
                     close={handleCloseModal}
+                    errorMsgs={modalErrorMsgs}
                     exitBtn="Save"
                     save={handleConfirmSave}
+                    saveStatus={saveStatus}
                     showCancel={false}
                     showSave={
                       user &&
+                      changeSummaryStatus === dataStatus.SUCCESS &&
                       (!canCheckOut || isCheckedOutByUser) &&
                       !modalErrorMsgs.length
                     }
@@ -2204,17 +2225,6 @@ export const ConfigurationManagement = ({
                       label="summary of configuration changes"
                       status={changeSummaryStatus}
                     >
-                      {modalErrorMsgs.map((msg, i) => (
-                        <Alert
-                          key={i}
-                          noIcon
-                          slim
-                          type="error"
-                          headingLevel="h3"
-                        >
-                          {msg}
-                        </Alert>
-                      ))}
                       <SummarySectionPlan
                         plans={changeSummary.plans.newPlans}
                         title="New Plans"
@@ -2232,6 +2242,7 @@ export const ConfigurationManagement = ({
                         title="Other Stack/Pipe Changes"
                       />
                     </StatusContent>
+                    <SaveStatusAlert status={saveStatus} />
                   </Modal>
                 )}
               </Grid>
