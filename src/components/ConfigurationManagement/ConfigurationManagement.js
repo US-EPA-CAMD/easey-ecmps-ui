@@ -42,7 +42,6 @@ import {
 import {
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
-  getMonitoringPlans,
   importMP,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
@@ -1234,7 +1233,8 @@ export const ConfigurationManagement = ({
   }, [userFacilities]);
 
   // TODO: Remove this after migrating to checking out by plants.
-  const canCheckOut = monitoringPlans.length > 0;
+  const canCheckOut =
+    monitoringPlansStatus === dataStatus.SUCCESS && monitoringPlans.length > 0;
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
     (loc) => loc.facId === selectedFacility
@@ -1251,15 +1251,20 @@ export const ConfigurationManagement = ({
       (loc) => loc.checkedOutBy !== user.userId
     );
 
-  if (document.title !== configurationManagementTitle) {
-    document.title = configurationManagementTitle;
-  }
-
-  if (checkedOutLocationsRef.current !== checkedOutLocations) {
-    checkedOutLocationsRef.current = checkedOutLocations;
-  }
-
   /* HANDLERS */
+
+  const checkForDuplicateStackPipeIds = () => {
+    const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
+    if (new Set(stackPipeIds).size !== stackPipeIds.length) {
+      return true;
+    }
+  };
+
+  const checkForPendingEdits = () => {
+    return Object.values(formState)
+      .flat()
+      .some((row) => row.isEditing);
+  };
 
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
@@ -1428,9 +1433,8 @@ export const ConfigurationManagement = ({
       const orisCode = getOrisCodeByFacId(userFacilities, selectedFacility);
       if (!orisCode) return;
 
-      const monitoringPlans = await getMonitoringPlans(orisCode);
       await Promise.all(
-        monitoringPlans.data.map((mp) =>
+        monitoringPlans.map((mp) =>
           postCheckoutMonitoringPlanConfiguration(mp.id)
         )
       );
@@ -1455,22 +1459,16 @@ export const ConfigurationManagement = ({
   const handleInitialSave = () => {
     const newErrorMsgs = [];
 
-    if (
-      Object.values(formState)
-        .flat()
-        .some((row) => row.isEditing)
-    ) {
-      newErrorMsgs.push(errorMessages.UNSAVED_CHANGES);
+    if (checkForPendingEdits()) {
+      newErrorMsgs.push(errorMessages.EDITS_PENDING);
     }
 
     if (canCheckOut && !isCheckedOutByUser) {
       newErrorMsgs.push(errorMessages.NOT_CHECKED_OUT);
     }
 
-    const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
-    if (new Set(stackPipeIds).size !== stackPipeIds.length) {
-      newErrorMsgs.push(errorMessages.DUPLICATE_STACK_PIPE);
-    }
+    if (checkForDuplicateStackPipeIds())
+      newErrorMsgs.push(errorMessages.DUPLICATE_STACKPIPE_IDS);
 
     setErrorMsgs(newErrorMsgs);
     if (newErrorMsgs.length) return;
@@ -1777,6 +1775,31 @@ export const ConfigurationManagement = ({
     };
   }, [checkInAllPlansForUser]);
 
+  if (document.title !== configurationManagementTitle) {
+    document.title = configurationManagementTitle;
+  }
+
+  if (checkedOutLocationsRef.current !== checkedOutLocations) {
+    checkedOutLocationsRef.current = checkedOutLocations;
+  }
+
+  // Update visible errors when interactions occur.
+  const newErrorMsgs = errorMsgs.filter((msg) => {
+    switch (msg) {
+      case errorMessages.NOT_CHECKED_OUT:
+        return canCheckOut && !isCheckedOutByUser;
+      case errorMessages.DUPLICATE_STACKPIPE_IDS:
+        return checkForDuplicateStackPipeIds();
+      case errorMessages.EDITS_PENDING:
+        return checkForPendingEdits();
+      default:
+        return true;
+    }
+  });
+  if (newErrorMsgs.length !== errorMsgs.length) {
+    setErrorMsgs(newErrorMsgs);
+  }
+
   return !user ? (
     <Preloader />
   ) : (
@@ -2075,15 +2098,20 @@ export const ConfigurationManagement = ({
                   ]}
                 />
               </Grid>
-              {errorMsgs.length > 0 && (
-                <Grid row>
-                  {errorMsgs.map((msg, i) => (
-                    <Alert key={i} noIcon slim type="error" headingLevel="h4">
+              {errorMsgs.length > 0 &&
+                errorMsgs.map((msg) => (
+                  <Grid row key={msg}>
+                    <Alert
+                      noIcon
+                      slim
+                      type="error"
+                      headingLevel="h4"
+                      className="margin-bottom-1 width-full"
+                    >
                       {msg}
                     </Alert>
-                  ))}
-                </Grid>
-              )}
+                  </Grid>
+                ))}
               <Grid row>
                 <Button
                   className="margin-top-2"
