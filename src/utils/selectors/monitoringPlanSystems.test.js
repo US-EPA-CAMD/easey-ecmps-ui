@@ -95,7 +95,6 @@ describe("testing monitoring plan data selectors", () => {
       {
         componentId: "AFA",
         componentTypeCode: "GFFM",
-        analyticalPrincipleCode : null,
         sampleAcquisitionMethodCode: "ORF",
         basisCode : null,
         manufacturer: "SCHNEIDER",
@@ -107,7 +106,6 @@ describe("testing monitoring plan data selectors", () => {
       {
         componentId: "AFG",
         componentTypeCode: "TEMP",
-        analyticalPrincipleCode: null,
         sampleAcquisitionMethodCode: "ORF",
         basisCode: null,
         manufacturer: "SCHNEIDER",
