@@ -43,6 +43,7 @@ import {
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
   importMP,
+  importStackPipe,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
 import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
@@ -1106,6 +1107,28 @@ const SizedPreloader = ({ size = 9 }) => {
   );
 };
 
+const StackPipeSummary = ({ stackPipe }) => {
+  return (
+    <>
+      <h4>{stackPipe.stackPipeId}</h4>
+      <GridContainer>
+        <Grid row>
+          <Grid col={4} className="text-bold">
+            Active Date:
+          </Grid>
+          <Grid col="auto">{stackPipe.activeDate}</Grid>
+        </Grid>
+        <Grid row>
+          <Grid col={4} className="text-bold">
+            RetireDate:
+          </Grid>
+          <Grid col="auto">{stackPipe.retireDate ?? "N/A"}</Grid>
+        </Grid>
+      </GridContainer>
+    </>
+  );
+};
+
 const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   <>
     {status === dataStatus.PENDING && (
@@ -1142,7 +1165,9 @@ const SummarySectionStackPipes = ({ stackPipes, title }) =>
       <h3 className="text-primary">{title}</h3>
       <ul className="usa-list usa-list--unstyled">
         {stackPipes.map((sp) => (
-          <></>
+          <li key={sp.id}>
+            <StackPipeSummary stackPipe={sp} />
+          </li>
         ))}
       </ul>
     </section>
@@ -1196,6 +1221,7 @@ export const ConfigurationManagement = ({
     plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
     stackPipes: [],
   });
+  console.log("changeSummary", changeSummary);
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
     dataStatus.IDLE
   );
@@ -1211,6 +1237,7 @@ export const ConfigurationManagement = ({
     dataStatus.IDLE
   );
   const [selectedFacility, setSelectedFacility] = useState(undefined);
+  const [stackPipePayloads, setStackPipePayloads] = useState([]);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
   const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
@@ -1317,7 +1344,7 @@ export const ConfigurationManagement = ({
         .map(mapConfigurationToPayload)
         .concat(newlyAssociatedUnits.map(mapUnitToPayload));
 
-      // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
+      // Generate a list of any stack/pipes that are part of a changed plan.
       const affectedStackPipeIds = new Set(
         newMonitorPlanPayloads
           .flatMap((p) =>
@@ -1327,17 +1354,40 @@ export const ConfigurationManagement = ({
           )
           .filter((id) => id)
       );
-      const unchangedStackPipes = formState.stackPipes.filter(
-        (sp) => !affectedStackPipeIds.has(sp.stackPipeId)
+
+      // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
+      const unaffiliatedChangedStackPipes = formState.stackPipes
+        .filter((sp) => !affectedStackPipeIds.has(sp.stackPipeId))
+        .filter((sp) => {
+          return (
+            !sp.originalRecord ||
+            sp.activeDate !== sp.originalRecord.activeDate ||
+            sp.retireDate !== sp.originalRecord.retireDate
+          );
+        });
+      const newStackPipePayloads = unaffiliatedChangedStackPipes.map(
+        mapStackPipeToPayload
       );
 
-      // TODO: Fetch the change summary for each stack/pipe.
+      // Fetch the change summary for each stack/pipe.
+      const stackPipeResults = await Promise.all(
+        newStackPipePayloads.map((payload) => importStackPipe(payload, true))
+      );
 
       // Fetch the change summary for each plan.
       const planResults = await Promise.all(
         newMonitorPlanPayloads.map((payload) => importMP(payload, true))
       );
-      setModalErrorMsgs(planResults.filter((r) => typeof r === "string"));
+
+      setModalErrorMsgs(
+        planResults
+          .concat(stackPipeResults)
+          .filter((r) => typeof r === "string")
+      );
+
+      const stackPipeSummaries = stackPipeResults
+        .filter((r) => typeof r === "object")
+        .map((r) => r.data);
 
       const planSummaries = planResults
         .filter((r) => typeof r === "object")
@@ -1368,24 +1418,26 @@ export const ConfigurationManagement = ({
 
       setChangeSummary({
         plans: uniquePlanSummaries,
-        stackPipes: [],
+        stackPipes: stackPipeSummaries,
       });
       setChangeSummaryStatus(dataStatus.SUCCESS);
       setMonitorPlanPayloads(newMonitorPlanPayloads);
+      setStackPipePayloads(newStackPipePayloads);
     } catch (err) {
       console.error(err);
       setChangeSummaryStatus(dataStatus.ERROR);
     }
   };
 
-  const createStackPipe = () => {
+  const createStackPipe = (facilityId) => () => {
     formDispatch({
       type: "ADD_STACK_PIPE",
       payload: {
-        activeDate: "",
+        activeDate: null,
+        facilityId,
         id: uuid(),
         isEditing: true,
-        retireDate: "",
+        retireDate: null,
         stackPipeId: "",
       },
     });
@@ -1395,8 +1447,8 @@ export const ConfigurationManagement = ({
     formDispatch({
       type: "ADD_UNIT_STACK_CONFIG",
       payload: {
-        beginDate: "",
-        endDate: "",
+        beginDate: null,
+        endDate: null,
         id: uuid(),
         isEditing: true,
         stackPipeId: "",
@@ -1542,6 +1594,18 @@ export const ConfigurationManagement = ({
         ),
     };
   };
+
+  const mapStackPipeToPayload = ({
+    activeDate,
+    facilityId,
+    retireDate,
+    stackPipeId,
+  }) => ({
+    activeDate,
+    facilityId,
+    retireDate,
+    stackPipeId,
+  });
 
   const mapUnitToPayload = (unit) => {
     return {
@@ -1996,7 +2060,7 @@ export const ConfigurationManagement = ({
                           <Button
                             className="margin-y-1"
                             type="button"
-                            onClick={createStackPipe}
+                            onClick={createStackPipe(selectedFacility)}
                           >
                             Add Stack/Pipe
                           </Button>

@@ -1210,6 +1210,24 @@ export const importMP = async (payload, draft) => {
   }
 };
 
+export const importStackPipe = async (payload, draft) => {
+  let url = getApiUrl(`/stack-pipes/import`, true);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const getMPSchema = async () => {
   const url = `${config.services.content.uri}/ecmps/reporting-instructions/monitor-plan.schema.json`;
   return axios({
