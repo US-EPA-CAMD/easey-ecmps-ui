@@ -1509,15 +1509,14 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = async () => {
     setSaveStatus(dataStatus.PENDING);
     try {
-      // TODO: Enable when ready for testing.
-      /*await Promise.all([
+      await Promise.all([
         Promise.all(
           monitorPlanPayloads.map((payload) => importMP(payload, false))
         ),
         Promise.all(
           stackPipePayloads.map((payload) => importStackPipe(payload, false))
         ),
-      ]);*/
+      ]);
       setSaveStatus(dataStatus.SUCCESS);
       [setUnitsStatus, setStackPipesStatus, setUnitStackConfigsStatus].forEach(
         (setter) => setter(dataStatus.IDLE)
