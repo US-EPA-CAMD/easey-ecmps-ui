@@ -4,9 +4,12 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 export const SizedPreloader = ({ className = "", size = 9 }) => {
   return (
     <div
-      className={`display-inline-flex flex-align-center height-${size} preloader-container width-${size} ${className}`}
+      className={`display-inline-flex flex-align-center height-auto preloader-container width-auto ${className}`}
     >
-      <Preloader showStopButton={false} />
+      <Preloader
+        showStopButton={false}
+        className={`height-${size} width-${size}`}
+      />
     </div>
   );
 };

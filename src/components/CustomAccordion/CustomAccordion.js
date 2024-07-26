@@ -6,12 +6,13 @@ import {
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
 const CustomAccordion = ({
-  title,
-  tables,
-  section,
-  headerButtonText,
   headerButtonClickHandler,
+  headerButtonText,
+  id,
   headingLevel = "h4",
+  section,
+  tables,
+  title,
 }) => {
   const [open, setOpen] = useState(tables.map((item, index) => true));
 
@@ -23,7 +24,7 @@ const CustomAccordion = ({
   const Heading = headingLevel;
 
   return (
-    <div className="">
+    <div id={id}>
       {tables.map((item, index) => (
         <div key={index} className={"clearfix"}>
           <div className="text-bold font-body-xl height-auto display-flex flex-align-center">

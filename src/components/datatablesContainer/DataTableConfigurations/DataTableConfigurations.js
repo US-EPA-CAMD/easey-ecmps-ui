@@ -126,10 +126,11 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    // cannot use .then() to call setDataLoaded with dispatch() in react 18 
+    // cannot use .then() to call setDataLoaded with dispatch() in react 18
     const callbackFunction = () => {
-      setDataLoaded(true);
-      dispatch(loadMonitoringPlansArray(data.col2));
+      loadMonitoringPlansArray(data.col2)(dispatch).then(() =>
+        setDataLoaded(true)
+      );
     };
     // Call the callback function
     callbackFunction();
@@ -143,7 +144,6 @@ export const DataTableConfigurations = ({
         ...selectedMP,
         monitoringPlans[monitoringPlans.length - 1],
       ]);
-  
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
@@ -155,7 +155,7 @@ export const DataTableConfigurations = ({
         for (const x of monitoringPlans) {
           if (x[0] === data.col2) {
             index = x[1];
-          
+
             return fs.getConfigurationNames(index);
           }
         }
@@ -175,7 +175,6 @@ export const DataTableConfigurations = ({
         tableStyling={"padding-left-4 padding-bottom-3"}
         defaultSort="col2"
         defaultSortDir="asc"
-        className={className}
         openHandler={openConfig}
         actionsBtn="Open"
         user={user}
@@ -194,6 +193,5 @@ export const DataTableConfigurations = ({
     </div>
   );
 };
-
 
 export default DataTableConfigurations;

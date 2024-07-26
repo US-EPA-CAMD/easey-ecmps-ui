@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -109,7 +109,7 @@ export const SelectFacilitiesDataTable = ({
       {
         title,
         component:
-        workspaceState === MONITORING_PLAN_STORE_NAME ? (
+          workspaceState === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
               <MonitoringPlanTab
                 orisCode={info[0].col2}
@@ -177,7 +177,7 @@ export const SelectFacilitiesDataTable = ({
         // info[2] shows true if "open and checkout" was click first time
         // checkedoutvalue shows true if user already had it checked out but navigates away
         checkout: info[2] || checkedOutValue,
-        workspaceSection:workspaceState
+        workspaceSection: workspaceState,
       },
     ]);
   };

@@ -63,6 +63,10 @@ const errorMessages = {
   EDITS_PENDING: "Please complete any pending edits before continuing.",
   NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
+const initialChangeSummaryState = {
+  plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
+  stackPipes: [],
+};
 const initialFormState = {
   units: [],
   stackPipes: [],
@@ -1218,10 +1222,7 @@ export const ConfigurationManagement = ({
 }) => {
   /* STATE */
 
-  const [changeSummary, setChangeSummary] = useState({
-    plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
-    stackPipes: [],
-  });
+  const [changeSummary, setChangeSummary] = useState(initialChangeSummaryState);
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
     dataStatus.IDLE
   );
@@ -1498,8 +1499,11 @@ export const ConfigurationManagement = ({
   };
 
   const handleCloseModal = () => {
-    setModalVisible(false);
     setChangeSummaryStatus(dataStatus.IDLE);
+    setChangeSummary(initialChangeSummaryState);
+    setModalErrorMsgs([]);
+    setModalVisible(false);
+    setSaveStatus(dataStatus.IDLE);
   };
 
   const handleConfirmSave = async () => {
@@ -1515,6 +1519,9 @@ export const ConfigurationManagement = ({
         ),
       ]);*/
       setSaveStatus(dataStatus.SUCCESS);
+      [setUnitsStatus, setStackPipesStatus, setUnitStackConfigsStatus].forEach(
+        (setter) => setter(dataStatus.IDLE)
+      );
     } catch (err) {
       console.error(err);
       setSaveStatus(dataStatus.ERROR);
@@ -1966,6 +1973,7 @@ export const ConfigurationManagement = ({
               <Grid row>
                 <CustomAccordion
                   headingLevel="h3"
+                  id="accordion-configuration-management"
                   tables={[
                     {
                       title: "Units",

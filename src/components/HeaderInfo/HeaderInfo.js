@@ -808,7 +808,7 @@ export const HeaderInfo = ({
 
   const showRevert = (status) => {
     return (
-      checkedOutByUser &&
+      (checkedOutByUser || !selectedConfig.active) &&
       (status === "PASS" ||
         status === "INFO" ||
         status === "ERR" ||
