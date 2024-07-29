@@ -20,6 +20,7 @@ import {
 } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import React, {
+  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -1072,8 +1073,8 @@ const PlanSummary = ({ plan }) => {
       <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
       <GridContainer>
         {plan.reportingFrequencies.map((rf) => (
-          <>
-            <Grid row key={rf.id}>
+          <Fragment key={rf.id}>
+            <Grid row>
               <Grid col={4} className="text-bold">
                 Reporting Period Range:
               </Grid>
@@ -1090,7 +1091,7 @@ const PlanSummary = ({ plan }) => {
                 {rf.reportingFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
               </Grid>
             </Grid>
-          </>
+          </Fragment>
         ))}
       </GridContainer>
     </>
@@ -1333,7 +1334,7 @@ export const ConfigurationManagement = ({
           const matchedPlan = monitoringPlans.find((mp) => {
             const configBeginPeriod = `${c.beginYear} Q${c.beginQuarter}`;
             return (
-              configBeginPeriod === mp.beginReportingPeriodDescription &&
+              configBeginPeriod === mp.beginReportPeriodDescription &&
               locationsMatch(mp.monitoringLocationData, c.items)
             );
           });
@@ -1521,6 +1522,7 @@ export const ConfigurationManagement = ({
       [setUnitsStatus, setStackPipesStatus, setUnitStackConfigsStatus].forEach(
         (setter) => setter(dataStatus.IDLE)
       );
+      checkInAllPlansForUser(); // NOTE: This is only necessary until check-outs are done on the plant level
     } catch (err) {
       console.error(err);
       setSaveStatus(dataStatus.ERROR);
@@ -2222,6 +2224,9 @@ export const ConfigurationManagement = ({
                     showSave={
                       user &&
                       changeSummaryStatus === dataStatus.SUCCESS &&
+                      [dataStatus.IDLE, dataStatus.PENDING].includes(
+                        saveStatus
+                      ) &&
                       (!canCheckOut || isCheckedOutByUser) &&
                       !modalErrorMsgs.length
                     }
