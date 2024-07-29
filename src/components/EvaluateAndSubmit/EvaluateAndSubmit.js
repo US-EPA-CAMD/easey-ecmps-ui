@@ -166,7 +166,7 @@ export const EvaluateAndSubmit = ({
       ref: matsBulkFilesRef,
       call: getMatsBulkFilesReviewSubmit,
       rowId: "matsBulkFileIdentifier",
-      name: "MATS Bulk Files",
+      name: "MATS Data",
       type: "QA",
       progressPending: useRef(false),
     },
