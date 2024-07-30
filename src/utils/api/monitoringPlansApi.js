@@ -33,15 +33,17 @@ export const getMonitoringPlans = async (
   forWorkspace = false,
   submissionPeriods = [] //Added for polymorphism across data fetch calls
 ) => {
-  let queryString;
+  let queryString = "";
 
   if (typeof orisCodes === "number") {
     queryString = "orisCodes=" + orisCodes;
-  } else {
+  } else if (Array.isArray(orisCodes) && orisCodes.length > 0) {
     queryString = `orisCodes=${orisCodes.join("|")}`;
   }
 
-  if (monPlanIds.length > 0) {
+  if (typeof monPlanIds === "string") {
+    queryString = queryString + `&monPlanIds=${monPlanIds}`;
+  } else if (Array.isArray(monPlanIds) && monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 

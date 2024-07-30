@@ -1973,6 +1973,7 @@ export const ConfigurationManagement = ({
               <hr />
               <Grid row>
                 <CustomAccordion
+                  className="width-full"
                   headingLevel="h3"
                   id="accordion-configuration-management"
                   tables={[

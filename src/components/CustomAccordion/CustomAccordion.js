@@ -6,6 +6,7 @@ import {
   KeyboardArrowUpSharp,
 } from "@material-ui/icons";
 const CustomAccordion = ({
+  className,
   headerButtonClickHandler,
   headerButtonText,
   id,
@@ -24,7 +25,7 @@ const CustomAccordion = ({
   const Heading = headingLevel;
 
   return (
-    <div id={id}>
+    <div className={className} id={id}>
       {tables.map((item, index) => (
         <div key={index} className={"clearfix"}>
           <div className="text-bold font-body-xl height-auto display-flex flex-align-center">

@@ -35,6 +35,7 @@ export const MonitoringPlanTabRender = ({
   orisCode,
   configID,
   checkout,
+  removeTab,
   setCheckout,
   setInactive,
   inactive,
@@ -672,6 +673,7 @@ export const MonitoringPlanTabRender = ({
           facility={title}
           selectedConfig={selectedConfig}
           orisCode={orisCode}
+          removeTab={removeTab}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
           setLocationSelect={setLocationSelect}

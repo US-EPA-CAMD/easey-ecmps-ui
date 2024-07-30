@@ -93,6 +93,7 @@ export const HeaderInfo = ({
   facility,
   selectedConfig,
   orisCode,
+  removeTab,
   user,
   setRevertedState,
   //redux sets
@@ -150,6 +151,7 @@ export const HeaderInfo = ({
       (t) => t.selectedConfig.id === configID
     )
   );
+  const currentTabIndex = useSelector((state) => state.currentTabIndex);
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -547,7 +549,7 @@ export const HeaderInfo = ({
       mpApi
         .getRefreshInfo(configID)
         .then((res) => {
-          if (res.data.evalStatusCode) {
+          if (res.data?.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
             setEvalStatusDescription(res.data.evalStatusCodeDescription);
@@ -835,23 +837,26 @@ export const HeaderInfo = ({
       });
   };
 
-  const revert = () => {
-    mpApi
-      .revertOfficialRecord(selectedConfig.id)
-      .then(() => {
-        setRevertedState(true);
-        setShowRevertModal(false);
-        setIsReverting(false);
-        setEvalStatusLoaded(false);
-        setDataLoaded(false);
-      })
-      .catch((error) => {
-        console.error("Error during reverting to official record", error);
-      });
-    // this code executes first while we wait for api to finish returning
+  const revert = async () => {
     setIsReverting(true);
     setShowRevertModal(false);
     resetEmissionsWorkspace();
+
+    try {
+      await mpApi.revertOfficialRecord(selectedConfig.id);
+      const res = await mpApi.getMonitoringPlans(undefined, selectedConfig.id);
+      if (res.data.length === 0) {
+        await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
+        removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
+      }
+      setRevertedState(true);
+      setShowRevertModal(false);
+      setIsReverting(false);
+      setEvalStatusLoaded(false);
+      setDataLoaded(false);
+    } catch (error) {
+      console.error("Error during reverting to official record", error);
+    }
   };
 
   const resetEmissionsWorkspace = () => {
