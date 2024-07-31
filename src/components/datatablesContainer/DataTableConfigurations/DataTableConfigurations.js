@@ -133,7 +133,8 @@ export const DataTableConfigurations = ({
     };
     // Call the callback function
     callbackFunction();
-  }, [data, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   useEffect(() => {
     if (dataLoaded) {
@@ -159,7 +160,9 @@ export const DataTableConfigurations = ({
       }
     }
     return [];
-  }, [data, dataLoaded, monitoringPlans]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [monitoringPlans]);
 
   return (
     <div className="tabsBox">
