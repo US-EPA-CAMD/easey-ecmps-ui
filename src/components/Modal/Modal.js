@@ -27,6 +27,7 @@ export const Modal = ({
   showDarkBg,
   errorMsgs = [],
   returnFocus,
+  fixedWidth
 }) => {
   const modalRef = createRef();
   const [windowSize, setWindowSize] = useState({
@@ -34,11 +35,14 @@ export const Modal = ({
     height: window.innerHeight,
   });
 
-  if (windowSize.width <= 1300) {
-    width = "650px";
-  } else {
-    width = "50%";
+  if (!fixedWidth) {
+    if (windowSize.width <= 1300) {
+      width = "650px";
+    } else {
+      width = "50%";
+    }
   }
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -116,7 +120,7 @@ export const Modal = ({
             }}
           >
             <div className="modal-content modal-color padding-y-3">
-              <div className="modal-header modal-color border-bottom-1px border-base-lighter">
+              <div className="modal-header modal-color border-bottom-1px border-base-lighter justify-content-start">
                 <ClearSharp
                   className="position-absolute right-1 top-1 cursor-pointer text-bold"
                   onClick={close}
