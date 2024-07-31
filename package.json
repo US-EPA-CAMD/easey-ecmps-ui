@@ -1,6 +1,6 @@
 {
   "name": "easey-ecmps-ui",
-  "version": "2.1",
+  "version": "2.2",
   "description": "EPA CAMD ECMPS Website application",
   "license": "MIT",
   "private": true,
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/US-EPA-CAMD/easey-ecmps-ui.git"
   },
   "engines": {
-    "node": ">=20.8.0",
+    "node": "20.x",
     "yarn": ">=1.22.19"
   },
   "scripts": {

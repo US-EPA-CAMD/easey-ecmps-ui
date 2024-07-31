@@ -315,19 +315,6 @@ export const UseRetrieveDropdownApi = async (
         })
         .catch(error => console.log('getAllBasisCodes failed', error));
         break;
-      case "analyticalPrincipleCode":
-        await dmApi.getAnalyticalPrincipleCodes().then((response) => {
-          options = response.data.map((option) => {
-            return {
-              code: option["analyticalPrincipleCode"],
-              name: option["analyticalPrincipleDescription"],
-            };
-          });
-
-          setDefaultOptions(options, fieldName);
-        })
-        .catch(error => console.log('getAllBasisCodes failed', error));
-        break;
       // for spans
 
       case "spanScaleCode":

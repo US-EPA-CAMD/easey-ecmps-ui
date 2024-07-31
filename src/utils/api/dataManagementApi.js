@@ -154,13 +154,6 @@ export const getAllBasisCodes = async () => {
     .catch(handleError);
 };
 
-export const getAnalyticalPrincipleCodes = async () => {
-  return axios
-    .get(`${config.services.mdm.uri}/analytical-principle-codes`)
-    .then(handleResponse)
-    .catch(handleError);
-};
-
 // Spans
 
 export const getAllSpanMethodCodes = async () => {

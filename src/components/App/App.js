@@ -43,7 +43,6 @@ import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { currentDateTime } from "../../utils/functions";
-import WhatHasData from "../WhatHasData/WhatHasData";
 import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
 import { validUser } from "../../utils/api/easeyAuthApi";
@@ -520,7 +519,6 @@ const App = () => {
           />
           <Route path="/resources" element={<Resources />} />
           <Route path="/help-support" element={<HelpSupport />} />
-          <Route path="/what-has-data" element={<WhatHasData />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route
