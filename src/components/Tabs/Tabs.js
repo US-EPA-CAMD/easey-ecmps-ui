@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
@@ -7,6 +7,7 @@ import "./Tabs.scss";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
+
 const Tabs = ({
   children,
   dynamic = false,

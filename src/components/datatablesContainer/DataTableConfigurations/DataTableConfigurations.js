@@ -126,7 +126,6 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    // cannot use .then() to call setDataLoaded with dispatch() in react 18
     const callbackFunction = () => {
       loadMonitoringPlansArray(data.col2)(dispatch).then(() =>
         setDataLoaded(true)
@@ -134,9 +133,7 @@ export const DataTableConfigurations = ({
     };
     // Call the callback function
     callbackFunction();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [data, dispatch]);
 
   useEffect(() => {
     if (dataLoaded) {
@@ -162,9 +159,7 @@ export const DataTableConfigurations = ({
       }
     }
     return [];
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringPlans]);
+  }, [data, dataLoaded, monitoringPlans]);
 
   return (
     <div className="tabsBox">

@@ -64,6 +64,7 @@ export const DetailsSelectBox = ({
             disabled={viewOnly || disableDropdownFlag}
             id={id === null ? caption : id}
             className={className}
+            data-testid="dropdown"
             epadataname={epadataname}
             onChange={(e) => handleChange(e)}
           >

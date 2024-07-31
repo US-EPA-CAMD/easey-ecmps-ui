@@ -43,13 +43,13 @@ const props = {
 describe("MonitoringPlanTabRender", () => {
   it("renders without crashing", () => {
     render(<MonitoringPlanTabRender {...props} />);
-    expect(screen.getAllByTestId("expandBTN")[0]).toBeInTheDocument();
+    expect(screen.getAllByTestId("collapseBTN")[0]).toBeInTheDocument();
   });
 
   it("renders the correct number of CustomAccordion components", () => {
     render(<MonitoringPlanTabRender {...props} />);
     const sectionCount = 2; // methods and mats methods
-    const accordionComponents = screen.getAllByTestId("expandBTN");
+    const accordionComponents = screen.getAllByTestId("collapseBTN");
     expect(accordionComponents).toHaveLength(sectionCount);
   });
 });
