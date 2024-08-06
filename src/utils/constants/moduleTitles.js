@@ -3,7 +3,7 @@ export const qa_Certifications_Test_Summary_Module =
   'QA Certifications Test Data';
 export const qa_Certifications_Event_Module =
   'QA Cert Event Data & Test Extension Exemption Data';
-export const export_Module = 'Export Data';
+export const export_Module = 'Export & Report';
 export const emissions_module = 'Emissions';
 export const error_supression_module = 'Error Suppression';
 export const submissionAccessTitle = 'Maintain EM Submission Access';
