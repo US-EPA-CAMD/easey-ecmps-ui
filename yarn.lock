@@ -2780,8 +2780,10 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
-"@us-epa-camd/easey-design-system@../easey-design-system/lib":
-  version "1.35.0"
+"@us-epa-camd/easey-design-system@^1.36.0":
+  version "1.36.0"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.36.0/59141903617fee41727a26945a3348b61c56d2dc#59141903617fee41727a26945a3348b61c56d2dc"
+  integrity sha512-H0OTVUYy5iB5NItrwGfVKMNXoyFL1DUMb1skMAzcIAvuZb6ZL5dffaoDLFWMJv1Lse96kX26l1HWcDwfzfeU6A==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
