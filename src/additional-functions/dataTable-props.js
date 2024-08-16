@@ -177,7 +177,7 @@ export const rectWAFsDataTableProps = (location) => {
       wafMethodCode: "string",
       wafValue: 0,
       numberOfTestRuns: 0,
-      numberOfTraversePointsWaf: 0,
+      numberOfTraversePointsWAF: 0,
       numberOfTestPorts: 0,
       numberOfTraversePointsRef: 0,
       ductWidth: 0,
@@ -196,7 +196,7 @@ export const rectWAFsDataTableProps = (location) => {
       wafMethodCode: ["WAF Method", "dropdown", "", ""],
       wafValue: ["WAF Value", "input", "", ""],
       numberOfTestRuns: ["Number of Test Runs", "input", "", ""],
-      numberOfTraversePointsWaf: [
+      numberOfTraversePointsWAF: [
         "Number of Traverse Points WAF",
         "input",
         "",
