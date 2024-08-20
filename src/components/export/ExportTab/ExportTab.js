@@ -36,6 +36,12 @@ import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
 
+import Modal from "../../Modal/Modal";
+import ModalDetails from "../../ModalDetails/ModalDetails";
+import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
+import { getReportingPeriods } from "../../../utils/api/qaCertificationsAPI";
+import { extractUserInput } from "../../../additional-functions/extract-user-input";
+
 export const ExportTab = ({
   facility,
   selectedConfig,
@@ -232,6 +238,60 @@ export const ExportTab = ({
     setCanExport(selectedItems > 0);
   }, []);
 
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [selectedModalData, setSelectedModalData] = useState(null);
+
+  const handleReportLoad = async () => {
+    const controlInputs = {
+      year: ['Years with Emissions Data', 'dropdown', '', '']
+    }
+    const resp = await getReportingPeriods(true);
+
+
+    const calendarYear = Object.values(
+      resp.data?.reduce((acc, obj) => ({ ...acc, [obj.calendarYear]: { code: obj.calendarYear, name: obj.calendarYear } }), {})
+    );
+
+    setSelectedModalData(
+      modalViewData(
+        {},
+        controlInputs,
+        undefined,
+        true,
+        {
+          year: [{ code: 0, name: 'All Years' }, ...calendarYear.reverse()]
+        },
+        "emissionSummaryReport",
+        "emissionSummaryReport",
+        true,
+        "emissionSummaryReport"
+      )
+    );
+    setShowFilterModal(true);
+  }
+
+  const viewEmissionSummaryReport = () => {
+    const payload = {
+      year: "string"
+    };
+    const userInput = extractUserInput(payload, ".modalUserInput");
+    const { year } = userInput;
+
+    setShowFilterModal(false)
+    const additionalParams = `&monitorPlanId=${selectedConfig.id}${!!parseInt(year) ? `&year=${year}` : ''}`;
+    const reportTitle = "Emissions Summary Report";
+    const url = `/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
+    const reportWindowParams = [
+      // eslint-disable-next-line no-restricted-globals
+      `height=${screen.height}`,
+      // eslint-disable-next-line no-restricted-globals
+      `width=${screen.width}`,
+      //`fullscreen=yes`,
+    ].join(",");
+
+    window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
@@ -262,6 +322,13 @@ export const ExportTab = ({
               onClick={exportClickHandler}
             >
               Export
+            </Button>
+            <Button
+              type={"button"}
+              className="padding-x-6 padding-y-1.5"
+              onClick={handleReportLoad}
+            >
+              Emissions Summary Report
             </Button>
           </div>
         </div>
@@ -308,6 +375,31 @@ export const ExportTab = ({
           preloader
         />
       )}
+
+      {showFilterModal ?
+        (
+          <Modal
+            title={"Select Report Criteria"}
+            show={showFilterModal}
+            close={() => setShowFilterModal(false)}
+            showDarkBg
+            showSave
+            extraBtnText
+            exitBTN="View Report"
+            save={viewEmissionSummaryReport}
+            width="34%"
+            left="33%"
+            fixedWidth={true}
+          >
+            <ModalDetails
+              modalData={null}
+              data={selectedModalData}
+              cols={3}
+              viewOnly={false}
+
+            />
+          </Modal>) : ''
+      }
     </div>
   );
 };
