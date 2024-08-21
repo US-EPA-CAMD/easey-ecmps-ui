@@ -166,7 +166,7 @@ export const DataTableRectangularDucts = ({
           wafMethodCode: ["WAF Method", "dropdown", ""],
           wafValue: ["WAF Value", "input", ""],
           numberOfTestRuns: ["Number of Test Runs", "input", ""],
-          numberOfTraversePointsWaf: [
+          numberOfTraversePointsWAF: [
             "Number of Traverse Points WAF",
             "input",
             "",
