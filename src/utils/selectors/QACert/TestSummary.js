@@ -1,5 +1,5 @@
 import { evalStatusContent } from "../../../additional-functions/evaluate-configs";
-import { formatDateTime } from '../../../utils/functions'
+import { formatDateTime, formatTimeStamp } from '../../../utils/functions';
 
 export const getTestSummary = (data, colTitles, orisCode) => {
   const records = [];
@@ -47,6 +47,9 @@ export const getTestSummary = (data, colTitles, orisCode) => {
           case "Eval Status":
             colValue = evalStatusContent(curData.evalStatusCode, orisCode, id);
             break;
+            case "Last Submitted Date/Time":
+              colValue = formatTimeStamp(curData.updateDate ?? curData.addDate);
+              break;
           default:
         }
         columnDef[colKey] = colValue;
@@ -78,6 +81,7 @@ const colTitleToDtoKeyMap = {
   "Injection Protocol Code": "injectionProtocolCode",
   "Test Comment": "testComment",
   "Eval Status": "evalStatusCode",
+  "Last Submitted By": "userId"
 };
 
 const mapTestSummaryColTitleToDTOKey = (columnTitle) => {
@@ -606,7 +610,9 @@ export const mapQaCertEventsDataToRows = (data, orisCode) => {
       col6: isNaN(el.requiredTestCode) ? el.requiredTestCode : Number(el.requiredTestCode),
       col7: formatDateTime(el.conditionalBeginDate, el.conditionalBeginHour),
       col8: formatDateTime(el.completionTestDate, el.completionTestHour),
-      col9: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+      col9: el.userId,
+      col10: formatTimeStamp(el.updateDate ?? el.addDate),
+      col11: evalStatusContent(el.evalStatusCode, orisCode, el.id),
       isSubmitted: el?.isSubmitted,
       isSavedNotSubmitted: el?.isSavedNotSubmitted,
     };
@@ -637,7 +643,9 @@ export const mapQaExtensionsExemptionsDataToRows = (data, orisCode) => {
       col7: el.spanScaleCode,
       col8: el.fuelCode,
       col9: el.extensionOrExemptionCode,
-      col10: evalStatusContent(el.evalStatusCode, orisCode, el.id),
+      col10: el.userId,
+      col11: formatTimeStamp(el.updateDate ?? el.addDate),
+      col12: evalStatusContent(el.evalStatusCode, orisCode, el.id),
 
       isSubmitted: el?.isSubmitted,
       isSavedNotSubmitted: el?.isSavedNotSubmitted,
