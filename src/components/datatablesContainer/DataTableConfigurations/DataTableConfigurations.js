@@ -160,9 +160,7 @@ export const DataTableConfigurations = ({
       }
     }
     return [];
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringPlans]);
+  }, [data, dataLoaded, monitoringPlans]);
 
   return (
     <div className="tabsBox">
