@@ -978,12 +978,15 @@ export const HeaderInfo = ({
         currentConfig.updateDate
       )}`;
     }
+
     // GLOBAL view
-    return `Last submitted by: ${selectedConfig.userId} ${formatDate(
-      selectedConfig.updateDate
-        ? selectedConfig.updateDate
-        : selectedConfig.addDate
-    )}`;
+    if (workspaceSection === MONITORING_PLAN_STORE_NAME) {
+      return `Last submitted by: ${selectedConfig.userId} ${formatDate(
+        selectedConfig.updateDate
+          ? selectedConfig.updateDate
+          : selectedConfig.addDate
+      )}`;
+    }
   };
 
   const resetEmissionsViewTable = () => {

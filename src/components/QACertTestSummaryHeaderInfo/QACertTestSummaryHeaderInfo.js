@@ -382,13 +382,6 @@ export const QACertTestSummaryHeaderInfo = ({
           true
         )}`;
       }
-      // GLOBAL view
-      return `Last submitted by: ${selectedConfig.userId} ${formatDate(
-        selectedConfig.updateDate
-          ? selectedConfig.updateDate
-          : selectedConfig.addDate,
-        true
-      )}`;
     }
   };
 

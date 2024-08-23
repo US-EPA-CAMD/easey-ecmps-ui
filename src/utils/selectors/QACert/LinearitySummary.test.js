@@ -12,6 +12,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -26,6 +28,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -47,6 +51,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Result Code",
       "Year",
       "Quarter",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
     ];
 
     expect(fs.getQAColsByTestCode("FLC")).toEqual(FLCCols);
@@ -58,6 +64,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Monitoring System ID",
       "Test Number",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -70,6 +78,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Monitoring System ID",
       "Test Number",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       //"End Hour",
     ];
 
@@ -83,6 +93,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       //"End Hour",
     ];
 
@@ -96,6 +108,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -108,6 +122,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Number",
       "Test Reason Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -123,6 +139,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
@@ -137,6 +155,8 @@ describe("testing getLinearitySummary data selectors", () => {
       "Test Reason Code",
       "Test Result Code",
       "End Date/Time",
+      "Last Submitted By",
+      "Last Submitted Date/Time"
       // "End Hour",
       // "End Minute",
     ];
