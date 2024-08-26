@@ -44,7 +44,6 @@ import {
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
   importMP,
-  importStackPipe,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
 import { dataStatus } from "../../utils/constants/dataStatus";
@@ -65,8 +64,9 @@ const errorMessages = {
   NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
 const initialChangeSummaryState = {
-  plans: { newPlans: [], endedPlans: [], unchangedPlans: [] },
-  stackPipes: [],
+  newPlans: [],
+  endedPlans: [],
+  unchangedPlans: [],
 };
 const initialFormState = {
   units: [],
@@ -80,32 +80,6 @@ const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]{1,4}$";
 /*
 ## HELPERS
 */
-
-function checkLocationsIntersect(a, b) {
-  const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } = getItemLocations(
-    a.items
-  );
-  const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } = getItemLocations(
-    b.items
-  );
-
-  for (const unitId of unitIdsA) {
-    if (unitIdsB.has(unitId)) return true;
-  }
-
-  for (const stackPipeId of stackPipeIdsA) {
-    if (stackPipeIdsB.has(stackPipeId)) return true;
-  }
-
-  return false;
-}
-
-function checkPeriodsIntersect(a, b) {
-  if (a.beginYear > b.endYear || a.endYear < b.beginYear) return false;
-  if (a.beginYear === b.endYear && a.beginQuarter > b.endQuarter) return false;
-  if (a.endYear === b.beginYear && a.endQuarter < b.beginQuarter) return false;
-  return true;
-}
 
 function formReducer(state, action) {
   switch (action.type) {
@@ -367,552 +341,8 @@ function formatDateSlashed(dateString) {
   );
 }
 
-function getItemLocations(items) {
-  const unitIds = new Set(items.map((item) => item.unitId));
-  unitIds.delete(undefined);
-  unitIds.delete(null);
-  const stackPipeIds = new Set(items.map((item) => item.stackPipeId));
-  stackPipeIds.delete(undefined);
-  stackPipeIds.delete(null);
-
-  return { unitIds, stackPipeIds };
-}
-
-function getMergedConfiguration(a, b) {
-  const combinedItems = [...a.items, ...b.items];
-
-  if (a.beginYear === b.beginYear && a.beginQuarter === b.beginQuarter) {
-    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
-      return {
-        id: uuid(),
-        items: combinedItems,
-        beginYear: a.beginYear,
-        beginQuarter: a.beginQuarter,
-        endYear: a.endYear,
-        endQuarter: a.endQuarter,
-      };
-    }
-
-    if (
-      a.endYear < b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
-    ) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: a.beginYear,
-          beginQuarter: a.beginQuarter,
-          endYear: b.endYear,
-          endQuarter: b.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
-            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-        ];
-      }
-    }
-
-    if (
-      a.endYear > b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
-    ) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: a.beginYear,
-          beginQuarter: a.beginQuarter,
-          endYear: a.endYear,
-          endQuarter: a.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
-            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-        ];
-      }
-    }
-  }
-
-  if (
-    a.beginYear < b.beginYear ||
-    (a.beginYear === b.beginYear && a.beginQuarter < b.beginQuarter)
-  ) {
-    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: a.beginYear,
-          beginQuarter: a.beginQuarter,
-          endYear: a.endYear,
-          endQuarter: a.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
-            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-          },
-        ];
-      }
-    }
-
-    if (
-      a.endYear < b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
-    ) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: a.beginYear,
-          beginQuarter: a.beginQuarter,
-          endYear: b.endYear,
-          endQuarter: b.endQuarter,
-        };
-      } else if (locationsMatch(a.items, combinedItems)) {
-        return [
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
-            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipe,
-          },
-        ];
-      } else if (locationsMatch(b.items, combinedItems)) {
-        return [
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
-            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-        ];
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
-            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
-            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-        ];
-      }
-    }
-
-    if (
-      a.endYear > b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
-    ) {
-      if (locationsMatch(a.items, combinedItems)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: a.beginYear,
-          beginQuarter: a.beginQuarter,
-          endYear: b.endYear,
-          endQuarter: b.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: b.beginQuarter === 1 ? b.beginYear - 1 : b.beginYear,
-            endQuarter: b.beginQuarter === 1 ? 4 : b.beginQuarter - 1,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
-            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-        ];
-      }
-    }
-  }
-
-  if (
-    a.beginYear > b.beginYear ||
-    (a.beginYear === b.beginYear && a.beginQuarter > b.beginQuarter)
-  ) {
-    if (a.endYear === b.endYear && a.endQuarter === b.endQuarter) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: b.beginYear,
-          beginQuarter: b.beginQuarter,
-          endYear: b.endYear,
-          endQuarter: b.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
-            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-          },
-        ];
-      }
-    }
-
-    if (
-      a.endYear < b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter < b.endQuarter)
-    ) {
-      if (locationsMatch(b.items, combinedItems)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: b.beginYear,
-          beginQuarter: b.beginQuarter,
-          endYear: b.endYear,
-          endQuarter: b.endQuarter,
-        };
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
-            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: a.endQuarter === 4 ? a.endYear + 1 : a.endYear,
-            beginQuarter: a.endQuarter === 4 ? 1 : a.endQuarter + 1,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-        ];
-      }
-    }
-
-    if (
-      a.endYear > b.endYear ||
-      (a.endYear === b.endYear && a.endQuarter > b.endQuarter)
-    ) {
-      if (locationsMatch(a.items, b.items)) {
-        return {
-          id: uuid(),
-          items: combinedItems,
-          beginYear: b.beginYear,
-          beginQuarter: b.beginQuarter,
-          endYear: a.endYear,
-          endQuarter: a.endQuarter,
-        };
-      } else if (locationsMatch(b.items, combinedItems)) {
-        return [
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
-            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-        ];
-      } else if (locationsMatch(a.items, combinedItems)) {
-        return [
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
-            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-          },
-        ];
-      } else {
-        return [
-          {
-            id: uuid(),
-            items: b.items,
-            beginYear: b.beginYear,
-            beginQuarter: b.beginQuarter,
-            endYear: a.beginQuarter === 1 ? a.beginYear - 1 : a.beginYear,
-            endQuarter: a.beginQuarter === 1 ? 4 : a.beginQuarter - 1,
-            unitIds: b.unitIds,
-            stackPipeIds: b.stackPipeIds,
-          },
-          {
-            id: uuid(),
-            items: combinedItems,
-            beginYear: a.beginYear,
-            beginQuarter: a.beginQuarter,
-            endYear: b.endYear,
-            endQuarter: b.endQuarter,
-          },
-          {
-            id: uuid(),
-            items: a.items,
-            beginYear: b.endQuarter === 4 ? b.endYear + 1 : b.endYear,
-            beginQuarter: b.endQuarter === 4 ? 1 : b.endQuarter + 1,
-            endYear: a.endYear,
-            endQuarter: a.endQuarter,
-            unitIds: a.unitIds,
-            stackPipeIds: a.stackPipeIds,
-          },
-        ];
-      }
-    }
-  }
-}
-
 function getOrisCodeByFacId(facilities, facId) {
   return facilities.find((f) => f.facilityRecordId === facId)?.facilityId;
-}
-
-function getYearAndQuarterFromDate(dateString) {
-  if (!dateString) return [Infinity, Infinity];
-
-  const date = new Date(dateString);
-  return [date.getUTCFullYear(), Math.floor(date.getUTCMonth() / 3) + 1];
-}
-
-function groupUnitsAndUnitStackConfigsByPeriodAndUnit(units, unitStackConfigs) {
-  return [...units, ...unitStackConfigs].reduce((acc, item) => {
-    const [beginYear, beginQuarter] = getYearAndQuarterFromDate(item.beginDate);
-    const [endYear, endQuarter] = getYearAndQuarterFromDate(item.endDate);
-    for (const grouping of acc) {
-      if (
-        grouping.items.find((i) => i.unitId === item.unitId) &&
-        grouping.beginYear === beginYear &&
-        grouping.beginQuarter === beginQuarter &&
-        grouping.endYear === endYear &&
-        grouping.endQuarter === endQuarter
-      ) {
-        grouping.items.push(item);
-        return acc;
-      }
-    }
-    return acc.concat({
-      id: uuid(),
-      beginYear,
-      beginQuarter,
-      endYear,
-      endQuarter,
-      items: [item],
-    });
-  }, []);
-}
-
-function locationsMatch(a, b) {
-  const { unitIds: unitIdsA, stackPipeIds: stackPipeIdsA } =
-    getItemLocations(a);
-  const { unitIds: unitIdsB, stackPipeIds: stackPipeIdsB } =
-    getItemLocations(b);
-
-  return (
-    unitIdsA.size === unitIdsB.size &&
-    [...unitIdsA].every((id) => unitIdsB.has(id)) &&
-    stackPipeIdsA.size === stackPipeIdsB.size &&
-    [...stackPipeIdsA].every((id) => stackPipeIdsB.has(id))
-  );
-}
-
-function mergePartialConfigurations(partialConfigurations) {
-  if (partialConfigurations.length < 2) return partialConfigurations;
-
-  const currentConfig = partialConfigurations[0];
-  for (const compareConfig of partialConfigurations.slice(1)) {
-    if (
-      !checkLocationsIntersect(currentConfig, compareConfig) ||
-      !checkPeriodsIntersect(currentConfig, compareConfig)
-    ) {
-      continue;
-    }
-
-    const mergedConfig = getMergedConfiguration(currentConfig, compareConfig);
-    if (mergedConfig) {
-      return mergePartialConfigurations(
-        partialConfigurations
-          .filter(
-            (pc) => pc.id !== compareConfig.id && pc.id !== currentConfig.id
-          )
-          .concat(mergedConfig)
-      );
-    }
-  }
-  return [
-    normalizeConfigurationPeriods(currentConfig),
-    ...mergePartialConfigurations(partialConfigurations.slice(1)),
-  ];
-}
-
-function normalizeConfigurationPeriods(configuration) {
-  const numberOrNull = (num) => (Number.isFinite(num) ? num : null);
-  return {
-    ...configuration,
-    beginQuarter: numberOrNull(configuration.beginQuarter),
-    beginYear: numberOrNull(configuration.beginYear),
-    endQuarter: numberOrNull(configuration.endQuarter),
-    endYear: numberOrNull(configuration.endYear),
-  };
 }
 
 function parseDatePickerString(dateString) {
@@ -1113,28 +543,6 @@ const SaveStatusAlert = ({ status }) => (
   </>
 );
 
-const StackPipeSummary = ({ stackPipe }) => {
-  return (
-    <>
-      <h4>{stackPipe.stackPipeId}</h4>
-      <GridContainer>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            Active Date:
-          </Grid>
-          <Grid col="auto">{stackPipe.activeDate}</Grid>
-        </Grid>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            RetireDate:
-          </Grid>
-          <Grid col="auto">{stackPipe.retireDate ?? "N/A"}</Grid>
-        </Grid>
-      </GridContainer>
-    </>
-  );
-};
-
 const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
   <>
     {status === dataStatus.PENDING && (
@@ -1159,20 +567,6 @@ const SummarySectionPlan = ({ plans, title }) =>
         {plans.map((plan) => (
           <li key={plan.id}>
             <PlanSummary plan={plan} />
-          </li>
-        ))}
-      </ul>
-    </section>
-  ) : null;
-
-const SummarySectionStackPipes = ({ stackPipes, title }) =>
-  stackPipes.length ? (
-    <section>
-      <h3 className="text-primary">{title}</h3>
-      <ul className="usa-list usa-list--unstyled">
-        {stackPipes.map((sp) => (
-          <li key={sp.id}>
-            <StackPipeSummary stackPipe={sp} />
           </li>
         ))}
       </ul>
@@ -1234,13 +628,12 @@ export const ConfigurationManagement = ({
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [monitorPlanPayloads, setMonitorPlanPayloads] = useState([]);
+  const [monitorPlansPayload, setMonitorPlansPayload] = useState(null);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
     dataStatus.IDLE
   );
   const [saveStatus, setSaveStatus] = useState(dataStatus.IDLE);
   const [selectedFacility, setSelectedFacility] = useState(undefined);
-  const [stackPipePayloads, setStackPipePayloads] = useState([]);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
   const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
@@ -1307,125 +700,19 @@ export const ConfigurationManagement = ({
 
   const createChangeSummary = async () => {
     setChangeSummaryStatus(dataStatus.PENDING);
+    const newMonitorPlansPayload = mapFormStateToPayload();
 
     try {
-      const partialConfigurations =
-        groupUnitsAndUnitStackConfigsByPeriodAndUnit(
-          formState.units,
-          formState.unitStackConfigs
-        );
+      const planResults = await importMP(newMonitorPlansPayload, true);
 
-      // Merge partial configurations into full configurations.
-      const fullConfigurations = mergePartialConfigurations(
-        partialConfigurations
-      );
-
-      // Filter out any plans where items have not been changed or it is matched to an existing inactive plan.
-      const changedConfigurations = fullConfigurations
-        .filter((c) =>
-          c.items.some(
-            (item) =>
-              !item.originalRecord ||
-              item.beginDate !== item.originalRecord.beginDate ||
-              item.endDate !== item.originalRecord.endDate
-          )
-        )
-        .filter((c) => {
-          const matchedPlan = monitoringPlans.find((mp) => {
-            const configBeginPeriod = `${c.beginYear} Q${c.beginQuarter}`;
-            return (
-              configBeginPeriod === mp.beginReportPeriodDescription &&
-              locationsMatch(mp.monitoringLocationData, c.items)
-            );
-          });
-          return !matchedPlan || matchedPlan.active;
-        });
-
+      // TODO: Handle newly associated units.
       const newlyAssociatedUnits = formState.units.filter((u) => u.isToggled);
 
-      const newMonitorPlanPayloads = changedConfigurations
-        .map(mapConfigurationToPayload)
-        .concat(newlyAssociatedUnits.map(mapUnitToPayload));
-
-      // Generate a list of any stack/pipes that are part of a changed plan.
-      const affectedStackPipeIds = new Set(
-        newMonitorPlanPayloads
-          .flatMap((p) =>
-            p.unitStackConfigurationData
-              .map((usc) => usc.stackPipeId)
-              .concat(p.monitoringLocationData.map((ml) => ml.stackPipeId))
-          )
-          .filter((id) => id)
-      );
-
-      // Generate a list of any stack/pipes that have been changed but are not part of a changed plan.
-      const unaffiliatedChangedStackPipes = formState.stackPipes
-        .filter((sp) => !affectedStackPipeIds.has(sp.stackPipeId))
-        .filter((sp) => {
-          return (
-            !sp.originalRecord ||
-            sp.activeDate !== sp.originalRecord.activeDate ||
-            sp.retireDate !== sp.originalRecord.retireDate
-          );
-        });
-      const newStackPipePayloads = unaffiliatedChangedStackPipes.map(
-        mapStackPipeToPayload
-      );
-
-      // Fetch the change summary for each stack/pipe.
-      const stackPipeResults = await Promise.all(
-        newStackPipePayloads.map((payload) => importStackPipe(payload, true))
-      );
-
-      // Fetch the change summary for each plan.
-      const planResults = await Promise.all(
-        newMonitorPlanPayloads.map((payload) => importMP(payload, true))
-      );
-
-      setModalErrorMsgs(
-        planResults
-          .concat(stackPipeResults)
-          .filter((r) => typeof r === "string")
-      );
-
-      const stackPipeSummaries = stackPipeResults
-        .filter((r) => typeof r === "object")
-        .map((r) => r.data);
-
-      const planSummaries = planResults
-        .filter((r) => typeof r === "object")
-        .map((r) => r.data)
-        .reduce(
-          (acc, { newPlan, endedPlans, unchangedPlans }) => ({
-            newPlans: newPlan ? acc.newPlans.concat(newPlan) : acc.newPlans,
-            unchangedPlans: acc.unchangedPlans.concat(unchangedPlans),
-            endedPlans: acc.endedPlans.concat(endedPlans),
-          }),
-          { newPlans: [], endedPlans: [], unchangedPlans: [] }
-        );
-      const uniquePlanSummaries = Object.entries(planSummaries).reduce(
-        (acc, [key, plans]) => ({
-          ...acc,
-          [key]: plans.filter(
-            (plan, index, self) =>
-              self.findIndex(
-                (p) =>
-                  p.name === plan.name &&
-                  p.beginReportPeriodId === plan.beginReportPeriodId &&
-                  p.endReportPeriodId === plan.endReportPeriodId
-              ) === index
-          ),
-        }),
-        { newPlans: [], endedPlans: [], unchangedPlans: [] }
-      );
-
-      setChangeSummary({
-        plans: uniquePlanSummaries,
-        stackPipes: stackPipeSummaries,
-      });
+      const { errors, ...results } = planResults.data;
+      setModalErrorMsgs(errors);
+      setChangeSummary(results);
       setChangeSummaryStatus(dataStatus.SUCCESS);
-      setMonitorPlanPayloads(newMonitorPlanPayloads);
-      setStackPipePayloads(newStackPipePayloads);
+      setMonitorPlansPayload(newMonitorPlansPayload);
     } catch (err) {
       console.error(err);
       setChangeSummaryStatus(dataStatus.ERROR);
@@ -1510,14 +797,7 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = async () => {
     setSaveStatus(dataStatus.PENDING);
     try {
-      await Promise.all([
-        Promise.all(
-          monitorPlanPayloads.map((payload) => importMP(payload, false))
-        ),
-        Promise.all(
-          stackPipePayloads.map((payload) => importStackPipe(payload, false))
-        ),
-      ]);
+      if (monitorPlansPayload) await importMP(monitorPlansPayload, false);
       setSaveStatus(dataStatus.SUCCESS);
       [setUnitsStatus, setStackPipesStatus, setUnitStackConfigsStatus].forEach(
         (setter) => setter(dataStatus.IDLE)
@@ -1579,79 +859,36 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const mapConfigurationToPayload = (configuration) => {
-    const { unitIds, stackPipeIds } = getItemLocations(configuration.items);
-    return {
-      monitoringPlanCommentData: [],
-      orisCode: userFacilities.find(
-        (f) => f.facilityRecordId === selectedFacility
-      ).facilityId,
-      unitStackConfigurationData: configuration.items
-        .filter((item) => item.hasOwnProperty("stackPipeId"))
-        .map((item) => ({
-          beginDate: item.beginDate,
-          endDate: item.endDate,
-          stackPipeId: item.stackPipeId,
-          unitId: item.unitId,
-        })),
-      monitoringLocationData: Array.from(unitIds)
-        .map((unitId) => formState.units.find((u) => u.unitId === unitId))
-        .map((unit) => ({
-          unitId: unit.unitId,
-          stackPipeId: null,
-          activeDate: null,
-          retireDate: null,
-          nonLoadBasedIndicator: unit.nonLoadBasedIndicator,
-          ...unusedMonitoringLocationDataFields(),
-        }))
-        .concat(
-          Array.from(stackPipeIds)
-            .map((stackPipeId) =>
-              formState.stackPipes.find((sp) => sp.stackPipeId === stackPipeId)
-            )
-            .map((stackPipe) => ({
-              unitId: null,
-              stackPipeId: stackPipe.stackPipeId,
-              activeDate: stackPipe.activeDate,
-              retireDate: stackPipe.retireDate,
-              nonLoadBasedIndicator: null,
-              ...unusedMonitoringLocationDataFields(),
-            }))
-        ),
-    };
-  };
-
-  const mapStackPipeToPayload = ({
-    activeDate,
-    facilityId,
-    retireDate,
-    stackPipeId,
-  }) => ({
-    activeDate,
-    facilityId,
-    retireDate,
-    stackPipeId,
+  const mapFormStateToPayload = () => ({
+    monitoringPlanCommentData: [],
+    orisCode: userFacilities.find(
+      (f) => f.facilityRecordId === selectedFacility
+    ).facilityId,
+    unitStackConfigurationData: formState.unitStackConfigs
+      .filter(
+        (usc) =>
+          !usc.originalRecord || usc.endDate !== usc.originalRecord.endDate
+      )
+      .map((usc) => ({
+        beginDate: usc.beginDate,
+        endDate: usc.endDate,
+        stackPipeId: usc.stackPipeId,
+        unitId: usc.unitId,
+      })),
+    monitoringLocationData: formState.stackPipes
+      .filter(
+        (sp) =>
+          !sp.originalRecord || sp.retireDate !== sp.originalRecord.retireDate
+      )
+      .map((sp) => ({
+        unitId: null,
+        stackPipeId: sp.stackPipeId,
+        activeDate: sp.activeDate,
+        retireDate: sp.retireDate,
+        nonLoadBasedIndicator: null,
+        ...unusedMonitoringLocationDataFields(),
+      })),
   });
-
-  const mapUnitToPayload = (unit) => {
-    return {
-      monitoringPlanCommentData: [],
-      orisCode: userFacilities.find(
-        (f) => f.facilityRecordId === selectedFacility
-      ).facilityId,
-      unitStackConfigurationData: [],
-      monitoringLocationData: [
-        {
-          unitId: unit.unitId,
-          stackPipeId: null,
-          activeDate: null,
-          retireDate: null,
-          nonLoadBasedIndicator: unit.nonLoadBasedIndicator,
-          ...unusedMonitoringLocationDataFields(),
-        },
-      ],
-    };
-  };
 
   const removeStackPipe = (rowId) => {
     formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
@@ -2239,20 +1476,16 @@ export const ConfigurationManagement = ({
                       status={changeSummaryStatus}
                     >
                       <SummarySectionPlan
-                        plans={changeSummary.plans.newPlans}
+                        plans={changeSummary.newPlans}
                         title="New Plans"
                       />
                       <SummarySectionPlan
-                        plans={changeSummary.plans.endedPlans}
+                        plans={changeSummary.endedPlans}
                         title="Ended Plans"
                       />
                       <SummarySectionPlan
-                        plans={changeSummary.plans.unchangedPlans}
+                        plans={changeSummary.unchangedPlans}
                         title="Unchanged Plans"
-                      />
-                      <SummarySectionStackPipes
-                        stackPipes={changeSummary.stackPipes}
-                        title="Other Stack/Pipe Changes"
                       />
                     </StatusContent>
                     <SaveStatusAlert status={saveStatus} />
