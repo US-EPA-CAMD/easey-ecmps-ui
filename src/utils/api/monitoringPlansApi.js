@@ -1163,6 +1163,24 @@ export const importMP = async (payload, draft) => {
   }
 };
 
+export const createSingleUnitMP = async (payload, draft) => {
+  let url = getApiUrl(`/plans/single-unit`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const importStackPipe = async (payload, draft) => {
   let url = getApiUrl(`/stack-pipes/import`, true);
   if (draft) {

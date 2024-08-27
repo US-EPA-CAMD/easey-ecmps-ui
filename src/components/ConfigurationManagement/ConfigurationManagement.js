@@ -18,7 +18,6 @@ import {
   Label,
   TextInput,
 } from "@trussworks/react-uswds";
-import { Preloader } from "@us-epa-camd/easey-design-system";
 import React, {
   Fragment,
   useCallback,
@@ -41,6 +40,7 @@ import {
   getUnitStackConfigsByFacId,
 } from "../../utils/api/facilityApi";
 import {
+  createSingleUnitMP,
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
   importMP,
@@ -63,11 +63,11 @@ const errorMessages = {
   EDITS_PENDING: "Please complete any pending edits before continuing.",
   NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
-const initialChangeSummaryState = {
+const initialChangeSummaryState = () => ({
   newPlans: [],
   endedPlans: [],
   unchangedPlans: [],
-};
+});
 const initialFormState = {
   units: [],
   stackPipes: [],
@@ -617,7 +617,9 @@ export const ConfigurationManagement = ({
 }) => {
   /* STATE */
 
-  const [changeSummary, setChangeSummary] = useState(initialChangeSummaryState);
+  const [changeSummary, setChangeSummary] = useState(
+    initialChangeSummaryState()
+  );
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
     dataStatus.IDLE
   );
@@ -628,7 +630,7 @@ export const ConfigurationManagement = ({
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [monitorPlansPayload, setMonitorPlansPayload] = useState(null);
+  const monitorPlansPayload = useRef(null);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
     dataStatus.IDLE
   );
@@ -701,18 +703,37 @@ export const ConfigurationManagement = ({
   const createChangeSummary = async () => {
     setChangeSummaryStatus(dataStatus.PENDING);
     const newMonitorPlansPayload = mapFormStateToPayload();
+    monitorPlansPayload.current = newMonitorPlansPayload;
 
     try {
-      const planResults = await importMP(newMonitorPlansPayload, true);
+      const [bulkResult, ...singleUnitResults] = await Promise.all([
+        importMP(newMonitorPlansPayload, true),
+        ...formState.units
+          .filter((u) => u.isToggled)
+          .map((u) =>
+            createSingleUnitMP(
+              { unitId: u.unitId, facilityId: selectedFacility },
+              true
+            )
+          ),
+      ]);
 
-      // TODO: Handle newly associated units.
-      const newlyAssociatedUnits = formState.units.filter((u) => u.isToggled);
+      setModalErrorMsgs(
+        [bulkResult, ...singleUnitResults].filter((r) => typeof r === "string")
+      );
 
-      const { errors, ...results } = planResults.data;
-      setModalErrorMsgs(errors);
+      const results =
+        typeof bulkResult === "object"
+          ? bulkResult.data
+          : initialChangeSummaryState();
+      singleUnitResults
+        .filter((r) => typeof r === "object")
+        .forEach((r) => {
+          results.newPlans.push(r.data);
+        });
+
       setChangeSummary(results);
       setChangeSummaryStatus(dataStatus.SUCCESS);
-      setMonitorPlansPayload(newMonitorPlansPayload);
     } catch (err) {
       console.error(err);
       setChangeSummaryStatus(dataStatus.ERROR);
@@ -788,7 +809,7 @@ export const ConfigurationManagement = ({
 
   const handleCloseModal = () => {
     setChangeSummaryStatus(dataStatus.IDLE);
-    setChangeSummary(initialChangeSummaryState);
+    setChangeSummary(initialChangeSummaryState());
     setModalErrorMsgs([]);
     setModalVisible(false);
     setSaveStatus(dataStatus.IDLE);
@@ -797,11 +818,15 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = async () => {
     setSaveStatus(dataStatus.PENDING);
     try {
-      if (monitorPlansPayload) await importMP(monitorPlansPayload, false);
+      if (monitorPlansPayload.current)
+        await importMP(monitorPlansPayload.current, false);
       setSaveStatus(dataStatus.SUCCESS);
-      [setUnitsStatus, setStackPipesStatus, setUnitStackConfigsStatus].forEach(
-        (setter) => setter(dataStatus.IDLE)
-      );
+      [
+        setMonitoringPlansStatus,
+        setUnitsStatus,
+        setStackPipesStatus,
+        setUnitStackConfigsStatus,
+      ].forEach((setter) => setter(dataStatus.IDLE));
       checkInAllPlansForUser(); // NOTE: This is only necessary until check-outs are done on the plant level
     } catch (err) {
       console.error(err);
@@ -864,22 +889,13 @@ export const ConfigurationManagement = ({
     orisCode: userFacilities.find(
       (f) => f.facilityRecordId === selectedFacility
     ).facilityId,
-    unitStackConfigurationData: formState.unitStackConfigs
-      .filter(
-        (usc) =>
-          !usc.originalRecord || usc.endDate !== usc.originalRecord.endDate
-      )
-      .map((usc) => ({
-        beginDate: usc.beginDate,
-        endDate: usc.endDate,
-        stackPipeId: usc.stackPipeId,
-        unitId: usc.unitId,
-      })),
+    unitStackConfigurationData: formState.unitStackConfigs.map((usc) => ({
+      beginDate: usc.beginDate,
+      endDate: usc.endDate,
+      stackPipeId: usc.stackPipeId,
+      unitId: usc.unitId,
+    })),
     monitoringLocationData: formState.stackPipes
-      .filter(
-        (sp) =>
-          !sp.originalRecord || sp.retireDate !== sp.originalRecord.retireDate
-      )
       .map((sp) => ({
         unitId: null,
         stackPipeId: sp.stackPipeId,
@@ -887,7 +903,17 @@ export const ConfigurationManagement = ({
         retireDate: sp.retireDate,
         nonLoadBasedIndicator: null,
         ...unusedMonitoringLocationDataFields(),
-      })),
+      }))
+      .concat(
+        formState.units.map((u) => ({
+          unitId: u.unitId,
+          stackPipeId: null,
+          activeDate: null,
+          retireDate: null,
+          nonLoadBasedIndicator: u.nonLoadBasedIndicator,
+          ...unusedMonitoringLocationDataFields(),
+        }))
+      ),
   });
 
   const removeStackPipe = (rowId) => {
@@ -1128,7 +1154,15 @@ export const ConfigurationManagement = ({
   }
 
   return !user ? (
-    <Preloader />
+    <Alert
+      noIcon
+      slim
+      type="error"
+      headingLevel="h2"
+      className="margin-bottom-1 width-full"
+    >
+      You must be logged in to access this page.
+    </Alert>
   ) : (
     <>
       <div className="react-transition fade-in padding-x-3">
