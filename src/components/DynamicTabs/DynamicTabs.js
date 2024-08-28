@@ -60,7 +60,6 @@ export const DynamicTabs = ({
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
             facId: t.selectedConfig.facId, // changed to id ??
-            id: t.selectedConfig.id,
             inactive: [false, false],
           },
           workspaceSection
@@ -104,7 +103,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               removeTab={removeTabsHandler}
               title={item.title}
               user={user}
@@ -129,7 +128,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               isCheckedOut={item.checkout}
@@ -147,7 +146,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               isCheckedOut={item.checkout}
@@ -165,7 +164,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               checkout={item.checkout}
@@ -179,7 +178,7 @@ export const DynamicTabs = ({
           item.component = (
             <Export
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               workspaceSection={workspaceSection}

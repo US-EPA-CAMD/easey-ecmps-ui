@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import DataTableMethod from "../datatablesContainer/DataTableMethod/DataTableMethod";
 import DataTableMats from "../datatablesContainer/DataTableMats/DataTableMats";
 import DataTableSystems from "../datatablesContainer/DataTableSystems/DataTableSystems";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
-import { checkoutAPI } from "../../additional-functions/checkout";
 import DataTableQualifications from "../datatablesContainer/DataTableQualifications/DataTableQualifications";
 
 import DataTableAssert from "../datatablesContainer/DataTableAssert/DataTableAssert";
@@ -26,14 +26,12 @@ import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace
 export const MonitoringPlanTabRender = ({
   title,
   user,
-  locations,
-  selectedConfig,
+  selectedConfigId,
   setSectionSelect,
   setLocationSelect,
   sectionSelect,
   locationSelect,
   orisCode,
-  configID,
   checkout,
   removeTab,
   setCheckout,
@@ -43,6 +41,8 @@ export const MonitoringPlanTabRender = ({
 
   workspaceSection,
 }) => {
+  const locations = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)?.monitoringLocationData ?? []);
+
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
   };
@@ -671,23 +671,20 @@ export const MonitoringPlanTabRender = ({
       <div className="grid-row">
         <HeaderInfo
           facility={title}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           orisCode={orisCode}
           removeTab={removeTab}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
-          locations={locations}
           checkout={checkout}
           user={user}
-          checkoutAPI={checkoutAPI}
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={inactive}
           // checkedOutLocations={checkedOutLocations}
           setRevertedState={setRevertedState}
-          configID={configID}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
           workspaceSection={workspaceSection}

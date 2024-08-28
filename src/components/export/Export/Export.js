@@ -10,7 +10,7 @@ import { setExportState } from "../../../store/actions/dynamicFacilityTab";
 
 export const Export = ({
   orisCode,
-  selectedConfig,
+  selectedConfigId,
   title,
   workspaceSection,
   exportTab,
@@ -18,7 +18,7 @@ export const Export = ({
 }) => {
   const getExportState = () => {
     const currentTabObj = exportTab.find(
-      (e) => e.selectedConfig.id === selectedConfig.id
+      (e) => e.selectedConfig.id === selectedConfigId,
     );
     if (currentTabObj && currentTabObj.hasOwnProperty("exportState")) {
       return currentTabObj.exportState;
@@ -30,7 +30,7 @@ export const Export = ({
   return (
     <ExportTab
       facility={title}
-      selectedConfig={selectedConfig}
+      selectedConfigId={selectedConfigId}
       orisCode={orisCode}
       exportState={getExportState()}
       setExportState={setExportState}

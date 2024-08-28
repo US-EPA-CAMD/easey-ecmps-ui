@@ -1,12 +1,7 @@
 import * as mpApi from "../utils/api/monitoringPlansApi";
 import { MONITORING_PLAN_STORE_NAME } from "../additional-functions/workspace-section-and-store-names";
 // Takes a direction to check a record in or out,the configID, and a dispatcher to the redux store
-export const checkoutAPI = (
-  direction,
-  configID,
-  monitorPlanId,
-  setCheckout
-) => {
+export const checkoutAPI = (direction, monitorPlanId, setCheckout) => {
   const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
   if (!direction) {
@@ -14,7 +9,7 @@ export const checkoutAPI = (
       .deleteCheckInMonitoringPlanConfiguration(monitorPlanId)
       .then((res) => {
         if (setCheckout !== undefined) {
-          setCheckout(false, configID, MONITORING_PLAN_STORE_NAME);
+          setCheckout(false, monitorPlanId, MONITORING_PLAN_STORE_NAME);
         }
         if (res === undefined) {
           console.log("error");
@@ -25,7 +20,7 @@ export const checkoutAPI = (
       .postCheckoutMonitoringPlanConfiguration(monitorPlanId, user.userId)
       .then((res) => {
         if (setCheckout !== undefined) {
-          setCheckout(true, configID, MONITORING_PLAN_STORE_NAME);
+          setCheckout(true, monitorPlanId, MONITORING_PLAN_STORE_NAME);
         }
         if (res === undefined) {
           console.log("this configuration is already checked out");

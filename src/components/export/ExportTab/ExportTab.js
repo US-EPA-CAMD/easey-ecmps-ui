@@ -40,7 +40,7 @@ import { extractUserInput } from "../../../additional-functions/extract-user-inp
 
 export const ExportTab = ({
   facility,
-  selectedConfig,
+  selectedConfigId,
   orisCode,
   workspaceSection,
 }) => {
@@ -55,7 +55,7 @@ export const ExportTab = ({
   const exportState = useSelector((state) => {
     const exportTabs = state.openedFacilityTabs.export;
     const curTabObj = exportTabs.find(
-      (tab) => tab.selectedConfig.id === selectedConfig.id
+      (tab) => tab.selectedConfig.id === selectedConfigId,
     );
     return curTabObj?.exportState ?? null;
   });
@@ -64,22 +64,24 @@ export const ExportTab = ({
 
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EXPORT_STORE_NAME].find(
-      (t) => t.selectedConfig.id === selectedConfig.id
+      (t) => t.selectedConfig.id === selectedConfigId
     )
   );
+
+  const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName =
     facility.split("(")[1].replace(")", "") +
-    (currentTab.selectedConfig.active ? "" : " Inactive");
+    (selectedConfig?.active ? "" : " Inactive");
 
-  const selectedUnits = selectedConfig.monitoringLocationData
+  const selectedUnits = selectedConfig?.monitoringLocationData
     .filter((ml) => ml.unitId)
-    .map((data) => data.unitId);
-  const selectedStacks = selectedConfig.monitoringLocationData
+    .map((data) => data.unitId) ?? [];
+  const selectedStacks = selectedConfig?.monitoringLocationData
     .filter((ml) => ml.stackPipeId)
-    .map((data) => data.stackPipeId);
+    .map((data) => data.stackPipeId) ?? [];
 
   const dataTypes = [
     {
@@ -128,7 +130,7 @@ export const ExportTab = ({
   useEffect(() => {
     const fetchTableData = async () => {
       const promises = dataTypes.map((dt) =>
-        dt.dataFetch([orisCode], [selectedConfig.id], [reportingPeriod])
+        dt.dataFetch([orisCode], [selectedConfigId], [reportingPeriod])
       );
       const responses = await Promise.all(promises);
 
@@ -137,7 +139,7 @@ export const ExportTab = ({
     };
     fetchTableData();
     // causes inf rerender: dataTypes (dataTypes is not a primitive)
-  }, [reportingPeriod, orisCode, selectedConfig.id]);
+  }, [reportingPeriod, orisCode, selectedConfigId]);
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
     const { id, calendarYear, quarter } = selectedObj;
@@ -152,7 +154,7 @@ export const ExportTab = ({
     };
 
     dispatch(
-      setExportState(selectedConfig.id, newExportState, workspaceSection)
+      setExportState(selectedConfigId, newExportState, workspaceSection)
     );
   };
 
@@ -165,7 +167,7 @@ export const ExportTab = ({
 
   const downloadQaData = async () => {
     const exportJson = await exportQA(
-      selectedConfig.orisCode,
+      orisCode,
       selectedUnits,
       selectedStacks,
       null,
@@ -199,7 +201,7 @@ export const ExportTab = ({
 
     // export monitoring plan
     if (dataTypes[0].selectedRows.current.length > 0) {
-      promises.push(exportMonitoringPlanDownload(selectedConfig.id));
+      promises.push(exportMonitoringPlanDownload(selectedConfigId));
     }
 
     //export qa
@@ -216,7 +218,7 @@ export const ExportTab = ({
       promises.push(
         exportEmissionsDataDownload(
           facility,
-          selectedConfig.id,
+          selectedConfigId,
           storedYear.current,
           storedQuarter.current,
           getUser() !== null
@@ -230,7 +232,7 @@ export const ExportTab = ({
 
   const dispatchSetExportState = (newExportState) => {
     dispatch(
-      setExportState(selectedConfig.id, newExportState, workspaceSection)
+      setExportState(selectedConfigId, newExportState, workspaceSection)
     );
   };
 
@@ -291,7 +293,7 @@ export const ExportTab = ({
     const { year } = userInput;
 
     setShowFilterModal(false);
-    const additionalParams = `&monitorPlanId=${selectedConfig.id}${
+    const additionalParams = `&monitorPlanId=${selectedConfigId}${
       !!parseInt(year) ? `&year=${year}` : ""
     }`;
     const reportTitle = "Emissions Summary Report";

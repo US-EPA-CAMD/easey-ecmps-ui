@@ -28,10 +28,9 @@ import { successResponses } from "../../utils/api/apiUtils";
 import { formatErrorResponse } from "../../utils/functions";
 export const QACertEventHeaderInfo = ({
   facility,
-  selectedConfig,
+  selectedConfigId,
   orisCode,
   user,
-  configID,
   //redux sets
   setLocationSelect,
   setSectionSelect,
@@ -40,7 +39,6 @@ export const QACertEventHeaderInfo = ({
   checkoutState,
   sectionSelect,
   locationSelect,
-  locations,
   setSelectedTestCode,
   setUpdateRelatedTables,
 }) => {
@@ -51,17 +49,14 @@ export const QACertEventHeaderInfo = ({
     useState(false);
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
 
-  const currentTab = useSelector((state) =>
-    state.openedFacilityTabs[QA_CERT_EVENT_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
-    )
-  );
+  const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
+  const locations = selectedConfig?.monitoringLocationData ?? [];
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName =
     facility.split("(")[1].replace(")", "") +
-    (currentTab.selectedConfig.active ? "" : " Inactive");
+    (selectedConfig?.active ? "" : " Inactive");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -119,7 +114,7 @@ export const QACertEventHeaderInfo = ({
         });
     };
     fetchTestTypeCodes();
-  }, [configID]);
+  }, [selectedConfigId]);
 
   useEffect(() => {
     const selectedIndex = sectionSelect[0];
@@ -145,7 +140,7 @@ export const QACertEventHeaderInfo = ({
   // *** Clean up focus event listeners
   useEffect(() => {
     mpApi
-      .getRefreshInfo(configID)
+      .getRefreshInfo(selectedConfigId)
       .then((info) =>
         setRefresherInfo({
           checkedOutBy: "N/A",
@@ -335,7 +330,7 @@ export const QACertEventHeaderInfo = ({
     // trigger checkout API
     //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
     //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout)
+    checkoutAPI(direction, selectedConfig.id, setCheckout)
       .then(() => {
         setCheckedOutByUser(direction);
         setLockedFacility(direction);

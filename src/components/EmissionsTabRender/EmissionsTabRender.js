@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
-import { checkoutAPI } from "../../additional-functions/checkout";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import "./EmissionsTabRender.scss";
 import { getEmissionViewData } from "../../utils/api/emissionsApi";
@@ -12,12 +11,10 @@ import { EmissionsViewTable } from "../EmissionsViewTable/EmissionsViewTable";
 export const EmissionsTabRender = ({
   title,
   user,
-  locations,
-  selectedConfig,
+  selectedConfigId,
   setLocationSelect,
   locationSelect,
   orisCode,
-  configID,
   checkout,
   setCheckout,
   setInactive,
@@ -26,8 +23,11 @@ export const EmissionsTabRender = ({
 }) => {
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
+      (t) => t.selectedConfig.id === selectedConfigId
     )
+  );
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
   );
 
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
@@ -52,7 +52,7 @@ export const EmissionsTabRender = ({
 
     getEmissionViewData(
       viewTemplateSelect.code,
-      configID,
+      selectedConfigId,
       currentTab.reportingPeriods,
       selectedUnitId,
       selectedStackPipeId,
@@ -88,18 +88,15 @@ export const EmissionsTabRender = ({
       <div className="grid-row">
         <HeaderInfo
           facility={title}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           orisCode={orisCode}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
-          locations={locations}
           checkout={checkout}
           user={user}
-          checkoutAPI={checkoutAPI}
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={inactive}
-          configID={configID}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
           workspaceSection={workspaceSection}
@@ -135,7 +132,9 @@ export const EmissionsTabRender = ({
               headerButtonClickHandler={handleDownload}
               tables={[
                 {
-                  content: <EmissionsViewTable monitorPlanId={configID} />,
+                  content: (
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} />
+                  ),
                   title: viewTemplateSelect?.name ?? "",
                 },
               ]}

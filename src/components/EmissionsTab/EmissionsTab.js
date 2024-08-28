@@ -18,7 +18,7 @@ export const EmissionsTab = ({
   callApiFlag,
 
   orisCode,
-  selectedConfig,
+  selectedConfigId,
   title,
   user,
   tabs,
@@ -30,13 +30,11 @@ export const EmissionsTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
-    return tabs.find(tab => tab.selectedConfig.id === selectedConfig.id);
-  }
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
+  };
 
   const currentTab = getCurrentTab();
-  const [locationSelect, setLocationSelect] = useState(
-    currentTab.location
-  );
+  const [locationSelect, setLocationSelect] = useState(currentTab.location);
 
   useEffect(() => {
     setLocation(locationSelect, title, workspaceSection);
@@ -53,12 +51,10 @@ export const EmissionsTab = ({
           callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig?.monitoringLocationData}
           user={user}
-          configID={currentTab.selectedConfig.id}
           checkout={currentTab.checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}

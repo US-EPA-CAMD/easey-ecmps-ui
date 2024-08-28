@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/monitoringConfigurations";
-import { loadMonitoringPlansArray } from "../../../store/actions/monitoringPlans";
+import { loadMonitoringPlans } from "../../../store/actions/monitoringPlans";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
 import { setCheckoutState } from "../../../store/actions/dynamicFacilityTab";
@@ -23,11 +23,13 @@ export const DataTableConfigurations = ({
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Configurations", "Status"];
   const facility = data.col1;
+  const orisCode = data.col2;
+  const facilityMonitoringPlans = useMemo(() => monitoringPlans[orisCode] ?? [], [monitoringPlans, orisCode]);
 
   // *** generate columns array of object based on columnNames array above
 
   const [selectedMP, setSelectedMp] = useState([]);
-  const [selectedConfig, setSelectedConfig] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
 
   const [dataLoaded, setDataLoaded] = useState(false);
   const findSelectedConfig = (configID) => {
@@ -35,7 +37,7 @@ export const DataTableConfigurations = ({
     if (selectedMP.length > 0) {
       for (const currentMP of selectedMP) {
         if (currentMP !== undefined) {
-          for (const x of currentMP[1]) {
+          for (const x of currentMP) {
             if (x.id === configID) {
               val = x;
               break;
@@ -86,7 +88,7 @@ export const DataTableConfigurations = ({
         mpApi
           .postCheckoutMonitoringPlanConfiguration(config.col3, user.userId)
           .then((res) => {
-            setSelectedConfig([data, selectedConfigData, checkout]);
+            setSelectedRow([data, selectedConfigData, checkout]);
 
             try {
               dispatch(
@@ -95,7 +97,7 @@ export const DataTableConfigurations = ({
             } catch {}
           });
       } else {
-        setSelectedConfig([data, selectedConfigData, checkout]);
+        setSelectedRow([data, selectedConfigData, checkout]);
       }
     } else {
       // monitoring plan id for api check in
@@ -119,17 +121,15 @@ export const DataTableConfigurations = ({
   };
 
   useEffect(() => {
-    if (selectedConfig.length > 0) {
-      selectedRowHandler(selectedConfig);
+    if (selectedRow.length > 0) {
+      selectedRowHandler(selectedRow);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConfig]);
+  }, [selectedRow]);
 
   useEffect(() => {
     const callbackFunction = () => {
-      loadMonitoringPlansArray(data.col2)(dispatch).then(() =>
-        setDataLoaded(true)
-      );
+      loadMonitoringPlans(orisCode)(dispatch).then(() => setDataLoaded(true));
     };
     // Call the callback function
     callbackFunction();
@@ -140,27 +140,20 @@ export const DataTableConfigurations = ({
     if (dataLoaded) {
       setSelectedMp([
         ...selectedMP,
-        monitoringPlans[monitoringPlans.length - 1],
+        facilityMonitoringPlans,
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringPlans]);
+  }, [facilityMonitoringPlans]);
 
   const records = useMemo(() => {
     if (dataLoaded) {
-      if (monitoringPlans.length >= 1) {
-        let index = 0;
-        for (const x of monitoringPlans) {
-          if (x[0] === data.col2) {
-            index = x[1];
-
-            return fs.getConfigurationNames(index);
-          }
-        }
+      if (facilityMonitoringPlans.length >= 1) {
+            return fs.getConfigurationNames(facilityMonitoringPlans);
       }
     }
     return [];
-  }, [data, dataLoaded, monitoringPlans]);
+  }, [dataLoaded, facilityMonitoringPlans]);
 
   return (
     <div className="tabsBox">

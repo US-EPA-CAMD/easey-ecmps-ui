@@ -19,9 +19,8 @@ export const MonitoringPlanTab = ({
   callApiFlag,
 
   orisCode,
-  selectedConfig,
+  selectedConfigId,
   title,
-  locations,
   user,
   checkout,
   removeTab,
@@ -38,11 +37,11 @@ export const MonitoringPlanTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   };
   const currentTabIndex = useMemo(() => {
-    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfig.id);
-  }, [selectedConfig.id, tabs]);
+    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
+  }, [selectedConfigId, tabs]);
 
   // console.log('workspaceSection',workspaceSection)
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
@@ -71,14 +70,12 @@ export const MonitoringPlanTab = ({
           callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig?.monitoringLocationData}
           user={user}
-          configID={tabs[currentTabIndex].selectedConfig.id}
           checkout={tabs[currentTabIndex].checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}

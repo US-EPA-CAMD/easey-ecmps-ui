@@ -128,11 +128,3 @@ export const setViewTemplateSelectionAction = (
     viewTemplateSelect,
   };
 };
-
-export const setFacilityTabSelectedConfig = (selectedConfig, id) => {
-  return {
-    type: types.SET_FACILITY_TAB_SELECTED_CONFIG,
-    id,
-    selectedConfig,
-  };
-};

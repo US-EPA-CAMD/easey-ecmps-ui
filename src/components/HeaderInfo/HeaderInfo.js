@@ -12,6 +12,7 @@ import {
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 
+import { checkoutAPI } from "../../additional-functions/checkout";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
 import {
@@ -50,11 +51,11 @@ import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalConte
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
   setReportingPeriods,
-  setFacilityTabSelectedConfig,
   setViewData,
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
+import { loadMonitoringPlans, loadSingleMonitoringPlanSuccess } from "../../store/actions/monitoringPlans";
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
@@ -92,7 +93,7 @@ export const getReportingPeriods = (minYear = 2009) => {
 
 export const HeaderInfo = ({
   facility,
-  selectedConfig,
+  selectedConfigId,
   orisCode,
   removeTab,
   user,
@@ -105,12 +106,9 @@ export const HeaderInfo = ({
   // redux store
   sectionSelect,
   locationSelect,
-  locations,
   checkout = false,
   inactive,
   ///
-  checkoutAPI,
-  configID,
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
@@ -145,16 +143,21 @@ export const HeaderInfo = ({
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
+      (t) => t.selectedConfig.id === selectedConfigId
     )
   );
   const currentTabIndex = useSelector((state) => state.currentTabIndex);
+
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+  );
+  const locations = selectedConfig?.monitoringLocationData ?? [];
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
   const facilityAdditionalName =
     facility.split("(")[1].replace(")", "") +
-    (currentTab.selectedConfig.active ? "" : " Inactive");
+    (selectedConfig?.active ? "" : " Inactive");
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -420,7 +423,7 @@ export const HeaderInfo = ({
       }
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
-        configID,
+        selectedConfigId,
         selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
@@ -495,7 +498,7 @@ export const HeaderInfo = ({
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
-        configID,
+        selectedConfigId,
         selectedReportingPeriod.slice(0, 4),
         selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
         getUser() !== null
@@ -550,7 +553,7 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
       mpApi
-        .getRefreshInfo(configID)
+        .getRefreshInfo(selectedConfigId)
         .then((res) => {
           if (res.data?.evalStatusCode) {
             const status = res.data.evalStatusCode;
@@ -593,7 +596,7 @@ export const HeaderInfo = ({
           // if not, obtain it from the database
           else {
             mpApi
-              .getRefreshInfo(configID)
+              .getRefreshInfo(selectedConfigId)
               .then((info) => {
                 currentConfig = {
                   checkedOutBy: "N/A",
@@ -654,7 +657,7 @@ export const HeaderInfo = ({
         ) {
           // check database and update status
           mpApi
-            .getRefreshInfo(configID)
+            .getRefreshInfo(selectedConfigId)
             .then((res) => {
               let databaseStatus = "";
               if (res) {
@@ -827,7 +830,7 @@ export const HeaderInfo = ({
     // trigger checkout API
     //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
     //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout)
+    checkoutAPI(direction, selectedConfig.id, setCheckout)
       .then(() => {
         handleSelectReportingPeriod();
         setCheckedOutByUser(direction);
@@ -852,7 +855,7 @@ export const HeaderInfo = ({
         await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
         removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
       } else {
-        dispatch(setFacilityTabSelectedConfig(res.data[0], currentTab.id));
+        dispatch(loadSingleMonitoringPlanSuccess(orisCode, res.data[0]));
       }
       setRevertedState(true);
       setShowRevertModal(false);
@@ -896,6 +899,8 @@ export const HeaderInfo = ({
         if (!successResponses.includes(response.status)) {
           const errorMsgs = formatErrorResponse(response);
           setImportedFileErrorMsgs(errorMsgs);
+        } else {
+          loadMonitoringPlans(orisCode); // Reload monitoring plans
         }
       })
       .catch((err) => {
@@ -1098,7 +1103,7 @@ export const HeaderInfo = ({
           console.error("Error during exporting:", error);
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-        await mpApi.exportMonitoringPlanDownload(configID).catch((error) => {
+        await mpApi.exportMonitoringPlanDownload(selectedConfigId).catch((error) => {
           console.error("Error during exporting ", error);
         });
       setDataLoaded(true);
@@ -1534,7 +1539,7 @@ export const HeaderInfo = ({
                     }
                     onClick={() =>
                       applyFilters(
-                        configID,
+                        selectedConfigId,
                         selectedUnitId,
                         selectedStackPipeId
                       ).catch(handleError)
