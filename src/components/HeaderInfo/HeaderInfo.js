@@ -50,6 +50,7 @@ import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalConte
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
 import {
   setReportingPeriods,
+  setFacilityTabSelectedConfig,
   setViewData,
   setViewDataColumns,
   setViewTemplateSelectionAction,
@@ -141,10 +142,6 @@ export const HeaderInfo = ({
     name: "--- select a view ---",
   };
 
-  // *** parse apart facility name
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -152,6 +149,12 @@ export const HeaderInfo = ({
     )
   );
   const currentTabIndex = useSelector((state) => state.currentTabIndex);
+
+  // *** parse apart facility name
+  const facilityMainName = facility.split("(")[0];
+  const facilityAdditionalName =
+    facility.split("(")[1].replace(")", "") +
+    (currentTab.selectedConfig.active ? "" : " Inactive");
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -848,6 +851,8 @@ export const HeaderInfo = ({
       if (res.data.length === 0) {
         await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
         removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
+      } else {
+        dispatch(setFacilityTabSelectedConfig(res.data[0], currentTab.id));
       }
       setRevertedState(true);
       setShowRevertModal(false);

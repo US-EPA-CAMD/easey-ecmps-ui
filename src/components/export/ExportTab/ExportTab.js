@@ -1,13 +1,9 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import download from "downloadjs";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
+import { EXPORT_STORE_NAME } from "../../../additional-functions/workspace-section-and-store-names";
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
 import { ExportTable } from "../ExportTable/ExportTable";
 import {
@@ -66,8 +62,17 @@ export const ExportTab = ({
 
   const dispatch = useDispatch();
 
+  const currentTab = useSelector((state) =>
+    state.openedFacilityTabs[EXPORT_STORE_NAME].find(
+      (t) => t.selectedConfig.id === selectedConfig.id
+    )
+  );
+
+  // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const facilityAdditionalName =
+    facility.split("(")[1].replace(")", "") +
+    (currentTab.selectedConfig.active ? "" : " Inactive");
 
   const selectedUnits = selectedConfig.monitoringLocationData
     .filter((ml) => ml.unitId)
@@ -243,13 +248,21 @@ export const ExportTab = ({
 
   const handleReportLoad = async () => {
     const controlInputs = {
-      year: ['Years with Emissions Data', 'dropdown', '', '']
-    }
+      year: ["Years with Emissions Data", "dropdown", "", ""],
+    };
     const resp = await getReportingPeriods(true);
 
-
     const calendarYear = Object.values(
-      resp.data?.reduce((acc, obj) => ({ ...acc, [obj.calendarYear]: { code: obj.calendarYear, name: obj.calendarYear } }), {})
+      resp.data?.reduce(
+        (acc, obj) => ({
+          ...acc,
+          [obj.calendarYear]: {
+            code: obj.calendarYear,
+            name: obj.calendarYear,
+          },
+        }),
+        {}
+      )
     );
 
     setSelectedModalData(
@@ -259,7 +272,7 @@ export const ExportTab = ({
         undefined,
         true,
         {
-          year: [{ code: 0, name: 'All Years' }, ...calendarYear.reverse()]
+          year: [{ code: 0, name: "All Years" }, ...calendarYear.reverse()],
         },
         "emissionSummaryReport",
         "emissionSummaryReport",
@@ -268,17 +281,19 @@ export const ExportTab = ({
       )
     );
     setShowFilterModal(true);
-  }
+  };
 
   const viewEmissionSummaryReport = () => {
     const payload = {
-      year: "string"
+      year: "string",
     };
     const userInput = extractUserInput(payload, ".modalUserInput");
     const { year } = userInput;
 
-    setShowFilterModal(false)
-    const additionalParams = `&monitorPlanId=${selectedConfig.id}${!!parseInt(year) ? `&year=${year}` : ''}`;
+    setShowFilterModal(false);
+    const additionalParams = `&monitorPlanId=${selectedConfig.id}${
+      !!parseInt(year) ? `&year=${year}` : ""
+    }`;
     const reportTitle = "Emissions Summary Report";
     const url = `/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
     const reportWindowParams = [
@@ -290,7 +305,7 @@ export const ExportTab = ({
     ].join(",");
 
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
-  }
+  };
 
   return (
     <div>
@@ -298,7 +313,11 @@ export const ExportTab = ({
         <div className="grid-row">
           <div className="grid-col">
             <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
-            <h3 className="facility-header-text-cutoff margin-top-0" style={{ maxWidth: '50%' }} title={facilityAdditionalName}>
+            <h3
+              className="facility-header-text-cutoff margin-top-0"
+              style={{ maxWidth: "50%" }}
+              title={facilityAdditionalName}
+            >
               {facilityAdditionalName}
             </h3>
           </div>
@@ -376,30 +395,30 @@ export const ExportTab = ({
         />
       )}
 
-      {showFilterModal ?
-        (
-          <Modal
-            title={"Select Report Criteria"}
-            show={showFilterModal}
-            close={() => setShowFilterModal(false)}
-            showDarkBg
-            showSave
-            extraBtnText
-            exitBTN="View Report"
-            save={viewEmissionSummaryReport}
-            width="34%"
-            left="33%"
-            fixedWidth={true}
-          >
-            <ModalDetails
-              modalData={null}
-              data={selectedModalData}
-              cols={3}
-              viewOnly={false}
-
-            />
-          </Modal>) : ''
-      }
+      {showFilterModal ? (
+        <Modal
+          title={"Select Report Criteria"}
+          show={showFilterModal}
+          close={() => setShowFilterModal(false)}
+          showDarkBg
+          showSave
+          extraBtnText
+          exitBTN="View Report"
+          save={viewEmissionSummaryReport}
+          width="34%"
+          left="33%"
+          fixedWidth={true}
+        >
+          <ModalDetails
+            modalData={null}
+            data={selectedModalData}
+            cols={3}
+            viewOnly={false}
+          />
+        </Modal>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

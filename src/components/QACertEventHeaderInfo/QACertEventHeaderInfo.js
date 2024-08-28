@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
 
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -49,9 +50,18 @@ export const QACertEventHeaderInfo = ({
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
+
+  const currentTab = useSelector((state) =>
+    state.openedFacilityTabs[QA_CERT_EVENT_STORE_NAME].find(
+      (t) => t.selectedConfig.id === configID
+    )
+  );
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const facilityAdditionalName =
+    facility.split("(")[1].replace(")", "") +
+    (currentTab.selectedConfig.active ? "" : " Inactive");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -161,9 +171,9 @@ export const QACertEventHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -176,9 +186,9 @@ export const QACertEventHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-        checkedOutConfigs
-          .map((con) => con["monPlanId"])
-          .indexOf(selectedConfig.id)
+          checkedOutConfigs
+            .map((con) => con["monPlanId"])
+            .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -299,8 +309,9 @@ export const QACertEventHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-            } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${
+            currentConfig["checkedOutBy"]
+          } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -338,14 +349,23 @@ export const QACertEventHeaderInfo = ({
   return (
     <div className="header QACertHeader ">
       <div className="grid-container width-full clearfix position-relative">
-
         <div className="grid-row">
           <div className="grid-col-9">
-            <h3 className="font-body-lg margin-y-0" data-testid="facility-name-header">{facilityMainName}</h3>
-            <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+            <h3
+              className="font-body-lg margin-y-0"
+              data-testid="facility-name-header"
+            >
+              {facilityMainName}
+            </h3>
+            <h3
+              className="facility-header-text-cutoff margin-y-0"
+              title={facilityAdditionalName}
+            >
               {facilityAdditionalName}
             </h3>
-            <p className="text-bold font-body-2xs margin-top-0">{createAuditMessage()}</p>
+            <p className="text-bold font-body-2xs margin-top-0">
+              {createAuditMessage()}
+            </p>
           </div>
 
           <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
@@ -435,13 +455,14 @@ export const QACertEventHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${showImportModal ||
+        className={`usa-overlay ${
+          showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-          ? "is-visible"
-          : ""
-          }`}
+            ? "is-visible"
+            : ""
+        }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (

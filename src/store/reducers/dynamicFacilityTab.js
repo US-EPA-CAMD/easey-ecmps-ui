@@ -197,6 +197,21 @@ const reducer = (state, action) => {
         ),
       };
       break;
+    case types.SET_FACILITY_TAB_SELECTED_CONFIG:
+      returnObject = {
+        ...currentState,
+      };
+      workspaceSections.forEach((section) => {
+        returnObject[section] = currentState[section].map((x) =>
+          x.id === action.id
+            ? {
+                ...x,
+                selectedConfig: action.selectedConfig,
+              }
+            : x
+        );
+      });
+      break;
     default:
       returnObject = currentState;
       break;

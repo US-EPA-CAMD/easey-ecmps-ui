@@ -60,7 +60,7 @@ export const DynamicTabs = ({
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
             facId: t.selectedConfig.facId, // changed to id ??
-            // id: t.selectedConfig.locations[0].id,
+            id: t.selectedConfig.id,
             inactive: [false, false],
           },
           workspaceSection

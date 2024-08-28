@@ -88,9 +88,7 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    const title = `${info[0].col1} (${info[1].name}) ${
-      info[1].active ? "" : "Inactive"
-    }`;
+    const title = `${info[0].col1} (${info[1].name})`;
 
     // if user has THIS plan checkedout
     const isCheckedOutByUser = (configs) => {

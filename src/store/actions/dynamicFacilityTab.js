@@ -72,16 +72,24 @@ export const setExportState = (configId, exportState, workspaceSection) => {
   };
 };
 
-export const setReportingPeriods = (reportingPeriods, title, workspaceSection) =>{
+export const setReportingPeriods = (
+  reportingPeriods,
+  title,
+  workspaceSection
+) => {
   return {
     type: types.SET_REPORTING_PERIODS,
     title,
     workspaceSection,
     reportingPeriods,
-  }
-}
+  };
+};
 
-export const setIsViewDataLoaded = (isViewDataLoaded, title, workspaceSection) => {
+export const setIsViewDataLoaded = (
+  isViewDataLoaded,
+  title,
+  workspaceSection
+) => {
   return {
     type: types.IS_VIEW_DATA_LOADED,
     title,
@@ -108,11 +116,23 @@ export const setViewDataColumns = (viewColumns, title, workspaceSection) => {
   };
 };
 
-export const setViewTemplateSelectionAction = (viewTemplateSelect, title, workspaceSection) => {
+export const setViewTemplateSelectionAction = (
+  viewTemplateSelect,
+  title,
+  workspaceSection
+) => {
   return {
     type: types.SET_VIEW_TEMPLATE_SELECTION,
     title,
     workspaceSection,
     viewTemplateSelect,
+  };
+};
+
+export const setFacilityTabSelectedConfig = (selectedConfig, id) => {
+  return {
+    type: types.SET_FACILITY_TAB_SELECTED_CONFIG,
+    id,
+    selectedConfig,
   };
 };

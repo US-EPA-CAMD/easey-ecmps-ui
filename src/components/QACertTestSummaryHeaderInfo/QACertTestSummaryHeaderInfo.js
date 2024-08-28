@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
 
 import "./QACertTestSummaryHeaderInfo.scss";
@@ -59,9 +60,18 @@ export const QACertTestSummaryHeaderInfo = ({
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
+
+  const currentTab = useSelector((state) =>
+    state.openedFacilityTabs[QA_CERT_TEST_SUMMARY_STORE_NAME].find(
+      (t) => t.selectedConfig.id === configID
+    )
+  );
+
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
+  const facilityAdditionalName =
+    facility.split("(")[1].replace(")", "") +
+    (currentTab.selectedConfig.active ? "" : " Inactive");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -412,27 +422,36 @@ export const QACertTestSummaryHeaderInfo = ({
   return (
     <div className="header QACertHeader ">
       <div className="grid-container width-full clearfix position-relative">
-
         <div className="grid-row">
           <div className="grid-col-9">
-            <h3 className="font-body-lg margin-y-0" data-testid="facility-name-header">{facilityMainName}</h3>
-            <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+            <h3
+              className="font-body-lg margin-y-0"
+              data-testid="facility-name-header"
+            >
+              {facilityMainName}
+            </h3>
+            <h3
+              className="facility-header-text-cutoff margin-y-0"
+              title={facilityAdditionalName}
+            >
               {facilityAdditionalName}
             </h3>
-            <p className="text-bold font-body-2xs margin-top-0">{createAuditMessage()}</p>
+            <p className="text-bold font-body-2xs margin-top-0">
+              {createAuditMessage()}
+            </p>
           </div>
 
           <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
-          {user && isCheckedOut && (
-            <Button
-              type="button"
-              outline={false}
-              onClick={() => openSelectionTypeImportModal()}
-              id="importSelectionQAModal"
-            >
-              Import Data
-            </Button>
-          )}
+            {user && isCheckedOut && (
+              <Button
+                type="button"
+                outline={false}
+                onClick={() => openSelectionTypeImportModal()}
+                id="importSelectionQAModal"
+              >
+                Import Data
+              </Button>
+            )}
           </div>
         </div>
 
