@@ -33,14 +33,14 @@ export function loadMonitoringPlans(orisCode) {
 export function loadMonitoringPlansArray(orisCode) {
   return async (dispatch) => {
     dispatch(beginMonitoringPlansApiCall());
-    await mpApi
-      .getMonitoringPlans(orisCode)
-      .then((res) => {
-        if (res) {
-          dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
-        }
-      })
-      .catch((error) => console.log("getMonitoringPlans failed", error));
+    try {
+      const res = await mpApi.getMonitoringPlans(orisCode);
+      if (res) {
+        dispatch(loadMonitoringPlansArraySuccess(res.data, orisCode));
+      }
+    } catch (error) {
+      console.error("getMonitoringPlans failed", error);
+    }
   };
 }
 
