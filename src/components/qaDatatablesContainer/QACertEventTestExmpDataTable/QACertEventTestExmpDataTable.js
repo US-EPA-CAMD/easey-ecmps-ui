@@ -73,14 +73,14 @@ const QACertEventTestExmpDataTable = ({
   let props = {};
   switch (sectionSelect[1]) {
     case "QA Certification Event":
-      props = qaCertEventsProps(selectedLocation);
+      props = qaCertEventsProps(selectedLocation, user);
       break;
 
     case "Test Extension Exemption":
-      props = qaTestExemptionProps(selectedLocation);
+      props = qaTestExemptionProps(selectedLocation, user);
       break;
     default:
-      props = qaCertEventsProps(selectedLocation);
+      props = qaCertEventsProps(selectedLocation, user);
       break;
   }
 
