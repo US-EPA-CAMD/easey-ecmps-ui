@@ -56,7 +56,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       label: (
         <span className="margin-right-1 text-no-wrap">
           <span
-            className="margin-right-20 menu-item-separator"
+            className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block"
             style={{ color: "#365b8f" }}
           >
             |
@@ -76,7 +76,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     {
       label: (
         <span className="margin-right-1 text-no-wrap" title="Coming Soon">
-          <span className="margin-right-20 menu-item-separator">|</span>
+          <span className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
           Regulatory Partners
         </span>
       ),
@@ -171,6 +171,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     setShow(value);
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   return (
     <div className="subheader-wrapper bg-primary-dark ">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -192,6 +194,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
             id="btnMobileMenu"
             type="button"
             className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
+            onClick={()=>setIsMobileMenuOpen(true)}
           >
             <img
               src={"/images/icons/mobile-menu-expand.svg"}
@@ -201,6 +204,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           <div className="float-right">
             <PrimaryNav
               className="float-left desktop:margin-top-1 desktop-lg:margin-top-0"
+              mobileExpanded={isMobileMenuOpen}
+              onToggleMobileNav={()=>setIsMobileMenuOpen(false)}
               items={subHeaderMenuList.map((el, i) => {
                 if (el.items.length === 0) {
                   return (
@@ -320,7 +325,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 </span>
               </>
             ) : (
-              <span className="text-bold text-white text-no-wrap clearfix position-relative margin-x-2">
+              <span className="text-bold text-white text-no-wrap clearfix position-relative desktop:margin-x-2">
                 <Button
                   type="button"
                   outline={true}
