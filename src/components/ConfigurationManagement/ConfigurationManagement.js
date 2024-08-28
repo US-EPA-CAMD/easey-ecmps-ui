@@ -657,9 +657,17 @@ export const ConfigurationManagement = ({
     }));
   }, [userFacilities]);
 
+  const selectedOrisCode = facilities.find(
+    (f) => f.facilityRecordId === selectedFacility
+  )?.facilityId;
+  const facilityMonitoringPlans = selectedFacility
+    ? monitoringPlans[selectedOrisCode] ?? []
+    : [];
+
   // TODO: Remove this after migrating to checking out by plants.
   const canCheckOut =
-    monitoringPlansStatus === dataStatus.SUCCESS && monitoringPlans.length > 0;
+    monitoringPlansStatus === dataStatus.SUCCESS &&
+    facilityMonitoringPlans.length > 0;
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
     (loc) => loc.facId === selectedFacility
@@ -797,7 +805,7 @@ export const ConfigurationManagement = ({
       if (!orisCode) return;
 
       await Promise.all(
-        monitoringPlans.map((mp) =>
+        facilityMonitoringPlans.map((mp) =>
           postCheckoutMonitoringPlanConfiguration(mp.id)
         )
       );
