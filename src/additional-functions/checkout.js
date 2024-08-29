@@ -22,7 +22,7 @@ export const checkoutAPI = (
       });
   } else {
     return mpApi
-      .postCheckoutMonitoringPlanConfiguration(monitorPlanId, user.userId)
+      .postCheckoutMonitoringPlanConfiguration(monitorPlanId)
       .then((res) => {
         if (setCheckout !== undefined) {
           setCheckout(true, configID, MONITORING_PLAN_STORE_NAME);
