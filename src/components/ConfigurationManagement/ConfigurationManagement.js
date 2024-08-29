@@ -66,7 +66,6 @@ const errorMessages = {
 const initialChangeSummaryState = () => ({
   newPlans: [],
   endedPlans: [],
-  unchangedPlans: [],
 });
 const initialFormState = {
   units: [],
@@ -466,6 +465,7 @@ const dateCell = ({
       return (
         <DatePicker
           aria-label={`Edit ${column.name} for row ${index + 1}`}
+          defaultValue={column.selector(row) ?? ""}
           disabled={disabled(row)}
           form={`form-${row.id}`}
           id={`${id}-input`}
@@ -1524,10 +1524,6 @@ export const ConfigurationManagement = ({
                       <SummarySectionPlan
                         plans={changeSummary.endedPlans}
                         title="Ended Plans"
-                      />
-                      <SummarySectionPlan
-                        plans={changeSummary.unchangedPlans}
-                        title="Unchanged Plans"
                       />
                     </StatusContent>
                     <SaveStatusAlert status={saveStatus} />
