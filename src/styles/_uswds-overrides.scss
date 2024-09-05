@@ -193,7 +193,10 @@
   }
 
   .usa-nav__primary button span::after {
-    background-color: $epa-white !important;
+    @media (min-width: 1024px) {
+      background-color: $epa-white !important;
+    }
+    top: calc(100% - 1.25rem - 0.125rem - 6px);
   }
 
   .usa-nav__submenu {
