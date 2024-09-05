@@ -84,7 +84,7 @@ export const DataTableConfigurations = ({
     if (!checkIn) {
       if (checkout) {
         mpApi
-          .postCheckoutMonitoringPlanConfiguration(config.col3, user.userId)
+          .postCheckoutMonitoringPlanConfiguration(config.col3)
           .then((res) => {
             setSelectedConfig([data, selectedConfigData, checkout]);
 
@@ -126,7 +126,7 @@ export const DataTableConfigurations = ({
   }, [selectedConfig]);
 
   useEffect(() => {
-    // cannot use .then() to call setDataLoaded with dispatch() in react 18 
+    // cannot use .then() to call setDataLoaded with dispatch() in react 18
     const callbackFunction = () => {
       setDataLoaded(true);
       dispatch(loadMonitoringPlansArray(data.col2));
@@ -143,7 +143,6 @@ export const DataTableConfigurations = ({
         ...selectedMP,
         monitoringPlans[monitoringPlans.length - 1],
       ]);
-  
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringPlans]);
@@ -155,7 +154,7 @@ export const DataTableConfigurations = ({
         for (const x of monitoringPlans) {
           if (x[0] === data.col2) {
             index = x[1];
-          
+
             return fs.getConfigurationNames(index);
           }
         }
@@ -194,6 +193,5 @@ export const DataTableConfigurations = ({
     </div>
   );
 };
-
 
 export default DataTableConfigurations;
