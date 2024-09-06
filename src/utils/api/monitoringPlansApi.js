@@ -868,6 +868,59 @@ export const createUnitCapacity = async (payload, urlParameters) => {
   }
 };
 
+export const getMonitoringPlansUnit = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/units`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const saveMonitoringPlansUnit = async (payload, urlParameters) => {
+  const url = getApiUrl(
+    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/units/${payload["id"]}`
+  );
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getUnitProgram = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-programs`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getReportingFrequency = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/reporting-frequencies`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getPCTQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/pct-qualifications`

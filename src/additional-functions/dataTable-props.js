@@ -1,3 +1,4 @@
+
 export const defaultsDataTableProps = (location) => {
   return {
     payload: {
@@ -428,6 +429,84 @@ export const unitCapacityDataTableProps = (location, selectedLocation) => {
       locId: selectedLocation.id,
       unitRecordId: selectedLocation.unitRecordId,
       unitCapacityId: location,
+    },
+  };
+};
+
+export const unitDataTableProps = (location, selectedLocation) => {
+  return {
+    payload: {
+      id: null,
+      nonLoadBasedIndicator: 0,
+    },
+    dropdownArray: [[]],
+    columnNames: [
+      "Unit Id",
+      "Non Load Based Indicator",
+      "Source Category Code",
+      "Commence Operation Date (CO)",
+      "Commercial Operation Date (CCO)",
+      "Unit Type Code",
+      "Operation Status Code",
+      "Operation Status Begin Date",
+    ],
+    controlInputs: {
+      nonLoadBasedIndicator: ["Non Load Based Indicator", "radio", "", ""],
+      sourceCategoryCd: ["Source Category Code", "input", "", "locked"],
+      commOpDate: ["Commence Operation Date (CO)", "date", "", "locked"],
+      comrOpDate: ["Commercial Operation Date (CCO)", "date", "", "locked"],
+      unitTypeCd: ["Unit Type Code", "input", "", "locked"],
+      opStatusCd: ["Operation Status Code", "input", "", "locked"],
+      statusBeginDate: ["Operation Status Begin Date", "date", "", "locked"],
+    },
+    controlDatePickerInputs: {},
+    urlParameters: {
+      locId: selectedLocation.id,
+      unitRecordId: selectedLocation.unitRecordId,
+    },
+  };
+};
+
+export const unitProgramDataTableProps = (location, selectedLocation) => {
+  return {
+    payload: {
+      },
+    dropdownArray: [[]],
+    columnNames: [
+      "Program Code",
+      "Unit Classification",
+      "Unit Monitor Certification Begin Date",
+      "Unit Monitor Certification Deadline",
+      "Emissions Recording Begin Date",
+      "End Date",
+    ],
+    controlInputs: {
+      programCode: ["Program Code", "input", "", "locked"],
+      classCode: ["Unit Classification", "input", "", "locked"],
+      unitMonitorCertBeginDate: ["Unit Monitor Certification Begin Date", "date", "", "locked"],
+      unitMonitorCertDeadline: ["Unit Monitor Certification Deadline", "date", "", "locked"],
+      emissionsRecordingBeginDate: ["Emissions Recording Begin Date", "date", "", "locked"],
+      endDate: ["End Date", "date", "", "locked"],
+    },
+    controlDatePickerInputs: {},
+  };
+};
+
+export const reportingFrequencyDataTableProps = (location, selectedLocation) => {
+  return {
+    payload: {},
+    dropdownArray: [[]],
+    columnNames: [
+      "Reporting Frequency",
+      "Monitoring Plan Locations",
+      "Begin Quarter",
+      "End Quarter",
+    ],
+    controlInputs: {
+      reportFrequencyCode: ["Reporting Frequency", "input", "", "locked"],
+      monitoringPlanLocations: ["Monitoring Plan Locations", "input", "", "locked"],
+      beginQuarter: ["Begin Quarter", "input", "", "locked"],
+      endQuarter: ["End Quarter", "input", "", "locked"],
     },
   };
 };
