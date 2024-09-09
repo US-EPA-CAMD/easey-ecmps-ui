@@ -627,13 +627,15 @@ export const DataTableSystems = ({
     try {
       let resp;
       let response;
-        resp = await mpApi
-        .createComponents(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id
-        )
-        .catch((error) => console.log("createComponents failed", error));
+        if (!addExistingComponentFlag) {
+          resp = await mpApi
+          .createComponents(
+            userInput,
+            selectedSystem.locationId,
+            selectedSystem.id
+          )
+          .catch((error) => console.log("createComponents failed", error));
+        }
         response = await mpApi
         .createSystemsComponents(
           userInput,
