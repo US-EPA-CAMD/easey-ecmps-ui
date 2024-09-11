@@ -24,7 +24,10 @@ export const DataTableConfigurations = ({
   const columnNames = ["Configurations", "Status"];
   const facility = data.col1;
   const orisCode = data.col2;
-  const facilityMonitoringPlans = useMemo(() => monitoringPlans[orisCode] ?? [], [monitoringPlans, orisCode]);
+  const facilityMonitoringPlans = useMemo(
+    () => monitoringPlans[orisCode] ?? [],
+    [monitoringPlans, orisCode]
+  );
 
   // *** generate columns array of object based on columnNames array above
 
@@ -86,7 +89,7 @@ export const DataTableConfigurations = ({
     if (!checkIn) {
       if (checkout) {
         mpApi
-          .postCheckoutMonitoringPlanConfiguration(config.col3, user.userId)
+          .postCheckoutMonitoringPlanConfiguration(config.col3)
           .then((res) => {
             setSelectedRow([data, selectedConfigData, checkout]);
 
@@ -138,10 +141,7 @@ export const DataTableConfigurations = ({
 
   useEffect(() => {
     if (dataLoaded) {
-      setSelectedMp([
-        ...selectedMP,
-        facilityMonitoringPlans,
-      ]);
+      setSelectedMp([...selectedMP, facilityMonitoringPlans]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [facilityMonitoringPlans]);
@@ -149,7 +149,7 @@ export const DataTableConfigurations = ({
   const records = useMemo(() => {
     if (dataLoaded) {
       if (facilityMonitoringPlans.length >= 1) {
-            return fs.getConfigurationNames(facilityMonitoringPlans);
+        return fs.getConfigurationNames(facilityMonitoringPlans);
       }
     }
     return [];

@@ -17,7 +17,7 @@ export const checkoutAPI = (direction, monitorPlanId, setCheckout) => {
       });
   } else {
     return mpApi
-      .postCheckoutMonitoringPlanConfiguration(monitorPlanId, user.userId)
+      .postCheckoutMonitoringPlanConfiguration(monitorPlanId)
       .then((res) => {
         if (setCheckout !== undefined) {
           setCheckout(true, monitorPlanId, MONITORING_PLAN_STORE_NAME);

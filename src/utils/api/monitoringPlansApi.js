@@ -133,25 +133,19 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
 export const postCheckoutMonitoringPlanConfiguration = async (
   id,
-  catchError = true
+  shouldHandleError = true
 ) => {
   const url = getApiUrl(`/check-outs/plans/${id}`, true);
-  if (catchError) {
-    try {
-      return (
-        await secureAxios({
-          method: "POST",
-          url: url,
-        })
-      ).data;
-    } catch (error) {
-      return handleError(error);
-    }
-  } else {
-    return await secureAxios({
-      method: "POST",
-      url: url,
-    });
+  try {
+    return (
+      await secureAxios({
+        method: "POST",
+        url: url,
+      })
+    ).data;
+  } catch (error) {
+    if (!shouldHandleError) throw error;
+    return handleError(error);
   }
 };
 
@@ -869,6 +863,59 @@ export const createUnitCapacity = async (payload, urlParameters) => {
   } catch (error) {
     return handleImportError(error);
   }
+};
+
+export const getMonitoringPlansUnit = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/units`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const saveMonitoringPlansUnit = async (payload, urlParameters) => {
+  const url = getApiUrl(
+    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/units/${payload["id"]}`
+  );
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getUnitProgram = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-programs`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getReportingFrequency = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/reporting-frequencies`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
 };
 
 export const getPCTQualifications = async (locationId, qualId) => {

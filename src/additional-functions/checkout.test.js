@@ -56,8 +56,7 @@ describe("checkoutAPI", () => {
     await checkoutAPI(direction, monitorPlanId, mockSetCheckout);
 
     expect(mockPostCheckoutMonitoringPlanConfiguration).toHaveBeenCalledWith(
-      monitorPlanId,
-      "123"
+      monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       true,
@@ -103,8 +102,7 @@ describe("checkoutAPI", () => {
     await checkoutAPI(direction, monitorPlanId, mockSetCheckout);
 
     expect(mockPostCheckoutMonitoringPlanConfiguration).toHaveBeenCalledWith(
-      monitorPlanId,
-      "123"
+      monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       true,

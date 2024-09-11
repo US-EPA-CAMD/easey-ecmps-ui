@@ -66,6 +66,7 @@ export const DataTableRender = ({
   tableStyling,
   // className,
   addBtnName,
+  allowToCreateNewData = true,
   uniqueKey,
   setShowInactive,
   openedFacilityTabs,
@@ -585,7 +586,7 @@ export const DataTableRender = ({
               {...ariaLabelProp}
             />{" "}
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user && !nonEditable ? (
+              {addBtn && checkout && user && allowToCreateNewData && !nonEditable ? (
                 <div className="padding-y-1">
                   <Button
                     type="button"
@@ -631,7 +632,7 @@ export const DataTableRender = ({
               )}
             </div>
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user && !nonEditable ? (
+              {addBtn && checkout && user && allowToCreateNewData && !nonEditable ? (
                 <h2 className="padding-0 page-subheader">
                   <div className="padding-y-1">
                     <Button
