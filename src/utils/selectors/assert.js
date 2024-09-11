@@ -10,6 +10,10 @@ import * as unitFuelSelector from "./monitoringPlanFuelData";
 import * as unitControlSelector from "./monitoringPlanUnitControls";
 import * as unitCapacitySelector from "./monitoringPlanUnitCapacity";
 import * as locationRelationshipsSelector from "./monitoringPlanLocationAttributes";
+import * as unitSelector from "./monitoringPlanUnitData";
+import * as unitProgSelector from "./monitoringPlanUnitProgramData";
+import * as reportingFreqSelector from "./monitoringPlanUnitReportingFreqData";
+
 
 // Table Names
 const load = "Load";
@@ -20,6 +24,9 @@ const rectDuctWaf = "Rectangular Duct WAF";
 const unitCon = "Unit Control";
 const unitCap = "Unit Capacity";
 const unitFuel = "Unit Fuel";
+const unit = "Unit";
+const unitProg = "Unit Program";
+const reportingFreq = "Reporting Frequency";
 const locationAttribute = "Location Attribute";
 const relationshipData = "Relationship Data";
 // Getting records from API
@@ -55,6 +62,22 @@ export const getDataTableApis = async (name, location, selectedLocation) => {
         selectedLocation ? selectedLocation : location
       )
         .catch(error => console.log('getUnitCapacity failed', error));
+
+    case unit:
+      return mpApi.getMonitoringPlansUnit(
+        selectedLocation ? selectedLocation : location
+      )
+        .catch(error => console.log('getMonitoringPlansUnit failed', error));
+    case unitProg:
+      return mpApi.getUnitProgram(
+        selectedLocation ? selectedLocation : location
+      )
+        .catch(error => console.log('getUnitProgram failed', error));
+    case reportingFreq:
+      return mpApi.getReportingFrequency(
+        selectedLocation ? selectedLocation : location
+      )
+        .catch(error => console.log('getReportingFrequency failed', error));
 
     case locationAttribute:
       return mpApi.getLocationAttributes(location)
@@ -95,7 +118,16 @@ export const getDataTableRecords = (dataIn, name) => {
         
     case unitCap:
       return unitCapacitySelector.getMonitoringPlansUnitCapacityRecords(dataIn)
-      
+
+    case unit:
+      return unitSelector.getMonitoringPlansUnitDataRecords(dataIn)
+
+    case unitProg:
+      return unitProgSelector.getMonitoringPlansUnitProgramDataRecords(dataIn)
+
+    case reportingFreq:
+      return reportingFreqSelector.getMonitoringPlanUnitReportingFreqData(dataIn)
+
     case locationAttribute:
       return locationRelationshipsSelector.getMonitoringPlansLocationAttributeRecords(
         dataIn
@@ -151,6 +183,17 @@ export const saveDataSwitch = (
       )
         .catch(error => console.log('saveUnitCapacity failed', error));
 
+    case unit:
+      return mpApi.saveMonitoringPlansUnit(userInput,
+        urlParameters ? urlParameters : null)
+        .catch(error => console.log('saveMonitoringPlansUnit failed', error));
+    case unitProg:
+      // Save Functionality not required. Do nothing.
+      break;
+    case reportingFreq:
+      // Save Functionality not required. Do nothing.
+      break;
+
     case locationAttribute:
       return mpApi.saveLocationAttribute(userInput, locationSelectValue)
         .catch(error => console.log('saveLocationAttribute failed', error));
@@ -198,6 +241,17 @@ export const createDataSwitch = (
         urlParameters ? urlParameters : null
       )
         .catch(error => console.log('createUnitCapacity failed', error));
+
+    case unit:
+      // Create Functionality not required. Do nothing.
+      break;
+    case unitProg:
+      // Create Functionality not required. Do nothing.
+      break;
+    case reportingFreq:
+      // Create Functionality not required. Do nothing.
+      break;
+
     case locationAttribute:
       return mpApi.createLocationAttribute(userInput, locationSelectValue)
         .catch(error => console.log('createLocationAttribute failed', error));
