@@ -60,6 +60,7 @@ export const DataTableAssert = ({
   filter,
   controlInputs,
   nonEditable = false,
+  allowToCreateNewData = true,
   controlDatePickerInputs,
   radioNames,
   payload,
@@ -90,6 +91,7 @@ export const DataTableAssert = ({
   const uCon = "Unit Control";
   const uFuel = "Unit Fuel";
   const uCap = "Unit Capacity";
+
   const unitInfoDict = {
     "Unit Control": [uFuel, uCap],
     "Unit Fuel": [uCon, uCap],
@@ -529,6 +531,7 @@ export const DataTableAssert = ({
         checkout={checkout}
         user={user}
         nonEditable={nonEditable}
+        allowToCreateNewData={allowToCreateNewData}
         addBtn={openModal}
         addBtnName={`Create ${dataTableName}`}
         show={show}
