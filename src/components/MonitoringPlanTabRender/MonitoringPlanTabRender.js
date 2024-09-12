@@ -19,7 +19,7 @@ import {
   unitFuelDataTableProps,
   unitCapacityDataTableProps,
   locationAttributesDataTableProps,
-  relationshipDataTableProps,
+  relationshipDataTableProps, unitDataTableProps, unitProgramDataTableProps, reportingFrequencyDataTableProps,
 } from "../../additional-functions/dataTable-props";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 // import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -365,6 +365,64 @@ export const MonitoringPlanTabRender = ({
           ],
         ],
         [
+
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              urlParameters={
+                unitDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["urlParameters"]
+              }
+              dataTableName={"Unit"}
+              radioNames={["nonLoadBasedIndicator"]}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              allowToCreateNewData={false}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
+            />,
+            "Unit",
+          ],
           [
             <DataTableAssert
               locationSelectValue={locationSelect[1]}
@@ -525,6 +583,106 @@ export const MonitoringPlanTabRender = ({
               currentTabIndex={currentTabIndex}
             />,
             "Unit Capacities",
+          ],
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                unitProgramDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                unitProgramDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                unitProgramDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                unitProgramDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                unitProgramDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              dataTableName={"Unit Program"}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              nonEditable={true}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
+            />,
+            "Unit Programs",
+          ],
+          [
+            <DataTableAssert
+              locationSelectValue={locationSelect[1]}
+              selectedLocation={locations.find(
+                (element) => element.id === locationSelect[1]
+              )}
+              payload={
+                reportingFrequencyDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["payload"]
+              }
+              dropdownArray={
+                reportingFrequencyDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["dropdownArray"]
+              }
+              columnNames={
+                reportingFrequencyDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["columnNames"]
+              }
+              controlInputs={
+                reportingFrequencyDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlInputs"]
+              }
+              controlDatePickerInputs={
+                reportingFrequencyDataTableProps(
+                  locationSelect[1],
+                  locations.find((element) => element.id === locationSelect[1])
+                )["controlDatePickerInputs"]
+              }
+              dataTableName={"Reporting Frequency"}
+              checkout={checkout}
+              user={user}
+              inactive={inactive}
+              settingInactiveCheckBox={settingInactiveCheckBox}
+              revertedState={revertedState}
+              nonEditable={true}
+              setRevertedState={setRevertedState}
+              setUpdateRelatedTables={setUpdateRelatedTables}
+              updateRelatedTables={updateRelatedTables}
+              currentTabIndex={currentTabIndex}
+            />,
+            "Reporting Frequencies",
           ],
         ], // unit info
       ];
