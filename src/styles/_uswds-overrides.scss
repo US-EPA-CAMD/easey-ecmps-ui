@@ -174,10 +174,12 @@
   .usa-nav__primary button {
     font-family: "Source Sans Pro Web", serif;
     font-weight: normal;
-    color: $epa-white;
 
     @media (max-width: 128em) {
       font-size: 0.72rem;
+    }
+    @media (min-width: 1024px) {
+      color: $epa-white;
     }
   }
 
@@ -191,13 +193,20 @@
   }
 
   .usa-nav__primary button span::after {
-    background-color: $epa-white !important;
+    @media (min-width: 1024px) {
+      background-color: $epa-white !important;
+    }
+    top: calc(100% - 1.25rem - 0.125rem - 6px);
   }
 
   .usa-nav__submenu {
     background-color: #162e51;
     top: 2.8em;
     width: 12em;
+
+    @media (max-width: 1023px) {
+      background-color: $epa-white;
+    }
   }
   #extended-nav-section-last {
     right: 0.01em;
