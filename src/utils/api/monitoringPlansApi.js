@@ -867,7 +867,7 @@ export const createUnitCapacity = async (payload, urlParameters) => {
 
 export const getMonitoringPlansUnit = async (selectedLocation) => {
   const url = getApiUrl(
-    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/units`
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}`
   );
   return secureAxios({
     method: "GET",
@@ -879,7 +879,7 @@ export const getMonitoringPlansUnit = async (selectedLocation) => {
 
 export const saveMonitoringPlansUnit = async (payload, urlParameters) => {
   const url = getApiUrl(
-    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/units/${payload["id"]}`
+    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}`
   );
   try {
     return handleResponse(
