@@ -1206,7 +1206,7 @@ export const HeaderInfo = ({
           children={
             <div>
               {
-                "Reverting to Official Record will undo all saved and unsaved changes. This is not recoverable. Do you want to continue?"
+                "Reverting to Official Record in the Monitoring Plan module will undo all saved and unsaved changes from the workspace. Any modified QA and Emissions data will also be purged from the workspace. This is not recoverable. If you want to maintain changes in a module, then export the file(s) before reverting to the official record. Do you want to continue?"
               }
             </div>
           }
