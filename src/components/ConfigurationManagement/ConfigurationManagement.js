@@ -34,6 +34,7 @@ import { v4 as uuid } from "uuid";
 import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import { loadFacilities } from "../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
+import { handleError } from "../../utils/api/apiUtils";
 import {
   getStackPipesByFacId,
   getUnitsByFacId,
@@ -624,7 +625,6 @@ export const ConfigurationManagement = ({
     dataStatus.IDLE
   );
   const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
-  const checkedOutLocationsRef = useRef(checkedOutLocations);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [facilitiesStatus, setFacilitiesStatus] = useState(dataStatus.IDLE);
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
@@ -701,7 +701,7 @@ export const ConfigurationManagement = ({
 
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
-      checkedOutLocationsRef.current
+      (await getCheckedOutLocations()).data
         .filter((loc) => user && loc.checkedOutBy === user.userId)
         .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
@@ -789,9 +789,9 @@ export const ConfigurationManagement = ({
           deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)
         )
       );
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
+      setCheckedOutLocations((await getCheckedOutLocations()).data);
     }
   };
 
@@ -806,12 +806,15 @@ export const ConfigurationManagement = ({
 
       await Promise.all(
         facilityMonitoringPlans.map((mp) =>
-          postCheckoutMonitoringPlanConfiguration(mp.id)
+          postCheckoutMonitoringPlanConfiguration(mp.id, false)
         )
       );
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+    } catch (err) {
+      await checkInAllPlansForUser();
+      handleError(err);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
+      setCheckedOutLocations((await getCheckedOutLocations()).data);
     }
   };
 
@@ -1138,10 +1141,6 @@ export const ConfigurationManagement = ({
 
   if (document.title !== configurationManagementTitle) {
     document.title = configurationManagementTitle;
-  }
-
-  if (checkedOutLocationsRef.current !== checkedOutLocations) {
-    checkedOutLocationsRef.current = checkedOutLocations;
   }
 
   // Update visible errors when interactions occur.
