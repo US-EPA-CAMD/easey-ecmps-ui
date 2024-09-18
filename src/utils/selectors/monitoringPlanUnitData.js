@@ -8,7 +8,7 @@ export const getMonitoringPlansUnitDataRecords = (totalData) => {
     const nonLoadBasedIndicator = (el.nonLoadBasedIndicator === 1 || el.nonLoadBasedIndicator === "1") ? "Yes" : "No";
 
     records.push({
-      col1: el.id,
+      col1: el.unitid,
       col2: `${nonLoadBasedIndicator}`,
       col3: el.sourceCategoryCd,
       col4: validateDate(el.commOpDate),
