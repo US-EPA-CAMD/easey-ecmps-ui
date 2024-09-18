@@ -159,7 +159,7 @@ export const logOut = async () => {
       if (checkedOutLocationResult.data.length > 0) {
         for (const location of checkedOutLocationResult.data) {
           if (location.checkedOutBy === user.userId) {
-            await checkoutAPI(false, location.facId, location.monPlanId);
+            await checkoutAPI(false, location.monPlanId);
           }
         }
       }

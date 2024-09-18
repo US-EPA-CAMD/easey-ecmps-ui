@@ -10,6 +10,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import ConfigurationManagement from "../ConfigurationManagement/ConfigurationManagement";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
@@ -44,9 +45,9 @@ import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
 import { currentDateTime } from "../../utils/functions";
 import { AdminMaintenance } from "../AdminMaintenance/AdminMaintenance";
 
-import {validUser} from "../../utils/api/easeyAuthApi";
-import {displayAppError} from "../../additional-functions/app-error";
-import {signInUser} from "./useAuthRedirect";
+import { validUser } from "../../utils/api/easeyAuthApi";
+import { displayAppError } from "../../additional-functions/app-error";
+import { signInUser } from "./useAuthRedirect";
 import LoadingModal from "../LoadingModal/LoadingModal";
 
 const App = () => {
@@ -58,8 +59,8 @@ const App = () => {
   const [resetTimer, setResetTimer] = useState(false);
 
   const urlParams = new URLSearchParams(queryParams);
-  const message = urlParams.get('message');
-  const sessionId = urlParams.get('sessionId');
+  const message = urlParams.get("message");
+  const sessionId = urlParams.get("sessionId");
   const signInAction = Boolean(message || sessionId);
   const [signInError, setSignInError] = useState(null); // State to hold any error messages
   const signInStarted = useRef(false);
@@ -123,7 +124,7 @@ const App = () => {
       }, 10000);
     }
   };
-  
+
   //Handles auth redirect and validation
   useEffect(() => {
     if (signInAction && !signInStarted.current) {
@@ -133,13 +134,16 @@ const App = () => {
           setSignInError(null);
           signInStarted.current = false;
         })
-        .catch(err => {
-          const message = err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message;
+        .catch((err) => {
+          const message =
+            err.response && err.response.data && err.response.data.message
+              ? err.response.data.message
+              : err.message;
           setSignInError(message);
           signInStarted.current = false;
         });
     }
-  }, []);
+  }, [message, sessionId, signInAction]);
 
   //Display sign in errors if there are any errors.
   useEffect(() => {
@@ -237,8 +241,9 @@ const App = () => {
     }
   }, [user]);
 
-  if (signInAction  && !signInError) { //page reloads if sign-in is successful; at that point signInAction will be false
-    return <LoadingModal type="Auth" loading={true}/>
+  if (signInAction && !signInError) {
+    //page reloads if sign-in is successful; at that point signInAction will be false
+    return <LoadingModal type="Auth" loading={true} />;
   }
 
   return (
@@ -436,13 +441,25 @@ const App = () => {
             path="/workspace/submit"
             element={
               !validUser() ||
-              roles?.every(role => !["Sponsor", "Submitter", "Initial Authorizer"].includes(role))
-              ? (
+              roles?.every(
+                (role) =>
+                  !["Sponsor", "Submitter", "Initial Authorizer"].includes(role)
+              ) ? (
                 <Navigate key="navigate" to="/" />
               ) : (
                 <div key={"Submit-Component"}>
                   <EvaluateAndSubmit user={user} componentType="Submission" />
                 </div>
+              )
+            }
+          />
+          <Route
+            path="/workspace/configuration-management"
+            element={
+              !validUser() || !facilityCheckoutPermission() ? (
+                <Navigate key="navigate" to="/" />
+              ) : (
+                <ConfigurationManagement user={user} />
               )
             }
           />

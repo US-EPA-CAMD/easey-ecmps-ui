@@ -16,9 +16,8 @@ export const QACertEventTab = ({
   resetTimerFlag,
   callApiFlag,
   orisCode,
-  selectedConfig,
+  selectedConfigId,
   title,
-  locations,
   user,
   tabs,
   setSection,
@@ -28,7 +27,7 @@ export const QACertEventTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   };
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
@@ -57,16 +56,14 @@ export const QACertEventTab = ({
           callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig?.monitoringLocationData}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          configID={selectedConfig.id}
           setCheckout={setCheckout}
           checkedOutLocations={checkedOutLocations}
           workspaceSection={workspaceSection}

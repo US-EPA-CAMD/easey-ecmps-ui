@@ -381,7 +381,7 @@ export const ErrorSuppressionDataContainer = () => {
           show={showViewModal}
           nonEditable={true}
           title={"Error Suppression"}
-          exitBTN={"Close"}
+          exitBtn={"Close"}
           close={() => closeModal()}
           showCancel
           showDarkBg

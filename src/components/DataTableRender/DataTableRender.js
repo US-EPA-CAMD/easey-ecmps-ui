@@ -20,6 +20,7 @@ import DataTable from "react-data-table-component";
 // *** local
 import FilterComponent from "../ReactDataTablesFilter/ReactDataTablesFilter";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import { SizedPreloader } from "../SizedPreloader/SizedPreloader";
 
 /*********** LOOKS AND DECORATION (ICONS, SCSS, ETC.) ***********/
 // *** icons
@@ -38,31 +39,31 @@ import { setCheckoutState } from "../../store/actions/dynamicFacilityTab";
 import { connect } from "react-redux";
 
 export const DataTableRender = ({
+  actionsBtn,
+  addBtn,
+  checkedOutLocations,
+  checkout,
+  columnNames,
+  data,
+  dataLoaded,
+  nonEditable,
+  openHandler,
   sectionTitle,
   tableTitle,
-  addBtn,
-  columnNames,
-  checkedOutLocations,
-  data,
   user,
-  dataLoaded,
-  openHandler,
-  checkout,
-  actionsBtn,
-  nonEditable,
   // for data table
-  pagination,
-  filter,
-  expandableRowComp,
-  expandableRowProps,
+  componentStyling,
   defaultSort,
   defaultSortDir, // can be either "asc" for ascending or any other value for descending
+  expandableRowComp,
+  expandableRowProps,
   expandableRows,
-  headerStyling,
-  tableStyling,
-  componentStyling,
+  filter,
   fixedHeader = true,
   hasSortIcon = true,
+  headerStyling,
+  pagination,
+  tableStyling,
   // className,
   addBtnName,
   allowToCreateNewData = true,
@@ -511,24 +512,16 @@ export const DataTableRender = ({
       title = sectionTitle ? sectionTitle : null;
     }
     if (data.length > 0) {
-      return (
-        <FilterComponent
-          onSearch={handleSearch}
-          title={title}
-          setShowInactive={setShowInactive}
-        />
-      );
+      return <FilterComponent onSearch={handleSearch} title={title} />;
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection]);
+  }, [data, sectionTitle, tableTitle]);
 
   return (
-    <div className={`${componentStyling}`}>
+    <div className={componentStyling}>
       <div id="datatableFilterContainer" />
       <div
         aria-live="polite"
-        className={`${tableStyling}`}
+        className={tableStyling}
         id="datatableContainer"
         data-testid="datatableContainer"
       >
@@ -632,7 +625,11 @@ export const DataTableRender = ({
               ""
             )}
             <div className="text-center">
-              <p>{noDataString}</p>
+              {dataLoaded ? (
+                <p>{noDataString}</p>
+              ) : (
+                <SizedPreloader className="padding-top-3" />
+              )}
             </div>
             <div className={`${headerStyling}`}>
               {addBtn && checkout && user && allowToCreateNewData && !nonEditable ? (

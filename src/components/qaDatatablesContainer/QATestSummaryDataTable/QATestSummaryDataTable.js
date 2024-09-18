@@ -769,7 +769,7 @@ const QATestSummaryDataTable = ({
           showSave={user && isCheckedOut}
           //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
-          exitBTN={`Save and Close`}
+          exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (

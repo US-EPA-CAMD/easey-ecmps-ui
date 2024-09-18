@@ -33,15 +33,17 @@ export const getMonitoringPlans = async (
   forWorkspace = false,
   submissionPeriods = [] //Added for polymorphism across data fetch calls
 ) => {
-  let queryString;
+  let queryString = "";
 
   if (typeof orisCodes === "number") {
     queryString = "orisCodes=" + orisCodes;
-  } else {
+  } else if (Array.isArray(orisCodes) && orisCodes.length > 0) {
     queryString = `orisCodes=${orisCodes.join("|")}`;
   }
 
-  if (monPlanIds.length > 0) {
+  if (typeof monPlanIds === "string") {
+    queryString = queryString + `&monPlanIds=${monPlanIds}`;
+  } else if (Array.isArray(monPlanIds) && monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
@@ -275,6 +277,7 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
+  // NOTE:XXX: Why do we need the current user to find all facilities?
   if (!localStorage.getItem("ecmps_user")) {
     return { data: [] };
   }
@@ -864,7 +867,7 @@ export const createUnitCapacity = async (payload, urlParameters) => {
 
 export const getMonitoringPlansUnit = async (selectedLocation) => {
   const url = getApiUrl(
-    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/units`
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}`
   );
   return secureAxios({
     method: "GET",
@@ -876,7 +879,7 @@ export const getMonitoringPlansUnit = async (selectedLocation) => {
 
 export const saveMonitoringPlansUnit = async (payload, urlParameters) => {
   const url = getApiUrl(
-    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}/units/${payload["id"]}`
+    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}`
   );
   try {
     return handleResponse(
@@ -1189,8 +1192,47 @@ export const getMonitoringPlanComments = async (monPlanId) => {
     .catch(handleError);
 };
 
-export const importMP = async (payload) => {
-  const url = getApiUrl(`/plans/import`);
+export const importMP = async (payload, draft) => {
+  let url = getApiUrl(`/plans/import`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createSingleUnitMP = async (payload, draft) => {
+  let url = getApiUrl(`/plans/single-unit`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const importStackPipe = async (payload, draft) => {
+  let url = getApiUrl(`/stack-pipes/import`, true);
+  if (draft) {
+    url = url + "?draft=true";
+  }
   try {
     return handleResponse(
       await secureAxios({

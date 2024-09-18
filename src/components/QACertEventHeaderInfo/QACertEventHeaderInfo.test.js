@@ -1,55 +1,51 @@
-import React from 'react';
 import {
-  screen,
-  fireEvent,
-  waitForElement,
-  within,
-  act,
+    act,
+    screen
 } from '@testing-library/react';
-import axios from 'axios';
+import React from 'react';
+import { Provider } from 'react-redux';
 
 import * as dataManagementApi from "../../utils/api/dataManagementApi";
 import * as monitorPlanApi from "../../utils/api/monitoringPlansApi";
-
-import render from "../../mocks/render"
-import QACertEventHeaderInfo from './QACertEventHeaderInfo';
+import configureStore from '../../store/configureStore.dev';
 import { getMockCheckedOutLocations, getMockTestTypeCodes, getMockTestTypeGroupCodes } from '../../mocks/functions';
+import render from "../../mocks/render";
+import QACertEventHeaderInfo from './QACertEventHeaderInfo';
 
-// jest.mock('axios');
+const dateString = new Date().toISOString();
 
-// jest.mock('../../utils/api/dataManagementApi', () => ({
-//   getAllTestTypeCodes: jest.fn(() =>
-//     Promise.resolve({
-//       data: [
-//         {
-//           testTypeCode: 'DAYCAL',
-//           testTypeDescription: 'Daily Calibration',
-//           testTypeGroupCode: null,
-//         },
-//       ],
-//     })
-//   ),
-//   getAllTestTypeGroupCodes: jest.fn(() =>
-//     Promise.resolve({
-//       data: [
-//         {
-//           testTypeGroupCode: 'PEI',
-//           testTypeGroupDescription: 'Primary Element Inspection',
-//           childDepth: '1',
-//         },
-//       ],
-//     })
-//   ),
-// }));
+const selectedConfig = {
+  id: 'id',
+  userId: 'testUserId',
+  updateDate: dateString,
+  addDate: dateString,
+  active: true,
+  orisCode: 'testOrisCode',
+  monitoringLocationData: [
+    { id: 'testLocId', name: 'testLocName', type: 'testType', active: true },
+  ],
+};
 
-// jest.mock('../../utils/api/monitoringPlansApi', () => ({
-//   getCheckedOutLocations: jest.fn(() => Promise.resolve({ data: [] })),
-//   getRefreshInfo: jest.fn(() => Promise.resolve({ data: [] })),
-// }));
+const props = {
+  facility: 'Test (1, 2, 3)',
+  selectedConfigId: selectedConfig.id,
+  orisCode: selectedConfig.orisCode,
+  sectionSelect: [4, 'Methods'],
+  setSectionSelect: jest.fn(),
+  setLocationSelect: jest.fn(),
+  locationSelect: [0, 'testLocName'],
+  user: 'user',
+  setSelectedTestCode: jest.fn(),
+  checkoutState: true,
+};
 
-const date = new Date();
-const dateString = date.toString();
+const store = configureStore({
+    monitoringPlans: {
+      [selectedConfig.orisCode]: [selectedConfig],
+    },
+  });
 
+const testTypeDropdownLabel = /Test Data/i;
 beforeEach(() => {
   jest.spyOn(dataManagementApi, "getAllTestTypeCodes").mockResolvedValue({
     data: getMockTestTypeCodes(),
@@ -70,34 +66,6 @@ afterEach(() => {
   jest.clearAllMocks();
 })
 
-const selectedConfig = {
-  id: 'id',
-  userId: 'testUserId',
-  updateDate: dateString,
-  addDate: dateString,
-  active: true,
-};
-
-const props = {
-  facility: 'Test (1, 2, 3)',
-  selectedConfig: selectedConfig,
-  orisCode: 'testOrisCode',
-  sectionSelect: [4, 'Methods'],
-  setSectionSelect: jest.fn(),
-  setLocationSelect: jest.fn(),
-  locationSelect: [0, 'testLocName'],
-  locations: [
-    { id: 'testLocId', name: 'testLocName', type: 'testType', active: true },
-  ],
-  user: 'user',
-
-  configID: 'testConfigId',
-  setSelectedTestCode: jest.fn(),
-  checkoutState: true,
-};
-
-const testTypeDropdownLabel = /Test Data/i;
-
 // mocking JavaScript built-in window functions
 window.open = jest.fn().mockReturnValue({ close: jest.fn() });
 window.scrollTo = jest.fn();
@@ -107,7 +75,9 @@ jest.setTimeout(oneMin);
 
 test('testing QACertEventHeaderInfo component', async () => {
   await render(
-    <QACertEventHeaderInfo {...props} />
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
   )
 
   const facilityNameHeader = screen.getByTestId('facility-name-header')
@@ -116,7 +86,9 @@ test('testing QACertEventHeaderInfo component', async () => {
 
 test('testing QACertEventHeaderInfo component and opening selection modal import', async () => {
   await render(
-    <QACertEventHeaderInfo {...props} />
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
   )
 
   const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })
@@ -129,7 +101,9 @@ test('testing QACertEventHeaderInfo component and opening selection modal import
 test('test type dropdown selection renders', async () => {
   // Arrange
   await render(
-    <QACertEventHeaderInfo {...props} />
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
   )
   const testTypeDropdown = screen.getByLabelText(testTypeDropdownLabel);
 
@@ -140,7 +114,9 @@ test('test type dropdown selection renders', async () => {
 test('renders buttons for "Import Test Data", "Test Data Report", "Test History Report"', async () => {
   // Arrange
   await render(
-    <QACertEventHeaderInfo {...props} />
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
   )
 
   const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })

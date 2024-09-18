@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, Label } from "@trussworks/react-uswds";
+import { Select, Label } from "@trussworks/react-uswds";
 import { getReportingPeriods } from "../../utils/api/qaCertificationsAPI";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
@@ -70,7 +70,7 @@ const ReportingPeriodSelector = ({
             <Label className="inline-label" htmlFor="year-quarter-dropdown">
               Reporting Periods
             </Label>
-            <Dropdown
+            <Select
               id="year-quarter-dropdown"
               name="year-quarter-dropdown"
               className="width-15"
@@ -87,7 +87,7 @@ const ReportingPeriodSelector = ({
                   {period.periodAbbreviation}
                 </option>
               ))}
-            </Dropdown>
+            </Select>
           </div>
 
           <div className="aria-live margin-x-5">

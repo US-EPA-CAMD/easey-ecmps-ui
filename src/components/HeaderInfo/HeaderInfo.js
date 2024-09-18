@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Checkbox,
-  Dropdown,
   FormGroup,
   Grid,
   GridContainer,
   Label,
+  Select,
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import config from "../../config";
 
+import { checkoutAPI } from "../../additional-functions/checkout";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import * as emApi from "../../utils/api/emissionsApi";
 import {
@@ -54,6 +55,7 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
+import { loadMonitoringPlans, loadSingleMonitoringPlanSuccess } from "../../store/actions/monitoringPlans";
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
@@ -91,8 +93,9 @@ export const getReportingPeriods = (minYear = 2009) => {
 
 export const HeaderInfo = ({
   facility,
-  selectedConfig,
+  selectedConfigId,
   orisCode,
+  removeTab,
   user,
   setRevertedState,
   //redux sets
@@ -103,17 +106,13 @@ export const HeaderInfo = ({
   // redux store
   sectionSelect,
   locationSelect,
-  locations,
   checkout = false,
   inactive,
   ///
-  checkoutAPI,
-  configID,
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
 }) => {
-
   //MP
   const sections = [
     { name: "Defaults" },
@@ -141,16 +140,24 @@ export const HeaderInfo = ({
     name: "--- select a view ---",
   };
 
-  // *** parse apart facility name
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName = facility.split("(")[1].replace(")", "");
-
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
-      (t) => t.selectedConfig.id === configID
+      (t) => t.selectedConfig.id === selectedConfigId
     )
   );
+  const currentTabIndex = useSelector((state) => state.currentTabIndex);
+
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+  );
+  const locations = selectedConfig?.monitoringLocationData ?? [];
+
+  // *** parse apart facility name
+  const facilityMainName = facility.split("(")[0];
+  const facilityAdditionalName =
+    facility.split("(")[1].replace(")", "") +
+    (selectedConfig?.active ? "" : " Inactive");
 
   const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
   const [auditInformation, setAuditInformation] = useState("");
@@ -218,7 +225,8 @@ export const HeaderInfo = ({
   /* defaultReportingPeriodChanged is a flag for whether a user has selected a reporing date or not;
     it's changed when user manually changes location or viewTemplate or imports data
   */
-  const [defaultReportingPeriodChanged, setDefaultReportingPeriodChanged] = useState(false);
+  const [defaultReportingPeriodChanged, setDefaultReportingPeriodChanged] =
+    useState(false);
 
   let selectedUnitId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === locationSelect[1])
@@ -234,8 +242,8 @@ export const HeaderInfo = ({
     workspaceSection === MONITORING_PLAN_STORE_NAME
       ? "Monitoring Plan"
       : workspaceSection === EMISSIONS_STORE_NAME
-        ? "Emissions"
-        : "Test";
+      ? "Emissions"
+      : "Test";
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
@@ -302,7 +310,7 @@ export const HeaderInfo = ({
         }
       }
 
-      setSelectedReportingPeriods(reduxReportingPeriods)
+      setSelectedReportingPeriods(reduxReportingPeriods);
     }
     if (currentTab?.locationSelect) {
       setLocationSelect(currentTab.locationSelect);
@@ -369,35 +377,35 @@ export const HeaderInfo = ({
 
     // This will filter the dropdown values for the views by the ones that have a count > 0
     return allViews
-      .filter(view => view.code !== "COUNTS")
+      .filter((view) => view.code !== "COUNTS")
       .filter(
         (view) => codesWithData.find((d) => d === view.code) !== undefined
       );
-  }
+  };
 
   // See zenhub ticket#5756 for info on business logic of View Templates dropdown in global
   const filterViewDataForGlobal = (countData, allViews) => {
     return allViews
-      .filter(view => view.code !== "COUNTS")
-      .filter(view => {
-
-        const matches = countData.filter(cd => cd.dataSetCode === view.code && cd.count === 0)
+      .filter((view) => view.code !== "COUNTS")
+      .filter((view) => {
+        const matches = countData.filter(
+          (cd) => cd.dataSetCode === view.code && cd.count === 0
+        );
         // The counts data comes back with multiple records for the same view code but in order for a
         // view template to be filtered out of the View Templates dropdown, the number of 0 count records
         // has to be the same as the number of reporting periods that are selected
-        return matches.length !== selectedReportingPeriods.length
-      })
-  }
+        return matches.length !== selectedReportingPeriods.length;
+      });
+  };
 
   // gets the data required to build the emissions dropdown
   const getEmissionsViewDropdownData = async (location) => {
-
-    const isSelectedReportingPeriodsEmpty = selectedReportingPeriods.length === 0;
+    const isSelectedReportingPeriodsEmpty =
+      selectedReportingPeriods.length === 0;
 
     if (isSelectedReportingPeriodsEmpty) {
-
       setViewTemplates([defaultTemplateValue]);
-      setViewTemplateSelect(defaultTemplateValue)
+      setViewTemplateSelect(defaultTemplateValue);
       return;
     }
 
@@ -415,7 +423,7 @@ export const HeaderInfo = ({
       }
       const { data: countData } = await emApi.getEmissionViewData(
         "COUNTS",
-        configID,
+        selectedConfigId,
         selectedReportingPeriods,
         selectedUnitId,
         selectedStackPipeId,
@@ -427,8 +435,7 @@ export const HeaderInfo = ({
       let filteredViewData;
       if (inWorkspace)
         filteredViewData = filterViewDataForWorkspace(countData, allViews);
-      else
-        filteredViewData = filterViewDataForGlobal(countData, allViews);
+      else filteredViewData = filterViewDataForGlobal(countData, allViews);
 
       filteredViewData.unshift(defaultTemplateValue);
 
@@ -491,7 +498,7 @@ export const HeaderInfo = ({
       // reportingPeriod: '2022 Q1' -> year: 2022, quarter: 1
       await emApi.exportEmissionsDataDownload(
         facility,
-        configID,
+        selectedConfigId,
         selectedReportingPeriod.slice(0, 4),
         selectedReportingPeriod.charAt(selectedReportingPeriod.length - 1),
         getUser() !== null
@@ -546,9 +553,9 @@ export const HeaderInfo = ({
     // get evaluation status
     if (!evalStatusLoaded || updateRelatedTables) {
       mpApi
-        .getRefreshInfo(configID)
+        .getRefreshInfo(selectedConfigId)
         .then((res) => {
-          if (res.data.evalStatusCode) {
+          if (res.data?.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
             setEvalStatusDescription(res.data.evalStatusCodeDescription);
@@ -589,7 +596,7 @@ export const HeaderInfo = ({
           // if not, obtain it from the database
           else {
             mpApi
-              .getRefreshInfo(configID)
+              .getRefreshInfo(selectedConfigId)
               .then((info) => {
                 currentConfig = {
                   checkedOutBy: "N/A",
@@ -650,7 +657,7 @@ export const HeaderInfo = ({
         ) {
           // check database and update status
           mpApi
-            .getRefreshInfo(configID)
+            .getRefreshInfo(selectedConfigId)
             .then((res) => {
               let databaseStatus = "";
               if (res) {
@@ -708,9 +715,9 @@ export const HeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
+        configs
+          .map((location) => location["monPlanId"])
+          .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -809,7 +816,7 @@ export const HeaderInfo = ({
 
   const showRevert = (status) => {
     return (
-      checkedOutByUser &&
+      (checkedOutByUser || !selectedConfig.active) &&
       (status === "PASS" ||
         status === "INFO" ||
         status === "ERR" ||
@@ -823,7 +830,7 @@ export const HeaderInfo = ({
     // trigger checkout API
     //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
     //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, configID, selectedConfig.id, setCheckout)
+    checkoutAPI(direction, selectedConfig.id, setCheckout)
       .then(() => {
         handleSelectReportingPeriod();
         setCheckedOutByUser(direction);
@@ -836,38 +843,52 @@ export const HeaderInfo = ({
       });
   };
 
-  const revert = () => {
-    mpApi
-      .revertOfficialRecord(selectedConfig.id)
-      .then(() => {
-        setRevertedState(true);
-        setShowRevertModal(false);
-        setIsReverting(false);
-        setEvalStatusLoaded(false);
-        setDataLoaded(false);
-      })
-      .catch((error) => {
-        console.error("Error during reverting to official record", error);
-      });
-    // this code executes first while we wait for api to finish returning
+  const revert = async () => {
     setIsReverting(true);
     setShowRevertModal(false);
     resetEmissionsWorkspace();
+
+    try {
+      await mpApi.revertOfficialRecord(selectedConfig.id);
+      const res = await mpApi.getMonitoringPlans(undefined, selectedConfig.id);
+      if (res.data.length === 0) {
+        await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
+        removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
+      } else {
+        dispatch(loadSingleMonitoringPlanSuccess(orisCode, res.data[0]));
+      }
+      setRevertedState(true);
+      setShowRevertModal(false);
+      setIsReverting(false);
+      setEvalStatusLoaded(false);
+      setDataLoaded(false);
+    } catch (error) {
+      console.error("Error during reverting to official record", error);
+    }
   };
 
   const resetEmissionsWorkspace = () => {
-
     // set Default Reporting period
     setSelectedReportingPeriods([reportingPeriods[0]?.id]);
     dispatch(
-      setReportingPeriods([reportingPeriods[0]?.id], currentTab.name, EMISSIONS_STORE_NAME)
+      setReportingPeriods(
+        [reportingPeriods[0]?.id],
+        currentTab.name,
+        EMISSIONS_STORE_NAME
+      )
     );
 
     dispatch(setViewDataColumns([], currentTab.name, EMISSIONS_STORE_NAME));
     dispatch(setViewData([], currentTab.name, EMISSIONS_STORE_NAME));
-    dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
+    dispatch(
+      setViewTemplateSelectionAction(
+        null,
+        currentTab.name,
+        EMISSIONS_STORE_NAME
+      )
+    );
     setDefaultReportingPeriodChanged(true);
-  }
+  };
 
   const importMPFile = (payload) => {
     setIsLoading(true);
@@ -878,6 +899,8 @@ export const HeaderInfo = ({
         if (!successResponses.includes(response.status)) {
           const errorMsgs = formatErrorResponse(response);
           setImportedFileErrorMsgs(errorMsgs);
+        } else {
+          loadMonitoringPlans(orisCode); // Reload monitoring plans
         }
       })
       .catch((err) => {
@@ -904,7 +927,11 @@ export const HeaderInfo = ({
         const { year, quarter } = payload;
         let importedReportingPeriod = [`${year} Q${quarter}`];
         if (defaultReportingPeriodChanged) {
-          importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${year} Q${quarter}`]))];
+          importedReportingPeriod = [
+            ...new Set(
+              selectedReportingPeriods.concat([`${year} Q${quarter}`])
+            ),
+          ];
         }
 
         // Select the reporting period that user has selected
@@ -913,7 +940,13 @@ export const HeaderInfo = ({
         });
 
         setSelectedReportingPeriods(importedReportingPeriod);
-        dispatch(setReportingPeriods(importedReportingPeriod, currentTab.name, workspaceSection));
+        dispatch(
+          setReportingPeriods(
+            importedReportingPeriod,
+            currentTab.name,
+            workspaceSection
+          )
+        );
         setDefaultReportingPeriodChanged(true);
       })
       .catch((err) => {
@@ -951,7 +984,13 @@ export const HeaderInfo = ({
     // getEmissionsViewDropdownData w/ new reporting periods state
     let importedReportingPeriod = [`${historicYear} Q${historicQuarter}`];
     if (defaultReportingPeriodChanged) {
-      importedReportingPeriod = [...new Set(selectedReportingPeriods.concat([`${historicYear} Q${historicQuarter}`]))];
+      importedReportingPeriod = [
+        ...new Set(
+          selectedReportingPeriods.concat([
+            `${historicYear} Q${historicQuarter}`,
+          ])
+        ),
+      ];
     }
 
     // Select the reporting period that user has selected
@@ -960,8 +999,14 @@ export const HeaderInfo = ({
     });
 
     setSelectedReportingPeriods(importedReportingPeriod);
-    dispatch(setReportingPeriods(importedReportingPeriod, currentTab.name, workspaceSection));
-    setDefaultReportingPeriodChanged(true)
+    dispatch(
+      setReportingPeriods(
+        importedReportingPeriod,
+        currentTab.name,
+        workspaceSection
+      )
+    );
+    setDefaultReportingPeriodChanged(true);
   };
 
   // Create audit message for header info
@@ -970,8 +1015,9 @@ export const HeaderInfo = ({
     if (inWorkspace) {
       // when config is checked out by someone
       if (checkedOut) {
-        return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+        return `Currently checked-out by: ${
+          currentConfig["checkedOutBy"]
+        } ${formatDate(currentConfig["checkedOutOn"])}`;
       }
       // when config is not checked out
       return `Last updated by: ${currentConfig.lastUpdatedBy} ${formatDate(
@@ -992,18 +1038,27 @@ export const HeaderInfo = ({
   const resetEmissionsViewTable = () => {
     dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
     dispatch(setViewData([], currentTab.name, workspaceSection));
-    dispatch(setViewTemplateSelectionAction(null, currentTab.name, EMISSIONS_STORE_NAME));
+    dispatch(
+      setViewTemplateSelectionAction(
+        null,
+        currentTab.name,
+        EMISSIONS_STORE_NAME
+      )
+    );
     setDefaultReportingPeriodChanged(true);
-  }
+  };
 
   const handleSelectReportingPeriod = () => {
-
     if (!selectedReportingPeriods.length) return;
-    const uniqueReportingPeriods = [
-      ...new Set([...selectedReportingPeriods]),
-    ];
+    const uniqueReportingPeriods = [...new Set([...selectedReportingPeriods])];
     setSelectedReportingPeriods(uniqueReportingPeriods);
-    dispatch(setReportingPeriods(uniqueReportingPeriods, currentTab.name, workspaceSection));
+    dispatch(
+      setReportingPeriods(
+        uniqueReportingPeriods,
+        currentTab.name,
+        workspaceSection
+      )
+    );
   };
 
   const reportingPeriodOnChangeUpdate = (id) => {
@@ -1024,17 +1079,23 @@ export const HeaderInfo = ({
       .map((rp) => rp.id);
     setSelectedReportingPeriods(filteredReportingPeriods);
 
-    dispatch(setReportingPeriods(filteredReportingPeriods, currentTab.name, workspaceSection));
+    dispatch(
+      setReportingPeriods(
+        filteredReportingPeriods,
+        currentTab.name,
+        workspaceSection
+      )
+    );
 
     resetEmissionsViewTable();
   };
 
   const emissionsLocationOnchange = (location) => {
     setLocationSelect(location);
-    setViewTemplateSelect(defaultTemplateValue)
+    setViewTemplateSelect(defaultTemplateValue);
     resetEmissionsViewTable();
     getEmissionsViewDropdownData(location);
-  }
+  };
 
   const handleExport = async () => {
     try {
@@ -1045,7 +1106,7 @@ export const HeaderInfo = ({
           console.error("Error during exporting:", error);
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-        await mpApi.exportMonitoringPlanDownload(configID).catch((error) => {
+        await mpApi.exportMonitoringPlanDownload(selectedConfigId).catch((error) => {
           console.error("Error during exporting ", error);
         });
       setDataLoaded(true);
@@ -1071,7 +1132,7 @@ export const HeaderInfo = ({
   };
 
   const applyFilters = async (monitorPlanId, unitIds, stackPipeIds) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await emApi.getEmissionViewData(
       viewTemplateSelect?.code,
       monitorPlanId,
@@ -1091,11 +1152,17 @@ export const HeaderInfo = ({
       const results = response.data;
 
       if (results.length === 0) {
-        displayAppWarning(`The ${viewTemplateSelect.name} view does not contain data for ${selectedReportingPeriods.join(", ")} location ${locations[locationSelect[0]]?.name}`);
+        displayAppWarning(
+          `The ${
+            viewTemplateSelect.name
+          } view does not contain data for ${selectedReportingPeriods.join(
+            ", "
+          )} location ${locations[locationSelect[0]]?.name}`
+        );
         getEmissionsViewDropdownData();
       }
 
-      results.forEach((o, idx) => o.id = idx)
+      results.forEach((o, idx) => (o.id = idx));
       dispatch(
         setViewTemplateSelectionAction(
           results.length === 0 ? null : viewTemplateSelect,
@@ -1105,8 +1172,7 @@ export const HeaderInfo = ({
       );
       dispatch(setViewDataColumns(columns, currentTab.name, workspaceSection));
       dispatch(setViewData(results, currentTab.name, workspaceSection));
-    }
-    else {
+    } else {
       dispatch(
         setViewTemplateSelectionAction(
           null,
@@ -1117,7 +1183,7 @@ export const HeaderInfo = ({
       dispatch(setViewDataColumns([], currentTab.name, workspaceSection));
       dispatch(setViewData([], currentTab.name, workspaceSection));
     }
-    setIsLoading(false)
+    setIsLoading(false);
 
     // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
@@ -1125,8 +1191,9 @@ export const HeaderInfo = ({
   return (
     <div className="header">
       <div
-        className={`usa-overlay ${showRevertModal || showEvalReport ? "is-visible" : ""
-          } `}
+        className={`usa-overlay ${
+          showRevertModal || showEvalReport ? "is-visible" : ""
+        } `}
       />
 
       {showRevertModal && (
@@ -1134,7 +1201,7 @@ export const HeaderInfo = ({
           show={showRevertModal}
           close={closeRevertModal}
           showSave={true}
-          exitBTN={"Yes"}
+          exitBtn={"Yes"}
           save={revert}
           children={
             <div>
@@ -1163,11 +1230,16 @@ export const HeaderInfo = ({
           <div className="grid-row">
             <div className="grid-col-9">
               <h3 className="font-body-lg margin-y-0">{facilityMainName}</h3>
-              <h3 className="facility-header-text-cutoff margin-y-0" title={facilityAdditionalName}>
+              <h3
+                className="facility-header-text-cutoff margin-y-0"
+                title={facilityAdditionalName}
+              >
                 {facilityAdditionalName}
               </h3>
               {dataLoaded && (
-                <p className="text-bold font-body-2xs margin-top-0">{auditInformation}</p>
+                <p className="text-bold font-body-2xs margin-top-0">
+                  {auditInformation}
+                </p>
               )}
             </div>
             <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
@@ -1194,8 +1266,6 @@ export const HeaderInfo = ({
               </div>
             </div>
           </div>
-
-
 
           <GridContainer
             className="padding-left-0 margin-left-0 padding-right-0"
@@ -1373,7 +1443,7 @@ export const HeaderInfo = ({
                     <Label test-id={"testData"} htmlFor={"testData"}>
                       {"Test Data"}
                     </Label>
-                    <Dropdown
+                    <Select
                       id={"testData"}
                       name={"testData"}
                       epa-testid={"testData"}
@@ -1384,7 +1454,7 @@ export const HeaderInfo = ({
                           testDataOptions.find((v) => v.name === e.target.value)
                         );
                       }}
-                    // className="mobile-lg:view-template-dropdown-maxw"
+                      // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {testDataOptions?.map((data) => (
                         <option
@@ -1395,7 +1465,7 @@ export const HeaderInfo = ({
                           {data.name}
                         </option>
                       ))}
-                    </Dropdown>
+                    </Select>
                   </FormGroup>
                 </Grid>
               </Grid>
@@ -1431,7 +1501,7 @@ export const HeaderInfo = ({
                     <Label test-id={"viewtemplate"} htmlFor={"viewtemplate"}>
                       {"View Template"}
                     </Label>
-                    <Dropdown
+                    <Select
                       id={"viewtemplate"}
                       name={"viewtemplate"}
                       epa-testid={"viewtemplate"}
@@ -1441,9 +1511,9 @@ export const HeaderInfo = ({
                         setViewTemplateSelect(
                           viewTemplates.find((v) => v.name === e.target.value)
                         );
-                        resetEmissionsViewTable()
+                        resetEmissionsViewTable();
                       }}
-                    // className="mobile-lg:view-template-dropdown-maxw"
+                      // className="mobile-lg:view-template-dropdown-maxw"
                     >
                       {viewTemplates?.map((view) => (
                         <option
@@ -1454,7 +1524,7 @@ export const HeaderInfo = ({
                           {view.name}
                         </option>
                       ))}
-                    </Dropdown>
+                    </Select>
                   </FormGroup>
                 </Grid>
                 <Grid col={2} className="margin-top-3">
@@ -1464,16 +1534,15 @@ export const HeaderInfo = ({
                     className="cursor-pointer text-no-wrap apply-filter-position"
                     disabled={
                       locationSelect &&
-                        selectedReportingPeriods.length !==
-                        0 &&
-                        viewTemplateSelect?.code !== defaultTemplateValue.code &&
-                        viewTemplateSelect !== null
+                      selectedReportingPeriods.length !== 0 &&
+                      viewTemplateSelect?.code !== defaultTemplateValue.code &&
+                      viewTemplateSelect !== null
                         ? false
                         : true
                     }
                     onClick={() =>
                       applyFilters(
-                        configID,
+                        selectedConfigId,
                         selectedUnitId,
                         selectedStackPipeId
                       ).catch(handleError)
@@ -1499,7 +1568,7 @@ export const HeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={`Import ${workspaceSectionName} Data`}
-            exitBTN={"Import"}
+            exitBtn={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => {
               importFile(importedFile);

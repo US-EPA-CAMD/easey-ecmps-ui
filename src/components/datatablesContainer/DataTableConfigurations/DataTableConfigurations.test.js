@@ -2,12 +2,11 @@ import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi"
+import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
 
 import { DataTableConfigurations } from "./DataTableConfigurations";
 import configureStore from "../../../store/configureStore.dev";
 import { getMockMonitorPlanConfigurations } from "../../../mocks/functions";
-
 
 const store = configureStore();
 
@@ -28,15 +27,15 @@ describe("- DataTable Configurations -", () => {
     col3: "stateCode",
     col4: "orisCode",
     facId: "facilityRecordId",
-  }
+  };
 
   const props = {
     data: mockData,
     selectedRowHandler: jest.fn(),
-    checkedOutLocations: []
-  }
+    checkedOutLocations: [],
+  };
 
-  test('renders DataTableConfigurations', async () => {
+  test("renders DataTableConfigurations", async () => {
     await act(async () => {
       render(
         <Provider store={store}>
@@ -44,11 +43,11 @@ describe("- DataTable Configurations -", () => {
         </Provider>
       );
     });
-    const title = screen.getByText("Configurations")
-    expect(title).toBeDefined()
-  })
+    const title = screen.getByText("Configurations");
+    expect(title).toBeDefined();
+  });
 
-  it('opens the configuration', async () => {
+  it("opens the configuration", async () => {
     await act(async () => {
       render(
         <Provider store={store}>
@@ -57,14 +56,15 @@ describe("- DataTable Configurations -", () => {
       );
     });
 
-    const openBtns = screen.getAllByTestId('btnOpenPublicRecord')
-    const firstOpenBtn = openBtns[0]
+    const openBtns = screen.getAllByTestId("btnOpenPublicRecord");
+    const firstOpenBtn = openBtns[0];
 
     await act(() => firstOpenBtn.click());
 
-    screen.debug(undefined, 30000)
+    screen.debug(undefined, 30000);
 
-    const title = screen.getByText("Configurations")
-    expect(title).toBeDefined()
-  })
-})
+    const title = screen.getByText("Configurations");
+    expect(title).toBeDefined();
+  });
+});
+

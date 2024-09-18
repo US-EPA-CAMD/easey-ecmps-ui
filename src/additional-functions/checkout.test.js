@@ -21,7 +21,6 @@ describe("checkoutAPI", () => {
 
   it("should call deleteCheckInMonitoringPlanConfiguration and setCheckout with false when direction is falsy", async () => {
     const monitorPlanId = "mp-123";
-    const configID = "config-123";
     const direction = false;
 
     const mockDeleteCheckInMonitoringPlanConfiguration = jest
@@ -31,21 +30,20 @@ describe("checkoutAPI", () => {
       mockDeleteCheckInMonitoringPlanConfiguration
     );
 
-    await checkoutAPI(direction, configID, monitorPlanId, mockSetCheckout);
+    await checkoutAPI(direction, monitorPlanId, mockSetCheckout);
 
     expect(mockDeleteCheckInMonitoringPlanConfiguration).toHaveBeenCalledWith(
       monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       false,
-      configID,
+      monitorPlanId,
       MONITORING_PLAN_STORE_NAME
     );
   });
 
   it("should call postCheckoutMonitoringPlanConfiguration and setCheckout with true when direction is truthy", async () => {
     const monitorPlanId = "mp-123";
-    const configID = "config-123";
     const direction = true;
 
     const mockPostCheckoutMonitoringPlanConfiguration = jest
@@ -55,21 +53,20 @@ describe("checkoutAPI", () => {
       mockPostCheckoutMonitoringPlanConfiguration
     );
 
-    await checkoutAPI(direction, configID, monitorPlanId, mockSetCheckout);
+    await checkoutAPI(direction, monitorPlanId, mockSetCheckout);
 
     expect(mockPostCheckoutMonitoringPlanConfiguration).toHaveBeenCalledWith(
       monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       true,
-      configID,
+      monitorPlanId,
       MONITORING_PLAN_STORE_NAME
     );
   });
 
   it("should handle errors when deleteCheckInMonitoringPlanConfiguration returns undefined", async () => {
     const monitorPlanId = "mp-123";
-    const configID = "config-123";
     const direction = false;
 
     const mockDeleteCheckInMonitoringPlanConfiguration = jest
@@ -79,21 +76,20 @@ describe("checkoutAPI", () => {
       mockDeleteCheckInMonitoringPlanConfiguration
     );
 
-    await checkoutAPI(direction, configID, monitorPlanId, mockSetCheckout);
+    await checkoutAPI(direction,  monitorPlanId, mockSetCheckout);
 
     expect(mockDeleteCheckInMonitoringPlanConfiguration).toHaveBeenCalledWith(
       monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       false,
-      configID,
+      monitorPlanId,
       MONITORING_PLAN_STORE_NAME
     );
   });
 
   it("should handle errors when postCheckoutMonitoringPlanConfiguration returns undefined", async () => {
     const monitorPlanId = "mp-123";
-    const configID = "config-123";
     const direction = true;
 
     const mockPostCheckoutMonitoringPlanConfiguration = jest
@@ -103,14 +99,14 @@ describe("checkoutAPI", () => {
       mockPostCheckoutMonitoringPlanConfiguration
     );
 
-    await checkoutAPI(direction, configID, monitorPlanId, mockSetCheckout);
+    await checkoutAPI(direction, monitorPlanId, mockSetCheckout);
 
     expect(mockPostCheckoutMonitoringPlanConfiguration).toHaveBeenCalledWith(
       monitorPlanId
     );
     expect(mockSetCheckout).toHaveBeenCalledWith(
       true,
-      configID,
+      monitorPlanId,
       MONITORING_PLAN_STORE_NAME
     );
   });
