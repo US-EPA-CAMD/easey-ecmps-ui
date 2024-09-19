@@ -36,9 +36,9 @@ import { loadFacilities } from "../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
 import { handleError } from "../../utils/api/apiUtils";
 import {
-  getStackPipesByFacId,
-  getUnitsByFacId,
-  getUnitStackConfigsByFacId,
+  getStackPipesByOrisCode,
+  getUnitsByOrisCode,
+  getUnitStackConfigsByOrisCode,
 } from "../../utils/api/facilityApi";
 import {
   createSingleUnitMP,
@@ -657,10 +657,10 @@ export const ConfigurationManagement = ({
     }));
   }, [userFacilities]);
 
-  const selectedOrisCode = facilities.find(
-    (f) => f.facilityRecordId === selectedFacility
-  )?.facilityId;
-  const facilityMonitoringPlans = selectedFacility
+  const selectedOrisCode =
+    selectedFacility &&
+    facilities.find((f) => f.facilityRecordId === selectedFacility)?.facilityId;
+  const facilityMonitoringPlans = selectedOrisCode
     ? monitoringPlans[selectedOrisCode] ?? []
     : [];
 
@@ -1075,12 +1075,12 @@ export const ConfigurationManagement = ({
 
   // Load units.
   useEffect(() => {
-    if (!selectedFacility) return;
+    if (!selectedOrisCode) return;
 
     if (unitsStatus === dataStatus.IDLE) {
       try {
         setUnitsStatus(dataStatus.PENDING);
-        getUnitsByFacId(selectedFacility).then((res) => {
+        getUnitsByOrisCode(selectedOrisCode).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
             res.data.map((d) => ({
@@ -1095,16 +1095,16 @@ export const ConfigurationManagement = ({
         setUnitsStatus(dataStatus.ERROR);
       }
     }
-  }, [selectedFacility, unitsStatus]);
+  }, [selectedOrisCode, unitsStatus]);
 
   // Load stacks & pipes.
   useEffect(() => {
-    if (!selectedFacility) return;
+    if (!selectedOrisCode) return;
 
     if (stackPipesStatus === dataStatus.IDLE) {
       try {
         setStackPipesStatus(dataStatus.PENDING);
-        getStackPipesByFacId(selectedFacility).then((res) => {
+        getStackPipesByOrisCode(selectedOrisCode).then((res) => {
           setStackPipesStatus(dataStatus.SUCCESS);
           initializeEditableFormState(res.data, "SET_STACK_PIPES");
         });
@@ -1112,16 +1112,16 @@ export const ConfigurationManagement = ({
         setStackPipesStatus(dataStatus.ERROR);
       }
     }
-  }, [selectedFacility, stackPipesStatus]);
+  }, [selectedOrisCode, stackPipesStatus]);
 
   // Load unit stack configurations.
   useEffect(() => {
-    if (!selectedFacility) return;
+    if (!selectedOrisCode) return;
 
     if (unitStackConfigsStatus === dataStatus.IDLE) {
       try {
         setUnitStackConfigsStatus(dataStatus.PENDING);
-        getUnitStackConfigsByFacId(selectedFacility).then((res) => {
+        getUnitStackConfigsByOrisCode(selectedOrisCode).then((res) => {
           setUnitStackConfigsStatus(dataStatus.SUCCESS);
           initializeEditableFormState(res.data, "SET_UNIT_STACK_CONFIGS");
         });
@@ -1129,7 +1129,7 @@ export const ConfigurationManagement = ({
         setUnitStackConfigsStatus(dataStatus.ERROR);
       }
     }
-  }, [selectedFacility, unitStackConfigsStatus]);
+  }, [selectedOrisCode, unitStackConfigsStatus]);
 
   // Check in all monitoring plan configurations checked out by the user when the user changes or the component unloads.
   // TODO: This can be removed when we move to checking out by facility rather than monitoring plan.
