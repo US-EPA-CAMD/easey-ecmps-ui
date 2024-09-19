@@ -32,7 +32,6 @@ export const MonitoringPlanHome = ({
   // openedFacilityTabs,
   workspaceSection,
 }) => {
-
   const dispatch = useDispatch();
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceSection]
@@ -83,7 +82,7 @@ export const MonitoringPlanHome = ({
     return () => {
       setTitleName(""); // This worked for me
     };
-  }, [workspaceSection,dispatch]);
+  }, [workspaceSection, dispatch]);
 
   const obtainCheckedOutLocations = async () => {
     const checkedOutLocationResult = await getCheckedOutLocations();
@@ -130,10 +129,8 @@ export const MonitoringPlanHome = ({
     };
   }, []);
 
-
   // works if you go from modules to home back and then back
   const handleTabState = () => {
-
     const tabArr = [
       {
         title: "Select Configurations",
@@ -166,7 +163,7 @@ export const MonitoringPlanHome = ({
                 resetTimerFlag={resetTimerFlag}
                 callApiFlag={callApiFlag}
                 orisCode={row.orisCode}
-                selectedConfig={row.selectedConfig}
+                selectedConfigId={row.selectedConfig.id}
                 title={row.name}
                 user={user}
                 checkout={row.checkout}
@@ -198,7 +195,7 @@ export const MonitoringPlanHome = ({
                 resetTimerFlag={resetTimerFlag}
                 callApiFlag={callApiFlag}
                 orisCode={row.orisCode}
-                selectedConfig={row.selectedConfig}
+                selectedConfigId={row.selectedConfig.id}
                 title={row.name}
                 user={user}
                 isCheckedOut={row.checkout}
@@ -222,7 +219,7 @@ export const MonitoringPlanHome = ({
                 resetTimerFlag={resetTimerFlag}
                 callApiFlag={callApiFlag}
                 orisCode={row.orisCode}
-                selectedConfig={row.selectedConfig}
+                selectedConfigId={row.selectedConfig.id}
                 title={row.name}
                 user={user}
                 isCheckedOut={row.checkout}
@@ -248,7 +245,7 @@ export const MonitoringPlanHome = ({
                 resetTimerFlag={resetTimerFlag}
                 callApiFlag={callApiFlag}
                 orisCode={row.orisCode}
-                selectedConfig={row.selectedConfig}
+                selectedConfigId={row.selectedConfig.id}
                 title={row.name}
                 user={user}
                 checkout={row.checkout}
@@ -269,7 +266,7 @@ export const MonitoringPlanHome = ({
             component: (
               <Export
                 orisCode={row.orisCode}
-                selectedConfig={row.selectedConfig}
+                selectedConfigId={row.selectedConfig.id}
                 title={row.name}
                 user={user}
                 workspaceSection={workspaceSection}
@@ -285,7 +282,7 @@ export const MonitoringPlanHome = ({
         break;
     }
     return tabArr;
-  }
+  };
 
   return (
     <div className="react-transition fade-in padding-x-3">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
@@ -7,6 +7,7 @@ import "./Tabs.scss";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
+
 const Tabs = ({
   children,
   dynamic = false,
@@ -18,24 +19,8 @@ const Tabs = ({
   setCurrentTabIndex,
   currentTabIndex,
 }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(currentTabIndex);
-  useEffect(() => {
-    if (activeTabIndex !== currentTabIndex) {
-      setCurrentTabIndex(activeTabIndex);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTabIndex]);
-
-  const settingActiveTab = (index) => {
-    setActiveTabIndex(index);
-  };
-
   const removeTab = (index) => {
     removeTabs(index);
-    if (activeTabIndex === children.length - 1) {
-      setActiveTabIndex(index - 1);
-    }
   };
 
   const closeHandler = (event, index, configId) => {
@@ -131,16 +116,16 @@ const Tabs = ({
                 <>
                   <Button
                     type="button"
-                    outline={activeTabIndex !== i}
+                    outline={currentTabIndex !== i}
                     tabIndex="0"
                     id="select-config"
                     aria-label={`open ${el.props.title} tab`}
                     className={
-                      activeTabIndex === i
+                      currentTabIndex === i
                         ? "initial-tab-button active-tab-button"
                         : "initial-tab-button"
                     }
-                    onClick={() => settingActiveTab(i)}
+                    onClick={() => setCurrentTabIndex(i)}
                   >
                     {el.props.title}
                   </Button>
@@ -150,7 +135,7 @@ const Tabs = ({
                   role="button"
                   id="tabBtn"
                   className={
-                    activeTabIndex === i
+                    currentTabIndex === i
                       ? "tab-button react-transition flip-in-y active-tab-button"
                       : "tab-button react-transition flip-in-y"
                   }
@@ -180,12 +165,12 @@ const Tabs = ({
                   )}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
-                    settingActiveTab(i);
+                    setCurrentTabIndex(i);
                   }}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       addElementToLastFocusedArray(tabBtnSelector);
-                      settingActiveTab(i);
+                      setCurrentTabIndex(i);
                     }
                   }}
                 >
@@ -258,7 +243,7 @@ const Tabs = ({
         </ul>
       </div>
       <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
-        {children[activeTabIndex]}
+        {children[currentTabIndex]}
       </div>
     </div>
   );

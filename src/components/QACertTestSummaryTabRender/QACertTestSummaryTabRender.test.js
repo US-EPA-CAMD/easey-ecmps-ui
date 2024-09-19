@@ -1,4 +1,6 @@
 import React from "react";
+import { Provider } from "react-redux";
+import configureStore from "../../store/configureStore.dev";
 import { render } from "@testing-library/react";
 import QACertTestSummaryTabRender from "./QACertTestSummaryTabRender";
 
@@ -25,7 +27,7 @@ jest.mock(
 const selectedConfig = {
   id: "MDC-7C15B3D1B20542C3B54DD57F03A516E5",
   name: "110",
-  locations: [
+  monitoringLocationData: [
     {
       id: "655",
       name: "110",
@@ -34,27 +36,37 @@ const selectedConfig = {
       retireDate: null,
     },
   ],
+  orisCode: 5,
 };
+
+const store = configureStore({
+  monitoringPlans: {
+    [selectedConfig.orisCode]: [selectedConfig],
+  },
+});
 
 const props = {
   title: " ( test ) ",
   user: { firstName: "test" },
   locations: selectedConfig.locations,
-  selectedConfig: selectedConfig,
+  selectedConfigId: selectedConfig.id,
   setSectionSelect: jest.fn(),
   setLocationSelect: jest.fn(),
   sectionSelect: [3, "Methods"],
-  locationSelect: [0, "65"],
-  orisCode: "5",
+  locationSelect: [0, "655"],
+  orisCode: 5,
   checkoutState: true,
-  configID: selectedConfig.id,
   currentTab: {
     name: 'Test Tab'
   }
 };
-test("tests QACertTestSummaryTabRender", async () => {
+test("tests QACertTestSummaryTabRender", () => {
   jest.useFakeTimers();
-  const { container } = await render(<QACertTestSummaryTabRender {...props} />);
+  const { container } = render(
+    <Provider store={store}>
+      <QACertTestSummaryTabRender {...props} />
+    </Provider>
+  );
 
   jest.runAllTimers();
   expect(container).not.toBeUndefined();

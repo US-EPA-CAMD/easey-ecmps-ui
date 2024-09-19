@@ -109,7 +109,7 @@ export const mockEmissionsTabRenderProps = {
   },
 
   title: "Barry (1, 2, CS0AAN) ",
-  configID: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
+  selectedConfigId: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
   user: false,
   locationSelect: [
     {

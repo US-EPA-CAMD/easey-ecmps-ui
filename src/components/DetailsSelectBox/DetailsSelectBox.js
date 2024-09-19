@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Label, Dropdown, FormGroup } from "@trussworks/react-uswds";
+import { Label, FormGroup, Select } from "@trussworks/react-uswds";
 
 export const DetailsSelectBox = ({
   caption,
@@ -51,7 +51,7 @@ export const DetailsSelectBox = ({
           ) : (
             ""
           )}
-          <Dropdown
+          <Select
             name={caption}
             // weird bug without this
             value={
@@ -64,11 +64,12 @@ export const DetailsSelectBox = ({
             disabled={viewOnly || disableDropdownFlag}
             id={id === null ? caption : id}
             className={className}
+            data-testid="dropdown"
             epadataname={epadataname}
             onChange={(e) => handleChange(e)}
           >
             {populateOptions(options)}
-          </Dropdown>
+          </Select>
         </FormGroup>
       </div>
     </div>

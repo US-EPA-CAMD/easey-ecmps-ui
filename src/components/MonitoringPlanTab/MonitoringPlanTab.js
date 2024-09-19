@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import { connect } from "react-redux";
 import MonitoringPlanTabRender from "../MonitoringPlanTabRender/MonitoringPlanTabRender";
@@ -19,11 +19,11 @@ export const MonitoringPlanTab = ({
   callApiFlag,
 
   orisCode,
-  selectedConfig,
+  selectedConfigId,
   title,
-  locations,
   user,
   checkout,
+  removeTab,
   tabs,
 
   setSection,
@@ -37,19 +37,11 @@ export const MonitoringPlanTab = ({
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfig.id);
+    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   };
-  const getCurrentTabIndex = () => {
-    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfig.id);
-  };
-  const [currentTabIndex, setCurrentTabIndex] = useState(getCurrentTabIndex());
-
-  useEffect(() => {
-    // setCurrentTab(getCurrentTab())
-    setCurrentTabIndex(getCurrentTabIndex());
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConfig, checkout, currentTabIndex]);
+  const currentTabIndex = useMemo(() => {
+    return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
+  }, [selectedConfigId, tabs]);
 
   // console.log('workspaceSection',workspaceSection)
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
@@ -73,18 +65,17 @@ export const MonitoringPlanTab = ({
         <MonitoringPlanTabRender
           resetTimer={resetTimer}
           setExpired={setExpired}
+          removeTab={removeTab}
           resetTimerFlag={resetTimerFlag}
           callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
           setLocationSelect={(location) => setLocationSelect(location)}
-          locations={selectedConfig?.monitoringLocationData}
           user={user}
-          configID={tabs[currentTabIndex].selectedConfig.id}
           checkout={tabs[currentTabIndex].checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}

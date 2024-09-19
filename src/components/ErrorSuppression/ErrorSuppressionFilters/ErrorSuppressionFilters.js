@@ -3,12 +3,12 @@ import {
   GridContainer,
   Grid,
   Label,
-  Dropdown,
   DatePicker,
   ButtonGroup,
   Button,
+  Select,
 } from "@trussworks/react-uswds";
-import {ComboBox} from "../../ComboBox/ComboBox";
+import { ComboBox } from "../../ComboBox/ComboBox";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import {
@@ -63,7 +63,6 @@ export const getUniqueCheckTypeDescription = (transformedData) => {
 // Makes API call to get locations and then formats them to be in the way
 // MultiSelectCombobox expects the items to look and calls setLocationData()
 export const getLocations = (facilityValue, checkResultObj) => {
-
   return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
     const locations = data.map((f) => f.monitoringLocationData).flat(1);
     // TODO: 5609 this might fail
@@ -189,9 +188,9 @@ export const ErrorSuppressionFilters = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(()=>{
-    addAriaLabelOnDatePickerCalendar(["add-date-after","add-date-before"]);
-  },[]);
+  useEffect(() => {
+    addAriaLabelOnDatePickerCalendar(["add-date-after", "add-date-before"]);
+  }, []);
 
   const onChangeOfLocationMultiSelect = (id, changeType) => {
     const uniqueLocations = [...new Set([...selectedLocations, id])];
@@ -367,7 +366,7 @@ export const ErrorSuppressionFilters = () => {
           <Label test-id={"check-type-label"} htmlFor={"check-type"}>
             Check Type
           </Label>
-          <Dropdown
+          <Select
             id={"check-type"}
             name={"check-type"}
             epa-testid={"check-type"}
@@ -375,7 +374,9 @@ export const ErrorSuppressionFilters = () => {
             value={selectedCheckType}
             onChange={onCheckTypeChange}
           >
-            <option value="false" key="false">{defaultDropdownText}</option>
+            <option value="false" key="false">
+              {defaultDropdownText}
+            </option>
             {checkTypeList.map((d) => (
               <option
                 key={d.checkTypeCode}
@@ -383,14 +384,14 @@ export const ErrorSuppressionFilters = () => {
                 data-testid={d.checkTypeCode}
               >{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>
             ))}
-          </Dropdown>
+          </Select>
         </Grid>
         <Grid col={2}>
           <div className="margin-left-2">
             <Label test-id={"check-number-label"} htmlFor={"check-number"}>
               Check Number
             </Label>
-            <Dropdown
+            <Select
               id={"check-number"}
               name={"check-number"}
               epa-testid={" "}
@@ -399,13 +400,15 @@ export const ErrorSuppressionFilters = () => {
               onChange={onCheckNumberChange}
               disabled={!selectedCheckType}
             >
-              <option value="false" key="false">{defaultDropdownText}</option>
+              <option value="false" key="false">
+                {defaultDropdownText}
+              </option>
               {checkNumberList.map((d) => (
                 <option key={d} value={d} data-testid={d}>
                   {d}
                 </option>
               ))}
-            </Dropdown>
+            </Select>
           </div>
         </Grid>
       </Grid>
@@ -414,7 +417,7 @@ export const ErrorSuppressionFilters = () => {
           <Label test-id={"check-result-label"} htmlFor={"check-result"}>
             Check Result
           </Label>
-          <Dropdown
+          <Select
             id={"check-result"}
             name={"check-result"}
             epa-testid={"check-result"}
@@ -423,13 +426,15 @@ export const ErrorSuppressionFilters = () => {
             onChange={onCheckResultChange}
             disabled={!selectedCheckType || !selectedCheckNumber}
           >
-            <option value="false" key="false">{defaultDropdownText}</option>
+            <option value="false" key="false">
+              {defaultDropdownText}
+            </option>
             {checkResultList.map((d) => (
               <option key={d} value={d} data-testid={d}>
                 {d}
               </option>
             ))}
-          </Dropdown>
+          </Select>
         </Grid>
       </Grid>
       <Grid row className="margin-top-4">
@@ -481,7 +486,7 @@ export const ErrorSuppressionFilters = () => {
           <Label test-id={"status-label"} htmlFor={"status"}>
             Status
           </Label>
-          <Dropdown
+          <Select
             id={"status"}
             name={"status"}
             epa-testid={"status"}
@@ -504,13 +509,13 @@ export const ErrorSuppressionFilters = () => {
                 {d.label}
               </option>
             ))}
-          </Dropdown>
+          </Select>
         </Grid>
         <Grid col={3} className="margin-left-2">
           <Label test-id={"reason-label"} htmlFor={"reason"}>
             Reason
           </Label>
-          <Dropdown
+          <Select
             id={"reason"}
             name={"reason"}
             epa-testid={"reason"}
@@ -528,7 +533,7 @@ export const ErrorSuppressionFilters = () => {
                 {d.errorSuppressionReasonCode}
               </option>
             ))}
-          </Dropdown>
+          </Select>
         </Grid>
       </Grid>
       <Grid row className="margin-top-2">

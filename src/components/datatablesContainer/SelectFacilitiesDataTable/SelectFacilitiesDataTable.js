@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -23,13 +23,10 @@ import { resetTabOrder } from "../../../utils/functions";
 export const SelectFacilitiesDataTable = ({
   user,
   addtabs,
-  // openedFacilityTabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
+  workspaceState,
 }) => {
-  // const workspaceSection = useSelector((state) => state.workspaceState);
-
-  const workspaceState = useSelector((state) => state.workspaceState);
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceSection]
   );
@@ -88,17 +85,17 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
-    const title = `${info[0].col1} (${info[1].name}) ${
-      info[1].active ? "" : "Inactive"
-    }`;
+    const [data, config, checkout] = info;
+    const title = `${config.facilityName} (${config.name})`;
+    console.log(config);
 
     // if user has THIS plan checkedout
     const isCheckedOutByUser = (configs) => {
       return (
-        configs.map((location) => location["monPlanId"]).indexOf(info[1].id) >
+        configs.map((location) => location["monPlanId"]).indexOf(config.id) >
           -1 &&
         configs[
-          configs.map((location) => location["monPlanId"]).indexOf(info[1].id)
+          configs.map((location) => location["monPlanId"]).indexOf(config.id)
         ]["checkedOutBy"] === user["userId"]
       );
     };
@@ -109,14 +106,14 @@ export const SelectFacilitiesDataTable = ({
       {
         title,
         component:
-        workspaceState === MONITORING_PLAN_STORE_NAME ? (
+          workspaceState === MONITORING_PLAN_STORE_NAME ? (
             <div className="selectedTabsBox">
               <MonitoringPlanTab
-                orisCode={info[0].col2}
-                selectedConfig={info[1]}
+                orisCode={data.col2}
+                selectedConfigId={config.id}
                 title={title}
                 user={user}
-                checkout={info[2] || checkedOutValue}
+                checkout={checkout || checkedOutValue}
                 checkedOutLocations={checkedOutLocations}
                 setMostRecentlyCheckedInMonitorPlanId={
                   setMostRecentlyCheckedInMonitorPlanId
@@ -130,18 +127,17 @@ export const SelectFacilitiesDataTable = ({
           ) : workspaceState === QA_CERT_TEST_SUMMARY_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertTestSummaryTab
-                orisCode={info[0].col2}
-                selectedConfig={info[1]}
+                orisCode={data.col2}
+                selectedConfigId={config.id}
                 title={title}
                 user={user}
-                workspaceSection={workspaceState}
               />
             </div>
           ) : workspaceState === QA_CERT_EVENT_STORE_NAME ? (
             <div className="selectedTabsBox">
               <QACertEventTab
-                orisCode={info[0].col2}
-                selectedConfig={info[1]}
+                orisCode={data.col2}
+                selectedConfigId={config.id}
                 title={title}
                 user={user}
                 workspaceSection={workspaceState}
@@ -150,11 +146,11 @@ export const SelectFacilitiesDataTable = ({
           ) : workspaceSection === EMISSIONS_STORE_NAME ? (
             <div className="selectedTabsBox">
               <EmissionsTab
-                orisCode={info[0].col2}
-                selectedConfig={info[1]}
+                orisCode={data.col2}
+                selectedConfigId={config.id}
                 title={title}
                 user={user}
-                checkout={info[2] || checkedOutValue}
+                checkout={checkout || checkedOutValue}
                 checkedOutLocations={checkedOutLocations}
                 workspaceSection={workspaceState}
               />
@@ -163,8 +159,8 @@ export const SelectFacilitiesDataTable = ({
             // handles export
             <div className="selectedTabsBox">
               <Export
-                orisCode={info[0].col2}
-                selectedConfig={info[1]}
+                orisCode={data.col2}
+                selectedConfigId={config.id}
                 title={title}
                 user={user}
                 workspaceSection={workspaceState}
@@ -172,12 +168,12 @@ export const SelectFacilitiesDataTable = ({
             </div>
           ),
 
-        orisCode: info[0].col2,
-        selectedConfig: info[1],
+        orisCode: data.col2,
+        selectedConfig: config,
         // info[2] shows true if "open and checkout" was click first time
         // checkedoutvalue shows true if user already had it checked out but navigates away
-        checkout: info[2] || checkedOutValue,
-        workspaceSection:workspaceState
+        checkout: checkout || checkedOutValue,
+        workspaceSection: workspaceState,
       },
     ]);
   };
@@ -244,11 +240,8 @@ export const SelectFacilitiesDataTable = ({
   );
 };
 
-// const mapStateToProps = (state, ownProps) => {
-//   return {
-//     openedFacilityTabs: state.openedFacilityTabs[ownProps.workspaceSection],
-//   };
-// };
+const mapStateToProps = (state) => ({
+  workspaceState: state.workspaceState,
+});
 
-export default SelectFacilitiesDataTable;
-// export { mapStateToProps };
+export default connect(mapStateToProps)(SelectFacilitiesDataTable);

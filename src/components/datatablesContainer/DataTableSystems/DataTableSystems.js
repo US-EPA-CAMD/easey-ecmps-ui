@@ -810,7 +810,7 @@ export const DataTableSystems = ({
             showSave={user && checkout}
             breadCrumbBar={currentBar}
             title={"Create System"}
-            exitBTN="Create System"
+            exitBtn="Create System"
             save={() => {
               createSystems();
               // setCreateNewSystem(false);
@@ -916,7 +916,7 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
-            exitBTN={
+            exitBtn={
               createAnalyzerRangesFlag
                 ? "Create Analyzer Range"
                 : createFuelFlowFlag
