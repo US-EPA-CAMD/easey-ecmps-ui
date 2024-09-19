@@ -5,10 +5,13 @@ export const getMonitoringPlansUnitDataRecords = (totalData) => {
   const records = [];
 
   data.forEach((el) => {
-    const nonLoadBasedIndicator = (el.nonLoadBasedIndicator === 1 || el.nonLoadBasedIndicator === "1") ? "Yes" : "No";
+    const nonLoadBasedIndicator =
+      el.nonLoadBasedIndicator === 1 || el.nonLoadBasedIndicator === "1"
+        ? "Yes"
+        : "No";
 
     records.push({
-      col1: el.unitid,
+      col1: el.unitId,
       col2: `${nonLoadBasedIndicator}`,
       col3: el.sourceCategoryCd,
       col4: validateDate(el.commOpDate),
