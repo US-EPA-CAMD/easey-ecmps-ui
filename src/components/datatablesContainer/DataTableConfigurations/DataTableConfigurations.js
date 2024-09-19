@@ -147,10 +147,9 @@ export const DataTableConfigurations = ({
 
   useEffect(() => {
     if (dataLoaded) {
-      setSelectedMp([...selectedMP, facilityMonitoringPlans]);
+      setSelectedMp((prev) => [...prev, facilityMonitoringPlans]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [facilityMonitoringPlans]);
+  }, [dataLoaded, facilityMonitoringPlans]);
 
   const records = useMemo(() => {
     if (dataLoaded) {
