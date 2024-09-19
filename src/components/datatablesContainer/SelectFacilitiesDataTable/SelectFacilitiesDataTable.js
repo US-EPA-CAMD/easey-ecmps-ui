@@ -85,6 +85,7 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
+    console.debug("info", info); // TODO: Remove this when done debugging
     const [data, config, checkout] = info;
     const title = `${config.facilityName} (${config.name})`;
 

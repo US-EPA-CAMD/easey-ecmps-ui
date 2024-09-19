@@ -88,7 +88,7 @@ export const DataTableConfigurations = ({
     const selectedConfigData = findSelectedConfig(config.col3);
     if (!selectedConfigData) {
       console.debug("selectedMP", selectedMP); // TODO: Remove this when done debugging
-      console.debug("config.col3", config.col3); // TODO: Remove this when done debugging
+      console.debug("config", config); // TODO: Remove this when done debugging
       throw new Error(`Selected configuration not found: ${config.col3}`);
     }
 
