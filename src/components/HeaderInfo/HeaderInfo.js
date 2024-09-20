@@ -55,7 +55,10 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
-import { loadMonitoringPlans, loadSingleMonitoringPlanSuccess } from "../../store/actions/monitoringPlans";
+import {
+  loadMonitoringPlans,
+  loadSingleMonitoringPlanSuccess,
+} from "../../store/actions/monitoringPlans";
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
@@ -850,7 +853,11 @@ export const HeaderInfo = ({
 
     try {
       await mpApi.revertOfficialRecord(selectedConfig.id);
-      const res = await mpApi.getMonitoringPlans(undefined, selectedConfig.id);
+      const res = await mpApi.getMonitoringPlans(
+        orisCode,
+        selectedConfig.id,
+        true
+      );
       if (res.data.length === 0) {
         await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
         removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
@@ -1106,9 +1113,11 @@ export const HeaderInfo = ({
           console.error("Error during exporting:", error);
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-        await mpApi.exportMonitoringPlanDownload(selectedConfigId).catch((error) => {
-          console.error("Error during exporting ", error);
-        });
+        await mpApi
+          .exportMonitoringPlanDownload(selectedConfigId)
+          .catch((error) => {
+            console.error("Error during exporting ", error);
+          });
       setDataLoaded(true);
       setIsLoading(false);
     } catch (error) {
