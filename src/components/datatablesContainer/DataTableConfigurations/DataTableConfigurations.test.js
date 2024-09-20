@@ -23,7 +23,7 @@ describe("- DataTable Configurations -", () => {
 
   const mockData = {
     col1: "facilityName",
-    col2: "facilityId",
+    col2: "3",
     col3: "stateCode",
     col4: "orisCode",
     facId: "facilityRecordId",
@@ -67,4 +67,3 @@ describe("- DataTable Configurations -", () => {
     expect(title).toBeDefined();
   });
 });
-

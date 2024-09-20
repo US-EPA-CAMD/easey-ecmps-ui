@@ -45,6 +45,7 @@ export const DynamicTabs = ({
   }, [tabsProps]);
 
   const addTabsHandler = (newTabs) => {
+    console.debug("newTabs", newTabs); // TODO: Remove this when done debugging
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
         tabs.push(t);
@@ -55,7 +56,7 @@ export const DynamicTabs = ({
             name: t.title,
             location: [
               0,
-              t.selectedConfig?.monitoringLocationData[0]?.id ?? null,
+              t.selectedConfig?.monitoringLocationData?.[0]?.id ?? null,
             ],
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,

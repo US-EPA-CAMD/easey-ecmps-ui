@@ -36,7 +36,7 @@ export const DataTableConfigurations = ({
 
   const [dataLoaded, setDataLoaded] = useState(false);
   const findSelectedConfig = (configID) => {
-    let val = 0;
+    let val = null;
     if (selectedMP.length > 0) {
       for (const currentMP of selectedMP) {
         if (currentMP !== undefined) {
@@ -86,6 +86,12 @@ export const DataTableConfigurations = ({
   const [openAndCheckoutBTNFocus, setOpenAndCheckoutBTNFocus] = useState("");
   const openConfig = (config, checkout, checkIn) => {
     const selectedConfigData = findSelectedConfig(config.col3);
+    if (!selectedConfigData) {
+      console.debug("selectedMP", selectedMP); // TODO: Remove this when done debugging
+      console.debug("config", config); // TODO: Remove this when done debugging
+      throw new Error(`Selected configuration not found: ${config.col3}`);
+    }
+
     if (!checkIn) {
       if (checkout) {
         mpApi
@@ -141,10 +147,9 @@ export const DataTableConfigurations = ({
 
   useEffect(() => {
     if (dataLoaded) {
-      setSelectedMp([...selectedMP, facilityMonitoringPlans]);
+      setSelectedMp((prev) => [...prev, facilityMonitoringPlans]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [facilityMonitoringPlans]);
+  }, [dataLoaded, facilityMonitoringPlans]);
 
   const records = useMemo(() => {
     if (dataLoaded) {

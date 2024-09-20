@@ -85,18 +85,18 @@ export const SelectFacilitiesDataTable = ({
 
   // handles the actual component that appears after clicking on the dynamic tabs
   const selectedRowHandler = (info) => {
+    console.debug("info", info); // TODO: Remove this when done debugging
     const [data, config, checkout] = info;
     const title = `${config.facilityName} (${config.name})`;
-    console.log(config);
 
     // if user has THIS plan checkedout
     const isCheckedOutByUser = (configs) => {
+      const configIndex = configs
+        .map((location) => location["monPlanId"])
+        .indexOf(config.id);
       return (
-        configs.map((location) => location["monPlanId"]).indexOf(config.id) >
-          -1 &&
-        configs[
-          configs.map((location) => location["monPlanId"]).indexOf(config.id)
-        ]["checkedOutBy"] === user["userId"]
+        configIndex > -1 &&
+        configs[configIndex]["checkedOutBy"] === user["userId"]
       );
     };
 
