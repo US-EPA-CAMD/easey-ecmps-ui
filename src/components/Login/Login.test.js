@@ -23,6 +23,11 @@ describe("login modal component", ()=>{
   });
 
   it("tests user authentication", async () =>{
+    const mockPermissions = jest.fn().mockResolvedValue({});
+      jest
+          .spyOn(easeyAuthApi, "getPermissions")
+          .mockImplementation(mockPermissions);
+
     const mockAuthenticate = jest.fn().mockResolvedValue({});
 
       jest
@@ -38,6 +43,8 @@ describe("login modal component", ()=>{
     const loginBtn = screen.getByTestId("component-login-submit-button");
     expect(loginBtn).toBeInTheDocument();
     await userEvent.click(loginBtn);
+    
+    expect(mockPermissions).toHaveBeenCalled();
     expect(mockAuthenticate).toHaveBeenCalled();
   });
   
