@@ -45,7 +45,6 @@ export const DynamicTabs = ({
   }, [tabsProps]);
 
   const addTabsHandler = (newTabs) => {
-    console.debug("newTabs", newTabs); // TODO: Remove this when done debugging
     newTabs.forEach((t) => {
       if (!tabs.some((facility) => facility.title === t.title)) {
         tabs.push(t);
