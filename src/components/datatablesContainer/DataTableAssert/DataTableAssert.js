@@ -74,6 +74,7 @@ export const DataTableAssert = ({
   updateRelatedTables,
   currentTabIndex,
   tabs,
+  reportDataStatus,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -92,12 +93,20 @@ export const DataTableAssert = ({
   const uFuel = "Unit Fuel";
   const uCap = "Unit Capacity";
 
+  const uUnit = "Unit";
+  const uProg = "Unit Program";
+  const uFreq = "Reporting Frequency";
+
   const unitInfoDict = {
-    "Unit Control": [uFuel, uCap],
-    "Unit Fuel": [uCon, uCap],
-    "Unit Capacity": [uFuel, uCon],
+    "Unit Control": [uFuel, uCap, uUnit, uFreq, uProg],
+    "Unit Fuel": [uCon, uCap, uUnit, uFreq, uProg],
+    "Unit Capacity": [uCon, uFuel, uUnit, uFreq, uProg],
+    "Unit": [uCon, uFuel, uCap, uFreq, uProg],
+    "Reporting Frequency": [uCon, uFuel, uCap, uUnit, uProg],
+    "Unit Program": [uCon, uFuel, uCap, uUnit, uFreq],
   };
-  const unitInfoTables = [uCon, uFuel, uCap];
+
+  const unitInfoTables = [uCon, uFuel, uCap, uUnit, uFreq, uProg];
 
   // Location Attributes & Relationship Data variables
   const lAttr = "Location Attribute";
@@ -230,52 +239,33 @@ export const DataTableAssert = ({
   useEffect(() => {
     assignFocusEventListeners();
   }, [displayedRecords]);
+
   const inactiveCheckboxFiltering = (records, multiTable) => {
+    let hasActive = false;
+    let hasInactive = false;
     if (records.length > 0) {
       const activeRecords = getActiveData(records);
       const inactiveRecords = getInactiveData(records);
+      hasActive = activeRecords.length > 0;
+      hasInactive = inactiveRecords.length > 0;
+
       const display = multiTable ? dataPulled : records;
 
-      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
-
-      // if ONLY ACTIVE records return,
-      if (activeRecords.length === records.length) {
-        // then disable the inactive checkbox and set it as un-checked
-        settingInactiveCheckBox(false, true);
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(display, dataTableName)
-        );
-      }
-
-      // if ONLY INACTIVE records return
-      else if (inactiveRecords.length === records.length) {
-        // then disable the inactive checkbox and set it as checked
-        settingInactiveCheckBox(true, true);
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(display, dataTableName)
-        );
-      }
-
-      // if BOTH ACTIVE & INACTIVE records return
-      else {
-        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(
-            !tabs[currentTabIndex].inactive[0]
-              ? getActiveData(display)
-              : display,
-            dataTableName
-          )
-        );
-      }
-    }
-    // if NO RECORDS are returned
-    else {
-      // disable the inactive checkbox and set it as un-checked\
+      setDisplayedRecords(
+        assertSelector.getDataTableRecords(
+          !tabs[currentTabIndex].inactive[0]
+            ? getActiveData(display)
+            : display,
+          dataTableName
+        )
+      );
+    } else {
+      // No records
       setDisplayedRecords([]);
     }
+
+    // Report data status to parent
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
   };
 
   // Setting "Show Inactive" checkbox disabled & checked statuses based on records
