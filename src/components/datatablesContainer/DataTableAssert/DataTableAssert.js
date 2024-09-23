@@ -84,38 +84,9 @@ export const DataTableAssert = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-  const [complimentaryData, setComplimentaryData] = useState([]);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
-  // Unit Information variables
-  const uCon = "Unit Control";
-  const uFuel = "Unit Fuel";
-  const uCap = "Unit Capacity";
-
-  const uUnit = "Unit";
-  const uProg = "Unit Program";
-  const uFreq = "Reporting Frequency";
-
-  const unitInfoDict = {
-    "Unit Control": [uFuel, uCap, uUnit, uFreq, uProg],
-    "Unit Fuel": [uCon, uCap, uUnit, uFreq, uProg],
-    "Unit Capacity": [uCon, uFuel, uUnit, uFreq, uProg],
-    "Unit": [uCon, uFuel, uCap, uFreq, uProg],
-    "Reporting Frequency": [uCon, uFuel, uCap, uUnit, uProg],
-    "Unit Program": [uCon, uFuel, uCap, uUnit, uFreq],
-  };
-
-  const unitInfoTables = [uCon, uFuel, uCap, uUnit, uFreq, uProg];
-
-  // Location Attributes & Relationship Data variables
-  const lAttr = "Location Attribute";
-  const rDat = "Relationship Data";
-  const locAttAndRelDataDict = {
-    "Location Attribute": rDat,
-    "Relationship Data": lAttr,
-  };
-  const locAttAndRelDataTables = [lAttr, rDat];
   const selectText = "-- Select a value --";
 
   useEffect(() => {
@@ -163,47 +134,7 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
         .then((res) => {
-          // Location Attributes & Relationship Data tables
-          if (locAttAndRelDataTables.includes(dataTableName)) {
-            assertSelector
-              .getDataTableApis(
-                locAttAndRelDataDict[dataTableName],
-                locationSelectValue,
-                selectedLocation
-              )
-              .then((locAtt) => {
-                setComplimentaryData(locAtt.data);
-                finishedLoadingData(res.data);
-              });
-          }
-
-          // Unit Information tables
-          else if (unitInfoTables.includes(dataTableName)) {
-            assertSelector
-              .getDataTableApis(
-                unitInfoDict[dataTableName][0],
-                locationSelectValue,
-                selectedLocation
-              )
-              .then((sec) => {
-                const secondTableData = sec.data;
-                assertSelector
-                  .getDataTableApis(
-                    unitInfoDict[dataTableName][1],
-                    locationSelectValue,
-                    selectedLocation
-                  )
-                  .then((third) => {
-                    const thirdTableData = third.data;
-                    setComplimentaryData(
-                      secondTableData.concat(thirdTableData)
-                    );
-                    finishedLoadingData(res.data);
-                  });
-              });
-          } else {
-            finishedLoadingData(res.data);
-          }
+          finishedLoadingData(res.data);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -240,22 +171,20 @@ export const DataTableAssert = ({
     assignFocusEventListeners();
   }, [displayedRecords]);
 
-  const inactiveCheckboxFiltering = (records, multiTable) => {
+  const inactiveCheckboxFiltering = () => {
     let hasActive = false;
     let hasInactive = false;
-    if (records.length > 0) {
-      const activeRecords = getActiveData(records);
-      const inactiveRecords = getInactiveData(records);
+    if (dataPulled.length > 0) {
+      const activeRecords = getActiveData(dataPulled);
+      const inactiveRecords = getInactiveData(dataPulled);
       hasActive = activeRecords.length > 0;
       hasInactive = inactiveRecords.length > 0;
-
-      const display = multiTable ? dataPulled : records;
 
       setDisplayedRecords(
         assertSelector.getDataTableRecords(
           !tabs[currentTabIndex].inactive[0]
-            ? getActiveData(display)
-            : display,
+            ? getActiveData(dataPulled)
+            : dataPulled,
           dataTableName
         )
       );
@@ -270,14 +199,7 @@ export const DataTableAssert = ({
 
   // Setting "Show Inactive" checkbox disabled & checked statuses based on records
   useEffect(() => {
-    if (
-      locAttAndRelDataTables.includes(dataTableName) ||
-      unitInfoTables.includes(dataTableName)
-    ) {
-      inactiveCheckboxFiltering(dataPulled.concat(complimentaryData), true);
-    } else {
-      inactiveCheckboxFiltering(dataPulled, false);
-    }
+    inactiveCheckboxFiltering();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataLoaded, dataPulled, tabs[currentTabIndex].inactive[0], updateTable]);

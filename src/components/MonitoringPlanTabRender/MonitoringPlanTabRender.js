@@ -68,6 +68,12 @@ export const MonitoringPlanTabRender = ({
     }));
   };
 
+  const [prevSectionSelect, setPrevSectionSelect] = useState(sectionSelect);
+  if (prevSectionSelect !== sectionSelect) {
+    setPrevSectionSelect(sectionSelect);
+    setTableDataStatuses({});
+  }
+
   useEffect(() => {
     const statuses = Object.values(tableDataStatuses);
 
@@ -89,9 +95,12 @@ export const MonitoringPlanTabRender = ({
 
     // Update the global inactive state
     if (inactiveDisabled !== disableCheckbox) {
-      setInactive([inactive[0], disableCheckbox], title, MONITORING_PLAN_STORE_NAME);
+      setInactive(
+        [inactive[0], disableCheckbox],
+        title,
+        MONITORING_PLAN_STORE_NAME
+      );
     }
-
   }, [tableDataStatuses, inactive, setInactive, title]);
 
   // updates all tables whenever a location is changed
