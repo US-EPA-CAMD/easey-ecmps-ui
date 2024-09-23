@@ -74,6 +74,7 @@ export const DataTableAssert = ({
   updateRelatedTables,
   currentTabIndex,
   tabs,
+  reportDataStatus,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -83,30 +84,9 @@ export const DataTableAssert = ({
   const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
 
   const [updateTable, setUpdateTable] = useState(false);
-  const [complimentaryData, setComplimentaryData] = useState([]);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
 
-  // Unit Information variables
-  const uCon = "Unit Control";
-  const uFuel = "Unit Fuel";
-  const uCap = "Unit Capacity";
-
-  const unitInfoDict = {
-    "Unit Control": [uFuel, uCap],
-    "Unit Fuel": [uCon, uCap],
-    "Unit Capacity": [uFuel, uCon],
-  };
-  const unitInfoTables = [uCon, uFuel, uCap];
-
-  // Location Attributes & Relationship Data variables
-  const lAttr = "Location Attribute";
-  const rDat = "Relationship Data";
-  const locAttAndRelDataDict = {
-    "Location Attribute": rDat,
-    "Relationship Data": lAttr,
-  };
-  const locAttAndRelDataTables = [lAttr, rDat];
   const selectText = "-- Select a value --";
 
   useEffect(() => {
@@ -154,47 +134,7 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
         .then((res) => {
-          // Location Attributes & Relationship Data tables
-          if (locAttAndRelDataTables.includes(dataTableName)) {
-            assertSelector
-              .getDataTableApis(
-                locAttAndRelDataDict[dataTableName],
-                locationSelectValue,
-                selectedLocation
-              )
-              .then((locAtt) => {
-                setComplimentaryData(locAtt.data);
-                finishedLoadingData(res.data);
-              });
-          }
-
-          // Unit Information tables
-          else if (unitInfoTables.includes(dataTableName)) {
-            assertSelector
-              .getDataTableApis(
-                unitInfoDict[dataTableName][0],
-                locationSelectValue,
-                selectedLocation
-              )
-              .then((sec) => {
-                const secondTableData = sec.data;
-                assertSelector
-                  .getDataTableApis(
-                    unitInfoDict[dataTableName][1],
-                    locationSelectValue,
-                    selectedLocation
-                  )
-                  .then((third) => {
-                    const thirdTableData = third.data;
-                    setComplimentaryData(
-                      secondTableData.concat(thirdTableData)
-                    );
-                    finishedLoadingData(res.data);
-                  });
-              });
-          } else {
-            finishedLoadingData(res.data);
-          }
+          finishedLoadingData(res.data);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,64 +170,36 @@ export const DataTableAssert = ({
   useEffect(() => {
     assignFocusEventListeners();
   }, [displayedRecords]);
-  const inactiveCheckboxFiltering = (records, multiTable) => {
-    if (records.length > 0) {
-      const activeRecords = getActiveData(records);
-      const inactiveRecords = getInactiveData(records);
-      const display = multiTable ? dataPulled : records;
 
-      // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
+  const inactiveCheckboxFiltering = () => {
+    let hasActive = false;
+    let hasInactive = false;
+    if (dataPulled.length > 0) {
+      const activeRecords = getActiveData(dataPulled);
+      const inactiveRecords = getInactiveData(dataPulled);
+      hasActive = activeRecords.length > 0;
+      hasInactive = inactiveRecords.length > 0;
 
-      // if ONLY ACTIVE records return,
-      if (activeRecords.length === records.length) {
-        // then disable the inactive checkbox and set it as un-checked
-        settingInactiveCheckBox(false, true);
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(display, dataTableName)
-        );
-      }
-
-      // if ONLY INACTIVE records return
-      else if (inactiveRecords.length === records.length) {
-        // then disable the inactive checkbox and set it as checked
-        settingInactiveCheckBox(true, true);
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(display, dataTableName)
-        );
-      }
-
-      // if BOTH ACTIVE & INACTIVE records return
-      else {
-        // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-
-        setDisplayedRecords(
-          assertSelector.getDataTableRecords(
-            !tabs[currentTabIndex].inactive[0]
-              ? getActiveData(display)
-              : display,
-            dataTableName
-          )
-        );
-      }
-    }
-    // if NO RECORDS are returned
-    else {
-      // disable the inactive checkbox and set it as un-checked\
+      setDisplayedRecords(
+        assertSelector.getDataTableRecords(
+          !tabs[currentTabIndex].inactive[0]
+            ? getActiveData(dataPulled)
+            : dataPulled,
+          dataTableName
+        )
+      );
+    } else {
+      // No records
       setDisplayedRecords([]);
     }
+
+    // Report data status to parent
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
   };
 
   // Setting "Show Inactive" checkbox disabled & checked statuses based on records
   useEffect(() => {
-    if (
-      locAttAndRelDataTables.includes(dataTableName) ||
-      unitInfoTables.includes(dataTableName)
-    ) {
-      inactiveCheckboxFiltering(dataPulled.concat(complimentaryData), true);
-    } else {
-      inactiveCheckboxFiltering(dataPulled, false);
-    }
+    inactiveCheckboxFiltering();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataLoaded, dataPulled, tabs[currentTabIndex].inactive[0], updateTable]);

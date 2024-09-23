@@ -17,6 +17,11 @@ const CustomAccordion = ({
 }) => {
   const [open, setOpen] = useState(tables.map((item, index) => true));
 
+  // Update 'open' state whenever 'tables' prop changes
+  useEffect(() => {
+    setOpen(tables.map((item, index) => true));
+  }, [tables]);
+
   // updates all tables whenever a location is changed
   const tableState = (index, val) => {
     setOpen(tables.map((item, ind) => (ind === index ? val : open[ind])));

@@ -58,6 +58,51 @@ export const MonitoringPlanTabRender = ({
 
   const [revertedState, setRevertedState] = useState(false);
 
+  // Initialize state to collect data statuses
+  const [tableDataStatuses, setTableDataStatuses] = useState({});
+
+  const handleReportDataStatus = (tableName, dataStatus) => {
+    setTableDataStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [tableName]: dataStatus,
+    }));
+  };
+
+  const [prevSectionSelect, setPrevSectionSelect] = useState(sectionSelect);
+  if (prevSectionSelect !== sectionSelect) {
+    setPrevSectionSelect(sectionSelect);
+    setTableDataStatuses({});
+  }
+
+  useEffect(() => {
+    const statuses = Object.values(tableDataStatuses);
+
+    // Determine if there are active and/or inactive records across all tables
+    const hasAnyActive = statuses.some((status) => status.hasActive);
+    const hasAnyInactive = statuses.some((status) => status.hasInactive);
+
+    let disableCheckbox = false;
+
+    if (hasAnyActive && hasAnyInactive) {
+      // Both active and inactive data exist
+      disableCheckbox = false;
+    } else {
+      // Only active or only inactive data across all tables
+      disableCheckbox = true;
+    }
+
+    const inactiveDisabled = inactive[1];
+
+    // Update the global inactive state
+    if (inactiveDisabled !== disableCheckbox) {
+      setInactive(
+        [inactive[0], disableCheckbox],
+        title,
+        MONITORING_PLAN_STORE_NAME
+      );
+    }
+  }, [tableDataStatuses, inactive, setInactive, title]);
+
   // updates all tables whenever a location is changed
   useEffect(
     () => {
@@ -87,6 +132,7 @@ export const MonitoringPlanTabRender = ({
                   ]
                 }
                 dataTableName={"Default"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -122,6 +168,7 @@ export const MonitoringPlanTabRender = ({
                   ]
                 }
                 dataTableName={"Formula"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -157,6 +204,7 @@ export const MonitoringPlanTabRender = ({
                   ]
                 }
                 dataTableName={"Load"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -201,6 +249,7 @@ export const MonitoringPlanTabRender = ({
                 }
                 radioNames={["ductIndicator", "bypassIndicator"]}
                 dataTableName={"Location Attribute"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -237,6 +286,7 @@ export const MonitoringPlanTabRender = ({
                 }
                 radioNames={[]}
                 dataTableName={"Relationship Data"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 nonEditable={true}
                 setRevertedState={setRevertedState}
@@ -328,6 +378,7 @@ export const MonitoringPlanTabRender = ({
                   ]
                 }
                 dataTableName={"Rectangular Duct WAF"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -365,6 +416,7 @@ export const MonitoringPlanTabRender = ({
                   ]
                 }
                 dataTableName={"Span"}
+                reportDataStatus={handleReportDataStatus}
                 revertedState={revertedState}
                 setRevertedState={setRevertedState}
                 setUpdateRelatedTables={setUpdateRelatedTables}
@@ -452,6 +504,7 @@ export const MonitoringPlanTabRender = ({
                   )["urlParameters"]
                 }
                 dataTableName={"Unit"}
+                reportDataStatus={handleReportDataStatus}
                 radioNames={["nonLoadBasedIndicator"]}
                 checkout={checkout}
                 user={user}
@@ -517,6 +570,7 @@ export const MonitoringPlanTabRender = ({
                   )["urlParameters"]
                 }
                 dataTableName={"Unit Fuel"}
+                reportDataStatus={handleReportDataStatus}
                 radioNames={["ozoneSeasonIndicator"]}
                 checkout={checkout}
                 user={user}
@@ -588,6 +642,7 @@ export const MonitoringPlanTabRender = ({
                 }
                 radioNames={["originalCode", "seasonalControlsIndicator"]}
                 dataTableName={"Unit Control"}
+                reportDataStatus={handleReportDataStatus}
                 checkout={checkout}
                 user={user}
                 inactive={inactive}
@@ -657,6 +712,7 @@ export const MonitoringPlanTabRender = ({
                   )["urlParameters"]
                 }
                 dataTableName={"Unit Capacity"}
+                reportDataStatus={handleReportDataStatus}
                 checkout={checkout}
                 user={user}
                 inactive={inactive}
@@ -718,6 +774,7 @@ export const MonitoringPlanTabRender = ({
                   )["controlDatePickerInputs"]
                 }
                 dataTableName={"Unit Program"}
+                reportDataStatus={handleReportDataStatus}
                 checkout={checkout}
                 user={user}
                 inactive={inactive}
@@ -780,6 +837,7 @@ export const MonitoringPlanTabRender = ({
                   )["controlDatePickerInputs"]
                 }
                 dataTableName={"Reporting Frequency"}
+                reportDataStatus={handleReportDataStatus}
                 checkout={checkout}
                 user={user}
                 inactive={inactive}
