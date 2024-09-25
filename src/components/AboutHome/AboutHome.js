@@ -30,8 +30,6 @@ const AboutHome = ({ user, setCurrentLink }) => {
   const [monitorPlanContent, setMonitorPlanContent] = useState();
   const [qaCertificationContent, setQACertificationContent] = useState();
 
-  const [warningMessage, setWarningMessage] = useState(null);
-
   useEffect(() => {
     document.title = "ECMPS Home";
 
@@ -58,12 +56,11 @@ const AboutHome = ({ user, setCurrentLink }) => {
     const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
 
     //check if the user has initial authorizer role with no responsibilities
-    if (cdxUser?.roles?.includes(config.app.initialAuthorizerRole) &&  JSON.stringify(cdxUser?.facilities) === '{}')
+    if (cdxUser?.roles?.includes(config.app.initialAuthorizerRole) && Object.keys(cdxUser?.facilities || {}).length === 0)
     {
       //display the warning message on the home page
       const warningMessage = 'You have no facilities for which you are responsible. Please login to CBS to review and add facilities for which you are responsible.';
       displayAppWarning(warningMessage);
-      setWarningMessage(warningMessage);
     }
   }, [user]);
 
