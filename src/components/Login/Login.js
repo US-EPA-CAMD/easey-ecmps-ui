@@ -67,65 +67,39 @@ const Login = ({ isModal, closeModalHandler, isLoginDisabled = false, showSystem
       setLoading(true);
       setShowError(false);
 
-      try {
-        // First check if user has unsigned certificate statements
-        const response = await getPermissions(username);
-    
-        if (response && response.error) {
-          throw response.error;
-        }
-    
-        // Handle case where response includes an error code
-        if ('code' in response.data) {
-          const error = new Error(response.data.message);
-          error.response = { data: response.data }; // Mimic Axios error structure for consistency
-          throw error;
-        }
-    
-        // Extract the missing cert statements flag
-        const existUnsignedCertStatements = response.data.missingCertificationStatements;
-    
-        // display the error message if user has unsigned cert statements, otherwise proceed
-        if (existUnsignedCertStatements) {
+      await determinePolicy({ userId: username })
+        .then((response) => {
+          if (response && response.error) {
+            throw response.error;
+          }
+
+          // Handle case where response includes an error code
+          if ('code' in response.data) {
+            const error = new Error(response.data.message);
+            error.response = { data: response.data }; // Mimic Axios error structure for consistency
+            throw error;
+          }
+
+          //Extract the policy match
+          const policyMatch = response.data.policy.match(/_(SIGNUP|MIGRATE|SIGNIN)/);
+          const policySuffix = policyMatch ? policyMatch[0] : "_DEFAULT";
+
+          //Disable the loading overlay
+          setLoading(false);
+          setViewProps( userAccountStatusProps[policySuffix] );
+          setPolicyResponse(response.data);
+
+        })
+        // *** display serverside errors
+        .catch((err) => {
           setLoading(false);
           setShowError(true);
-          setFormErrorMessage(
-            "You have not signed all of the necessary certification statements which are associated with your responsibilities as a representative or agent. Until these certification statements have been signed, you will not be able to log in to ECMPS. Please use the CAMD Business System to sign all of your required certification statements."
-          );
-          return;
-        }
-    
-        // determine the policy for the passed-in username
-        const policyResponse = await determinePolicy({ userId: username });
-    
-        if (policyResponse && policyResponse.error) {
-          throw policyResponse.error;
-        }
-    
-        if ('code' in policyResponse.data) {
-          const error = new Error(policyResponse.data.message);
-          error.response = { data: policyResponse.data }; // Mimic Axios error structure for consistency
-          throw error;
-        }
-    
-        // Extract the policy match
-        const policyMatch = policyResponse.data.policy.match(/_(SIGNUP|MIGRATE|SIGNIN)/);
-        const policySuffix = policyMatch ? policyMatch[0] : "_DEFAULT";
-    
-        // Disable the loading overlay
-        setLoading(false);
-        setViewProps(userAccountStatusProps[policySuffix]);
-        setPolicyResponse(policyResponse.data);
-    
-      } catch (err) {
-        // Handle errors for both API calls here
-        setLoading(false);
-        setShowError(true);
-        setFormErrorMessage(err.response?.data?.message || err.message);
-      };
-    };
+          setFormErrorMessage(err.response?.data?.message || err.message);
+        });
+    }
   };
 
+  
   if (isLoginDisabled) {
       return (
           <div className="padding-1">
