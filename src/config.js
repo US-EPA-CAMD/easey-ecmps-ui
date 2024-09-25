@@ -1,3 +1,4 @@
+import log from "loglevel";
 import {
   getConfigValue,
   getConfigValueNumber,
@@ -182,6 +183,10 @@ export const config = {
 
 if (config.app.enableDebug) {
   console.log("config: ", config);
+}
+
+if (config.app.env === "production") {
+  log.setLevel(log.levels.ERROR);
 }
 
 export default config;

@@ -78,6 +78,7 @@ export const getDataTableAssertProps = () => {
     setUpdateRelatedTables: jest.fn(), //before
 
     updateRelatedTables: false,
+    reportDataStatus: jest.fn(),
   };
 }
 
