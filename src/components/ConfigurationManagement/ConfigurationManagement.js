@@ -73,6 +73,7 @@ const initialFormState = {
   stackPipes: [],
   unitStackConfigs: [],
 };
+const MONITOR_PLAN_SCHEMA_VERSION = "1.0.0";
 const STACK_PIPE_ID_HINT =
   "Enter an ID that begins with CS, CP, MS, or MP and is followed by 1 to 4 alphanumeric characters or dash (-) characters";
 const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]{1,4}$";
@@ -630,7 +631,6 @@ export const ConfigurationManagement = ({
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const monitorPlansPayload = useRef(null);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
     dataStatus.IDLE
   );
@@ -684,6 +684,8 @@ export const ConfigurationManagement = ({
       (loc) => loc.checkedOutBy !== user.userId
     );
 
+  const changedPlansCount = Object.values(changeSummary).flat().length;
+
   /* HANDLERS */
 
   const checkForDuplicateStackPipeIds = () => {
@@ -710,20 +712,11 @@ export const ConfigurationManagement = ({
 
   const createChangeSummary = async () => {
     setChangeSummaryStatus(dataStatus.PENDING);
-    const newMonitorPlansPayload = mapFormStateToPayload();
-    monitorPlansPayload.current = newMonitorPlansPayload;
 
     try {
       const [bulkResult, ...singleUnitResults] = await Promise.all([
-        importMP(newMonitorPlansPayload, true),
-        ...formState.units
-          .filter((u) => u.isToggled)
-          .map((u) =>
-            createSingleUnitMP(
-              { unitId: u.unitId, facilityId: selectedFacility },
-              true
-            )
-          ),
+        sendConfigurationsPayload(true),
+        ...sendSingleUnitPayloads(true),
       ]);
 
       setModalErrorMsgs(
@@ -829,8 +822,10 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = async () => {
     setSaveStatus(dataStatus.PENDING);
     try {
-      if (monitorPlansPayload.current)
-        await importMP(monitorPlansPayload.current, false);
+      await Promise.all([
+        sendConfigurationsPayload(false),
+        ...sendSingleUnitPayloads(false),
+      ]);
       setSaveStatus(dataStatus.SUCCESS);
       [
         setMonitoringPlansStatus,
@@ -895,7 +890,7 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const mapFormStateToPayload = () => ({
+  const mapFormStateToConfigurationsPayload = () => ({
     monitoringPlanCommentData: [],
     orisCode: userFacilities.find(
       (f) => f.facilityRecordId === selectedFacility
@@ -925,6 +920,12 @@ export const ConfigurationManagement = ({
           ...unusedMonitoringLocationDataFields(),
         }))
       ),
+    version: MONITOR_PLAN_SCHEMA_VERSION,
+  });
+
+  const mapFormStateToSingleUnitPayload = (unit) => ({
+    unitId: unit.unitId,
+    orisCode: selectedOrisCode,
   });
 
   const removeStackPipe = (rowId) => {
@@ -949,6 +950,22 @@ export const ConfigurationManagement = ({
 
   const revertUnitStackConfig = (rowId) => {
     formDispatch({ type: "REVERT_UNIT_STACK_CONFIG", payload: rowId });
+  };
+
+  const sendConfigurationsPayload = (draft) => {
+    return importMP(mapFormStateToConfigurationsPayload(), {
+      draft,
+      shouldHandleError: false,
+    });
+  };
+
+  const sendSingleUnitPayloads = (draft) => {
+    return formState.units
+      .filter((u) => u.isToggled)
+      .map(mapFormStateToSingleUnitPayload)
+      .map((payload) =>
+        createSingleUnitMP(payload, { draft, shouldHandleError: false })
+      );
   };
 
   const setStackPipeActiveDate = (rowId, activeDate) => {
@@ -1507,7 +1524,8 @@ export const ConfigurationManagement = ({
                         saveStatus
                       ) &&
                       (!canCheckOut || isCheckedOutByUser) &&
-                      !modalErrorMsgs.length
+                      !modalErrorMsgs.length &&
+                      changedPlansCount > 0
                     }
                     title="Change Summary"
                   >
@@ -1516,14 +1534,22 @@ export const ConfigurationManagement = ({
                       label="summary of configuration changes"
                       status={changeSummaryStatus}
                     >
-                      <SummarySectionPlan
-                        plans={changeSummary.newPlans}
-                        title="New Plans"
-                      />
-                      <SummarySectionPlan
-                        plans={changeSummary.endedPlans}
-                        title="Ended Plans"
-                      />
+                      {changedPlansCount === 0 ? (
+                        <Alert noIcon slim type="info" headingLevel="h3">
+                          There are no configuration changes to apply.
+                        </Alert>
+                      ) : (
+                        <>
+                          <SummarySectionPlan
+                            plans={changeSummary.newPlans}
+                            title="New Plans"
+                          />
+                          <SummarySectionPlan
+                            plans={changeSummary.endedPlans}
+                            title="Ended Plans"
+                          />
+                        </>
+                      )}
                     </StatusContent>
                     <SaveStatusAlert status={saveStatus} />
                   </Modal>

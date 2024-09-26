@@ -1192,7 +1192,10 @@ export const getMonitoringPlanComments = async (monPlanId) => {
     .catch(handleError);
 };
 
-export const importMP = async (payload, draft) => {
+export const importMP = async (
+  payload,
+  { draft = false, shouldHandleError = true } = {}
+) => {
   let url = getApiUrl(`/plans/import`);
   if (draft) {
     url = url + "?draft=true";
@@ -1206,11 +1209,15 @@ export const importMP = async (payload, draft) => {
       })
     );
   } catch (error) {
+    if (!shouldHandleError) throw error;
     return handleImportError(error);
   }
 };
 
-export const createSingleUnitMP = async (payload, draft) => {
+export const createSingleUnitMP = async (
+  payload,
+  { draft = false, shouldHandleError = true } = {}
+) => {
   let url = getApiUrl(`/plans/single-unit`);
   if (draft) {
     url = url + "?draft=true";
@@ -1224,6 +1231,7 @@ export const createSingleUnitMP = async (payload, draft) => {
       })
     );
   } catch (error) {
+    if (!shouldHandleError) throw error;
     return handleImportError(error);
   }
 };
