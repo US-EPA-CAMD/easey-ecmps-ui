@@ -1,15 +1,17 @@
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
+import { DatabaseContext } from "../constants/databaseContext";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
 import axios from "axios";
 
-export const getApiUrl = (path, workspaceOnly = false) => {
-  let url = config.services.monitorPlans.uri;
-
-  if (workspaceOnly === true || window.location.href.includes("/workspace")) {
-    url = `${url}/workspace`;
+export const getApiUrl = (path, context) => {
+  let url;
+  if (context === DatabaseContext.OFFICIAL) {
+    url = config.services.monitorPlans.uri;
+  } else if (context === DatabaseContext.WORKSPACE || window.location.href.includes("/workspace")) {
+    url = `${config.services.monitorPlans.uri}/workspace`;
   }
 
   return `${url}${path}`;
@@ -30,8 +32,7 @@ export const getMonitoringPlanById = async (id) => {
 export const getMonitoringPlans = async (
   orisCodes,
   monPlanIds = [],
-  forWorkspace = false,
-  submissionPeriods = [] //Added for polymorphism across data fetch calls
+  context = null,
 ) => {
   let queryString = "";
 
@@ -47,7 +48,7 @@ export const getMonitoringPlans = async (
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  const url = getApiUrl(`/configurations?${queryString}`, forWorkspace);
+  const url = getApiUrl(`/configurations?${queryString}`, context);
   return secureAxios({
     method: "GET",
     url: url,
@@ -135,7 +136,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (
   id,
   shouldHandleError = true
 ) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
     return (
       await secureAxios({
@@ -150,7 +151,7 @@ export const postCheckoutMonitoringPlanConfiguration = async (
 };
 
 export const revertOfficialRecord = async (id) => {
-  const url = getApiUrl(`/plans/${id}/revert`, true);
+  const url = getApiUrl(`/plans/${id}/revert`, DatabaseContext.WORKSPACE);
   try {
     return (
       await secureAxios({
@@ -204,7 +205,7 @@ export const createMats = async (payload) => {
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
     return handleResponse(
       await secureAxios({
@@ -262,7 +263,7 @@ export const saveMonitoringMats = async (payload) => {
 };
 
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
     return (
       await secureAxios({
@@ -281,7 +282,7 @@ export const getCheckedOutLocations = async () => {
   if (!localStorage.getItem("ecmps_user")) {
     return { data: [] };
   }
-  const url = getApiUrl(`/check-outs/plans`, true);
+  const url = getApiUrl(`/check-outs/plans`, DatabaseContext.WORKSPACE);
 
   return secureAxios({
     method: "GET",
@@ -1237,7 +1238,7 @@ export const createSingleUnitMP = async (
 };
 
 export const importStackPipe = async (payload, draft) => {
-  let url = getApiUrl(`/stack-pipes/import`, true);
+  let url = getApiUrl(`/stack-pipes/import`, DatabaseContext.WORKSPACE);
   if (draft) {
     url = url + "?draft=true";
   }

@@ -15,6 +15,7 @@ import SubmissionAlertModal from "../SubmissionAlertModal/SubmissionAlertModal";
 import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { DatabaseContext } from "../../utils/constants/databaseContext";
 import {
   submitData,
   triggerBulkEvaluation,
@@ -190,7 +191,7 @@ export const EvaluateAndSubmit = ({
   });
 
   useEffect(() => {
-    let isMounted = true;  // Track the mounting status
+    let isMounted = true; // Track the mounting status
 
     const fetchDropdownFacilities = async () => {
       const facilities = await getDropDownFacilities();
@@ -202,10 +203,9 @@ export const EvaluateAndSubmit = ({
     fetchDropdownFacilities();
 
     return () => {
-      isMounted = false;  // Set false when the component unmounts
+      isMounted = false; // Set false when the component unmounts
     };
   }, []);
-
 
   const filterClick = () => {
     if (componentType === "Submission") {
@@ -473,17 +473,19 @@ export const EvaluateAndSubmit = ({
 
     let formattedData = rows.map((chunk) => {
       return {
-        isSelected: false,
-        isDisabled: isForceReEvaluation ? false : !canSelectRow(
-          chunk,
-          rowType,
-          componentType,
-          idToPermissionsMap,
-          userId
-        ), //Determine if a record is checked out [If not by user then disable and set isSelected to false]
-        checkedOutBy: "",
-        // Add an optional iCheckedOut Flag
         ...chunk,
+        isSelected: false,
+        isDisabled: isForceReEvaluation
+          ? false
+          : !canSelectRow(
+              chunk,
+              rowType,
+              componentType,
+              idToPermissionsMap,
+              userId
+            ), //Determine if a record is checked out [If not by user then disable and set isSelected to false]
+        checkedOutBy: "",
+        // TODO: Add an optional iCheckedOut Flag
       };
     });
 
@@ -540,8 +542,19 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    let monitorPlans = (await dataList[0].call(orisCodes, monPlanIds)).data;
-    monitorPlans = monitorPlans.filter((mp) => mp.active); //We only want the active monitor plans
+    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] = await Promise.all([
+      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
+      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
+    ]);
+    // Filter to plans that are `active` in the workspace or that are `active` in official but `inactive` in the workspace (becoming inactive).
+    const monitorPlans = workspaceMonitorPlans.filter((mp) => {
+      return (
+        mp.active ||
+        officialMonitorPlans.some(
+          (omp) => omp.monPlanId === mp.monPlanId && omp.active
+        )
+      );
+    });
     const activePlanIdSet = new Set(monitorPlans.map((mp) => mp.id));
     formatDataRows(dataList[0].ref, monitorPlans, "MP");
 
@@ -605,7 +618,10 @@ export const EvaluateAndSubmit = ({
         row.isSelected = false;
       }
 
-      if (!canSelectRow(row, type, componentType, idToPermissionsMap, userId) && !isForceReEvaluation) {
+      if (
+        !canSelectRow(row, type, componentType, idToPermissionsMap, userId) &&
+        !isForceReEvaluation
+      ) {
         row.isDisabled = true;
         row.isSelected = false;
       }
@@ -664,7 +680,8 @@ export const EvaluateAndSubmit = ({
               componentType,
               idToPermissionsMap,
               userId
-            ) && !isForceReEvaluation
+            ) &&
+            !isForceReEvaluation
           ) {
             row.isDisabled = true;
             row.isSelected = false;

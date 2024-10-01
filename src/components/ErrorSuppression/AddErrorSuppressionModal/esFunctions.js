@@ -1,6 +1,7 @@
 import { getMdmData as getMatchData } from "../../../utils/api/errorSuppressionApi";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
+import { DatabaseContext } from "../../../utils/constants/databaseContext";
 
 // The mdm api returns a data that looks different for each Data Type Code.
 // The below function maps the correct description and code field for a
@@ -113,7 +114,7 @@ export const createMatchTypeDropdownLists = async (
     if (!orisCode) return [];
 
     try {
-      const { data } = await getMonitoringPlans([orisCode], [], true);
+      const { data } = await getMonitoringPlans([orisCode], [], DatabaseContext.WORKSPACE);
       return processPromiseData(data);
     } catch (e) {
       console.error(e);

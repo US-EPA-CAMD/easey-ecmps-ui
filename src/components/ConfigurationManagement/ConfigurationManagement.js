@@ -392,7 +392,8 @@ function unusedMonitoringLocationDataFields() {
 
 const actionCellToggle = (onToggle) => {
   return (row) =>
-    row.associatedMonitorPlanIds.length === 0 ? (
+    row.associatedMonitorPlanIds.length === 0 &&
+    ["OPR", "FUT"].includes(row.opStatusCd) ? (
       <Button
         aria-label={
           row.isToggled
@@ -484,51 +485,49 @@ const dateCell = ({
   };
 };
 
-const PlanSummary = ({ plan }) => {
-  return (
-    <>
-      <h4>{plan.name}</h4>
-      <GridContainer>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            Begin Reporting Period:
-          </Grid>
-          <Grid col="auto">{plan.beginReportPeriodDescription}</Grid>
+const PlanSummary = ({ plan }) => (
+  <>
+    <h4>{plan.name}</h4>
+    <GridContainer>
+      <Grid row>
+        <Grid col={4} className="text-bold">
+          Begin Reporting Period:
         </Grid>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            End Reporting Period:
-          </Grid>
-          <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
+        <Grid col="auto">{plan.beginReportPeriodDescription}</Grid>
+      </Grid>
+      <Grid row>
+        <Grid col={4} className="text-bold">
+          End Reporting Period:
         </Grid>
-      </GridContainer>
-      <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
-      <GridContainer>
-        {plan.reportingFrequencies.map((rf) => (
-          <Fragment key={rf.id}>
-            <Grid row>
-              <Grid col={4} className="text-bold">
-                Reporting Period Range:
-              </Grid>
-              <Grid col="auto">
-                {rf.beginReportPeriodDescription} -{" "}
-                {rf.endReportPeriodDescription ?? "Current"}
-              </Grid>
+        <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
+      </Grid>
+    </GridContainer>
+    <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
+    <GridContainer>
+      {plan.reportingFrequencies.map((rf) => (
+        <Fragment key={rf.id}>
+          <Grid row>
+            <Grid col={4} className="text-bold">
+              Reporting Period Range:
             </Grid>
-            <Grid row>
-              <Grid col={4} className="text-bold">
-                Reporting Frequency:
-              </Grid>
-              <Grid col="auto">
-                {rf.reportingFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
-              </Grid>
+            <Grid col="auto">
+              {rf.beginReportPeriodDescription} -{" "}
+              {rf.endReportPeriodDescription ?? "Current"}
             </Grid>
-          </Fragment>
-        ))}
-      </GridContainer>
-    </>
-  );
-};
+          </Grid>
+          <Grid row>
+            <Grid col={4} className="text-bold">
+              Reporting Frequency:
+            </Grid>
+            <Grid col="auto">
+              {rf.reportFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
+            </Grid>
+          </Grid>
+        </Fragment>
+      ))}
+    </GridContainer>
+  </>
+);
 
 const SaveStatusAlert = ({ status }) => (
   <>
@@ -1100,11 +1099,13 @@ export const ConfigurationManagement = ({
         getUnitsByOrisCode(selectedOrisCode).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
-            res.data.map((d) => ({
-              ...d,
-              beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
-              endDate: d.endDate ? d.endDate.split("T")[0] : null,
-            })),
+            res.data
+              .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
+              .map((d) => ({
+                ...d,
+                beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
+                endDate: d.endDate ? d.endDate.split("T")[0] : null,
+              })),
             "SET_UNITS"
           );
         });
