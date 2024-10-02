@@ -7,14 +7,19 @@ import download from "downloadjs";
 import axios from "axios";
 
 export const getApiUrl = (path, context) => {
-  let url;
-  if (context === DatabaseContext.OFFICIAL) {
-    url = config.services.monitorPlans.uri;
-  } else if (context === DatabaseContext.WORKSPACE || window.location.href.includes("/workspace")) {
-    url = `${config.services.monitorPlans.uri}/workspace`;
+  const base = config.services.monitorPlans.uri;
+  switch (context) {
+    case DatabaseContext.OFFICIAL:
+      return `${base}${path}`;
+    case DatabaseContext.WORKSPACE:
+      return `${base}/workspace${path}`;
+    default:
+      if (window.location.href.includes("/workspace")) {
+        return `${base}/workspace${path}`;
+      } else {
+        return `${base}${path}`;
+      }
   }
-
-  return `${url}${path}`;
 };
 
 export const getMonitoringPlanById = async (id) => {
@@ -32,7 +37,7 @@ export const getMonitoringPlanById = async (id) => {
 export const getMonitoringPlans = async (
   orisCodes,
   monPlanIds = [],
-  context = null,
+  context = null
 ) => {
   let queryString = "";
 
