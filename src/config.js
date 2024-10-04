@@ -187,6 +187,8 @@ if (config.app.enableDebug) {
 
 if (config.app.env === "production") {
   log.setLevel(log.levels.ERROR);
+} else {
+  log.setLevel(log.levels.TRACE);
 }
 
 export default config;
