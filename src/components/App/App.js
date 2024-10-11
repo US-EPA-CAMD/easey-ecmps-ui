@@ -453,16 +453,18 @@ const App = () => {
               )
             }
           />
-          <Route
-            path="/workspace/configuration-management"
-            element={
-              !validUser() || !facilityCheckoutPermission() ? (
-                <Navigate key="navigate" to="/" />
-              ) : (
-                <ConfigurationManagement user={user} />
-              )
-            }
-          />
+          {config.app.enableConfigurationManagementModule && (
+            <Route
+              path="/workspace/configuration-management"
+              element={
+                !validUser() || !facilityCheckoutPermission() ? (
+                  <Navigate key="navigate" to="/" />
+                ) : (
+                  <ConfigurationManagement user={user} />
+                )
+              }
+            />
+          )}
           <Route
             path="/admin/qa-maintenance"
             element={
