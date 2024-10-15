@@ -239,22 +239,44 @@ export const getPermissions = async (userId) => {
   }
 };
 
+export const validate = async (payload) => {
+  try {
+    return await secureAxios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/sign/validate`,
+      data: payload,
+    });
+  } catch (err) {
+    displayAppError(err.response?.data?.message || err?.message || err);
+  }
+  
+};
+
 export const createActivity = async (payload) => {
-  return secureAxios({
-    method: "POST",
-    url: `${config.services.authApi.uri}/sign/create-activity`,
-    /*headers: { "Id-Token": "test" },*/
-    data: payload,
-  });
+  try {
+    return secureAxios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/sign/create-activity`,
+      /*headers: { "Id-Token": "test" },*/
+      data: payload,
+    });
+  } catch (err) {
+    displayAppError(err.response?.data?.message || err?.message || err);
+  }
 };
 
 export const getCredentials = async (monitorPlans) => {
-  return secureAxios({
-    method: "GET",
-    url: `${
-      config.services.authApi.uri
-    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
-  });
+  try {
+    return secureAxios({
+      method: "GET",
+      url: `${
+        config.services.authApi.uri
+      }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+    });
+  } catch (err) {
+    displayAppError(err.response?.data?.message || err?.message || err);
+  }
+  
 };
 
 export const validUser = () => {

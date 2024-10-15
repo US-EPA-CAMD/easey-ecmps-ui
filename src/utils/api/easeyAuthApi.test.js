@@ -5,7 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions } from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions, createActivity, validate } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -268,6 +268,36 @@ describe("Easey Auth API", () => {
 
     expect((await getPermissions(userId)).data).toEqual([]);
   });
+
+  it("validate", async () => {
+    const payload = {
+      userId: "testUser",
+      items: [{ monPlanId: 1 }],
+    };
+  
+    mock
+      .onPost(`${config.services.authApi.uri}/sign/validate`)
+      .reply(200, { status: "success" });
+  
+    const response = await validate({});
+  
+    expect(response.data.status).toEqual("success");
+  });
+
+  it("createActivity method should post payload and return response", async () => {
+    const payload = {
+      userId: "testUser",
+    };
+  
+    mock
+      .onPost(`${config.services.authApi.uri}/sign/create-activity`)
+      .reply(200, { activityId: 123 });
+  
+    const response = await createActivity({});
+  
+    expect(response.data.activityId).toEqual(123);
+  });
+  
 
   it("refreshLastActivity", async () => {
 
