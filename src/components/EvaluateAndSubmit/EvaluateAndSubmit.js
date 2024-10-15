@@ -211,7 +211,14 @@ export const EvaluateAndSubmit = ({
   const filterClick = async () => {
     if (componentType === "Submission") {
 
-      const activeMPSet = getSelectedMPIds();
+      //passed-in user can be ecmps user object or false.
+      if (user === false || !user.userId) {
+        modalType.current = "error";  
+        modalHeading.current = "ERROR";
+        modalMessage.current = "Please login to ECMPS to submit! If you are already logged in, please logout and log back in. If you still see this message, please contact ECMPS support!";
+        setShowSuccessModal(true);  
+        return;
+      }
       
       //construct payload to call auth-api/sign/validate endpoint
       const items = [];
@@ -219,6 +226,8 @@ export const EvaluateAndSubmit = ({
         userId: user.userId,
         items: items,
       };
+
+      const activeMPSet = getSelectedMPIds();
 
       for (const monPlanId of activeMPSet) {
         const newItem = {};
@@ -230,10 +239,6 @@ export const EvaluateAndSubmit = ({
             (f) => f.monPlanId === monPlanId && f.isSelected
           ).length > 0
         ) {
-          const plan = monPlanRef.current.find(
-            (f) => {
-              return f.monPlanId === monPlanId && f.isSelected;}
-          );
           newItem.submitMonPlan = true;
         } else {
           //did not select this monitoring plan to submit, so no need to validate this one

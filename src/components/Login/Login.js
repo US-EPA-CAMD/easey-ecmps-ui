@@ -8,7 +8,7 @@ import {
   Fieldset,
 } from "@trussworks/react-uswds";
 
-import {determinePolicy, getLoginState, getPermissions} from "../../utils/api/easeyAuthApi";
+import {determinePolicy, getLoginState} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary

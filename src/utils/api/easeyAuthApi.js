@@ -254,7 +254,7 @@ export const validate = async (payload) => {
 
 export const createActivity = async (payload) => {
   try {
-    return secureAxios({
+    return await secureAxios({
       method: "POST",
       url: `${config.services.authApi.uri}/sign/create-activity`,
       /*headers: { "Id-Token": "test" },*/
