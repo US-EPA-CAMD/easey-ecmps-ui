@@ -5,6 +5,7 @@ apiHost: api.epa.gov/easey/staging
 inactivityDurationMinutes: 30
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
+enableConfigurationManagementModule: false
 enableSystemAdminstrationModule: true
 tokenRefreshThresholdSeconds: 5
 

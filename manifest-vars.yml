@@ -24,6 +24,7 @@ cdxRegisterPath: "/Registration/Terms"
 enableManageDelegations: "false"
 refreshLastActivityIntervalMinutes: 1
 tokenRefreshThresholdSeconds: 10
+enableConfigurationManagementModule: true
 enableSystemAdminstrationModule: true
 #ICAM changes
 cdxHowToGetAccessPath: https://www.epa.gov/airmarkets/camd-business-system-cbs-faqs
