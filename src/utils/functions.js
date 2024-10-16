@@ -7,6 +7,7 @@ import {
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 import { isNumber } from "lodash";
+import log from "loglevel";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -390,8 +391,8 @@ export const formatDateTime = (date, hour, mins) => {
 };
 
 export const formatTimeStamp = (timeStamp) => {
-  if(!timeStamp){
-    return 
+  if (!timeStamp) {
+    return;
   }
   const date = new Date(timeStamp);
   return `${date.getFullYear()}-${(date.getMonth() + 1)
@@ -408,10 +409,13 @@ export const formatTimeStamp = (timeStamp) => {
  * @returns
  */
 export const formatErrorResponse = (errorResp) => {
-  const errorMsgs = Array.isArray(errorResp)
-    ? errorResp
-    : [JSON.stringify(errorResp)];
-  return errorMsgs;
+  let errorMsgs = errorResp;
+  try {
+    errorMsgs = JSON.parse(errorResp);
+  } catch (err) {
+    // Do nothing.
+  }
+  return Array.isArray(errorMsgs) ? errorMsgs : [JSON.stringify(errorMsgs)];
 };
 
 // Returns the amount of seconds until the users front-end session expires
@@ -424,10 +428,9 @@ export const currentSecondsTilInactive = () => {
 };
 
 export const parseBool = (str) => {
-  if(isNumber(str)){
+  if (isNumber(str)) {
     return str > 0;
+  } else {
+    return String(str).toLocaleLowerCase() == "true";
   }
-  else{
-    return String(str).toLocaleLowerCase() == "true"
-  }
-}
+};
