@@ -14,6 +14,7 @@ import config from "../../config";
 
 import { checkoutAPI } from "../../additional-functions/checkout";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { DatabaseContext } from "../../utils/constants/databaseContext";
 import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
@@ -55,7 +56,10 @@ import {
   setViewDataColumns,
   setViewTemplateSelectionAction,
 } from "../../store/actions/dynamicFacilityTab";
-import { loadMonitoringPlans, loadSingleMonitoringPlanSuccess } from "../../store/actions/monitoringPlans";
+import {
+  loadMonitoringPlans,
+  loadSingleMonitoringPlanSuccess,
+} from "../../store/actions/monitoringPlans";
 import { handleError, successResponses } from "../../utils/api/apiUtils";
 import {
   displayAppError,
@@ -816,7 +820,7 @@ export const HeaderInfo = ({
 
   const showRevert = (status) => {
     return (
-      (checkedOutByUser || !selectedConfig.active) &&
+      checkedOutByUser &&
       (status === "PASS" ||
         status === "INFO" ||
         status === "ERR" ||
@@ -850,9 +854,12 @@ export const HeaderInfo = ({
 
     try {
       await mpApi.revertOfficialRecord(selectedConfig.id);
-      const res = await mpApi.getMonitoringPlans(undefined, selectedConfig.id);
+      const res = await mpApi.getMonitoringPlans(
+        orisCode,
+        selectedConfig.id,
+        DatabaseContext.WORKSPACE,
+      );
       if (res.data.length === 0) {
-        await mpApi.deleteCheckInMonitoringPlanConfiguration(selectedConfig.id);
         removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
       } else {
         dispatch(loadSingleMonitoringPlanSuccess(orisCode, res.data[0]));
@@ -1106,9 +1113,11 @@ export const HeaderInfo = ({
           console.error("Error during exporting:", error);
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
-        await mpApi.exportMonitoringPlanDownload(selectedConfigId).catch((error) => {
-          console.error("Error during exporting ", error);
-        });
+        await mpApi
+          .exportMonitoringPlanDownload(selectedConfigId)
+          .catch((error) => {
+            console.error("Error during exporting ", error);
+          });
       setDataLoaded(true);
       setIsLoading(false);
     } catch (error) {
@@ -1252,7 +1261,7 @@ export const HeaderInfo = ({
                 >
                   Export Data
                 </Button>
-                {user && checkedOutByUser && (
+                {user && checkedOutByUser && selectedConfig.active && (
                   <Button
                     type="button"
                     className="margin-y-1"
@@ -1295,7 +1304,6 @@ export const HeaderInfo = ({
                     </Button>
                   ) : !lockedFacility &&
                     !userHasCheckout &&
-                    selectedConfig.active &&
                     checkedOutConfigs
                       .map((location) => location["monPlanId"])
                       .indexOf(selectedConfig.id) === -1 ? (

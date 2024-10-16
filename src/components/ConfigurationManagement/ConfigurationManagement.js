@@ -24,7 +24,6 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-  useRef,
   useState,
 } from "react";
 import DataTable from "react-data-table-component";
@@ -61,6 +60,8 @@ import "./ConfigurationManagement.scss";
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
 const errorMessages = {
   DUPLICATE_STACKPIPE_IDS: "Stack/Pipe IDs must be unique.",
+  DUPLICATE_UNIT_STACK_CONFIGS:
+    "Unit/Stack Configurations with the same Unit and Stack/Pipe cannot have the same begin date.",
   EDITS_PENDING: "Please complete any pending edits before continuing.",
   NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
@@ -73,6 +74,7 @@ const initialFormState = {
   stackPipes: [],
   unitStackConfigs: [],
 };
+const MONITOR_PLAN_SCHEMA_VERSION = "1.0.0";
 const STACK_PIPE_ID_HINT =
   "Enter an ID that begins with CS, CP, MS, or MP and is followed by 1 to 4 alphanumeric characters or dash (-) characters";
 const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]{1,4}$";
@@ -391,7 +393,8 @@ function unusedMonitoringLocationDataFields() {
 
 const actionCellToggle = (onToggle) => {
   return (row) =>
-    row.associatedMonitorPlanIds.length === 0 ? (
+    row.associatedMonitorPlanIds.length === 0 &&
+    ["OPR", "FUT"].includes(row.opStatusCd) ? (
       <Button
         aria-label={
           row.isToggled
@@ -483,51 +486,49 @@ const dateCell = ({
   };
 };
 
-const PlanSummary = ({ plan }) => {
-  return (
-    <>
-      <h4>{plan.name}</h4>
-      <GridContainer>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            Begin Reporting Period:
-          </Grid>
-          <Grid col="auto">{plan.beginReportPeriodDescription}</Grid>
+const PlanSummary = ({ plan }) => (
+  <>
+    <h4>{plan.name}</h4>
+    <GridContainer>
+      <Grid row>
+        <Grid col={4} className="text-bold">
+          Begin Reporting Period:
         </Grid>
-        <Grid row>
-          <Grid col={4} className="text-bold">
-            End Reporting Period:
-          </Grid>
-          <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
+        <Grid col="auto">{plan.beginReportPeriodDescription}</Grid>
+      </Grid>
+      <Grid row>
+        <Grid col={4} className="text-bold">
+          End Reporting Period:
         </Grid>
-      </GridContainer>
-      <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
-      <GridContainer>
-        {plan.reportingFrequencies.map((rf) => (
-          <Fragment key={rf.id}>
-            <Grid row>
-              <Grid col={4} className="text-bold">
-                Reporting Period Range:
-              </Grid>
-              <Grid col="auto">
-                {rf.beginReportPeriodDescription} -{" "}
-                {rf.endReportPeriodDescription ?? "Current"}
-              </Grid>
+        <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
+      </Grid>
+    </GridContainer>
+    <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
+    <GridContainer>
+      {plan.reportingFrequencies.map((rf) => (
+        <Fragment key={rf.id}>
+          <Grid row>
+            <Grid col={4} className="text-bold">
+              Reporting Period Range:
             </Grid>
-            <Grid row>
-              <Grid col={4} className="text-bold">
-                Reporting Frequency:
-              </Grid>
-              <Grid col="auto">
-                {rf.reportingFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
-              </Grid>
+            <Grid col="auto">
+              {rf.beginReportPeriodDescription} -{" "}
+              {rf.endReportPeriodDescription ?? "Current"}
             </Grid>
-          </Fragment>
-        ))}
-      </GridContainer>
-    </>
-  );
-};
+          </Grid>
+          <Grid row>
+            <Grid col={4} className="text-bold">
+              Reporting Frequency:
+            </Grid>
+            <Grid col="auto">
+              {rf.reportFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
+            </Grid>
+          </Grid>
+        </Fragment>
+      ))}
+    </GridContainer>
+  </>
+);
 
 const SaveStatusAlert = ({ status }) => (
   <>
@@ -630,7 +631,6 @@ export const ConfigurationManagement = ({
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const monitorPlansPayload = useRef(null);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
     dataStatus.IDLE
   );
@@ -684,11 +684,22 @@ export const ConfigurationManagement = ({
       (loc) => loc.checkedOutBy !== user.userId
     );
 
+  const changedPlansCount = Object.values(changeSummary).flat().length;
+
   /* HANDLERS */
 
   const checkForDuplicateStackPipeIds = () => {
     const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
     if (new Set(stackPipeIds).size !== stackPipeIds.length) {
+      return true;
+    }
+  };
+
+  const checkForDuplicateUnitStackConfigs = () => {
+    const unitStackConfigs = formState.unitStackConfigs
+      .map((usc) => [usc.unitId, usc.stackPipeId, usc.beginDate])
+      .map(JSON.stringify);
+    if (new Set(unitStackConfigs).size !== unitStackConfigs.length) {
       return true;
     }
   };
@@ -710,20 +721,11 @@ export const ConfigurationManagement = ({
 
   const createChangeSummary = async () => {
     setChangeSummaryStatus(dataStatus.PENDING);
-    const newMonitorPlansPayload = mapFormStateToPayload();
-    monitorPlansPayload.current = newMonitorPlansPayload;
 
     try {
       const [bulkResult, ...singleUnitResults] = await Promise.all([
-        importMP(newMonitorPlansPayload, true),
-        ...formState.units
-          .filter((u) => u.isToggled)
-          .map((u) =>
-            createSingleUnitMP(
-              { unitId: u.unitId, facilityId: selectedFacility },
-              true
-            )
-          ),
+        sendConfigurationsPayload(true),
+        ...sendSingleUnitPayloads(true),
       ]);
 
       setModalErrorMsgs(
@@ -829,8 +831,10 @@ export const ConfigurationManagement = ({
   const handleConfirmSave = async () => {
     setSaveStatus(dataStatus.PENDING);
     try {
-      if (monitorPlansPayload.current)
-        await importMP(monitorPlansPayload.current, false);
+      await Promise.all([
+        sendConfigurationsPayload(false),
+        ...sendSingleUnitPayloads(false),
+      ]);
       setSaveStatus(dataStatus.SUCCESS);
       [
         setMonitoringPlansStatus,
@@ -861,8 +865,13 @@ export const ConfigurationManagement = ({
       newErrorMsgs.push(errorMessages.NOT_CHECKED_OUT);
     }
 
-    if (checkForDuplicateStackPipeIds())
+    if (checkForDuplicateStackPipeIds()) {
       newErrorMsgs.push(errorMessages.DUPLICATE_STACKPIPE_IDS);
+    }
+
+    if (checkForDuplicateUnitStackConfigs()) {
+      newErrorMsgs.push(errorMessages.DUPLICATE_UNIT_STACK_CONFIGS);
+    }
 
     setErrorMsgs(newErrorMsgs);
     if (newErrorMsgs.length) return;
@@ -895,7 +904,7 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const mapFormStateToPayload = () => ({
+  const mapFormStateToConfigurationsPayload = () => ({
     monitoringPlanCommentData: [],
     orisCode: userFacilities.find(
       (f) => f.facilityRecordId === selectedFacility
@@ -925,6 +934,12 @@ export const ConfigurationManagement = ({
           ...unusedMonitoringLocationDataFields(),
         }))
       ),
+    version: MONITOR_PLAN_SCHEMA_VERSION,
+  });
+
+  const mapFormStateToSingleUnitPayload = (unit) => ({
+    unitId: unit.unitId,
+    orisCode: selectedOrisCode,
   });
 
   const removeStackPipe = (rowId) => {
@@ -949,6 +964,22 @@ export const ConfigurationManagement = ({
 
   const revertUnitStackConfig = (rowId) => {
     formDispatch({ type: "REVERT_UNIT_STACK_CONFIG", payload: rowId });
+  };
+
+  const sendConfigurationsPayload = (draft) => {
+    return importMP(mapFormStateToConfigurationsPayload(), {
+      draft,
+      shouldHandleError: false,
+    });
+  };
+
+  const sendSingleUnitPayloads = (draft) => {
+    return formState.units
+      .filter((u) => u.isToggled)
+      .map(mapFormStateToSingleUnitPayload)
+      .map((payload) =>
+        createSingleUnitMP(payload, { draft, shouldHandleError: false })
+      );
   };
 
   const setStackPipeActiveDate = (rowId, activeDate) => {
@@ -1083,11 +1114,13 @@ export const ConfigurationManagement = ({
         getUnitsByOrisCode(selectedOrisCode).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
-            res.data.map((d) => ({
-              ...d,
-              beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
-              endDate: d.endDate ? d.endDate.split("T")[0] : null,
-            })),
+            res.data
+              .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
+              .map((d) => ({
+                ...d,
+                beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
+                endDate: d.endDate ? d.endDate.split("T")[0] : null,
+              })),
             "SET_UNITS"
           );
         });
@@ -1507,7 +1540,8 @@ export const ConfigurationManagement = ({
                         saveStatus
                       ) &&
                       (!canCheckOut || isCheckedOutByUser) &&
-                      !modalErrorMsgs.length
+                      !modalErrorMsgs.length &&
+                      changedPlansCount > 0
                     }
                     title="Change Summary"
                   >
@@ -1516,14 +1550,22 @@ export const ConfigurationManagement = ({
                       label="summary of configuration changes"
                       status={changeSummaryStatus}
                     >
-                      <SummarySectionPlan
-                        plans={changeSummary.newPlans}
-                        title="New Plans"
-                      />
-                      <SummarySectionPlan
-                        plans={changeSummary.endedPlans}
-                        title="Ended Plans"
-                      />
+                      {changedPlansCount === 0 ? (
+                        <Alert noIcon slim type="info" headingLevel="h3">
+                          There are no configuration changes to apply.
+                        </Alert>
+                      ) : (
+                        <>
+                          <SummarySectionPlan
+                            plans={changeSummary.newPlans}
+                            title="New Plans"
+                          />
+                          <SummarySectionPlan
+                            plans={changeSummary.endedPlans}
+                            title="Ended Plans"
+                          />
+                        </>
+                      )}
                     </StatusContent>
                     <SaveStatusAlert status={saveStatus} />
                   </Modal>

@@ -108,7 +108,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     function findGroupByName(groups, name) {
       return groups.find((group) => group.name === name);
     }
-    
+
     function findItemByCode(items, code) {
       return items.find((item) => item.code === code);
     }
@@ -259,3 +259,4 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
 };
 
 export default Report;
+
