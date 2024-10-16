@@ -627,13 +627,15 @@ export const DataTableSystems = ({
     try {
       let resp;
       let response;
-        resp = await mpApi
-        .createComponents(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id
-        )
-        .catch((error) => console.log("createComponents failed", error));
+        if (!addExistingComponentFlag) {
+          resp = await mpApi
+          .createComponents(
+            userInput,
+            selectedSystem.locationId,
+            selectedSystem.id
+          )
+          .catch((error) => console.log("createComponents failed", error));
+        }
         response = await mpApi
         .createSystemsComponents(
           userInput,
@@ -808,7 +810,7 @@ export const DataTableSystems = ({
             showSave={user && checkout}
             breadCrumbBar={currentBar}
             title={"Create System"}
-            exitBTN="Create System"
+            exitBtn="Create System"
             save={() => {
               createSystems();
               // setCreateNewSystem(false);
@@ -914,7 +916,7 @@ export const DataTableSystems = ({
             close={closeModalHandler}
             showCancel={!(user && checkout)}
             showSave={user && checkout}
-            exitBTN={
+            exitBtn={
               createAnalyzerRangesFlag
                 ? "Create Analyzer Range"
                 : createFuelFlowFlag

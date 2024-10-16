@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import QACertTestSummaryHeaderInfo from "../QACertTestSummaryHeaderInfo/QACertTestSummaryHeaderInfo";
 
 import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTable/QATestSummaryDataTable";
@@ -6,8 +7,7 @@ import QATestSummaryDataTable from "../qaDatatablesContainer/QATestSummaryDataTa
 export const QACertTestSummaryRender = ({
   title,
   user,
-  locations,
-  selectedConfig,
+  selectedConfigId,
   setSectionSelect,
   setLocationSelect,
   setSelectedTestCode,
@@ -15,12 +15,16 @@ export const QACertTestSummaryRender = ({
   sectionSelect,
   locationSelect,
   orisCode,
-  configID,
   setCheckout,
   checkoutState,
   currentTab,
 }) => {
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
+  const locations = useSelector(
+    (state) =>
+      state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+        ?.monitoringLocationData ?? []
+  );
 
   useEffect(() => {
     setTimeout(() => {
@@ -37,20 +41,17 @@ export const QACertTestSummaryRender = ({
       <div className="grid-row">
         <QACertTestSummaryHeaderInfo
           facility={title}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           orisCode={orisCode}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
-          locations={locations}
           user={user}
-          configID={configID}
           setSelectedTestCode={setSelectedTestCode}
           setCheckout={setCheckout}
           checkoutState={checkoutState}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          updateRelatedTables={updateRelatedTables}
         />
       </div>
       <hr />

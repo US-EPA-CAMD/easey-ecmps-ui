@@ -114,6 +114,11 @@ export const getQAColsByTestCode = (testCode, user = false) => {
     // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
 
+  // Public view add "Last Submitted By" and "Last Submitted Date/Time"
+  if (!user) {
+    cols.push("Last Submitted By", "Last Submitted Date/Time")
+  }
+
   return cols;
 };
 

@@ -15,15 +15,19 @@ describe("Facility Async Actions", () => {
   });
   it("should create BEGIN_FACILITIES_API_CALL and LOAD_FACILITIES_SUCCESS when loading facilities", () => {
     const mockFacilities = getFacilitiesFromMDM();
-    const mockFacilitiesResponse = jest.fn().mockResolvedValue({data: mockFacilities})
-    jest.spyOn(facilitiesApi, "getAllFacilities").mockImplementation(mockFacilitiesResponse); 
+    const mockFacilitiesResponse = jest
+      .fn()
+      .mockResolvedValue({ data: mockFacilities });
+    jest
+      .spyOn(facilitiesApi, "getAllFacilities")
+      .mockImplementation(mockFacilitiesResponse);
     const expectedActions = [
       { type: types.BEGIN_FACILITIES_API_CALL },
       { type: types.LOAD_FACILITIES_SUCCESS, facilities: mockFacilities },
     ];
 
     const store = mockStore({ facilities: [] });
-    return store.dispatch(loadFacilities()).then(() => {
+    return loadFacilities(store.dispatch).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -39,4 +43,3 @@ describe("Facility Async Actions", () => {
     expect(action).toEqual(expectedAction);
   });
 });
-

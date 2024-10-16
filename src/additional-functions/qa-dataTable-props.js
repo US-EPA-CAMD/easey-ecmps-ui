@@ -1593,7 +1593,7 @@ export const qaHgInjectionDataProps = () => {
   };
 };
 
-export const qaCertEventsProps = selectedLocation => {
+export const qaCertEventsProps = (selectedLocation, user) => {
   const result = {
     dataTableName: 'QA Certification Event',
     payload: {
@@ -1672,10 +1672,15 @@ export const qaCertEventsProps = selectedLocation => {
     ...result.controlInputs,
   };
   //result.controlInputs[locId] = ["Unit/Stack Pipe ID", "input", "", ""];
+  
+  // Public view add "Last Submitted By" and "Last Submitted Date/Time"
+  if (!user) {
+    result.columns.push("Last Submitted By", "Last Submitted Date/Time")
+  }
   return result;
 };
 
-export const qaTestExemptionProps = selectedLocation => {
+export const qaTestExemptionProps = (selectedLocation, user) => {
   const result = {
     dataTableName: 'Test Extension Exemption',
     payload: {
@@ -1743,5 +1748,10 @@ export const qaTestExemptionProps = selectedLocation => {
     [locId]: ['Unit/Stack Pipe ID', 'input', '', ''],
     ...result.controlInputs,
   };
+
+  // Public view add "Last Submitted By" and "Last Submitted Date/Time"
+  if (!user) {
+    result.columns.push("Last Submitted By", "Last Submitted Date/Time")
+  }
   return result;
 };

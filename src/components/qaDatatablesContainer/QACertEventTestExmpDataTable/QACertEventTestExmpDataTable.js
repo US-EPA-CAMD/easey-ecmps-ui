@@ -73,14 +73,14 @@ const QACertEventTestExmpDataTable = ({
   let props = {};
   switch (sectionSelect[1]) {
     case "QA Certification Event":
-      props = qaCertEventsProps(selectedLocation);
+      props = qaCertEventsProps(selectedLocation, user);
       break;
 
     case "Test Extension Exemption":
-      props = qaTestExemptionProps(selectedLocation);
+      props = qaTestExemptionProps(selectedLocation, user);
       break;
     default:
-      props = qaCertEventsProps(selectedLocation);
+      props = qaCertEventsProps(selectedLocation, user);
       break;
   }
 
@@ -593,7 +593,7 @@ const QACertEventTestExmpDataTable = ({
           showSave={user && isCheckedOut}
           //nonEditable={nonEditable}
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
-          exitBTN={`Save and Close`}
+          exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (

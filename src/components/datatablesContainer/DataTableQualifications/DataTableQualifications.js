@@ -486,7 +486,7 @@ export const DataTableQualifications = ({
               ? "Create Qualification"
               : "Qualification"
           }
-          exitBTN={
+          exitBtn={
             createNewQualificationData
               ? "Create Qualification"
               : user && checkout && openPCT && creatingChild

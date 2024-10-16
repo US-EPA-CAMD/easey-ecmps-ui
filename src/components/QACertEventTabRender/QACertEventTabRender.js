@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import QACertEventHeaderInfo from "../QACertEventHeaderInfo/QACertEventHeaderInfo";
 import QACertEventTestExmpDataTable from "../qaDatatablesContainer/QACertEventTestExmpDataTable/QACertEventTestExmpDataTable";
@@ -6,12 +7,10 @@ import QACertEventTestExmpDataTable from "../qaDatatablesContainer/QACertEventTe
 export const QACertEventTabRender = ({
   title,
   user,
-  locations,
-  selectedConfig,
+  selectedConfigId,
   setLocationSelect,
   locationSelect,
   orisCode,
-  configID,
   checkout,
   setCheckout,
   workspaceSection,
@@ -21,25 +20,27 @@ export const QACertEventTabRender = ({
   sectionSelect,
   checkoutState,
 }) => {
+  const locations = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)?.monitoringLocationData ?? []);
+
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
+
   useEffect(() => {
     setSectionSelect([0, "QA Certification Event"]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div className=" padding-top-0">
       <div className="grid-row">
         <QACertEventHeaderInfo
           facility={title}
-          selectedConfig={selectedConfig}
+          selectedConfigId={selectedConfigId}
           orisCode={orisCode}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
           setLocationSelect={setLocationSelect}
           locationSelect={locationSelect}
-          locations={locations}
           user={user}
-          configID={configID}
           setSelectedTestCode={setSelectedTestCode}
           setCheckout={setCheckout}
           checkoutState={checkoutState}

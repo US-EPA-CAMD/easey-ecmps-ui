@@ -1,6 +1,6 @@
 const initialState = {
   facilities: [],
-  monitoringPlans: [],
+  monitoringPlans: {},
   apiCallsInProgress: {
     facilities: false,
     monitoringPlans: false,
@@ -43,3 +43,4 @@ const initialState = {
   currentTabIndex: 0,
 };
 export default initialState;
+

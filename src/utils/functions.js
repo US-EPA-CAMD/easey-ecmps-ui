@@ -389,6 +389,19 @@ export const formatDateTime = (date, hour, mins) => {
   }
 };
 
+export const formatTimeStamp = (timeStamp) => {
+  if(!timeStamp){
+    return 
+  }
+  const date = new Date(timeStamp);
+  return `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+};
+
 /**
  * Formats errored response into list of strings
  * @param {*} errorResp

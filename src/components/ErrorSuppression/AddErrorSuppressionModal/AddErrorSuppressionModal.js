@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo, useContext } from "react";
 import {
   GridContainer,
   Grid,
-  Dropdown,
   Label,
   DatePicker,
+  Select,
   TextInput,
   Checkbox,
 } from "@trussworks/react-uswds";
@@ -426,7 +426,7 @@ export const AddErrorSupressionModal = ({
         show={showModal}
         errorMsgs={errorMsgs}
         save={saveFunc}
-        exitBTN={"Save and Close"}
+        exitBtn={"Save and Close"}
         showSave
         title={"Add Error Suppression"}
         close={close}
@@ -447,7 +447,7 @@ export const AddErrorSupressionModal = ({
                 >
                   Check Type
                 </Label>
-                <Dropdown
+                <Select
                   id={"add-check-type"}
                   name={"add-check-type"}
                   epa-testid={"add-check-type"}
@@ -465,7 +465,7 @@ export const AddErrorSupressionModal = ({
                       data-testid={d.checkTypeCode}
                     >{`${d.checkTypeDescription} (${d.checkTypeCode})`}</option>
                   ))}
-                </Dropdown>
+                </Select>
               </Grid>
               <Grid col={5}>
                 <Label
@@ -474,7 +474,7 @@ export const AddErrorSupressionModal = ({
                 >
                   Check Number
                 </Label>
-                <Dropdown
+                <Select
                   id={"add-check-number"}
                   name={"add-check-number"}
                   epa-testid={"add-check-number"}
@@ -491,7 +491,7 @@ export const AddErrorSupressionModal = ({
                       {d}
                     </option>
                   ))}
-                </Dropdown>
+                </Select>
               </Grid>
             </Grid>
             <Grid row gap={2} className="margin-top-2">
@@ -502,7 +502,7 @@ export const AddErrorSupressionModal = ({
                 >
                   Check Result
                 </Label>
-                <Dropdown
+                <Select
                   id={"add-check-result"}
                   name={"add-check-result"}
                   epa-testid={"add-check-result"}
@@ -519,7 +519,7 @@ export const AddErrorSupressionModal = ({
                       {d}
                     </option>
                   ))}
-                </Dropdown>
+                </Select>
               </Grid>
             </Grid>
             <Grid row gap={2}>
@@ -533,7 +533,7 @@ export const AddErrorSupressionModal = ({
                 >
                   Type
                 </Label>
-                <Dropdown
+                <Select
                   id={"add-severity-code"}
                   name={"add-severity-code"}
                   epa-testid={"add-severity-code"}
@@ -551,13 +551,13 @@ export const AddErrorSupressionModal = ({
                       {d.severityCode}
                     </option>
                   ))}
-                </Dropdown>
+                </Select>
               </Grid>
               <Grid col={5}>
                 <Label test-id={"add-reason"} htmlFor={"add-reason"}>
                   Reason
                 </Label>
-                <Dropdown
+                <Select
                   id={"add-reason"}
                   name={"add-reason"}
                   epa-testid={"add-reason"}
@@ -575,7 +575,7 @@ export const AddErrorSupressionModal = ({
                       {d.errorSuppressionReasonCode}
                     </option>
                   ))}
-                </Dropdown>
+                </Select>
               </Grid>
             </Grid>
             <Grid row gap={2}>
@@ -634,7 +634,7 @@ export const AddErrorSupressionModal = ({
                   <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
                     {selectedCheckResultObj.dataTypeLabel}
                   </Label>
-                  <Dropdown
+                  <Select
                     id={"add-fuel-type"}
                     name={"add-fuel-type"}
                     epa-testid={"add-fuel-type"}
@@ -648,7 +648,7 @@ export const AddErrorSupressionModal = ({
                         {d.label}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                 </Grid>
               </Grid>
             )}
@@ -681,7 +681,7 @@ export const AddErrorSupressionModal = ({
                   <Label test-id={"add-begin-hour"} htmlFor={"add-begin-hour"}>
                     Begin Hour
                   </Label>
-                  <Dropdown
+                  <Select
                     id={"add-begin-hour"}
                     name={"add-begin-hour"}
                     epa-testid={"add-begin-hour"}
@@ -695,7 +695,7 @@ export const AddErrorSupressionModal = ({
                         {h}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                 </Grid>
                 <Grid col={3}>
                   <Label htmlFor="add-end-date" id="add-end-date">
@@ -715,7 +715,7 @@ export const AddErrorSupressionModal = ({
                   <Label test-id={"add-end-hour"} htmlFor={"add-end-hour"}>
                     End Hour
                   </Label>
-                  <Dropdown
+                  <Select
                     id={"add-end-hour"}
                     name={"add-end-hour"}
                     epa-testid={"add-end-hour"}
@@ -729,7 +729,7 @@ export const AddErrorSupressionModal = ({
                         {h}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                 </Grid>
               </Grid>
             ) : null}
@@ -798,7 +798,7 @@ export const AddErrorSupressionModal = ({
                   >
                     Begin Quarter
                   </Label>
-                  <Dropdown
+                  <Select
                     id={"add-begin-quarter"}
                     name={"add-begin-quarter"}
                     epa-testid={"add-begin-quarter"}
@@ -812,7 +812,7 @@ export const AddErrorSupressionModal = ({
                         {yearquarter}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                 </Grid>
                 <Grid col={3}>
                   <Label
@@ -821,7 +821,7 @@ export const AddErrorSupressionModal = ({
                   >
                     End Quarter
                   </Label>
-                  <Dropdown
+                  <Select
                     id={"add-end-quarter"}
                     name={"add-end-quarter"}
                     epa-testid={"add-end-quarter"}
@@ -835,7 +835,7 @@ export const AddErrorSupressionModal = ({
                         {yearquarter}
                       </option>
                     ))}
-                  </Dropdown>
+                  </Select>
                 </Grid>
               </Grid>
             ) : null}

@@ -77,8 +77,8 @@ export async function logServerError(errorId, message, stackTrace) {
       data: {
         errorId,
         message,
-        stackTrace
-      }
+        stackTrace,
+      },
     });
   } catch (error) {
     handleError(error);

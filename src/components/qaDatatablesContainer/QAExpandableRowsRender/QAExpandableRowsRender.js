@@ -1043,7 +1043,7 @@ const QAExpandableRowsRender = ({
                 ? ` Edit ${dataTableName}`
                 : ` ${dataTableName}`
           }
-          exitBTN={`Save and Close`}
+          exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
           children={
             dropdownsLoaded ? (

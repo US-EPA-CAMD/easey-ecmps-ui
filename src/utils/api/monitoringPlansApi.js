@@ -1,18 +1,25 @@
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
+import { DatabaseContext } from "../constants/databaseContext";
 import { secureAxios } from "./easeyAuthApi";
 import { getFacilityById } from "./facilityApi";
 import download from "downloadjs";
 import axios from "axios";
 
-export const getApiUrl = (path, workspaceOnly = false) => {
-  let url = config.services.monitorPlans.uri;
-
-  if (workspaceOnly === true || window.location.href.includes("/workspace")) {
-    url = `${url}/workspace`;
+export const getApiUrl = (path, context) => {
+  const base = config.services.monitorPlans.uri;
+  switch (context) {
+    case DatabaseContext.OFFICIAL:
+      return `${base}${path}`;
+    case DatabaseContext.WORKSPACE:
+      return `${base}/workspace${path}`;
+    default:
+      if (window.location.href.includes("/workspace")) {
+        return `${base}/workspace${path}`;
+      } else {
+        return `${base}${path}`;
+      }
   }
-
-  return `${url}${path}`;
 };
 
 export const getMonitoringPlanById = async (id) => {
@@ -30,22 +37,23 @@ export const getMonitoringPlanById = async (id) => {
 export const getMonitoringPlans = async (
   orisCodes,
   monPlanIds = [],
-  forWorkspace = false,
-  submissionPeriods = [] //Added for polymorphism across data fetch calls
+  context = null
 ) => {
-  let queryString;
+  let queryString = "";
 
   if (typeof orisCodes === "number") {
     queryString = "orisCodes=" + orisCodes;
-  } else {
+  } else if (Array.isArray(orisCodes) && orisCodes.length > 0) {
     queryString = `orisCodes=${orisCodes.join("|")}`;
   }
 
-  if (monPlanIds.length > 0) {
+  if (typeof monPlanIds === "string") {
+    queryString = queryString + `&monPlanIds=${monPlanIds}`;
+  } else if (Array.isArray(monPlanIds) && monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  const url = getApiUrl(`/configurations?${queryString}`, forWorkspace);
+  const url = getApiUrl(`/configurations?${queryString}`, context);
   return secureAxios({
     method: "GET",
     url: url,
@@ -131,30 +139,24 @@ export const getMonitoringAnalyzerRanges = async (locId, componentRecordId) => {
 
 export const postCheckoutMonitoringPlanConfiguration = async (
   id,
-  handleError = true
+  shouldHandleError = true
 ) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
-  if (handleError) {
-    try {
-      return (
-        await secureAxios({
-          method: "POST",
-          url: url,
-        })
-      ).data;
-    } catch (error) {
-      return handleError(error);
-    }
-  } else {
-    return await secureAxios({
-      method: "POST",
-      url: url,
-    });
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
+  try {
+    return (
+      await secureAxios({
+        method: "POST",
+        url: url,
+      })
+    ).data;
+  } catch (error) {
+    if (!shouldHandleError) throw error;
+    return handleError(error);
   }
 };
 
 export const revertOfficialRecord = async (id) => {
-  const url = getApiUrl(`/plans/${id}/revert`, true);
+  const url = getApiUrl(`/plans/${id}/revert`, DatabaseContext.WORKSPACE);
   try {
     return (
       await secureAxios({
@@ -208,7 +210,7 @@ export const createMats = async (payload) => {
 };
 
 export const putLockTimerUpdateConfiguration = async (id) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
     return handleResponse(
       await secureAxios({
@@ -266,7 +268,7 @@ export const saveMonitoringMats = async (payload) => {
 };
 
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
-  const url = getApiUrl(`/check-outs/plans/${id}`, true);
+  const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
     return (
       await secureAxios({
@@ -281,10 +283,11 @@ export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
 
 // *** obtain a list of all checked out locations (by all users)
 export const getCheckedOutLocations = async () => {
+  // NOTE:XXX: Why do we need the current user to find all facilities?
   if (!localStorage.getItem("ecmps_user")) {
     return { data: [] };
   }
-  const url = getApiUrl(`/check-outs/plans`, true);
+  const url = getApiUrl(`/check-outs/plans`, DatabaseContext.WORKSPACE);
 
   return secureAxios({
     method: "GET",
@@ -868,6 +871,59 @@ export const createUnitCapacity = async (payload, urlParameters) => {
   }
 };
 
+export const getMonitoringPlansUnit = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const saveMonitoringPlansUnit = async (payload, urlParameters) => {
+  const url = getApiUrl(
+    `/locations/${urlParameters["locId"]}/units/${urlParameters["unitRecordId"]}`
+  );
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const getUnitProgram = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/unit-programs`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getReportingFrequency = async (selectedLocation) => {
+  const url = getApiUrl(
+    `/locations/${selectedLocation["id"]}/units/${selectedLocation["unitRecordId"]}/reporting-frequencies`
+  );
+  return secureAxios({
+    method: "GET",
+    url: url,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const getPCTQualifications = async (locationId, qualId) => {
   const url = getApiUrl(
     `/locations/${locationId}/qualifications/${qualId}/pct-qualifications`
@@ -1142,8 +1198,55 @@ export const getMonitoringPlanComments = async (monPlanId) => {
     .catch(handleError);
 };
 
-export const importMP = async (payload) => {
-  const url = getApiUrl(`/plans/import`);
+export const importMP = async (
+  payload,
+  { draft = false, shouldHandleError = true } = {}
+) => {
+  let url = getApiUrl(`/plans/import`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    if (!shouldHandleError) throw error;
+    return handleImportError(error);
+  }
+};
+
+export const createSingleUnitMP = async (
+  payload,
+  { draft = false, shouldHandleError = true } = {}
+) => {
+  let url = getApiUrl(`/plans/single-unit`);
+  if (draft) {
+    url = url + "?draft=true";
+  }
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    if (!shouldHandleError) throw error;
+    return handleImportError(error);
+  }
+};
+
+export const importStackPipe = async (payload, draft) => {
+  let url = getApiUrl(`/stack-pipes/import`, DatabaseContext.WORKSPACE);
+  if (draft) {
+    url = url + "?draft=true";
+  }
   try {
     return handleResponse(
       await secureAxios({

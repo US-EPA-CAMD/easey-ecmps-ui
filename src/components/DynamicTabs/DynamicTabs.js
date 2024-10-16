@@ -40,9 +40,9 @@ export const DynamicTabs = ({
 }) => {
   const [tabs, setTabs] = useState([]);
 
-  useEffect(()=>{
-    setTabs(tabsProps())
-  }, [tabsProps])
+  useEffect(() => {
+    setTabs(tabsProps());
+  }, [tabsProps]);
 
   const addTabsHandler = (newTabs) => {
     newTabs.forEach((t) => {
@@ -53,11 +53,13 @@ export const DynamicTabs = ({
             orisCode: t.orisCode,
             checkout: t.checkout,
             name: t.title,
-            location: [0, t.selectedConfig?.monitoringLocationData[0]?.id ?? null],
+            location: [
+              0,
+              t.selectedConfig?.monitoringLocationData?.[0]?.id ?? null,
+            ],
             section: [4, "Methods"], // watch out for this outside MP
             selectedConfig: t.selectedConfig,
             facId: t.selectedConfig.facId, // changed to id ??
-            // id: t.selectedConfig.locations[0].id,
             inactive: [false, false],
           },
           workspaceSection
@@ -74,10 +76,13 @@ export const DynamicTabs = ({
   };
 
   const removeTabsHandler = (index) => {
-    // setTimeout(()=>{
+    const prevTabCount = tabs.length;
     tabs.splice(index, 1);
     removeFacility(index, workspaceSection);
     setTabs([...tabs]);
+    if (currentTabIndex === prevTabCount - 1) {
+      setCurrentTabIndex(index - 1);
+    }
 
     setTimeout(() => {
       const elems = document.querySelectorAll(".tab-button");
@@ -85,8 +90,6 @@ export const DynamicTabs = ({
         elems[elems.length - 1].focus();
       }
     });
-
-    // },100)
   };
 
   const getModule = (item) => {
@@ -100,7 +103,8 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
+              removeTab={removeTabsHandler}
               title={item.title}
               user={user}
               checkout={item.checkout}
@@ -124,7 +128,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               isCheckedOut={item.checkout}
@@ -142,7 +146,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               isCheckedOut={item.checkout}
@@ -160,7 +164,7 @@ export const DynamicTabs = ({
               resetTimerFlag={item.component.resetTimerFlag}
               callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               checkout={item.checkout}
@@ -174,7 +178,7 @@ export const DynamicTabs = ({
           item.component = (
             <Export
               orisCode={item.orisCode}
-              selectedConfig={item.selectedConfig}
+              selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
               workspaceSection={workspaceSection}

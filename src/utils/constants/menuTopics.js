@@ -263,8 +263,21 @@ export const getWorkspacePaths = () => {
         config.app.submitterRole,
       ],
     },
+    ...(config.app.enableConfigurationManagementModule
+      ? [
+          {
+            name: "Configuration Management",
+            url: "/workspace/configuration-management",
+            requiredRoles: [
+              config.app.preparerRole,
+              config.app.sponsorRole,
+              config.app.initialAuthorizerRole,
+              config.app.submitterRole,
+            ],
+          },
+        ]
+      : []),
   ];
 
   return workSpace;
 };
-

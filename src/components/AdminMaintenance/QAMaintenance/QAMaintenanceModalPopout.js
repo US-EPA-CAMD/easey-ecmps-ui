@@ -1,18 +1,22 @@
 import React, { useRef } from "react";
 import { Label, Textarea, Alert } from "@trussworks/react-uswds";
 import Modal from "../../Modal/Modal";
-import { certEventLabel, testExtensionExemptionLabel, testSummaryLabel } from "../FilterFormAdmin/FilterFormAdmin";
+import {
+  certEventLabel,
+  testExtensionExemptionLabel,
+  testSummaryLabel,
+} from "../FilterFormAdmin/FilterFormAdmin";
 import {
   updateQaCertEventMaintenanceRecords,
   updateQaExtensionExemptionMaintenanceRecords,
   updateQaTestMaintenanceRecords,
   deleteQaCertEventMaintenanceRecords,
   deleteQaTestMaintenanceRecords,
-  deleteQaExtensionExemptionMaintenanceRecords
+  deleteQaExtensionExemptionMaintenanceRecords,
 } from "../../../utils/api/adminManagementApi";
 
-export const QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION = 'require-resubmission'
-export const QA_MAINTENANCE_MODAL_DELETE = 'delete'
+export const QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION = "require-resubmission";
+export const QA_MAINTENANCE_MODAL_DELETE = "delete";
 
 const QAMaintenanceModalPopout = ({
   showModal,
@@ -22,10 +26,9 @@ const QAMaintenanceModalPopout = ({
   selectedRows,
   setReloadTableData,
 }) => {
-
-  let modalContent
+  let modalContent;
   if (action === QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION) {
-    modalContent =
+    modalContent = (
       <QAMaintenanceRequireResubmissionPopout
         showModal={showModal}
         closeModalHandler={closeModalHandler}
@@ -33,8 +36,9 @@ const QAMaintenanceModalPopout = ({
         selectedRows={selectedRows}
         setReloadTableData={setReloadTableData}
       />
+    );
   } else if (action === QA_MAINTENANCE_MODAL_DELETE) {
-    modalContent =
+    modalContent = (
       <QAMaintenanceDeletePopout
         showModal={showModal}
         closeModalHandler={closeModalHandler}
@@ -42,31 +46,30 @@ const QAMaintenanceModalPopout = ({
         selectedRows={selectedRows}
         setReloadTableData={setReloadTableData}
       />
+    );
   }
 
-  return (
-    modalContent
-  )
-}
+  return modalContent;
+};
 
 const getFunctionsAndIdentifiers = (typeSelection) => {
   let updateFunc;
   let deleteFunc;
-  const identifier = 'id';
+  const identifier = "id";
 
   switch (typeSelection) {
     case testSummaryLabel:
       updateFunc = updateQaTestMaintenanceRecords;
       deleteFunc = deleteQaTestMaintenanceRecords;
-      break
+      break;
     case certEventLabel:
       updateFunc = updateQaCertEventMaintenanceRecords;
       deleteFunc = deleteQaCertEventMaintenanceRecords;
-      break
+      break;
     case testExtensionExemptionLabel:
       updateFunc = updateQaExtensionExemptionMaintenanceRecords;
       deleteFunc = deleteQaExtensionExemptionMaintenanceRecords;
-      break
+      break;
     default:
       throw new Error(`type selection of ${typeSelection} does not exist`);
   }
@@ -75,8 +78,8 @@ const getFunctionsAndIdentifiers = (typeSelection) => {
     updateFunc,
     deleteFunc,
     identifier,
-  }
-}
+  };
+};
 
 const QAMaintenanceRequireResubmissionPopout = ({
   showModal,
@@ -85,17 +88,18 @@ const QAMaintenanceRequireResubmissionPopout = ({
   selectedRows,
   setReloadTableData,
 }) => {
-  const inputRef = useRef('');
+  const inputRef = useRef("");
 
   const handleSave = async () => {
-    const { identifier, updateFunc } = getFunctionsAndIdentifiers(typeSelection);
-    const selectedIds = selectedRows.map(row => row[identifier]);
+    const { identifier, updateFunc } =
+      getFunctionsAndIdentifiers(typeSelection);
+    const selectedIds = selectedRows.map((row) => row[identifier]);
 
     try {
       const payload = {
-        resubExplanation: inputRef.current.value
-      }
-      const promises = selectedIds.map(id => updateFunc(payload, id));
+        resubExplanation: inputRef.current.value,
+      };
+      const promises = selectedIds.map((id) => updateFunc(payload, id));
       await Promise.all(promises);
       setReloadTableData(true);
     } catch (e) {
@@ -103,31 +107,31 @@ const QAMaintenanceRequireResubmissionPopout = ({
     } finally {
       closeModalHandler();
     }
-  }
+  };
 
   return (
     <Modal
       showDarkBg
       show={showModal}
       save={handleSave}
-      exitBTN='Save and Close'
+      exitBtn="Save and Close"
       showSave
-      title='Require Resubmission'
+      title="Require Resubmission"
       close={closeModalHandler}
       width="40%"
       left="30%"
       returnFocus={true}
     >
       <ReasonForActionTextInput
-        title='Reason to require resubmission'
+        title="Reason to require resubmission"
         action={QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION}
         inputRef={inputRef}
-        className='margin-y-2'
+        className="margin-y-2"
         disabled={false}
       />
-    </Modal >
-  )
-}
+    </Modal>
+  );
+};
 
 const QAMaintenanceDeletePopout = ({
   showModal,
@@ -136,14 +140,13 @@ const QAMaintenanceDeletePopout = ({
   selectedRows,
   setReloadTableData,
 }) => {
-
   const handleSave = async () => {
-
-    const { identifier, deleteFunc } = getFunctionsAndIdentifiers(typeSelection);
-    const selectedIds = selectedRows.map(row => row[identifier]);
+    const { identifier, deleteFunc } =
+      getFunctionsAndIdentifiers(typeSelection);
+    const selectedIds = selectedRows.map((row) => row[identifier]);
 
     try {
-      const promises = selectedIds.map(id => deleteFunc(id));
+      const promises = selectedIds.map((id) => deleteFunc(id));
       await Promise.all(promises);
       setReloadTableData(true);
     } catch (e) {
@@ -151,14 +154,14 @@ const QAMaintenanceDeletePopout = ({
     } finally {
       closeModalHandler();
     }
-  }
+  };
 
   return (
     <Modal
       showDarkBg
       show={showModal}
       save={handleSave}
-      exitBTN={"Delete"}
+      exitBtn={"Delete"}
       showSave
       title={"Delete QA/Cert Data"}
       close={closeModalHandler}
@@ -168,21 +171,27 @@ const QAMaintenanceDeletePopout = ({
     >
       <h3>Are you sure you want to continue?</h3>
 
-      <Alert type="error" slim>
+      <Alert headingLevel="h4" type="error" slim>
         Are you sure you want to Delete? This action cannot be undone.
       </Alert>
+    </Modal>
+  );
+};
 
-    </Modal >
-  )
-}
-
-const ReasonForActionTextInput = ({ title, action, inputRef, className, disabled = false }) => {
-
-  const reasonToAction = `reason-to-${action}`
+const ReasonForActionTextInput = ({
+  title,
+  action,
+  inputRef,
+  className,
+  disabled = false,
+}) => {
+  const reasonToAction = `reason-to-${action}`;
 
   return (
     <div className={className}>
-      <Label htmlFor={reasonToAction} id={`${reasonToAction}-label`}>{title}</Label>
+      <Label htmlFor={reasonToAction} id={`${reasonToAction}-label`}>
+        {title}
+      </Label>
       <Textarea
         className="maxw-full"
         id={reasonToAction}
@@ -194,7 +203,7 @@ const ReasonForActionTextInput = ({ title, action, inputRef, className, disabled
         disabled={disabled}
       />
     </div>
-  )
-}
+  );
+};
 
-export default QAMaintenanceModalPopout
+export default QAMaintenanceModalPopout;
