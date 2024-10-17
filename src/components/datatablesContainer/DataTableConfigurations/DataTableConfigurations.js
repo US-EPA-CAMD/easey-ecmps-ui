@@ -140,8 +140,7 @@ export const DataTableConfigurations = ({
     };
     // Call the callback function
     callbackFunction();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, orisCode]);
 
   useEffect(() => {
     if (dataLoaded) {

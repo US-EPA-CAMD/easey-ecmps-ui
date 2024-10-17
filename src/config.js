@@ -109,6 +109,10 @@ export const config = {
       "REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE",
       true
     ),
+    enableConfigurationManagementModule: getConfigValueBoolean(
+      "REACT_APP_EASEY_ECMPS_UI_ENABLE_CONFIGURATION_MANAGEMENT_MODULE",
+      true
+    ),
 
 
     oidcClientId: getConfigValue("REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID"),
@@ -187,6 +191,8 @@ if (config.app.enableDebug) {
 
 if (config.app.env === "production") {
   log.setLevel(log.levels.ERROR);
+} else {
+  log.setLevel(log.levels.TRACE);
 }
 
 export default config;

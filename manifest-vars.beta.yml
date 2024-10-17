@@ -6,6 +6,7 @@ inactivityDurationMinutes: 30
 googleAnalyticsEnabled: true
 cdxBaseUrl: test.epacdx.net
 cbsBaseUrl: camd.epa.gov
+enableConfigurationManagementModule: false
 enableSystemAdminstrationModule: false
 tokenRefreshThresholdSeconds: 5
 

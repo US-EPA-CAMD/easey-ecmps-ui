@@ -12,10 +12,9 @@ describe("EvaluateRefresh Component", () => {
     await act(async () => {
       render(
         <EvaluateRefresh
-          dataList={{
-            monPlan: {
+          dataList={[
+            {
               ref: { current: [{ monPlanId: "test", evalStatusCode: "PASS" }] },
-              state: jest.fn(),
               call: callFunc.mockResolvedValue({
                 data: [
                   {
@@ -25,8 +24,10 @@ describe("EvaluateRefresh Component", () => {
                 ],
               }),
               rowId: "monPlanId",
+              name: "Monitoring Plan",
+              type: "MP",
             },
-          }}
+          ]}
           storedFilters={{
             current: {
               orisCodes: [],
@@ -42,8 +43,8 @@ describe("EvaluateRefresh Component", () => {
 
   it("Fast forward timer and expect mock calls to have been made", async () => {
     await act(async () => {
-       jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
+      jest.advanceTimersByTime(config.app.refreshEvalStatusRate);
     });
-    expect(callFunc).toHaveBeenCalled();;
+    expect(callFunc).toHaveBeenCalled();
   });
 });

@@ -306,8 +306,7 @@ export const DataTableRender = ({
 
                     {workspaceSection !== EXPORT_STORE_NAME &&
                     isAnyLocationCheckedOutByUser() === false &&
-                    isLocationCheckedOut(row["facId"]) === false &&
-                    row["col2"] === "Active" ? (
+                    isLocationCheckedOut(row["facId"]) === false ? (
                       <>
                         <span className="margin-x-1">|</span>
                         <Button
@@ -586,7 +585,11 @@ export const DataTableRender = ({
               {...ariaLabelProp}
             />{" "}
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user && allowToCreateNewData && !nonEditable ? (
+              {addBtn &&
+              checkout &&
+              user &&
+              allowToCreateNewData &&
+              !nonEditable ? (
                 <div className="padding-y-1">
                   <Button
                     type="button"
@@ -632,7 +635,11 @@ export const DataTableRender = ({
               )}
             </div>
             <div className={`${headerStyling}`}>
-              {addBtn && checkout && user && allowToCreateNewData && !nonEditable ? (
+              {addBtn &&
+              checkout &&
+              user &&
+              allowToCreateNewData &&
+              !nonEditable ? (
                 <h2 className="padding-0 page-subheader">
                   <div className="padding-y-1">
                     <Button

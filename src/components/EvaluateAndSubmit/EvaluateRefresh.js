@@ -11,10 +11,10 @@ export const EvaluateRefresh = ({
   
   const refreshPage = async () => {
     if (storedFilters.current !== null) {
-      for (const [key, value] of Object.entries(dataList)) {
+      for (const value of dataList) {
         let data;
 
-        const { ref, rowId, call } = value;
+        const { ref, rowId, call, type: key } = value;
 
         if (key !== "MP") {
           //Filter emissions by quarter as well
