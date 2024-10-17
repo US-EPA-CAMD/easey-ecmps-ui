@@ -8,7 +8,7 @@ import {
   Fieldset,
 } from "@trussworks/react-uswds";
 
-import {determinePolicy, getLoginState} from "../../utils/api/easeyAuthApi";
+import {determinePolicy, getLoginState, getPermissions} from "../../utils/api/easeyAuthApi";
 
 import LoadingModal from "../LoadingModal/LoadingModal";
 import userAccountStatusProps from './userAccountStatusProps'; // Adjust the import path as necessary
@@ -99,6 +99,7 @@ const Login = ({ isModal, closeModalHandler, isLoginDisabled = false, showSystem
     }
   };
 
+  
   if (isLoginDisabled) {
       return (
           <div className="padding-1">

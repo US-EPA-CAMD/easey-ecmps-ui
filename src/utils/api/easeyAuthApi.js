@@ -228,6 +228,17 @@ export const refreshToken = async () => {
   }
 };
 
+export const getPermissions = async (userId) => {
+  try {
+    return await secureAxios({
+      method: "GET",
+      url: `${config.services.authApi.uri}/permissions?userId=${userId}`,
+    });
+  } catch (err) {
+    displayAppError(err.response?.data?.message || err?.message || err);
+  }
+};
+
 export const createActivity = async (payload) => {
   return secureAxios({
     method: "POST",
