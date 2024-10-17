@@ -55,8 +55,13 @@ const AboutHome = ({ user, setCurrentLink }) => {
     //get the current user
     const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
 
-    //check if the user has initial authorizer role with no responsibilities
-    if (cdxUser?.roles?.includes(config.app.initialAuthorizerRole) && Object.keys(cdxUser?.facilities || {}).length === 0)
+    //check if the user has any IA, Sponsor, Submitter or Preparer role(s) with no responsibilities
+    if (
+      ( cdxUser?.roles?.includes(config.app.initialAuthorizerRole) ||
+        cdxUser?.roles?.includes(config.app.sponsorRole) ||
+        cdxUser?.roles?.includes(config.app.submitterRole) ||
+        cdxUser?.roles?.includes(config.app.preparerRole) ) && 
+        Object.keys(cdxUser?.facilities || {}).length === 0)
     {
       //display the warning message on the home page
       const warningMessage = 'You have no facilities for which you are responsible. Please login to CBS to review and add facilities for which you are responsible.';
