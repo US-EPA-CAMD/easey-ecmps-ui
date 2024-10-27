@@ -5,6 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
+
 import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions, createActivity, validate } from "./easeyAuthApi";
 
 delete window.location;
@@ -297,8 +298,7 @@ describe("Easey Auth API", () => {
   
     expect(response.data.activityId).toEqual(123);
   });
-  
-
+ 
   it("refreshLastActivity", async () => {
 
     mock
