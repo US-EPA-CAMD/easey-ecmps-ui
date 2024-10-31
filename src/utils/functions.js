@@ -7,7 +7,6 @@ import {
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 import { isNumber } from "lodash";
-import log from "loglevel";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
