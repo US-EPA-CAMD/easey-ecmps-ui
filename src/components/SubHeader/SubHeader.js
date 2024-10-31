@@ -14,6 +14,7 @@ import "./SubHeader.scss";
 import {getLoginState, logOut} from "../../utils/api/easeyAuthApi";
 import Modal from "../Modal/Modal";
 import Login from "../Login/Login";
+import { getContent } from "../../utils/api/contentApi";
 
 export const SubHeader = ({ user, setCurrentLink }) => {
   let initials = "xx";
@@ -22,7 +23,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   }
 
   const [userProfileExpanded, setUserProfileExpanded] = useState(false);
-  const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState('');
+  const [maintenanceContent, setMaintenanceContent] = useState();
 
   const [userProfileIcon, setUserProfileIcon] = useState(
     "/images/icons/menu-item-expand.svg"
@@ -96,12 +98,23 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   useEffect(() => {
     getLoginState()
       .then((response) => {
-        setIsLoginDisabled(response.data.isDisabled);
+        setApplicationStatus(response.data.status);
       })
       .catch(err => {
-        setIsLoginDisabled(false);
+        if("err", err.response.status === 503){
+          setApplicationStatus("DOWN");
+        }
       });
   }, []);
+
+  useEffect(() => {
+    if(applicationStatus && applicationStatus === "DOWN"){
+      getContent("/ecmps/login/maintenance.md").then((resp) => {
+        setMaintenanceContent(resp.data);
+      });
+    }
+    
+  }, [applicationStatus]);
 
   useEffect(() => {
     setCategorySelected([false, false, false, false, false]);
@@ -344,7 +357,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     show={show}
                     close={closeModalHandler}
                     returnFocus={true}
-                    children={<Login isModal={true} isLoginDisabled={isLoginDisabled} closeModalHandler={closeModalHandler} />}
+                    children={<Login isModal={true} maintenanceContent={maintenanceContent} closeModalHandler={closeModalHandler} />}
                   />
                 ) : null}
               </span>
