@@ -20,7 +20,7 @@ import {
   submitData,
   triggerBulkEvaluation,
 } from "../../utils/api/camdServices";
-import { handleError } from "../../utils/api/apiUtils";
+import { handleError, parseErrorMessage } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
 import { EvaluateRefresh } from "./EvaluateRefresh";
@@ -248,8 +248,6 @@ export const EvaluateAndSubmit = ({
   const checkOutLocationsOrRollback = async () => {
     const checkedOutLocations = (await getCheckedOutLocations()).data;
 
-    console.log(checkedOutLocations);
-
     const checkOutMapping = new Map();
     for (const loc of checkedOutLocations) {
       checkOutMapping.set(loc.monPlanId, loc.checkedOutBy);
@@ -418,7 +416,7 @@ export const EvaluateAndSubmit = ({
     }
 
     try {
-      await callback(payload);
+      await callback(payload, false);
       //checkInAllCheckedOutLocations();
       setSubmitting(false);
       if (componentType === "Submission") {
@@ -442,7 +440,7 @@ export const EvaluateAndSubmit = ({
       if (componentType === "Submission") {
         modalType.current = "error";
         modalHeading.current = "Error";
-        modalMessage.current = e.message;
+        modalMessage.current = parseErrorMessage(e);
         setShowSuccessModal(true);
       } else {
         handleError(e);

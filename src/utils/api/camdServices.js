@@ -32,17 +32,26 @@ export async function downloadReport(params) {
   });
 }
 
-export async function submitData(payload) {
+export async function submitData(
+  payload,
+  shouldHandleError = true,
+) {
   return secureAxios({
     method: "POST",
     url: `${config.services.camd.uri}/submission/queue`,
     data: payload,
   })
     .then(handleResponse)
-    .catch(handleError);
+    .catch((error) => {
+      if (!shouldHandleError) throw error;
+      return handleError(error);
+    });
 }
 
-export const triggerBulkEvaluation = async (payload) => {
+export const triggerBulkEvaluation = async (
+  payload,
+  shouldHandleError = true,
+) => {
   let url = `${config.services.camd.uri}`;
   url = `${url}/evaluate`;
 
@@ -55,7 +64,8 @@ export const triggerBulkEvaluation = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    if (!shouldHandleError) throw error;
+    return handleError(error);
   }
 };
 
