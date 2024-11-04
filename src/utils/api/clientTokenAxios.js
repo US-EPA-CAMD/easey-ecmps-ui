@@ -17,6 +17,7 @@ export const clientTokenAxios = async (options) => {
     authorization: `Bearer ${localStorage.getItem("client_token")}`,
     "x-api-key": config.app.apiKey,
     "x-client-id": config.app.clientId,
+    "x-client-token": `Bearer ${localStorage.getItem("client_token")}`
   };
 
   return axios(options);
