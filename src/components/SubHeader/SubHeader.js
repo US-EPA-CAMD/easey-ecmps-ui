@@ -101,7 +101,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
         setApplicationStatus(response.data.status);
       })
       .catch(err => {
-        if("err", err.response.status === 503){
+        if(err.response.status === 503){
           setApplicationStatus("DOWN");
         }
       });
