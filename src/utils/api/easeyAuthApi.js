@@ -1,9 +1,9 @@
 import axios from "axios";
 import config from "../../config";
-import {checkoutAPI} from "../../additional-functions/checkout";
-import {getCheckedOutLocations} from "./monitoringPlansApi";
-import {displayAppError} from "../../additional-functions/app-error";
-import {currentDateTime} from "../functions";
+import { checkoutAPI } from "../../additional-functions/checkout";
+import { getCheckedOutLocations } from "./monitoringPlansApi";
+import { displayAppError } from "../../additional-functions/app-error";
+import { currentDateTime } from "../functions";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -14,6 +14,19 @@ axios.defaults.headers.common = {
 export const secureAxios = async (options) => {
   try {
     const ecmpsUser = localStorage.getItem("ecmps_user");
+    
+    if (localStorage.getItem("client_token")) {
+      if (
+        new Date() > new Date(localStorage.getItem("client_token_expiration"))
+      ) {
+        await refreshClientToken();
+      }
+    } else {
+      await refreshClientToken();
+    }
+
+    const clientToken = localStorage.getItem("client_token");
+
     if (ecmpsUser) {
       const token = await refreshToken();
 
@@ -22,11 +35,15 @@ export const secureAxios = async (options) => {
           ...options.headers,
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
+          "x-client-token": `Bearer ${clientToken}`,
+          "x-client-id": config.app.clientId,
         };
       } else {
         options.headers = {
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
+          "x-client-token": `Bearer ${clientToken}`,
+          "x-client-id": config.app.clientId,
         };
       }
     } else {
@@ -34,10 +51,14 @@ export const secureAxios = async (options) => {
         options.headers = {
           ...options.headers,
           "x-api-key": config.app.apiKey,
+          "x-client-token": `Bearer ${clientToken}`,
+          "x-client-id": config.app.clientId,
         };
       } else {
         options.headers = {
           "x-api-key": config.app.apiKey,
+          "x-client-token": `Bearer ${clientToken}`,
+          "x-client-id": config.app.clientId,
         };
       }
     }
@@ -84,15 +105,19 @@ export const refreshLastActivity = async () => {
 };
 
 export const determinePolicy = async (payload) => {
-    try {
-      return await axios.post(`${config.services.authApi.uri}/authentication/determinePolicy`, payload);
-    } catch (e) {
-      throw e;
-    }
+  try {
+    return secureAxios({
+      method: "POST",
+      url: `${config.services.authApi.uri}/authentication/determinePolicy`,
+      data: payload,
+    })
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const authenticate = async (payload) => {
-  return axios({
+  return secureAxios({
     method: "POST",
     url: `${config.services.authApi.uri}/authentication/sign-in`,
     data: payload,
@@ -111,8 +136,8 @@ function storeUser(response) {
   const currDate = currentDateTime();
   currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
   localStorage.setItem(
-      "ecmps_session_expiration",
-      currDate.toLocaleString()
+    "ecmps_session_expiration",
+    currDate.toLocaleString()
   );
 
   // Remove the sessionID and other extraneous from the URL if we just logged in
@@ -125,9 +150,9 @@ function storeUser(response) {
   }
 
   if (
-      window.location.pathname.includes("/workspace") ||
-      window.location.pathname.endsWith("/home") ||
-      window.location.pathname.endsWith("/")
+    window.location.pathname.includes("/workspace") ||
+    window.location.pathname.endsWith("/home") ||
+    window.location.pathname.endsWith("/")
   ) {
     window.location.reload();
   } else {
@@ -251,9 +276,8 @@ export const createActivity = async (payload) => {
 export const getCredentials = async (monitorPlans) => {
   return secureAxios({
     method: "GET",
-    url: `${
-      config.services.authApi.uri
-    }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+    url: `${config.services.authApi.uri
+      }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
   });
 };
 
