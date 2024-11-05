@@ -5,7 +5,7 @@ import * as monitoringPlansApi from "./monitoringPlansApi"
 import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity } from "./easeyAuthApi";
+import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -256,6 +256,17 @@ describe("Easey Auth API", () => {
       .reply(200, {});
 
     expect((await getCredentials(monitorPlans)).data).toEqual({});
+  });
+
+  it("getPermissions", async () => {
+    const userId = 1;
+    mock
+      .onGet(
+        `${config.services.authApi.uri}/permissions?userId=${userId}`
+      )
+      .reply(200, []);
+
+    expect((await getPermissions(userId)).data).toEqual([]);
   });
 
   it("refreshLastActivity", async () => {
