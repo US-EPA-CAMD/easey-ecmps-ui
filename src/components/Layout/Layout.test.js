@@ -19,6 +19,7 @@ describe('Layout', () => {
   beforeEach(() => {
     jest.spyOn(contentApi, "getContent").mockResolvedValue({ data: testContent })
   });
+  // skip layout test due to jest worker encountered 4 child process exceptions, exceeding retry limit
   it.skip('renders Layout component', () => {
     let renderer
 
