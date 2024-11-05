@@ -2,44 +2,7 @@ import axios from "axios";
 
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
-import { refreshToken } from "./easeyAuthApi";
-import { displayAppError } from "../../additional-functions/app-error";
-
-const secureAxios = async (options) => {
-  try {
-    const ecmpsUser = localStorage.getItem("ecmps_user");
-    if (ecmpsUser) {
-      const token = await refreshToken();
-
-      if (options["headers"]) {
-        options.headers = {
-          ...options.headers,
-          authorization: `Bearer ${token}`,
-          "x-api-key": config.app.apiKey,
-        };
-      } else {
-        options.headers = {
-          authorization: `Bearer ${token}`,
-          "x-api-key": config.app.apiKey,
-        };
-      }
-    } else {
-      if (options["headers"]) {
-        options.headers = {
-          ...options.headers,
-          "x-api-key": config.app.apiKey,
-        };
-      } else {
-        options.headers = {
-          "x-api-key": config.app.apiKey,
-        };
-      }
-    }
-  } catch (e) {
-    displayAppError(e);
-  }
-  return axios(options);
-};
+import { secureAxios } from "./easeyAuthApi"
 
 const getApiUrl = (path = "") => {
   let url = config.services.qaCertification.uri;
