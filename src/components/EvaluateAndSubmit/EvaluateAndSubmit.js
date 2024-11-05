@@ -439,15 +439,15 @@ export const EvaluateAndSubmit = ({
         forceReloadTables();
       }
     } catch (e) {
+      setSubmitting(false);
       if (componentType === "Submission") {
         modalType.current = "error";
         modalHeading.current = "Error";
-        modalMessage.current = e.message;
+        modalMessage.current = "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
       }
-      setSubmitting(false);
     }
   };
 
