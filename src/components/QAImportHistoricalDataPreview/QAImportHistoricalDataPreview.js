@@ -41,6 +41,7 @@ export const QAImportHistoricalDataPreview = ({
   setDisablePortBtn,
   orisCode,
   showTestSummaryTable = true,
+  setJsonSchemaVersion
 }) => {
   const [reportingPeriodObj, setReportingPeriodObj] = useState(null);
   const [tableData, setTableData] = useState(null);
@@ -69,6 +70,7 @@ export const QAImportHistoricalDataPreview = ({
           setTableData(response.data);
           setPreviewData(true);
           setLoading(false);
+          setJsonSchemaVersion(response.data?.version)
           const dataKeys = showTestSummaryTable
             ? [TEST_SUMMARY_KEY]
             : [CERT_EVENT_KEY, TEST_EXT_EXE_KEY];
