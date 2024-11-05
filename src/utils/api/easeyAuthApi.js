@@ -17,10 +17,8 @@ export const secureAxios = async (options) => {
     const ecmpsUser = localStorage.getItem("ecmps_user");
 
     if (localStorage.getItem("client_token")) {
-      const now = new Date();
-      const oneHoure = new Date(now.getTime() + 60 * 60 * 1000);
       if (
-        oneHoure > new Date(localStorage.getItem("client_token_expiration"))
+        new Date() > new Date(localStorage.getItem("client_token_expiration"))
       ) {
         await refreshClientToken();
       }
