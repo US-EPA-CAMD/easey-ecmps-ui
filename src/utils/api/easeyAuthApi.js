@@ -4,6 +4,7 @@ import { checkoutAPI } from "../../additional-functions/checkout";
 import { getCheckedOutLocations } from "./monitoringPlansApi";
 import { displayAppError } from "../../additional-functions/app-error";
 import { currentDateTime } from "../functions";
+import { handleResponse, handleError } from "./apiUtils";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
@@ -14,10 +15,12 @@ axios.defaults.headers.common = {
 export const secureAxios = async (options) => {
   try {
     const ecmpsUser = localStorage.getItem("ecmps_user");
-    
+
     if (localStorage.getItem("client_token")) {
+      const now = new Date();
+      const oneHoure = new Date(now.getTime() + 60 * 60 * 1000);
       if (
-        new Date() > new Date(localStorage.getItem("client_token_expiration"))
+        oneHoure > new Date(localStorage.getItem("client_token_expiration"))
       ) {
         await refreshClientToken();
       }
@@ -105,15 +108,12 @@ export const refreshLastActivity = async () => {
 };
 
 export const determinePolicy = async (payload) => {
-  try {
-    return secureAxios({
-      method: "POST",
-      url: `${config.services.authApi.uri}/authentication/determinePolicy`,
-      data: payload,
-    })
-  } catch (e) {
-    throw e;
-  }
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.authApi.uri}/authentication/determinePolicy`,
+    data: payload,
+  }).then(handleResponse)
+    .catch(handleError);
 };
 
 export const authenticate = async (payload) => {
