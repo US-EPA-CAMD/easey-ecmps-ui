@@ -77,6 +77,7 @@ export const QACertEventHeaderInfo = ({
   const [lockedFacility, setLockedFacility] = useState(false);
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
+  const [jsonSchemaVersion, setJsonSchemaVersion] = useState("");
 
   const qaCertEventOptions = [
     { name: "QA Certification Event" },
@@ -166,9 +167,9 @@ export const QACertEventHeaderInfo = ({
         .map((location) => location["monPlanId"])
         .indexOf(selectedConfig.id) > -1 &&
       configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
+      configs
+        .map((location) => location["monPlanId"])
+        .indexOf(selectedConfig.id)
       ]["checkedOutBy"] === user["userId"]
     );
   };
@@ -181,9 +182,9 @@ export const QACertEventHeaderInfo = ({
       setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
       const result =
         checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
+        checkedOutConfigs
+          .map((con) => con["monPlanId"])
+          .indexOf(selectedConfig.id)
         ];
       if (result) {
         setLockedFacility(true);
@@ -276,6 +277,7 @@ export const QACertEventHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
+      version: jsonSchemaVersion,
       ...selectedHistoricalData,
     };
     importQABtn(payload);
@@ -304,9 +306,8 @@ export const QACertEventHeaderInfo = ({
       if (user) {
         // when config is checked out by someone
         if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
+          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
+            } ${formatDate(currentConfig["checkedOutOn"])}`;
         }
         // when config is not checked out
         return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
@@ -443,14 +444,13 @@ export const QACertEventHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${
-          showImportModal ||
+        className={`usa-overlay ${showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? "is-visible"
-            : ""
-        }`}
+          ? "is-visible"
+          : ""
+          }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
@@ -570,6 +570,7 @@ export const QACertEventHeaderInfo = ({
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
               showTestSummaryTable={false}
+              setJsonSchemaVersion={setJsonSchemaVersion}
             />
           }
         />
