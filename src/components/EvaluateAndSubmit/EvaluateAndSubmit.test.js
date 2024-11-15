@@ -4,6 +4,7 @@ import EvaluateAndSubmit from "./EvaluateAndSubmit";
 import { Provider } from "react-redux";
 import configureStore from "../../store/configureStore.dev";
 
+import * as easeyAuthApi from "../../utils/api/easeyAuthApi";
 import * as monitorPlanApi from "../../utils/api/monitoringPlansApi";
 import * as qaApi from "../../utils/api/qaCertificationsAPI";
 import * as emissionsApi from "../../utils/api/emissionsApi";
@@ -60,6 +61,14 @@ describe("- Evaluate And Submit -", () => {
       .spyOn(helperFunctions, "getDropDownFacilities")
       .mockResolvedValue(getMockFacilityDropwdownList());
     jest.spyOn(contentApi, "getContent").mockResolvedValue({ data: "" });
+
+    jest.spyOn(easeyAuthApi, "validate").mockResolvedValue({
+      data: {
+        hasValidationError: false,
+        validationErrorHeading: "Validation Error",
+        validationErrorMessage: "There was a validation error",
+      },
+    });
   });
 
   afterEach(() => {
