@@ -669,7 +669,6 @@ export const DataTableSystems = ({
     userInput.componentId = selectedRangeInFirst.componentId;
     userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
     userInput.basisCode = selectedRangeInFirst.basisCode;
-    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode =
       selectedRangeInFirst.sampleAcquisitionMethodCode;
 
