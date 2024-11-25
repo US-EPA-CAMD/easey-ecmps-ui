@@ -678,27 +678,40 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
-    try {
-      const resp = await mpApi
-        .saveSystemsComponents(
-          userInput,
-          selectedSystem.locationId,
-          selectedSystem.id,
-          selectedRangeInFirst.id
-        )
-        .catch((error) => console.log("saveSystemsComponents failed", error));
-      if (resp.status >= 200 && resp.status < 300) {
-        setupdateComponentTable(true);
-        setUpdateRelatedTables(true);
-        setErrorMsgs([]);
-        return true;
-      } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
-      }
-    } catch (error) {
-      setErrorMsgs([JSON.stringify(error)]);
+    
+   try {
+    let resp;
+    let response;
+
+    response = await mpApi
+    .saveComponents(
+      userInput,
+      selectedSystem.locationId,
+      selectedRangeInFirst.componentId
+    )
+    .catch((error) => console.log("saveComponents failed", error));
+
+    resp = await mpApi
+    .saveSystemsComponents(
+      userInput,
+      selectedSystem.locationId,
+      selectedSystem.id,
+      selectedRangeInFirst.id
+    )
+    .catch((error) => console.log("saveSystemsComponents failed", error));
+
+    if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
+      setupdateComponentTable(true);
+      setUpdateRelatedTables(true);
+      setErrorMsgs([]);
+      return true;
+    } else {
+      const errorResp = Array.isArray(resp) ? resp : [resp];
+      setErrorMsgs(errorResp);
     }
+  } catch (error) {
+    setErrorMsgs(JSON.stringify(error));
+  }
     return false;
   };
 
