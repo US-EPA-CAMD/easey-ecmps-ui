@@ -654,7 +654,7 @@ export const DataTableSystems = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs(JSON.stringify(error));
+      setErrorMsgs([JSON.stringify(error)]);
     }
     return false;
   };
