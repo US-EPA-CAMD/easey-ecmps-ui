@@ -141,7 +141,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
       
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {
-            //reaplce all the \ with /, exclude \r and \n
+            //replaced all the \ with /, exclude \r and \n
             columnValue = columnValue.replace(/\\(?![rn])/g, '/');
             if (columnValue.includes("\r\n")) {
               return `${columnNumber}"${columnValue.replace(
