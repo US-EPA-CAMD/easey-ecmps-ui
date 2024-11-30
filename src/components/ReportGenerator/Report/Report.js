@@ -118,18 +118,18 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     results.push(
       detail.results.map((row) => {
         const columnData = detailColumns.values.map((column, index) => {
-          const columnValue = row[column.name];
+          var columnValue = row[column.name];
           const codeGroup = row[column.name + "Group"];
           const codeDescription = row[column.name + "Description"];
-
+      
           if (codeGroup) {
             let group = findGroupByName(groups, codeGroup);
-
+      
             if (!group) {
               group = { name: codeGroup, items: [] };
               groups.push(group);
             }
-
+      
             const code = findItemByCode(group.items, columnValue);
             if (!code && columnValue !== null && columnValue !== undefined) {
               group.items.push({
@@ -138,9 +138,11 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
               });
             }
           }
-
+      
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {
+            //reaplce all the \ with /, exclude \r and \n
+            columnValue = columnValue.replace(/\\(?![rn])/g, '/');
             if (columnValue.includes("\r\n")) {
               return `${columnNumber}"${columnValue.replace(
                 /\r\n/gi,
@@ -217,7 +219,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                     key={detail.displayName}
                     title={detail.displayName}
                     columnGroups={columnGroups[index]}
-                    data={detail.results[0]}
+                    data={detail.results[0]} // detail.results[0] is the data
                   />
                 );
               } else {
