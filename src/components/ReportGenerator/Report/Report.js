@@ -219,7 +219,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
                     key={detail.displayName}
                     title={detail.displayName}
                     columnGroups={columnGroups[index]}
-                    data={detail.results[0]} // detail.results[0] is the data
+                    data={detail.results[0]}
                   />
                 );
               } else {
