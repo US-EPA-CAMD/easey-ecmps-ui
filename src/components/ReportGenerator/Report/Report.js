@@ -7,6 +7,7 @@ import config from "../../../config";
 import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
 import { getEvalResultMessage, getEvalStatus } from "../../../utils/functions";
+import { LeakRemoveTwoTone } from "@material-ui/icons";
 
 export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   const [evalResultMessage, setEvalResultMessage] = useState(null);
@@ -118,7 +119,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     results.push(
       detail.results.map((row) => {
         const columnData = detailColumns.values.map((column, index) => {
-          var columnValue = row[column.name];
+          let columnValue = row[column.name];
           const codeGroup = row[column.name + "Group"];
           const codeDescription = row[column.name + "Description"];
       
