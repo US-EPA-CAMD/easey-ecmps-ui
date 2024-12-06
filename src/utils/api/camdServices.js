@@ -39,7 +39,10 @@ export async function submitData(payload) {
     data: payload,
   })
     .then(handleResponse)
-    .catch(handleError);
+    .catch((error) => {
+      // Re-throw the error so that we can display a user-friendly message to the user.
+      throw error;
+    });
 }
 
 export const triggerBulkEvaluation = async (payload) => {
