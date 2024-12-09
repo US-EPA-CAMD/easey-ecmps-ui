@@ -33,12 +33,13 @@ import { v4 as uuid } from "uuid";
 import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import { loadFacilities } from "../../store/actions/facilities";
 import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
-import { handleError } from "../../utils/api/apiUtils";
+import { handleError, handleImportError } from "../../utils/api/apiUtils";
 import {
   getStackPipesByOrisCode,
   getUnitsByOrisCode,
   getUnitStackConfigsByOrisCode,
 } from "../../utils/api/facilityApi";
+import { formatErrorResponse } from "../../utils/functions";
 import {
   createSingleUnitMP,
   deleteCheckInMonitoringPlanConfiguration,
@@ -728,24 +729,16 @@ export const ConfigurationManagement = ({
         ...sendSingleUnitPayloads(true),
       ]);
 
-      setModalErrorMsgs(
-        [bulkResult, ...singleUnitResults].filter((r) => typeof r === "string")
-      );
-
-      const results =
-        typeof bulkResult === "object"
-          ? bulkResult.data
-          : initialChangeSummaryState();
-      singleUnitResults
-        .filter((r) => typeof r === "object")
-        .forEach((r) => {
-          results.newPlans.push(r.data);
-        });
+      const results = bulkResult.data;
+      singleUnitResults.forEach((r) => {
+        results.newPlans.push(r.data);
+      });
 
       setChangeSummary(results);
       setChangeSummaryStatus(dataStatus.SUCCESS);
     } catch (err) {
       console.error(err);
+      setModalErrorMsgs(formatErrorResponse(handleImportError(err)));
       setChangeSummaryStatus(dataStatus.ERROR);
     }
   };
