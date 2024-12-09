@@ -23,6 +23,7 @@ describe("login modal component", ()=>{
   });
 
   it("tests user authentication", async () =>{
+
     const mockAuthenticate = jest.fn().mockResolvedValue({});
 
       jest
@@ -38,6 +39,7 @@ describe("login modal component", ()=>{
     const loginBtn = screen.getByTestId("component-login-submit-button");
     expect(loginBtn).toBeInTheDocument();
     await userEvent.click(loginBtn);
+    
     expect(mockAuthenticate).toHaveBeenCalled();
   });
   

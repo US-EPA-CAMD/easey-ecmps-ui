@@ -91,6 +91,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [userHasCheckout, setUserHasCheckout] = useState(false);
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
   const [disableMatsImportButton, setDisableMatsImportButton] = useState(true);
+  const [jsonSchemaVersion, setJsonSchemaVersion] = useState("");
 
   const selectedTestNumberRef = useRef();
 
@@ -324,6 +325,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const importHistoricalData = () => {
     const payload = {
       orisCode: orisCode,
+      version: jsonSchemaVersion,
       ...selectedHistoricalData,
     };
     importQABtn(payload);
@@ -639,6 +641,7 @@ export const QACertTestSummaryHeaderInfo = ({
               setFileName={setFileName}
               setDisablePortBtn={setDisablePortBtn}
               orisCode={orisCode}
+              setJsonSchemaVersion={setJsonSchemaVersion}
             />
           }
         />

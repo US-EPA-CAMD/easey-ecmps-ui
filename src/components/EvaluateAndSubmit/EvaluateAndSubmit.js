@@ -16,11 +16,12 @@ import { Button, Alert } from "@trussworks/react-uswds";
 import { connect } from "react-redux";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { DatabaseContext } from "../../utils/constants/databaseContext";
+import { validate } from "../../utils/api/easeyAuthApi";
 import {
   submitData,
   triggerBulkEvaluation,
 } from "../../utils/api/camdServices";
-import { handleError, parseErrorMessage } from "../../utils/api/apiUtils";
+import { handleError } from "../../utils/api/apiUtils";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import FilterForm from "./FilterForm/FilterForm";
 import { EvaluateRefresh } from "./EvaluateRefresh";
@@ -207,9 +208,91 @@ export const EvaluateAndSubmit = ({
     };
   }, []);
 
-  const filterClick = () => {
+  const filterClick = async () => {
     if (componentType === "Submission") {
-      setShowModal(true);
+      //passed-in user can be ecmps user object or false.
+      if (user === false || !user.userId) {
+        modalType.current = "error";
+        modalHeading.current = "ERROR";
+        modalMessage.current =
+          "Please login to ECMPS to submit! If you are already logged in, please logout and log back in. If you still see this message, please contact ECMPS support!";
+        setShowSuccessModal(true);
+        return;
+      }
+
+      //construct payload to call auth-api/sign/validate endpoint
+      const items = [];
+      const payload = {
+        userId: user.userId,
+        items: items,
+      };
+
+      const activeMPSet = getSelectedMPIds();
+
+      for (const monPlanId of activeMPSet) {
+        const newItem = {};
+
+        //add monitoring plan Id related info
+        newItem.monPlanId = monPlanId;
+        if (
+          monPlanRef.current.filter(
+            (f) => f.monPlanId === monPlanId && f.isSelected
+          ).length > 0
+        ) {
+          newItem.submitMonPlan = true;
+        } else {
+          //did not select this monitoring plan to submit, so no need to validate this one
+          newItem.submitMonPlan = false;
+        }
+
+        //get all qat ids associated with this mon plan id
+        newItem.testSumIds = qaTestSumRef.current
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.testSumId;
+          });
+
+        //get all qce ids associated with this mon plan id
+        newItem.qceIds = qaCertEventRef.current
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.qaCertEventIdentifier;
+          });
+
+        //get all tee ids associated with this mon plan id
+        newItem.teeIds = qaTeeRef.current
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.testExtensionExemptionIdentifier;
+          });
+
+        //get all em ids associated with this mon plan id
+        newItem.emissionsReportingPeriods = emissionsRef.current
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.periodAbbreviation;
+          });
+
+        // Add it to the result set of data sent to the back-end
+        items.push(newItem);
+      }
+
+      //payload have the structure of EvaluationDTO in camdService, so this triggerPermissioAndFileValidation should exist in camd-services
+      const validationResult = await validate({
+        userId: payload.userId,
+        items: payload.items,
+      });
+
+      if (validationResult.data.hasValidationError) {
+        modalType.current = "error";
+        modalHeading.current = validationResult.data.validationErrorHeading;
+        modalMessage.current = validationResult.data.validationErrorMessage;
+        setShowSuccessModal(true);
+      } else {
+        //passed all the validations
+        //proceed to launch the submission modal
+        setShowModal(true);
+      }
       console.log("Submission Evaluation");
     } else {
       finalSubmission(triggerBulkEvaluation);
@@ -248,7 +331,7 @@ export const EvaluateAndSubmit = ({
   const checkOutLocationsOrRollback = async () => {
     const checkedOutLocations = (await getCheckedOutLocations()).data;
 
-    const checkOutMapping = new Map();
+    const checkOutMapping = new Map(); //store the monPlanId as key and checkedOutBy (userId) as value
     for (const loc of checkedOutLocations) {
       checkOutMapping.set(loc.monPlanId, loc.checkedOutBy);
     }
@@ -437,15 +520,16 @@ export const EvaluateAndSubmit = ({
         forceReloadTables();
       }
     } catch (e) {
+      setSubmitting(false);
       if (componentType === "Submission") {
         modalType.current = "error";
         modalHeading.current = "Error";
-        modalMessage.current = parseErrorMessage(e);
+        modalMessage.current =
+          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
       }
-      setSubmitting(false);
     }
   };
 
@@ -540,10 +624,11 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] = await Promise.all([
-      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
-      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
-    ]);
+    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] =
+      await Promise.all([
+        dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
+        dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
+      ]);
     // Filter to plans that are `active` in the workspace or that are `active` in official but `inactive` in the workspace (becoming inactive).
     const monitorPlans = workspaceMonitorPlans.filter((mp) => {
       return (

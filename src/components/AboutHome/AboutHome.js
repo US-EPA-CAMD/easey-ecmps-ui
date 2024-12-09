@@ -11,6 +11,7 @@ import axios from "axios";
 import { handleResponse, handleError } from "../../utils/api/apiUtils";
 import "./AboutHome.scss";
 import {getLoginState} from "../../utils/api/easeyAuthApi";
+import { displayAppWarning } from "../../additional-functions/app-error";
 
 const getContent = async (path) => {
   const url = `${config.services.content.uri}${path}`;
@@ -48,6 +49,25 @@ const AboutHome = ({ user, setCurrentLink }) => {
       setQACertificationContent(resp.data)
     );
   }, []);
+
+  //Display login warnings for the login initial authorizer user with no responsibilities.
+  useEffect(() => {
+    //get the current user
+    const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
+
+    //check if the user has any IA, Sponsor, Submitter or Preparer role(s) with no responsibilities
+    if (
+      ( cdxUser?.roles?.includes(config.app.initialAuthorizerRole) ||
+        cdxUser?.roles?.includes(config.app.sponsorRole) ||
+        cdxUser?.roles?.includes(config.app.submitterRole) ||
+        cdxUser?.roles?.includes(config.app.preparerRole) ) && 
+        Object.keys(cdxUser?.facilities || {}).length === 0)
+    {
+      //display the warning message on the home page
+      const warningMessage = 'You have no facilities for which you are responsible. Please login to CBS to review and add facilities for which you are responsible.';
+      displayAppWarning(warningMessage);
+    }
+  }, [user]);
 
   const handleRouteChange = (event, url) => {
     setCurrentLink(url);
