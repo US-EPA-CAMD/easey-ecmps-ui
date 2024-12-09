@@ -29,8 +29,6 @@ import {
   qaUnitDefaultTestRunDataProps,
   qaHgInjectionDataProps,
 } from "../../../additional-functions/qa-dataTable-props";
-import { secureAxios } from "../../../utils/api/easeyAuthApi";
-
 const mock = new MockAdapter(axios);
 
 const qaCertBaseUrl = config.services.qaCertification.uri;
@@ -66,8 +64,6 @@ mock.onGet(mdmCodes).reply(200, []);
 
 mock.onGet(monitorPlanSystems).reply(200, []);
 
-jest.mock("../../../utils/api/easeyAuthApi");
-//secureAxios.mockImplementation((options) => axios(options));
 
 const renderComponent = (props, idArray, data) => {
   return render(
