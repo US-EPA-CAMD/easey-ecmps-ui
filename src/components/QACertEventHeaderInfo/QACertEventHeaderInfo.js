@@ -469,6 +469,7 @@ export const QACertEventHeaderInfo = ({
             children={
               <QAImportModalSelect
                 setImportTypeSelection={setImportTypeSelection}
+                importTestTitle = {importTestTitle}
               />
             }
           />
