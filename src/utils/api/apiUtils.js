@@ -18,6 +18,19 @@ export async function handleResponse(response) {
 }
 
 export function handleError(error) {
+  const errorMessage = parseErrorMessage(error);
+
+  // *** display error only if encountered
+  if (errorMessage !== "") {
+    displayAppError(errorMessage);
+  }
+}
+
+export function handleImportError(error) {
+  return parseErrorMessage(error);
+}
+
+export function parseErrorMessage(error) {
   let errorMessage = "";
 
   if (error.response) {
@@ -39,32 +52,7 @@ export function handleError(error) {
     errorMessage = error.message;
   }
 
-  // *** display error only if encountered
-  if (errorMessage !== "") {
-    displayAppError(errorMessage);
-  }
-}
-
-export function handleImportError(error) {
-  if (error.response) {
-    // client received an error response (5xx, 4xx)
-    log.error({
-      error: error.response.data,
-      //requestUrl: error.response.request.responseURL,
-      status: error.response.status,
-      headers: error.response.headers,
-    });
-  } else if (error.request) {
-    // client never received a response, or request never left
-    log.error({ error: error.request });
-  } else {
-    // anything else
-    log.error({ error: error.message });
-  }
-  // sonarcloud doesnt want to return anything
-  if (error.response) {
-    return error.response.data.message;
-  }
+  return errorMessage;
 }
 
 export async function logServerError(errorId, message, stackTrace) {
