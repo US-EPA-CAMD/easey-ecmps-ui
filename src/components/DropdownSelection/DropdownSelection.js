@@ -28,9 +28,6 @@ export const DropdownSelection = ({
 
   const populateOptions = (optionsList) => {
     return optionsList.map((info, index) => {
-       // Skip empty objects
-      if (Object.keys(info).length === 0) return null;
-    
       return (
         <option
           data-testid={info[selectKey]}
