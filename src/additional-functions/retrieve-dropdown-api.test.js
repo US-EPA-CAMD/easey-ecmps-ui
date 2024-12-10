@@ -5,7 +5,10 @@ import {
 } from "./retrieve-dropdown-api";
 import * as dmApi from "../utils/api/dataManagementApi";
 import axios from "axios";
+import { secureAxios } from "../utils/api/easeyAuthApi";
 jest.mock("axios");
+
+jest.mock("../utils/api/easeyAuthApi");
 
 afterAll(() => {
   jest.restoreAllMocks();
@@ -75,10 +78,10 @@ const executeTests = () => {
 
       // Testing...
       else {
-        axios.get.mockImplementation(() =>
+        secureAxios.mockImplementation((options) =>
           Promise.resolve(testObject.expectedApiResponse)
         );
-        const apiResponse = await testObject.function();
+        const apiResponse = await testObject.function()
 
         // ... Normal dropdowns
         if (!testObject.yearDropdown) {
@@ -90,7 +93,7 @@ const executeTests = () => {
           expect(apiResponse).toEqual(testObject.expectedApiResponse.data);
         }
 
-       await  UseRetrieveDropdownApi(
+        await UseRetrieveDropdownApi(
           [testObject.case],
           testObject.mats ? testObject.mats : false
         ).then((dropdownOptions) => {
