@@ -7,6 +7,10 @@ import {
   Alert,
   Fieldset,
 } from "@trussworks/react-uswds";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+import { Link as USWDSLink } from "@trussworks/react-uswds";
 
 import {determinePolicy, getLoginState, getPermissions} from "../../utils/api/easeyAuthApi";
 
@@ -18,7 +22,7 @@ import config from "../../config";
 import * as yup from "yup";
 import UserAccountStatus from "./UserAccountStatus";
 
-const Login = ({ isModal, closeModalHandler, isLoginDisabled = false, showSystemNotification = true }) => {
+const Login = ({ isModal, closeModalHandler, maintenanceContent, showSystemNotification = true }) => {
   const standardFormErrorMessage = "Please enter your username";
   const [showError, setShowError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState("");
@@ -100,11 +104,23 @@ const Login = ({ isModal, closeModalHandler, isLoginDisabled = false, showSystem
   };
 
   
-  if (isLoginDisabled) {
+  if (maintenanceContent) {
       return (
-          <div className="padding-1">
-              <p> ECMPS 2.0 Login is disabled due to Maintenance. Please contact Information for further assistance. </p>
-          </div>
+        <ReactMarkdown
+        className="padding-top-2 maintenance-content"
+        children={maintenanceContent}
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ node, ...props }) => (
+            <USWDSLink
+              {...props}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="forceUnderlineText colorContrast"
+            />
+          ),
+        }}
+      />
       );
   }
 

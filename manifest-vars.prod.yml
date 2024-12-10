@@ -8,7 +8,6 @@ googleAnalyticsPublicContainerId: "GTM-L8ZB"
 cdxBaseUrl: cdx.epa.gov
 enableManageDelegations: true
 cbsBaseUrl: camd.epa.gov
-enableConfigurationManagementModule: false
 enableSystemAdminstrationModule: true
 tokenRefreshThresholdSeconds: 5
 

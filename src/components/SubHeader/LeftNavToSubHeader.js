@@ -28,6 +28,7 @@ export const LeftNavToSubHeader = (props) => {
     false,
     false,
   ]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const makeHeader = (arr, noActive, isWorkspace) => {
     // Filter workspace based on user roles
@@ -53,7 +54,7 @@ export const LeftNavToSubHeader = (props) => {
         return renderLink(el, i);
       }
     }) : [];
-    
+
     function renderNavDropDown(el, i) {
       return (
         <div>
@@ -74,7 +75,7 @@ export const LeftNavToSubHeader = (props) => {
         </div>
       );
     }
-    
+
     function renderLink(el, i) {
       return (
         <Link
@@ -89,13 +90,13 @@ export const LeftNavToSubHeader = (props) => {
         </Link>
       );
     }
-    
+
     function getNavDropDownButtonClassName(el) {
       return window.location.href.indexOf(`${el.url}`) > -1
         ? "wkspaceMainMenu current-app-subitem font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems"
         : " font-sans-md mobile-lg:font-sans-sm text-no-wrap no-subitems";
     }
-    
+
     function getAriaLabel(el) {
       return el.name !== "Home"
         ? isWorkspace
@@ -103,13 +104,13 @@ export const LeftNavToSubHeader = (props) => {
           : `${el.name} - Global-View`
         : "Go to Home";
     }
-    
+
     function getLinkClassName(el) {
       return props.currentLink === `/${el.url}` || props.currentLink === el.url
         ? " current-app-subitem"
         : "";
     }
-    
+
     function getTitle(el) {
       return el.name !== "Home"
         ? isWorkspace
@@ -117,7 +118,7 @@ export const LeftNavToSubHeader = (props) => {
           : `Go to ${el.name} - Global-View page`
         : "Go to Home page";
     }
-    
+
   };
 
   const makeWKspaceSubHeader = () => {
@@ -157,13 +158,13 @@ export const LeftNavToSubHeader = (props) => {
   };
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="padding-y-1 text-bold font-body-lg mobile:display-block tablet:display-none bg-base-lightest">
-        <MenuSharp className="margin-left-2 margin-right-1" />
+      <div className="padding-y-1 text-bold font-body-lg mobile:display-flex align-middle desktop:display-none bg-base-lightest">
+        <MenuSharp className="margin-left-2 margin-right-1" onClick={() => setIsMobileMenuOpen(true)} />
         ECMPS Menu
       </div>
       <Header
-        className="display-none tablet:display-block desktop-lg:display-none
-      padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4 bg-base-lightest"
+        className="display-none mobile:display-block desktop-lg:display-none
+      padding-y-0 mobile-lg:padding-x-2 desktop:padding-x-4"
       >
         <div className="usa-nav-container clearfix padding-x-0 padding-bottom-2">
           <div className="text-center desktop:margin-top-1 desktop-lg:margin-top-0 display-inline-flex padding-left-1">
@@ -171,14 +172,16 @@ export const LeftNavToSubHeader = (props) => {
             {props.user ? (
               <PrimaryNav
                 items={makeWKspaceSubHeader()}
-                mobileExpanded={false}
+                mobileExpanded={isMobileMenuOpen}
+                onToggleMobileNav={() => setIsMobileMenuOpen(false)}
                 type="primary"
               />
             ) : (
               <PrimaryNav
                 type="primary"
                 items={makeHeader(globalView, true, false)}
-                mobileExpanded={false}
+                mobileExpanded={isMobileMenuOpen}
+                onToggleMobileNav={() => setIsMobileMenuOpen(false)}
               />
             )}
           </div>

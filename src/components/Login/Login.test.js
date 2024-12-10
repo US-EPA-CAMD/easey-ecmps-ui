@@ -4,10 +4,16 @@ import Login from "./Login";
 import render from "../../mocks/render";
 import * as easeyAuthApi from "../../utils/api/easeyAuthApi";
 
+jest.mock("react-markdown", () => (props) => {
+  return <>{props.children}</>;
+});
+
+jest.mock("remark-gfm", () => () => {});
+
 describe("login modal component", ()=>{
 
   beforeEach( async ()=>{
-    await render(<Login isModal={false} showSystemNotification={false}  />);
+    await render(<Login isModal={false} maintenanceContent={false} showSystemNotification={false}  />);
   });
 
   afterEach(() => {
