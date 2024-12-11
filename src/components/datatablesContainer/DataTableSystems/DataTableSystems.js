@@ -654,7 +654,7 @@ export const DataTableSystems = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs(JSON.stringify(error));
+      setErrorMsgs([JSON.stringify(error)]);
     }
     return false;
   };
@@ -669,7 +669,6 @@ export const DataTableSystems = ({
     userInput.componentId = selectedRangeInFirst.componentId;
     userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
     userInput.basisCode = selectedRangeInFirst.basisCode;
-    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode =
       selectedRangeInFirst.sampleAcquisitionMethodCode;
 
@@ -679,28 +678,49 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
+    
     try {
-      const resp = await mpApi
-        .saveSystemsComponents(
+          let resp;
+          let response;
+
+          response = await mpApi
+          .saveComponents(
+          userInput,
+          selectedSystem.locationId,
+          selectedRangeInFirst.componentId
+          )
+          .catch((error) => console.log("saveComponents failed", error));
+
+          resp = await mpApi
+          .saveSystemsComponents(
           userInput,
           selectedSystem.locationId,
           selectedSystem.id,
           selectedRangeInFirst.id
-        )
+          )
         .catch((error) => console.log("saveSystemsComponents failed", error));
-      if (resp.status >= 200 && resp.status < 300) {
+
+        const newErrorMsgs = [];
+        [resp, response].forEach((res) => {
+          if (res?.status < 200 || res?.status >= 300) {
+                newErrorMsgs.push(res);
+              }
+          });
+
+        if (newErrorMsgs.length > 0) {
+            setErrorMsgs(newErrorMsgs.flat());
+            return false;
+        }
+
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
         return true;
-      } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
+
+      } catch (error) {
+        setErrorMsgs(JSON.stringify(error));
       }
-    } catch (error) {
-      setErrorMsgs([JSON.stringify(error)]);
-    }
-    return false;
+      return false;
   };
 
   // from analyzer ranges view to components view

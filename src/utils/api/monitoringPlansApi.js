@@ -453,6 +453,22 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
   }
 };
 
+export const saveComponents = async (payload, locId, compId) => {
+  const url = getApiUrl(`/locations/${locId}/components/${compId}`);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const createSystemsComponents = async (payload, locId, sysId) => {
   const url = getApiUrl(`/locations/${locId}/systems/${sysId}/components`);
 
