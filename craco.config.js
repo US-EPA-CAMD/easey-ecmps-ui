@@ -36,7 +36,9 @@ module.exports = {
       jestConfig.coverageReporters = ["html", "text", "clover", "json", "lcov"];
       jestConfig.collectCoverage = true;
       jestConfig.moduleNameMapper = {
-        "\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js"
+        "\\.(css|scss)$": "<rootDir>/src/mocks/styleMock.js",
+        "react-markdown": "<rootDir>/src/mocks/styleMock.js",
+        "remark-gfm": "<rootDir>/src/mocks/styleMock.js",
       };
       jestConfig.setupFilesAfterEnv = [
         "@testing-library/jest-dom/extend-expect"

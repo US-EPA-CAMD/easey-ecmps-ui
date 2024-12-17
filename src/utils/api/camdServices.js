@@ -21,7 +21,6 @@ export async function downloadReport(params) {
     "copy-of-record"
   )}`;
 
-
   return secureAxios({
     method: "GET",
     url,
@@ -32,7 +31,7 @@ export async function downloadReport(params) {
   });
 }
 
-export async function submitData(payload) {
+export async function submitData(payload, shouldHandleError = true) {
   return secureAxios({
     method: "POST",
     url: `${config.services.camd.uri}/submission/queue`,
@@ -40,12 +39,15 @@ export async function submitData(payload) {
   })
     .then(handleResponse)
     .catch((error) => {
-      // Re-throw the error so that we can display a user-friendly message to the user.
-      throw error;
+      if (!shouldHandleError) throw error; // Re-throw the error so that we can display a user-friendly message to the user
+      return handleError(error);
     });
 }
 
-export const triggerBulkEvaluation = async (payload) => {
+export const triggerBulkEvaluation = async (
+  payload,
+  shouldHandleError = true
+) => {
   let url = `${config.services.camd.uri}`;
   url = `${url}/evaluate`;
 
@@ -58,7 +60,8 @@ export const triggerBulkEvaluation = async (payload) => {
       })
     );
   } catch (error) {
-    handleError(error);
+    if (!shouldHandleError) throw error;
+    return handleError(error);
   }
 };
 

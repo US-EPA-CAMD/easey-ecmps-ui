@@ -210,16 +210,16 @@ export const EvaluateAndSubmit = ({
 
   const filterClick = async () => {
     if (componentType === "Submission") {
-
       //passed-in user can be ecmps user object or false.
       if (user === false || !user.userId) {
-        modalType.current = "error";  
+        modalType.current = "error";
         modalHeading.current = "ERROR";
-        modalMessage.current = "Please login to ECMPS to submit! If you are already logged in, please logout and log back in. If you still see this message, please contact ECMPS support!";
-        setShowSuccessModal(true);  
+        modalMessage.current =
+          "Please login to ECMPS to submit! If you are already logged in, please logout and log back in. If you still see this message, please contact ECMPS support!";
+        setShowSuccessModal(true);
         return;
       }
-      
+
       //construct payload to call auth-api/sign/validate endpoint
       const items = [];
       const payload = {
@@ -247,31 +247,31 @@ export const EvaluateAndSubmit = ({
 
         //get all qat ids associated with this mon plan id
         newItem.testSumIds = qaTestSumRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-        .map((m) => {
-          return m.testSumId;
-        });
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.testSumId;
+          });
 
         //get all qce ids associated with this mon plan id
         newItem.qceIds = qaCertEventRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-        .map((m) => {
-          return m.qaCertEventIdentifier;
-        });
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.qaCertEventIdentifier;
+          });
 
         //get all tee ids associated with this mon plan id
         newItem.teeIds = qaTeeRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-        .map((m) => {
-          return m.testExtensionExemptionIdentifier;
-        });
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.testExtensionExemptionIdentifier;
+          });
 
         //get all em ids associated with this mon plan id
         newItem.emissionsReportingPeriods = emissionsRef.current
-        .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-        .map((m) => {
-          return m.periodAbbreviation;
-        });
+          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
+          .map((m) => {
+            return m.periodAbbreviation;
+          });
 
         // Add it to the result set of data sent to the back-end
         items.push(newItem);
@@ -284,10 +284,10 @@ export const EvaluateAndSubmit = ({
       });
 
       if (validationResult.data.hasValidationError) {
-        modalType.current = "error";  
+        modalType.current = "error";
         modalHeading.current = validationResult.data.validationErrorHeading;
         modalMessage.current = validationResult.data.validationErrorMessage;
-        setShowSuccessModal(true);  
+        setShowSuccessModal(true);
       } else {
         //passed all the validations
         //proceed to launch the submission modal
@@ -330,8 +330,6 @@ export const EvaluateAndSubmit = ({
 
   const checkOutLocationsOrRollback = async () => {
     const checkedOutLocations = (await getCheckedOutLocations()).data;
-
-    console.log(checkedOutLocations);
 
     const checkOutMapping = new Map(); //store the monPlanId as key and checkedOutBy (userId) as value
     for (const loc of checkedOutLocations) {
@@ -501,7 +499,7 @@ export const EvaluateAndSubmit = ({
     }
 
     try {
-      await callback(payload);
+      await callback(payload, false);
       //checkInAllCheckedOutLocations();
       setSubmitting(false);
       if (componentType === "Submission") {
@@ -526,7 +524,8 @@ export const EvaluateAndSubmit = ({
       if (componentType === "Submission") {
         modalType.current = "error";
         modalHeading.current = "Error";
-        modalMessage.current = "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+        modalMessage.current =
+          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
@@ -625,10 +624,11 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] = await Promise.all([
-      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
-      dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
-    ]);
+    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] =
+      await Promise.all([
+        dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
+        dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
+      ]);
     // Filter to plans that are `active` in the workspace or that are `active` in official but `inactive` in the workspace (becoming inactive).
     const monitorPlans = workspaceMonitorPlans.filter((mp) => {
       return (

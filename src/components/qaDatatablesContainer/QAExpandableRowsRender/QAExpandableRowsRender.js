@@ -807,7 +807,7 @@ const QAExpandableRowsRender = ({
         controlDatePickerInputs,
         create,
         mdmData,
-        prefilteredDataName ? mdmData[prefilteredDataName] : '',
+        prefilteredDataName ? mdmData && mdmData[prefilteredDataName] : '',
         mainDropdownName,
         mainDropdownResult,
         hasMainDropdown,
