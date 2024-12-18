@@ -28,36 +28,34 @@ export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterAp
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
-        console.log(JSON.stringify(viewTemplateSelect))
-        console.log(filterApply + ' filter apply')
-        console.log(pending + 'pending')
+
 
         if 
             ( filterApply
         ) {
-            console.log("working")
             const timeOutApply = setTimeout(() => {
-                setViewData(reduxCurrentTab?.viewData || []);
                 // Update message based on data availability
-                if (viewData.length === 0) {
-                    console.log("message no records")
+                setViewData(reduxCurrentTab?.viewData || []);
+
+                if (reduxCurrentTab?.viewData.length === 0) {
                     setMessage('There are no records to display');
                 } 
-                console.log("timer ends ")
 
                 setPending(false); // Hide spinner after data is loaded
                 setfilterApply(false)
-            }, 500);
+            }, 2000);
 
-            console.log("timer starts ")
             setPending(true); // Show spinner while data is loading
 
             // Cleanup timeout on unmount or if dependencies change
             return () => clearTimeout(timeOutApply);
         }
         else
+        {
+            setViewData(reduxCurrentTab?.viewData || []);
             setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
-    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
+        }
+    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData,filterApply]);
 
     // useEffect(() => {
     //     // Check if all the required conditions are met before starting the effect
