@@ -7,7 +7,12 @@ import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-export const EmissionsViewTable = ({ monitorPlanId }) => {
+export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterApply, setfilterApply }) => {
+
+    const defaultTemplateValue = {
+        code: "SELECT",
+        name: "--- select a view ---",
+      };
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -19,18 +24,69 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
     const [pending, setPending] = useState(true);
+    const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
+        console.log(JSON.stringify(viewTemplateSelect))
+        console.log(filterApply + ' filter apply')
+        console.log(pending + 'pending')
 
-        const timeout = setTimeout(() => {
-            setViewData(reduxCurrentTab?.viewData || []);
-            setPending(false)
-        }, 500)
-        // add short delay of 500, without short delay sometimes empty table appears before loading spinner
+        if 
+            ( filterApply
+        ) {
+            console.log("working")
+            const timeOutApply = setTimeout(() => {
+                setViewData(reduxCurrentTab?.viewData || []);
+                // Update message based on data availability
+                if (viewData.length === 0) {
+                    console.log("message no records")
+                    setMessage('There are no records to display');
+                } 
+                console.log("timer ends ")
 
-        return () => clearTimeout(timeout)
+                setPending(false); // Hide spinner after data is loaded
+                setfilterApply(false)
+            }, 500);
+
+            console.log("timer starts ")
+            setPending(true); // Show spinner while data is loading
+
+            // Cleanup timeout on unmount or if dependencies change
+            return () => clearTimeout(timeOutApply);
+        }
+        else
+            setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
+
+    // useEffect(() => {
+    //     // Check if all the required conditions are met before starting the effect
+    //     if (
+    //         viewTemplateSelect?.code !== defaultTemplateValue.code &&
+    //         viewTemplateSelect !== null && filterApply
+    //     ) {
+    //         const timeOutApply = setTimeout(() => {
+    //             // Update message based on data availability
+    //             if (viewData.length === 0) {
+    //                 setMessage('There are no records to display');
+    //             } else {
+    //                 setMessage(''); // Clear message when data is available
+    //             }
+    //             setPending(false); // Hide spinner after data is loaded
+    //         }, 2000);
+
+    //         // Add short delay of 2000ms to show the spinner
+    //         setPending(true); // Show spinner while data is loading
+
+    //         // Cleanup timeout on unmount or if dependencies change
+    //         return () => clearTimeout(timeOutApply);
+    //     }
+    // }, [
+    //     viewTemplateSelect,
+    //     filterApply,
+    //     viewData, // This dependency ensures the effect will run when `viewData` changes
+    // ]);
+
 
     // If the error has an errorCode then we want to show a "View Error" link on the first column to the left of the actual data of the first column, see Zenhub ticket#5756 for more details
     const getFormattedCellForFirstRow = useCallback((row) => {
@@ -87,25 +143,31 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
     }, [getFormattedCellForFirstRow, viewColumnInfo])
 
     useEffect(() => {
+
         const cols = createTableColumns();
         setTableColumns(cols);
+        setPending(false)
     }, [viewColumnInfo, createTableColumns]);
 
-    return (
-        <div className="padding-left-0 margin-left-0 padding-right-0">
-            <DataTable
-                sortIcon={
-                    <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                }
-                noHeader={true}
-                fixedHeader={true}
-                fixedHeaderScrollHeight="50vh"
-                columns={tableColumns}
-                data={viewData}
-                className={`data-display-table react-transition fade-in`}
-                progressPending={pending}
-                progressComponent={<Preloader />}
-            />
-        </div>
+
+
+
+    return (         
+            <div className="padding-left-0 margin-left-0 padding-right-0">
+                <DataTable
+                    sortIcon={
+                        <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    noHeader={true}
+                    fixedHeader={true}
+                    fixedHeaderScrollHeight="50vh"
+                    columns={tableColumns}
+                    data={viewData}
+                    className={`data-display-table react-transition fade-in`}
+                    progressPending={pending}
+                    noDataComponent={message}
+                    progressComponent={<Preloader />}
+                />
+            </div>
     )
 }

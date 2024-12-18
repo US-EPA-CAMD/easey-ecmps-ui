@@ -33,6 +33,7 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [filterApply, setfilterApply] = useState(false);
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
@@ -103,6 +104,7 @@ export const EmissionsTabRender = ({
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
+          setfilterApply={setfilterApply}
         />
       </div>
       <hr />
@@ -133,7 +135,7 @@ export const EmissionsTabRender = ({
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} />
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} viewTemplateSelect={viewTemplateSelect} filterApply={filterApply} setfilterApply={setfilterApply}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },
