@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { FormGroup, Label } from "@trussworks/react-uswds";
+import log from "loglevel";
 
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 import { FileInput } from "../../FileInput/FileInput";
@@ -63,7 +64,7 @@ const ImportModalMatsContent = ({
 
         setTestTypes(testTypeOptions);
       } catch (e) {
-        console.log("error fetching test summary records", e);
+        log.log("error fetching test summary records", e);
       }
     }
   };

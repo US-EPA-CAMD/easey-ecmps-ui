@@ -1,4 +1,5 @@
 import React from "react";
+import log from "loglevel";
 
 import Modal from "../../Modal/Modal";
 import "./DeactivateNotificationModal.scss";
@@ -22,7 +23,7 @@ export const DeactivateNotificationModal = ({
         refreshTable();
       })
       .catch((e) => {
-        console.error(e);
+        log.error(e);
       })
       .finally(() => {
         close();

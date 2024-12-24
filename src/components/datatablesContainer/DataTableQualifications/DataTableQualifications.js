@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import _ from "lodash";
+import log from "loglevel";
 
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -130,7 +131,7 @@ export const DataTableQualifications = ({
           setUpdateLME(false);
           setUpdateCPMS(false);
         })
-        .catch((error) => console.log("getQualifications failed", error));
+        .catch((error) => log.log("getQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);

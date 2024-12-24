@@ -1,3 +1,4 @@
+import log from "loglevel";
 import {authenticate} from "../../utils/api/easeyAuthApi";
 
 export async function signInUser(message, sessionId) {
@@ -12,10 +13,10 @@ export async function signInUser(message, sessionId) {
         throw new Error(response.error);
       } else {
         //successful login
-        console.log("Login successful", response);
+        log.log("Login successful", response);
       }
     } catch (err) {
-      console.error("Error during authentication:", err.message);
+      log.error("Error during authentication:", err.message);
       throw err;
     }
   }

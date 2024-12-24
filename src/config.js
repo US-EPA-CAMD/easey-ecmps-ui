@@ -182,7 +182,7 @@ export const config = {
 };
 
 if (config.app.enableDebug) {
-  console.log("config: ", config);
+  log.log("config: ", config);
 }
 
 if (config.app.env === "production") {

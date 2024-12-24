@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import log from "loglevel";
 
 import {
   getQATestSummary,
@@ -159,7 +160,7 @@ const QATestSummaryDataTable = ({
             setLoading(false);
           })
           .catch((error) => {
-            console.log("error fetching test summary", error);
+            log.log("error fetching test summary", error);
           });
         setUpdateTable(false);
       }
@@ -270,7 +271,7 @@ const QATestSummaryDataTable = ({
         setDropdownsLoading(false);
       })
       .catch((err) => {
-        console.log("error", err);
+        log.log("error", err);
       });
   };
   useEffect(() => {
@@ -557,7 +558,7 @@ const QATestSummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        log.error("error", error);
       });
   };
 
@@ -599,7 +600,7 @@ const QATestSummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        log.error("error", error);
         returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       });
   };

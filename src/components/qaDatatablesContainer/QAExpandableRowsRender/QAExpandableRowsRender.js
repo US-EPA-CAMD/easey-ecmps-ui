@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import log from "loglevel";
 
 import { Button } from '@trussworks/react-uswds';
 import {
@@ -81,7 +82,7 @@ const QAExpandableRowsRender = ({
         .then(res => {
           finishedLoadingData(res.data);
         })
-        .catch(error => console.log(error));
+        .catch(error => log.log(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTableName, updateTable]);
@@ -282,7 +283,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Linearity Test':
       case 'Linearity Injection':
@@ -318,7 +319,7 @@ const QAExpandableRowsRender = ({
 
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'RATA Data':
         allPromises.push(dmApi.getAllRataFreqCodes());
@@ -347,7 +348,7 @@ const QAExpandableRowsRender = ({
             ];
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
 
       case 'RATA Run Data':
@@ -370,7 +371,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
 
       case 'RATA Summary':
@@ -417,7 +418,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'RATA Traverse Data':
         allPromises.push(dmApi.getAllProbeTypeCodes());
@@ -453,7 +454,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Gas':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(
@@ -480,7 +481,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Oil':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0],
@@ -524,7 +525,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Transmitter Transducer Accuracy Data':
         allPromises.push(dmApi.getAllAccuracySpecCodes());
@@ -558,7 +559,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Flow To Load Reference':
         allPromises.push(dmApi.getRataTestNumber(locationId));
@@ -597,7 +598,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Unit Default Test Run':
         populateStaticDropdowns(name, dropdowns);
@@ -637,7 +638,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(err => console.error(err));
+          .catch(err => log.error(err));
 
         break;
     }
@@ -833,7 +834,7 @@ const QAExpandableRowsRender = ({
 
     const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
-      console.log('valid errors', validationErrors);
+      log.log('valid errors', validationErrors);
       setErrorMsgs(validationErrors);
       return;
     }
@@ -854,7 +855,7 @@ const QAExpandableRowsRender = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      console.log('error saving data', error);
+      log.log('error saving data', error);
     }
   };
 
@@ -888,7 +889,7 @@ const QAExpandableRowsRender = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      console.log('error creating data', error);
+      log.log('error creating data', error);
     }
   };
 
@@ -906,7 +907,7 @@ const QAExpandableRowsRender = ({
         returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
       }
     } catch (error) {
-      console.log(
+      log.log(
         `error deleting data of table: ${dataTableName}, row: ${row}`,
         error,
       );
