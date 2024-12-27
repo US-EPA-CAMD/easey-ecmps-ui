@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
@@ -33,11 +33,15 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [filterApply, setfilterApply] = useState(false);
+  const [filterApply, setFilterApply] = useState(false);
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
+  const memoizedSetFilterApply = useCallback((value) => {
+    setFilterApply(value);
+  }, [setFilterApply]);
+  
   useEffect(() => {
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +108,7 @@ export const EmissionsTabRender = ({
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
-          setfilterApply={setfilterApply}
+          setfilterApply={memoizedSetFilterApply}
         />
       </div>
       <hr />
@@ -135,7 +139,7 @@ export const EmissionsTabRender = ({
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} viewTemplateSelect={viewTemplateSelect} filterApply={filterApply} setfilterApply={setfilterApply}/>
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setfilterApply={memoizedSetFilterApply}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },

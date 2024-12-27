@@ -7,12 +7,7 @@ import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterApply, setfilterApply }) => {
-
-    const defaultTemplateValue = {
-        code: "SELECT",
-        name: "--- select a view ---",
-      };
+export const EmissionsViewTable = ({ monitorPlanId, filterApply, setfilterApply }) => {
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -23,68 +18,44 @@ export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterAp
     const [tableColumns, setTableColumns] = useState([]);
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
-    const [pending, setPending] = useState(true);
+    const [pendingMessage, setpendingMessage] = useState([false])
     const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
 
-
-        if 
-            ( filterApply
-        ) {
+        if ( filterApply) {
             const timeOutApply = setTimeout(() => {
-                // Update message based on data availability
                 setViewData(reduxCurrentTab?.viewData || []);
-
-                if (reduxCurrentTab?.viewData.length === 0) {
-                    setMessage('There are no records to display');
-                } 
-
-                setPending(false); // Hide spinner after data is loaded
                 setfilterApply(false)
-            }, 2000);
+                if ( reduxCurrentTab?.viewData?.length === 0) {
+                    setpendingMessage(true)
+                }
+            }, 1000);
 
-            setPending(true); // Show spinner while data is loading
-
-            // Cleanup timeout on unmount or if dependencies change
             return () => clearTimeout(timeOutApply);
-        }
+       }
         else
         {
             setViewData(reduxCurrentTab?.viewData || []);
             setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
         }
-    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData,filterApply]);
+    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
-    // useEffect(() => {
-    //     // Check if all the required conditions are met before starting the effect
-    //     if (
-    //         viewTemplateSelect?.code !== defaultTemplateValue.code &&
-    //         viewTemplateSelect !== null && filterApply
-    //     ) {
-    //         const timeOutApply = setTimeout(() => {
-    //             // Update message based on data availability
-    //             if (viewData.length === 0) {
-    //                 setMessage('There are no records to display');
-    //             } else {
-    //                 setMessage(''); // Clear message when data is available
-    //             }
-    //             setPending(false); // Hide spinner after data is loaded
-    //         }, 2000);
-
-    //         // Add short delay of 2000ms to show the spinner
-    //         setPending(true); // Show spinner while data is loading
-
-    //         // Cleanup timeout on unmount or if dependencies change
-    //         return () => clearTimeout(timeOutApply);
-    //     }
-    // }, [
-    //     viewTemplateSelect,
-    //     filterApply,
-    //     viewData, // This dependency ensures the effect will run when `viewData` changes
-    // ]);
-
+    useEffect(() => {
+        if(pendingMessage === true)
+        {
+            if ( viewData?.length === 0) {
+                const timeOutApply = setTimeout(() => {
+                    setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+                    setpendingMessage(false)
+                }, 1000);
+                setMessage('There are no records to display');
+                return () => clearTimeout(timeOutApply);
+           }
+        }
+        
+    }, [pendingMessage]);
 
     // If the error has an errorCode then we want to show a "View Error" link on the first column to the left of the actual data of the first column, see Zenhub ticket#5756 for more details
     const getFormattedCellForFirstRow = useCallback((row) => {
@@ -144,7 +115,6 @@ export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterAp
 
         const cols = createTableColumns();
         setTableColumns(cols);
-        setPending(false)
     }, [viewColumnInfo, createTableColumns]);
 
 
@@ -162,7 +132,7 @@ export const EmissionsViewTable = ({ monitorPlanId, viewTemplateSelect, filterAp
                     columns={tableColumns}
                     data={viewData}
                     className={`data-display-table react-transition fade-in`}
-                    progressPending={pending}
+                    progressPending={filterApply}
                     noDataComponent={message}
                     progressComponent={<Preloader />}
                 />
