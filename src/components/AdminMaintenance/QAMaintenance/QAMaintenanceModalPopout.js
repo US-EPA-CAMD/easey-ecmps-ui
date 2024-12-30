@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Label, Textarea, Alert } from "@trussworks/react-uswds";
+import log from "loglevel";
 import Modal from "../../Modal/Modal";
 import {
   certEventLabel,
@@ -103,7 +104,7 @@ const QAMaintenanceRequireResubmissionPopout = ({
       await Promise.all(promises);
       setReloadTableData(true);
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       closeModalHandler();
     }
@@ -150,7 +151,7 @@ const QAMaintenanceDeletePopout = ({
       await Promise.all(promises);
       setReloadTableData(true);
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       closeModalHandler();
     }

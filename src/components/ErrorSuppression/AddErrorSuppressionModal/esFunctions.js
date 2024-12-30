@@ -1,3 +1,5 @@
+import log from "loglevel";
+
 import { getMdmData as getMatchData } from "../../../utils/api/errorSuppressionApi";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
@@ -117,7 +119,7 @@ export const createMatchTypeDropdownLists = async (
       const { data } = await getMonitoringPlans([orisCode], [], DatabaseContext.WORKSPACE);
       return processPromiseData(data);
     } catch (e) {
-      console.error(e);
+      log.error(e);
       return [];
     }
   }
@@ -138,7 +140,7 @@ export const createMatchTypeDropdownLists = async (
       const data = responses.map(({ data }) => data).flat();
       return processPromiseData(data);
     } catch (e) {
-      console.error(e);
+      log.error(e);
       return [];
     }
   } else {
@@ -148,7 +150,7 @@ export const createMatchTypeDropdownLists = async (
       const { data } = await getMatchData(path);
       return processPromiseData(data);
     } catch (e) {
-      console.error(e);
+      log.error(e);
       return [];
     }
   }

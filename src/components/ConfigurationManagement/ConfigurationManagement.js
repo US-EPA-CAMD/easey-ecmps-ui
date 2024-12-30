@@ -29,6 +29,7 @@ import React, {
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { v4 as uuid } from "uuid";
+import log from "loglevel";
 
 import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import { loadFacilities } from "../../store/actions/facilities";
@@ -737,7 +738,7 @@ export const ConfigurationManagement = ({
       setChangeSummary(results);
       setChangeSummaryStatus(dataStatus.SUCCESS);
     } catch (err) {
-      console.error(err);
+      log.error(err);
       setModalErrorMsgs(formatErrorResponse(handleImportError(err)));
       setChangeSummaryStatus(dataStatus.ERROR);
     }
@@ -837,7 +838,7 @@ export const ConfigurationManagement = ({
       ].forEach((setter) => setter(dataStatus.IDLE));
       checkInAllPlansForUser(); // NOTE: This is only necessary until check-outs are done on the plant level
     } catch (err) {
-      console.error(err);
+      log.error(err);
       setSaveStatus(dataStatus.ERROR);
     }
   };

@@ -923,7 +923,6 @@ export const MonitoringPlanTabRender = ({
 
   // not tested ***
   // const resetInactivityTimerApiCall = () => {
-  //   console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   // };
 
   return (

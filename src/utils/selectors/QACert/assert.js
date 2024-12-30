@@ -1,3 +1,5 @@
+import log from "loglevel";
+
 import * as qaApi from '../../api/qaCertificationsAPI';
 
 // Selectors that normalize api data to fit the columns in UI datatable
@@ -39,43 +41,43 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
   switch (name) {
     case lineTest:
       return qaApi.getQALinearitySummary(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
     case proGas:
       return qaApi
         .getProtocolGas(extraIdsArr[0], extraIdsArr[1])
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case lineInjection:
       return qaApi
         .getQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case rataData:
       return qaApi.getRataData(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
 
     case rataRunData:
       return qaApi
         .getRataRunData(extraIdsArr[0], extraIdsArr[1], extraIdsArr[2], id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataSummary:
       return qaApi
         .getRataSummary(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case airEmissions:
       return qaApi
         .getAirEmissions(extraIdsArr[0], extraIdsArr[1])
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowRataRun:
       return qaApi
@@ -87,7 +89,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case rataTraverseData:
       return qaApi
@@ -100,37 +102,37 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           id,
         )
         .catch(error =>
-          console.log('error fetching rata traverse data', error),
+          log.log('error fetching rata traverse data', error),
         );
     case testQualification:
       return qaApi
         .getTestQualification(extraIdsArr[0], extraIdsArr[1])
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrelationSummary:
       return qaApi
         .getAppendixECorrelationSummaryRecords(location, id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case fuelFlowToLoad:
       return qaApi
         .getFuelFlowToLoadData(location, id)
         .catch(error =>
-          console.log('error fetching fuel flow to load data', error),
+          log.log('error fetching fuel flow to load data', error),
         );
     case fuelFlowToLoadBaseline:
       return qaApi
         .getFuelFlowToLoadBaseline(location, id)
         .catch(error =>
-          console.log('error fetching fuel flow to load baseline data', error),
+          log.log('error fetching fuel flow to load baseline data', error),
         );
     case appendixECorrTestRun:
       return qaApi
         .getAppendixERunData(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error =>
-          console.log('error fetching appendix E test run data', error),
+          log.log('error fetching appendix E test run data', error),
         );
     case appendixECorrHeatInputGas:
       return qaApi
@@ -141,7 +143,7 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           id,
         )
         .catch(error =>
-          console.log(
+          log.log(
             'error fetching appendix E heat input from gas data',
             error,
           ),
@@ -155,81 +157,81 @@ export const getDataTableApis = async (name, location, id, extraIdsArr) => {
           id,
         )
         .catch(error =>
-          console.log(
+          log.log(
             'error fetching appendix E heat input from oil data',
             error,
           ),
         );
     case flowToLoadCheck:
       return qaApi.getFlowToLoadCheckRecords(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
     case onlineOfflineCalibration:
       return qaApi
         .getOnlineOfflineCalibration(location, id)
         .catch(error =>
-          console.log('error fetching online offline calibration', error),
+          log.log('error fetching online offline calibration', error),
         );
     case calibrationInjections:
       return qaApi.getCalibrationInjectionRecords(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
     case fuelFlowmeterAccuracyData:
       return qaApi
         .getFuelFlowmeterAccuracyDataRecords(location, id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case cycleTimeSummary:
       return qaApi.getCycleTimeSummary(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
     case cycleTimeInjection:
       return qaApi
         .getCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case transmitterTransducerAccuracyData:
       return qaApi
         .getTransmitterTransducerAccuracyDataRecords(location, id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowToLoadReference:
       return qaApi
         .getFlowToLoadReference(location, id)
         .catch(error =>
-          console.log('error fetching flow to load reference', error),
+          log.log('error fetching flow to load reference', error),
         );
     case unitDefualtTest:
       return qaApi.getUnitDefaultTest(location, id).catch(error => {
-        console.log('error fetching unit default test data', error);
+        log.log('error fetching unit default test data', error);
       });
     case unitDefaultTestRun:
       return qaApi
         .getUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id)
         .catch(error => {
-          console.log('error fetching unit default test run data', error);
+          log.log('error fetching unit default test run data', error);
         });
     case hgSummary:
       return qaApi.getHgSummary(location, id).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
     case hgInjection:
       return qaApi
         .getHgInjection(extraIdsArr[0], extraIdsArr[1], id)
-        .catch(error => console.log('error fetching hg injection data', error));
+        .catch(error => log.log('error fetching hg injection data', error));
     case qaCertEvent:
       return qaApi
         .getQaCertEvents(location)
-        .catch(error => console.log('error fetching cert event data', error));
+        .catch(error => log.log('error fetching cert event data', error));
 
     case qaExeptions:
       return qaApi
         .getTestExtension(location)
         .catch(error =>
-          console.log('error fetching qa exceptions data', error),
+          log.log('error fetching qa exceptions data', error),
         );
     default:
       throw new Error(`getDataTableApis case not implemented for ${name}`);
@@ -312,38 +314,38 @@ export const removeDataSwitch = async (
       return qaApi
         .deleteQALinearitySummary(locationId, id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case proGas:
       return qaApi
         .deleteProtocolGas(extraIdsArr[0], extraIdsArr[1], row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
 
     case airEmissions:
       return qaApi
         .deleteAirEmissions(extraIdsArr[0], extraIdsArr[1], row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
 
     case testQualification:
       return qaApi
         .deleteTestQualification(extraIdsArr[0], extraIdsArr[1], row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
 
     case lineInjection:
       return qaApi
         .deleteQALinearityInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataData:
       return qaApi
         .deleteRataData(locationId, id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         })
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataRunData:
@@ -356,7 +358,7 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataSummary:
@@ -370,7 +372,7 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowRataRun:
       return qaApi
@@ -383,7 +385,7 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case rataTraverseData:
       return qaApi
@@ -397,25 +399,25 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case fuelFlowToLoad:
       return qaApi
         .deleteFuelFlowToLoadData(locationId, id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case fuelFlowToLoadBaseline:
       return qaApi
         .deleteFuelFlowToLoadBaseline(locationId, id, row.id)
         .catch(error =>
-          console.log('error deleting fuel flow to load baseline', error),
+          log.log('error deleting fuel flow to load baseline', error),
         );
     case appendixECorrelationSummary:
       return qaApi
         .deleteAppendixECorrelationSummaryRecord(locationId, id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrHeatInputGas:
       return qaApi
@@ -427,7 +429,7 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrHeatInputOil:
       return qaApi
@@ -439,78 +441,78 @@ export const removeDataSwitch = async (
           row.id,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrTestRun:
       return qaApi
         .deleteAppendixERun(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowToLoadCheck:
       return qaApi
         .deleteFlowToLoadCheckRecord(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case calibrationInjections:
       return qaApi
         .deleteCalibrationInjectionRecord(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case onlineOfflineCalibration:
       return qaApi
         .deleteOnlineOfflineCalibration(locationId, id, row.id)
         .catch(error =>
-          console.log('error deleting online offline calibration', error),
+          log.log('error deleting online offline calibration', error),
         );
     case fuelFlowmeterAccuracyData:
       return qaApi
         .deleteFuelFlowmeterAccuracyDataRecord(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case cycleTimeSummary:
       return qaApi
         .deleteCycleTimeSummary(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case cycleTimeInjection:
       return qaApi
         .deleteCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case transmitterTransducerAccuracyData:
       return qaApi
         .deleteTransmitterTransducerAccuracyDataRecord(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case flowToLoadReference:
       return qaApi
         .deleteFlowToLoadReference(locationId, id, row.id)
         .catch(error =>
-          console.log('error deleting flow to load reference', error),
+          log.log('error deleting flow to load reference', error),
         );
     case unitDefualtTest:
       return qaApi
         .deleteUnitDefaultTest(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case hgSummary:
       return qaApi
         .deleteHgSummary(locationId, id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case hgInjection:
       return qaApi
         .deleteHgInjection(extraIdsArr[0], extraIdsArr[1], id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case unitDefaultTestRun:
       return qaApi
         .deleteUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, row.id)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
 
     case qaCertEvent:
       return qaApi
         .deleteQaCertEvents(locationId, row.id)
-        .catch(error => console.log('error deleting QA cert events', error));
+        .catch(error => log.log('error deleting QA cert events', error));
     case qaExeptions:
       return qaApi
         .deleteTestExtension(locationId, row.id)
         .catch(error =>
-          console.log('error deleting QA TEST EXCEPTIONS', error),
+          log.log('error deleting QA TEST EXCEPTIONS', error),
         );
     default:
       throw new Error(`removeDataSwitch case not implemented for ${name}`);
@@ -529,7 +531,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case proGas:
@@ -541,7 +543,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case airEmissions:
@@ -553,7 +555,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case lineInjection:
@@ -566,14 +568,14 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataData:
       return qaApi
         .updateRataData(userInput.id, location, id, userInput)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataRunData:
@@ -587,7 +589,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataSummary:
@@ -600,7 +602,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case flowRataRun:
@@ -615,7 +617,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case rataTraverseData:
       return qaApi
@@ -630,7 +632,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error =>
-          console.log('error updating rata traverse data', error),
+          log.log('error updating rata traverse data', error),
         );
     case testQualification:
       return qaApi
@@ -640,7 +642,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput,
         )
-        .catch(error => console.log('updateTestQualification failed', error));
+        .catch(error => log.log('updateTestQualification failed', error));
     case appendixECorrelationSummary:
       return qaApi
         .updateAppendixECorrelationSummaryRecord(
@@ -650,17 +652,17 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case fuelFlowToLoad:
       return qaApi
         .updateFuelFlowToLoad(location, id, userInput.id, userInput)
-        .catch(error => console.log('updateFuelFlowToLoad failed', error));
+        .catch(error => log.log('updateFuelFlowToLoad failed', error));
     case fuelFlowToLoadBaseline:
       return qaApi
         .updateFuelFlowToLoadBaseline(location, id, userInput.id, userInput)
         .catch(error =>
-          console.log('error updating fuel flow to load baseline', error),
+          log.log('error updating fuel flow to load baseline', error),
         );
     case appendixECorrTestRun:
       return qaApi
@@ -672,7 +674,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrHeatInputGas:
       return qaApi
@@ -685,7 +687,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case appendixECorrHeatInputOil:
       return qaApi
@@ -698,21 +700,21 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowToLoadCheck:
       return qaApi
         .updateFlowToLoadCheckRecord(location, id, userInput.id, userInput)
-        .catch(error => console.log('error', error));
+        .catch(error => log.log('error', error));
     case calibrationInjections:
       return qaApi
         .updateCalibrationInjectionRecord(location, id, userInput.id, userInput)
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case onlineOfflineCalibration:
       return qaApi
         .updateOnlineOfflineCalibration(location, id, userInput.id, userInput)
         .catch(error =>
-          console.log('error updating online offline calibration', error),
+          log.log('error updating online offline calibration', error),
         );
     case fuelFlowmeterAccuracyData:
       return qaApi
@@ -722,11 +724,11 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput,
         )
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case cycleTimeSummary:
       return qaApi
         .updateCycleTimeSummary(location, id, userInput.id, userInput)
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case cycleTimeInjection:
       return qaApi
         .updateCycleTimeInjection(
@@ -737,7 +739,7 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case transmitterTransducerAccuracyData:
       return qaApi
@@ -747,17 +749,17 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput,
         )
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case flowToLoadReference:
       return qaApi
         .updateFlowToLoadReference(location, id, userInput.id, userInput)
         .catch(error =>
-          console.log('error updating flow to load reference', error),
+          log.log('error updating flow to load reference', error),
         );
     case unitDefualtTest:
       return qaApi
         .updateUnitDefaultTest(location, id, userInput.id, userInput)
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case unitDefaultTestRun:
       return qaApi
         .updateUnitDefaultTestRun(
@@ -768,12 +770,12 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput,
         )
         .catch(error =>
-          console.log('error updating unit default test run data', error),
+          log.log('error updating unit default test run data', error),
         );
     case hgSummary:
       return qaApi
         .updateHgSummary(location, id, userInput.id, userInput)
-        .catch(err => console.error(err));
+        .catch(err => log.error(err));
     case hgInjection:
       return qaApi
         .updateHgInjection(
@@ -783,18 +785,18 @@ export const saveDataSwitch = (userInput, name, location, id, extraIdsArr) => {
           userInput.id,
           userInput,
         )
-        .catch(error => console.log('error updating hg injection', error));
+        .catch(error => log.log('error updating hg injection', error));
 
     // for some reason, id and userinput. id are identical in the url
     case qaCertEvent:
       return qaApi
         .updateQaCertEvents(location, id, userInput)
-        .catch(error => console.log('error updating QA cert events', error));
+        .catch(error => log.log('error updating QA cert events', error));
     case qaExeptions:
       return qaApi
         .updateTestExtension(location, id, userInput)
         .catch(error =>
-          console.log('error updating QA TEST EXCEPTIONS', error),
+          log.log('error updating QA TEST EXCEPTIONS', error),
         );
 
     default:
@@ -816,12 +818,12 @@ export const createDataSwitch = async (
       return qaApi
         .createQALinearitySummaryTestSecondLevel(location, id, userInput)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case proGas:
       return qaApi
         .createProtocolGas(extraIdsArr[0], extraIdsArr[1], userInput)
-        .catch(error => console.log('createProtocolGas failed', error));
+        .catch(error => log.log('createProtocolGas failed', error));
     case lineInjection:
       return qaApi
         .createQALinearityInjection(
@@ -831,12 +833,12 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataData:
       return qaApi.createRataData(location, id, userInput).catch(error => {
-        console.log('error', error);
+        log.log('error', error);
       });
 
     case rataRunData:
@@ -849,14 +851,14 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
 
     case rataSummary:
       return qaApi
         .createRataSummary(extraIdsArr[0], extraIdsArr[1], id, userInput)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case rataTraverseData:
       return qaApi
@@ -870,14 +872,14 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error =>
-          console.log('error creating rata traverse data', error),
+          log.log('error creating rata traverse data', error),
         );
 
     case airEmissions:
       return qaApi
         .createAirEmissions(extraIdsArr[0], extraIdsArr[1], userInput)
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case flowRataRun:
       return qaApi
@@ -890,35 +892,35 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error => {
-          console.log('error', error);
+          log.log('error', error);
         });
     case testQualification:
       return qaApi
         .createTestQualification(extraIdsArr[0], extraIdsArr[1], userInput)
-        .catch(error => console.log('createTestQualification failed', error));
+        .catch(error => log.log('createTestQualification failed', error));
     case appendixECorrelationSummary:
       return qaApi
         .createAppendixECorrelationSummaryRecord(location, id, userInput)
         .catch(error =>
-          console.log('createAppendixECorrelationSummaryRecord failed', error),
+          log.log('createAppendixECorrelationSummaryRecord failed', error),
         );
     case fuelFlowToLoad:
       return qaApi
         .createFuelFlowToLoad(location, id, userInput)
         .catch(error =>
-          console.log('error creating fuel flow to load data', error),
+          log.log('error creating fuel flow to load data', error),
         );
     case fuelFlowToLoadBaseline:
       return qaApi
         .createFuelFlowToLoadBaseline(location, id, userInput)
         .catch(error =>
-          console.log('error creating fuel flow to load baseline data', error),
+          log.log('error creating fuel flow to load baseline data', error),
         );
     case appendixECorrTestRun:
       return qaApi
         .createAppendixERun(extraIdsArr[0], extraIdsArr[1], id, userInput)
         .catch(error => {
-          console.log('error creating appendix e correlation test run', error);
+          log.log('error creating appendix e correlation test run', error);
         });
     case appendixECorrHeatInputGas:
       return qaApi
@@ -930,7 +932,7 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error => {
-          console.log(
+          log.log(
             'error creating appendix e correlation heat input from gas',
             error,
           );
@@ -945,7 +947,7 @@ export const createDataSwitch = async (
           userInput,
         )
         .catch(error => {
-          console.log(
+          log.log(
             'error creating appendix e correlation heat input from oil',
             error,
           );
@@ -953,40 +955,40 @@ export const createDataSwitch = async (
     case cycleTimeInjection:
       return qaApi
         .createCycleTimeInjection(extraIdsArr[0], extraIdsArr[1], id, userInput)
-        .catch(error => console.log('createCycleTimeInjection failed', error));
+        .catch(error => log.log('createCycleTimeInjection failed', error));
     case flowToLoadCheck:
       return qaApi
         .createFlowToLoadCheckRecord(location, id, userInput)
         .catch(error =>
-          console.log('createFlowToLoadCheckRecord failed', error),
+          log.log('createFlowToLoadCheckRecord failed', error),
         );
     case onlineOfflineCalibration:
       return qaApi
         .createOnlineOfflineCalibration(location, id, userInput)
         .catch(error =>
-          console.log('createOnlineOfflineCalibration failed', error),
+          log.log('createOnlineOfflineCalibration failed', error),
         );
     case calibrationInjections:
       return qaApi
         .createCalibrationInjectionRecord(location, id, userInput)
         .catch(error =>
-          console.log('createCalibrationInjectionRecord failed', error),
+          log.log('createCalibrationInjectionRecord failed', error),
         );
     case fuelFlowmeterAccuracyData:
       return qaApi
         .createFuelFlowmeterAccuracyDataRecord(location, id, userInput)
         .catch(error =>
-          console.log('createFuelFlowmeterAccuracyDataRecord failed', error),
+          log.log('createFuelFlowmeterAccuracyDataRecord failed', error),
         );
     case cycleTimeSummary:
       return qaApi
         .createCycleTimeSummary(location, id, userInput)
-        .catch(error => console.log('createCycleTimeSummary failed', error));
+        .catch(error => log.log('createCycleTimeSummary failed', error));
     case transmitterTransducerAccuracyData:
       return qaApi
         .createTransmitterTransducerAccuracyDataRecord(location, id, userInput)
         .catch(error =>
-          console.log(
+          log.log(
             'createTransmitterTransducerAccuracyDataRecord failed',
             error,
           ),
@@ -994,31 +996,31 @@ export const createDataSwitch = async (
     case flowToLoadReference:
       return qaApi
         .createFlowToLoadReference(location, id, userInput)
-        .catch(error => console.log('createFlowToLoadReference failed', error));
+        .catch(error => log.log('createFlowToLoadReference failed', error));
     case unitDefualtTest:
       return qaApi
         .createUnitDefaultTest(location, id, userInput)
-        .catch(error => console.log('createUnitDefaultTest failed', error));
+        .catch(error => log.log('createUnitDefaultTest failed', error));
     case unitDefaultTestRun:
       return qaApi
         .createUnitDefaultTestRun(extraIdsArr[0], extraIdsArr[1], id, userInput)
-        .catch(error => console.log('createUnitDefaultTestRun failed', error));
+        .catch(error => log.log('createUnitDefaultTestRun failed', error));
     case hgSummary:
       return qaApi
         .createHgSummary(location, id, userInput)
-        .catch(error => console.log('createHgSummary failed', error));
+        .catch(error => log.log('createHgSummary failed', error));
     case hgInjection:
       return qaApi
         .createHgInjection(extraIdsArr[0], extraIdsArr[1], id, userInput)
-        .catch(error => console.log('createHgInjection failed', error));
+        .catch(error => log.log('createHgInjection failed', error));
     case qaCertEvent:
       return qaApi
         .createQaCertEvents(location, userInput)
-        .catch(error => console.log('createQaCertEvents failed', error));
+        .catch(error => log.log('createQaCertEvents failed', error));
     case qaExeptions:
       return qaApi
         .createTestExtension(location, userInput)
-        .catch(error => console.log('createTestExtension failed', error));
+        .catch(error => log.log('createTestExtension failed', error));
     default:
       throw new Error(`createDataSwitch case not implemented for ${name}`);
   }

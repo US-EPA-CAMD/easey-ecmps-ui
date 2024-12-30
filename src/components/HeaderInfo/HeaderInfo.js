@@ -10,6 +10,8 @@ import {
   Select,
 } from "@trussworks/react-uswds";
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
+import log from "loglevel";
+
 import config from "../../config";
 
 import { checkoutAPI } from "../../additional-functions/checkout";
@@ -367,7 +369,7 @@ export const HeaderInfo = ({
   useEffect(() => {
     if (workspaceSection === EMISSIONS_STORE_NAME) {
       getEmissionsViewDropdownData().catch((e) => {
-        console.log(e);
+        log.log(e);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -456,7 +458,7 @@ export const HeaderInfo = ({
 
       setIsLoading(false);
     } catch (e) {
-      console.error(e);
+      log.error(e);
       setIsLoading(false);
     }
   };
@@ -545,7 +547,7 @@ export const HeaderInfo = ({
         setShowCommentsModal(true);
       })
       .catch((error) => {
-        console.error("Error during getting comments", error);
+        log.error("Error during getting comments", error);
       });
 
     setTimeout(() => {
@@ -573,7 +575,7 @@ export const HeaderInfo = ({
           }
         })
         .catch((error) => {
-          console.error("Error during evaluation", error);
+          log.error("Error during evaluation", error);
         });
     }
 
@@ -617,12 +619,12 @@ export const HeaderInfo = ({
                 renderWithNewData(configs, currentConfig, false);
               })
               .catch((error) => {
-                console.error("Error during refreshing", error);
+                log.error("Error during refreshing", error);
               });
           }
         })
         .catch((error) => {
-          console.error("Error during getting checked out locations", error);
+          log.error("Error during getting checked out locations", error);
         });
     }
 
@@ -676,7 +678,7 @@ export const HeaderInfo = ({
               }
             })
             .catch((error) => {
-              console.error("Error during getting refresh info", error);
+              log.error("Error during getting refresh info", error);
             });
         }
 
@@ -843,7 +845,7 @@ export const HeaderInfo = ({
         setDataLoaded(false);
       })
       .catch((error) => {
-        console.error("Error during checking out api ", error);
+        log.error("Error during checking out api ", error);
       });
   };
 
@@ -870,7 +872,7 @@ export const HeaderInfo = ({
       setEvalStatusLoaded(false);
       setDataLoaded(false);
     } catch (error) {
-      console.error("Error during reverting to official record", error);
+      log.error("Error during reverting to official record", error);
     }
   };
 
@@ -911,7 +913,7 @@ export const HeaderInfo = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        log.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -957,7 +959,7 @@ export const HeaderInfo = ({
         setDefaultReportingPeriodChanged(true);
       })
       .catch((err) => {
-        console.log(err);
+        log.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -1110,20 +1112,20 @@ export const HeaderInfo = ({
       setDataLoaded(false);
       if (workspaceSection === EMISSIONS_STORE_NAME)
         await handleEmissionsExport().catch((error) => {
-          console.error("Error during exporting:", error);
+          log.error("Error during exporting:", error);
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi
           .exportMonitoringPlanDownload(selectedConfigId)
           .catch((error) => {
-            console.error("Error during exporting ", error);
+            log.error("Error during exporting ", error);
           });
       setDataLoaded(true);
       setIsLoading(false);
     } catch (error) {
       setDataLoaded(true);
       setIsLoading(false);
-      console.error(error);
+      log.error(error);
     }
   };
 

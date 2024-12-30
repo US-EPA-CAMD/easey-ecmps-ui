@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import log from "loglevel";
+
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -116,7 +118,7 @@ export const MonitoringPlanHome = ({
         )
         .then((res) => {})
         .catch((error) =>
-          console.log("deleteCheckInMonitoringPlanConfiguration failed", error)
+          log.log("deleteCheckInMonitoringPlanConfiguration failed", error)
         );
     }
   };

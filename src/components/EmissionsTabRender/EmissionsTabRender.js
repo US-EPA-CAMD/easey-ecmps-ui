@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import log from "loglevel";
+
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
@@ -79,7 +81,7 @@ export const EmissionsTabRender = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        log.log(error);
       });
   };
 

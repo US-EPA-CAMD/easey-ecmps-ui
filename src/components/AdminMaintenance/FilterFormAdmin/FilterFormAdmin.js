@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import log from "loglevel";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
@@ -179,7 +180,7 @@ const FilterFormAdmin = ({
       assignAriaSortHandlersToDatatable()
       assignAriaLabelsToDataTableColumns()
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       setIsTableDataLoading(false);
       setSelectedRows([]);

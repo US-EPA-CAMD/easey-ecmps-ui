@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { ArrowDownwardSharp } from "@material-ui/icons";
+import log from "loglevel";
 
 import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
 import { exportQA } from "../../utils/api/qaCertificationsAPI";
@@ -81,7 +82,7 @@ export const QAImportHistoricalDataPreview = ({
           }
         }
       } catch (err) {
-        console.log(err);
+        log.log(err);
       }
     }
   };

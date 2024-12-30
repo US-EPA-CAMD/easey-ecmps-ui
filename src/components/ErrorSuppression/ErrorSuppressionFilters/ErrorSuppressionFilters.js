@@ -8,6 +8,7 @@ import {
   Button,
   Select,
 } from "@trussworks/react-uswds";
+import log from "loglevel";
 import { ComboBox } from "../../ComboBox/ComboBox";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
@@ -145,7 +146,7 @@ export const ErrorSuppressionFilters = () => {
         setTransformedData(_transformedData);
       })
       .catch((error) => {
-        console.error("Error getting Check Catalog Results", error);
+        log.error("Error getting Check Catalog Results", error);
       });
 
     getAllFacilities()
@@ -170,7 +171,7 @@ export const ErrorSuppressionFilters = () => {
         // previouslyFocusedEle.tabIndex = -1;
       })
       .catch((error) => {
-        console.error("Error getting facilities", error);
+        log.error("Error getting facilities", error);
       });
 
     getReasonCodes()
@@ -178,7 +179,7 @@ export const ErrorSuppressionFilters = () => {
         setReasonCodeList(data);
       })
       .catch((error) => {
-        console.error("Error getting reason codes", error);
+        log.error("Error getting reason codes", error);
       });
 
     return () => {
