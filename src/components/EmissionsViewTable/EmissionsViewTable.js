@@ -112,13 +112,9 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
     }, [getFormattedCellForFirstRow, viewColumnInfo])
 
     useEffect(() => {
-
         const cols = createTableColumns();
         setTableColumns(cols);
     }, [viewColumnInfo, createTableColumns]);
-
-
-
 
     return (         
             <div className="padding-left-0 margin-left-0 padding-right-0">
