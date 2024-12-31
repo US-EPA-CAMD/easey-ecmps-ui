@@ -118,7 +118,7 @@ export const HeaderInfo = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
-  setfilterApply
+  setFilterApply
 }) => {
   //MP
   const sections = [
@@ -301,7 +301,6 @@ export const HeaderInfo = ({
       setReportingPeriods(selectedRptPeriods, currentTab.name, workspaceSection)
     );
 
-
     // Adding dispatch to below dep array causes an inifinte rerender problem
     // hence why the linter warning is being suppressed.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -323,15 +322,12 @@ export const HeaderInfo = ({
     if (currentTab?.locationSelect) {
       setLocationSelect(currentTab.locationSelect);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   useEffect(() => {
     if (currentTab?.testDataOptionSelect)
       setTestDataOptionSelect(currentTab.testDataOptionSelect);
-
-
   }, [currentTab]);
 
   // *** Assign initial event listeners after loading data/dropdowns
@@ -633,14 +629,12 @@ export const HeaderInfo = ({
         });
     }
 
-
     // clear open intervals when a different page is loaded
     return () => {
       if (dataLoaded && evalStatusLoaded) {
         clearOpenRefreshInterval();
       }
     };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkout, dataLoaded, evalStatusLoaded, updateRelatedTables]);
 
@@ -1202,7 +1196,7 @@ export const HeaderInfo = ({
       dispatch(setViewData([], currentTab.name, workspaceSection));
     }
     setIsLoading(false);
-    setfilterApply(true)
+    setFilterApply(true)
     // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
 

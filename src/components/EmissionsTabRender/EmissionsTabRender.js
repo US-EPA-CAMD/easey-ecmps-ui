@@ -110,7 +110,7 @@ export const EmissionsTabRender = ({
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
-          setfilterApply={memoizedSetFilterApply}
+          setFilterApply={memoizedSetFilterApply}
         />
       </div>
       <hr />

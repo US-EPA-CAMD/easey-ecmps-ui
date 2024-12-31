@@ -18,7 +18,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
     const [tableColumns, setTableColumns] = useState([]);
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
-    const [pendingMessage, setpendingMessage] = useState(false)
+    const [pendingMessage, setPendingMessage] = useState(false);
     const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
                 setViewData(reduxCurrentTab?.viewData || []);
                 setFilterApply(false)
                 if ( reduxCurrentTab?.viewData?.length === 0) {
-                    setpendingMessage(true)
+                    setPendingMessage(true)
                 }
             }, 1000);
 
@@ -48,7 +48,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
             if ( viewData?.length === 0) {
                 const timeOutApply = setTimeout(() => {
                     setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
-                    setpendingMessage(false)
+                    setPendingMessage(false)
                 }, 1000);
                 setMessage('There are no records to display');
                 return () => clearTimeout(timeOutApply);
