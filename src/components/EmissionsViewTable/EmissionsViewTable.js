@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-export const EmissionsViewTable = ({ monitorPlanId, filterApply, setfilterApply }) => {
+export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply }) => {
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -18,7 +18,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setfilterApply 
     const [tableColumns, setTableColumns] = useState([]);
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
-    const [pendingMessage, setpendingMessage] = useState([false])
+    const [pendingMessage, setpendingMessage] = useState(false)
     const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setfilterApply 
         if ( filterApply) {
             const timeOutApply = setTimeout(() => {
                 setViewData(reduxCurrentTab?.viewData || []);
-                setfilterApply(false)
+                setFilterApply(false)
                 if ( reduxCurrentTab?.viewData?.length === 0) {
                     setpendingMessage(true)
                 }
@@ -43,7 +43,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setfilterApply 
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
     useEffect(() => {
-        if(pendingMessage === true)
+        if(pendingMessage)
         {
             if ( viewData?.length === 0) {
                 const timeOutApply = setTimeout(() => {
