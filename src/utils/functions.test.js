@@ -280,7 +280,6 @@ describe("functions.js", function () {
       it("adds cell with alert style to eval status columns", () => {
         const columns = addEvalStatusCell(_.clone(monPlanColumns, 
           () => {}));
-          console.log(columns)
         const evalStatusColumn = columns.find(
           (column) => column.name === "Eval Status"
         );

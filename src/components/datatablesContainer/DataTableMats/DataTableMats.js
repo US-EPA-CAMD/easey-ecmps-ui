@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
   extractUserInput,
@@ -201,7 +202,7 @@ export const DataTableMats = ({
     }
     try {
       const resp = await mpApi.saveMonitoringMats(userInput)
-        .catch(error => console.log('saveMonitoringMats failed', error));
+        .catch(error => log.log('saveMonitoringMats failed', error));
       if (resp.status === 200) {
         setShow(false);
         setUpdateTable(true);
@@ -223,7 +224,7 @@ export const DataTableMats = ({
     }
     try {
       const resp = await mpApi.createMats(userInput)
-        .catch(error => console.log('createMats failed', error));
+        .catch(error => log.log('createMats failed', error));
       if (resp.status === 201) {
         setShow(false);
         setUpdateTable(true);

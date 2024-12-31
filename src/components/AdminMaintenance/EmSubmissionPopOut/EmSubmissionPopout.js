@@ -7,6 +7,7 @@ import {
   Textarea,
   Checkbox,
 } from "@trussworks/react-uswds";
+import log from "loglevel";
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
@@ -171,7 +172,7 @@ export const EmSubmissionModal = ({
       }
       setReloadTableData(true);
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       close();
     }

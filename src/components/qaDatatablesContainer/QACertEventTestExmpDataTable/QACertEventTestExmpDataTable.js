@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import log from "loglevel";
 
 import {
   mapQaCertEventsDataToRows,
@@ -123,7 +124,7 @@ const QACertEventTestExmpDataTable = ({
           setLoading(false);
         })
         .catch((error) => {
-          console.log(
+          log.log(
             `error fetching table records for ${dataTableName} `,
             error
           );
@@ -159,7 +160,7 @@ const QACertEventTestExmpDataTable = ({
       case "QA Certification Event":
         allPromises.push(
           mpApi.getMonitoringComponents(locationSelectValue).catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -167,7 +168,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           mpApi.getMonitoringSystems(locationSelectValue).catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -175,7 +176,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           dmApi.getMdmDataByCodeTable("qa-cert-event-codes").catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -183,7 +184,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           dmApi.getMdmDataByCodeTable("required-test-codes").catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -229,7 +230,7 @@ const QACertEventTestExmpDataTable = ({
             setDropdownsLoading(false);
           })
           .catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -246,7 +247,7 @@ const QACertEventTestExmpDataTable = ({
         allPromises.push([]);
         allPromises.push(
           mpApi.getMonitoringComponents(locationSelectValue).catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -254,7 +255,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           mpApi.getMonitoringSystems(locationSelectValue).catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -262,7 +263,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           dmApi.getAllSpanScaleCodes().catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -270,7 +271,7 @@ const QACertEventTestExmpDataTable = ({
         );
         allPromises.push(
           dmApi.getAllFuelCodes().catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -280,7 +281,7 @@ const QACertEventTestExmpDataTable = ({
           dmApi
             .getMdmDataByCodeTable("extension-exemption-codes")
             .catch((error) => {
-              console.log(
+              log.log(
                 `error fetching dropdown items for ${dataTableName} `,
                 error
               );
@@ -328,7 +329,7 @@ const QACertEventTestExmpDataTable = ({
             setDropdownsLoading(false);
           })
           .catch((error) => {
-            console.log(
+            log.log(
               `error fetching dropdown items for ${dataTableName} `,
               error
             );
@@ -470,7 +471,7 @@ const QACertEventTestExmpDataTable = ({
         returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       }
     } catch (error) {
-      console.log(
+      log.log(
         `error deleting data of table: ${dataTableName}, row: ${row}`,
         error
       );
@@ -490,7 +491,7 @@ const QACertEventTestExmpDataTable = ({
         setErrorMsgs(errorMsgs)
       }
     } catch (error) {
-      console.error(error)
+      log.error(error)
     }
   };
 
@@ -515,7 +516,7 @@ const QACertEventTestExmpDataTable = ({
         setErrorMsgs(errorMsgs)
       }
     } catch (error) {
-      console.error(error);
+      log.error(error);
       returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
     }
   };

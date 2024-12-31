@@ -1,3 +1,4 @@
+import log from "loglevel";
 import * as dmApi from "../utils/api/dataManagementApi";
 
 export const dataYearOptions = async () => {
@@ -51,7 +52,7 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, "supplementalMATSParameterCode");
           })
-          .catch(error => console.log('getAllMatsParameterCodes failed', error));
+          .catch(error => log.log('getAllMatsParameterCodes failed', error));
         } else if (equipmentControl) {
           await dmApi
             .getAllControlEquipmentParameterCodes()
@@ -65,7 +66,7 @@ export const UseRetrieveDropdownApi = async (
 
               setDefaultOptions(options, "parameterCode");
             })
-            .catch(error => console.log('getAllControlEquipmentParameterCodes failed', error));
+            .catch(error => log.log('getAllControlEquipmentParameterCodes failed', error));
         } else {
           await dmApi.getAllParameterCodes().then((response) => {
             options = response.data.map((option) => {
@@ -77,7 +78,7 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, fieldName);
           })
-          .catch(error => console.log('getAllParameterCodes failed', error));
+          .catch(error => log.log('getAllParameterCodes failed', error));
         }
         break;
 
@@ -93,7 +94,7 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, "supplementalMATSMonitoringMethodCode");
           })
-          .catch(error => console.log('getAllMatsMethodCodes failed', error));
+          .catch(error => log.log('getAllMatsMethodCodes failed', error));
         } else {
           await dmApi.getAllMethodCodes().then((response) => {
             options = response.data.map((option) => {
@@ -105,7 +106,7 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, fieldName);
           })
-          .catch(error => console.log('getAllMethodCodes failed', error));
+          .catch(error => log.log('getAllMethodCodes failed', error));
         }
         break;
       case "substituteDataCode":
@@ -119,7 +120,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSubstituteDataCodes failed', error));
+        .catch(error => log.log('getAllSubstituteDataCodes failed', error));
         break;
 
       case "bypassApproachCode":
@@ -133,7 +134,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllBypassApproachCodes failed', error));
+        .catch(error => log.log('getAllBypassApproachCodes failed', error));
         break;
       //Analyzer Range
       case "analyzerRangeCode":
@@ -147,7 +148,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllRangeCodes failed', error));
+        .catch(error => log.log('getAllRangeCodes failed', error));
         break;
       // System Fuel Flows
       case "maximumFuelFlowRateSourceCode":
@@ -161,7 +162,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllMaxRateSourceCodes failed', error));
+        .catch(error => log.log('getAllMaxRateSourceCodes failed', error));
         break;
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
@@ -178,7 +179,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllUnitsOfMeasureCodes failed', error));
+        .catch(error => log.log('getAllUnitsOfMeasureCodes failed', error));
         break;
 
       case "fuelType":
@@ -192,7 +193,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, "fuelCode");
         })
-        .catch(error => console.log('getAllFuelTypes failed', error));
+        .catch(error => log.log('getAllFuelTypes failed', error));
         break;
 
       case "fuelCode":
@@ -206,7 +207,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFuelCodes failed', error));
+        .catch(error => log.log('getAllFuelCodes failed', error));
         break;
       case "indicatorCode":
         await dmApi.getAllFuelIndicatorCodes().then((response) => {
@@ -219,7 +220,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFuelIndicatorCodes failed', error));
+        .catch(error => log.log('getAllFuelIndicatorCodes failed', error));
         break;
         ///
       case "demGCV":
@@ -233,7 +234,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
+        .catch(error => log.log('getAllDemonstrationMethodCodes failed', error));
         break;
         ///  same as above?
       case "demSO2":
@@ -247,7 +248,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
+        .catch(error => log.log('getAllDemonstrationMethodCodes failed', error));
         break;
       case "systemTypeCode":
         await dmApi.getAllSystemTypeCodes().then((response) => {
@@ -260,7 +261,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSystemTypeCodes failed', error));
+        .catch(error => log.log('getAllSystemTypeCodes failed', error));
         break;
       case "systemDesignationCode":
         await dmApi.getAllSystemDesignationCodes().then((response) => {
@@ -273,7 +274,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSystemDesignationCodes failed', error));
+        .catch(error => log.log('getAllSystemDesignationCodes failed', error));
         break;
 
       case "sampleAcquisitionMethodCode":
@@ -287,7 +288,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllAcquisitionMethodCodes failed', error));
+        .catch(error => log.log('getAllAcquisitionMethodCodes failed', error));
         break;
       case "componentTypeCode":
         await dmApi.getAllComponentTypeCodes().then((response) => {
@@ -300,7 +301,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllComponentTypeCodes failed', error));
+        .catch(error => log.log('getAllComponentTypeCodes failed', error));
         break;
       case "basisCode":
         await dmApi.getAllBasisCodes().then((response) => {
@@ -313,7 +314,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllBasisCodes failed', error));
+        .catch(error => log.log('getAllBasisCodes failed', error));
         break;
       // for spans
 
@@ -328,7 +329,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSpanScaleCodes failed', error));
+        .catch(error => log.log('getAllSpanScaleCodes failed', error));
         break;
       case "spanMethodCode":
         await dmApi.getAllSpanMethodCodes().then((response) => {
@@ -341,7 +342,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSpanMethodCodes failed', error));
+        .catch(error => log.log('getAllSpanMethodCodes failed', error));
         break;
       case "normalLevelCode":
       case "secondLevelCode":
@@ -356,7 +357,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllOperatingLevelCodes failed', error));
+        .catch(error => log.log('getAllOperatingLevelCodes failed', error));
         break;
 
       // for defaults
@@ -372,7 +373,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllOperatingConditionCodes failed', error));
+        .catch(error => log.log('getAllOperatingConditionCodes failed', error));
         break;
       case "defaultSourceCode":
         await dmApi.getAllDefaultSourceCodes().then((response) => {
@@ -385,7 +386,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDefaultSourceCodes failed', error));
+        .catch(error => log.log('getAllDefaultSourceCodes failed', error));
         break;
       case "defaultPurposeCode":
         await dmApi.getAllDefaultPurposeCodes().then((response) => {
@@ -398,7 +399,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDefaultPurposeCodes failed', error));
+        .catch(error => log.log('getAllDefaultPurposeCodes failed', error));
         break;
       case "formulaCode":
         await dmApi.getAllFormulaCodes().then((response) => {
@@ -411,7 +412,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFormulaCodes failed', error));
+        .catch(error => log.log('getAllFormulaCodes failed', error));
         break;
 
       case "wafMethodCode":
@@ -425,7 +426,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllRectangularDuctsCodes failed', error));
+        .catch(error => log.log('getAllRectangularDuctsCodes failed', error));
         break;
       case "controlCode":
         await dmApi.getAllControlTechnologies().then((response) => {
@@ -438,7 +439,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllControlTechnologies failed', error));
+        .catch(error => log.log('getAllControlTechnologies failed', error));
         break;
       case "qualificationTypeCode":
         await dmApi.getAllQualificationTypeCodes().then((response) => {
@@ -452,7 +453,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationTypeCodes failed', error));
         break;
       case "qualificationYear":
       case "yr1QualificationDataYear":
@@ -484,7 +485,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationDataTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationDataTypeCodes failed', error));
         break;
       case "qualificationTestType":
         await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
@@ -497,7 +498,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationLEETestTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationLEETestTypeCodes failed', error));
         break;
 
       case "materialCode":
@@ -511,7 +512,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllMaterialCodes failed', error));
+        .catch(error => log.log('getAllMaterialCodes failed', error));
         break;
 
       case "shapeCode":
@@ -525,7 +526,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllShapeCodes failed', error));
+        .catch(error => log.log('getAllShapeCodes failed', error));
         break;
 
       case "prefilteredMatsMethods":
@@ -551,7 +552,7 @@ export const UseRetrieveDropdownApi = async (
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredMatsMethods failed', error));
+        .catch(error => log.log('getPrefilteredMatsMethods failed', error));
         break;
 
       case "prefilteredMethods":
@@ -577,7 +578,7 @@ export const UseRetrieveDropdownApi = async (
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredMethods failed', error));
+        .catch(error => log.log('getPrefilteredMethods failed', error));
         break;
 
       case "prefilteredFormulas":
@@ -603,7 +604,7 @@ export const UseRetrieveDropdownApi = async (
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredFormulas failed', error));
+        .catch(error => log.log('getPrefilteredFormulas failed', error));
         break;
 
       case "prefilteredSpans":
@@ -623,7 +624,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSpans failed', error));
+        .catch(error => log.log('getPrefilteredSpans failed', error));
         break;
       case "prefilteredDefaults":
         let noDupesDefaultCodes = [];
@@ -641,20 +642,20 @@ export const UseRetrieveDropdownApi = async (
           );
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredDefaults failed', error));
+        .catch(error => log.log('getPrefilteredDefaults failed', error));
         break;
 
       case "prefilteredLoads":
         await dmApi.getPrefilteredLoads().then((response) => {
           setStaticDropdown(response.data, fieldName);
         })
-        .catch(error => console.log('getPrefilteredLoads failed', error));
+        .catch(error => log.log('getPrefilteredLoads failed', error));
         break;
       case "prefilteredUnitFuels":
         await dmApi.getPrefilteredUnitFuels().then((response) => {
           setStaticDropdown(response.data, fieldName);
         })
-        .catch(error => console.log('getPrefilteredUnitFuels failed', error));
+        .catch(error => log.log('getPrefilteredUnitFuels failed', error));
         break;
       case "prefilteredUnitControls":
         let noDupesFormCodesControls = [];
@@ -677,19 +678,19 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredUnitControls failed', error));
+        .catch(error => log.log('getPrefilteredUnitControls failed', error));
         break;
       case "prefilteredLEEQualifications":
         await dmApi.prefilteredLEEQualifications().then((response) => {
           setStaticDropdown(response.data, fieldName);
         })
-        .catch(error => console.log('prefilteredLEEQualifications failed', error));
+        .catch(error => log.log('prefilteredLEEQualifications failed', error));
         break;
       case "prefilteredSystemFuelFlows":
         await dmApi.getPrefilteredSystemFuelFlows().then((response) => {
           setStaticDropdown(response.data, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSystemFuelFlows failed', error));
+        .catch(error => log.log('getPrefilteredSystemFuelFlows failed', error));
         break;
 
       case "prefilteredSystemsComponents":
@@ -709,7 +710,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSystemComponents failed', error));
+        .catch(error => log.log('getPrefilteredSystemComponents failed', error));
         break;
       default:
         break;

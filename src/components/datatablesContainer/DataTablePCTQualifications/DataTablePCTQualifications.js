@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanPCTQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
@@ -76,7 +77,7 @@ export const DataTablePCTQualifications = ({
           setRevertedState(false);
           setUpdatePCT(false);
         })
-        .catch(error => console.log('getPCTQualifications failed', error))
+        .catch(error => log.log('getPCTQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updatePCT]);

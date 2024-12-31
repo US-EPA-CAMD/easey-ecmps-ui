@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import * as fs from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -92,7 +94,7 @@ export const DataTableRectangularDucts = ({
               setDataLoaded(true);
               setUpdateTable(false);
             })
-            .catch(error => console.log('getMonitoringRectangularDucts failed', error));
+            .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
           setRevertedState(false);
         }, [1000]);
@@ -103,7 +105,7 @@ export const DataTableRectangularDucts = ({
         setDataLoaded(true);
         setUpdateTable(false);
       })
-      .catch(error => console.log('getMonitoringRectangularDucts failed', error));
+      .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
       UseRetrieveDropdownApi(["wafMethodCode"]).then(resp => {
         setTotalOptions(resp);
