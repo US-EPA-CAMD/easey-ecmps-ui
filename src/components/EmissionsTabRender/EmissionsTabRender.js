@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import log from "loglevel";
 
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
@@ -39,10 +39,6 @@ export const EmissionsTabRender = ({
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
-
-  const memoizedSetFilterApply = useCallback((value) => {
-    setFilterApply(value);
-  }, [setFilterApply]);
   
   useEffect(() => {
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
@@ -110,7 +106,7 @@ export const EmissionsTabRender = ({
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
-          setFilterApply={memoizedSetFilterApply}
+          setFilterApply={setFilterApply}
         />
       </div>
       <hr />
@@ -141,7 +137,7 @@ export const EmissionsTabRender = ({
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={memoizedSetFilterApply}/>
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },
