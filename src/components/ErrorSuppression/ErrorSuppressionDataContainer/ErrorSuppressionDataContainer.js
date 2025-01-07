@@ -270,6 +270,14 @@ export const ErrorSuppressionDataContainer = () => {
     setShowViewModal(false);
   };
 
+  function sortDate(key) {
+    return (a, b) => {
+      if (!a[key]) return 1;
+      if (!b[key]) return -1;
+      return new Date(a[key]) - new Date(b[key]);
+    };
+  }
+
   const columns = [
     {
       name: <span>{"Select"}</span>,
@@ -343,12 +351,14 @@ export const ErrorSuppressionDataContainer = () => {
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate),
       sortable: true,
+      sortFunction: sortDate('addDate')
     },
     {
       name: <span>{"Update Date"}</span>,
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
       sortable: true,
+      sortFunction: sortDate('updateDate')
     },
     {
       name: <span>{"Record Id"}</span>,
