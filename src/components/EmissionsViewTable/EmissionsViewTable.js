@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-export const EmissionsViewTable = ({ monitorPlanId }) => {
+export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply }) => {
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -18,19 +18,44 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
     const [tableColumns, setTableColumns] = useState([]);
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
-    const [pending, setPending] = useState(true);
+    const [pendingMessage, setPendingMessage] = useState(false);
+    const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
 
-        const timeout = setTimeout(() => {
-            setViewData(reduxCurrentTab?.viewData || []);
-            setPending(false)
-        }, 500)
-        // add short delay of 500, without short delay sometimes empty table appears before loading spinner
+        if ( filterApply) {
+            const timeOutApply = setTimeout(() => {
+                setViewData(reduxCurrentTab?.viewData || []);
+                setFilterApply(false)
+                if ( reduxCurrentTab?.viewData?.length === 0) {
+                    setPendingMessage(true)
+                }
+            }, 1000);
 
-        return () => clearTimeout(timeout)
-    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData]);
+            return () => clearTimeout(timeOutApply);
+       }
+        else
+        {
+            setViewData(reduxCurrentTab?.viewData || []);
+            setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+        }
+    }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
+
+    useEffect(() => {
+        if(pendingMessage)
+        {
+            if ( viewData?.length === 0) {
+                const timeOutApply = setTimeout(() => {
+                    setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+                    setPendingMessage(false)
+                }, 1000);
+                setMessage('There are no records to display');
+                return () => clearTimeout(timeOutApply);
+           }
+        }
+        
+    }, [pendingMessage]);
 
     // If the error has an errorCode then we want to show a "View Error" link on the first column to the left of the actual data of the first column, see Zenhub ticket#5756 for more details
     const getFormattedCellForFirstRow = useCallback((row) => {
@@ -91,21 +116,22 @@ export const EmissionsViewTable = ({ monitorPlanId }) => {
         setTableColumns(cols);
     }, [viewColumnInfo, createTableColumns]);
 
-    return (
-        <div className="padding-left-0 margin-left-0 padding-right-0">
-            <DataTable
-                sortIcon={
-                    <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                }
-                noHeader={true}
-                fixedHeader={true}
-                fixedHeaderScrollHeight="50vh"
-                columns={tableColumns}
-                data={viewData}
-                className={`data-display-table react-transition fade-in`}
-                progressPending={pending}
-                progressComponent={<Preloader />}
-            />
-        </div>
+    return (         
+            <div className="padding-left-0 margin-left-0 padding-right-0">
+                <DataTable
+                    sortIcon={
+                        <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                    }
+                    noHeader={true}
+                    fixedHeader={true}
+                    fixedHeaderScrollHeight="50vh"
+                    columns={tableColumns}
+                    data={viewData}
+                    className={`data-display-table react-transition fade-in`}
+                    progressPending={filterApply}
+                    noDataComponent={message}
+                    progressComponent={<Preloader />}
+                />
+            </div>
     )
 }
