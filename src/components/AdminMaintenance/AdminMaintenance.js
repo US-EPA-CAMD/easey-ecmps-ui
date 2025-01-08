@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import log from "loglevel";
 import FilterFormAdmin from "./FilterFormAdmin/FilterFormAdmin";
 import { getAllFacilities } from "../../utils/api/facilityApi";
 import {
@@ -59,7 +60,7 @@ export const AdminMaintenance = ({ section }) => {
         // previouslyFocusedEle.tabIndex = -1;
       })
       .catch((error) => {
-        console.error("Error getting facilities", error);
+        log.error("Error getting facilities", error);
       });
 
     getReportingPeriods()
@@ -67,7 +68,7 @@ export const AdminMaintenance = ({ section }) => {
         setReportingPeriods(data);
       })
       .catch(error => {
-        console.error("Error getting reporting periods", error);
+        log.error("Error getting reporting periods", error);
       })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

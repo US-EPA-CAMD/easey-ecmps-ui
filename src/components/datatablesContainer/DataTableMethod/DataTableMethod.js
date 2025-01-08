@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -95,18 +97,18 @@ export const DataTableMethod = ({
     const fetchMethods = async () => {
       try {
         const methods = await mpApi.getMonitoringMethods(locationSelectValue)
-          .catch(error => console.log('getMonitoringMethods failed', error));
+          .catch(error => log.log('getMonitoringMethods failed', error));
         setMethods(methods.data);
         setDataLoaded(true);
         const matsMethods = await mpApi.getMonitoringMatsMethods(
           locationSelectValue
-        ).catch(error => console.log('getMonitoringMatsMethods failed', error));
+        ).catch(error => log.log('getMonitoringMatsMethods failed', error));
         setMatsMethods(matsMethods.data);
         setUpdateTable(false);
         setRevertedState(false);
         setUpdateRelatedTables(false);
       } catch (error) {
-        console.log("error fetching methods", error);
+        log.log("error fetching methods", error);
       }
     };
     if (
@@ -362,7 +364,7 @@ export const DataTableMethod = ({
 
     try {
       const resp = await mpApi.saveMonitoringMethods(userInput)
-        .catch(error => console.log('saveMonitoringMethods failed', error));
+        .catch(error => log.log('saveMonitoringMethods failed', error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
@@ -387,7 +389,7 @@ export const DataTableMethod = ({
 
     try {
       const resp = await mpApi.createMethods(userInput)
-        .catch(error => console.log('createMethods failed', error));
+        .catch(error => log.log('createMethods failed', error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
+import log from "loglevel";
 
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
@@ -95,7 +96,7 @@ export const QACertEventHeaderInfo = ({
           setAllTestTypeCodes(res.data);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
 
       getAllTestTypeGroupCodes()
@@ -111,7 +112,7 @@ export const QACertEventHeaderInfo = ({
           setTestTypeGroupOptions(options);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
     };
     fetchTestTypeCodes();
@@ -149,11 +150,11 @@ export const QACertEventHeaderInfo = ({
           updateDate: info.data.updateDate,
         })
       )
-      .catch((err) => console.log(err));
+      .catch((err) => log.log(err));
     mpApi
       .getCheckedOutLocations()
       .then((res) => setCheckedOutConfigs(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => log.log(err));
 
     return () => {
       cleanupFocusEventListeners();
@@ -266,7 +267,7 @@ export const QACertEventHeaderInfo = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        log.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -331,7 +332,7 @@ export const QACertEventHeaderInfo = ({
         setIsCheckedOut(direction);
       })
       .catch((error) => {
-        console.error("Error during checkout", error);
+        log.error("Error during checkout", error);
       });
   };
 

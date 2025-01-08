@@ -1,3 +1,4 @@
+import log from "loglevel";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { DatabaseContext } from "../constants/databaseContext";
@@ -1301,6 +1302,6 @@ export const exportMonitoringPlanDownload = async (configID) => {
     const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
     download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
   } catch (error) {
-    console.log(error);
+    log.log(error);
   }
 };

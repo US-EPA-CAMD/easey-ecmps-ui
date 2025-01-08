@@ -1,5 +1,5 @@
 import React from "react";
-
+import log from "loglevel";
 import { Button } from "@trussworks/react-uswds";
 import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
 
@@ -47,7 +47,7 @@ const Tabs = ({
                 removeTab(index);
               })
               .catch((error) =>
-                console.log(
+                log.log(
                   "deleteCheckInMonitoringPlanConfiguration failed",
                   error
                 )
@@ -56,7 +56,7 @@ const Tabs = ({
             removeTab(index);
           }
         })
-        .catch((error) => console.log("getCheckedOutLocations failed", error));
+        .catch((error) => log.log("getCheckedOutLocations failed", error));
     } else {
       removeTab(index);
     }

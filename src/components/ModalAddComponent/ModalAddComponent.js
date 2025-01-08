@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import log from "loglevel";
+
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
@@ -27,15 +29,15 @@ const ModalAddComponent = ({
         .then((res) => {
           setComps(res.data);
         })
-        .catch((error) => console.log("getMonitoringComponents failed", error));
+        .catch((error) => log.log("getMonitoringComponents failed", error));
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
-          console.log("ress", ress);
+          log.log("ress", ress);
           setSysComps(ress.data);
         })
         .catch((error) =>
-          console.log("getMonitoringSystemsComponents failed", error)
+          log.log("getMonitoringSystemsComponents failed", error)
         );
     } else {
       main = comps;

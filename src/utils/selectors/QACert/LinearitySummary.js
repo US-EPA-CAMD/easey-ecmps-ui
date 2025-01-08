@@ -111,7 +111,6 @@ export const getQAColsByTestCode = (testCode, user = false) => {
       ];
       break;
     default:
-    // console.log(`getQAColsByTestCode default case w/ testCode: ${testCode}`);
   }
 
   // Public view add "Last Submitted By" and "Last Submitted Date/Time"
@@ -456,7 +455,6 @@ export const getQAModalDetailsByTestCode = (testCode, selectedLocation) => {
       };
       break;
     default:
-    // console.log(`getQAModalDetailsByTestCode default case w/ testCode: ${testCode}`);
   }
 
   if (selectedLocation.unitId) {

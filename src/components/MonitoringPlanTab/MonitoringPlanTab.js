@@ -43,7 +43,6 @@ export const MonitoringPlanTab = ({
     return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
   }, [selectedConfigId, tabs]);
 
-  // console.log('workspaceSection',workspaceSection)
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);

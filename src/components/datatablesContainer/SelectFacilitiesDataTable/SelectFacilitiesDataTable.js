@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
+import log from "loglevel";
+
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -51,7 +53,7 @@ export const SelectFacilitiesDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("Error getting facilities", error);
+        log.error("Error getting facilities", error);
       });
     return () => {
       setFacilities([]); // This worked for me
