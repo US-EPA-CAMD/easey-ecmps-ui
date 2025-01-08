@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, GovBanner } from "@trussworks/react-uswds";
 import { AppVersion, Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+
 import DefaultTemplate from "../DefaultTemplate/DefaultTemplate";
 import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplate";
 import config from "../../../config";
 import { downloadReport } from "../../../utils/api/camdServices";
 import { handleError } from "../../../utils/api/apiUtils";
 import { getEvalResultMessage, getEvalStatus } from "../../../utils/functions";
+import { LeakRemoveTwoTone } from "@material-ui/icons";
 
 export const Report = ({ reportData, dataLoaded, paramsObject }) => {
   const [evalResultMessage, setEvalResultMessage] = useState(null);
@@ -23,7 +26,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
         );
         setEvalResultMessage(resultMessage);
       } catch (error) {
-        console.error("Error fetching eval status", error);
+        log.error("Error fetching eval status", error);
       } finally {
         setLoading(false);
       }
@@ -118,18 +121,18 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
     results.push(
       detail.results.map((row) => {
         const columnData = detailColumns.values.map((column, index) => {
-          const columnValue = row[column.name];
+          let columnValue = row[column.name];
           const codeGroup = row[column.name + "Group"];
           const codeDescription = row[column.name + "Description"];
-
+      
           if (codeGroup) {
             let group = findGroupByName(groups, codeGroup);
-
+      
             if (!group) {
               group = { name: codeGroup, items: [] };
               groups.push(group);
             }
-
+      
             const code = findItemByCode(group.items, columnValue);
             if (!code && columnValue !== null && columnValue !== undefined) {
               group.items.push({
@@ -138,9 +141,11 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
               });
             }
           }
-
+      
           const columnNumber = `"col${index + 1}": `;
           if (columnValue !== null && columnValue !== undefined) {
+            //replaced all the \ with /, exclude \r and \n
+            columnValue = columnValue.replace(/\\(?![rn])/g, '/');
             if (columnValue.includes("\r\n")) {
               return `${columnNumber}"${columnValue.replace(
                 /\r\n/gi,

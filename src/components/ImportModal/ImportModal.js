@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import log from "loglevel";
 import { FormGroup, Label, Alert } from "@trussworks/react-uswds";
 import { FileInput } from "../FileInput/FileInput";
 import { checkingCorrectSchema } from "./import-functions";
@@ -43,7 +43,7 @@ const ImportModal = ({
             setMpSchema(data);
             setLabel("Upload MP JSON File");
           })
-          .catch((err) => console.log(err));
+          .catch((err) => log.log(err));
         setLabel("Upload MP JSON File");
         break;
       case QA_CERT_TEST_SUMMARY_STORE_NAME:
@@ -53,7 +53,7 @@ const ImportModal = ({
             setQaSchema(data);
             setLabel("Upload QA JSON File");
           })
-          .catch((err) => console.log(err));
+          .catch((err) => log.log(err));
         setLabel("Upload QA JSON File");
         break;
       case EMISSIONS_STORE_NAME:
@@ -63,7 +63,7 @@ const ImportModal = ({
             setEmSchema(data);
             setLabel("Upload Emissions JSON File");
           })
-          .catch((err) => console.log(err));
+          .catch((err) => log.log(err));
         setLabel("Upload Emissions JSON File");
         break;
       default:

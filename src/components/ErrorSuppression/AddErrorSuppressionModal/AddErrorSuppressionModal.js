@@ -8,6 +8,8 @@ import {
   TextInput,
   Checkbox,
 } from "@trussworks/react-uswds";
+import log from "loglevel";
+
 import { ComboBox } from "../../ComboBox/ComboBox";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
@@ -215,7 +217,7 @@ export const AddErrorSupressionModal = ({
         setSeverityCodeList(data);
       })
       .catch((error) => {
-        console.log("Error getting Severity Codes", error);
+        log.log("Error getting Severity Codes", error);
       });
   }, []);
 
@@ -306,7 +308,7 @@ export const AddErrorSupressionModal = ({
           setLocationData([...availLoc]);
         })
         .catch((err) => {
-          console.log("error", err);
+          log.log("error", err);
         });
     }
   };
@@ -405,7 +407,7 @@ export const AddErrorSupressionModal = ({
 
     try {
       const resp = await createErrorSuppression(payload).catch((error) =>
-        console.log("create failed", error)
+        log.log("create failed", error)
       );
       if (successResponses.includes(resp.status)) {
         close();

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import log from "loglevel";
+
 import {
   getMonitoringPlans,
   getCheckedOutLocations,
@@ -293,10 +295,10 @@ export const EvaluateAndSubmit = ({
         //proceed to launch the submission modal
         setShowModal(true);
       }
-      console.log("Submission Evaluation");
+      log.log("Submission Evaluation");
     } else {
       finalSubmission(triggerBulkEvaluation);
-      console.log("Emission Evaluation");
+      log.log("Emission Evaluation");
     }
   };
 

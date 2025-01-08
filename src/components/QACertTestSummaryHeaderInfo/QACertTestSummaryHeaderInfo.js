@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
+import log from "loglevel";
 
 import "./QACertTestSummaryHeaderInfo.scss";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -121,7 +122,7 @@ export const QACertTestSummaryHeaderInfo = ({
           setAllTestTypeCodes(res.data);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
 
       getAllTestTypeGroupCodes()
@@ -137,7 +138,7 @@ export const QACertTestSummaryHeaderInfo = ({
           setTestTypeGroupOptions(options);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
     };
     fetchTestTypeCodes();
@@ -183,11 +184,11 @@ export const QACertTestSummaryHeaderInfo = ({
           updateDate: info.data.updateDate,
         })
       )
-      .catch((err) => console.log(err));
+      .catch((err) => log.log(err));
     mpApi
       .getCheckedOutLocations()
       .then((res) => setCheckedOutConfigs(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => log.log(err));
 
     return () => {
       cleanupFocusEventListeners();
@@ -314,7 +315,7 @@ export const QACertTestSummaryHeaderInfo = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        log.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -348,7 +349,7 @@ export const QACertTestSummaryHeaderInfo = ({
         setImportedFileErrorMsgs(errorMsgs);
       }
     } catch (error) {
-      console.log("error importing MATS files", error);
+      log.log("error importing MATS files", error);
     } finally {
       setIsLoading(false);
       setFinishedLoading(true);
@@ -407,7 +408,7 @@ export const QACertTestSummaryHeaderInfo = ({
         setIsCheckedOut(direction);
       })
       .catch((error) => {
-        console.error("Error during checkout", error);
+        log.error("Error during checkout", error);
       });
   };
 

@@ -1,3 +1,4 @@
+import log from "loglevel";
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
 import { DatabaseContext } from "../constants/databaseContext";
@@ -439,6 +440,22 @@ export const saveSystemsComponents = async (payload, locId, sysId, compId) => {
 
   // *** remove attributes not needed by the API
   delete payload["id"];
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: payload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const saveComponents = async (payload, locId, compId) => {
+  const url = getApiUrl(`/locations/${locId}/components/${compId}`);
 
   try {
     return handleResponse(
@@ -1285,6 +1302,6 @@ export const exportMonitoringPlanDownload = async (configID) => {
     const exportFileName = `MP Export - ${facName}, ${mpName} (${fullDateString}).json`;
     download(JSON.stringify(mpRes.data, null, "\t"), exportFileName);
   } catch (error) {
-    console.log(error);
+    log.log(error);
   }
 };

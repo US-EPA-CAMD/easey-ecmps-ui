@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import Modal from "../../Modal/Modal";
@@ -139,7 +141,7 @@ export const DataTableSystems = ({
           setMonitoringSystems(res.data);
           setDataLoaded(true);
         })
-        .catch((error) => console.log("getMonitoringSystems failed", error));
+        .catch((error) => log.log("getMonitoringSystems failed", error));
       setUpdateSystemTable(false);
       setUpdateRelatedTables(false);
       setRevertedState(false);
@@ -384,7 +386,7 @@ export const DataTableSystems = ({
     try {
       const resp = await mpApi
         .saveSystems(userInput, locationSelectValue, selectedSystem.id)
-        .catch((error) => console.log("saveSystems failed", error));
+        .catch((error) => log.log("saveSystems failed", error));
       if (successResponses.includes(resp.status)) {
         setUpdateSystemTable(true);
         setUpdateRelatedTables(true);
@@ -409,7 +411,7 @@ export const DataTableSystems = ({
     try {
       const resp = await mpApi
         .createSystems(userInput, locationSelectValue)
-        .catch((error) => console.log("createSystems failed", error));
+        .catch((error) => log.log("createSystems failed", error));
       if (successResponses.includes(resp.status)) {
         setSecondLevel(false);
         setUpdateSystemTable(true);
@@ -453,7 +455,7 @@ export const DataTableSystems = ({
     try {
       const resp = await mpApi
         .saveAnalyzerRanges(userInput)
-        .catch((error) => console.log("saveAnalyzerRanges failed", error));
+        .catch((error) => log.log("saveAnalyzerRanges failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         setUpdateRelatedTables(true);
@@ -497,7 +499,7 @@ export const DataTableSystems = ({
     try {
       const resp = await mpApi
         .createAnalyzerRanges(userInput)
-        .catch((error) => console.log("createAnalyzerRanges failed", error));
+        .catch((error) => log.log("createAnalyzerRanges failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateAnalyzerRangeTable(true);
         setUpdateRelatedTables(true);
@@ -545,7 +547,7 @@ export const DataTableSystems = ({
           selectedSystem.locationId,
           selectedSystem.locationId
         )
-        .catch((error) => console.log("saveSystemsFuelFlows failed", error));
+        .catch((error) => log.log("saveSystemsFuelFlows failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
         setUpdateRelatedTables(true);
@@ -580,7 +582,7 @@ export const DataTableSystems = ({
           selectedSystem.locationId,
           selectedSystem.id
         )
-        .catch((error) => console.log("createSystemsFuelFlows failed", error));
+        .catch((error) => log.log("createSystemsFuelFlows failed", error));
       if (resp.status >= 200 && resp.status < 300) {
         setUpdateFuelFlowTable(true);
         setErrorMsgs([]);
@@ -634,7 +636,7 @@ export const DataTableSystems = ({
             selectedSystem.locationId,
             selectedSystem.id
           )
-          .catch((error) => console.log("createComponents failed", error));
+          .catch((error) => log.log("createComponents failed", error));
         }
         response = await mpApi
         .createSystemsComponents(
@@ -642,7 +644,7 @@ export const DataTableSystems = ({
           selectedSystem.locationId,
           selectedSystem.id
         )
-        .catch((error) => console.log("createSystemsComponents failed", error));
+        .catch((error) => log.log("createSystemsComponents failed", error));
       
       if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
         setupdateComponentTable(true);
@@ -654,7 +656,7 @@ export const DataTableSystems = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      setErrorMsgs(JSON.stringify(error));
+      setErrorMsgs([JSON.stringify(error)]);
     }
     return false;
   };
@@ -669,7 +671,6 @@ export const DataTableSystems = ({
     userInput.componentId = selectedRangeInFirst.componentId;
     userInput.componentTypeCode = selectedRangeInFirst.componentTypeCode;
     userInput.basisCode = selectedRangeInFirst.basisCode;
-    userInput.hgConverterIndicator = selectedRangeInFirst.hgConverterIndicator;
     userInput.sampleAcquisitionMethodCode =
       selectedRangeInFirst.sampleAcquisitionMethodCode;
 
@@ -679,28 +680,49 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
+    
     try {
-      const resp = await mpApi
-        .saveSystemsComponents(
+          let resp;
+          let response;
+
+          response = await mpApi
+          .saveComponents(
+          userInput,
+          selectedSystem.locationId,
+          selectedRangeInFirst.componentId
+          )
+          .catch((error) => log.log("saveComponents failed", error));
+
+          resp = await mpApi
+          .saveSystemsComponents(
           userInput,
           selectedSystem.locationId,
           selectedSystem.id,
           selectedRangeInFirst.id
-        )
-        .catch((error) => console.log("saveSystemsComponents failed", error));
-      if (resp.status >= 200 && resp.status < 300) {
+          )
+        .catch((error) => log.log("saveSystemsComponents failed", error));
+
+        const newErrorMsgs = [];
+        [resp, response].forEach((res) => {
+          if (res?.status < 200 || res?.status >= 300) {
+                newErrorMsgs.push(res);
+              }
+          });
+
+        if (newErrorMsgs.length > 0) {
+            setErrorMsgs(newErrorMsgs.flat());
+            return false;
+        }
+
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
         return true;
-      } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
-        setErrorMsgs(errorResp);
+
+      } catch (error) {
+        setErrorMsgs(JSON.stringify(error));
       }
-    } catch (error) {
-      setErrorMsgs([JSON.stringify(error)]);
-    }
-    return false;
+      return false;
   };
 
   // from analyzer ranges view to components view

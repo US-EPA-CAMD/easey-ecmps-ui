@@ -62,7 +62,6 @@ const Login = ({ isModal, closeModalHandler, maintenanceContent, showSystemNotif
           // *** NOTE: we are NOT displaying actual individual messages that go with each field,
           // ***       instead displaying a general message for both fields.  Individual messages are available
           // ***       in commented out object below
-          // console.log(jsonErrors.errors);
           setShowError(true);
           setFormErrorMessage(standardFormErrorMessage);
         });

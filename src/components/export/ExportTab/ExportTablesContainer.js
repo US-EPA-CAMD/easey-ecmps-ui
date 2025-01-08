@@ -2,6 +2,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
+import log from "loglevel";
 
 import { exportQA } from "../../../utils/api/qaCertificationsAPI";
 import { getUnitIdAndStackPipeIds } from "../../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
@@ -69,7 +70,7 @@ export const ExportTablesContainer = ({
           setLoading(false);
         }
       } catch (err) {
-        console.log(err);
+        log.log(err);
       }
     };
     fetchTableData();

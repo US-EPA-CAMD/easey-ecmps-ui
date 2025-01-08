@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
@@ -71,7 +73,7 @@ export const ErrorSuppressionDataContainer = () => {
         assignAriaLabelsToDataTableColumns();
       })
       .catch((err) => {
-        console.log("error", err);
+        log.log("error", err);
       })
       .finally(() => {
         setIsTableLoading(false);
