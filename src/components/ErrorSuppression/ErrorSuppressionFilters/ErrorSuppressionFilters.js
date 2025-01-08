@@ -205,22 +205,32 @@ export const ErrorSuppressionFilters = () => {
   };
 
   const onFacilityChange = (value) => {
-    setSelectedFacility(value);
+    setSelectedFacility(value === null ? null : value);
     if (!value || value === defaultDropdownText) {
       setSelectedLocations([]);
       setLocationData([]);
       return;
     }
-
+    const facility = facilityList.find((f) => f.value === value);
+  
     if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
       const checkResultObj = transformedData[selectedCheckType][
         selectedCheckNumber
       ].find((r) => r.checkResult === selectedCheckResult);
-      const facility = facilityList.find((f) => f.value === value);
+      
 
       getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
         setLocationData([...availLoc])
       );
+    }
+    else{
+      getLocations(facility.orisCode, {
+            locationTypeCode: "LOC",
+          }).then((availLoc) =>
+          {
+            setLocationData([...availLoc])
+          }
+        )
     }
   };
 
@@ -454,6 +464,7 @@ export const ErrorSuppressionFilters = () => {
             options={facilityList}
             onChange={onFacilityChange}
             disableFiltering={false}
+            selectedFacility = {selectedFacility}
           />
         </Grid>
         <Grid col={4}>
@@ -466,9 +477,6 @@ export const ErrorSuppressionFilters = () => {
               onChangeUpdate={onChangeOfLocationMultiSelect}
               disabled={
                 !(
-                  selectedCheckType &&
-                  selectedCheckNumber &&
-                  selectedCheckResult &&
                   selectedFacility &&
                   selectedFacility !== defaultDropdownText
                 )
