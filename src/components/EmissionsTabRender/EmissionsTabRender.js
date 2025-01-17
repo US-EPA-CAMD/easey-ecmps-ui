@@ -35,10 +35,11 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [filterApply, setFilterApply] = useState(false);
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
-
+  
   useEffect(() => {
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,6 +106,7 @@ export const EmissionsTabRender = ({
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
+          setFilterApply={setFilterApply}
         />
       </div>
       <hr />
@@ -135,7 +137,7 @@ export const EmissionsTabRender = ({
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} />
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },
