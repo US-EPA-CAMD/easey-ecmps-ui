@@ -205,7 +205,7 @@ export const ErrorSuppressionFilters = () => {
   };
 
   const onFacilityChange = (value) => {
-    setSelectedFacility(value === null ? null : value);
+    setSelectedFacility(value);
     if (!value || value === defaultDropdownText) {
       setSelectedLocations([]);
       setLocationData([]);
