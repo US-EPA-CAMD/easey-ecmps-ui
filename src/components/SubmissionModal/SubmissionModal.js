@@ -54,7 +54,7 @@ export const SubmissionModal = ({
       setLoading(true);  // Set loading to true before fetching data
       try {
         const result = await getCredentials(monitorPlanIds);
-        const list = result.data.data.map((el) => ({
+        const list = result.data.items.map((el) => ({
           title: "Certification Statement",
           content: el.statementText,
           expanded: false,
