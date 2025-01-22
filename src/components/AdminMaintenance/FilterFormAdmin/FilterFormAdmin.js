@@ -163,9 +163,9 @@ const FilterFormAdmin = ({
           default:
             return;
         }
-        let newData = resp.data;
+        let newData = resp.data.data;
         if (facilities.length > 0) {
-          newData = resp.data.map((obj) => ({
+          newData = resp.data.data.map((obj) => ({
             ...obj,
             facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
               }`,
