@@ -236,11 +236,11 @@ export const ErrorSuppressionFilters = () => {
 
   const onCheckTypeChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckType(value);
-    setSelectedCheckNumber(false);
-    setSelectedCheckResult(false);
+    setSelectedCheckNumber(undefined);
+    setSelectedCheckResult(undefined);
     if (!value) return;
 
     const checkNumbers = Object.keys(transformedData[value]);
@@ -251,10 +251,10 @@ export const ErrorSuppressionFilters = () => {
 
   const onCheckNumberChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckNumber(value);
-    setSelectedCheckResult(false);
+    setSelectedCheckResult(undefined);
 
     if (!value) return;
 
@@ -269,7 +269,7 @@ export const ErrorSuppressionFilters = () => {
 
   const onCheckResultChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckResult(value);
     if (!value) {
@@ -324,13 +324,13 @@ export const ErrorSuppressionFilters = () => {
 
     //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
     setCheckType(
-      selectedCheckType !== defaultDropdownText ? selectedCheckType : null
+      selectedCheckType !== defaultDropdownText ? selectedCheckType : undefined
     );
     setCheckNumber(
-      selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null
+      selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : undefined
     );
     setCheckResult(
-      selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null
+      selectedCheckResult !== defaultDropdownText ? selectedCheckResult : undefined
     );
     setFacility(orisCode);
     setLocations(unitStackNames);
