@@ -67,7 +67,7 @@ const QAMaintenanceData = ({
         // populate the options for Test Type Code filter if needed
         if (typeSelection === "Test Summary") {
           //gather all the test type codes from the data table set
-          const testTypeCodes = [...new Set(data.map(({ testTypeCode }) => testTypeCode))].sort();
+          const testTypeCodes = [...new Set(data.map(({ testTypeCode }) => testTypeCode))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
   
           const availTestTypeCode = testTypeCodes.map((testTypeCode) => ({
             id: testTypeCode,
