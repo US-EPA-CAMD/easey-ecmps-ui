@@ -130,8 +130,8 @@ const FilterFormAdmin = ({
           quarter,
           status
         );
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        data.items.forEach((d) => (d.selected = false));
+        setTableData(data.items);
       }
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
@@ -163,9 +163,9 @@ const FilterFormAdmin = ({
           default:
             return;
         }
-        let newData = resp.data.data;
+        let newData = resp.data.items;
         if (facilities.length > 0) {
-          newData = resp.data.data.map((obj) => ({
+          newData = resp.data.items.map((obj) => ({
             ...obj,
             facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
               }`,
