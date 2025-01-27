@@ -118,6 +118,7 @@ export const HeaderInfo = ({
   setUpdateRelatedTables,
   updateRelatedTables,
   workspaceSection,
+  setFilterApply
 }) => {
   //MP
   const sections = [
@@ -1195,7 +1196,7 @@ export const HeaderInfo = ({
       dispatch(setViewData([], currentTab.name, workspaceSection));
     }
     setIsLoading(false);
-
+    setFilterApply(true)
     // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
 
