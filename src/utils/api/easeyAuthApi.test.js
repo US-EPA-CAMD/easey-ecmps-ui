@@ -254,9 +254,9 @@ describe("Easey Auth API", () => {
         `${config.services.authApi.uri
         }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`
       )
-      .reply(200, {});
+      .reply(200, { items: {} });
 
-    expect((await getCredentials(monitorPlans)).data).toEqual({});
+    expect((await getCredentials(monitorPlans)).data).toEqual({ items: {} });
   });
 
   it("getPermissions", async () => {
