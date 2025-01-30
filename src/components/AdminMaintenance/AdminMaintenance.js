@@ -41,7 +41,7 @@ export const AdminMaintenance = ({ section }) => {
   useEffect(() => {
     getAllFacilities()
       .then(({ data }) => {
-        const formattedFacilities = data.map((f) => ({
+        const formattedFacilities = data.items.map((f) => ({
           value: f.facilityId,
           label: `${f.facilityName} (${f.facilityId})`,
         }));
