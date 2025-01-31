@@ -27,7 +27,7 @@ describe("testing facilities data fetching APIs", () => {
 
     const result = await getAllFacilities();
 
-    expect(result["data"].items.facilities).toEqual(mockResponse.facilities);
+    expect(result["data"].items.facilities).toEqual(mockResponse.items.facilities);
   });
 
   it("Should get facility data from a specific facility ID", async () => {
