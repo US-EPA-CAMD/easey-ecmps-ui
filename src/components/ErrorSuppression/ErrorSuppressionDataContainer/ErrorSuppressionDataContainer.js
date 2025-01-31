@@ -46,7 +46,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
-    if (!checkType || !checkNumber || !checkResult) return;
+    if (!checkType && !checkNumber && !checkResult && !facility && !locations) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
     // const params = { checkType:"QUAL", checkNumber:'23', checkResult:'D', facility, locations, active, reason, addDateAfter, addDateBefore, }
     // const params = { checkType:"HOURGEN", checkNumber:'7', checkResult:'C', facility, locations, active, reason, addDateAfter, addDateBefore, }
