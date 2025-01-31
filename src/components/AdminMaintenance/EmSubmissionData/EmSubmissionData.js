@@ -517,7 +517,7 @@ export const EmSubmissionData = ({
                     || selectedRows.some(row => row.status !== 'OPEN')
                   }
                 >
-                  Close
+                  Cancel
                 </Button>
               </div>
               <div className="grid-col-3">
