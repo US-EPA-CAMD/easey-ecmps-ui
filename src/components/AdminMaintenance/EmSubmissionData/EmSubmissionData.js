@@ -298,7 +298,7 @@ export const EmSubmissionData = ({
                   id="em-submission-close-btn"
                   disabled={selectedRows.length === 0}
                 >
-                  Close
+                  Cancel
                 </Button>
               </div>
               <div className="grid-col-3">
