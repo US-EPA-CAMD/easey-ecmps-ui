@@ -50,8 +50,8 @@ const FilterFormAdmin = ({
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
     { code: "Cancelled", name: "Cancelled" },
-    { code: "No_Window", name: "No Window" },
-    { code: "Not_Yet_Open", name: "Not Yet Open" },
+    { code: "No Window", name: "No Window" },
+    { code: "Not Yet Open", name: "Not Yet Open" },
   ]);
 
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
@@ -89,7 +89,6 @@ const FilterFormAdmin = ({
   }, [reportingPeriods, processReportingPeriods]);
 
   const applyFilters = useCallback(async () => {
-    let monitorPlanId;
     let year;
     let quarter;
     let status;
@@ -115,7 +114,6 @@ const FilterFormAdmin = ({
       if (section === SUBMISSION_ACCESS_STORE_NAME) {
         const { data } = await getEmSubmissionRecords(
           selectedFacility,
-          monitorPlanId,
           year,
           quarter,
           status
@@ -194,7 +192,7 @@ const FilterFormAdmin = ({
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
 
-    if (!value || value === defaultDropdownText) {
+    if (!value) {
       setSelectedFacility(null);
     }
   };
@@ -207,6 +205,7 @@ const FilterFormAdmin = ({
       element.click();
     });
     setSelectedFacility(null);
+    setSelectedReportingPeriod(null);
     setTypeSelection(null);
     setSelectedStatus(null);
     setTableData([]);
@@ -337,7 +336,7 @@ const FilterFormAdmin = ({
               disabled={
                 !(
                   (section === SUBMISSION_ACCESS_STORE_NAME
-                    && ((selectedReportingPeriod && selectedReportingPeriod[1] !== defaultDropdownText) || selectedFacility ) // for EM Submission Access, need to have at least reporting period OR facility to enable the button
+                    && (selectedFacility && (selectedReportingPeriod && selectedReportingPeriod[1] !== '') ) // for EM Submission Access, need to have at least reporting period OR facility to enable the button
                   ) ||
                     (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
                       && selectedFacility
