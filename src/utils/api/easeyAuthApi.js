@@ -111,7 +111,10 @@ export const determinePolicy = async (payload) => {
     url: `${config.services.authApi.uri}/authentication/determinePolicy`,
     data: payload,
   }).then(handleResponse)
-    .catch(handleError);
+    .catch((error)=>{
+      handleError(error);
+      throw error
+    });
 };
 
 export const authenticate = async (payload) => {
@@ -272,7 +275,7 @@ export const validate = async (payload) => {
   } catch (err) {
     displayAppError(err.response?.data?.message || err?.message || err);
   }
-  
+
 };
 
 export const createActivity = async (payload) => {
@@ -292,14 +295,13 @@ export const getCredentials = async (monitorPlans) => {
   try {
     return await secureAxios({
       method: "GET",
-      url: `${
-        config.services.authApi.uri
-      }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
+      url: `${config.services.authApi.uri
+        }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
     });
   } catch (err) {
     displayAppError(err.response?.data?.message || err?.message || err);
   }
-  
+
 };
 
 export const validUser = () => {
