@@ -277,10 +277,19 @@ export const getEvalStatus = async (paramsArray) => {
 
   if(workspace)
     {
-     const items = response?.data.filter((el) => el[identifier] === id);
-     if (!response?.data?.length) return;
-     if (identifier) return items[0].evalStatusCode;
-     return response.data[0]?.evalStatusCode;
+      if (response.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
+        const items = response?.data.items.filter((el) => el[identifier] === id);
+        if (!response?.data?.items.length) return;
+        if (identifier) return items[0].evalStatusCode;
+        return response.data.items[0]?.evalStatusCode;
+      }
+      else 
+      {
+        const items = response?.data.filter((el) => el[identifier] === id);
+        if (!response?.data?.length) return;
+        if (identifier) return items[0].evalStatusCode;
+        return response.data[0]?.evalStatusCode;
+      }
     }
     else {
       if (response.request.responseURL.includes('emissions-mgmt/emissions')) {

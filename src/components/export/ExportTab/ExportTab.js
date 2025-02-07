@@ -142,7 +142,13 @@ export const ExportTab = ({
       {
         if(workspace)
         {
-         return resp.data
+            if (resp.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
+              return resp.data.items
+           }
+            else 
+           {
+               return resp.data
+           }
         }
         else {
           if (resp.request.responseURL.includes('emissions-mgmt/emissions')) {
