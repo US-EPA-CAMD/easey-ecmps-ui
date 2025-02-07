@@ -8,6 +8,7 @@ import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
   Label,
   Button,
+  Checkbox
 } from "@trussworks/react-uswds";
 import { ComboBox } from "../../ComboBox/ComboBox";
 import {
@@ -68,6 +69,8 @@ const FilterFormAdmin = ({
     { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
   ];
 
+  const [includeHistoricalWindows, setIncludeHistoricalWindows] = useState(false);
+
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
@@ -120,8 +123,26 @@ const FilterFormAdmin = ({
           quarter,
           status
         );
+        
         data.forEach((d) => (d.selected = false));
-        setTableData(data);
+
+        //preprocess data to get the latest record for each config
+        const latestOpenDateMap = new Map();
+        data.forEach(record => {
+            const location = record.locations;
+            const openDate = new Date(record.openDate);
+
+            if (!latestOpenDateMap.has(location) || openDate > latestOpenDateMap.get(location)) {
+                latestOpenDateMap.set(location, openDate);
+            }
+        });
+        data.forEach(record => {
+            record.isLatestRecord = new Date(record.openDate).getTime() === latestOpenDateMap.get(record.locations).getTime();
+        });
+
+        const filteredData = includeHistoricalWindows ? data : data.filter(record => record.isLatestRecord);
+
+        setTableData(filteredData);
       }
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
@@ -180,7 +201,8 @@ const FilterFormAdmin = ({
     setSelectedRows,
     setTableData,
     typeSelection,
-    facilities
+    facilities,
+    includeHistoricalWindows
   ]);
 
   useEffect(() => {
@@ -351,6 +373,19 @@ const FilterFormAdmin = ({
               Apply Filter(s)
             </Button>
           </div>
+          {section === SUBMISSION_ACCESS_STORE_NAME ? (
+              <Checkbox
+                id="force-re-evaluation"
+                className="display-flex flex-row flex-justify-center"
+                name="include-historical-windows"
+                label="Include Historical Windows"
+                epa-testid={"include-historical-windows"}
+                data-testid={"include-historical-windows"}
+                checked={includeHistoricalWindows}
+                onChange={(e) => setIncludeHistoricalWindows(e.target.checked)}
+                disabled={false}
+              />
+            ) : ("")}
         </div>
 
     </div>

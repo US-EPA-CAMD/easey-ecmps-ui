@@ -127,8 +127,8 @@ const QAMaintenanceData = ({
   }); 
 
   const openViewModalHandler = useCallback(
-    async (row, isCreate = false) => {
-      const selectedData = row
+    async (row, index, isCreate = false) => {
+      const selectedData = row;
       const { systemIdentifier, componentIdentifier } = selectedData;
 
       selectedData.systemComponentID =
