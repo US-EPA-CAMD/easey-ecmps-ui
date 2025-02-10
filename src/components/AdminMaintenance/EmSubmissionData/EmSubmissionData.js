@@ -65,10 +65,6 @@ export const EmSubmissionData = ({
   }, [data]);
 
   const downloadFilteredDataIntoCSV = () => {
-    if (!filteredData || filteredData.length === 0) {
-      console.warn("No data available for CSV download");
-      return;
-    }
 
     // Extract only the displayed columns
     let columnMapping = {
@@ -685,6 +681,7 @@ export const EmSubmissionData = ({
                   data-testid={`em-submission-download-csv-button`}
                   title={"Download To CSV"}
                   onClick={downloadFilteredDataIntoCSV}
+                  disabled={!filteredData || filteredData.length === 0}
                 >
                   {"Download To CSV"}
                 </Button>

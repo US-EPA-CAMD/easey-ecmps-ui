@@ -102,10 +102,6 @@ export const ErrorSuppressionDataContainer = () => {
   ]);
 
   const downloadFilteredDataIntoCSV = () => {
-    if (!tableData || tableData.length === 0) {
-      console.warn("No data available for CSV download");
-      return;
-    }
 
     // Extract only the displayed columns
     let columnMapping = {
@@ -515,6 +511,7 @@ export const ErrorSuppressionDataContainer = () => {
               data-testid={`error-supression-download-csv-button`}
               title={"Download To CSV"}
               onClick={downloadFilteredDataIntoCSV}
+              disabled={!tableData || tableData.length === 0}
             >
               {"Download To CSV"}
             </Button>
