@@ -18,10 +18,6 @@ export const EvaluateRefresh = ({
 
         if (key !== "MP") {
           //Filter emissions by quarter as well
-          let workspace = false;
-          if (window.location.href.includes("/workspace")) {
-            workspace = true;
-          }
           const resp = (
             await call(
               storedFilters.current.orisCodes,
@@ -29,26 +25,7 @@ export const EvaluateRefresh = ({
               storedFilters.current.submissionPeriods
             )
           );
-      
-          if(workspace)
-            {
-                if (resp.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
-                  data = resp.data.items
-               }
-                else 
-               {
-                   data = resp.data
-               }
-            }
-          else {
-              if (resp.request.responseURL.includes('emissions-mgmt/emissions')) {
-               data = resp.data.items
-              }
-              else 
-              {
-                data = resp.data
-              }
-            }
+          data = resp.data?.items ?? resp.data;
         } else {
           data = (
             await call(

@@ -270,42 +270,13 @@ export const getEvalStatus = async (paramsArray) => {
     ids,
     getYearQuarter(type, paramsArray)
   );
-  let workspace = false;
-  if (window.location.href.includes("/workspace")) {
-    workspace = true;
-  }
 
-  if(workspace)
-    {
-      if (response.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
-        const items = response?.data.items.filter((el) => el[identifier] === id);
-        if (!response?.data?.items.length) return;
-        if (identifier) return items[0].evalStatusCode;
-        return response.data.items[0]?.evalStatusCode;
-      }
-      else 
-      {
-        const items = response?.data.filter((el) => el[identifier] === id);
-        if (!response?.data?.length) return;
-        if (identifier) return items[0].evalStatusCode;
-        return response.data[0]?.evalStatusCode;
-      }
-    }
-    else {
-      if (response.request.responseURL.includes('emissions-mgmt/emissions')) {
-        const items = response?.data.items.filter((el) => el[identifier] === id);
-        if (!response?.data?.items.length) return;
-        if (identifier) return items[0].evalStatusCode;
-        return response.data.items[0]?.evalStatusCode;
-      }
-      else 
-      {
-        const items = response?.data.filter((el) => el[identifier] === id);
-        if (!response?.data?.length) return;
-        if (identifier) return items[0].evalStatusCode;
-        return response.data[0]?.evalStatusCode;
-      }
-    }
+  let dataList = response.data?.items ?? resp.data;
+  
+  const items = dataList.filter((el) => el[identifier] === id);
+  if (!dataList.length) return;
+  if (identifier) return items[0].evalStatusCode;
+  return dataList[0]?.evalStatusCode;
 };
 
 export const getEvalResultMessage = (reportData, paramsObject, evalStatus) => {

@@ -129,38 +129,17 @@ export const ExportTab = ({
 
   useEffect(() => { 
     const fetchTableData = async () => {
-      let workspace = false;
-      if (window.location.href.includes("/workspace")) {
-        workspace = true;
-      }
       const promises = dataTypes.map((dt) =>
         dt.dataFetch([orisCode], [selectedConfigId], dt.reportCode === 'MPP' ? null : [reportingPeriod])
       );
       const responses = await Promise.all(promises);
 
       const tableData = responses.map((resp) =>
-      {
-        if(workspace)
         {
-            if (resp.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
-              return resp.data.items
-           }
-            else 
-           {
-               return resp.data
-           }
+          return resp.data?.items ?? resp.data;
         }
-        else {
-          if (resp.request.responseURL.includes('emissions-mgmt/emissions')) {
-           return resp.data.items
-          }
-          else 
-          {
-            return resp.data
-          }
-        }
-      }
-    );
+      );
+
       setTableData(tableData);
     };
     fetchTableData();

@@ -591,10 +591,6 @@ export const EvaluateAndSubmit = ({
   };
 
   const retrieveAndFormatData = async (dataListIndex, activeSet) => {
-    let workspace = false;
-    if (window.location.href.includes("/workspace")) {
-      workspace = true;
-    }
     const resp = (
       await dataList[dataListIndex].call(
         storedFilters.current.orisCodes,
@@ -603,26 +599,7 @@ export const EvaluateAndSubmit = ({
       )
     );
 
-    let data = []
-    if(workspace)
-      {
-          if (resp.request.responseURL.includes('emissions-mgmt/workspace/emissions')) {
-            data = resp.data.items
-         }
-          else 
-         {
-             data = resp.data
-         }
-      }
-    else {
-        if (resp.request.responseURL.includes('emissions-mgmt/emissions')) {
-         data = resp.data.items
-        }
-        else 
-        {
-          data = resp.data
-        }
-      }
+    let data = resp.data?.items ?? resp.data;
 
     formatDataRows(
       dataList[dataListIndex].ref,
