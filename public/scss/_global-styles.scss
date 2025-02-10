@@ -1,4 +1,4 @@
-@import "variables";
+@use "./variables" as *;
 
 * {
   font-family: $epa-generic-font-family !important;

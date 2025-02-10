@@ -1,4 +1,4 @@
-@import "variables";
+@use "./variables" as *;
 
 .header-container {
   .usa-nav {
@@ -68,7 +68,7 @@
 
   .usa-nav .usa-accordion {
     list-style-type: none !important;
-    @extend .text-base-darkest;
+    @extend .text-base-darkest !optional;
     margin-top: 2em !important;
     padding: 0 !important;
     width: 100% !important;
@@ -101,14 +101,14 @@
   }
 
   .usa-nav__primary button[aria-expanded="false"] {
-    background-image: url("../../public/images/icons/plus.svg"),
+    background-image: url("../images/icons/plus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;
   }
 
   .usa-nav__primary button[aria-expanded="true"] {
-    background-image: url("../../public/images/icons/minus.svg"),
+    background-image: url("../images/icons/minus.svg"),
       linear-gradient(transparent, transparent) !important;
     position: relative;
     left: 0.5em !important;
@@ -119,23 +119,23 @@
   }
 
   .usa-footer__secondary-section {
-    @extend .bg-base-lightest;
+    @extend .bg-base-lightest !optional;
   }
 
   .usa-nav__submenu.usa-megamenu {
     a {
       z-index: 999 !important;
-      @extend .text-base-dark;
-      @extend .bg-base-lightest;
+      @extend .text-base-dark !optional;
+      @extend .bg-base-lightest !optional;
     }
 
     .usa-col {
-      @extend .bg-base-lightest;
+      @extend .bg-base-lightest !optional;
     }
   }
 
   .usa-nav__submenu {
-    @extend .bg-base-lightest;
+    @extend .bg-base-lightest !optional;
   }
 
   .usa-megamenu.usa-nav__submenu {
@@ -146,7 +146,7 @@
 
   .usa-megamenu.usa-nav__submenu::after,
   .usa-nav__primary button[aria-expanded="true"] {
-    @extend .bg-base-lightest;
+    @extend .bg-base-lightest !optional;
     border-bottom: none !important;
   }
 
@@ -157,7 +157,7 @@
   }
 
   .usa-nav__primary .usa-current::after {
-    @extend .bg-primary-vivid;
+    @extend .bg-primary-vivid !optional;
     border-radius: 99rem !important;
     content: "" !important;
     display: block !important;
@@ -193,10 +193,10 @@
   }
 
   .usa-nav__primary button span::after {
+    top: calc(100% - 1.25rem - 0.125rem - 6px);
     @media (min-width: 1024px) {
       background-color: $epa-white !important;
     }
-    top: calc(100% - 1.25rem - 0.125rem - 6px);
   }
 
   .usa-nav__submenu {
@@ -238,14 +238,14 @@
   }
 
   .usa-accordion__button[aria-expanded="false"] {
-    background-image: url("../../public/images/icons/menu-item-expand-black.svg"),
+    background-image: url("../images/icons/menu-item-expand-black.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
   }
 
   .usa-accordion__button[aria-expanded="true"] {
-    background-image: url("../../public/images/icons/menu-item-collapse-black.svg"),
+    background-image: url("../images/icons/menu-item-collapse-black.svg"),
       linear-gradient(transparent, transparent);
     background-repeat: no-repeat;
     background-size: 3rem;
@@ -369,8 +369,8 @@ ul.usa-nav__primary.usa-accordion {
 
 .usa-accordion__content,
 .usa-nav__submenu {
-  @extend .react-transition;
-  @extend .fade-in;
+  @extend .react-transition !optional;
+  @extend .fade-in !optional;
 }
 
 .usa-character-count__message {

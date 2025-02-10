@@ -1,4 +1,4 @@
-@import "variables";
+@use "./variables" as *;
 
 .data-display-table-report {
   .brFloq {
@@ -11,13 +11,13 @@
   }
 
   .rdt_TableCell {
-    @extend .font-body-md;
+    @extend .font-body-md !optional;
     font-size: 1.2em;
   }
 
   .rdt_TableHeadRow {
     .rdt_TableCol {
-      @extend .font-heading-md;
+      @extend .font-heading-md !optional;
       background: $epa-white;
       color: $epa-black !important;
       font-weight: bold;
@@ -65,7 +65,7 @@
   }
   .rdt_TableHeadRow {
     .rdt_TableCol {
-      @extend .font-heading-md;
+      @extend .font-heading-md !optional;
       background: $epa-white;
       color: $epa-black !important;
       font-weight: bold;
@@ -95,11 +95,11 @@
     /* this comment is here to avoid a code smell for empty content */
   }
   .rdt_TableCell {
-    @extend .font-body-md;
+    @extend .font-body-md !optional;
     font-size: 1.2em;
   }
   .__rdt_custom_sort_icon__ {
-    @extend .text-indigo;
+    @extend .text-indigo !optional;
   }
 }
 
@@ -129,7 +129,7 @@
   }
   .rdt_TableHeadRow {
     .rdt_TableCol {
-      @extend .font-heading-md;
+      @extend .font-heading-md !optional;
       background: $epa-white;
       color: $epa-black !important;
       font-weight: bold;
@@ -160,11 +160,11 @@
     /* this comment is here to avoid a code smell for empty content */
   }
   .rdt_TableCell {
-    @extend .font-body-md;
+    @extend .font-body-md !optional;
     font-size: 1.2em;
   }
   .__rdt_custom_sort_icon__ {
-    @extend .text-indigo;
+    @extend .text-indigo !optional;
   }
 }
 

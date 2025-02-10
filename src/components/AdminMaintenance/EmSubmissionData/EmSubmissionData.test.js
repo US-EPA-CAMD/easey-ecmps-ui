@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { EmSubmissionData } from "./EmSubmissionData";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import { mockedApiData } from "./mocks";
 
 describe("<EmSubmissionData />", () => {

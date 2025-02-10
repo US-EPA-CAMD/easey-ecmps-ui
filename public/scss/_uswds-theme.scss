@@ -1,7 +1,7 @@
 @use "uswds-core" with (
-  $theme-image-path: "../../../../../../dist/img",
-  $theme-font-path: "../../../../../../dist/fonts",
-  $theme-hero-image: '../../../../dist/img/hero.jpg',
+  $theme-image-path: "../img",
+  $theme-font-path: "../fonts",
+  $theme-hero-image: '../img/hero.jpg',
   //$theme-show-compile-warnings: true,
   $theme-show-notifications: false,
   //$theme-focus-color: "blue-50v",

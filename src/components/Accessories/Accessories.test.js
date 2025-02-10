@@ -1,6 +1,6 @@
 import React from "react";
 import Accessories from "./Accessories";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 import Layout from "../Layout/Layout";
 import { render, fireEvent } from "@testing-library/react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";

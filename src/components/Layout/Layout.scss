@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use"../../../public/scss/variables" as *;
 
 div.row.column1 {
   float: left;

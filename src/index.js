@@ -15,7 +15,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { logServerError } from "./utils/api/apiUtils";
 
 import "@trussworks/react-uswds/lib/index.css";
-import "./styles/index.scss";
 
 const store = configureStore();
 document.title = config.app.title;

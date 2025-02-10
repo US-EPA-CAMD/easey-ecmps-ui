@@ -4,7 +4,7 @@ import {
   EMISSIONS_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 
-const validate = require('jsonschema').validate;
+import { validate } from 'jsonschema';
 
 export const checkingCorrectSchema = (
   file,

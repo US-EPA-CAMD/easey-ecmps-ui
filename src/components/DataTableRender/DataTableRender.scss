@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use"../../../public/scss/variables" as *;
 #datatableContainer{
   .break-line {
     display: block;

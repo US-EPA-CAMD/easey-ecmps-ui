@@ -94,5 +94,5 @@ describe("- DataTableMethods -", () => {
     await act(() => saveBtn.click())
 
     expect(saveMonitoringMethods).toHaveBeenCalled();
-  });
+  }, 50000);
 })

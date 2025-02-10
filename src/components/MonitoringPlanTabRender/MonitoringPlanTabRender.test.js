@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"; // For additional matchers like toBeInTheDocument
+import "@testing-library/jest-dom"; // For additional matchers like toBeInTheDocument
 
 import configureStore from "../../store/configureStore.dev";
 import MonitoringPlanTabRender from "./MonitoringPlanTabRender";

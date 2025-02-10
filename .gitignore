@@ -48,3 +48,7 @@ node_modules
 
 # never include npms package-lock
 package-lock.json
+
+
+# uswds
+public/uswds

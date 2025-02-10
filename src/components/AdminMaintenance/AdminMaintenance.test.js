@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import {AdminMaintenance} from "./AdminMaintenance";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 describe("<AdminMaintenance />", () => {
   test("renders component with correct title and facilities", async () => {
