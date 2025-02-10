@@ -101,6 +101,71 @@ export const ErrorSuppressionDataContainer = () => {
     addDateBefore,
   ]);
 
+  const downloadFilteredDataIntoCSV = () => {
+    if (!tableData || tableData.length === 0) {
+      console.warn("No data available for CSV download");
+      return;
+    }
+
+    // Extract only the displayed columns
+    let columnMapping = {
+      severityCode: "Severity",
+      facilityName: "Facility Name",
+      orisCode: "Oris Code",
+      locations: "Locations",
+      matchDataTypeCode: "Match Data Criteria",
+      matchTimeTypeCode: "Match Time Criteria",
+      reasonCode: "Reason",
+      active: "Status",
+      note: "Note",
+      userId: "User",
+      addDate: "Add Date & Hour",
+      updateDate: "Update Date",
+      id: "Record Id"
+    };
+  
+    const headers = Object.keys(columnMapping);
+    const csvHeaders = headers.map(key => columnMapping[key]);
+  
+    // Convert data to CSV format
+    const csvRows = tableData.map(row =>
+      headers.map(header => {
+        let value = row[header];
+
+        if (header === "active") {
+          value = value ? "Active" : "Inactive";
+        }
+
+        if (header === "matchTimeTypeCode") {
+          value = formatMatchTimeCriteriaCell(row);
+        }
+  
+        return value !== null && value !== undefined ? `"${value}"` : '""';
+      }).join(',')
+    );
+  
+    // Combine headers and data rows
+    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
+  
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Assemble file name
+    const facilityName = tableData[0].facilityName;
+    const orisCode = tableData[0].orisCode
+    let fileName = `Error_Supression_${facilityName}(${orisCode})_${new Date().toISOString().slice(0, 19)}.csv`
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+  
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const openViewModalHandler = useCallback(
     async (row, index, isCreate = false) => {
       const selectedData = { ...tableData[index] };
@@ -443,7 +508,17 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div className="es-datatable">
+        <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`error-supression-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={"Error Suppression"}></span>
           {isTableLoading ? (
             <Preloader />

@@ -50,6 +50,92 @@ const QAMaintenanceData = ({
     setFilteredData(data);
   }, [data]);
 
+  const downloadFilteredDataIntoCSV = () => {
+    if (!filteredData || filteredData.length === 0) {
+      console.warn("No data available for CSV download");
+      return;
+    }
+
+    // Extract only the displayed columns
+    let columnMapping = [];
+
+    if (typeSelection === 'Test Summary') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        testTypeCode: "Test Type Code",
+        yearQuarter: "Reporting Period",
+        beginDateTime: "Begin Date/Time",
+        endDateTime: "End Date/Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Cert Events') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        certEventCode: "Cert Event Code",
+        eventDateTime: "Event Date/Time",
+        requiredTestCode: "Required Test Code",
+        conditionalDateTime: "Conditional Date/Time",
+        lastCompletedDateTime: "Last Completed Date Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Test Extension Exemption') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        fuelCode: "Fuel Code",
+        extensionExemptionCode: "Extension Exemption Code",
+        hoursUsed: "Hours Used",
+        spanScaleCode: "Span Scale Code",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    }
+  
+    const headers = Object.keys(columnMapping);
+    const csvHeaders = headers.map(key => columnMapping[key]);
+  
+    // Convert data to CSV format
+    const csvRows = filteredData.map(row =>
+      headers.map(header => (row[header] !== null && row[header] !== undefined ? `"${row[header]}"` : '""')).join(',')
+    );
+  
+    // Combine headers and data rows
+    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
+  
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Assemble file name
+    const facilityName = filteredData[0].facilityName;
+    let fileName = `QA/Cert_Data_Maintenance_${facilityName}_${typeSelection}_${new Date().toISOString().slice(0, 19)}.csv`
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+  
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  
   // fetch and initialize options for lower grid filter(s)
   useEffect(() => {
     const fetchAndSetOptions = async () => {
@@ -422,6 +508,16 @@ const QAMaintenanceData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`qa-maintenance-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={'QA/Cert Data Maintenance'}></span>
           <DataTable
             sortIcon={

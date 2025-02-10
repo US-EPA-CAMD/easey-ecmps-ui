@@ -64,6 +64,61 @@ export const EmSubmissionData = ({
     setFilteredData(data);
   }, [data]);
 
+  const downloadFilteredDataIntoCSV = () => {
+    if (!filteredData || filteredData.length === 0) {
+      console.warn("No data available for CSV download");
+      return;
+    }
+
+    // Extract only the displayed columns
+    let columnMapping = {
+      facilityName: "Facility Name/ID",
+      orisCode: "Oris Code",
+      locations: "Configuration",
+      reportingPeriodAbbreviation: "Reporting Period",
+      reportingFrequencyCode: "Reporting Frequency",
+      submissionTypeCode: "Submission Type",
+      emissionStatusCode: "Status",
+      openDate: "Open Date",
+      closeDate: "Close Date",
+      emissionStatusCode: "Emission Status",
+      submissionAvailabilityCode: "Submission Availability",
+      lastSubmissionId: "Last Submission ID",
+      severityLevel: "Severity Level",
+      id: "Record Id"
+    };
+  
+    const headers = Object.keys(columnMapping);
+    const csvHeaders = headers.map(key => columnMapping[key]); 
+
+    // Convert data to CSV format
+    const csvRows = filteredData.map(row =>
+      headers.map(header => (row[header] !== null && row[header] !== undefined ? `"${row[header]}"` : '""')).join(',')
+    );
+  
+    // Combine headers and data rows
+    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
+  
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Assemble file name
+    const facilityName = filteredData[0].facilityName;
+    const orisCode = filteredData[0].orisCode
+    const reportingPeriod = filteredData[0].reportingPeriodAbbreviation
+    let fileName = `EM_Submission_Access_${facilityName}(${orisCode})_${reportingPeriod}_${new Date().toISOString().slice(0, 19)}.csv`
+  
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+  
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   // fetch and initialize options for lower grid filter(s)
   useEffect(() => {
 
@@ -610,7 +665,7 @@ export const EmSubmissionData = ({
             <div className="grid-row row-width" style={{ display: 'flex' }}>
               <div className="grid-col-6"></div>
               <div className="grid-col-6">
-                <div className="grid-col-8" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div className="grid-col-8 margin-top-2" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button
                       disabled={ false}
                       onClick={applyFilters}
@@ -624,6 +679,16 @@ export const EmSubmissionData = ({
           </>
         )}
         <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  type="button"
+                  data-testid={`em-submission-download-csv-button`}
+                  title={"Download To CSV"}
+                  onClick={downloadFilteredDataIntoCSV}
+                >
+                  {"Download To CSV"}
+                </Button>
+            </div>
           <span data-aria-label={"Maintain EM Submission Access"}></span>
           {isLoading && <Preloader />}
           {!isLoading && (
