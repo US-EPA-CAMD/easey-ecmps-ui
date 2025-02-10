@@ -271,7 +271,7 @@ export const getEvalStatus = async (paramsArray) => {
     getYearQuarter(type, paramsArray)
   );
 
-  let dataList = response.data?.items ?? resp.data;
+  let dataList = response.data?.items ?? response.data;
   
   const items = dataList.filter((el) => el[identifier] === id);
   if (!dataList.length) return;
