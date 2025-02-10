@@ -111,7 +111,10 @@ export const determinePolicy = async (payload) => {
     url: `${config.services.authApi.uri}/authentication/determinePolicy`,
     data: payload,
   }).then(handleResponse)
-    .catch(handleError);
+    .catch((error)=>{
+      handleError(error);
+      throw error
+    });
 };
 
 export const authenticate = async (payload) => {
