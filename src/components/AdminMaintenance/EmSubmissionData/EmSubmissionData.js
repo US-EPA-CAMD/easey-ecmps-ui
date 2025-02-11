@@ -12,7 +12,6 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { filter } from "lodash";
 
 export const EmSubmissionData = ({
   data = [],
