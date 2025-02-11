@@ -47,20 +47,18 @@ const FilterFormAdmin = ({
     initialSelectOption,
   ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [availableConfigurations, setAvailableConfigurations] = useState([
-    initialSelectOption,
-  ]);
-
   const [availStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
+    { code: "Cancelled", name: "Cancelled" },
+    { code: "No_Window", name: "No Window" },
+    { code: "Not_Yet_Open", name: "Not Yet Open" },
   ]);
 
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
-  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const [selectedStatus, setSelectedStatus] = useState();
 
@@ -98,11 +96,6 @@ const FilterFormAdmin = ({
     let year;
     let quarter;
     let status;
-
-    if (selectedLocation) {
-      const locationIdx = selectedLocation[0];
-      monitorPlanId = availableConfigurations[locationIdx].code;
-    }
 
     if (
       selectedReportingPeriod?.length > 0 &&
@@ -143,21 +136,16 @@ const FilterFormAdmin = ({
           case testSummaryLabel:
             resp = await getQaTestMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
-
             break;
           case certEventLabel:
             resp = await getQaCertEventMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
-
             break;
           case testExtensionExemptionLabel:
             resp = await getQaExtensionExemptionMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
             break;
           default:
@@ -186,10 +174,8 @@ const FilterFormAdmin = ({
       setSelectedRows([]);
     }
   }, [
-    availableConfigurations,
     section,
     selectedFacility,
-    selectedLocation,
     selectedReportingPeriod,
     selectedStatus,
     setIsTableDataLoading,
@@ -261,11 +247,9 @@ const FilterFormAdmin = ({
   }, [selectedFacility, individualFacilityFilterChange, section]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
-    // facilityFilterChange(value);
 
     if (!value || value === defaultDropdownText) {
       setSelectedFacility(null);
-      setSelectedLocation(null);
     }
   };
 
@@ -278,7 +262,6 @@ const FilterFormAdmin = ({
     });
     setSelectedFacility(null);
     setTypeSelection(null);
-    setSelectedLocation(null);
     setSelectedStatus(null);
     setTableData([]);
   }, [setTableData])
@@ -289,7 +272,7 @@ const FilterFormAdmin = ({
 
   useEffect(() => {
     setTableData([]);
-  }, [setTableData, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, typeSelection]);
+  }, [setTableData, selectedFacility, selectedReportingPeriod, selectedStatus, typeSelection]);
 
   return (
     <div className="margin-05">
@@ -308,24 +291,6 @@ const FilterFormAdmin = ({
               disableFiltering={true}
             />
           </div>
-
-          <div className="padding-left-4 desktop:width-mobile-lg desktop-lg:width-mobile">
-            <DropdownSelection
-              caption={
-                section === SUBMISSION_ACCESS_STORE_NAME
-                  ? "Configuration"
-                  : "Location"
-              }
-              selectionHandler={configurationFilterChange}
-              options={availableConfigurations}
-              viewKey="name"
-              selectKey="code"
-              initialSelection={selectedLocation ? selectedLocation[0] : 0}
-              workspaceSection={section}
-              extraSpace
-            />
-          </div>
-        
           {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && screenSize.width >= 1400 && (
             <div className="margin-left-4 width-card">
               <DropdownSelection
@@ -339,9 +304,7 @@ const FilterFormAdmin = ({
                 extraSpace
               />
             </div>
-
           )}
-    
           {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width >= 1400 &&(
             <>
               <div className="margin-left-4 width-card">
@@ -387,7 +350,6 @@ const FilterFormAdmin = ({
               />
             </div>
           )}
-
           {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width < 1400 &&(
             <>
               <div className="width-card">
@@ -428,11 +390,13 @@ const FilterFormAdmin = ({
             <Button
               disabled={
                 !(
-                  (selectedFacility &&
-                    selectedLocation && selectedLocation[1] !== "") &&
-                  ((section === SUBMISSION_ACCESS_STORE_NAME) ||
+                  (section === SUBMISSION_ACCESS_STORE_NAME
+                    && ((selectedReportingPeriod && selectedReportingPeriod[1] !== defaultDropdownText) || selectedFacility ) // for EM Submission Access, need to have at least reporting period OR facility to enable the button
+                  ) ||
                     (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                      && typeSelection && typeSelection[1] !== defaultDropdownText))
+                      && selectedFacility
+                      && typeSelection
+                      && typeSelection[1] !== defaultDropdownText) // for QA Maintenance, need both facility and type to enable the button
                 )
               }
               onClick={applyFilters}

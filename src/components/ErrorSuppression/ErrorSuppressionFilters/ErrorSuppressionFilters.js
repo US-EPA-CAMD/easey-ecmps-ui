@@ -211,26 +211,36 @@ export const ErrorSuppressionFilters = () => {
       setLocationData([]);
       return;
     }
-
+    const facility = facilityList.find((f) => f.value === value);
+  
     if (selectedCheckType && selectedCheckNumber && selectedCheckResult) {
       const checkResultObj = transformedData[selectedCheckType][
         selectedCheckNumber
       ].find((r) => r.checkResult === selectedCheckResult);
-      const facility = facilityList.find((f) => f.value === value);
+      
 
       getLocations(facility.orisCode, checkResultObj).then((availLoc) =>
         setLocationData([...availLoc])
       );
     }
+    else{
+      getLocations(facility.orisCode, {
+            locationTypeCode: "LOC",
+          }).then((availLoc) =>
+          {
+            setLocationData([...availLoc])
+          }
+        )
+    }
   };
 
   const onCheckTypeChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckType(value);
-    setSelectedCheckNumber(false);
-    setSelectedCheckResult(false);
+    setSelectedCheckNumber(undefined);
+    setSelectedCheckResult(undefined);
     if (!value) return;
 
     const checkNumbers = Object.keys(transformedData[value]);
@@ -241,10 +251,10 @@ export const ErrorSuppressionFilters = () => {
 
   const onCheckNumberChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckNumber(value);
-    setSelectedCheckResult(false);
+    setSelectedCheckResult(undefined);
 
     if (!value) return;
 
@@ -259,7 +269,7 @@ export const ErrorSuppressionFilters = () => {
 
   const onCheckResultChange = (e) => {
     let { value } = e.target;
-    value = value === "false" ? false : value;
+    value = value === "false" ? undefined : value;
 
     setSelectedCheckResult(value);
     if (!value) {
@@ -314,13 +324,13 @@ export const ErrorSuppressionFilters = () => {
 
     //Apply the states from the form to the Context so that the table in ErrorSuppressionDataContainer will automatically update
     setCheckType(
-      selectedCheckType !== defaultDropdownText ? selectedCheckType : null
+      selectedCheckType !== defaultDropdownText ? selectedCheckType : undefined
     );
     setCheckNumber(
-      selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : null
+      selectedCheckNumber !== defaultDropdownText ? selectedCheckNumber : undefined
     );
     setCheckResult(
-      selectedCheckResult !== defaultDropdownText ? selectedCheckResult : null
+      selectedCheckResult !== defaultDropdownText ? selectedCheckResult : undefined
     );
     setFacility(orisCode);
     setLocations(unitStackNames);
@@ -454,6 +464,7 @@ export const ErrorSuppressionFilters = () => {
             options={facilityList}
             onChange={onFacilityChange}
             disableFiltering={false}
+            selectedFacility = {selectedFacility}
           />
         </Grid>
         <Grid col={4}>
@@ -466,9 +477,6 @@ export const ErrorSuppressionFilters = () => {
               onChangeUpdate={onChangeOfLocationMultiSelect}
               disabled={
                 !(
-                  selectedCheckType &&
-                  selectedCheckNumber &&
-                  selectedCheckResult &&
                   selectedFacility &&
                   selectedFacility !== defaultDropdownText
                 )
