@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button, Checkbox } from "@trussworks/react-uswds";
-import { ArrowDownwardSharp, FilterDrama } from "@material-ui/icons";
+import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionAccessTitle } from "../../../utils/constants/moduleTitles";
 import { EmSubmissionModal } from "../EmSubmissionPopOut/EmSubmissionPopout";
 import "./EmSubmissionData.scss";
@@ -675,7 +675,6 @@ export const EmSubmissionData = ({
           </>
         )}
         <div className="es-datatable margin-top-5">
-          `the first row of the filteredDate: {JSON.stringify(filteredData[0])}`
           <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   type="button"
