@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button, Checkbox } from "@trussworks/react-uswds";
-import { ArrowDownwardSharp } from "@material-ui/icons";
+import { ArrowDownwardSharp, FilterDrama } from "@material-ui/icons";
 import { submissionAccessTitle } from "../../../utils/constants/moduleTitles";
 import { EmSubmissionModal } from "../EmSubmissionPopOut/EmSubmissionPopout";
 import "./EmSubmissionData.scss";
@@ -12,6 +12,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { filter } from "lodash";
 
 export const EmSubmissionData = ({
   data = [],
@@ -74,7 +75,7 @@ export const EmSubmissionData = ({
       reportingPeriodAbbreviation: "Reporting Period",
       reportingFrequencyCode: "Reporting Frequency",
       submissionTypeCode: "Submission Type",
-      emissionStatusCode: "Status",
+      status: "Status",
       openDate: "Open Date",
       closeDate: "Close Date",
       emissionStatusCode: "Emission Status",
@@ -675,6 +676,7 @@ export const EmSubmissionData = ({
           </>
         )}
         <div className="es-datatable margin-top-5">
+          `the first row of the filteredDate: {JSON.stringify(filteredData[0])}`
           <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   type="button"
