@@ -65,7 +65,7 @@ export const AdminMaintenance = ({ section }) => {
 
     getReportingPeriods()
       .then(({ data }) => {
-        setReportingPeriods(data);
+        setReportingPeriods(data?.items);
       })
       .catch(error => {
         log.error("Error getting reporting periods", error);

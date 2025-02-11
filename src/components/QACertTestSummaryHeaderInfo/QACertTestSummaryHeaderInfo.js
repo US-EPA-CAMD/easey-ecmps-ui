@@ -119,7 +119,7 @@ export const QACertTestSummaryHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
-          setAllTestTypeCodes(res.data);
+          setAllTestTypeCodes(res?.data?.items);
         })
         .catch((error) => {
           log.log(error);
@@ -127,7 +127,7 @@ export const QACertTestSummaryHeaderInfo = ({
 
       getAllTestTypeGroupCodes()
         .then((res) => {
-          const options = res.data
+          const options = res.data?.items
             .map((e) => {
               return {
                 name: e.testTypeGroupDescription,
@@ -187,7 +187,7 @@ export const QACertTestSummaryHeaderInfo = ({
       .catch((err) => log.log(err));
     mpApi
       .getCheckedOutLocations()
-      .then((res) => setCheckedOutConfigs(res.data))
+      .then((res) => setCheckedOutConfigs(res.data?.items))
       .catch((err) => log.log(err));
 
     return () => {
@@ -468,7 +468,7 @@ export const QACertTestSummaryHeaderInfo = ({
                 !userHasCheckout &&
                 selectedConfig.active &&
                 checkedOutConfigs
-                  .map((location) => location["monPlanId"])
+                  ?.map((location) => location["monPlanId"])
                   .indexOf(selectedConfig.id) === -1 ? (
                 <Button
                   type="button"

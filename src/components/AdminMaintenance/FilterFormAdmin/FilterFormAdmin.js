@@ -76,7 +76,7 @@ const FilterFormAdmin = ({
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
-    const availReportingPeriods = reportingPeriods.map((rp) => {
+    const availReportingPeriods = reportingPeriods?.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -165,7 +165,7 @@ const FilterFormAdmin = ({
         }
         let newData = resp.data;
         if (facilities.length > 0) {
-          newData = resp.data.map((obj) => ({
+          newData = resp.data?.map((obj) => ({
             ...obj,
             facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
               }`,
@@ -213,7 +213,7 @@ const FilterFormAdmin = ({
   };
 
   const facilityFilterChange = async (id) => {
-    const configurationData = (await getMonitoringPlans([id])).data;
+    const configurationData = (await getMonitoringPlans([id])).data?.items || [];
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
       if (cd.active) {

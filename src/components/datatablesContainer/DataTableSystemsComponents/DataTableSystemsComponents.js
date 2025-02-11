@@ -198,7 +198,7 @@ export const DataTableSystemsComponents = ({
   }, [addCompThirdLevelCreateTrigger]);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-      for (let value of res.data) {
+      for (let value of res.data?.items) {
         if (value.monitoringSystemId === systemID) {
           setSelected(value);
         }
@@ -214,7 +214,7 @@ export const DataTableSystemsComponents = ({
       mpApi
         .getMonitoringSystemsComponents(selected.locationId, selected.id)
         .then((res) => {
-          setMonitoringSystemsComponents(res.data);
+          setMonitoringSystemsComponents(res.data?.items);
           setDataLoaded(true);
           setupdateComponentTable(false);
         })
@@ -223,7 +223,7 @@ export const DataTableSystemsComponents = ({
       mpApi
         .getMonitoringComponents(selected.locationId)
         .then((res) => {
-          setMonitoringComponents(res.data);
+          setMonitoringComponents(res.data?.items);
           setDataComponentsLoaded(true);
           setupdateComponentList(false);
         })
@@ -232,7 +232,7 @@ export const DataTableSystemsComponents = ({
       mpApi
         .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
         .then((res) => {
-          setMonitoringSystemsFuelFlows(res.data);
+          setMonitoringSystemsFuelFlows(res.data?.items);
           setFuelDataLoaded(true);
           setUpdateFuelFlowTable(false);
         })

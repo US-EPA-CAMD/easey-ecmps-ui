@@ -91,8 +91,8 @@ export const MonitoringPlanHome = ({
 
     let checkedOutLocationList = [];
     if (checkedOutLocationResult) {
-      if (checkedOutLocationResult.data) {
-        checkedOutLocationList = checkedOutLocationResult.data;
+      if (checkedOutLocationResult.data?.items) {
+        checkedOutLocationList = checkedOutLocationResult.data?.items;
       }
       // *** find locations currently checked out by the user
       const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(

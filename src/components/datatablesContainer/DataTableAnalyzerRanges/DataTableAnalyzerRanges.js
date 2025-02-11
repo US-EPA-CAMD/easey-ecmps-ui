@@ -44,7 +44,7 @@ export const DataTableAnalyzerRanges = ({
           selectedRanges.componentRecordId
         )
         .then((res) => {
-          setRanges(res.data);
+          setRanges(res.data?.items);
           setRangesLoaded(true);
         });
       setUpdateAnalyzerRangeTable(false);
@@ -64,7 +64,7 @@ export const DataTableAnalyzerRanges = ({
   }, [mdmData]);
 
   const rangeData = useMemo(() => {
-    if (ranges.length > 0) {
+    if (ranges?.length > 0) {
       return fs.getMonitoringPlansSystemsAnalyzerRangesTableRecords(ranges);
     }
     return [];

@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { act, render, screen } from "@testing-library/react";
+import {act, render, screen, waitFor} from "@testing-library/react";
 
 import * as monitorPlanApi from "../../../utils/api/monitoringPlansApi";
 import * as extractUserInput from "../../../additional-functions/extract-user-input";
@@ -19,11 +19,11 @@ const store = configureStore(mockInitialState);
 describe("- DataTableMethods -", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getMonitoringMethods").mockResolvedValue({
-      data: getMockMonitoringMethods(),
+      data: { items: getMockMonitoringMethods()},
     });
 
     jest.spyOn(monitorPlanApi, "getMonitoringMatsMethods").mockResolvedValue({
-      data: getMockMonitoringMatsMethods(),
+      data: { items: getMockMonitoringMatsMethods()},
     });
 
     // bypass user input validation for saving/editing
@@ -61,11 +61,11 @@ describe("- DataTableMethods -", () => {
       );
     })
 
-    const addBtn = screen.getByTestId("addBtn")
+    const addBtn = await screen.getByTestId("addBtn")
     await act(() => addBtn.click())
 
-    const saveBtn = screen.getByTestId("saveBtn")
-    await act(() => saveBtn.click())
+    const saveBtn = await screen.getByTestId("saveBtn")
+    await act(() => saveBtn.click())*
 
     expect(createMethods).toHaveBeenCalled();
 

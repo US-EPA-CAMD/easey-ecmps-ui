@@ -179,8 +179,8 @@ export const logOut = async () => {
       const user = JSON.parse(localStorage.getItem("ecmps_user"));
       const checkedOutLocationResult = await getCheckedOutLocations();
 
-      if (checkedOutLocationResult.data.length > 0) {
-        for (const location of checkedOutLocationResult.data) {
+      if (checkedOutLocationResult.data?.items?.length > 0) {
+        for (const location of checkedOutLocationResult.data?.items) {
           if (location.checkedOutBy === user.userId) {
             await checkoutAPI(false, location.monPlanId);
           }
