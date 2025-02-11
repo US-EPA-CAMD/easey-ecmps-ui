@@ -31,7 +31,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
         env:
-          ENV_VAR_PREFIX: REACT_APP_EASEY
+          ENV_VAR_PREFIX: VITE_EASEY
       - name: Build
         run: devops/scripts/yarn/build.sh
         env:
