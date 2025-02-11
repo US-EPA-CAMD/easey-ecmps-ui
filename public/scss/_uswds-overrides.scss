@@ -1,4 +1,6 @@
 @use "./variables" as *;
+@use "uswds" as *;
+@use "./transitions.scss" as *;
 
 .header-container {
   .usa-nav {
@@ -68,7 +70,7 @@
 
   .usa-nav .usa-accordion {
     list-style-type: none !important;
-    @extend .text-base-darkest !optional;
+    @extend .text-base-darkest;
     margin-top: 2em !important;
     padding: 0 !important;
     width: 100% !important;
@@ -84,8 +86,8 @@
   }
 
   .usa-search {
-    font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial,
-      sans-serif;
+    // font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial,
+    //   sans-serif;
     margin: 0;
     font-size: 2em !important;
     line-height: 2em !important;
@@ -119,23 +121,23 @@
   }
 
   .usa-footer__secondary-section {
-    @extend .bg-base-lightest !optional;
+    @extend .bg-base-lightest;
   }
 
   .usa-nav__submenu.usa-megamenu {
     a {
       z-index: 999 !important;
-      @extend .text-base-dark !optional;
-      @extend .bg-base-lightest !optional;
+      @extend .text-base-dark;
+      @extend .bg-base-lightest;
     }
 
     .usa-col {
-      @extend .bg-base-lightest !optional;
+      @extend .bg-base-lightest;
     }
   }
 
   .usa-nav__submenu {
-    @extend .bg-base-lightest !optional;
+    @extend .bg-base-lightest;
   }
 
   .usa-megamenu.usa-nav__submenu {
@@ -146,7 +148,7 @@
 
   .usa-megamenu.usa-nav__submenu::after,
   .usa-nav__primary button[aria-expanded="true"] {
-    @extend .bg-base-lightest !optional;
+    @extend .bg-base-lightest;
     border-bottom: none !important;
   }
 
@@ -157,7 +159,7 @@
   }
 
   .usa-nav__primary .usa-current::after {
-    @extend .bg-primary-vivid !optional;
+    @extend .bg-primary-vivid;
     border-radius: 99rem !important;
     content: "" !important;
     display: block !important;
@@ -172,7 +174,7 @@
 
 .subheader-wrapper {
   .usa-nav__primary button {
-    font-family: "Source Sans Pro Web", serif;
+    // font-family: "Source Sans Pro Web", serif;
     font-weight: normal;
 
     @media (max-width: 128em) {
@@ -193,7 +195,7 @@
   }
 
   .usa-nav__primary button span::after {
-    top: calc(100% - 1.25rem - 0.125rem - 6px);
+    // top: calc(100% - 1.25rem - 0.125rem - 6px);
     @media (min-width: 1024px) {
       background-color: $epa-white !important;
     }
@@ -228,7 +230,7 @@
 .left-sidenav-to-header-wrapper {
   .usa-nav__primary {
     button {
-      font-family: "Source Sans Pro Web", serif !important;
+      // font-family: "Source Sans Pro Web", serif !important;
       color: $epa-black;
       // font-weight: normal;
     }
@@ -325,7 +327,7 @@
 }
 
 .usa-button:not([id="btnMobileMenu"]) {
-  font-family: $epa-generic-font-family !important;
+  // font-family: $epa-generic-font-family !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -369,8 +371,8 @@ ul.usa-nav__primary.usa-accordion {
 
 .usa-accordion__content,
 .usa-nav__submenu {
-  @extend .react-transition !optional;
-  @extend .fade-in !optional;
+  @extend .react-transition;
+  @extend .fade-in;
 }
 
 .usa-character-count__message {

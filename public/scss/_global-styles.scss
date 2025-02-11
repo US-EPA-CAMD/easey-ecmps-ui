@@ -4,6 +4,12 @@
   font-family: $epa-generic-font-family !important;
 }
 
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("../fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2") format("woff2"),
+       url("../fonts/source-sans-pro/sourcesanspro-regular-webfont.woff") format("woff");
+}
+
 .hour-input {
   width: 2em !important;
 }

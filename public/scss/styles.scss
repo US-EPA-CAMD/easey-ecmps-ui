@@ -4,6 +4,8 @@
 // 2. Load USWDS source code
 @forward "uswds";
 
+@use "uswds-core" as *;
+
 // 3. Load your project's custom Sass
 
 /***** GLOBAL VARIABLES (scss values used througout the app) *****/
@@ -19,3 +21,4 @@
 @use "icons";
 
 @use "transitions";
+

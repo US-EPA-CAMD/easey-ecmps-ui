@@ -26,6 +26,16 @@ export default ({ mode }) => {
             },
             include: ['react', 'react-dom'],
         },
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    includePaths: [
+                        './node_modules/@uswds',
+                        './node_modules/@uswds/uswds/packages',
+                    ],
+                },
+            },
+        },
         define: {
             'process.env': process.env,
         },
@@ -60,7 +70,7 @@ export default ({ mode }) => {
         build: {
             outDir: 'build',
             sourcemap: true,
-            cssCodeSplit: true,
+            cssCodeSplit: false,
             rollupOptions: {
                 output: {
                     entryFileNames: 'static/js/[name]-[hash].js',
