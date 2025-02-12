@@ -198,7 +198,7 @@ export const DataTableSystemsComponents = ({
   }, [addCompThirdLevelCreateTrigger]);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-      for (let value of res.data?.items) {
+      for (let value of res.data?.items ?? []) {
         if (value.monitoringSystemId === systemID) {
           setSelected(value);
         }

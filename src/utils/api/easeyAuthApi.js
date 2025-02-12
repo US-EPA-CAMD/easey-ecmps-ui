@@ -183,7 +183,7 @@ export const logOut = async () => {
       const checkedOutLocationResult = await getCheckedOutLocations();
 
       if (checkedOutLocationResult.data?.items?.length > 0) {
-        for (const location of checkedOutLocationResult.data?.items) {
+        for (const location of checkedOutLocationResult.data?.items ?? []) {
           if (location.checkedOutBy === user.userId) {
             await checkoutAPI(false, location.monPlanId);
           }
