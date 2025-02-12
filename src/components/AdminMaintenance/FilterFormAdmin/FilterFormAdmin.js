@@ -194,57 +194,6 @@ const FilterFormAdmin = ({
     }
   }, [reloadTableData, setReloadTableData, applyFilters]);
 
-  const configurationFilterChange = (id) => {
-    setSelectedLocation(id);
-  };
-
-  const facilityFilterChange = async (id) => {
-    const configurationData = (await getMonitoringPlans([id])).data?.items || [];
-    const configNamesToMonPlan = [];
-    for (const cd of configurationData) {
-      if (cd.active) {
-        const key = `${cd.facilityName} - ${cd.name}`;
-        if (!configNamesToMonPlan[key]) {
-          configNamesToMonPlan[key] = cd.id;
-        }
-      }
-    }
-    const availConfigs = [];
-    for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      availConfigs.push({
-        code: monPlanId,
-        name: name,
-      });
-    }
-    availConfigs.unshift(initialSelectOption);
-    setAvailableConfigurations(availConfigs);
-  };
-
-  const convertingArrayObject = (arr) => {
-    const convertedArray = arr.map((item) => {
-      return {
-        code: item.label,
-        name: item.label,
-      };
-    });
-
-    convertedArray.unshift(initialSelectOption);
-    return convertedArray;
-  };
-
-  const individualFacilityFilterChange = useCallback(async (id) => {
-    getLocations(selectedFacility, {
-      locationTypeCode: "LOC",
-    }).then((availLoc) =>
-      setAvailableConfigurations(convertingArrayObject([...availLoc]))
-    );
-  }, [selectedFacility])
-
-  useEffect(() => {
-    section === SUBMISSION_ACCESS_STORE_NAME
-      ? facilityFilterChange(selectedFacility)
-      : individualFacilityFilterChange(selectedFacility);
-  }, [selectedFacility, individualFacilityFilterChange, section]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
 
