@@ -86,8 +86,8 @@
   }
 
   .usa-search {
-    // font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial,
-    //   sans-serif;
+    font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial,
+      sans-serif;
     margin: 0;
     font-size: 2em !important;
     line-height: 2em !important;
@@ -170,11 +170,19 @@
     left: -0.25em !important;
     height: 9em !important;
   }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  label,
+  input {
+    margin-bottom: 10px;
+  }
 }
 
 .subheader-wrapper {
   .usa-nav__primary button {
-    // font-family: "Source Sans Pro Web", serif;
+    font-family: "Source Sans Pro Web", serif;
     font-weight: normal;
 
     @media (max-width: 128em) {
@@ -230,9 +238,9 @@
 .left-sidenav-to-header-wrapper {
   .usa-nav__primary {
     button {
-      // font-family: "Source Sans Pro Web", serif !important;
+      font-family: "Source Sans Pro Web", serif !important;
       color: $epa-black;
-      // font-weight: normal;
+      font-weight: normal;
     }
   }
   .usa-accordion__button:hover {
