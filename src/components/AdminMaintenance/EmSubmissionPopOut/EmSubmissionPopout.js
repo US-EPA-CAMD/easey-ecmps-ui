@@ -192,7 +192,7 @@ export const EmSubmissionModal = ({
       setSelectedOpenDate(getDateString(selectedRow?.openDate));
       setSelectedCloseDate(getDateString(selectedRow?.closeDate));
     } else if (isCloseModal) {
-      setTitle("Close");
+      setTitle("Cancel");
     } else if (isApproveModal) {
       setTitle("Approve");
     }
@@ -240,7 +240,7 @@ export const EmSubmissionModal = ({
         showDarkBg
         show={showModal}
         save={saveFunc}
-        exitBtn={"Save and Close"}
+        exitBtn={"Save"}
         showSave
         disableExitBtn={disableSaveBtn}
         title={`${title} Submission Access`}
