@@ -38,7 +38,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         else
         {
             setViewData(reduxCurrentTab?.viewData || []);
-            setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+            setMessage('Select a Reporting Period, Location, and Template, then click the Apply Filter button to view the data.');
         }
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
@@ -47,10 +47,9 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         {
             if ( viewData?.length === 0) {
                 const timeOutApply = setTimeout(() => {
-                    setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
                     setPendingMessage(false)
                 }, 1000);
-                setMessage('There are no records to display');
+                setMessage('There are no records to display.\nSelect another Reporting Period, Location, and Template, then click the Apply Filter button to view the data.');
                 return () => clearTimeout(timeOutApply);
            }
         }
@@ -116,6 +115,18 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         setTableColumns(cols);
     }, [viewColumnInfo, createTableColumns]);
 
+    const customNoDataMessage = message.split('.').map((line) => 
+        <div>
+          {line}
+        </div>
+      );
+
+    const inlineStyles = {
+        whiteSpace: 'pre-line',
+        display: 'block',       
+        wordWrap: 'break-word', 
+      };
+
     return (         
             <div className="padding-left-0 margin-left-0 padding-right-0">
                 <DataTable
@@ -129,7 +140,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
                     data={viewData}
                     className={`data-display-table react-transition fade-in`}
                     progressPending={filterApply}
-                    noDataComponent={message}
+                    noDataComponent={<div style={inlineStyles}>{customNoDataMessage}</div>}
                     progressComponent={<Preloader />}
                 />
             </div>
