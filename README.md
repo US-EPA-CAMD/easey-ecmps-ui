@@ -37,6 +37,10 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
    ```
    $ yarn install --ignore-engines
    ```
+5. Initialize project to copy all the necessary Sass, image, font, and Javascript assets from the USWDS source code.
+    ```
+    $ npx gulp init
+    ```
 
 ## Building, Testing, & Running the application
 

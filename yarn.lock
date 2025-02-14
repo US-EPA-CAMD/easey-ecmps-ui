@@ -2196,8 +2196,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@us-epa-camd/easey-design-system@../easey-design-system/lib":
-  version "1.36.0"
+"@us-epa-camd/easey-design-system@^1.36.1":
+  version "1.36.1"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.36.1/b46abd22c07454d1466bfe8e9a915b0ea3ae13a2#b46abd22c07454d1466bfe8e9a915b0ea3ae13a2"
+  integrity sha512-pFQGXaXToQiLaWgpLN9tXaA5IAr6rFK35qXvtaetUIAlP/qvLBCHHltp85nBrzau8/Ja4hSCaw/7mJOg8BTxOQ==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
