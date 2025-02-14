@@ -19,7 +19,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
     const [viewData, setViewData] = useState([]);
     const [pendingMessage, setPendingMessage] = useState(false);
-    const [message, setMessage] = useState('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
@@ -38,7 +38,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         else
         {
             setViewData(reduxCurrentTab?.viewData || []);
-            setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
+            setMessage('Select a Reporting Period, Location, and Template, then click the Apply Filter button to view the data.');
         }
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
@@ -47,11 +47,18 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         {
             if ( viewData?.length === 0) {
                 const timeOutApply = setTimeout(() => {
-                    setMessage('Select a Reporting Period, Location, and Template and Apply Filter to view the data');
                     setPendingMessage(false)
                 }, 1000);
-                setMessage('There are no records to display');
-                return () => clearTimeout(timeOutApply);
+                setMessage(
+                    <div>
+                      <p>There are no records to display</p>
+                      <p>
+                        Select another Reporting Period, Location, and Template, then
+                        click the Apply Filter button to view the data
+                      </p>
+                    </div>
+                  );
+            return () => clearTimeout(timeOutApply);
            }
         }
         
@@ -115,6 +122,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
         const cols = createTableColumns();
         setTableColumns(cols);
     }, [viewColumnInfo, createTableColumns]);
+
 
     return (         
             <div className="padding-left-0 margin-left-0 padding-right-0">
