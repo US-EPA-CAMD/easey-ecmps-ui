@@ -16,7 +16,7 @@
   "scripts": {
     "prepare": "gulp init",  
     "start": "vite",
-    "build": "vite build",
+    "build": "gulp init && vite build",
     "test": "jest --coverage --testResultsProcessor=jest-sonar-reporter",
     "test:cov": "jest --coverage",
     "up": "yarn && yarn start"
