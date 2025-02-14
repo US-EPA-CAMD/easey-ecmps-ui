@@ -8,7 +8,7 @@ import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss";
-import { formatDate, getQuarter } from "../../../utils/functions";
+import { exportToCSV, formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
@@ -119,47 +119,12 @@ export const ErrorSuppressionDataContainer = () => {
       updateDate: "Update Date",
       id: "Record Id"
     };
-  
-    const headers = Object.keys(columnMapping);
-    const csvHeaders = headers.map(key => columnMapping[key]);
-  
-    // Convert data to CSV format
-    const csvRows = tableData.map(row =>
-      headers.map(header => {
-        let value = row[header];
 
-        if (header === "active") {
-          value = value ? "Active" : "Inactive";
-        }
-
-        if (header === "matchTimeTypeCode") {
-          value = formatMatchTimeCriteriaCell(row);
-        }
-  
-        return value !== null && value !== undefined ? `"${value}"` : '""';
-      }).join(',')
-    );
-  
-    // Combine headers and data rows
-    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
-  
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-
-    // Assemble file name
     const facilityName = tableData[0].facilityName;
     const orisCode = tableData[0].orisCode
-    let fileName = `Error_Supression_${facilityName}(${orisCode})_${new Date().toISOString().slice(0, 19)}.csv`
+    
+    exportToCSV(tableData, columnMapping, `Error_Supression_${facilityName}(${orisCode})`, formatMatchTimeCriteriaCell)
   
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-  
-    // Cleanup
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   const openViewModalHandler = useCallback(

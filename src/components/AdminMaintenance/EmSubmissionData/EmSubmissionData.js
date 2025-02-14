@@ -12,6 +12,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { exportToCSV } from "../../../utils/functions";
 
 export const EmSubmissionData = ({
   data = [],
@@ -83,36 +84,13 @@ export const EmSubmissionData = ({
       severityLevel: "Severity Level",
       id: "Record Id"
     };
-  
-    const headers = Object.keys(columnMapping);
-    const csvHeaders = headers.map(key => columnMapping[key]); 
 
-    // Convert data to CSV format
-    const csvRows = filteredData.map(row =>
-      headers.map(header => (row[header] !== null && row[header] !== undefined ? `"${row[header]}"` : '""')).join(',')
-    );
-  
-    // Combine headers and data rows
-    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
-  
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-
-    // Assemble file name
     const facilityName = filteredData[0].facilityName;
     const orisCode = filteredData[0].orisCode
     const reportingPeriod = filteredData[0].reportingPeriodAbbreviation
-    let fileName = `EM_Submission_Access_${facilityName}(${orisCode})_${reportingPeriod}_${new Date().toISOString().slice(0, 19)}.csv`
   
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-  
-    // Cleanup
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportToCSV(filteredData, columnMapping, `EM_Submission_Access_${facilityName}(${orisCode})_${reportingPeriod}`)
+    
   };
 
   // fetch and initialize options for lower grid filter(s)

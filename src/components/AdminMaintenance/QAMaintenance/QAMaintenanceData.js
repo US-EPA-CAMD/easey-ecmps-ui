@@ -23,6 +23,7 @@ import QAMaintenanceModalPopout, {
 } from './QAMaintenanceModalPopout';
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { exportToCSV } from '../../../utils/functions';
 
 let controlInputs;
 
@@ -102,34 +103,11 @@ const QAMaintenanceData = ({
         id: "Record Id"
       };
     }
-  
-    const headers = Object.keys(columnMapping);
-    const csvHeaders = headers.map(key => columnMapping[key]);
-  
-    // Convert data to CSV format
-    const csvRows = filteredData.map(row =>
-      headers.map(header => (row[header] !== null && row[header] !== undefined ? `"${row[header]}"` : '""')).join(',')
-    );
-  
-    // Combine headers and data rows
-    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
-  
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
 
-    // Assemble file name
     const facilityName = filteredData[0].facilityName;
-    let fileName = `QA/Cert_Data_Maintenance_${facilityName}_${typeSelection}_${new Date().toISOString().slice(0, 19)}.csv`
+
+    exportToCSV(filteredData, columnMapping, `QA/Cert_Data_Maintenance_${facilityName}`)
   
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-  
-    // Cleanup
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
   
   // fetch and initialize options for lower grid filter(s)
