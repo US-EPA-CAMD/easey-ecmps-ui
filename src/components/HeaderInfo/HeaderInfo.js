@@ -544,7 +544,7 @@ export const HeaderInfo = ({
       .getMonitoringPlanComments(selectedConfig.id)
 
       .then((data) => {
-        setCommentsData(formatCommentsToTable(data.data));
+        setCommentsData(formatCommentsToTable(data.data?.items));
         setShowCommentsModal(true);
       })
       .catch((error) => {
@@ -586,7 +586,7 @@ export const HeaderInfo = ({
         .getCheckedOutLocations()
         .then((res) => {
           // get info for current checked-out configs, checkout status, date
-          const configs = res.data;
+          const configs = res.data?.items;
           setCheckedOutConfigs(configs);
           let currDate = new Date(Date.now());
           currDate.setDate(currDate.getDate() - 1);
@@ -862,10 +862,10 @@ export const HeaderInfo = ({
         selectedConfig.id,
         DatabaseContext.WORKSPACE,
       );
-      if (res.data.length === 0) {
+      if (res.data?.items?.length === 0) {
         removeTab(currentTabIndex); // Newly created plans are deleted rather than reverted, so remove it from the tabs
       } else {
-        dispatch(loadSingleMonitoringPlanSuccess(orisCode, res.data[0]));
+        dispatch(loadSingleMonitoringPlanSuccess(orisCode, res.data?.items[0]));
       }
       setRevertedState(true);
       setShowRevertModal(false);

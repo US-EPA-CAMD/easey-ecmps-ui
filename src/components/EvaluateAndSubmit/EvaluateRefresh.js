@@ -32,7 +32,7 @@ export const EvaluateRefresh = ({
               storedFilters.current.orisCodes,
               storedFilters.current.monPlanIds
             )
-          ).data;
+          ).data?.items;
         }
 
         // Extra formatting to make all data sets uniform

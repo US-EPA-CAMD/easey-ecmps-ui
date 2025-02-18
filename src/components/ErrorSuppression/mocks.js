@@ -104,49 +104,53 @@ export const esContext = {
 }
 
 export const esConfigurations = {
-    data: [
-        {
-            id: "MDC-DSF87364AD9879A8FDS7G",
-            name: "1, 2, CS0AAN",
-            locations: [
-                {
-                    id: "BZ5461",
-                    name: "1",
-                    type: "Unit",
-                    unitId: "1",
-                },
-                {
-                    id: "CZ5461",
-                    name: "2",
-                    type: "Unit",
-                    unitId: "2",
-                },
-                {
-                    id: "DA5461",
-                    name: "CS0AAN",
-                    type: "StackPipe",
-                    stackPipeId: "CS0AAN",
-                },
-            ],
-        },
-    ]
+    data: {
+        items: [
+            {
+                id: "MDC-DSF87364AD9879A8FDS7G",
+                name: "1, 2, CS0AAN",
+                locations: [
+                    {
+                        id: "BZ5461",
+                        name: "1",
+                        type: "Unit",
+                        unitId: "1",
+                    },
+                    {
+                        id: "CZ5461",
+                        name: "2",
+                        type: "Unit",
+                        unitId: "2",
+                    },
+                    {
+                        id: "DA5461",
+                        name: "CS0AAN",
+                        type: "StackPipe",
+                        stackPipeId: "CS0AAN",
+                    },
+                ],
+            },
+        ]
+    }
 }
 
 export const checkCatalogRecords = {
-    data: [
-        {
-            id: "5003",
-            checkTypeCode: "ADESTAT",
-            checkTypeDescription: "Appendix D and E Status",
-            checkNumber: "6",
-            checkResult: "Accuracy Test Not Yet Evaluated",
-            locationTypeCode: "LOC",
-            timeTypeCode: "HOUR",
-            dataTypeCode: "FUELTYP",
-            dataTypeLabel: "Fuel Type",
-            dataTypeUrl: "/master-data-mgmt/fuel-type-codes",
-        },
-    ]
+    data: {
+        items: [
+            {
+                id: "5003",
+                checkTypeCode: "ADESTAT",
+                checkTypeDescription: "Appendix D and E Status",
+                checkNumber: "6",
+                checkResult: "Accuracy Test Not Yet Evaluated",
+                locationTypeCode: "LOC",
+                timeTypeCode: "HOUR",
+                dataTypeCode: "FUELTYP",
+                dataTypeLabel: "Fuel Type",
+                dataTypeUrl: "/master-data-mgmt/fuel-type-codes",
+            },
+        ]
+    }
 }
 
 export const esFacilities = {
@@ -161,10 +165,12 @@ export const esFacilities = {
 }
 
 export const esReasonCodes = {
-    data: [
-        {
-            errorSuppressionReasonCode: "BUG",
-            errorSuppressionReasonDescription: "Application Bug",
-        },
-    ]
+    data: {
+        items: [
+            {
+                errorSuppressionReasonCode: "BUG",
+                errorSuppressionReasonDescription: "Application Bug",
+            },
+        ]
+    }
 }

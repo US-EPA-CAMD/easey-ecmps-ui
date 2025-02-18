@@ -63,7 +63,7 @@ export const DataTablePCTQualifications = ({
     if (
       updatePCT ||
       updateTable ||
-      qualPctData.length <= 0 ||
+      qualPctData?.length <= 0 ||
       locationSelectValue ||
       qualSelectValue ||
       revertedState
@@ -71,7 +71,7 @@ export const DataTablePCTQualifications = ({
       mpApi
         .getPCTQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualPctData(res.data);
+          setQualPctData(res.data?.items);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
@@ -105,7 +105,7 @@ export const DataTablePCTQualifications = ({
   ];
 
   const data = useMemo(() => {
-    if (qualPctData.length > 0) {
+    if (qualPctData?.length > 0) {
       return fs.getMonitoringPlansPCTQualifications(qualPctData);
     }
     return [];
@@ -118,7 +118,7 @@ export const DataTablePCTQualifications = ({
     setCreatingChild(create);
     let pctData = null;
 
-    if (qualPctData.length > 0 && !create) {
+    if (qualPctData?.length > 0 && !create) {
       pctData = qualPctData.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];

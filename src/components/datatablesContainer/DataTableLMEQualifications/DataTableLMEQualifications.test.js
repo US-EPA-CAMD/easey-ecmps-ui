@@ -23,7 +23,7 @@ const store = configureStore(mockInitialState);
 
 describe("- DataTable LME Qualifications - ", () => {
   beforeEach(() => {
-    jest.spyOn(monitorPlanApi, "getLMEQualifications").mockResolvedValue({ data: getMockLMEQualifications() });
+    jest.spyOn(monitorPlanApi, "getLMEQualifications").mockResolvedValue({ data:  { items: getMockLMEQualifications()} });
   })
 
   afterEach(() => {

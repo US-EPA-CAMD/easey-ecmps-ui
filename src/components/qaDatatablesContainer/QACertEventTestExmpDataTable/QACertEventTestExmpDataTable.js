@@ -194,17 +194,17 @@ const QACertEventTestExmpDataTable = ({
           .then((response) => {
             dropdownArray[0].forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "componentId", "componentId")
                 );
               } else if (i === 1) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "monitoringSystemId", "monitoringSystemId")
                 );
               } else if (i === 2) {
                 const codeField = "certificationEventCode"
                 const descriptionField = "certificationEventDescription"
-                dropdowns[dropdownArray[0][i]] = response[i].data
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items
                   .sort((obj1, obj2) => obj1[codeField].localeCompare(obj2[codeField], 'en', { numeric: true }))
                   .map((d) => {
                     d[descriptionField] = `${d[codeField]} (${d[descriptionField]})`
@@ -213,7 +213,7 @@ const QACertEventTestExmpDataTable = ({
               } else if (i === 3) {
                 const code = "requiredTestCode"
                 const description = "requiredTestDescription"
-                dropdowns[dropdownArray[0][i]] = response[i].data
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items
                   .sort((obj1, obj2) => obj1[code].localeCompare(obj2[code], 'en', { numeric: true }))
                   .map((d) => {
                     d[description] = `${d[code]} (${d[description]})`
@@ -295,23 +295,23 @@ const QACertEventTestExmpDataTable = ({
               } else if (i === 1) {
                 dropdowns[dropdownArray[0][i]] = quarters;
               } else if (i === 2) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "componentId", "componentId")
                 );
               } else if (i === 3) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "monitoringSystemId", "monitoringSystemId")
                 );
               } else if (i === 4) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "spanScaleCode", "spanScaleDescription")
                 );
               } else if (i === 5) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(d, "fuelCode", "fuelDescription")
                 );
               } else if (i === 6) {
-                dropdowns[dropdownArray[0][i]] = response[i].data.map((d) =>
+                dropdowns[dropdownArray[0][i]] = response[i].data?.items?.map((d) =>
                   getOptions(
                     d,
                     "extensionExemptionCode",

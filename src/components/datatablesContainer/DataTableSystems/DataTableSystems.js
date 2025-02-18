@@ -138,7 +138,7 @@ export const DataTableSystems = ({
       mpApi
         .getMonitoringSystems(locationSelectValue)
         .then((res) => {
-          setMonitoringSystems(res.data);
+          setMonitoringSystems(res.data?.items);
           setDataLoaded(true);
         })
         .catch((error) => log.log("getMonitoringSystems failed", error));

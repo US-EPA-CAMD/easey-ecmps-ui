@@ -13,7 +13,7 @@ const store = configureStore();
 describe("- DataTable Configurations -", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getMonitoringPlans").mockResolvedValue({
-      data: getMockMonitorPlanConfigurations(),
+      data: { items: getMockMonitorPlanConfigurations()},
     });
   });
 
