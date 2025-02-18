@@ -154,14 +154,14 @@ export const checkCatalogRecords = {
 }
 
 export const esFacilities = {
-    data: [
+    data: {items:[
         {
             facilityRecordId: 1,
             facilityId: 3,
             facilityName: "Barry",
             stateCode: "AL",
         },
-    ]
+    ]}
 }
 
 export const esReasonCodes = {
