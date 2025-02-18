@@ -591,13 +591,15 @@ export const EvaluateAndSubmit = ({
   };
 
   const retrieveAndFormatData = async (dataListIndex, activeSet) => {
-    const data = (
+    const resp = (
       await dataList[dataListIndex].call(
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
         storedFilters.current.submissionPeriods
       )
-    ).data;
+    );
+
+    let data = resp.data?.items ?? resp.data;
 
     formatDataRows(
       dataList[dataListIndex].ref,
