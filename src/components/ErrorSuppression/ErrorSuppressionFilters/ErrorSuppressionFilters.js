@@ -151,7 +151,7 @@ export const ErrorSuppressionFilters = () => {
 
     getAllFacilities()
       .then(({ data }) => {
-        const formattedFacilities = data.map((f) => ({
+        const formattedFacilities = data.items.map((f) => ({
           value: f.facilityRecordId,
           label: `${f.facilityName} (${f.facilityId})`,
           orisCode: f.facilityId,

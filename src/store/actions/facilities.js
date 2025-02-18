@@ -12,6 +12,6 @@ export function loadFacilitiesSuccess(facilities) {
 export function loadFacilities(dispatch) {
   dispatch(beginFacilitiesApiCall());
   return facilitiesApi.getAllFacilities().then((res) => {
-    dispatch(loadFacilitiesSuccess(res.data));
+    dispatch(loadFacilitiesSuccess(res.data.items));
   });
 }

@@ -47,7 +47,7 @@ export const SelectFacilitiesDataTable = ({
       .getAllFacilities()
       .then((res) => {
         setDataLoaded(true);
-        setFacilities(res.data);
+        setFacilities(res.data.items);
         if (history?.action === "POP") {
           resetTabOrder();
         }

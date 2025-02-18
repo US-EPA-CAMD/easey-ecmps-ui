@@ -10,11 +10,12 @@ describe("testing facilities data fetching APIs", () => {
   beforeAll(() => {
     mock = new MockAdapter(axios);
     mockResponse = {
+      items: {
       facilities: [
         { orisCode: 3, name: "Barry" },
         { orisCode: 8, name: "Gorgas" },
         { orisCode: 9, name: "Copper Station" },
-      ],
+      ]},
     };
   });
 
@@ -26,7 +27,7 @@ describe("testing facilities data fetching APIs", () => {
 
     const result = await getAllFacilities();
 
-    expect(result["data"].facilities).toEqual(mockResponse.facilities);
+    expect(result["data"].items.facilities).toEqual(mockResponse.items.facilities);
   });
 
   it("Should get facility data from a specific facility ID", async () => {
