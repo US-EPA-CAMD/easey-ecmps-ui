@@ -43,6 +43,7 @@
     "axios-mock-adapter": "^1.21.5",
     "axios-retry": "^3.4.0",
     "classnames": "^2.3.2",
+    "dompurify": "^3.2.3",
     "downloadjs": "^1.4.7",
     "focus-trap-react": "^10.2.3",
     "html-react-parser": "^3.0.15",
