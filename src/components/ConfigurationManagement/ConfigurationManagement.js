@@ -714,11 +714,11 @@ export const ConfigurationManagement = ({
 
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
-      (await getCheckedOutLocations()).data
-        .filter((loc) => user && loc.checkedOutBy === user.userId)
+      (await getCheckedOutLocations()).data?.items
+        ?.filter((loc) => user && loc.checkedOutBy === user.userId)
         .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
-    setCheckedOutLocations((await getCheckedOutLocations()).data);
+    setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
@@ -787,7 +787,7 @@ export const ConfigurationManagement = ({
       );
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
@@ -810,7 +810,7 @@ export const ConfigurationManagement = ({
       handleError(err);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 

@@ -25,10 +25,10 @@ const store = configureStore(mockInitialState);
 describe("- DataTable LEE Qualifications - ", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getLEEQualifications").mockResolvedValue({
-      data: getMockLEEQualifications(),
+      data: { items: getMockLEEQualifications() },
     });
     jest.spyOn(dataManagementApi, "prefilteredLEEQualifications").mockResolvedValue({
-      data: getMockLEEQualifications(),
+      data: { items: getMockLEEQualifications() },
     });
   })
 

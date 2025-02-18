@@ -68,6 +68,7 @@ const ComboBoxForwardRef = (
     ulProps,
     customFilter,
     disableFiltering = false,
+    selectedFacility
   },
   ref
 ) => {
@@ -161,6 +162,15 @@ const ComboBoxForwardRef = (
       }
     }
   }, [state.focusMode])
+
+  useEffect(() => 
+  {
+    if(typeof selectedFacility == "string" && selectedFacility == "")
+    {
+      dispatch({ type: ActionTypes.CLEAR_SELECTION })
+    }
+  }
+  ,[selectedFacility])
 
   useImperativeHandle(
     ref,

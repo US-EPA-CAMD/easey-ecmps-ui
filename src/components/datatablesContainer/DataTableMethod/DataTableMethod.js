@@ -98,12 +98,12 @@ export const DataTableMethod = ({
       try {
         const methods = await mpApi.getMonitoringMethods(locationSelectValue)
           .catch(error => log.log('getMonitoringMethods failed', error));
-        setMethods(methods.data);
+        setMethods(methods?.data?.items ?? []);
         setDataLoaded(true);
         const matsMethods = await mpApi.getMonitoringMatsMethods(
           locationSelectValue
         ).catch(error => log.log('getMonitoringMatsMethods failed', error));
-        setMatsMethods(matsMethods.data);
+        setMatsMethods(matsMethods?.data?.items ?? []);
         setUpdateTable(false);
         setRevertedState(false);
         setUpdateRelatedTables(false);

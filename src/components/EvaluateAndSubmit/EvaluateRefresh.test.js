@@ -16,12 +16,14 @@ describe("EvaluateRefresh Component", () => {
             {
               ref: { current: [{ monPlanId: "test", evalStatusCode: "PASS" }] },
               call: callFunc.mockResolvedValue({
-                data: [
-                  {
-                    monPlanId: "test",
-                    evalStatusCode: "ERR",
-                  },
-                ],
+                data: {
+                  items: [
+                    {
+                      monPlanId: "test",
+                      evalStatusCode: "ERR",
+                    },
+                  ],
+                }
               }),
               rowId: "monPlanId",
               name: "Monitoring Plan",

@@ -24,14 +24,14 @@ export const EvaluateRefresh = ({
               storedFilters.current.monPlanIds,
               storedFilters.current.submissionPeriods
             )
-          ).data;
+          ).data?.items;
         } else {
           data = (
             await call(
               storedFilters.current.orisCodes,
               storedFilters.current.monPlanIds
             )
-          ).data;
+          ).data?.items;
         }
 
         // Extra formatting to make all data sets uniform
