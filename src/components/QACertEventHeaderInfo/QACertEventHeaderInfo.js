@@ -93,7 +93,7 @@ export const QACertEventHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
-          setAllTestTypeCodes(res.data);
+          setAllTestTypeCodes(res.data?.items);
         })
         .catch((error) => {
           log.log(error);
@@ -101,8 +101,8 @@ export const QACertEventHeaderInfo = ({
 
       getAllTestTypeGroupCodes()
         .then((res) => {
-          const options = res.data
-            .map((e) => {
+          const options = res.data?.items
+            ?.map((e) => {
               return {
                 name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
@@ -123,7 +123,7 @@ export const QACertEventHeaderInfo = ({
     const selectedTestTypeGroupOptionObj = testTypeGroupOptions[selectedIndex];
 
     const codesForSelectedTestTypeGroup = allTestTypeCodes
-      .filter((data) => {
+      ?.filter((data) => {
         return data.testTypeGroupCode === selectedTestTypeGroupOptionObj?.code;
       })
       .map((obj) => {
@@ -153,7 +153,7 @@ export const QACertEventHeaderInfo = ({
       .catch((err) => log.log(err));
     mpApi
       .getCheckedOutLocations()
-      .then((res) => setCheckedOutConfigs(res.data))
+      .then((res) => setCheckedOutConfigs(res.data?.items))
       .catch((err) => log.log(err));
 
     return () => {
@@ -392,7 +392,7 @@ export const QACertEventHeaderInfo = ({
                 !userHasCheckout &&
                 selectedConfig.active &&
                 checkedOutConfigs
-                  .map((location) => location["monPlanId"])
+                  ?.map((location) => location["monPlanId"])
                   .indexOf(selectedConfig.id) === -1 ? (
                 <Button
                   type="button"

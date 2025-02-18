@@ -27,11 +27,11 @@ const FilterForm = ({
   const selectedReportingPeriods = useRef([]);
 
   async function fetchReportingPeriods() {
-    const reportingPeriodList = (await getReportingPeriods()).data;
+    const reportingPeriodList = (await getReportingPeriods()).data?.items;
 
     const availReportingPeriods = [];
 
-    for (let i = reportingPeriodList.length - 1; i >= 0; i--) {
+    for (let i = reportingPeriodList?.length - 1; i >= 0; i--) {
       const period = reportingPeriodList[i];
       const objectMapping = {
         id: period.periodAbbreviation,
@@ -125,7 +125,7 @@ const FilterForm = ({
     selectedOrisCodes.current = newState;
 
     const configurationData = newState.length
-      ? (await getMonitoringPlans(newState)).data
+      ? (await getMonitoringPlans(newState)).data?.items
       : [];
 
     const configNamesToMonPlan = [];
