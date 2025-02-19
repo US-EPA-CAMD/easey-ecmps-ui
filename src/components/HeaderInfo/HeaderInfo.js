@@ -586,7 +586,7 @@ export const HeaderInfo = ({
         .getCheckedOutLocations()
         .then((res) => {
           // get info for current checked-out configs, checkout status, date
-          const configs = res.data?.items;
+          const configs = res.data?.items ?? res.data;
           setCheckedOutConfigs(configs);
           let currDate = new Date(Date.now());
           currDate.setDate(currDate.getDate() - 1);
