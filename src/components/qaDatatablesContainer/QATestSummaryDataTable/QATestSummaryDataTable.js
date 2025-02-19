@@ -203,7 +203,7 @@ const QATestSummaryDataTable = ({
               getOptions(d, "spanScaleCode", "spanScaleDescription")
             );
           } else if (i === 2) {
-            dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[2].data?.items?.map((d) =>
               getOptions(d, "testReasonCode", "testReasonDescription")
             );
           } else if (i === 3) {
