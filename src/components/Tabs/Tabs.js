@@ -30,7 +30,7 @@ const Tabs = ({
       mpApi
         .getCheckedOutLocations()
         .then((resOne) => {
-          const configs = resOne.data?.items;
+          const configs = resOne.data?.items ?? resOne.data;
           if (
             configs.some(
               (plan) =>
