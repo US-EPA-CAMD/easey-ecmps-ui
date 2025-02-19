@@ -714,11 +714,11 @@ export const ConfigurationManagement = ({
 
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
-      (await getCheckedOutLocations()).data
-        .filter((loc) => user && loc.checkedOutBy === user.userId)
+      (await getCheckedOutLocations()).data?.items
+        ?.filter((loc) => user && loc.checkedOutBy === user.userId)
         .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
-    setCheckedOutLocations((await getCheckedOutLocations()).data);
+    setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
@@ -787,7 +787,7 @@ export const ConfigurationManagement = ({
       );
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
@@ -810,7 +810,7 @@ export const ConfigurationManagement = ({
       handleError(err);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
@@ -1108,7 +1108,7 @@ export const ConfigurationManagement = ({
         getUnitsByOrisCode(selectedOrisCode).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
-            res.data
+            res.data.items
               .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
               .map((d) => ({
                 ...d,
@@ -1133,7 +1133,7 @@ export const ConfigurationManagement = ({
         setStackPipesStatus(dataStatus.PENDING);
         getStackPipesByOrisCode(selectedOrisCode).then((res) => {
           setStackPipesStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data, "SET_STACK_PIPES");
+          initializeEditableFormState(res.data.items, "SET_STACK_PIPES");
         });
       } catch (err) {
         setStackPipesStatus(dataStatus.ERROR);
@@ -1150,7 +1150,7 @@ export const ConfigurationManagement = ({
         setUnitStackConfigsStatus(dataStatus.PENDING);
         getUnitStackConfigsByOrisCode(selectedOrisCode).then((res) => {
           setUnitStackConfigsStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data, "SET_UNIT_STACK_CONFIGS");
+          initializeEditableFormState(res.data.items, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
         setUnitStackConfigsStatus(dataStatus.ERROR);

@@ -117,7 +117,7 @@ export const createMatchTypeDropdownLists = async (
 
     try {
       const { data } = await getMonitoringPlans([orisCode], [], DatabaseContext.WORKSPACE);
-      return processPromiseData(data);
+      return processPromiseData(data?.items);
     } catch (e) {
       log.error(e);
       return [];

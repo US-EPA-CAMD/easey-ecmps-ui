@@ -1,7 +1,7 @@
 import { getAllFacilities } from "../../../utils/api/facilityApi";
 
 export const getDropDownFacilities = async () => {
-  const facilities = (await getAllFacilities()).data;
+  const facilities = (await getAllFacilities()).data.items;
   const formattedFacilities = facilities.map(
     ({ facilityId, facilityName }) => ({
       id: facilityId,

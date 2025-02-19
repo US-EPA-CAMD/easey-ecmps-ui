@@ -109,7 +109,7 @@ const App = () => {
         }
         if (refreshCheckouts) {
           const checkedOutLocationResult = (await getCheckedOutLocations())
-            ?.data;
+            ?.data?.items;
           if (
             checkedOutLocationResult &&
             !isEqual(checkedOutLocationResult, checkedOutLocationsCache)
