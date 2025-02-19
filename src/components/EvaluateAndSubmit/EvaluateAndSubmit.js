@@ -628,8 +628,8 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] =
-      await Promise.all([
+    const [{ data: { items: officialMonitorPlans } }, { data: { items: workspaceMonitorPlans } }] =
+    await Promise.all([
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
       ]);
