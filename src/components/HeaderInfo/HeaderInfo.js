@@ -437,8 +437,7 @@ export const HeaderInfo = ({
         inWorkspace
       );
 
-      const response = await emApi.getViews();
-      let { items: allViews } = response.data || {};
+      let { items: allViews } = (await emApi.getViews()).data;
 
       let filteredViewData;
       if (inWorkspace)
@@ -587,7 +586,7 @@ export const HeaderInfo = ({
         .getCheckedOutLocations()
         .then((res) => {
           // get info for current checked-out configs, checkout status, date
-          const configs = res.data?.items ?? res.data;
+          const configs = res.data?.items;
           setCheckedOutConfigs(configs);
           let currDate = new Date(Date.now());
           currDate.setDate(currDate.getDate() - 1);
