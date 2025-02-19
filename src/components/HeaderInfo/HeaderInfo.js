@@ -437,7 +437,7 @@ export const HeaderInfo = ({
         inWorkspace
       );
 
-      let { items: allViews } = await emApi.getViews().data;
+      let { items: allViews } = (await emApi.getViews()).data;
 
       let filteredViewData;
       if (inWorkspace)
