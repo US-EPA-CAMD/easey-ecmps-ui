@@ -262,7 +262,7 @@ export const EmSubmissionData = ({
 
 
   const openViewEditModalHandler = useCallback(
-    (row, isCreate = false) => {
+    (row, index, isCreate = false) => {
       const selectedData = row;
       const { facilityName, facilityId } = selectedData;
       selectedData.facilityNameAndId = `${facilityName} (${facilityId})`;
@@ -511,6 +511,7 @@ export const EmSubmissionData = ({
                     data.length === 0 
                     || selectedRows.length !== 1 //we can only submit the open request for one record at a time
                     || selectedRows.some(row => row.status !== 'CLOSED' && row.status !== 'NO WINDOW')
+                    || !selectedRows[0]?.isLatestRecord
                   } 
                 >
                   Open
@@ -528,6 +529,7 @@ export const EmSubmissionData = ({
                     || disableApproveBtn 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'OPEN')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   } 
                 >
                   Extend
@@ -544,6 +546,7 @@ export const EmSubmissionData = ({
                     data.length === 0 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'OPEN')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   }
                 >
                   Cancel
@@ -561,6 +564,7 @@ export const EmSubmissionData = ({
                     || disableApproveBtn 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'PENDING' && row.status !== 'CANCELLED')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   }
                 >
                   Approve
