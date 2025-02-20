@@ -7,6 +7,8 @@ import {
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 import { isNumber } from "lodash";
+import log from "loglevel";
+import { displayAppError } from "../additional-functions/app-error";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -434,5 +436,52 @@ export const parseBool = (str) => {
     return str > 0;
   } else {
     return String(str).toLocaleLowerCase() == "true";
+  }
+};
+
+export const exportToCSV = (data, columnMapping, fileNamePrefix, formatMatchTimeCriteriaCell) => {
+  try {
+
+    const headers = Object.keys(columnMapping);
+    const csvHeaders = headers.map(key => columnMapping[key]);
+
+    // Convert data to CSV format
+    const csvRows = data.map(row =>
+      headers.map(header => {
+        let value = row[header];
+
+        if (header === "active") {
+          value = value ? "Active" : "Inactive";
+        }
+
+        if (header === "matchTimeTypeCode" && formatMatchTimeCriteriaCell) {
+          value = formatMatchTimeCriteriaCell(row);
+        }
+
+        return value !== null && value !== undefined ? `"${value}"` : '""';
+      }).join(',')
+    );
+
+    // Combine headers and data rows
+    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
+
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Assemble file name
+    let fileName = `${fileNamePrefix}_${new Date().toISOString().slice(0, 19)}.csv`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    displayAppError("Generate CSV file failed, please try it again!");
+    log.log("generate csv file failed", error);
   }
 };
