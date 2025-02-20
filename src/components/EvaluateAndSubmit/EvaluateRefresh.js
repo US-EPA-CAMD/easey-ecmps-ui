@@ -18,20 +18,21 @@ export const EvaluateRefresh = ({
 
         if (key !== "MP") {
           //Filter emissions by quarter as well
-          data = (
+          const resp = (
             await call(
               storedFilters.current.orisCodes,
               storedFilters.current.monPlanIds,
               storedFilters.current.submissionPeriods
             )
-          ).data;
+          );
+          data = resp.data?.items ?? resp.data;
         } else {
           data = (
             await call(
               storedFilters.current.orisCodes,
               storedFilters.current.monPlanIds
             )
-          ).data;
+          ).data?.items;
         }
 
         // Extra formatting to make all data sets uniform

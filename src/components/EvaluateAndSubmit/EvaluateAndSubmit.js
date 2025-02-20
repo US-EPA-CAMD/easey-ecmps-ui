@@ -331,7 +331,7 @@ export const EvaluateAndSubmit = ({
   };
 
   const checkOutLocationsOrRollback = async () => {
-    const checkedOutLocations = (await getCheckedOutLocations()).data;
+    const checkedOutLocations = (await getCheckedOutLocations()).data?.items;
 
     const checkOutMapping = new Map(); //store the monPlanId as key and checkedOutBy (userId) as value
     for (const loc of checkedOutLocations) {
@@ -591,13 +591,15 @@ export const EvaluateAndSubmit = ({
   };
 
   const retrieveAndFormatData = async (dataListIndex, activeSet) => {
-    const data = (
+    const resp = (
       await dataList[dataListIndex].call(
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
         storedFilters.current.submissionPeriods
       )
-    ).data;
+    );
+
+    let data = resp.data?.items ?? resp.data;
 
     formatDataRows(
       dataList[dataListIndex].ref,
@@ -626,8 +628,8 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] =
-      await Promise.all([
+    const [{ data: { items: officialMonitorPlans } }, { data: { items: workspaceMonitorPlans } }] =
+    await Promise.all([
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
       ]);

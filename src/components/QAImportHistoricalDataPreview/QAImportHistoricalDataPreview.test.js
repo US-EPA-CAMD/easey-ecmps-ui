@@ -27,7 +27,7 @@ beforeEach(() => {
   });
 
   jest.spyOn(qaCertApi, "getReportingPeriods").mockResolvedValue({
-    data: getMockReportingPeriods(),
+    data: { items : getMockReportingPeriods() },
     status: 200
   });
 })

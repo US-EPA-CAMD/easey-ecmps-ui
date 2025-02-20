@@ -68,7 +68,7 @@ export const DataTableLEEQualifications = ({
       mpApi
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualLeeData(res.data);
+          setQualLeeData(res.data?.items);
 
           setDataLoaded(true);
           setUpdateTable(false);
@@ -105,7 +105,7 @@ export const DataTableLEEQualifications = ({
   ];
 
   const data = useMemo(() => {
-    if (qualLeeData.length > 0) {
+    if (qualLeeData?.length > 0) {
       return fs.getMonitoringPlansLEEQualifications(qualLeeData);
     }
     return [];

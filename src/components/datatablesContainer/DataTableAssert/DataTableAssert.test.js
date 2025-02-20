@@ -23,19 +23,19 @@ const props = getDataTableAssertProps()
 describe("- DataTableAssert - ", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
-      data: getMockMonitoringSpans(),
+      data: { items: getMockMonitoringSpans() },
     });
     jest.spyOn(monitorPlanApi, "getMonitoringPlansUnitControlRecords").mockResolvedValue({
-      data: getMockMonitoringPlansUnitControlRecords(),
+      data: { items: getMockMonitoringPlansUnitControlRecords() },
     });
     jest.spyOn(monitorPlanApi, "getMonitoringPlansFuelDataRecords").mockResolvedValue({
-      data: getMockMonitoringPlansFuelDataRecords(),
+      data: { items: getMockMonitoringPlansFuelDataRecords() },
     });
     jest.spyOn(monitorPlanApi, "getUnitCapacity").mockResolvedValue({
-      data: getMockUnitCapacity(),
+      data: { items: getMockUnitCapacity() },
     });
     jest.spyOn(monitorPlanApi, "getLocationAttributes").mockResolvedValue({
-      data: getMockLocationAttributes(),
+      data: { items: getMockLocationAttributes() },
     });
 
     // init modal button
@@ -58,7 +58,7 @@ describe("- DataTableAssert - ", () => {
 
   test('renders with active and inactive data', async () => {
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
-      data: getMockBothActiveAndInactiveRecords(),
+      data: { items : getMockBothActiveAndInactiveRecords() },
     });
 
     await act(() => {
@@ -75,7 +75,7 @@ describe("- DataTableAssert - ", () => {
 
   test('renders with only inactive data', async () => {
     jest.spyOn(monitorPlanApi, "getMonitoringSpans").mockResolvedValue({
-      data: getMockOnlyInactiveRecords(),
+      data: { items : getMockOnlyInactiveRecords() },
     });
 
     await act(() => {

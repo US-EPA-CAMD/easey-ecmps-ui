@@ -90,7 +90,7 @@ export const DataTableRectangularDucts = ({
           mpApi
             .getMonitoringRectangularDucts(locationSelectValue)
             .then((res) => {
-              setDucts(res.data);
+              setDucts(res.data?.items);
               setDataLoaded(true);
               setUpdateTable(false);
             })
@@ -101,7 +101,7 @@ export const DataTableRectangularDucts = ({
         return () => clearTimeout(timerFunc);
       }
       mpApi.getMonitoringRectangularDucts(locationSelectValue).then((res) => {
-        setDucts(res.data);
+        setDucts(res.data?.items);
         setDataLoaded(true);
         setUpdateTable(false);
       })
@@ -217,7 +217,7 @@ export const DataTableRectangularDucts = ({
   };
 
   const data = useMemo(() => {
-    if (ducts.length > 0) {
+    if (ducts?.length > 0) {
       const activeOnly = getActiveData(ducts);
       const inactiveOnly = getInactiveData(ducts);
 

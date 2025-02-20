@@ -728,7 +728,7 @@ describe("testing monitoring plans data fetching APIs", () => {
     localStorage.ecmps_user = {}
     const apiCall = await mpApi.getCheckedOutLocations(monitoringLocationId);
 
-    expect(apiCall["data"]).toEqual({});
+    expect(apiCall["data"]).toEqual( {});
   });
 
   test("tests getRefreshInfo not secure", async () => {

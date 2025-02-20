@@ -10,7 +10,7 @@ describe("<AdminMaintenance />", () => {
    
     jest.mock("../../utils/api/facilityApi", () => ({
       getAllFacilities: jest.fn().mockResolvedValue({
-        data: [
+        data: {items: [
           {
             facilityId: 1,
             facilityName: "Facility 1",
@@ -19,7 +19,7 @@ describe("<AdminMaintenance />", () => {
             facilityId: 2,
             facilityName: "Facility 2",
           },
-        ],
+        ]},
       }),
     }));
 
