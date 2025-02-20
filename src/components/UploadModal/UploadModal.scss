@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use"../../../public/scss/variables" as *;
 
 .upload-modal-container {
   position: absolute;

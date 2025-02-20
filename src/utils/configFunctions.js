@@ -1,7 +1,7 @@
 import log from "loglevel";
 
 export const debugLog = (message, object = null) => {
-  if (getConfigValueBoolean("REACT_APP_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
+  if (getConfigValueBoolean("VITE_EASEY_ECMPS_UI_ENABLE_DEBUG")) {
     if (object) {
       log.log(message, object);
     } else {

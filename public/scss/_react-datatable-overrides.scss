@@ -1,4 +1,5 @@
-@import "variables";
+@use "./variables" as *;
+@use "uswds" as *;
 
 .data-display-table-report {
   .brFloq {

@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use"../../../public/scss/variables" as *;
 
 .initial-tab-button {
   padding: 1em !important;

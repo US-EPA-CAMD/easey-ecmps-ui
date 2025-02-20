@@ -7,3 +7,11 @@
 // import EnzymeAdapter from "enzyme-adapter-react-16";
 
 // Enzyme.configure({ adapter: new EnzymeAdapter() });
+
+import '@testing-library/jest-dom';
+import nodeCrypto from 'crypto';
+window.crypto = {
+  getRandomValues: function (buffer) {
+    return nodeCrypto.randomFillSync(buffer);
+  }
+}
