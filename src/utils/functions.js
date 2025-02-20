@@ -272,10 +272,13 @@ export const getEvalStatus = async (paramsArray) => {
     ids,
     getYearQuarter(type, paramsArray)
   );
-  const items = response?.data.filter((el) => el[identifier] === id);
-  if (!response?.data?.length) return;
+
+  let dataList = response.data?.items ?? response.data;
+  
+  const items = dataList.filter((el) => el[identifier] === id);
+  if (!dataList.length) return;
   if (identifier) return items[0].evalStatusCode;
-  return response.data[0]?.evalStatusCode;
+  return dataList[0]?.evalStatusCode;
 };
 
 export const getEvalResultMessage = (reportData, paramsObject, evalStatus) => {

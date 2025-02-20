@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import log from "loglevel";
+import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../../additional-functions/system-admin-section-and-store-names";
+
+import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
   Label,
@@ -71,7 +74,7 @@ const FilterFormAdmin = ({
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
-    const availReportingPeriods = reportingPeriods.map((rp) => {
+    const availReportingPeriods = reportingPeriods?.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -120,8 +123,8 @@ const FilterFormAdmin = ({
           quarter,
           status
         );
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        data.items.forEach((d) => (d.selected = false));
+        setTableData(data.items);
       }
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
@@ -148,9 +151,9 @@ const FilterFormAdmin = ({
           default:
             return;
         }
-        let newData = resp.data;
+        let newData = resp.data.items;
         if (facilities.length > 0) {
-          newData = resp.data.map((obj) => ({
+          newData = resp.data.items.map((obj) => ({
             ...obj,
             facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
               }`,
@@ -341,7 +344,7 @@ const FilterFormAdmin = ({
                   ) ||
                     (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
                       && selectedFacility
-                      && typeSelection 
+                      && typeSelection
                       && typeSelection[1] !== defaultDropdownText) // for QA Maintenance, need both facility and type to enable the button
                 )
               }

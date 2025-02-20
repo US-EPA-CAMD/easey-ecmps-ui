@@ -115,14 +115,14 @@ export const DataTableQualifications = ({
   useEffect(() => {
     if (
       updateTable ||
-      qualificationData.length <= 0 ||
+      qualificationData?.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
       mpApi
         .getQualifications(locationSelectValue)
         .then((res) => {
-          setQualificationsData(res.data);
+          setQualificationsData(res.data?.items);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
@@ -138,7 +138,7 @@ export const DataTableQualifications = ({
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (mdmData.length === 0) {
+    if (mdmData?.length === 0) {
       loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
@@ -197,7 +197,7 @@ export const DataTableQualifications = ({
   };
 
   const data = useMemo(() => {
-    if (qualificationData.length > 0) {
+    if (qualificationData?.length > 0) {
       const activeOnly = getActiveData(qualificationData);
       const inactiveOnly = getInactiveData(qualificationData);
 
@@ -391,7 +391,7 @@ export const DataTableQualifications = ({
     let qualData = null;
     setCreating(create);
     setCreateNewQualificationData(create);
-    if (qualificationData.length > 0 && !create) {
+    if (qualificationData?.length > 0 && !create) {
       qualData = qualificationData.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];

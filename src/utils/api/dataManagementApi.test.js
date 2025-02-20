@@ -577,9 +577,12 @@ describe("Test Data Management API calls", () => {
   });
 
   test("prefilteredLEEQualifications", async () => {
-    const prefilteredLEEQualificationsObject = [
-      { prefilteredLEEQualifications: "data" },
-    ];
+    const prefilteredLEEQualificationsObject =
+      {
+        items: [
+          { prefilteredLEEQualifications: "data"},
+        ]
+      };
 
     const prefilteredLEEQualificationsUrl = `${dataManagementBaseUrl}/relationships/lee-qualifications`;
     mock

@@ -105,10 +105,10 @@ export const DataTableMats = ({
       updateRelatedTables
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-        if(res?.data){
-          setMatsMethods(res.data);
+        if(res?.data?.items){
+          setMatsMethods(res.data?.items);
           mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
-            setMethods(mets.data);
+            setMethods(mets.data?.items);
             setUpdateTable(false);
             setDataLoaded(true);
             setUpdateRelatedTables(false);

@@ -100,10 +100,10 @@ describe("Emissions API", function () {
       const url = `${config.services.emissions.uri}/emissions/views`;
       mock
         .onGet(`${url.toString()}`)
-        .reply(200, {});
+        .reply(200, {items:[]});
 
       const result = await emissionsApi.getViews();
-      expect(result.data).toEqual({});
+      expect(result.data).toEqual({items:[]});
     });
 
     it("should call handleError and return []", async () => {
@@ -117,7 +117,7 @@ describe("Emissions API", function () {
       const result = await emissionsApi.getViews();
 
       expect(mockHandleError).toHaveBeenCalled();
-      expect(result).toEqual([]);
+      expect(result).toEqual({});
 
     });
   });

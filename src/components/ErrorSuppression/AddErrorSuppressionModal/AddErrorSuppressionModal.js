@@ -214,7 +214,7 @@ export const AddErrorSupressionModal = ({
   useEffect(() => {
     getSeverityCodes()
       .then(({ data }) => {
-        setSeverityCodeList(data);
+        setSeverityCodeList(data?.items);
       })
       .catch((error) => {
         log.log("Error getting Severity Codes", error);
@@ -544,7 +544,7 @@ export const AddErrorSupressionModal = ({
                   onChange={(e) => setSelectedSeverityCode(e.target.value)}
                 >
                   <option value={"false"}>{defaultDropdownText}</option>
-                  {severityCodeList.map((d) => (
+                  {severityCodeList?.map((d) => (
                     <option
                       key={d.severityCode}
                       value={d.severityCode}

@@ -467,23 +467,27 @@ export const mockTestTypeCodes = [
   },
 ]
 
-export const mockTestTypeGroupCodes = [
+export const mockTestTypeGroupCodes =
   {
-    testTypeGroupCode: "LINSUM",
-    testTypeGroupDescription: "Linearity Summary",
-    childDepth: "3"
-  },
-  {
-    testTypeGroupCode: "RELACC",
-    testTypeGroupDescription: "Relative Accuracy",
-    childDepth: "6"
-  },
-  {
-    testTypeGroupCode: 'PEI',
-    testTypeGroupDescription: 'Primary Element Inspection',
-    childDepth: '1',
-  },
-]
+    items:
+      [
+        {
+          testTypeGroupCode: "LINSUM",
+          testTypeGroupDescription: "Linearity Summary",
+          childDepth: "3"
+        },
+        {
+          testTypeGroupCode: "RELACC",
+          testTypeGroupDescription: "Relative Accuracy",
+          childDepth: "6"
+        },
+        {
+          testTypeGroupCode: 'PEI',
+          testTypeGroupDescription: 'Primary Element Inspection',
+          childDepth: '1',
+        },
+      ]
+  }
 
 export const mockSpanScaleCodes = [
   {

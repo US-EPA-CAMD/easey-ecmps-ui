@@ -17,7 +17,7 @@ describe("Facility Async Actions", () => {
     const mockFacilities = getFacilitiesFromMDM();
     const mockFacilitiesResponse = jest
       .fn()
-      .mockResolvedValue({ data: mockFacilities });
+      .mockResolvedValue({ data: {items: mockFacilities}});
     jest
       .spyOn(facilitiesApi, "getAllFacilities")
       .mockImplementation(mockFacilitiesResponse);

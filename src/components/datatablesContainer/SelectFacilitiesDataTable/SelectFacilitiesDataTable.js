@@ -47,7 +47,7 @@ export const SelectFacilitiesDataTable = ({
       .getAllFacilities()
       .then((res) => {
         setDataLoaded(true);
-        setFacilities(res.data);
+        setFacilities(res.data.items);
         if (history?.action === "POP") {
           resetTabOrder();
         }
@@ -69,10 +69,10 @@ export const SelectFacilitiesDataTable = ({
     let checkedOutLocationsList = [];
     if (checkedOutLocationResult) {
       if (
-        checkedOutLocationResult.data &&
-        checkedOutLocationResult.data.length > 0
+        checkedOutLocationResult.data?.items &&
+        checkedOutLocationResult?.data?.items?.length > 0
       ) {
-        checkedOutLocationsList = checkedOutLocationResult.data;
+        checkedOutLocationsList = checkedOutLocationResult.data?.items;
       }
     }
 

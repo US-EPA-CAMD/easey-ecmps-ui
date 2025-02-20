@@ -245,7 +245,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasLevelCode'],
                     name: d['gasLevelDescription'],
@@ -256,7 +256,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else if (i === 1) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasComponentCode'],
                     name: d['gasComponentDescription'],
@@ -269,7 +269,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['vendorId'],
                     name: d['vendorName'],
@@ -293,7 +293,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasLevelCode'],
                     name: d['gasLevelDescription'],
@@ -304,7 +304,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasTypeCode'],
                     name: d['gasTypeDescription'],
@@ -327,7 +327,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['rataFrequencyCode'],
                     name: d['rataFrequencyDescription'],
@@ -357,7 +357,7 @@ const QAExpandableRowsRender = ({
           .then(response => {
             dropdownArray.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = response[0].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[0].data?.items?.map(d => {
                   return {
                     code: d['runStatusCode'],
                     name: d['runStatusDescription'],
@@ -382,7 +382,7 @@ const QAExpandableRowsRender = ({
           .then(response => {
             dropdownArray.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = response[0].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[0].data?.items?.map(d => {
                   return {
                     code: d['opLevelCode'],
                     name: d['opLevelDescription'],
@@ -393,7 +393,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else if (i === 1 || i === 3) {
-                dropdowns[dropdownArray[i]] = response[1].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[1].data?.items?.map(d => {
                   return {
                     code: d['referenceMethodCode'],
                     name: d['referenceMethodDescription'],
@@ -404,7 +404,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = response[2].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[2].data?.items?.map(d => {
                   return {
                     code: d['apsCode'],
                     name: d['apsDescription'],
@@ -445,7 +445,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -472,7 +472,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -504,16 +504,16 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
               if (i === 1) {
-                dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data.map(
+                dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
                     return { code: d[codeLabel], name: d[descriptionLabel] };
                   },
                 );
-                dropdowns['oilDensityUnitsOfMeasureCode'] = curResp.data.map(
+                dropdowns['oilDensityUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
                     return { code: d[codeLabel], name: d[descriptionLabel] };
                   },
@@ -542,14 +542,14 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
               if (i === 0) {
-                dropdowns['midLevelAccuracySpecCode'] = curResp.data.map(d => {
+                dropdowns['midLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
                   return { code: d[codeLabel], name: d[descriptionLabel] };
                 });
-                dropdowns['highLevelAccuracySpecCode'] = curResp.data.map(d => {
+                dropdowns['highLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
                   return { code: d[codeLabel], name: d[descriptionLabel] };
                 });
               }
@@ -589,7 +589,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -611,7 +611,7 @@ const QAExpandableRowsRender = ({
         Promise.all(allPromises)
           .then(res => {
             res.forEach((val, i) => {
-              dropdowns[dropdownArray[i]] = val.data.map(d => {
+              dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                 return {
                   code: d[mdmProps[i].responseProps['code']],
                   name: d[mdmProps[i].responseProps['description']],
