@@ -9,19 +9,17 @@ const EXT_EXEMP_ENDPOINT = 'extension-exemptions'
 
 export const getEmSubmissionRecords = async (
   orisCode,
-  monitorPlanId,
   year,
   quarter,
   status
 ) => {
   // At least some kind of filtering is required
-  if (!orisCode && !monitorPlanId && !year && !quarter && !status) return [];
+  if (!orisCode && !year && !quarter && !status) return [];
 
   return secureAxios({
     url: url,
     params: {
       orisCode,
-      monitorPlanId,
       year,
       quarter,
       status,
