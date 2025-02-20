@@ -8,7 +8,7 @@ import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss";
-import { formatDate, getQuarter } from "../../../utils/functions";
+import { exportToCSV, formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
@@ -66,8 +66,8 @@ export const ErrorSuppressionDataContainer = () => {
 
     getErrorSuppressionRecords(params)
       .then(({ data }) => {
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        data.items.forEach((d) => (d.selected = false));
+        setTableData(data.items);
         setSelectedRows([]);
         assignAriaSortHandlersToDatatable();
         assignAriaLabelsToDataTableColumns();
@@ -100,6 +100,32 @@ export const ErrorSuppressionDataContainer = () => {
     addDateAfter,
     addDateBefore,
   ]);
+
+  const downloadFilteredDataIntoCSV = () => {
+
+    // Extract only the displayed columns
+    let columnMapping = {
+      severityCode: "Severity",
+      facilityName: "Facility Name",
+      orisCode: "Oris Code",
+      locations: "Locations",
+      matchDataTypeCode: "Match Data Criteria",
+      matchTimeTypeCode: "Match Time Criteria",
+      reasonCode: "Reason",
+      active: "Status",
+      note: "Note",
+      userId: "User",
+      addDate: "Add Date & Hour",
+      updateDate: "Update Date",
+      id: "Record Id"
+    };
+
+    const facilityName = tableData[0].facilityName;
+    const orisCode = tableData[0].orisCode
+    
+    exportToCSV(tableData, columnMapping, `Error_Supression_${facilityName}(${orisCode})`, formatMatchTimeCriteriaCell)
+  
+  };
 
   const openViewModalHandler = useCallback(
     async (row, index, isCreate = false) => {
@@ -443,7 +469,18 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div className="es-datatable">
+        <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`error-supression-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+              disabled={!tableData || tableData.length === 0}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={"Error Suppression"}></span>
           {isTableLoading ? (
             <Preloader />

@@ -41,7 +41,7 @@ export const AdminMaintenance = ({ section }) => {
   useEffect(() => {
     getAllFacilities()
       .then(({ data }) => {
-        const formattedFacilities = data.map((f) => ({
+        const formattedFacilities = data.items.map((f) => ({
           value: f.facilityId,
           label: `${f.facilityName} (${f.facilityId})`,
         }));
@@ -65,7 +65,7 @@ export const AdminMaintenance = ({ section }) => {
 
     getReportingPeriods()
       .then(({ data }) => {
-        setReportingPeriods(data);
+        setReportingPeriods(data?.items);
       })
       .catch(error => {
         log.error("Error getting reporting periods", error);

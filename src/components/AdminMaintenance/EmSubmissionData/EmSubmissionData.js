@@ -12,6 +12,7 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { returnsFocusDatatableViewBTN } from "../../../additional-functions/ensure-508";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
+import { exportToCSV } from "../../../utils/functions";
 
 export const EmSubmissionData = ({
   data = [],
@@ -63,6 +64,34 @@ export const EmSubmissionData = ({
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
+
+  const downloadFilteredDataIntoCSV = () => {
+
+    // Extract only the displayed columns
+    let columnMapping = {
+      facilityName: "Facility Name/ID",
+      orisCode: "Oris Code",
+      locations: "Configuration",
+      reportingPeriodAbbreviation: "Reporting Period",
+      reportingFrequencyCode: "Reporting Frequency",
+      submissionTypeCode: "Submission Type",
+      status: "Status",
+      openDate: "Open Date",
+      closeDate: "Close Date",
+      emissionStatusCode: "Emission Status",
+      submissionAvailabilityCode: "Submission Availability",
+      lastSubmissionId: "Last Submission ID",
+      severityLevel: "Severity Level",
+      id: "Record Id"
+    };
+
+    const facilityName = filteredData[0].facilityName;
+    const orisCode = filteredData[0].orisCode
+    const reportingPeriod = filteredData[0].reportingPeriodAbbreviation
+  
+    exportToCSV(filteredData, columnMapping, `EM_Submission_Access_${facilityName}(${orisCode})_${reportingPeriod}`)
+    
+  };
 
   // fetch and initialize options for lower grid filter(s)
   useEffect(() => {
@@ -233,7 +262,7 @@ export const EmSubmissionData = ({
 
 
   const openViewEditModalHandler = useCallback(
-    (row, isCreate = false) => {
+    (row, index, isCreate = false) => {
       const selectedData = row;
       const { facilityName, facilityId } = selectedData;
       selectedData.facilityNameAndId = `${facilityName} (${facilityId})`;
@@ -482,6 +511,7 @@ export const EmSubmissionData = ({
                     data.length === 0 
                     || selectedRows.length !== 1 //we can only submit the open request for one record at a time
                     || selectedRows.some(row => row.status !== 'CLOSED' && row.status !== 'NO WINDOW')
+                    || !selectedRows[0]?.isLatestRecord
                   } 
                 >
                   Open
@@ -499,6 +529,7 @@ export const EmSubmissionData = ({
                     || disableApproveBtn 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'OPEN')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   } 
                 >
                   Extend
@@ -515,6 +546,7 @@ export const EmSubmissionData = ({
                     data.length === 0 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'OPEN')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   }
                 >
                   Cancel
@@ -532,6 +564,7 @@ export const EmSubmissionData = ({
                     || disableApproveBtn 
                     || selectedRows.length === 0 
                     || selectedRows.some(row => row.status !== 'PENDING' && row.status !== 'CANCELLED')
+                    || selectedRows.some(row => row.isLatestRecord === false)
                   }
                 >
                   Approve
@@ -610,7 +643,7 @@ export const EmSubmissionData = ({
             <div className="grid-row row-width" style={{ display: 'flex' }}>
               <div className="grid-col-6"></div>
               <div className="grid-col-6">
-                <div className="grid-col-8" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div className="grid-col-8 margin-top-2" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button
                       disabled={ false}
                       onClick={applyFilters}
@@ -624,6 +657,17 @@ export const EmSubmissionData = ({
           </>
         )}
         <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  type="button"
+                  data-testid={`em-submission-download-csv-button`}
+                  title={"Download To CSV"}
+                  onClick={downloadFilteredDataIntoCSV}
+                  disabled={!filteredData || filteredData.length === 0}
+                >
+                  {"Download To CSV"}
+                </Button>
+            </div>
           <span data-aria-label={"Maintain EM Submission Access"}></span>
           {isLoading && <Preloader />}
           {!isLoading && (

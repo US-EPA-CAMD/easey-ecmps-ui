@@ -26,7 +26,7 @@ export const obtainCheckedOutLocations = async ({
   const checkedOutLocationResult = await getCheckedOutLocations();
   let checkedOutLocationsList = [];
   if (checkedOutLocationResult) {
-    const checkedOutLocationResultData = checkedOutLocationResult.data;
+    const checkedOutLocationResultData = checkedOutLocationResult.data?.items;
     if (!dispatch) {
       return checkedOutLocationResultData;
     }

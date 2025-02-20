@@ -19,11 +19,11 @@ const store = configureStore(mockInitialState);
 describe("- DataTableMats -", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getMonitoringMatsMethods").mockResolvedValue({
-      data: getMockMonitoringMatsMethods(),
+      data: { items: getMockMonitoringMatsMethods() },
     });
 
     jest.spyOn(monitorPlanApi, "getMonitoringMethods").mockResolvedValue({
-      data: getMockMonitoringMethods(),
+      data: { items: getMockMonitoringMethods()},
     });
 
     // bypass user input validation for saving/editing

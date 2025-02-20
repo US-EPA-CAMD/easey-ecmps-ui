@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 export const needEndDate = "Must enter in both End Date and End Time";
 
 const displayAppMessage = (messages, type, hideFunc) => {
@@ -8,7 +10,7 @@ const displayAppMessage = (messages, type, hideFunc) => {
   const textMessageContainerId = `#app${type}MessageText`
 
   if (typeof document !== 'undefined' && document.querySelector(textMessageContainerId)) {
-    document.querySelector(textMessageContainerId).innerHTML = formattedError;
+    document.querySelector(textMessageContainerId).innerHTML = DOMPurify.sanitize(formattedError);
 
     const errorMsg = document.querySelector(containerId)
 

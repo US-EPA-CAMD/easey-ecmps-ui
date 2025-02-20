@@ -23,6 +23,7 @@ import QAMaintenanceModalPopout, {
 } from './QAMaintenanceModalPopout';
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { exportToCSV } from '../../../utils/functions';
 
 let controlInputs;
 
@@ -50,6 +51,65 @@ const QAMaintenanceData = ({
     setFilteredData(data);
   }, [data]);
 
+  const downloadFilteredDataIntoCSV = () => {
+
+    // Extract only the displayed columns
+    let columnMapping = [];
+
+    if (typeSelection === 'Test Summary') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        testTypeCode: "Test Type Code",
+        yearQuarter: "Reporting Period",
+        beginDateTime: "Begin Date/Time",
+        endDateTime: "End Date/Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Cert Events') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        certEventCode: "Cert Event Code",
+        eventDateTime: "Event Date/Time",
+        requiredTestCode: "Required Test Code",
+        conditionalDateTime: "Conditional Date/Time",
+        lastCompletedDateTime: "Last Completed Date Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Test Extension Exemption') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        fuelCode: "Fuel Code",
+        extensionExemptionCode: "Extension Exemption Code",
+        hoursUsed: "Hours Used",
+        spanScaleCode: "Span Scale Code",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    }
+
+    const facilityName = filteredData[0].facilityName;
+
+    exportToCSV(filteredData, columnMapping, `QA/Cert_Data_Maintenance_${facilityName}`)
+  
+  };
+  
   // fetch and initialize options for lower grid filter(s)
   useEffect(() => {
     const fetchAndSetOptions = async () => {
@@ -127,8 +187,8 @@ const QAMaintenanceData = ({
   }); 
 
   const openViewModalHandler = useCallback(
-    async (row, isCreate = false) => {
-      const selectedData = row
+    async (row, index, isCreate = false) => {
+      const selectedData = row;
       const { systemIdentifier, componentIdentifier } = selectedData;
 
       selectedData.systemComponentID =
@@ -422,6 +482,17 @@ const QAMaintenanceData = ({
           </div>
         </div>
         <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`qa-maintenance-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+              disabled={!filteredData || filteredData.length === 0}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={'QA/Cert Data Maintenance'}></span>
           <DataTable
             sortIcon={

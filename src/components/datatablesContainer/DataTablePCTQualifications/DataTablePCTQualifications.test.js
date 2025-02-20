@@ -19,7 +19,7 @@ const store = configureStore(mockInitialState);
 describe("- DataTablePCTQualifications -", () => {
   beforeEach(() => {
     jest.spyOn(monitorPlanApi, "getPCTQualifications").mockResolvedValue({
-      data: getMockPCTQualifications(),
+      data: { items: getMockPCTQualifications()},
     });
   });
 
