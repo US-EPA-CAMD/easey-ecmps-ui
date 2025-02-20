@@ -56,8 +56,8 @@ export const EmSubmissionData = ({
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
     { code: "Cancelled", name: "Cancelled" },
-    { code: "No_Window", name: "No Window" },
-    { code: "Not_Yet_Open", name: "Not Yet Open" },
+    { code: "No Window", name: "No Window" },
+    { code: "Not Yet Open", name: "Not Yet Open" },
   ]);
 
   const [filteredData, setFilteredData] = useState(data);
@@ -228,7 +228,7 @@ export const EmSubmissionData = ({
     const selectedReportingPeriodIds = currentReportingPeriod.filter(item => item.selected).map(item => item.id);
 
     //get all the selected status/statuses
-    const selectedStatusIds = currentStatus.filter(item => item.selected).map(item => item.id.toLowerCase());
+    const selectedStatusIds = currentStatus.filter(item => item.selected).map(item => item.id?.toLowerCase());
 
     //each time we filter data, it's a new filter based on the passed-in data set, NOT previous filtered data
     let updatedFilteredData = data
@@ -253,7 +253,7 @@ export const EmSubmissionData = ({
     //filter for the selected status
     if (selectedStatusIds?.length !== 0) {
       updatedFilteredData = updatedFilteredData.filter((it) => 
-        selectedStatusIds.includes(it.status.toLowerCase()) // Use some to match unitStack
+        selectedStatusIds.includes(it.status?.toLowerCase())
       );
     }
 
