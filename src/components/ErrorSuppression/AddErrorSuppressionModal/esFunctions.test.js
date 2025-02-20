@@ -38,24 +38,28 @@ describe("AddErrorSuppressionModal helper functions", () => {
         .onGet(
           `${config.services.monitorPlans.uri}/workspace/configurations?orisCodes=3`
         )
-        .reply(200, [
+        .reply(200,
           {
-            id: "MDC-ABF4B69D22C04494A78DA1667DFE9DE6",
-            facId: 1,
-            facilityName: "Barry",
-            configTypeCode: null,
-            lastUpdated: "2009-02-20T15:09:02.000Z",
-            orisCode: 3,
-            name: "7B",
-          },
-        ]);
+            items:
+            [
+              {
+                id: "MDC-ABF4B69D22C04494A78DA1667DFE9DE6",
+                facId: 1,
+                facilityName: "Barry",
+                configTypeCode: null,
+                lastUpdated: "2009-02-20T15:09:02.000Z",
+                orisCode: 3,
+                name: "7B",
+              },
+            ]
+          });
       let result = await createMatchTypeDropdownLists(
         mockMonplanCheckCatalogResult,
         3
       );
 
-      expect(result[0].value).toBe("MDC-ABF4B69D22C04494A78DA1667DFE9DE6");
-      expect(result[0].label).toBe("7B");
+      expect(result[0]?.value).toBe("MDC-ABF4B69D22C04494A78DA1667DFE9DE6");
+      expect(result[0]?.label).toBe("7B");
     });
 
     it("successfuly returns data when dataTypeCode=TESTNUM", async () => {

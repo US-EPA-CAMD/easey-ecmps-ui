@@ -127,14 +127,19 @@ export const ExportTab = ({
     },
   ];
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchTableData = async () => {
       const promises = dataTypes.map((dt) =>
         dt.dataFetch([orisCode], [selectedConfigId], dt.reportCode === 'MPP' ? null : [reportingPeriod])
       );
       const responses = await Promise.all(promises);
 
-      const tableData = responses.map((resp) => resp.data);
+      const tableData = responses.map((resp) =>
+        {
+          return resp.data?.items ?? resp.data;
+        }
+      );
+
       setTableData(tableData);
     };
     fetchTableData();

@@ -144,7 +144,7 @@ export const getViews = async () => {
     return handleResponse(response);
   } catch (error) {
     handleError(error);
-    return [];
+    return {};
   }
 };
 

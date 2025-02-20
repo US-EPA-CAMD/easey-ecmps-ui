@@ -26,7 +26,7 @@ export function loadMonitoringPlans(orisCode) {
       .getMonitoringPlans(orisCode)
       .then((res) => {
         if (res) {
-          dispatch(loadMonitoringPlansSuccess(orisCode, res.data));
+          dispatch(loadMonitoringPlansSuccess(orisCode, res.data?.items));
         }
       })
       .catch((error) => log.log("getMonitoringPlans failed", error));

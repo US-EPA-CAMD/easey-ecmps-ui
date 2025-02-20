@@ -597,7 +597,7 @@ export const getAllMonitoringSystemIDCodes = async (
 		.then((response) => {
 			const actualResponse = response
 			const dataArray = []
-			response.data.map((monitorCode) => {
+			response.data?.items?.map((monitorCode) => {
 				if (systemTypeCodes.includes(monitorCode.systemTypeCode)) {
 					dataArray.push({
 						monitoringSystemIDCode: monitorCode.monitoringSystemId,
@@ -607,7 +607,7 @@ export const getAllMonitoringSystemIDCodes = async (
 
 				return 1
 			})
-			actualResponse.data = dataArray
+			actualResponse.data.items = dataArray
 			return actualResponse
 		})
 		.catch(handleError)

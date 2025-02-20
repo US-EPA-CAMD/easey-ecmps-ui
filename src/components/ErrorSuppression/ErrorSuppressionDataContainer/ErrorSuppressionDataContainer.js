@@ -66,8 +66,8 @@ export const ErrorSuppressionDataContainer = () => {
 
     getErrorSuppressionRecords(params)
       .then(({ data }) => {
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        data.items.forEach((d) => (d.selected = false));
+        setTableData(data.items);
         setSelectedRows([]);
         assignAriaSortHandlersToDatatable();
         assignAriaLabelsToDataTableColumns();

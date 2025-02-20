@@ -28,7 +28,7 @@ const ReportingPeriodSelector = ({
           );
         }
 
-        const periodsFromMostRecent = resp.data.reverse();
+        const periodsFromMostRecent = resp.data.items.reverse();
         // if resp.data is empty this will evaluate to {}
         const mostRecentPeriod = { ...periodsFromMostRecent[0] };
         let curSelectedPeriod = mostRecentPeriod;
