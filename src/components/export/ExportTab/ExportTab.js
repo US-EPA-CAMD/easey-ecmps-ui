@@ -257,10 +257,10 @@ export const ExportTab = ({
     const controlInputs = {
       year: ["Years with Emissions Data", "dropdown", "", ""],
     };
-    const resp = await getReportingPeriods(true);
-
+    let resp = await getReportingPeriods(true);
+    resp = resp.data?.items ?? resp.data ;
     const calendarYear = Object.values(
-      resp.data?.reduce(
+      resp?.reduce(
         (acc, obj) => ({
           ...acc,
           [obj.calendarYear]: {
