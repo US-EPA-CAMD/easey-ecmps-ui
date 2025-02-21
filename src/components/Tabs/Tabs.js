@@ -120,11 +120,7 @@ const Tabs = ({
                     tabIndex="0"
                     id="select-config"
                     aria-label={`open ${el.props.title} tab`}
-                    className={
-                      currentTabIndex === i
-                        ? "initial-tab-button active-tab-button"
-                        : "initial-tab-button"
-                    }
+                    className="initial-tab-button"
                     onClick={() => setCurrentTabIndex(i)}
                   >
                     {el.props.title}
