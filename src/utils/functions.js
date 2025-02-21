@@ -263,8 +263,12 @@ export const getEvalStatus = async (paramsArray) => {
   const orisCode = paramsArray[1][1],
     isEmissions = paramsArray[0][1] === "EM_EVAL",
     id = paramsArray[2][1],
-    type = isEmissions ? "emissions" : paramsArray[2][0],
-    api = tableRowApi[type];
+    type = isEmissions ? "emissions" : paramsArray[2][0];
+    if(!tableRowApi.hasOwnProperty(type) || typeof tableRowApi[type] !== 'function')
+    {
+      return;
+    }
+  const api = tableRowApi[type];
   if (!api) return;
   const { ids, identifier } = getIdentfierAndIds(type, id);
   const response = await api(
