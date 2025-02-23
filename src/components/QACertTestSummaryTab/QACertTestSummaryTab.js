@@ -12,24 +12,10 @@ import {
   setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 export const QACertTestSummaryTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-
   orisCode,
   selectedConfigId,
   title,
-  locations,
   user,
-  // tabs,
-  isCheckedOut,
-
-  activeTab,
-  setSection,
-  setLocation,
-  // setCheckout,
-  checkedOutLocations,
 }) => {
   const dispatch = useDispatch();
 
@@ -87,10 +73,6 @@ export const QACertTestSummaryTab = ({
     <div>
       <div>
         <QACertTestSummaryTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}

@@ -13,27 +13,12 @@ export const Export = ({
   selectedConfigId,
   title,
   workspaceSection,
-  exportTab,
-  setExportState,
 }) => {
-  const getExportState = () => {
-    const currentTabObj = exportTab.find(
-      (e) => e.selectedConfig.id === selectedConfigId,
-    );
-    if (currentTabObj && currentTabObj.hasOwnProperty("exportState")) {
-      return currentTabObj.exportState;
-    } else {
-      return null;
-    }
-  };
-
   return (
     <ExportTab
       facility={title}
       selectedConfigId={selectedConfigId}
       orisCode={orisCode}
-      exportState={getExportState()}
-      setExportState={setExportState}
       workspaceSection={workspaceSection}
     />
   );

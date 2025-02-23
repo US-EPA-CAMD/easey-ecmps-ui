@@ -13,27 +13,16 @@ import {
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-
   orisCode,
   selectedConfigId,
   title,
   user,
-  checkout,
   removeTab,
   tabs,
-
   setSection,
   setLocation,
   setCheckout,
   setInactive,
-  checkedOutLocations,
-  setMostRecentlyCheckedInMonitorPlanId,
-  setMostRecentlyCheckedInMonitorPlanIdForTab,
-  mostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
@@ -62,11 +51,7 @@ export const MonitoringPlanTab = ({
     <div>
       <div>
         <MonitoringPlanTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
           removeTab={removeTab}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
@@ -79,13 +64,6 @@ export const MonitoringPlanTab = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={tabs[currentTabIndex].inactive}
-          checkedOutLocations={checkedOutLocations}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          setMostRecentlyCheckedInMonitorPlanIdForTab={
-            setMostRecentlyCheckedInMonitorPlanIdForTab
-          }
           currentTabIndex={currentTabIndex}
           workspaceSection={workspaceSection}
         />

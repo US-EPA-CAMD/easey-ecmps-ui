@@ -291,12 +291,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  moduleName={modules.monitoring_plans_module}
                 />
               )
             }
@@ -322,12 +317,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-                  moduleName={modules.qa_Certifications_Test_Summary_Module}
                 />
               )
             }
@@ -353,12 +343,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
-                  moduleName={modules.qa_Certifications_Event_Module}
                 />
               )
             }
@@ -384,12 +369,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={EMISSIONS_STORE_NAME}
-                  moduleName={modules.emissions_module}
                 />
               )
             }
@@ -416,10 +396,6 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )
@@ -460,6 +436,19 @@ const App = () => {
                 <Navigate key="navigate" to="/" />
               ) : (
                 <ConfigurationManagement user={user} />
+              )
+            }
+          />
+          <Route
+            path="/workspace/mats-submission"
+            element={
+              !facilityCheckoutPermission() ? (
+                <Navigate key="navigate" to="/" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                />
               )
             }
           />

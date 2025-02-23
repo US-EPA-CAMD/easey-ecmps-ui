@@ -11,10 +11,6 @@ import {
 } from '../../store/actions/dynamicFacilityTab';
 import QACertEventTabRender from '../QACertEventTabRender/QACertEventTabRender';
 export const QACertEventTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
   orisCode,
   selectedConfigId,
   title,
@@ -23,7 +19,6 @@ export const QACertEventTab = ({
   setSection,
   setLocation,
   setCheckout,
-  checkedOutLocations,
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
@@ -50,10 +45,6 @@ export const QACertEventTab = ({
     <div>
       <div>
         <QACertEventTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
@@ -65,8 +56,6 @@ export const QACertEventTab = ({
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
           setCheckout={setCheckout}
-          checkedOutLocations={checkedOutLocations}
-          workspaceSection={workspaceSection}
           checkoutState={getCurrentTab().checkout}
         />
       </div>

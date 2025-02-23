@@ -9,7 +9,6 @@ import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-
 import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
 
 const Tabs = ({
-  children,
   dynamic = false,
   removeTabs,
   checkedOutLocations,
@@ -18,6 +17,7 @@ const Tabs = ({
   workspaceSection,
   setCurrentTabIndex,
   currentTabIndex,
+  panes,
 }) => {
   const removeTab = (index) => {
     removeTabs(index);
@@ -104,22 +104,22 @@ const Tabs = ({
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
         <ul className="usa-button-group margin-top-1">
-          {children.map((el, i) => (
+          {panes.map((pane, i) => (
             <li
               key={i}
               className="usa-button-group__item usa-tooltip"
               data-position="bottom"
-              title={el.props.title}
+              title={pane.title}
             >
               {" "}
-              {el.props.title.toLowerCase() === "select configurations" ? (
+              {pane.title.toLowerCase() === "select configurations" ? (
                 <>
                   <Button
                     type="button"
                     outline={currentTabIndex !== i}
                     tabIndex="0"
                     id="select-config"
-                    aria-label={`open ${el.props.title} tab`}
+                    aria-label={`open ${pane.title} tab`}
                     className={
                       currentTabIndex === i
                         ? "initial-tab-button active-tab-button"
@@ -127,7 +127,7 @@ const Tabs = ({
                     }
                     onClick={() => setCurrentTabIndex(i)}
                   >
-                    {el.props.title}
+                    {pane.title}
                   </Button>
                 </>
               ) : (
@@ -141,24 +141,24 @@ const Tabs = ({
                   }
                   tabIndex="0"
                   aria-label={updateTabBtnSelectorAndReturnAriaLabel(
-                    `open ${el.props.title.split("(")[0]}${
+                    `open ${pane.title.split("(")[0]}${
                       user &&
-                      el.props.locationId &&
-                      el.props.facId &&
+                      pane.locationId &&
+                      pane.facId &&
                       workspaceSection !== EXPORT_STORE_NAME &&
-                      (isCheckedOut(el.props.locationId) ||
+                      (isCheckedOut(pane.locationId) ||
                         checkedOutLocations.some(
-                          (loc) => loc.facId === parseInt(el.props.facId)
+                          (loc) => loc.facId === parseInt(pane.facId)
                         ))
                         ? "(locked)"
                         : ""
-                    } ${el.props.title
+                    } ${pane.title
                       .split("(")[1]
                       .replace(")", "")
                       .replace("Inactive", "(Inactive)")
                       .replace("Active", "(Active)")} ${
-                      el.props.locationId &&
-                      isCheckedOutByUser(el.props.locationId)
+                      pane.locationId &&
+                      isCheckedOutByUser(pane.locationId)
                         ? "(checked-out)"
                         : ""
                     } tab`
@@ -177,59 +177,59 @@ const Tabs = ({
                   <div className="text-center tab-button-text-container ellipsis-text position-relative">
                     {user &&
                     workspaceSection !== EXPORT_STORE_NAME &&
-                    el.props.locationId &&
-                    el.props.facId &&
-                    (isCheckedOut(el.props.locationId) ||
+                    pane.locationId &&
+                    pane.facId &&
+                    (isCheckedOut(pane.locationId) ||
                       checkedOutLocations.some(
-                        (plan) => plan.facId === parseInt(el.props.facId)
+                        (plan) => plan.facId === parseInt(pane.facId)
                       )) ? (
                       <LockSharp
                         role="img"
                         className="text-bold tab-icon margin-right-1"
                         aria-hidden="false"
                         title={`Locked Facility - ${
-                          el.props.title.split("(")[0]
+                          pane.title.split("(")[0]
                         }`}
                       />
                     ) : null}
                     {workspaceSection !== EXPORT_STORE_NAME &&
-                      el.props.locationId &&
-                      isCheckedOutByUser(el.props.locationId) && (
+                      pane.locationId &&
+                      isCheckedOutByUser(pane.locationId) && (
                         <CreateSharp
                           role="img"
                           className="text-bold tab-icon margin-right-1"
                           aria-hidden="false"
-                          title={`Checked-out Configuration - ${el.props.title
+                          title={`Checked-out Configuration - ${pane.title
                             .split("(")[1]
                             .replace(")", "")}`}
                         />
                       )}
-                    {el.props.title.split("(")[0]}
+                    {pane.title.split("(")[0]}
                   </div>
                   <div className="text-center">
                     <span className="position-relative top-neg-105 locations-display">
-                      {el.props.selectedConfigName}
+                      {pane.selectedConfigName}
                     </span>
                   </div>
 
                   {dynamic ? (
                     <ClearSharp
                       className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-1 margin-top-neg-3 cursor-pointer closeXBtnTab"
-                      onClick={(e) => closeHandler(e, i, el.props.locationId)}
+                      onClick={(e) => closeHandler(e, i, pane.locationId)}
                       onKeyPress={(event) => {
                         if (event.key === "Enter") {
                           closeHandler(event, i);
                         }
                       }}
-                      title={`Click to close ${el.props.title} tab`}
-                      name={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
-                      id={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
+                      title={`Click to close ${pane.title} tab`}
+                      name={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
+                      id={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
                       data-test-id={`closeXBtnTab-${cleanConfigStr(
-                        el.props.title
+                        pane.title
                       )}`}
                       data-testid="closeXBtnTab"
                       epa-testid={`closeXBtnTab-${cleanConfigStr(
-                        el.props.title
+                        pane.title
                       )}`}
                       role="button"
                       tabIndex="0"
@@ -243,7 +243,7 @@ const Tabs = ({
         </ul>
       </div>
       <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
-        {children[currentTabIndex]}
+        {panes[currentTabIndex]?.content}
       </div>
     </div>
   );

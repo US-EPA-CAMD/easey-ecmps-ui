@@ -12,11 +12,6 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import EmissionsTabRender from "../EmissionsTabRender/EmissionsTabRender";
 export const EmissionsTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-
   orisCode,
   selectedConfigId,
   title,
@@ -26,7 +21,6 @@ export const EmissionsTab = ({
   setLocation,
   setCheckout,
   setInactive,
-  checkedOutLocations,
   workspaceSection,
 }) => {
   const getCurrentTab = () => {
@@ -45,10 +39,6 @@ export const EmissionsTab = ({
     <div>
       <div>
         <EmissionsTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
@@ -59,9 +49,7 @@ export const EmissionsTab = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={currentTab.inactive}
-          checkedOutLocations={checkedOutLocations}
           workspaceSection={workspaceSection}
-          currentTab={currentTab}
         />
       </div>
     </div>
