@@ -21,7 +21,6 @@ export const EmissionsTab = ({
   setLocation,
   setCheckout,
   setInactive,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -31,7 +30,7 @@ export const EmissionsTab = ({
   const [locationSelect, setLocationSelect] = useState(currentTab.location);
 
   useEffect(() => {
-    setLocation(locationSelect, title, workspaceSection);
+    setLocation(locationSelect, title, EMISSIONS_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -49,13 +48,12 @@ export const EmissionsTab = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={currentTab.inactive}
-          workspaceSection={workspaceSection}
         />
       </div>
     </div>
   );
 };
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(EMISSIONS_STORE_NAME)
@@ -63,7 +61,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch) => {
   return {
     setLocation: (location, title, workspaceSection) =>
       dispatch(
@@ -91,6 +89,5 @@ const mapDispatchToProps = (dispatch) => {
       ),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(EmissionsTab);
-export { mapStateToProps };
-export { mapDispatchToProps };

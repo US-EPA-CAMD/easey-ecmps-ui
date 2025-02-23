@@ -29,6 +29,7 @@ import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
+  MATS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
@@ -55,8 +56,6 @@ const App = () => {
 
   const dispatch = useDispatch();
   const [user, setUser] = useState(false);
-  const [expired, setExpired] = useState(false);
-  const [resetTimer, setResetTimer] = useState(false);
 
   const urlParams = new URLSearchParams(queryParams);
   const message = urlParams.get("message");
@@ -440,14 +439,14 @@ const App = () => {
             }
           />
           <Route
-            path="/workspace/mats-submission"
+            path="/workspace/mats-data-submission"
             element={
               !facilityCheckoutPermission() ? (
                 <Navigate key="navigate" to="/" />
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  workspaceSection={MONITORING_PLAN_STORE_NAME}
+                  workspaceSection={MATS_STORE_NAME}
                 />
               )
             }

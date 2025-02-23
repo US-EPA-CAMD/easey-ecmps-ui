@@ -1,24 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import log from "loglevel";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import DynamicTabs from "../DynamicTabs/DynamicTabs";
-
-import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
-
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-
-import { setWorkspaceState } from "../../store/actions/workspace";
-import "./MonitoringPlanHome.scss";
 import {
-  MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
-  MATS_SUBMISSION_STORE_NAME,
+  MATS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
+import { setWorkspaceState } from "../../store/actions/workspace";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import * as modules from "../../utils/constants/moduleTitles";
+import DynamicTabs from "../DynamicTabs/DynamicTabs";
+import "./MonitoringPlanHome.scss";
 
 export const MonitoringPlanHome = ({
   user,
@@ -67,9 +64,9 @@ export const MonitoringPlanHome = ({
         document.title = modules.emissions_module;
         setTitleName(modules.emissions_module);
         break;
-      case MATS_SUBMISSION_STORE_NAME:
-        document.title = modules.matsSubmissionModule;
-        setTitleName(modules.matsSubmissionModule);
+      case MATS_STORE_NAME:
+        document.title = modules.matsModule;
+        setTitleName(modules.matsModule);
         break;
       default:
         break;
@@ -182,7 +179,7 @@ export const MonitoringPlanHome = ({
           });
         }
         break;
-      case MATS_SUBMISSION_STORE_NAME:
+      case MATS_STORE_NAME:
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,

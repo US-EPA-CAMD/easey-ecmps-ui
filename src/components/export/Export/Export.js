@@ -12,14 +12,12 @@ export const Export = ({
   orisCode,
   selectedConfigId,
   title,
-  workspaceSection,
 }) => {
   return (
     <ExportTab
       facility={title}
       selectedConfigId={selectedConfigId}
       orisCode={orisCode}
-      workspaceSection={workspaceSection}
     />
   );
 };

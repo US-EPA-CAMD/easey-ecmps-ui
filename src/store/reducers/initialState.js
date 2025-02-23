@@ -15,6 +15,7 @@ const initialState = {
     qaCertEvent: [],
     export: [],
     emissions: [],
+    mats: [],
   },
   checkedOutLocations: [],
   dropdowns: {

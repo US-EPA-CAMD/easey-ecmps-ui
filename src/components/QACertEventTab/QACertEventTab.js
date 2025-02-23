@@ -19,14 +19,13 @@ export const QACertEventTab = ({
   setSection,
   setLocation,
   setCheckout,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   };
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
-    setSection(sectionSelect, title, workspaceSection);
+    setSection(sectionSelect, title, QA_CERT_EVENT_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 

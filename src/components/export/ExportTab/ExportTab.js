@@ -42,7 +42,6 @@ export const ExportTab = ({
   facility,
   selectedConfigId,
   orisCode,
-  workspaceSection,
 }) => {
   const [canExport, setCanExport] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -159,7 +158,7 @@ export const ExportTab = ({
     };
 
     dispatch(
-      setExportState(selectedConfigId, newExportState, workspaceSection)
+      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME)
     );
   };
 
@@ -237,7 +236,7 @@ export const ExportTab = ({
 
   const dispatchSetExportState = (newExportState) => {
     dispatch(
-      setExportState(selectedConfigId, newExportState, workspaceSection)
+      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME)
     );
   };
 

@@ -23,7 +23,6 @@ export const MonitoringPlanTab = ({
   setLocation,
   setCheckout,
   setInactive,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -43,7 +42,7 @@ export const MonitoringPlanTab = ({
   );
 
   useEffect(() => {
-    setLocation(locationSelect, title, workspaceSection);
+    setLocation(locationSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
@@ -65,7 +64,6 @@ export const MonitoringPlanTab = ({
           setInactive={setInactive}
           inactive={tabs[currentTabIndex].inactive}
           currentTabIndex={currentTabIndex}
-          workspaceSection={workspaceSection}
         />
       </div>
     </div>

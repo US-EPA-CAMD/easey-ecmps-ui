@@ -3,7 +3,7 @@ export const QA_CERT_TEST_SUMMARY_STORE_NAME = "qaCertTestSummary";
 export const EXPORT_STORE_NAME = "export";
 export const EMISSIONS_STORE_NAME = "emissions";
 export const QA_CERT_EVENT_STORE_NAME = "qaCertEvent";
-export const MATS_SUBMISSION_STORE_NAME = "matsSubmission";
+export const MATS_STORE_NAME = "mats";
 
 export const convertSectionToStoreName = (dataTableName) => {
   let storeName = "";
@@ -22,6 +22,9 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case QA_CERT_EVENT_STORE_NAME:
       storeName = QA_CERT_EVENT_STORE_NAME;
+      break;
+    case MATS_STORE_NAME:
+      storeName = MATS_STORE_NAME;
       break;
     default:
       break;

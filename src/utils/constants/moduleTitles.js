@@ -9,4 +9,4 @@ export const error_supression_module = "Error Suppression";
 export const submissionAccessTitle = "Maintain EM Submission Access";
 export const qaCertDataMaintenanceTitle = "QA/Cert Data Maintenance";
 export const configurationManagementTitle = "Configuration Management";
-export const matsSubmissionModule = "MATS Submission";
+export const matsModule = "MATS Data Submission";

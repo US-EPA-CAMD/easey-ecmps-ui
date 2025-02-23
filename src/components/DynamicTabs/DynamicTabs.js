@@ -1,28 +1,31 @@
-import React, { useState, cloneElement, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import Tabs from "../Tabs/Tabs";
+
+import {
+  convertSectionToStoreName,
+  EMISSIONS_STORE_NAME,
+  EXPORT_STORE_NAME,
+  MATS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
+} from "../../additional-functions/workspace-section-and-store-names";
+import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 import {
   addFacilityTab,
   removeFacilityTab,
   setActiveTab,
-  setCheckoutState,
+  setCheckoutState
 } from "../../store/actions/dynamicFacilityTab";
-import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
-import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
-import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import EmissionsTab from "../EmissionsTab/EmissionsTab";
 import Export from "../export/Export/Export";
-import {
-  convertSectionToStoreName,
-  MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
-  EMISSIONS_STORE_NAME,
-  EXPORT_STORE_NAME,
-  QA_CERT_EVENT_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
+import MatsTab from "../MatsTab/MatsTab";
+import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import Tabs from "../Tabs/Tabs";
 import "./DynamicTabs.scss";
-import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 
 export const DynamicTabs = ({
   tabsProps,
@@ -36,6 +39,7 @@ export const DynamicTabs = ({
   setCheckout,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
+  /** @type {[{title: string, orisCode: number, selectedConfig: {id: string, facId: number, name: string}, checkout: boolean}[], function]} */
   const [tabs, setTabs] = useState([]);
 
   useEffect(() => {
@@ -111,7 +115,6 @@ export const DynamicTabs = ({
               removeTab={removeTabsHandler}
               title={item.title}
               user={user}
-              workspaceSection={workspaceSection}
             />
           );
 
@@ -132,7 +135,6 @@ export const DynamicTabs = ({
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
-              workspaceSection={workspaceSection}
             />
           );
 
@@ -143,7 +145,6 @@ export const DynamicTabs = ({
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
-              workspaceSection={workspaceSection}
             />
           );
 
@@ -153,7 +154,16 @@ export const DynamicTabs = ({
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
-              workspaceSection={workspaceSection}
+            />
+          );
+
+        case MATS_STORE_NAME:
+          return (
+            <MatsTab
+              orisCode={item.orisCode}
+              selectedConfigId={item.selectedConfig.id}
+              title={item.title}
+              user={user}
             />
           );
 
@@ -220,3 +230,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(DynamicTabs);
 export { mapDispatchToProps };
 export { mapStateToProps };
+

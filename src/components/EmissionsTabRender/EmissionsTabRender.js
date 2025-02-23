@@ -21,7 +21,6 @@ export const EmissionsTabRender = ({
   setCheckout,
   setInactive,
   inactive,
-  workspaceSection,
 }) => {
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -102,7 +101,7 @@ export const EmissionsTabRender = ({
           inactive={inactive}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
-          workspaceSection={workspaceSection}
+          workspaceSection={EMISSIONS_STORE_NAME}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
