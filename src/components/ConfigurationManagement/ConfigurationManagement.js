@@ -887,16 +887,19 @@ export const ConfigurationManagement = ({
   };
 
   const filterFormState = () => {
-    const filteredStackPipes = formState.stackPipes.filter(
-      stackPipe => stackPipe?.retireDate !== stackPipe?.originalRecord?.retireDate
-      || stackPipe?.originalRecord == null
-    );
     const filteredUnitStackConfigs = formState.unitStackConfigs.filter(
       unitStackConfig => unitStackConfig?.endDate !== unitStackConfig?.originalRecord?.endDate
       || unitStackConfig?.originalRecord == null
     );
+    const filteredStackPipes = formState.stackPipes.filter(
+      (stackPipe) =>
+        filteredUnitStackConfigs.some(
+          (config) => config.stackPipeId === stackPipe.stackPipeId
+        ) ||
+        stackPipe?.retireDate !== stackPipe?.originalRecord?.retireDate ||
+        stackPipe?.originalRecord == null
+    );
     const filteredUnits = formState.units.filter(unit => 
-      unit.isToggled === true || 
       filteredUnitStackConfigs.some(config => config.unitId === unit.unitId)
     );
     
