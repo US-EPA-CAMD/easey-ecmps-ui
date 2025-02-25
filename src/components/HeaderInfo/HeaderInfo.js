@@ -50,6 +50,7 @@ import {
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
 import { ImportHistoricalDataModal } from "./ImportHistoricalDataModal";
+import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import {
   setReportingPeriods,
   setViewData,
@@ -816,12 +817,16 @@ export const HeaderInfo = ({
         handleSelectReportingPeriod();
         setCheckedOutByUser(direction);
         setLockedFacility(direction);
-        // setCheckoutState(direction);
         setDataLoaded(false);
       })
       .catch((error) => {
         log.error("Error during checking out api ", error);
+      })
+    .finally(() => {
+      mpApi.getCheckedOutLocations().then((res) => {
+        dispatch(setCheckedOutLocations(res.data?.items ?? []));
       });
+    });
   };
 
   const revert = async () => {

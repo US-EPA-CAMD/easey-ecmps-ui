@@ -8,7 +8,6 @@ export const MatsHeaderInfo = ({
   facility,
   orisCode,
   selectedConfigId,
-  setCheckout,
   user,
 
   /* MAPPED PROPS */
@@ -33,7 +32,6 @@ export const MatsHeaderInfo = ({
           <HeaderInfoCheckoutButton
             checkedOutConfigs={checkedOutConfigs}
             selectedConfig={selectedConfig}
-            setCheckout={setCheckout}
             user={user}
           />
         </div>

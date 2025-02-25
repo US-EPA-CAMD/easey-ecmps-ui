@@ -7,7 +7,6 @@ import {
 import {
   setSectionSelectionState,
   setLocationSelectionState,
-  setCheckoutState,
 } from '../../store/actions/dynamicFacilityTab';
 import QACertEventTabRender from '../QACertEventTabRender/QACertEventTabRender';
 export const QACertEventTab = ({
@@ -18,7 +17,6 @@ export const QACertEventTab = ({
   tabs,
   setSection,
   setLocation,
-  setCheckout,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -54,7 +52,6 @@ export const QACertEventTab = ({
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          setCheckout={setCheckout}
           checkoutState={getCurrentTab().checkout}
         />
       </div>
@@ -93,14 +90,6 @@ const mapDispatchToProps = (dispatch) => {
           section,
           title,
           convertSectionToStoreName(QA_CERT_EVENT_STORE_NAME)
-        )
-      ),
-    setCheckout: (value, configID, workspaceSection) =>
-      dispatch(
-        setCheckoutState(
-          value,
-          configID,
-          convertSectionToStoreName(workspaceSection)
         )
       ),
   };

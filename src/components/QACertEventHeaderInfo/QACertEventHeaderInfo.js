@@ -257,7 +257,6 @@ export const QACertEventHeaderInfo = ({
           <HeaderInfoCheckoutButton
             checkedOutConfigs={checkedOutConfigs}
             selectedConfig={selectedConfig}
-            setCheckout={setCheckout}
             user={user}
           />
         </div>

@@ -8,7 +8,6 @@ export const MatsTabRender = ({
   locationSelect,
   orisCode,
   selectedConfigId,
-  setCheckout,
   setLocationSelect,
   title,
   user,
@@ -22,7 +21,6 @@ export const MatsTabRender = ({
           facility={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
-          setCheckout={setCheckout}
           user={user}
         />
       </div>

@@ -11,7 +11,6 @@ export const QACertEventTabRender = ({
   setLocationSelect,
   locationSelect,
   orisCode,
-  setCheckout,
   setSectionSelect,
   setSelectedTestCode,
   selectedTestCode,
@@ -40,7 +39,6 @@ export const QACertEventTabRender = ({
           locationSelect={locationSelect}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
-          setCheckout={setCheckout}
           checkoutState={checkoutState}
           setUpdateRelatedTables={setUpdateRelatedTables}
         />

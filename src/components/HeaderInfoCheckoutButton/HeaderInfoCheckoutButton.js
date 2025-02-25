@@ -1,32 +1,24 @@
 import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
-import log from "loglevel";
 import React from "react";
+import { connect } from "react-redux";
 
-import { checkoutAPI } from "../../additional-functions/checkout";
+import { checkPlanIn as _checkPlanIn, checkPlanOut as _checkPlanOut } from "../../additional-functions/checkout";
 
 export const HeaderInfoCheckoutButton = ({
   checkedOutConfigs,
   selectedConfig,
-  setCheckout,
   user,
+
+  /* MAPPED PROPS */
+  checkPlanIn,
+  checkPlanOut,
 }) => {
   const checkoutState = checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfig.id);
   const isCheckedOut = !!checkoutState;
   const isCheckedOutByUser = isCheckedOut && checkoutState["checkedOutBy"] === user.userId;
   const userHasCheckout = checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId);
 
-  // direction -> false = check back in
-  // direction -> true = check out
-  const checkoutStateHandler = (direction) => {
-    // trigger checkout API
-    // - POST if direction is TRUE (adding new record to checkouts table)
-    // - DELETE if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, selectedConfig.id, setCheckout)
-      .catch((error) => {
-        log.error("Error during checkout", error);
-      });
-  };
   return (
     <>
       {user && (
@@ -34,11 +26,10 @@ export const HeaderInfoCheckoutButton = ({
           {isCheckedOutByUser ? (
             <Button
               type="button"
-              //autofocus // TODO: See if this can be removed
               outline={false}
               tabIndex={0}
               aria-label={`Check back in the configuration `}
-              onClick={() => checkoutStateHandler(false)}
+              onClick={() => checkPlanIn(selectedConfig.id)}
               id="checkInBTN"
               epa-testid="checkInBTN"
             >
@@ -49,11 +40,10 @@ export const HeaderInfoCheckoutButton = ({
               !userHasCheckout ? (
             <Button
               type="button"
-              //autoFocus // TODO: See if this can be removed
               outline={true}
               tabIndex={0}
               aria-label={`Check out the configuration`}
-              onClick={() => checkoutStateHandler(true)}
+              onClick={() => checkPlanOut(selectedConfig.id)}
               id="checkOutBTN"
               epa-testid="checkOutBTN"
             >
@@ -66,4 +56,11 @@ export const HeaderInfoCheckoutButton = ({
   );
 };
 
-export default HeaderInfoCheckoutButton;
+export const mapDispatchToProps = (dispatch) => {
+  return {
+    checkPlanIn: _checkPlanIn(dispatch),
+    checkPlanOut: _checkPlanOut(dispatch),
+  };
+};
+
+export default connect(undefined, mapDispatchToProps)(HeaderInfoCheckoutButton);

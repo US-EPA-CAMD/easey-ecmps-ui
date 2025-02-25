@@ -7,7 +7,6 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import {
   setLocationSelectionState,
-  setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 import MatsTabRender from "../MatsTabRender/MatsTabRender";
 
@@ -18,7 +17,6 @@ export const MatsTab = ({
   user,
 
   /* MAPPED PROPS */
-  setCheckout,
   setLocation,
   tabs,
 }) => {
@@ -37,7 +35,6 @@ export const MatsTab = ({
       locationSelect={locationSelect}
       orisCode={orisCode}
       selectedConfigId={selectedConfigId}
-      setCheckout={setCheckout}
       setLocationSelect={setLocationSelect}
       title={title}
       user={user}
@@ -52,14 +49,6 @@ export const mapDispatchToProps = (dispatch) => {
         setLocationSelectionState(
           location,
           title,
-          convertSectionToStoreName(MATS_STORE_NAME)
-        )
-      ),
-    setCheckout: (value, configID) =>
-      dispatch(
-        setCheckoutState(
-          value,
-          configID,
           convertSectionToStoreName(MATS_STORE_NAME)
         )
       ),
