@@ -13,9 +13,7 @@ const formatDate = (dateString, isUTC = false) => {
   //HANDLE -1 days from DB dates which are UTC
   const day = isUTC ? date.getDate() + 1 : date.getDate();
   return (
-    (date.getMonth() > 8
-      ? date.getMonth() + 1
-      : "0" + (date.getMonth() + 1)) +
+    (date.getMonth() > 8 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) +
     "/" +
     (day > 9 ? day : "0" + day) +
     "/" +
@@ -50,15 +48,18 @@ export const HeaderInfoFacility = ({
     facility.split("(")[1].replace(")", "") +
     (selectedConfig?.active ? "" : " Inactive");
   const isCheckedOut = selectedConfig.checkout;
-  const currentConfig = checkedOutConfigs.find((config) => config.monPlanId === selectedConfig.id);
+  const currentConfig = checkedOutConfigs.find(
+    (config) => config.monPlanId === selectedConfig.id
+  );
 
   // Create audit message for header info
   const auditMessage = useMemo(() => {
-    if (!user) return '';
+    if (!user) return "";
 
     if (isCheckedOut) {
-      return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-        } ${formatDate(currentConfig["checkedOutOn"])}`;
+      return `Currently checked-out by: ${
+        currentConfig["checkedOutBy"]
+      } ${formatDate(currentConfig["checkedOutOn"])}`;
     } else {
       return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
         refresherInfo?.updateDate,
@@ -87,9 +88,7 @@ export const HeaderInfoFacility = ({
       >
         {facilityAdditionalName}
       </h3>
-      <p className="text-bold font-body-2xs margin-top-0">
-        {auditMessage}
-      </p>
+      <p className="text-bold font-body-2xs margin-top-0">{auditMessage}</p>
     </>
   );
 };

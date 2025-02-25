@@ -1,8 +1,10 @@
 import React from "react";
 import { connect, useSelector } from "react-redux";
 
+import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
 import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
 
 export const MatsHeaderInfo = ({
   facility,
@@ -13,7 +15,9 @@ export const MatsHeaderInfo = ({
   /* MAPPED PROPS */
   checkedOutConfigs,
 }) => {
-  const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+  );
 
   return (
     <div className="header QACertHeader ">
@@ -34,6 +38,16 @@ export const MatsHeaderInfo = ({
             selectedConfig={selectedConfig}
             user={user}
           />
+        </div>
+        <div className="grid-row positon-relative">
+          <div className="grid-col-2">
+            <HeaderInfoLocationSelect
+              selectedConfig={selectedConfig}
+              workspaceSection={MATS_STORE_NAME}
+            />
+          </div>
+          <div className="grid-col-4">{/* REPORT TYPE */}</div>{" "}
+          <div className="grid-col-3"></div>{" "}
         </div>
       </div>
     </div>

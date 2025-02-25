@@ -6,6 +6,7 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
 import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import { cleanupFocusEventListeners } from "../../additional-functions/manage-focus";
 import {
@@ -32,13 +33,10 @@ export const QACertEventHeaderInfo = ({
   orisCode,
   user,
   //redux sets
-  setLocationSelect,
   setSectionSelect,
-  setCheckout,
   // redux store
   checkoutState,
   sectionSelect,
-  locationSelect,
   setSelectedTestCode,
   setUpdateRelatedTables,
   // mapped props
@@ -262,13 +260,8 @@ export const QACertEventHeaderInfo = ({
         </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
-            <DropdownSelection
-              caption="Locations"
-              options={locations}
-              viewKey="name"
-              selectKey="id"
-              initialSelection={locationSelect ? locationSelect[0] : null}
-              selectionHandler={setLocationSelect}
+            <HeaderInfoLocationSelect
+              selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_EVENT_STORE_NAME}
             />
           </div>

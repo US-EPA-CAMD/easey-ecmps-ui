@@ -6,11 +6,8 @@ import {
   convertSectionToStoreName,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
-import {
-  setSectionSelectionState,
-  setLocationSelectionState,
-  setCheckoutState,
-} from "../../store/actions/dynamicFacilityTab";
+import { setSectionSelectionState, } from "../../store/actions/dynamicFacilityTab";
+
 export const QACertTestSummaryTab = ({
   orisCode,
   selectedConfigId,
@@ -38,37 +35,14 @@ export const QACertTestSummaryTab = ({
         convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
       )
     );
+  }, [dispatch, sectionSelect, title]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionSelect]);
-
-  const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
-  );
+  const locationSelect = getCurrentTab().location;
   const [selectedTestCode, setSelectedTestCode] = useState({
     testTypeGroupCode: null,
     testTypeCodes: [],
   });
-  useEffect(() => {
-    dispatch(
-      setLocationSelectionState(
-        locationSelect,
-        title,
-        convertSectionToStoreName(QA_CERT_TEST_SUMMARY_STORE_NAME)
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
 
-  const setCheckout = (value, configID, workspaceSection) => {
-    dispatch(
-      setCheckoutState(
-        value,
-        configID,
-        convertSectionToStoreName(workspaceSection)
-      )
-    );
-  };
   return (
     <div>
       <div>
@@ -79,11 +53,9 @@ export const QACertTestSummaryTab = ({
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          setCheckout={setCheckout}
           checkoutState={getCurrentTab().checkout}
           currentTab={getCurrentTab()}
         />

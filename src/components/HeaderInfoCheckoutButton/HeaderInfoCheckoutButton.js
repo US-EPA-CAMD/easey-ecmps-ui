@@ -3,7 +3,10 @@ import { Button } from "@trussworks/react-uswds";
 import React from "react";
 import { connect } from "react-redux";
 
-import { checkPlanIn as _checkPlanIn, checkPlanOut as _checkPlanOut } from "../../additional-functions/checkout";
+import {
+  checkPlanIn as _checkPlanIn,
+  checkPlanOut as _checkPlanOut,
+} from "../../additional-functions/checkout";
 
 export const HeaderInfoCheckoutButton = ({
   checkedOutConfigs,
@@ -14,10 +17,15 @@ export const HeaderInfoCheckoutButton = ({
   checkPlanIn,
   checkPlanOut,
 }) => {
-  const checkoutState = checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfig.id);
+  const checkoutState = checkedOutConfigs.find(
+    (config) => config["monPlanId"] === selectedConfig.id
+  );
   const isCheckedOut = !!checkoutState;
-  const isCheckedOutByUser = isCheckedOut && checkoutState["checkedOutBy"] === user.userId;
-  const userHasCheckout = checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId);
+  const isCheckedOutByUser =
+    isCheckedOut && checkoutState["checkedOutBy"] === user.userId;
+  const userHasCheckout = checkedOutConfigs.some(
+    (plan) => plan["checkedOutBy"] === user.userId
+  );
 
   return (
     <>
@@ -35,9 +43,7 @@ export const HeaderInfoCheckoutButton = ({
             >
               <LockOpenSharp /> {"Check Back In"}
             </Button>
-          ) : //selectedConfig.active && // TODO: See if this can be removed
-              !isCheckedOut &&
-              !userHasCheckout ? (
+          ) : !isCheckedOut && !userHasCheckout ? (
             <Button
               type="button"
               outline={true}

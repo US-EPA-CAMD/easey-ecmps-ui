@@ -5,10 +5,8 @@ import MatsHeaderInfo from "../MatsHeaderInfo/MatsHeaderInfo";
 
 export const MatsTabRender = ({
   checkout,
-  locationSelect,
   orisCode,
   selectedConfigId,
-  setLocationSelect,
   title,
   user,
 }) => {

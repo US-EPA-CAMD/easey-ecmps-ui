@@ -4,11 +4,9 @@ import {
   convertSectionToStoreName,
   QA_CERT_EVENT_STORE_NAME,
 } from '../../additional-functions/workspace-section-and-store-names';
-import {
-  setSectionSelectionState,
-  setLocationSelectionState,
-} from '../../store/actions/dynamicFacilityTab';
+import { setSectionSelectionState, } from '../../store/actions/dynamicFacilityTab';
 import QACertEventTabRender from '../QACertEventTabRender/QACertEventTabRender';
+
 export const QACertEventTab = ({
   orisCode,
   selectedConfigId,
@@ -16,7 +14,6 @@ export const QACertEventTab = ({
   user,
   tabs,
   setSection,
-  setLocation,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -27,17 +24,12 @@ export const QACertEventTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
-  const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
-  );
+  const locationSelect = getCurrentTab().location;
   const [selectedTestCode, setSelectedTestCode] = useState({
     testTypeGroupCode: null,
     testTypeCodes: [],
   });
-  useEffect(() => {
-    setLocation(locationSelect, title);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+
   return (
     <div>
       <div>
@@ -48,7 +40,6 @@ export const QACertEventTab = ({
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
@@ -68,14 +59,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLocation: (location, title) =>
-      dispatch(
-        setLocationSelectionState(
-          location,
-          title,
-          convertSectionToStoreName(QA_CERT_EVENT_STORE_NAME)
-        )
-      ),
     setSection: (section, title) =>
       dispatch(
         setSectionSelectionState(

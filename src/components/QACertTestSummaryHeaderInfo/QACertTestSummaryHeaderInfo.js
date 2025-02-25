@@ -25,6 +25,7 @@ import { formatErrorResponse } from "../../utils/functions";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
 import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
 import ImportModal from "../ImportModal/ImportModal";
 import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
 import Modal from "../Modal/Modal";
@@ -39,12 +40,10 @@ export const QACertTestSummaryHeaderInfo = ({
   orisCode,
   user,
   //redux sets
-  setLocationSelect,
   setSectionSelect,
   // redux store
   checkoutState,
   sectionSelect,
-  locationSelect,
   setSelectedTestCode,
   ///
   setUpdateRelatedTables,
@@ -336,14 +335,8 @@ export const QACertTestSummaryHeaderInfo = ({
         </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
-            <DropdownSelection
-              caption="Locations"
-              orisCode={orisCode}
-              options={locations}
-              viewKey="name"
-              selectKey="id"
-              initialSelection={locationSelect ? locationSelect[0] : null}
-              selectionHandler={setLocationSelect}
+            <HeaderInfoLocationSelect
+              selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
             />
           </div>
