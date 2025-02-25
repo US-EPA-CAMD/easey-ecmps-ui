@@ -18,6 +18,7 @@ export const MonitoringPlanTab = ({
   title,
   user,
   removeTab,
+
   tabs,
   setSection,
   setLocation,

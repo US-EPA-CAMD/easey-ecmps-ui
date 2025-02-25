@@ -38,10 +38,9 @@ export const EmissionsTabRender = ({
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
-  
+
   useEffect(() => {
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab.viewTemplateSelect]);
 
   const handleDownload = async () => {
@@ -130,13 +129,16 @@ export const EmissionsTabRender = ({
         <div>
           <div className="grid-row overflow-x-auto">
             <CustomAccordion
-              title={viewTemplateSelect?.name}
               headerButtonText="Download To CSV"
               headerButtonClickHandler={handleDownload}
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply}/>
+                    <EmissionsViewTable
+                      monitorPlanId={selectedConfigId}
+                      filterApply={filterApply}
+                      setFilterApply={setFilterApply}
+                    />
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },

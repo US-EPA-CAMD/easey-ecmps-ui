@@ -21,12 +21,10 @@ import * as emApi from "../../utils/api/emissionsApi";
 import {
   EMISSIONS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
-  QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import Modal from "../Modal/Modal";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import "./HeaderInfo.scss";
-import ReportGenerator from "../ReportGenerator/ReportGenerator";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import ImportModal from "../ImportModal/ImportModal";
 import UploadModal from "../UploadModal/UploadModal";
@@ -97,6 +95,28 @@ export const getReportingPeriods = (minYear = 2009) => {
   return reportingPeriods;
 };
 
+// MP
+const sections = [
+  { name: "Defaults" },
+  { name: "Formulas" },
+  { name: "Loads" },
+  {
+    name: "Location Attributes and Relationships",
+  },
+  { name: "Methods" },
+  { name: "Qualifications" },
+  { name: "Rectangular Duct WAFs" },
+  { name: "Spans" },
+  { name: "Systems" },
+  { name: "Unit Information" },
+];
+
+// EM
+const defaultTemplateValue = {
+  code: "SELECT",
+  name: "--- select a view ---",
+};
+
 export const HeaderInfo = ({
   facility,
   selectedConfigId,
@@ -120,33 +140,6 @@ export const HeaderInfo = ({
   workspaceSection,
   setFilterApply
 }) => {
-  //MP
-  const sections = [
-    { name: "Defaults" },
-    { name: "Formulas" },
-    { name: "Loads" },
-    {
-      name: "Location Attributes and Relationships",
-    },
-    { name: "Methods" },
-    { name: "Qualifications" },
-    { name: "Rectangular Duct WAFs" },
-    { name: "Spans" },
-    { name: "Systems" },
-    { name: "Unit Information" },
-  ];
-
-  const testData = [
-    { name: "-- Select --" },
-    { name: "QA Certification Event" },
-    { name: "Test Extension Exemption" },
-  ];
-
-  const defaultTemplateValue = {
-    code: "SELECT",
-    name: "--- select a view ---",
-  };
-
   const dispatch = useDispatch();
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -171,7 +164,6 @@ export const HeaderInfo = ({
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const [checkedOutByUser, setCheckedOutByUser] = useState(false);
-  const [showEvalReport, setShowEvalReport] = useState(false);
   const [showRevertModal, setShowRevertModal] = useState(false);
 
   const closeRevertModal = () => {
@@ -179,7 +171,6 @@ export const HeaderInfo = ({
     const revertBtn = document.querySelector("#showRevertModal");
     revertBtn.focus();
   };
-  const closeEvalReportModal = () => setShowEvalReport(false);
 
   // const [checkoutState, setCheckoutState] = useState(checkout);
   const inWorkspace = !!user;
@@ -229,9 +220,8 @@ export const HeaderInfo = ({
   const [selectedReportingPeriods, setSelectedReportingPeriods] = useState(
     currentTab?.reportingPeriods ?? []
   );
-  /* defaultReportingPeriodChanged is a flag for whether a user has selected a reporing date or not;
-    it's changed when user manually changes location or viewTemplate or imports data
-  */
+  // defaultReportingPeriodChanged is a flag for whether a user has selected a reporing date or not;
+  // it's changed when user manually changes location or viewTemplate or imports data
   const [defaultReportingPeriodChanged, setDefaultReportingPeriodChanged] =
     useState(false);
 
@@ -241,22 +231,20 @@ export const HeaderInfo = ({
   let selectedStackPipeId = selectedConfig?.monitoringLocationData
     ?.filter((l) => l.id === locationSelect[1])
     .map((l) => l.stackPipeId);
-  const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
-  const [testDataOptionSelect, setTestDataOptionSelect] = useState(null);
+  const [viewTemplateSelect, setViewTemplateSelect] = useState(defaultTemplateValue);
 
   const evalModuleLoadedStatus = evalStatusLoaded || !inWorkspace;
-  const workspaceSectionName =
-    workspaceSection === MONITORING_PLAN_STORE_NAME
-      ? "Monitoring Plan"
-      : workspaceSection === EMISSIONS_STORE_NAME
-      ? "Emissions"
-      : "Test";
+  const modalTitleMap = {
+    [MONITORING_PLAN_STORE_NAME]: "Monitoring Plan",
+    [EMISSIONS_STORE_NAME]: "Emissions",
+  };
+  const workspaceSectionName = modalTitleMap[workspaceSection] ?? "Unknown";
 
   const MAX_REPORTING_PERIODS = 4;
   const MAX_REPORTING_PERIODS_ERROR_MSG =
     "You can only select a maximum of four reporting periods";
 
-  let reportingPeriods = useMemo(
+  const reportingPeriods = useMemo(
     () =>
       getReportingPeriods().map((reportingPeriod, index) => {
         const noPrevSelection = currentTab?.reportingPeriods === undefined;
@@ -325,11 +313,6 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
-  useEffect(() => {
-    if (currentTab?.testDataOptionSelect)
-      setTestDataOptionSelect(currentTab.testDataOptionSelect);
-  }, [currentTab]);
-
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (showCommentsModal) {
@@ -356,15 +339,6 @@ export const HeaderInfo = ({
       cleanupFocusEventListeners();
     };
   }, []);
-
-  useEffect(() => {
-    if (workspaceSection !== QA_CERT_EVENT_STORE_NAME) return;
-    setTestDataOptions(testData);
-    if (!currentTab?.TestDataOptionSelect && testData?.length > 0) {
-      setTestDataOptionSelect(testData[0]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceSection, setTestDataOptionSelect]);
 
   // Initially loads the view dropdown
   useEffect(() => {
@@ -974,12 +948,12 @@ export const HeaderInfo = ({
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
         removeChangeEventListeners(".modalUserInput");
-        importBtn.focus();
+        importBtn?.focus();
       }
     } else {
       resetImportFlags();
       removeChangeEventListeners(".modalUserInput");
-      importBtn.focus();
+      importBtn?.focus();
     }
   };
 
@@ -1079,8 +1053,7 @@ export const HeaderInfo = ({
     if (uniqueReportingPeriods.length > MAX_REPORTING_PERIODS) {
       displayAppError(MAX_REPORTING_PERIODS_ERROR_MSG);
       const addedRp = reportingPeriods.find((rp) => rp.id === id);
-      addedRp.selected = false;
-      reportingPeriods = [...reportingPeriods];
+      if (addedRp) addedRp.selected = false;
       return;
     }
     hideAppError();
@@ -1197,14 +1170,13 @@ export const HeaderInfo = ({
     }
     setIsLoading(false);
     setFilterApply(true)
-    // dispatch(setIsViewDataLoaded(true, currentTab.name, workspaceSection));
   };
 
   return (
     <div className="header">
       <div
         className={`usa-overlay ${
-          showRevertModal || showEvalReport ? "is-visible" : ""
+          showRevertModal ? "is-visible" : ""
         } `}
       />
 
@@ -1215,26 +1187,11 @@ export const HeaderInfo = ({
           showSave={true}
           exitBtn={"Yes"}
           save={revert}
-          children={
-            <div>
-              {
-                "Reverting to Official Record in the Monitoring Plan module will undo all saved and unsaved changes from the workspace. Any modified QA and Emissions data will also be purged from the workspace. This is not recoverable. If you want to maintain changes in a module, then export the file(s) before reverting to the official record. Do you want to continue?"
-              }
-            </div>
-          }
-        />
-      )}
-      {showEvalReport && (
-        <Modal
-          title="Monitoring Plan Evaluation Report"
-          width="80%"
-          left="10%"
-          show={showEvalReport}
-          close={closeEvalReportModal}
-          showSave={false}
-          showCancel={true}
-          children={<ReportGenerator user={user} />}
-        />
+        >
+          <div>
+            Reverting to Official Record in the Monitoring Plan module will undo all saved and unsaved changes from the workspace. Any modified QA and Emissions data will also be purged from the workspace. This is not recoverable. If you want to maintain changes in a module, then export the file(s) before reverting to the official record. Do you want to continue?
+          </div>
+        </Modal>
       )}
 
       {evalModuleLoadedStatus && dataLoaded ? (
@@ -1314,7 +1271,7 @@ export const HeaderInfo = ({
                       type="button"
                       autoFocus
                       outline={true}
-                      tabIndex="0"
+                      tabIndex={0}
                       aria-label={`Check out the configuration`}
                       onClick={() => checkoutStateHandler(true)}
                       id="checkOutBTN"
@@ -1328,7 +1285,7 @@ export const HeaderInfo = ({
                       <Button
                         type="button"
                         id="showRevertModal"
-                        tabIndex="0"
+                        tabIndex={0}
                         onClick={() => setShowRevertModal(true)}
                         outline={true}
                         className="text-no-wrap height-6 position-relative bottom-1"
@@ -1430,55 +1387,6 @@ export const HeaderInfo = ({
                   View Audit Report
                 </Button>
                 */}
-              </Grid>
-            </GridContainer>
-          )}
-
-          {workspaceSection === QA_CERT_EVENT_STORE_NAME && (
-            <GridContainer className="padding-left-0 margin-left-0 maxw-desktop">
-              <Grid row={true}>
-                <Grid col={2}>
-                  <DropdownSelection
-                    caption="Locations"
-                    orisCode={orisCode}
-                    options={locations}
-                    viewKey="name"
-                    selectKey="id"
-                    initialSelection={locationSelect[0]}
-                    selectionHandler={setLocationSelect}
-                    workspaceSection={workspaceSection}
-                  />
-                </Grid>
-                <Grid col={8} desktopLg={{ col: 5 }} widescreen={{ col: 5 }}>
-                  <FormGroup className="margin-right-2 margin-bottom-1">
-                    <Label test-id={"testData"} htmlFor={"testData"}>
-                      {"Test Data"}
-                    </Label>
-                    <Select
-                      id={"testData"}
-                      name={"testData"}
-                      epa-testid={"testData"}
-                      data-testid={"testData"}
-                      value={testDataOptionSelect?.name}
-                      onChange={(e) => {
-                        setTestDataOptionSelect(
-                          testDataOptions.find((v) => v.name === e.target.value)
-                        );
-                      }}
-                      // className="mobile-lg:view-template-dropdown-maxw"
-                    >
-                      {testDataOptions?.map((data) => (
-                        <option
-                          data-testid={data.name}
-                          key={data.name}
-                          value={data.name}
-                        >
-                          {data.name}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormGroup>
-                </Grid>
               </Grid>
             </GridContainer>
           )}
@@ -1586,27 +1494,27 @@ export const HeaderInfo = ({
             }}
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
-            children={
-              <ImportModal
-                setDisablePortBtn={setDisablePortBtn}
-                disablePortBtn={disablePortBtn}
-                setFileName={setFileName}
-                setHasFormatError={setHasFormatError}
-                setHasInvalidJsonError={setHasInvalidJsonError}
-                setImportedFile={setImportedFile}
-                workspaceSection={workspaceSection}
-              />
-            }
-          />
+          >
+            <ImportModal
+              setDisablePortBtn={setDisablePortBtn}
+              setFileName={setFileName}
+              setHasFormatError={setHasFormatError}
+              setHasInvalidJsonError={setHasInvalidJsonError}
+              setImportedFile={setImportedFile}
+              workspaceSection={workspaceSection}
+            />
+          </UploadModal>
         </div>
       )}
+
       {isReverting && (
         <UploadModal
           width={"30%"}
           left={"35%"}
-          children={<Preloader />}
           preloader
-        />
+        >
+          <Preloader />
+        </UploadModal>
       )}
       {/* while uploading, just shows preloader spinner  */}
 
@@ -1614,17 +1522,11 @@ export const HeaderInfo = ({
         <UploadModal
           width={"30%"}
           left={"35%"}
-          setFinishedLoading={setFinishedLoading}
-          setShowImportModal={setShowImportModal}
-          setIsLoading={setIsLoading}
-          timer={true}
-          children={<Preloader />}
           preloader
-          setImportApiErrors={setImportApiErrors}
           importedFileErrorMsgs={importedFileErrorMsgs}
-          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
-          fileName={fileName}
-        />
+        >
+          <Preloader />
+        </UploadModal>
       )}
 
       {/* For file imports, after it finishes uploading , shows either api errors or success messages */}
@@ -1635,24 +1537,18 @@ export const HeaderInfo = ({
             show={showImportModal}
             close={closeImportModalHandler}
             showCancel={false}
-            showSave={true}
-            exitBtn={"Ok"}
             complete={true}
-            importApiErrors={importApiErrors}
             importedFileErrorMsgs={importedFileErrorMsgs}
             setUpdateRelatedTables={setUpdateRelatedTables}
             successMsg={`${workspaceSectionName} has been Successfully Imported.`}
-            children={
-              <ImportModal
-                setDisablePortBtn={setDisablePortBtn}
-                disablePortBtn={disablePortBtn}
-                complete={true}
-                fileName={fileName}
-                importApiErrors={importApiErrors}
-                importedFileErrorMsgs={importedFileErrorMsgs}
-              />
-            }
-          />
+          >
+            <ImportModal
+              setDisablePortBtn={setDisablePortBtn}
+              complete={true}
+              fileName={fileName}
+              importedFileErrorMsgs={importedFileErrorMsgs}
+            />
+          </UploadModal>
         )}
 
       {showEmissionsImportTypeModal && (
@@ -1662,12 +1558,9 @@ export const HeaderInfo = ({
           close={() => setShowEmissionsImportTypeModal(false)}
           showCancel={true}
           showImport={false}
-          children={
-            <EmissionsImportTypeModalContent
-              onChange={onChangeOfEmissionsImportType}
-            />
-          }
-        />
+        >
+          <EmissionsImportTypeModalContent onChange={onChangeOfEmissionsImportType} />
+        </UploadModal>
       )}
 
       {showHistoricalDataImportModal && !finishedLoading && !isLoading && (
@@ -1675,7 +1568,6 @@ export const HeaderInfo = ({
           closeModalHandler={closeImportModalHandler}
           setIsLoading={setIsLoading}
           setFinishedLoading={setFinishedLoading}
-          finishedLoading={finishedLoading}
           importedFileErrorMsgs={importedFileErrorMsgs}
           setImportedFileErrorMsgs={setImportedFileErrorMsgs}
           workspaceSectionName={workspaceSectionName}
@@ -1690,19 +1582,16 @@ export const HeaderInfo = ({
           left={"25%"}
           close={() => executeOnClose()}
           showCancel={false}
-          showSave={false}
           complete={true}
-          xBtn
           notUploadVersion
-          children={
-            <GenericTable
-              data1={commentsData}
-              title={"Monitoring Plan - Comments"}
-              expandable={true}
-              additionalTitle={facilityAdditionalName}
-            />
-          }
-        />
+        >
+          <GenericTable
+            data1={commentsData}
+            title={"Monitoring Plan - Comments"}
+            expandable={true}
+            additionalTitle={facilityAdditionalName}
+          />
+        </UploadModal>
       )}
     </div>
   );

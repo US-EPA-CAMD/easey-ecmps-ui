@@ -1,10 +1,9 @@
 import log from "loglevel";
 import * as mpApi from "../utils/api/monitoringPlansApi";
 import { MONITORING_PLAN_STORE_NAME } from "../additional-functions/workspace-section-and-store-names";
+
 // Takes a direction to check a record in or out,the configID, and a dispatcher to the redux store
 export const checkoutAPI = (direction, monitorPlanId, setCheckout) => {
-  const user = JSON.parse(localStorage.getItem("ecmps_user"));
-
   if (!direction) {
     return mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitorPlanId)

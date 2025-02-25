@@ -39,7 +39,7 @@ export const DynamicTabs = ({
   setCheckout,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
 }) => {
-  /** @type {[{title: string, orisCode: number, selectedConfig: {id: string, facId: number, name: string}, checkout: boolean}[], function]} */
+  /** @type {[{title: string, orisCode?: number, selectedConfig?: {id: string, facId: number, name: string}, checkout?: boolean}[], function]} */
   const [tabs, setTabs] = useState([]);
 
   useEffect(() => {
@@ -195,13 +195,13 @@ export const DynamicTabs = ({
   );
 };
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {
     currentTabIndex: state.currentTabIndex,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch) => {
   return {
     removeFacility: (facility, workspaceSection) =>
       dispatch(
@@ -228,6 +228,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DynamicTabs);
-export { mapDispatchToProps };
-export { mapStateToProps };
-

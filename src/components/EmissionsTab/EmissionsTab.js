@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { connect } from "react-redux";
+
 import {
   setLocationSelectionState,
   setCheckoutState,
@@ -16,8 +16,8 @@ export const EmissionsTab = ({
   selectedConfigId,
   title,
   user,
-  tabs,
 
+  tabs,
   setLocation,
   setCheckout,
   setInactive,
@@ -31,28 +31,24 @@ export const EmissionsTab = ({
 
   useEffect(() => {
     setLocation(locationSelect, title, EMISSIONS_STORE_NAME);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+  }, [locationSelect, setLocation, title]);
 
   return (
-    <div>
-      <div>
-        <EmissionsTabRender
-          title={title}
-          orisCode={orisCode}
-          selectedConfigId={selectedConfigId}
-          locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
-          user={user}
-          checkout={currentTab.checkout}
-          setCheckout={setCheckout}
-          setInactive={setInactive}
-          inactive={currentTab.inactive}
-        />
-      </div>
-    </div>
+    <EmissionsTabRender
+      title={title}
+      orisCode={orisCode}
+      selectedConfigId={selectedConfigId}
+      locationSelect={locationSelect}
+      setLocationSelect={(location) => setLocationSelect(location)}
+      user={user}
+      checkout={currentTab.checkout}
+      setCheckout={setCheckout}
+      setInactive={setInactive}
+      inactive={currentTab.inactive}
+    />
   );
 };
+
 export const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[
