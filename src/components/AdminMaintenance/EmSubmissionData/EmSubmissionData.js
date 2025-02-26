@@ -166,7 +166,7 @@ export const EmSubmissionData = ({
     const selectedOrisCodes = currentFacility.filter(item => item.selected).map(item => item.id);
 
     const configurationData = selectedOrisCodes.length
-      ? (await getMonitoringPlans(selectedOrisCodes)).data
+      ? (await getMonitoringPlans(selectedOrisCodes)).data?.items
       : [];
 
     const configNamesToMonPlan = [];
