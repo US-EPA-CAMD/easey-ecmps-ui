@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { handleResponse, handleError, handleImportError } from "./apiUtils";
 import config from "../../config";
-import { secureAxios } from "./easeyAuthApi"
+import { secureAxios } from "./easeyAuthApi";
 
 const getApiUrl = (path = "") => {
   let url = config.services.qaCertification.uri;
@@ -147,6 +147,18 @@ export const getMatsBulkFilesReviewSubmit = async (
   }
 
   let url = `${config.services.qaCertification.uri}/workspace/mats-bulk-file?${queryString}`;
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const getMatsSubmissions = async (monPlanId, params = {}) => {
+  const paramKeys = ["locationId", "reportTypeCode"];
+  const queryString = Object.entries(params)
+    .filter(([key]) => paramKeys.includes(key))
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission/${monPlanId}?${queryString}`;
   return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);

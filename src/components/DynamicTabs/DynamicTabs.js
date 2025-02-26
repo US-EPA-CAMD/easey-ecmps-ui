@@ -8,14 +8,14 @@ import {
   MATS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 import {
   addFacilityTab,
   removeFacilityTab,
   setActiveTab,
-  setCheckoutState
+  setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
 import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import EmissionsTab from "../EmissionsTab/EmissionsTab";
@@ -96,14 +96,16 @@ export const DynamicTabs = ({
 
   const getModule = (item) => {
     if (item.title === "Select Configurations") {
-          return <DataTable
-            addtabs={addTabsHandler}
-            user={user}
-            setMostRecentlyCheckedInMonitorPlanIdForTab={
-              setMostRecentlyCheckedInMonitorPlanIdForTab
-            }
-            workspaceSection={workspaceSection}
-          />
+      return (
+        <DataTable
+          addtabs={addTabsHandler}
+          user={user}
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          workspaceSection={workspaceSection}
+        />
+      );
     }
     return (() => {
       switch (workspaceSection) {
@@ -174,23 +176,23 @@ export const DynamicTabs = ({
   };
   return (
     <div>
-        <Tabs
-          checkedOutLocations={checkedOutLocations}
-          dynamic={true}
-          removeTabs={removeTabsHandler}
-          user={user}
-          workspaceSection={workspaceSection}
-          currentTabIndex={currentTabIndex}
-          setCheckout={setCheckout}
-          setCurrentTabIndex={setCurrentTabIndex}
-          panes={tabs.map((tab) => ({
-            content: getModule(tab),
-            facId: tab.selectedConfig?.facId ?? "initial",
-            locationId: tab.selectedConfig?.id ?? "initial",
-            selectedConfigName: tab.selectedConfig?.name ?? "initial",
-            title: tab.title,
-          }))}
-        />
+      <Tabs
+        checkedOutLocations={checkedOutLocations}
+        dynamic={true}
+        removeTabs={removeTabsHandler}
+        user={user}
+        workspaceSection={workspaceSection}
+        currentTabIndex={currentTabIndex}
+        setCheckout={setCheckout}
+        setCurrentTabIndex={setCurrentTabIndex}
+        panes={tabs.map((tab) => ({
+          content: getModule(tab),
+          facId: tab.selectedConfig?.facId ?? "initial",
+          locationId: tab.selectedConfig?.id ?? "initial",
+          selectedConfigName: tab.selectedConfig?.name ?? "initial",
+          title: tab.title,
+        }))}
+      />
     </div>
   );
 };

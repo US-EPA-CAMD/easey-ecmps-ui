@@ -1,16 +1,17 @@
-import { Link } from "@trussworks/react-uswds";
+import { Button } from "@trussworks/react-uswds";
 import { at } from "lodash";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import config from "../../config";
 
-export const HeaderInfoMatsSubmissionButton = ({
+const HeaderInfoMatsSubmissionButton = ({
   checkedOutConfigs,
   selectedConfig,
   user,
 }) => {
+  const navigate = useNavigate();
   const [id] = useState(uuidv4());
 
   const isCheckedOutByUser =
@@ -26,18 +27,25 @@ export const HeaderInfoMatsSubmissionButton = ({
     acceptedRoles.includes(role)
   );
 
+  const onClick = () => {
+    navigate("new-submission", {
+      relative: "path",
+      state: { selectedConfigId: selectedConfig.id },
+    });
+  };
+
   return (
     isCheckedOutByUser &&
     hasRequiredRole && (
-      <Link
-        className="usa-button"
+      <Button
+        type="button"
+        className=""
         id={`submission-button-${id}`}
-        variant="unstyled"
-        asCustom={NavLink}
-        to={`/workspace/mats-data-submission/${selectedConfig.id}`}
+        outline={false}
+        onClick={onClick}
       >
         New Submission
-      </Link>
+      </Button>
     )
   );
 };

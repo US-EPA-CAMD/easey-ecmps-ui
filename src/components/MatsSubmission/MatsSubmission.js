@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const MatsSubmission = ({
   user,
@@ -8,13 +8,17 @@ const MatsSubmission = ({
   /* MAPPED PROPS */
   checkedOutConfigs,
 }) => {
-  const { configId } = useParams();
+  const location = useLocation();
+
+  const selectedConfigId = location.state?.selectedConfigId;
 
   const isCheckedOutByUser =
-    checkedOutConfigs.find((config) => config["monPlanId"] === configId)?.checkedOutBy === user.userId;
+    selectedConfigId &&
+    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
+      ?.checkedOutBy === user.userId;
 
   if (!isCheckedOutByUser) {
-    return <Navigate to="/workspace/mats-data-submission" />;
+    return <Navigate to=".." relative="path" />;
   }
 
   return <></>;

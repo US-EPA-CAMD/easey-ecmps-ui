@@ -1,40 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
-import {
-  convertSectionToStoreName,
-  MATS_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
-import MatsTabRender from "../MatsTabRender/MatsTabRender";
+import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import MatsDataTable from "../MatsDataTable/MatsDataTable";
+import MatsHeaderInfo from "../MatsHeaderInfo/MatsHeaderInfo";
 
-export const MatsTab = ({
-  orisCode,
-  selectedConfigId,
-  title,
-  user,
-
-  /* MAPPED PROPS */
-  tabs,
-}) => {
-  const currentTab = tabs.find(
-    (tab) => tab.selectedConfig.id === selectedConfigId
+export const MatsTab = ({ orisCode, selectedConfigId, title, user }) => {
+  const selectedLocation = useSelector(
+    (state) =>
+      state.openedFacilityTabs[MATS_STORE_NAME].find(
+        (tab) => tab.selectedConfig.id === selectedConfigId
+      )?.location[1]
   );
+  const [selectedReportType, setSelectedReportType] = useState("");
 
   return (
-    <MatsTabRender
-      checkout={currentTab.checkout}
-      orisCode={orisCode}
-      selectedConfigId={selectedConfigId}
-      title={title}
-      user={user}
-    />
+    <div className="padding-top-0">
+      <div className="grid-row">
+        <MatsHeaderInfo
+          facility={title}
+          orisCode={orisCode}
+          selectedConfigId={selectedConfigId}
+          selectedReportType={selectedReportType}
+          setSelectedReportType={setSelectedReportType}
+          user={user}
+        />
+      </div>
+      <hr />
+      <MatsDataTable
+        selectedConfigId={selectedConfigId}
+        selectedLocation={selectedLocation}
+        selectedReportType={selectedReportType}
+      />
+    </div>
   );
 };
 
-export const mapStateToProps = (state) => {
-  return {
-    tabs: state.openedFacilityTabs[convertSectionToStoreName(MATS_STORE_NAME)],
-  };
-};
-
-export default connect(mapStateToProps)(MatsTab);
+export default MatsTab;

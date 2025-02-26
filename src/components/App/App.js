@@ -456,7 +456,7 @@ const App = () => {
             }
           />
           <Route
-            path="/workspace/mats-data-submission/:configId"
+            path="/workspace/mats-data-submission/new-submission"
             element={
               !facilityCheckoutPermission([
                 config.app.sponsorRole,

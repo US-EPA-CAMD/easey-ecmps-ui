@@ -12,6 +12,8 @@ export const MatsHeaderInfo = ({
   facility,
   orisCode,
   selectedConfigId,
+  selectedReportType,
+  setSelectedReportType,
   user,
 
   /* MAPPED PROPS */
@@ -20,8 +22,6 @@ export const MatsHeaderInfo = ({
   const selectedConfig = useSelector((state) =>
     state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
   );
-
-  const [selectedReportType, setSelectedReportType] = React.useState("");
 
   return (
     <div className="header QACertHeader ">
@@ -49,8 +49,9 @@ export const MatsHeaderInfo = ({
           />
         </div>
         <div className="grid-row positon-relative">
-          <div className="grid-col-2">
+          <div className="grid-col-4">
             <HeaderInfoLocationSelect
+              allowEmpty
               selectedConfig={selectedConfig}
               workspaceSection={MATS_STORE_NAME}
             />
