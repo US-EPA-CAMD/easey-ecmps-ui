@@ -53,6 +53,7 @@ import { configurationManagementTitle } from "../../utils/constants/moduleTitles
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
+import StatusContent from "../StatusContent/StatusContent";
 import "./ConfigurationManagement.scss";
 
 /*
@@ -544,22 +545,6 @@ const SaveStatusAlert = ({ status }) => (
         Changes saved successfully.
       </Alert>
     )}
-  </>
-);
-
-const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
-  <>
-    {status === dataStatus.PENDING && (
-      <div className="display-flex flex-justify-center">
-        <SizedPreloader />
-      </div>
-    )}
-    {status === dataStatus.ERROR && (
-      <Alert noIcon slim type="error" headingLevel={headingLevel}>
-        Error loading {label}.
-      </Alert>
-    )}
-    {status === dataStatus.SUCCESS && children}
   </>
 );
 

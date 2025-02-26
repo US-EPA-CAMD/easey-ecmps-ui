@@ -34,7 +34,7 @@ const getRefreshInfo = async (selectedConfigId) => {
   }
 };
 
-export const HeaderInfoFacility = ({
+const HeaderInfoFacility = ({
   checkedOutConfigs,
   facility,
   selectedConfig,

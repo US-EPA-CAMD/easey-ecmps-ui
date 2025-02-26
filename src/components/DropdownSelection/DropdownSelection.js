@@ -55,7 +55,7 @@ export const DropdownSelection = ({
               value={
                 options[initialSelection]
                   ? options[initialSelection][selectKey]
-                  : options[0][selectKey]
+                  : options[0]?.[selectKey]
               }
               onChange={(e) => handleChange(e)}
               tabIndex={0}

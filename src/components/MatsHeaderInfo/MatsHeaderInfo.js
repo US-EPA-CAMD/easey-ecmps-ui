@@ -5,6 +5,7 @@ import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-an
 import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
 import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
 import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
+import HeaderInfoMatsReportTypeCodeSelect from "./HeaderInfoMatsReportTypeCodeSelect";
 
 export const MatsHeaderInfo = ({
   facility,
@@ -18,6 +19,8 @@ export const MatsHeaderInfo = ({
   const selectedConfig = useSelector((state) =>
     state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
   );
+
+  const [selectedReportType, setSelectedReportType] = React.useState("");
 
   return (
     <div className="header QACertHeader ">
@@ -46,7 +49,12 @@ export const MatsHeaderInfo = ({
               workspaceSection={MATS_STORE_NAME}
             />
           </div>
-          <div className="grid-col-4">{/* REPORT TYPE */}</div>{" "}
+          <div className="grid-col-4">
+            <HeaderInfoMatsReportTypeCodeSelect
+              selected={selectedReportType}
+              setSelected={setSelectedReportType}
+            />
+          </div>{" "}
           <div className="grid-col-3"></div>{" "}
         </div>
       </div>

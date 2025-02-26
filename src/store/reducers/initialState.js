@@ -38,6 +38,9 @@ const initialState = {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
+    matsReportTypeCodes: {
+      matsReportTypeCodes: [],
+    },
   },
   currentSection: "",
   workspaceState: "monitoringPlans",

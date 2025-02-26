@@ -8,7 +8,7 @@ import {
   checkPlanOut as _checkPlanOut,
 } from "../../additional-functions/checkout";
 
-export const HeaderInfoCheckoutButton = ({
+const HeaderInfoCheckoutButton = ({
   checkedOutConfigs,
   selectedConfig,
   user,
