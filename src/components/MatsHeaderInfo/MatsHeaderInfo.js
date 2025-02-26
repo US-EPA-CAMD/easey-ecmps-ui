@@ -6,6 +6,7 @@ import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoChec
 import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
 import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
 import HeaderInfoMatsReportTypeCodeSelect from "./HeaderInfoMatsReportTypeCodeSelect";
+import HeaderInfoMatsSubmissionButton from "./HeaderInfoMatsSubmissionButton";
 
 export const MatsHeaderInfo = ({
   facility,
@@ -37,6 +38,11 @@ export const MatsHeaderInfo = ({
         </div>
         <div className="grid-row">
           <HeaderInfoCheckoutButton
+            checkedOutConfigs={checkedOutConfigs}
+            selectedConfig={selectedConfig}
+            user={user}
+          />
+          <HeaderInfoMatsSubmissionButton
             checkedOutConfigs={checkedOutConfigs}
             selectedConfig={selectedConfig}
             user={user}

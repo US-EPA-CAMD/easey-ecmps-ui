@@ -12,6 +12,7 @@ import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import ConfigurationManagement from "../ConfigurationManagement/ConfigurationManagement";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
+import MatsSubmission from "../MatsSubmission/MatsSubmission";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
@@ -39,7 +40,6 @@ import {
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../additional-functions/system-admin-section-and-store-names";
 
-import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
@@ -217,14 +217,18 @@ const App = () => {
 
   const roles = JSON.parse(localStorage.getItem("ecmps_user"))?.roles;
 
-  const facilityCheckoutPermission = () => {
+  const facilityCheckoutPermission = (
+    acceptedRoles = [
+      config.app.sponsorRole,
+      config.app.submitterRole,
+      config.app.preparerRole,
+      config.app.initialAuthorizerRole,
+    ]
+  ) => {
     const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
     return (
       validUser() &&
-      (cdxUser?.roles?.includes(config.app.sponsorRole) ||
-        cdxUser?.roles?.includes(config.app.submitterRole) ||
-        cdxUser?.roles?.includes(config.app.preparerRole) ||
-        cdxUser?.roles?.includes(config.app.initialAuthorizerRole))
+      cdxUser?.roles?.some((role) => acceptedRoles.includes(role))
     );
   };
 
@@ -448,6 +452,20 @@ const App = () => {
                   user={user}
                   workspaceSection={MATS_STORE_NAME}
                 />
+              )
+            }
+          />
+          <Route
+            path="/workspace/mats-data-submission/:configId"
+            element={
+              !facilityCheckoutPermission([
+                config.app.sponsorRole,
+                config.app.submitterRole,
+                config.app.initialAuthorizerRole,
+              ]) ? (
+                <Navigate key="navigate" to="/workspace/mats-data-submission" />
+              ) : (
+                <MatsSubmission user={user} />
               )
             }
           />

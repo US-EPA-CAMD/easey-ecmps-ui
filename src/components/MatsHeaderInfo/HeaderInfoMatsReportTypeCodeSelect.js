@@ -47,7 +47,7 @@ const HeaderInfoMatsReportTypeCodeSelect = ({
       viewKey="name"
       selectKey="code"
       initialSelection={options.findIndex((option) => option.code === selected)}
-      selectionHandler={(_index, code) => setSelected(code)}
+      selectionHandler={([_index, code]) => setSelected(code)}
     />
   );
 };
