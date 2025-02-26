@@ -152,7 +152,7 @@ describe("Test cases for QACertEventTestExmpDataTable", () => {
     // setTimeout(() => expect(mock.history.delete.length).toBe(1), 10000);
   });
   test("renders Qa Cert Events data rows and create/save/delete with 0 data coming back", async () => {
-    const qaCertsEventsData = [];
+    const qaCertsEventsData = { items : [] };
     const getMonitoringComponentsUrl = new RegExp(
       `${config.services.monitorPlans.uri}/locations/${locId}/components`
     );
@@ -298,7 +298,7 @@ describe("Test cases for QACertEventTestExmpDataTable", () => {
     mock.onGet(getMdmDataByCodeTable, requestHeaders).reply(200, { data: [] });
     mock
       .onGet(getQaTestExemptUrl, requestHeaders)
-      .reply(200, qaTestExemptsData);
+      .reply(200, { items : qaTestExemptsData });
     mock.onPost(createQaTestExemptUrl, requestHeaders).reply(200, "created");
 
     renderComponent({
