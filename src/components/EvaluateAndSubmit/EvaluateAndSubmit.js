@@ -9,7 +9,6 @@ import {
   getQATestSummaryReviewSubmit,
   getQACertEventReviewSubmit,
   getQATeeReviewSubmit,
-  getMatsBulkFilesReviewSubmit,
 } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
@@ -34,7 +33,6 @@ import {
   emissionsColumns,
   qaCertEventColumns,
   qaTeeColumns,
-  matsBulkFilesColumns,
 } from "./ColumnMappings";
 import { canSelectRow, getDropDownFacilities } from "./utils/functions";
 import useGetContent from "./utils/useGetContent";
@@ -73,7 +71,6 @@ export const EvaluateAndSubmit = ({
   const qaCertEventRef = useRef([]);
   const qaTeeRef = useRef([]);
   const emissionsRef = useRef([]);
-  const matsBulkFilesRef = useRef([]);
   const monPlanRef = useRef([]);
 
   const [showSuccesModal, setShowSuccessModal] = useState(false);
@@ -165,20 +162,7 @@ export const EvaluateAndSubmit = ({
       type: "EM",
       progressPending: useRef(false),
     },
-    {
-      columns: matsBulkFilesColumns,
-      ref: matsBulkFilesRef,
-      call: getMatsBulkFilesReviewSubmit,
-      rowId: "matsBulkFileIdentifier",
-      name: "MATS Data",
-      type: "QA",
-      progressPending: useRef(false),
-    },
   ];
-
-  if (componentType !== "Submission") {
-    dataList = dataList.filter((f) => f.rowId !== "matsBulkFileIdentifier");
-  }
 
   const idToPermissionsMap = useRef(new Map());
   useEffect(() => {
@@ -488,13 +472,6 @@ export const EvaluateAndSubmit = ({
           }
           return m.periodAbbreviation;
         });
-
-      if (componentType === "Submission") {
-        // Iterate MATs bulk files and append them to the submission payload
-        newItem.matsBulkFiles = matsBulkFilesRef.current
-          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-          .map((m) => m.matsBulkFileIdentifier);
-      }
 
       // Add it to the result set of data sent to the back-end
       payload.items.push(newItem);
