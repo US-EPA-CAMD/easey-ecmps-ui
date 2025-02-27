@@ -11,6 +11,7 @@ const MatsSubmission = ({
   const location = useLocation();
 
   const selectedConfigId = location.state?.selectedConfigId;
+  const originalSubmissionId = location.state?.originalSubmissionId;
 
   const isCheckedOutByUser =
     selectedConfigId &&
@@ -21,7 +22,7 @@ const MatsSubmission = ({
     return <Navigate to=".." relative="path" />;
   }
 
-  return <></>;
+  return <>PLACEHOLDER</>;
 };
 
 export const mapStateToProps = (state) => ({

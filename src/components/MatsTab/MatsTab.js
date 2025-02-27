@@ -1,11 +1,21 @@
+import { at } from "lodash";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 
 import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import MatsDataTable from "../MatsDataTable/MatsDataTable";
+import config from "../../config";
+import DataTableMatsSubmission from "../datatablesContainer/DataTableMatsSubmission/DataTableMatsSubmission";
 import MatsHeaderInfo from "../MatsHeaderInfo/MatsHeaderInfo";
 
-export const MatsTab = ({ orisCode, selectedConfigId, title, user }) => {
+export const MatsTab = ({
+  orisCode,
+  selectedConfigId,
+  title,
+  user,
+
+  /* MAPPED PROPS */
+  checkedOutConfigs,
+}) => {
   const selectedLocation = useSelector(
     (state) =>
       state.openedFacilityTabs[MATS_STORE_NAME].find(
@@ -14,10 +24,24 @@ export const MatsTab = ({ orisCode, selectedConfigId, title, user }) => {
   );
   const [selectedReportType, setSelectedReportType] = useState("");
 
+  const isCheckedOutByUser =
+    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
+      ?.checkedOutBy === user.userId;
+  const acceptedRoles = at(config.app, [
+    "sponsorRole",
+    "submitterRole",
+    "initialAuthorizerRole",
+  ]);
+  const hasRequiredRole = user.roles?.some((role) =>
+    acceptedRoles.includes(role)
+  );
+  const canSubmit = isCheckedOutByUser && hasRequiredRole;
+
   return (
     <div className="padding-top-0">
       <div className="grid-row">
         <MatsHeaderInfo
+          canSubmit={canSubmit}
           facility={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
@@ -27,7 +51,8 @@ export const MatsTab = ({ orisCode, selectedConfigId, title, user }) => {
         />
       </div>
       <hr />
-      <MatsDataTable
+      <DataTableMatsSubmission
+        canSubmit={canSubmit}
         selectedConfigId={selectedConfigId}
         selectedLocation={selectedLocation}
         selectedReportType={selectedReportType}
@@ -36,4 +61,8 @@ export const MatsTab = ({ orisCode, selectedConfigId, title, user }) => {
   );
 };
 
-export default MatsTab;
+export const mapStateToProps = (state) => ({
+  checkedOutConfigs: state.checkedOutLocations,
+});
+
+export default connect(mapStateToProps)(MatsTab);

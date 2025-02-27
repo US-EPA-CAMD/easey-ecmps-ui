@@ -9,6 +9,7 @@ import HeaderInfoMatsReportTypeCodeSelect from "./HeaderInfoMatsReportTypeCodeSe
 import HeaderInfoMatsSubmissionButton from "./HeaderInfoMatsSubmissionButton";
 
 export const MatsHeaderInfo = ({
+  canSubmit = false,
   facility,
   orisCode,
   selectedConfigId,
@@ -42,11 +43,9 @@ export const MatsHeaderInfo = ({
             selectedConfig={selectedConfig}
             user={user}
           />
-          <HeaderInfoMatsSubmissionButton
-            checkedOutConfigs={checkedOutConfigs}
-            selectedConfig={selectedConfig}
-            user={user}
-          />
+          {canSubmit && (
+            <HeaderInfoMatsSubmissionButton selectedConfig={selectedConfig} />
+          )}
         </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-4">

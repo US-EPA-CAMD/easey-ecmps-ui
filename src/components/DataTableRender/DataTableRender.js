@@ -68,17 +68,11 @@ export const DataTableRender = ({
   addBtnName,
   allowToCreateNewData = true,
   uniqueKey,
-  setShowInactive,
-  openedFacilityTabs,
-
-  setCheckout,
-  show = false,
   ariaLabel,
   noDataString = `No data currently present.`,
 
   // for 508
   openAndCheckoutBTNFocus,
-  onRowExpandToggled,
   workspaceSection,
 }) => {
   const ariaLabelProp = { "aria-label": ariaLabel };
