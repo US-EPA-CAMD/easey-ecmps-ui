@@ -42,7 +42,6 @@ const initialState = {
       matsReportTypeCodes: [],
     },
   },
-  currentSection: "",
   workspaceState: "monitoringPlans",
   currentTabIndex: 0,
 };

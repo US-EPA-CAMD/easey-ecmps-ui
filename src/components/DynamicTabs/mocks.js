@@ -1,8 +1,7 @@
 import React from "react";
+import { MOCK_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-
-
-class Welcome extends React.Component {
+export class Welcome extends React.Component {
   clickHandler = () => {
     const selectedConfig = {
       id: "TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A",
@@ -51,25 +50,24 @@ export const getMockDynamicTabsProps = () => {
 
   return {
     addFacility: jest.fn(),
+    checkedOutLocations: [],
+    currentTabIndex: 0,
+    mostRecentlyCheckedInMonitorPlanId: "",
     removeFacility: jest.fn(),
     setActive: jest.fn(),
-    checkedOutLocations: [],
-    user: { firstName: "test" },
+    setCheckout: jest.fn(),
+    setCurrentTabIndex: jest.fn(),
     setMostRecentlyCheckedInMonitorPlanId: jest.fn(),
-    mostRecentlyCheckedInMonitorPlanId: "",
     tabsProps: () => ([
       {
         title: "Welcome ( test )",
-        component: <Welcome name="Addis" />,
         selectedConfig: selectedConfig,
       },
       {
         title: "Welcome ( test )",
-        component: <Welcome name="Addis" />,
       },
     ]),
-    setCurrentTabIndex: jest.fn(),
-    currentTabIndex: 0,
-    setCheckout: jest.fn(),
+    user: { firstName: "Addis" },
+    workspaceSection: MOCK_STORE_NAME,
   }
 }

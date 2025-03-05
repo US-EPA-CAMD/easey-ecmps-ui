@@ -9,6 +9,7 @@ import {
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
   QA_CERT_TEST_SUMMARY_STORE_NAME,
+  MOCK_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 import {
@@ -26,18 +27,19 @@ import QACertEventTab from "../QACertEventTab/QACertEventTab";
 import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
 import Tabs from "../Tabs/Tabs";
 import "./DynamicTabs.scss";
+import { Welcome } from "./mocks";
 
 export const DynamicTabs = ({
-  tabsProps,
-  checkedOutLocations,
-  user,
-  removeFacility,
   addFacility,
-  workspaceSection,
-  setCurrentTabIndex,
+  checkedOutLocations,
   currentTabIndex,
+  removeFacility,
   setCheckout,
+  setCurrentTabIndex,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  tabsProps,
+  user,
+  workspaceSection,
 }) => {
   /** @type {[{title: string, orisCode?: number, selectedConfig?: {id: string, facId: number, name: string}, checkout?: boolean}[], function]} */
   const [tabs, setTabs] = useState([]);
@@ -166,6 +168,13 @@ export const DynamicTabs = ({
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
+            />
+          );
+        case MOCK_STORE_NAME:
+          return (
+            <Welcome 
+              addtabs={addTabsHandler}
+              name={user.firstName}
             />
           );
 

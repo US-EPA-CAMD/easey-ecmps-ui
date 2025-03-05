@@ -100,6 +100,33 @@ const Tabs = ({
     tabBtnSelector = `[aria-label="${arg}"]`;
     return arg;
   };
+  const makeTabButtonAriaLabel = (pane) => {
+    const parts = [
+      "open",
+      pane.title.split("(")[0].trim(),
+      user &&
+      pane.locationId &&
+      pane.facId &&
+      workspaceSection !== EXPORT_STORE_NAME &&
+      (isCheckedOut(pane.locationId) ||
+        checkedOutLocations.some((loc) => loc.facId === parseInt(pane.facId)))
+        ? "(locked)"
+        : "",
+      pane.title
+        .split("(")[1]
+        .replace(")", "")
+        .replace("Inactive", "(Inactive)")
+        .replace("Active", "(Active)")
+        .trim(),
+      pane.locationId && isCheckedOutByUser(pane.locationId)
+        ? "(checked-out)"
+        : "",
+      "tab",
+    ].filter(Boolean);
+
+    return parts.join(" ");
+  };
+
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
@@ -141,27 +168,7 @@ const Tabs = ({
                   }
                   tabIndex="0"
                   aria-label={updateTabBtnSelectorAndReturnAriaLabel(
-                    `open ${pane.title.split("(")[0]}${
-                      user &&
-                      pane.locationId &&
-                      pane.facId &&
-                      workspaceSection !== EXPORT_STORE_NAME &&
-                      (isCheckedOut(pane.locationId) ||
-                        checkedOutLocations.some(
-                          (loc) => loc.facId === parseInt(pane.facId)
-                        ))
-                        ? "(locked)"
-                        : ""
-                    } ${pane.title
-                      .split("(")[1]
-                      .replace(")", "")
-                      .replace("Inactive", "(Inactive)")
-                      .replace("Active", "(Active)")} ${
-                      pane.locationId &&
-                      isCheckedOutByUser(pane.locationId)
-                        ? "(checked-out)"
-                        : ""
-                    } tab`
+                    makeTabButtonAriaLabel(pane)
                   )}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
@@ -187,9 +194,7 @@ const Tabs = ({
                         role="img"
                         className="text-bold tab-icon margin-right-1"
                         aria-hidden="false"
-                        title={`Locked Facility - ${
-                          pane.title.split("(")[0]
-                        }`}
+                        title={`Locked Facility - ${pane.title.split("(")[0]}`}
                       />
                     ) : null}
                     {workspaceSection !== EXPORT_STORE_NAME &&
@@ -228,9 +233,7 @@ const Tabs = ({
                         pane.title
                       )}`}
                       data-testid="closeXBtnTab"
-                      epa-testid={`closeXBtnTab-${cleanConfigStr(
-                        pane.title
-                      )}`}
+                      epa-testid={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
                       role="button"
                       tabIndex="0"
                       aria-hidden="false"

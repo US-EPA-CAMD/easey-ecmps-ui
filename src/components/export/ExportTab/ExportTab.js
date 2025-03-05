@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import download from "downloadjs";
+import log from "loglevel";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
@@ -13,6 +14,7 @@ import {
   qaTeeColumns,
   emissionsColumns,
 } from "../../EvaluateAndSubmit/ColumnMappings";
+import StatusContent from "../../StatusContent/StatusContent";
 import {
   getQATestSummaryReviewSubmit,
   getQACertEventReviewSubmit,
@@ -27,6 +29,7 @@ import {
   getMonitoringPlans,
   exportMonitoringPlanDownload,
 } from "../../../utils/api/monitoringPlansApi";
+import { dataStatus } from "../../../utils/constants/dataStatus";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,6 +50,7 @@ export const ExportTab = ({
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
   const [tableData, setTableData] = useState([]);
+  const [tableDataStatus, setTableDataStatus] = useState(dataStatus.IDLE);
 
   const storedYear = useRef();
   const storedQuarter = useRef();
@@ -60,12 +64,6 @@ export const ExportTab = ({
   });
 
   const dispatch = useDispatch();
-
-  const currentTab = useSelector((state) =>
-    state.openedFacilityTabs[EXPORT_STORE_NAME].find(
-      (t) => t.selectedConfig.id === selectedConfigId
-    )
-  );
 
   const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
 
@@ -82,7 +80,7 @@ export const ExportTab = ({
     .filter((ml) => ml.stackPipeId)
     .map((data) => data.stackPipeId) ?? [];
 
-  const dataTypes = [
+  const dataTypes = useRef([
     {
       title: "Monitor Plan",
       columns: monPlanColumns,
@@ -124,11 +122,11 @@ export const ExportTab = ({
       reportCode: "EM",
       uniqueIdField: "submissionId",
     },
-  ];
+  ]);
 
   useEffect(() => { 
     const fetchTableData = async () => {
-      const promises = dataTypes.map((dt) =>
+      const promises = dataTypes.current.map((dt) =>
         dt.dataFetch([orisCode], [selectedConfigId], dt.reportCode === 'MPP' ? null : [reportingPeriod])
       );
       const responses = await Promise.all(promises);
@@ -139,10 +137,19 @@ export const ExportTab = ({
         }
       );
 
-      setTableData(tableData);
+      return tableData;
     };
-    fetchTableData();
-    // causes inf rerender: dataTypes (dataTypes is not a primitive)
+
+    setTableDataStatus(dataStatus.PENDING);
+    fetchTableData()
+      .then((res) => {
+        setTableData(res);
+        setTableDataStatus(dataStatus.SUCCESS);
+      })
+      .catch((err) => {
+        log.error(err);
+        setTableDataStatus(dataStatus.ERROR);
+      });
   }, [reportingPeriod, orisCode, selectedConfigId]);
 
   const reportingPeriodSelectionHandler = (selectedObj) => {
@@ -162,13 +169,6 @@ export const ExportTab = ({
     );
   };
 
-  const getInitSelection = (reportingPeriodObj) => {
-    const { calendarYear, quarter } = reportingPeriodObj;
-    setReportingPeriod(`${calendarYear} Q${quarter}`);
-    storedYear.current = calendarYear;
-    storedQuarter.current = quarter;
-  };
-
   const downloadQaData = async () => {
     const exportJson = await exportQA(
       orisCode,
@@ -177,9 +177,9 @@ export const ExportTab = ({
       null,
       null,
       { isOfficial: !getUser(), isHistoricalImport: false },
-      dataTypes[1].selectedRows.current.map((d) => d.testSumId),
-      dataTypes[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
-      dataTypes[3].selectedRows.current.map(
+      dataTypes.current[1].selectedRows.current.map((d) => d.testSumId),
+      dataTypes.current[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
+      dataTypes.current[3].selectedRows.current.map(
         (d) => d.testExtensionExemptionIdentifier
       )
     );
@@ -192,7 +192,7 @@ export const ExportTab = ({
 
   const exportClickHandler = async () => {
     let selectedItems = 0;
-    for (const section of dataTypes) {
+    for (const section of dataTypes.current) {
       selectedItems += section.selectedRows.current.length;
     }
 
@@ -204,21 +204,21 @@ export const ExportTab = ({
     const promises = [];
 
     // export monitoring plan
-    if (dataTypes[0].selectedRows.current.length > 0) {
+    if (dataTypes.current[0].selectedRows.current.length > 0) {
       promises.push(exportMonitoringPlanDownload(selectedConfigId));
     }
 
     //export qa
     if (
-      dataTypes[1].selectedRows.current.length > 0 ||
-      dataTypes[2].selectedRows.current.length > 0 ||
-      dataTypes[3].selectedRows.current.length > 0
+      dataTypes.current[1].selectedRows.current.length > 0 ||
+      dataTypes.current[2].selectedRows.current.length > 0 ||
+      dataTypes.current[3].selectedRows.current.length > 0
     ) {
       promises.push(downloadQaData());
     }
 
     // export emissions
-    if (dataTypes[4].selectedRows.current.length > 0) {
+    if (dataTypes.current[4].selectedRows.current.length > 0) {
       promises.push(
         exportEmissionsDataDownload(
           facility,
@@ -242,7 +242,7 @@ export const ExportTab = ({
 
   const canToggleExport = useCallback(() => {
     let selectedItems = 0;
-    for (const dataChunk of dataTypes) {
+    for (const dataChunk of dataTypes.current) {
       selectedItems += dataChunk.selectedRows.current.length;
     }
 
@@ -298,7 +298,7 @@ export const ExportTab = ({
 
     setShowFilterModal(false);
     const additionalParams = `&monitorPlanId=${selectedConfigId}${
-      !!parseInt(year) ? `&year=${year}` : ""
+      parseInt(year) ? `&year=${year}` : ""
     }`;
     const reportTitle = "Emissions Summary Report";
     const url = `/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
@@ -332,10 +332,9 @@ export const ExportTab = ({
         <div className="display-flex flex-row flex-justify">
           <ReportingPeriodSelector
             isExport={true}
-            dataTypes={dataTypes.filter((e) => e.checked)}
+            dataTypes={dataTypes.current.filter((e) => e.checked)}
             reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
             exportState={exportState}
-            getInitSelection={getInitSelection}
             isQaCert={true}
           />
 
@@ -359,38 +358,39 @@ export const ExportTab = ({
         </div>
       </div>
 
-      <div className="border-bottom-1px border-base-lighter padding-bottom-2">
-        {dataTypes.map((dt, index) => {
-          return (
-            <ExportTable
-              toggleExportCallback={canToggleExport}
-              key={dt.uniqueIdField}
-              title={dt.title}
-              columns={dt.columns}
-              providedData={tableData[index]}
-              selectedDataRef={dt.selectedRows}
-              reportCode={dt.reportCode}
-              exportState={exportState}
-              dispatchSetExportState={dispatchSetExportState}
-              uniqueIdField={dt.uniqueIdField}
-            />
-          );
-        })}
-      </div>
-
-      <div className="grid-row">
-        <center className="grid-col-3 grid-offset-9 margin-y-auto padding-top-2">
-          <Button
-            disabled={!canExport}
-            type={"button"}
-            size="big"
-            className="width-full maxw-card-lg"
-            onClick={exportClickHandler}
-          >
-            Export
-          </Button>
-        </center>
-      </div>
+      <StatusContent label="table data" status={tableDataStatus}>
+        <div className="border-bottom-1px border-base-lighter padding-bottom-2">
+          {dataTypes.current.map((dt, index) => {
+            return (
+              <ExportTable
+                toggleExportCallback={canToggleExport}
+                key={dt.uniqueIdField}
+                title={dt.title}
+                columns={dt.columns}
+                providedData={tableData[index]}
+                selectedDataRef={dt.selectedRows}
+                reportCode={dt.reportCode}
+                exportState={exportState}
+                dispatchSetExportState={dispatchSetExportState}
+                uniqueIdField={dt.uniqueIdField}
+              />
+            );
+          })}
+        </div>
+        <div className="grid-row">
+          <center className="grid-col-3 grid-offset-9 margin-y-auto padding-top-2">
+            <Button
+              disabled={!canExport}
+              type={"button"}
+              size="big"
+              className="width-full maxw-card-lg"
+              onClick={exportClickHandler}
+            >
+              Export
+            </Button>
+          </center>
+        </div>
+      </StatusContent>
 
       {isExporting && (
         <UploadModal
@@ -409,7 +409,6 @@ export const ExportTab = ({
           showDarkBg
           showSave
           extraBtnText
-          exitBTN="View Report"
           save={viewEmissionSummaryReport}
           width="34%"
           left="33%"
