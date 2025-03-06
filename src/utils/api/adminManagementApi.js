@@ -29,6 +29,22 @@ export const getEmSubmissionRecords = async (
     .catch(handleError);
 };
 
+export const getSubmissionReportRecords = async (
+  orisCode,
+  year,
+  quarter,
+  submissionType,
+  severityLevel,
+  submissionFrom,
+  SubmissionTo
+) => {
+  // At least some kind of filtering is required
+  if (!orisCode && !year && !quarter && !submissionType && !severityLevel && !submissionFrom && !SubmissionTo) return [];
+
+  //placeHolder for data
+  return [];
+}
+
 export const openEmSubmissionRecord = async (payload) => {
   return secureAxios({
     method: "POST",
