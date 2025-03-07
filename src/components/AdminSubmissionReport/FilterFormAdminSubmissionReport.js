@@ -113,23 +113,23 @@ const FilterFormAdminSubmissionReport = ({
       selectedReportingPeriod?.length > 0 &&
       selectedReportingPeriod?.[1] !== ''
     ) {
-      const rpString = selectedReportingPeriod[1];
-      year = rpString.split(" ")[0];
-      quarter = rpString.slice(-1);
+      const rpString = selectedReportingPeriod?.[1];
+      year = rpString?.split(" ")[0];
+      quarter = rpString?.slice(-1);
     }
 
     if (
       selectedSubmissionType?.length > 0 &&
       selectedSubmissionType?.[1] !== ''
     ) {
-      submissionType = selectedSubmissionType[1].toUpperCase();
+      submissionType = selectedSubmissionType?.[1].toUpperCase();
     }
 
     if (
       selectedSeverityLevel?.length > 0 &&
       selectedSeverityLevel?.[1] !== ''
     ) {
-      severityLevel = selectedSeverityLevel[1].toUpperCase();
+      severityLevel = selectedSeverityLevel?.[1].toUpperCase();
     }
 
     try {
