@@ -7,15 +7,12 @@ import {
 } from "@trussworks/react-uswds";
 import log from "loglevel";
 
-import { addAriaLabelOnDatePickerCalendar } from "../../additional-functions/ensure-508";
-
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import { ComboBox } from "../ComboBox/ComboBox";
 import {
   getSubmissionReportRecords
 } from "../../utils/api/adminManagementApi";
-import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../additional-functions/ensure-508"
-import { addAriaLabelToDatatable } from "../../additional-functions/ensure-508";
+import { addAriaLabelToDatatable, addAriaLabelOnDatePickerCalendar, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns } from "../../additional-functions/ensure-508"
 import useScreenSize from "../../customHooks/useScreenSize/useScreenSize";
 
 
@@ -113,6 +110,7 @@ const FilterFormAdminSubmissionReport = ({
     setIsTableDataLoading(true);
 
     if (
+      selectedReportingPeriod != null  &&
       selectedReportingPeriod?.length > 0 &&
       selectedReportingPeriod[1] !== ''
     ) {
@@ -122,6 +120,7 @@ const FilterFormAdminSubmissionReport = ({
     }
 
     if (
+      selectedSubmissionType != null  &&
       selectedSubmissionType?.length > 0 &&
       selectedSubmissionType[1] !== ''
     ) {
@@ -129,6 +128,7 @@ const FilterFormAdminSubmissionReport = ({
     }
 
     if (
+      selectedSeverityLevel != null &&
       selectedSeverityLevel?.length > 0 &&
       selectedSeverityLevel[1] !== ''
     ) {
@@ -243,7 +243,6 @@ const FilterFormAdminSubmissionReport = ({
         </div>
 
         <div className="display-flex flex-row flex-justify-start">
-            <>
               <div className="margin-left-2 width-card">
                 <DropdownSelection
                   caption="Severity Level"
@@ -267,12 +266,9 @@ const FilterFormAdminSubmissionReport = ({
                   extraSpace
                 />
               </div>
-
-            </>
         </div>
 
         <div className="display-flex flex-row flex-justify-start">
-            <>
             <div className="margin-left-2 width-card margin-top-2">
                         <Label htmlFor="add-date-before" id="add-date-before-label">
                         Submission From
@@ -300,7 +296,6 @@ const FilterFormAdminSubmissionReport = ({
                           onChange={(date) => setSelectedAddDateAfter(date)}
                         />
                       </div>
-            </>
           </div>
 
         <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
