@@ -110,9 +110,8 @@ const FilterFormAdminSubmissionReport = ({
     setIsTableDataLoading(true);
 
     if (
-      selectedReportingPeriod != null  &&
       selectedReportingPeriod?.length > 0 &&
-      selectedReportingPeriod[1] !== ''
+      selectedReportingPeriod?.[1] !== ''
     ) {
       const rpString = selectedReportingPeriod[1];
       year = rpString.split(" ")[0];
@@ -120,17 +119,15 @@ const FilterFormAdminSubmissionReport = ({
     }
 
     if (
-      selectedSubmissionType != null  &&
       selectedSubmissionType?.length > 0 &&
-      selectedSubmissionType[1] !== ''
+      selectedSubmissionType?.[1] !== ''
     ) {
       submissionType = selectedSubmissionType[1].toUpperCase();
     }
 
     if (
-      selectedSeverityLevel != null &&
       selectedSeverityLevel?.length > 0 &&
-      selectedSeverityLevel[1] !== ''
+      selectedSeverityLevel?.[1] !== ''
     ) {
       severityLevel = selectedSeverityLevel[1].toUpperCase();
     }
