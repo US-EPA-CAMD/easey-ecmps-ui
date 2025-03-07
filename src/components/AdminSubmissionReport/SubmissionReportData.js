@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { ArrowDownwardSharp } from "@material-ui/icons";
-import { submissionAccessTitle } from "../../utils/constants/moduleTitles";
+import { submissionReportTitle } from "../../utils/constants/moduleTitles";
 
 import { exportToCSV } from "../../utils/functions";
 
@@ -207,7 +207,7 @@ export const SubmissionReportData = ({
         <div className="grid-row row-width">
           <div className="grid-col-4">
             <span className="data-container-header">
-              {submissionAccessTitle}
+              {submissionReportTitle}
             </span>
           </div>
         </div>
