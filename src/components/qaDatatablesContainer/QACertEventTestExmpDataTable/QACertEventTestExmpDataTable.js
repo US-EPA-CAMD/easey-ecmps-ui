@@ -116,8 +116,8 @@ const QACertEventTestExmpDataTable = ({
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue)
         .then((res) => {
-          if (res !== undefined && res.data.length > 0) {
-            setQATestSummary(res.data);
+          if (res !== undefined && res.data?.items.length > 0) {
+            setQATestSummary(res.data?.items ?? res.data);
           } else {
             setQATestSummary([]);
           }

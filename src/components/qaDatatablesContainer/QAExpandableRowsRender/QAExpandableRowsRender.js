@@ -80,7 +80,7 @@ const QAExpandableRowsRender = ({
       assertSelector
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then(res => {
-          finishedLoadingData(res.data);
+          finishedLoadingData(res.data?.items ?? res.data);
         })
         .catch(error => log.log(error));
     }
