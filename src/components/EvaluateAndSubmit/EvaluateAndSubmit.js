@@ -527,7 +527,7 @@ export const EvaluateAndSubmit = ({
         modalType.current = "error";
         modalHeading.current = "Error";
         modalMessage.current =
-          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+        e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
