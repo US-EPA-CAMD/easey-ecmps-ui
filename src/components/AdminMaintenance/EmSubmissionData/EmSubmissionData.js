@@ -171,11 +171,9 @@ export const EmSubmissionData = ({
 
     const configNamesToMonPlan = [];
     for (const cd of configurationData) {
-      if (cd.active) {
-        const key = `${cd.facilityName} - ${cd.name}`;
-        if (!configNamesToMonPlan[key]) {
-          configNamesToMonPlan[key] = cd.id;
-        }
+      const key = `${cd.facilityName} - ${cd.name}`;
+      if (!configNamesToMonPlan[key]) {
+        configNamesToMonPlan[key] = cd.id;
       }
     }
 

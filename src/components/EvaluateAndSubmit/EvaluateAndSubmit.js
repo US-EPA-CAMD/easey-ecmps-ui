@@ -738,7 +738,7 @@ export const EvaluateAndSubmit = ({
         }
       }
 
-      const dataListLength = isForceReEvaluation ? dataList.length : 3;
+      const dataListLength = isForceReEvaluation ? dataList.length : 4;
 
       for (let i = 0; i < dataListLength; i++) {
         //Determine MP + QA Rerenders
