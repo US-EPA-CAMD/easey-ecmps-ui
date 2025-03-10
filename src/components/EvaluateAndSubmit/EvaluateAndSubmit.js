@@ -441,7 +441,7 @@ export const EvaluateAndSubmit = ({
           (f) => f.monPlanId === monPlanId && f.isSelected
         );
 
-        if (plan.evalStatusCode === "ERR") {
+        if (plan.evalStatusCode === "ERR" && plan.severityCode === "CRIT1") {
           payload.hasCritErrors = true;
         }
 
@@ -454,7 +454,7 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
+          if (m.evalStatusCode === "ERR" && m.severityCode === "CRIT1") {
             payload.hasCritErrors = true;
           }
 
@@ -463,7 +463,7 @@ export const EvaluateAndSubmit = ({
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
+          if (m.evalStatusCode === "ERR" && m.severityCode === "CRIT1") {
             payload.hasCritErrors = true;
           }
 
@@ -472,7 +472,7 @@ export const EvaluateAndSubmit = ({
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
+          if (m.evalStatusCode === "ERR" && m.severityCode === "CRIT1") {
             payload.hasCritErrors = true;
           }
 
@@ -483,7 +483,7 @@ export const EvaluateAndSubmit = ({
       newItem.emissionsReportingPeriods = emissionsRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
+          if (m.evalStatusCode === "ERR" && m.severityCode === "CRIT1") {
             payload.hasCritErrors = true;
           }
           return m.periodAbbreviation;
@@ -527,7 +527,7 @@ export const EvaluateAndSubmit = ({
         modalType.current = "error";
         modalHeading.current = "Error";
         modalMessage.current =
-        e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
@@ -582,7 +582,7 @@ export const EvaluateAndSubmit = ({
     if (excludeErrors && componentType === "Submission") {
       //We don't care about errors on evaluations page
       formattedData = formattedData.filter(
-        (mpd) => mpd.evalStatusCode !== "ERR"
+        (mpd) => !(mpd.evalStatusCode === "ERR" && mpd.severityCode === "CRIT1")
       );
     }
 
@@ -738,7 +738,7 @@ export const EvaluateAndSubmit = ({
         }
       }
 
-      const dataListLength = isForceReEvaluation ? dataList.length : 4;
+      const dataListLength = isForceReEvaluation ? dataList.length : 3;
 
       for (let i = 0; i < dataListLength; i++) {
         //Determine MP + QA Rerenders
