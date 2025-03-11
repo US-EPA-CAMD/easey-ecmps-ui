@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
 
-import TagManager from "react-gtm-module";
+import TagManager from "@sooro-io/react-gtm-module";
 import UserAccountStatus from "../Login/UserAccountStatus";
 import ComingSoon from "../ComingSoon/ComingSoon";
 import NotFound from "../NotFound/NotFound";
@@ -175,7 +175,13 @@ const App = () => {
 
   useEffect(() => {
     if (config.app.googleAnalyticsEnabled) {
-      const tagManagerArgs = { gtmId: "" };
+      // @ts-ignore
+      const nonce = window.__CSP_NONCE__;
+      const tagManagerArgs = {
+        gtmId: config.app.googleAnalyticsContainerId,
+        ...(nonce ? { nonce } : {}),
+      };
+
       if (window.location.href.search("workspace") === -1) {
         tagManagerArgs.gtmId = config.app.googleAnalyticsPublicContainerId;
       } else {
@@ -442,10 +448,10 @@ const App = () => {
             path="/workspace/submit"
             element={
               !validUser() ||
-              roles?.every(
-                (role) =>
-                  !["Sponsor", "Submitter", "Initial Authorizer"].includes(role)
-              ) ? (
+                roles?.every(
+                  (role) =>
+                    !["Sponsor", "Submitter", "Initial Authorizer"].includes(role)
+                ) ? (
                 <Navigate key="navigate" to="/" />
               ) : (
                 <div key={"Submit-Component"}>
@@ -468,9 +474,9 @@ const App = () => {
             path="/admin/qa-maintenance"
             element={
               !validUser() ||
-              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
-                config.app.adminRole
-              ) ? (
+                !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                  config.app.adminRole
+                ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
@@ -484,9 +490,9 @@ const App = () => {
             path="/admin/error-suppression"
             element={
               !validUser() ||
-              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
-                config.app.adminRole
-              ) ? (
+                !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                  config.app.adminRole
+                ) ? (
                 <Navigate to="/" />
               ) : (
                 <ErrorSuppression user={user} />
@@ -497,9 +503,9 @@ const App = () => {
             path="/admin/em-submission-access"
             element={
               !validUser() ||
-              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
-                config.app.adminRole
-              ) ? (
+                !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                  config.app.adminRole
+                ) ? (
                 <Navigate to="/" />
               ) : (
                 <AdminMaintenance
