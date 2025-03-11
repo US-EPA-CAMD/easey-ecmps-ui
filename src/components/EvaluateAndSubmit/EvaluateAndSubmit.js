@@ -527,7 +527,7 @@ export const EvaluateAndSubmit = ({
         modalType.current = "error";
         modalHeading.current = "Error";
         modalMessage.current =
-          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+        e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
@@ -738,7 +738,7 @@ export const EvaluateAndSubmit = ({
         }
       }
 
-      const dataListLength = isForceReEvaluation ? dataList.length : 3;
+      const dataListLength = isForceReEvaluation ? dataList.length : 4;
 
       for (let i = 0; i < dataListLength; i++) {
         //Determine MP + QA Rerenders
