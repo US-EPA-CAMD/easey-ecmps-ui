@@ -59,7 +59,7 @@ export const MonitoringPlanTab = ({
   }, [locationSelect]);
 
   return (
-    <div>
+    <div id="monitoring-plan-tab-container">
       <div>
         <MonitoringPlanTabRender
           resetTimer={resetTimer}
