@@ -28,7 +28,7 @@ export const SubmissionReportData = ({
       orisCode: "Facility ID",
       facilityName: "Facility Name",
       state: "State",
-      location: "MP Location ",
+      locations: "MP Location ",
       reportingPeriodAbbreviation: "Reporting Period",
       reportingFrequencyCode: "Reporting Frequency",
       submissionTypeCode: "Submission Type",
@@ -36,7 +36,7 @@ export const SubmissionReportData = ({
       submissionDateTime:"Submission Date/Time",
       severityLevel: "Severity Level",
       mostRecet: "Most Recent",
-      submissionStatus: "Submission Status",
+      submissionCode: "Submission Status",
       criticalErrLevelOne: "Critical Error Level 1",
       criticalErrLevelTwo: "Critical Error Level 2",
       nonCritical: "Non-Critical",
@@ -72,7 +72,7 @@ export const SubmissionReportData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
-            aria-label={`select row for EM Submission Access record with id ${row.id}`}
+            aria-label={`select row for submission list record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={(e) => {
@@ -110,7 +110,7 @@ export const SubmissionReportData = ({
     {
       name: "MP location",
       width: "210px",
-      selector: (row) => row.location,
+      selector: (row) => row.locations,
       sortable: true,
     },
     {
@@ -158,7 +158,7 @@ export const SubmissionReportData = ({
     {
       name: "Submission Status",
       width: "160px",
-      selector: (row) => row.submissionStatus,
+      selector: (row) => row.submissionCode,
       sortable: true,
     },
     {
@@ -216,7 +216,7 @@ export const SubmissionReportData = ({
           <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   type="button"
-                  data-testid={`em-submission-download-csv-button`}
+                  data-testid={`submission-list-download-csv-button`}
                   title={"Download To CSV"}
                   onClick={downloadFilteredDataIntoCSV}
                   disabled={!filteredData || filteredData.length === 0}
@@ -224,7 +224,7 @@ export const SubmissionReportData = ({
                   {"Download To CSV"}
                 </Button>
             </div>
-          <span data-aria-label={"Maintain EM Submission Access"}></span>
+          <span data-aria-label={"Submission List Report"}></span>
           {isLoading && <Preloader />}
           {!isLoading && (
             <DataTable

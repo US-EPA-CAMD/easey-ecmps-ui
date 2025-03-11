@@ -90,19 +90,19 @@ const FilterFormAdminSubmissionReport = ({
     let year;
     let quarter;
     let submissionType;
-    let severityLevel;
-    let apiFormattedDateAfter;
-    let apiFormattedDateBefore;
+    let severityCode;
+    let submissionFrom;
+    let submissionTo;
 
     // Keep in the the below will convert the dates to UTC
     if (selectedAddDateAfter) {
-      apiFormattedDateAfter = new Date(selectedAddDateAfter)
+      submissionTo = new Date(selectedAddDateAfter)
         .toISOString()
         .split("T")[0];
     }
 
     if (selectedAddDateBefore) {
-      apiFormattedDateBefore = new Date(selectedAddDateBefore)
+      submissionFrom = new Date(selectedAddDateBefore)
         .toISOString()
         .split("T")[0];
     }
@@ -129,7 +129,7 @@ const FilterFormAdminSubmissionReport = ({
       selectedSeverityLevel?.length > 0 &&
       selectedSeverityLevel?.[1] !== ''
     ) {
-      severityLevel = selectedSeverityLevel?.[1].toUpperCase();
+      severityCode = selectedSeverityLevel?.[1].toUpperCase();
     }
 
     try {
@@ -137,13 +137,13 @@ const FilterFormAdminSubmissionReport = ({
           selectedFacility,
           year,
           quarter,
+          severityCode,
           submissionType,
-          severityLevel,
-          apiFormattedDateBefore,
-          apiFormattedDateAfter
+          submissionFrom,
+          submissionTo
         );
 
-        setTableData(data);
+      setTableData(data.items);
 
       setTimeout(() => {
         addAriaLabelToDatatable();
