@@ -628,7 +628,8 @@ export const AddErrorSupressionModal = ({
             </Grid>
             {/* Dropdown is hidden if no check result is selected and in the case that check result's matchDataType is PARAM, it is not shown if there is no data for matchDataList.
                             See ticket 4621 for the explanation of PARAM match type */}
-            {!selectedCheckResultObj ||
+            {!selectedCheckResultObj || 
+            selectedCheckResultObj?.dataTypeCode === "TESTNUM" ||
             (selectedCheckResultObj?.dataTypeCode === "PARAM" &&
               matchDataList?.length === 0) ? null : (
               <Grid row gap={2}>
@@ -651,6 +652,24 @@ export const AddErrorSupressionModal = ({
                       </option>
                     ))}
                   </Select>
+                </Grid>
+              </Grid>
+            )}
+
+            { selectedCheckResultObj?.dataTypeCode === "TESTNUM" && (
+              <Grid row gap={2}>
+                <Grid col={5}>
+                  <Label test-id={"add-test-sum"} htmlFor={"add-test-sum"}>
+                    {selectedCheckResultObj.dataTypeLabel}
+                  </Label>
+                  <TextInput
+                    className="maxw-full"
+                    id={"add-test-sum"}
+                    name={"add-test-sum"}
+                    type="text"
+                    value={selectedMatchDataValue}
+                    onChange={onMatchDataTypeChange}
+                  />
                 </Grid>
               </Grid>
             )}
