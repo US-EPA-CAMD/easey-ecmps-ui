@@ -137,7 +137,7 @@ export const EmissionsTabRender = ({
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply}/>
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply} user={user}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },
