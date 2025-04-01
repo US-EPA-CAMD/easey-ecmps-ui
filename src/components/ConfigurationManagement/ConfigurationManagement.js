@@ -871,6 +871,31 @@ export const ConfigurationManagement = ({
     });
   };
 
+  const filterFormState = () => {
+    const filteredUnitStackConfigs = formState.unitStackConfigs.filter(
+      unitStackConfig => unitStackConfig?.endDate !== unitStackConfig?.originalRecord?.endDate
+      || unitStackConfig?.originalRecord == null
+    );
+    const filteredStackPipes = formState.stackPipes.filter(
+      (stackPipe) =>
+        filteredUnitStackConfigs.some(
+          (config) => config.stackPipeId === stackPipe.stackPipeId
+        ) ||
+        stackPipe?.retireDate !== stackPipe?.originalRecord?.retireDate ||
+        stackPipe?.originalRecord == null
+    );
+    const filteredUnits = formState.units.filter(unit => 
+      filteredUnitStackConfigs.some(config => config.unitId === unit.unitId)
+    );
+    
+    return {
+      units: filteredUnits,
+      stackPipes: filteredStackPipes,
+      unitStackConfigs: filteredUnitStackConfigs
+    };
+  };
+  
+
   const initializeEditableFormState = (data, type) => {
     formDispatch({
       type,
@@ -883,18 +908,20 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const mapFormStateToConfigurationsPayload = () => ({
+  const mapFormStateToConfigurationsPayload = () => {
+    const newFormState = filterFormState()
+    return {
     monitoringPlanCommentData: [],
     orisCode: userFacilities.find(
       (f) => f.facilityRecordId === selectedFacility
     ).facilityId,
-    unitStackConfigurationData: formState.unitStackConfigs.map((usc) => ({
+    unitStackConfigurationData: newFormState.unitStackConfigs.map((usc) => ({
       beginDate: usc.beginDate,
       endDate: usc.endDate,
       stackPipeId: usc.stackPipeId,
       unitId: usc.unitId,
     })),
-    monitoringLocationData: formState.stackPipes
+    monitoringLocationData: newFormState.stackPipes
       .map((sp) => ({
         unitId: null,
         stackPipeId: sp.stackPipeId,
@@ -904,7 +931,7 @@ export const ConfigurationManagement = ({
         ...unusedMonitoringLocationDataFields(),
       }))
       .concat(
-        formState.units.map((u) => ({
+        newFormState.units.map((u) => ({
           unitId: u.unitId,
           stackPipeId: null,
           activeDate: null,
@@ -914,7 +941,8 @@ export const ConfigurationManagement = ({
         }))
       ),
     version: MONITOR_PLAN_SCHEMA_VERSION,
-  });
+  };
+};
 
   const mapFormStateToSingleUnitPayload = (unit) => ({
     unitId: unit.unitId,
