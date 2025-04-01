@@ -1,15 +1,24 @@
 import * as types from "../actions/actionTypes";
 import initialState from "./initialState";
+import { 
+  EMISSIONS_STORE_NAME,
+  EXPORT_STORE_NAME,
+  MATS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
 
 const reducer = (state, action) => {
   const currentState = state ? state : initialState.openedFacilityTabs;
   let returnObject;
   const workspaceSections = [
-    "monitoringPlans",
-    "qaCertTestSummary",
-    "qaCertEvent",
-    "export",
-    "emissions",
+    EMISSIONS_STORE_NAME,
+    EXPORT_STORE_NAME,
+    MATS_STORE_NAME,
+    MONITORING_PLAN_STORE_NAME,
+    QA_CERT_EVENT_STORE_NAME,
+    QA_CERT_TEST_SUMMARY_STORE_NAME,
   ];
   const fac = {};
   fac[`${action.workspaceSection}`] = action.facility;

@@ -54,7 +54,7 @@ test('tests QACertEventTab', async () => {
   const { container } = render(
     <Provider store={store}>
       <QACertEventTab {...props} />{' '}
-    </Provider>
+    </Provider>,
   );
 
   expect(container).not.toBeUndefined();
@@ -85,7 +85,7 @@ test('tests QACertEventTab with conditionals ', async () => {
   const { container } = render(
     <Provider store={store}>
       <QACertEventTab {...condProps} />{' '}
-    </Provider>
+    </Provider>,
   );
 
   expect(container).not.toBeUndefined();
@@ -96,7 +96,7 @@ describe('workspace store names', () => {
 
   it('should test with valid input', () => {
     expect(convertSectionToStoreName(QA_CERT_EVENT_STORE_NAME)).toBe(
-      'qaCertEvent'
+      'qaCertEvent',
     );
   });
 });
@@ -110,12 +110,9 @@ test('mapDispatchToProps calls the appropriate action', async () => {
   };
 
   // verify the appropriate action was called
-  actionProps.setLocation();
-  expect(actions.setLocationSelectionState).toHaveBeenCalled();
   actionProps.setSection();
   expect(actions.setSectionSelectionState).toHaveBeenCalled();
   actionProps.updateTestTypeCodes();
-  actionProps.setCheckout();
   expect(state).toBeDefined();
 });
 

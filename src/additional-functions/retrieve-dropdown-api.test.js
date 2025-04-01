@@ -1,7 +1,7 @@
 
 import {
-  UseRetrieveDropdownApi,
   dataYearOptions,
+  retrieveDropdowns,
 } from "./retrieve-dropdown-api";
 import * as dmApi from "../utils/api/dataManagementApi";
 import axios from "axios";
@@ -61,14 +61,14 @@ const executeTests = () => {
         const viewData = prefilterResponse.data?.items;
         expect(viewData).toEqual(prefilterReturnedArray);
 
-        await UseRetrieveDropdownApi(
+        await retrieveDropdowns(
           [testObject.case],
           testObject.mats ? testObject.mats : false
         ).then((dropdownOptions) => {
           expect(dropdownOptions).toHaveProperty(testObject.case);
         });
       } else if (testObject.staticPrefilterDropdown) {
-        await UseRetrieveDropdownApi(
+        await retrieveDropdowns(
           [testObject.case],
           testObject.mats ? testObject.mats : false
         ).then((dropdownOptions) => {
@@ -93,7 +93,7 @@ const executeTests = () => {
           expect(apiResponse).toEqual(testObject.expectedApiResponse.data);
         }
 
-        await UseRetrieveDropdownApi(
+        await retrieveDropdowns(
           [testObject.case],
           testObject.mats ? testObject.mats : false
         ).then((dropdownOptions) => {

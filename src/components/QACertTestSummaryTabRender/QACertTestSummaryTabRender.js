@@ -9,13 +9,11 @@ export const QACertTestSummaryRender = ({
   user,
   selectedConfigId,
   setSectionSelect,
-  setLocationSelect,
   setSelectedTestCode,
   selectedTestCode,
   sectionSelect,
   locationSelect,
   orisCode,
-  setCheckout,
   checkoutState,
   currentTab,
 }) => {
@@ -45,11 +43,8 @@ export const QACertTestSummaryRender = ({
           orisCode={orisCode}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
-          setLocationSelect={setLocationSelect}
-          locationSelect={locationSelect}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
-          setCheckout={setCheckout}
           checkoutState={checkoutState}
           setUpdateRelatedTables={setUpdateRelatedTables}
         />
