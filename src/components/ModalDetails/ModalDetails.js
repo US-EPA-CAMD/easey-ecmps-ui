@@ -251,7 +251,7 @@ const ModalDetails = ({
             }
           }
         }
-        
+
         let selectedOptions =
           modalData?.[value[0]].split(",") && !create
             ? modalData?.[value[0]].split(",")
@@ -376,11 +376,20 @@ const ModalDetails = ({
             defaultValue={datePickerValue}
             disabled={isEditingDisabled}
             maxDate={
-              title !== "Protocol Gas"
-                ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-                : null
-            }
-          />
+                  // Allow future dates up to 90 days for specific components
+                  ["Defaults", "Formulas", "Loads", "Location Attributes", "Methods",
+                    "Qualifications", "Rectangular Duct WAFs", "Spans", "Systems",
+                    "Unit Information"].includes(title)
+                      ? (() => {
+                        const futureDate = new Date();
+                        futureDate.setDate(futureDate.getDate() + 90);
+                        return `${futureDate.getFullYear()}-${futureDate.getMonth() + 1}-${futureDate.getDate()}`;
+                      })()
+                      : title !== "Protocol Gas"
+                          ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+                          : null
+                }
+            />
         );
         break;
 
