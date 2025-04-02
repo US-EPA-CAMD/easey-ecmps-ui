@@ -305,7 +305,6 @@ export const QACertEventHeaderInfo = ({
           >
             <QAImportModalSelect
               setImportTypeSelection={setImportTypeSelection}
-              importTestTitle = {importTestTitle}
             />
           </UploadModal>
         </div>
