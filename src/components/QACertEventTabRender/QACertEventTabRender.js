@@ -8,12 +8,8 @@ export const QACertEventTabRender = ({
   title,
   user,
   selectedConfigId,
-  setLocationSelect,
   locationSelect,
   orisCode,
-  checkout,
-  setCheckout,
-  workspaceSection,
   setSectionSelect,
   setSelectedTestCode,
   selectedTestCode,
@@ -38,14 +34,10 @@ export const QACertEventTabRender = ({
           orisCode={orisCode}
           sectionSelect={sectionSelect}
           setSectionSelect={setSectionSelect}
-          setLocationSelect={setLocationSelect}
-          locationSelect={locationSelect}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
-          setCheckout={setCheckout}
           checkoutState={checkoutState}
           setUpdateRelatedTables={setUpdateRelatedTables}
-          updateRelatedTables={updateRelatedTables}
         />
       </div>
       <hr />

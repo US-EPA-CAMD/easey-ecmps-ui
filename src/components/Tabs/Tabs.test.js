@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Tabs from "./Tabs";
 import TabPane from "../TabPane/TabPane";
-import { render, fireEvent, screen, act } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  screen,
+  act,
+  waitFor,
+} from "@testing-library/react";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { Tab } from "@material-ui/core";
 
 const testMonPlanId = "testMonPlanId";
 const testFacId = "123";
@@ -24,7 +31,6 @@ const childProps = {
   title: testTitle,
   locationId: testLocationId,
   facId: testFacId,
-  checkedOutBy: testUserId,
 };
 
 jest.mock("axios", () => {
@@ -35,10 +41,26 @@ jest.mock("axios", () => {
   };
 });
 
+const InteractiveTabs = ({ panes }) => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  return (
+    <Tabs
+      dynamic={true}
+      removeTabs={jest.fn()}
+      checkedOutLocations={testCheckedOutLocations}
+      user={{ firstName: testFirstName }}
+      setCheckout={jest.fn()}
+      workspaceSection={MONITORING_PLAN_STORE_NAME}
+      setCurrentTabIndex={setCurrentTabIndex}
+      currentTabIndex={currentTabIndex}
+      panes={panes}
+    />
+  );
+};
+
 const TabsUsage = (bool) => (
   <Tabs
     dynamic={bool}
-    setActive={jest.fn()}
     removeTabs={jest.fn()}
     checkedOutLocations={testCheckedOutLocations}
     user={{ firstName: testFirstName, userId: testUserId }}
@@ -46,27 +68,34 @@ const TabsUsage = (bool) => (
     workspaceSection={MONITORING_PLAN_STORE_NAME}
     setCurrentTabIndex={jest.fn()}
     currentTabIndex={0}
-  >
-    <TabPane {...childProps}>Tab1 Content</TabPane>
-    <TabPane title="Select configurations">Tab2 Content</TabPane>
-    <TabPane
-      title={"Tab (3)"}
-      locationId={"DKFJNDSJK"}
-      facId={testFacId}
-      checkedOutBy={testUserId}
-    >
-      <p>Tab3 Content</p>
-    </TabPane>
-    <TabPane
-      title={"Tab (4)"}
-      locationId={"AWOIEUNCS"}
-      facId={testFacId}
-      checkedOutBy={testUserId}
-    >
-      <p>Tab4 Content 1</p>
-      <p>Tab4 Content 2</p>
-    </TabPane>
-  </Tabs>
+    panes={[
+      {
+        title: "Select configurations",
+        content: <>Select Configurations</>,
+      },
+      {
+        ...childProps,
+        content: <>Tab2 Content</>,
+      },
+      {
+        ...childProps,
+        title: "Tab (3)",
+        content: <>Tab3 Content</>,
+        locationId: "DKFJNDSJK",
+      },
+      {
+        ...childProps,
+        title: "Tab (4)",
+        content: (
+          <>
+            <p>Tab4 Content 1</p>
+            <p>Tab4 Content 2</p>
+          </>
+        ),
+        locationId: "AWOIEUNCS",
+      },
+    ]}
+  />
 );
 
 describe("testing a reusable Tabs component", () => {
@@ -96,44 +125,67 @@ describe("testing a reusable Tabs component", () => {
   });
   test("renders the specified initial tabpane content ", () => {
     render(<TabsUsage />);
-    const initTabContent = screen.getByText("Tab1 Content");
+    const initTabContent = screen.getByText("Select Configurations");
     expect(initTabContent).not.toBeUndefined();
   });
 
   // FIXME: Need to figure out why 'Tab2 Content' is not being found.
-  test.skip("renders the user selected tab", async () => {
+  test("renders the user selected tab", async () => {
     // verify the appropriate action was called
     let container;
-    await act(async () => {
-      let renderer = render(
-        <Tabs
-          dynamic={true}
-          setActive={jest.fn()}
-          removeTabs={jest.fn()}
-          checkedOutLocations={testCheckedOutLocations}
-          user={{ firstName: testFirstName }}
-          setCheckout={jest.fn()}
-          workspaceSection={MONITORING_PLAN_STORE_NAME}
-          setCurrentTabIndex={jest.fn()}
-          currentTabIndex={0}
-        >
-          <TabPane {...childProps}>Tab1 Content</TabPane>
-          <TabPane title="Select configurations">Tab2 Content</TabPane>
-          <TabPane {...childProps}>
-            <p>Tab3 Content</p>
-          </TabPane>
-          <TabPane {...childProps}>
+    const panes = [
+      {
+        ...childProps,
+        title: "Select configurations",
+        content: <>Select Configurations</>,
+      },
+      {
+        ...childProps,
+        content: <>Tab2 Content</>,
+        title: "Tab (2)",
+      },
+      {
+        ...childProps,
+        content: <>Tab3 Content</>,
+      },
+      {
+        ...childProps,
+        content: (
+          <>
             <p>Tab4 Content 1</p>
             <p>Tab4 Content 2</p>
-          </TabPane>
-        </Tabs>
-      );
+          </>
+        ),
+        title: "Tab (4)",
+      },
+    ];
+    await act(async () => {
+      let renderer = render(<InteractiveTabs panes={panes} />);
       container = renderer.container;
     });
-    const btns = await screen.findAllByRole("button");
-    fireEvent.click(btns[2]);
-    const tab3Content = await screen.findByText("Tab2 Content");
-    expect(tab3Content).not.toBeUndefined();
+    const findTabButton = async (paneNumber) => {
+      const pane = panes[paneNumber - 1];
+      const tabFacility = pane.title.split("(")[0].trim();
+      const tabLocations = pane.title.match(/\((.*)\)/)?.[1];
+      const isCheckedOut = testCheckedOutLocations.some(
+        (loc) => pane.locationId === loc.monPlanId
+      );
+      const name = `open ${tabFacility} ${
+        isCheckedOut ? `(locked) ${tabLocations}` : `(${tabLocations})`
+      } tab`;
+      return screen.findByRole("button", {
+        name,
+      });
+    };
+    const tab2Button = await findTabButton(2);
+    fireEvent.click(tab2Button);
+    await waitFor(
+      async () => {
+        const tab2Content = await screen.findByText("Tab2 Content");
+        expect(tab2Content).not.toBeUndefined();
+      },
+      { timeout: 3000 }
+    );
 
     const nodeList = container.querySelector(".closeXBtnTab");
     nodeList.focus();
@@ -150,14 +202,15 @@ describe("testing a reusable Tabs component", () => {
     const firstTab = container.querySelector(".initial-tab-button");
     fireEvent.click(firstTab);
     // goes to last tab
-    btns[3].focus();
-    fireEvent.keyPress(btns[3], {
+    const tab3Button = await findTabButton(3);
+    tab3Button.focus();
+    fireEvent.keyPress(tab3Button, {
       key: "Enter",
       code: "Enter",
       keyCode: 13,
       charCode: 13,
     });
-    fireEvent.click(btns[3]);
+    fireEvent.click(tab3Button);
 
     const allTabs = container.querySelectorAll("#tabBtn");
     fireEvent.click(allTabs[allTabs.length - 1]);

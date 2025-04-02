@@ -15,6 +15,7 @@ const initialState = {
     qaCertEvent: [],
     export: [],
     emissions: [],
+    mats: [],
   },
   checkedOutLocations: [],
   dropdowns: {
@@ -37,8 +38,10 @@ const initialState = {
     systemComponents: [],
     analyzerRanges: [],
     matsMethods: [],
+    matsReportTypeCodes: {
+      matsReportTypeCodes: [],
+    },
   },
-  currentSection: "",
   workspaceState: "monitoringPlans",
   currentTabIndex: 0,
 };

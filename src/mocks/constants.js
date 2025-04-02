@@ -255,13 +255,6 @@ export const mockFacilities = [
   ],
 ];
 
-export const EXPORT_TAB_TEST_EXPORT_STATE = {
-  checkedDataTypes: [
-    'monitoring-plan'
-  ],
-  reportingPeriodId: mockReportingPeriodId
-}
-
 export const mockExportQa = {
   orisCode: 3776,
   testSummaryData: [

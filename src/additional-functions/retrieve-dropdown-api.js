@@ -1,4 +1,5 @@
 import log from "loglevel";
+
 import * as dmApi from "../utils/api/dataManagementApi";
 
 export const dataYearOptions = async () => {
@@ -13,11 +14,10 @@ export const dataYearOptions = async () => {
   return availableYears;
 };
 
-export const UseRetrieveDropdownApi = async (
+export const retrieveDropdowns = async (
   dropDownFields,
   mats = false,
   equipmentControl = false,
-  selectedTestCode = false
 ) => {
   let totalOptions = {};
 
@@ -712,6 +712,17 @@ export const UseRetrieveDropdownApi = async (
         })
         .catch(error => log.log('getPrefilteredSystemComponents failed', error));
         break;
+      case "matsReportTypeCodes": {
+        const res = await dmApi.getAllMatsReportTypeCodes();
+        const reportTypeCodes = res.data?.items?.map((option) => ({
+          code: option.matsReportTypeCode,
+          name: option.matsReportTypeDescription,
+        }));
+        const sortedReportTypeCodes = reportTypeCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedReportTypeCodes, fieldName);
+        break;
+      }
       default:
         break;
     }

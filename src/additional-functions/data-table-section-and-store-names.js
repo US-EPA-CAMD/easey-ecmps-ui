@@ -19,6 +19,7 @@ export const PCT_QUALIFICATIONS_SECTION_NAME = "Qualification Percent";
 export const LME_QUALIFICATIONS_SECTION_NAME = "Qualification LME";
 export const LEE_QUALIFICATIONS_SECTION_NAME = "Qualification LEE";
 export const MATS_METHODS_SECTION_NAME = "Supplemental Methods";
+export const MATS_REPORT_TYPE_CODES_SECTION_NAME = "Report Type Codes";
 
 // qa & cert
 
@@ -52,6 +53,7 @@ export const PCT_QUALIFICATIONS_STORE_NAME = "pctQualifications";
 export const LME_QUALIFICATIONS_STORE_NAME = "lmeQualifications";
 export const LEE_QUALIFICATIONS_STORE_NAME = "leeQualifications";
 export const MATS_METHODS_STORE_NAME = "matsMethods";
+export const MATS_REPORT_TYPE_CODES_STORE_NAME = "matsReportTypeCodes";
 
 // qa & cert
 
@@ -116,6 +118,9 @@ export const convertSectionToStoreName = (dataTableName) => {
     case MATS_METHODS_SECTION_NAME:
       storeName = MATS_METHODS_STORE_NAME;
       break;
+    case MATS_REPORT_TYPE_CODES_SECTION_NAME:
+      storeName = MATS_REPORT_TYPE_CODES_STORE_NAME;
+      break
     case UNIT_FUELS_SECTION_NAME:
       storeName = UNIT_FUELS_STORE_NAME;
       break;

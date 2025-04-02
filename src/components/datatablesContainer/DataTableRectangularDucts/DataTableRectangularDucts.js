@@ -13,7 +13,7 @@ import {
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { UseRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
+import { retrieveDropdowns } from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -107,7 +107,7 @@ export const DataTableRectangularDucts = ({
       })
       .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
-      UseRetrieveDropdownApi(["wafMethodCode"]).then(resp => {
+      retrieveDropdowns(["wafMethodCode"]).then(resp => {
         setTotalOptions(resp);
         setDataLoaded(true);
         setUpdateTable(false);

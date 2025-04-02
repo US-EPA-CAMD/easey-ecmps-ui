@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
-import log from "loglevel";
-
-import "./QACertTestSummaryHeaderInfo.scss";
-import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
-
-import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+import React, { useEffect, useRef, useState } from "react";
+import { connect, useSelector } from "react-redux";
+
 import {
-  assignFocusEventListeners,
-  cleanupFocusEventListeners,
-  returnFocusToLast,
+    assignFocusEventListeners,
+    cleanupFocusEventListeners,
+    returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import {
-  removeChangeEventListeners,
-  unsavedDataMessage,
+    removeChangeEventListeners,
+    unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
-import ImportModal from "../ImportModal/ImportModal";
-import UploadModal from "../UploadModal/UploadModal";
-import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
-import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
-import Modal from "../Modal/Modal";
-import { importQA } from "../../utils/api/qaCertificationsAPI";
-import {
-  getAllTestTypeCodes,
-  getAllTestTypeGroupCodes,
-} from "../../utils/api/dataManagementApi";
-import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { checkoutAPI } from "../../additional-functions/checkout";
+import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { successResponses } from "../../utils/api/apiUtils";
-import { formatErrorResponse } from "../../utils/functions";
-import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
 import { matsFileUpload } from "../../utils/api/camdServices";
+import {
+    getAllTestTypeCodes,
+    getAllTestTypeGroupCodes,
+} from "../../utils/api/dataManagementApi";
+import { importQA } from "../../utils/api/qaCertificationsAPI";
+import { formatErrorResponse } from "../../utils/functions";
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
+import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
+import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
+import ImportModal from "../ImportModal/ImportModal";
+import ImportModalMatsContent from "../ImportModal/ImportModalMatsContent/ImportModalMatsContent";
+import Modal from "../Modal/Modal";
+import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import UploadModal from "../UploadModal/UploadModal";
+import "./QACertTestSummaryHeaderInfo.scss";
+import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -41,16 +40,16 @@ export const QACertTestSummaryHeaderInfo = ({
   orisCode,
   user,
   //redux sets
-  setLocationSelect,
   setSectionSelect,
-  setCheckout,
   // redux store
   checkoutState,
   sectionSelect,
-  locationSelect,
   setSelectedTestCode,
   ///
   setUpdateRelatedTables,
+
+  /* MAPPED PROPS */
+  checkedOutConfigs,
 }) => {
   const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
@@ -65,12 +64,6 @@ export const QACertTestSummaryHeaderInfo = ({
   );
   const locations = selectedConfig?.monitoringLocationData ?? [];
 
-  // *** parse apart facility name
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName =
-    facility.split("(")[1].replace(")", "") +
-    (selectedConfig?.active ? "" : " Inactive");
-
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
   const [importTypeSelection, setImportTypeSelection] = useState("");
@@ -84,15 +77,10 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
-  const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
-  const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
-  const [refresherInfo, setRefresherInfo] = useState(null);
-  const [currentConfig, setCurrentConfig] = useState(false);
-  const [lockedFacility, setLockedFacility] = useState(false);
-  const [userHasCheckout, setUserHasCheckout] = useState(false);
-  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
   const [disableMatsImportButton, setDisableMatsImportButton] = useState(true);
   const [jsonSchemaVersion, setJsonSchemaVersion] = useState("");
+
+  const isCheckedOut = checkoutState;
 
   const selectedTestNumberRef = useRef();
 
@@ -175,59 +163,10 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // *** Clean up focus event listeners
   useEffect(() => {
-    mpApi
-      .getRefreshInfo(selectedConfigId)
-      .then((info) =>
-        setRefresherInfo({
-          checkedOutBy: "N/A",
-          lastUpdatedBy: info.data.userId,
-          updateDate: info.data.updateDate,
-        })
-      )
-      .catch((err) => log.log(err));
-    mpApi
-      .getCheckedOutLocations()
-      .then((res) => setCheckedOutConfigs(res.data?.items))
-      .catch((err) => log.log(err));
-
     return () => {
       cleanupFocusEventListeners();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkoutState]);
-
-  const isCheckedOutByUser = (configs) => {
-    return (
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1 &&
-      configs[
-        configs
-          .map((location) => location["monPlanId"])
-          .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["userId"]
-    );
-  };
-
-  useEffect(() => {
-    if (checkedOutConfigs) {
-      setUserHasCheckout(
-        checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
-      );
-      setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
-      const result =
-        checkedOutConfigs[
-          checkedOutConfigs
-            .map((con) => con["monPlanId"])
-            .indexOf(selectedConfig.id)
-        ];
-      if (result) {
-        setLockedFacility(true);
-        setCurrentConfig(result);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedOutConfigs]);
+  }, [checkoutState, selectedConfigId]);
 
   useEffect(() => {
     if (importTypeSelection !== "select" || importedFile.length !== 0) {
@@ -360,78 +299,17 @@ export const QACertTestSummaryHeaderInfo = ({
     }
   };
 
-  const formatDate = (dateString, isUTC = false) => {
-    const date = new Date(dateString);
-    //HANDLE -1 days from DB dates which are UTC
-    const day = isUTC ? date.getDate() + 1 : date.getDate();
-    return (
-      (date.getMonth() > 8
-        ? date.getMonth() + 1
-        : "0" + (date.getMonth() + 1)) +
-      "/" +
-      (day > 9 ? day : "0" + day) +
-      "/" +
-      date.getFullYear()
-    );
-  };
-
-  // Create audit message for header info
-  const createAuditMessage = () => {
-    if (checkedOutConfigs) {
-      // WORKSPACE view
-      if (user) {
-        // when config is checked out by someone
-        if (isCheckedOut) {
-          return `Currently checked-out by: ${
-            currentConfig["checkedOutBy"]
-          } ${formatDate(currentConfig["checkedOutOn"])}`;
-        }
-        // when config is not checked out
-        return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
-          refresherInfo?.updateDate,
-          true
-        )}`;
-      }
-    }
-  };
-
-  // direction -> false = check back in
-  // true = check out
-  const checkoutStateHandler = (direction) => {
-    // trigger checkout API
-    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
-    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, selectedConfigId, setCheckout)
-      .then(() => {
-        setCheckedOutByUser(direction);
-        setLockedFacility(direction);
-        setIsCheckedOut(direction);
-      })
-      .catch((error) => {
-        log.error("Error during checkout", error);
-      });
-  };
-
   return (
     <div className="header QACertHeader ">
       <div className="grid-container width-full clearfix position-relative">
         <div className="grid-row">
           <div className="grid-col-9">
-            <h3
-              className="font-body-lg margin-y-0"
-              data-testid="facility-name-header"
-            >
-              {facilityMainName}
-            </h3>
-            <h3
-              className="facility-header-text-cutoff margin-y-0"
-              title={facilityAdditionalName}
-            >
-              {facilityAdditionalName}
-            </h3>
-            <p className="text-bold font-body-2xs margin-top-0">
-              {createAuditMessage()}
-            </p>
+            <HeaderInfoFacility
+              checkedOutConfigs={checkedOutConfigs}
+              facility={facility}
+              selectedConfig={selectedConfig}
+              user={user}
+            />
           </div>
 
           <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
@@ -449,58 +327,16 @@ export const QACertTestSummaryHeaderInfo = ({
         </div>
 
         <div className="grid-row">
-          {user && (
-            <>
-              {checkedOutByUser ? (
-                <Button
-                  type="button"
-                  autoFocus
-                  outline={false}
-                  tabIndex="0"
-                  aria-label={`Check back in the configuration `}
-                  onClick={() => checkoutStateHandler(false)}
-                  id="checkInBTN"
-                  epa-testid="checkInBTN"
-                >
-                  <LockOpenSharp /> {"Check Back In"}
-                </Button>
-              ) : !lockedFacility &&
-                !userHasCheckout &&
-                selectedConfig.active &&
-                checkedOutConfigs
-                  ?.map((location) => location["monPlanId"])
-                  .indexOf(selectedConfig.id) === -1 ? (
-                <Button
-                  type="button"
-                  autoFocus
-                  outline={true}
-                  tabIndex="0"
-                  aria-label={`Check out the configuration`}
-                  onClick={() => checkoutStateHandler(true)}
-                  id="checkOutBTN"
-                  epa-testid="checkOutBTN"
-                >
-                  <CreateOutlined color="primary" /> {"Check Out"}
-                </Button>
-              ) : null}
-              {/***  Un-comment this block once the button-click behavior is implemented ***
-                isCheckedOut && (
-              <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
-              )
-              */}
-            </>
-          )}
+          <HeaderInfoCheckoutButton
+            checkedOutConfigs={checkedOutConfigs}
+            selectedConfig={selectedConfig}
+            user={user}
+          />
         </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
-            <DropdownSelection
-              caption="Locations"
-              orisCode={orisCode}
-              options={locations}
-              viewKey="name"
-              selectKey="id"
-              initialSelection={locationSelect ? locationSelect[0] : null}
-              selectionHandler={setLocationSelect}
+            <HeaderInfoLocationSelect
+              selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
             />
           </div>
@@ -676,4 +512,10 @@ export const QACertTestSummaryHeaderInfo = ({
   );
 };
 
-export default QACertTestSummaryHeaderInfo;
+export const mapStateToProps = (state) => {
+  return {
+    checkedOutConfigs: state.checkedOutLocations,
+  };
+};
+
+export default connect(mapStateToProps)(QACertTestSummaryHeaderInfo);
