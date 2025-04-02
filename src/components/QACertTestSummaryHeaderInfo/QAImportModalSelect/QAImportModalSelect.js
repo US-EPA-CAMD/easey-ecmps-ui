@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 
-const QAImportModalSelect = ({ setImportTypeSelection, importTestTitle}) => {
+const QAImportModalSelect = ({ setImportTypeSelection}) => {
   const selectOptions = [
     { key: "select", name: "Select Data Type to Import" },
     { key: "file", name: "Import from File" },
-    { key: "historical", name: "Import Historical Data" },
-    ...( importTestTitle === "Import QA Test Data" ?
-      [{ key: "mats", name: "MATS Data" }] : []),
+    { key: "historical", name: "Import Historical Data" }
   ];
   const [selection, setSelection] = useState(0);
   useEffect(() => {
