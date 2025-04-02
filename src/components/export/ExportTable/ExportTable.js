@@ -1,17 +1,14 @@
 import { Button } from "@trussworks/react-uswds";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 
 //Selectable data table that automatically refreshes its data based on the dataFetchCall whenever dataFetchParams are changed
 export const ExportTable = ({
   toggleExportCallback,
   title,
   columns,
-  dataFetchCall,
-  dataFetchParams,
   selectedDataRef,
   reportCode,
   uniqueIdField = "id",

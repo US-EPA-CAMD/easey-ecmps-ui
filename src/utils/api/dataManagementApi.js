@@ -115,6 +115,15 @@ export const getAllMatsMethodCodes = async () => {
 		.catch(handleError)
 }
 
+export const getAllMatsReportTypeCodes = async () => {
+	return secureAxios({
+		method: "GET",
+		url: `${config.services.mdm.uri}/mats-report-type-codes`,
+	})
+		.then(handleResponse)
+		.catch(handleError)
+}
+
 // System Fuel Flows
 export const getAllMaxRateSourceCodes = async () => {
 	return secureAxios({

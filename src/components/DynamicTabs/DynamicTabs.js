@@ -1,43 +1,47 @@
-import React, { useState, cloneElement, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import Tabs from "../Tabs/Tabs";
-import TabPane from "../TabPane/TabPane";
+
+import {
+  convertSectionToStoreName,
+  EMISSIONS_STORE_NAME,
+  EXPORT_STORE_NAME,
+  MATS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
+  QA_CERT_EVENT_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME,
+  MOCK_STORE_NAME,
+} from "../../additional-functions/workspace-section-and-store-names";
+import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
 import {
   addFacilityTab,
   removeFacilityTab,
   setActiveTab,
   setCheckoutState,
 } from "../../store/actions/dynamicFacilityTab";
-import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
-import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
-import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
 import EmissionsTab from "../EmissionsTab/EmissionsTab";
 import Export from "../export/Export/Export";
-import {
-  convertSectionToStoreName,
-  MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
-  EMISSIONS_STORE_NAME,
-  EXPORT_STORE_NAME,
-  QA_CERT_EVENT_STORE_NAME,
-} from "../../additional-functions/workspace-section-and-store-names";
+import MatsTab from "../MatsTab/MatsTab";
+import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
+import QACertEventTab from "../QACertEventTab/QACertEventTab";
+import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
+import Tabs from "../Tabs/Tabs";
 import "./DynamicTabs.scss";
-import { setCurrentTabIndex } from "../../store/actions/currentTabIndex";
+import { Welcome } from "./mocks";
 
 export const DynamicTabs = ({
-  tabsProps,
-  checkedOutLocations,
-  user,
-  removeFacility,
   addFacility,
-  setMostRecentlyCheckedInMonitorPlanId,
-  workspaceSection,
-  setCurrentTabIndex,
+  checkedOutLocations,
   currentTabIndex,
+  removeFacility,
   setCheckout,
-  mostRecentlyCheckedInMonitorPlanIdForTab,
+  setCurrentTabIndex,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
+  tabsProps,
+  user,
+  workspaceSection,
 }) => {
+  /** @type {[{title: string, orisCode?: number, selectedConfig?: {id: string, facId: number, name: string}, checkout?: boolean}[], function]} */
   const [tabs, setTabs] = useState([]);
 
   useEffect(() => {
@@ -93,184 +97,122 @@ export const DynamicTabs = ({
   };
 
   const getModule = (item) => {
-    if (tabs.length > 1 && item.title !== "Select Configurations") {
+    if (item.title === "Select Configurations") {
+      return (
+        <DataTable
+          addtabs={addTabsHandler}
+          user={user}
+          setMostRecentlyCheckedInMonitorPlanIdForTab={
+            setMostRecentlyCheckedInMonitorPlanIdForTab
+          }
+          workspaceSection={workspaceSection}
+        />
+      );
+    }
+    return (() => {
       switch (workspaceSection) {
         case MONITORING_PLAN_STORE_NAME:
-          item.component = (
+          return (
             <MonitoringPlanTab
-              resetTimer={item.component.resetTimer}
-              setExpired={item.component.setExpired}
-              resetTimerFlag={item.component.resetTimerFlag}
-              callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               removeTab={removeTabsHandler}
               title={item.title}
               user={user}
-              checkout={item.checkout}
-              checkedOutLocations={checkedOutLocations}
-              mostRecentlyCheckedInMonitorPlanIdForTab={
-                mostRecentlyCheckedInMonitorPlanIdForTab
-              }
-              setMostRecentlyCheckedInMonitorPlanIdForTab={
-                setMostRecentlyCheckedInMonitorPlanIdForTab
-              }
-              workspaceSection={workspaceSection}
             />
           );
-          break;
 
         case QA_CERT_TEST_SUMMARY_STORE_NAME:
-          item.component = (
+          return (
             <QACertTestSummaryTab
-              resetTimer={item.component.resetTimer}
-              setExpired={item.component.setExpired}
-              resetTimerFlag={item.component.resetTimerFlag}
-              callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
-              isCheckedOut={item.checkout}
-              checkedOutLocations={checkedOutLocations}
             />
           );
-
-          break;
 
         case QA_CERT_EVENT_STORE_NAME:
-          item.component = (
+          return (
             <QACertEventTab
-              resetTimer={item.component.resetTimer}
-              setExpired={item.component.setExpired}
-              resetTimerFlag={item.component.resetTimerFlag}
-              callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
-              isCheckedOut={item.checkout}
-              checkedOutLocations={checkedOutLocations}
-              workspaceSection={workspaceSection}
             />
           );
 
-          break;
         case EMISSIONS_STORE_NAME:
-          item.component = (
+          return (
             <EmissionsTab
-              resetTimer={item.component.resetTimer}
-              setExpired={item.component.setExpired}
-              resetTimerFlag={item.component.resetTimerFlag}
-              callApiFlag={item.component.callApiFlag}
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
               user={user}
-              checkout={item.checkout}
-              checkedOutLocations={checkedOutLocations}
-              workspaceSection={workspaceSection}
             />
           );
 
-          break;
         case EXPORT_STORE_NAME:
-          item.component = (
+          return (
             <Export
               orisCode={item.orisCode}
               selectedConfigId={item.selectedConfig.id}
               title={item.title}
-              user={user}
-              workspaceSection={workspaceSection}
             />
           );
 
-          break;
+        case MATS_STORE_NAME:
+          return (
+            <MatsTab
+              orisCode={item.orisCode}
+              selectedConfigId={item.selectedConfig.id}
+              title={item.title}
+              user={user}
+            />
+          );
+        case MOCK_STORE_NAME:
+          return (
+            <Welcome 
+              addtabs={addTabsHandler}
+              name={user.firstName}
+            />
+          );
+
         default:
           break;
       }
-    }
-
-    return item.component;
+    })();
   };
   return (
     <div>
-      {workspaceSection === EXPORT_STORE_NAME ? (
-        <Tabs
-          dynamic={true}
-          removeTabs={removeTabsHandler}
-          tabProps={tabs}
-          user={user}
-          workspaceSection={workspaceSection}
-          currentTabIndex={currentTabIndex}
-          setCheckout={setCheckout}
-          setCurrentTabIndex={setCurrentTabIndex}
-        >
-          {tabs &&
-            tabs.map((tab, i) => (
-              <TabPane
-                key={i}
-                title={tab.title}
-                locationId={
-                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
-                }
-                facId={
-                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
-                }
-                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
-              >
-                {cloneElement(getModule(tab), {
-                  addtabs: addTabsHandler,
-                })}
-              </TabPane>
-            ))}
-        </Tabs>
-      ) : (
-        <Tabs
-          dynamic={true}
-          removeTabs={removeTabsHandler}
-          tabProps={tabs}
-          checkedOutLocations={checkedOutLocations}
-          user={user}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          workspaceSection={workspaceSection}
-          currentTabIndex={currentTabIndex}
-          setCheckout={setCheckout}
-          setCurrentTabIndex={setCurrentTabIndex}
-        >
-          {tabs &&
-            tabs.map((tab, i) => (
-              <TabPane
-                key={i}
-                title={tab.title}
-                locationId={
-                  tab.selectedConfig ? tab.selectedConfig.id : "initial"
-                }
-                facId={
-                  tab.selectedConfig ? tab.selectedConfig.facId : "initial"
-                }
-                selectedConfigName={tab?.selectedConfig?.name ?? "initial"}
-              >
-                {cloneElement(getModule(tab), {
-                  addtabs: addTabsHandler,
-                })}
-              </TabPane>
-            ))}
-        </Tabs>
-      )}
+      <Tabs
+        checkedOutLocations={checkedOutLocations}
+        dynamic={true}
+        removeTabs={removeTabsHandler}
+        user={user}
+        workspaceSection={workspaceSection}
+        currentTabIndex={currentTabIndex}
+        setCheckout={setCheckout}
+        setCurrentTabIndex={setCurrentTabIndex}
+        panes={tabs.map((tab) => ({
+          content: getModule(tab),
+          facId: tab.selectedConfig?.facId ?? "initial",
+          locationId: tab.selectedConfig?.id ?? "initial",
+          selectedConfigName: tab.selectedConfig?.name ?? "initial",
+          title: tab.title,
+        }))}
+      />
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {
     currentTabIndex: state.currentTabIndex,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch) => {
   return {
     removeFacility: (facility, workspaceSection) =>
       dispatch(
@@ -297,5 +239,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DynamicTabs);
-export { mapDispatchToProps };
-export { mapStateToProps };
