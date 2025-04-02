@@ -1,6 +1,6 @@
 import { beginMdmApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
-import { UseRetrieveDropdownApi } from "../../additional-functions/retrieve-dropdown-api";
+import { retrieveDropdowns } from "../../additional-functions/retrieve-dropdown-api";
 import { UNIT_CONTROLS_STORE_NAME } from "../../additional-functions/data-table-section-and-store-names.js";
 
 export function loadDropdownsSuccess(dropdowns, section) {
@@ -14,7 +14,6 @@ export function loadDropdownsSuccess(dropdowns, section) {
 export function loadDropdowns(
   section,
   dropdownArray,
-  selectedTestCode = false
 ) {
   let equipmentControlParameterFlag = false;
   if (section === UNIT_CONTROLS_STORE_NAME) {
@@ -22,11 +21,10 @@ export function loadDropdowns(
   }
   return (dispatch) => {
     dispatch(beginMdmApiCall(section));
-    return UseRetrieveDropdownApi(
+    return retrieveDropdowns(
       dropdownArray[0],
       dropdownArray.length > 1 ? dropdownArray[1] : null,
       equipmentControlParameterFlag,
-      selectedTestCode
     ).then((dropdowns) => {
       dispatch(loadDropdownsSuccess(dropdowns, section));
     });

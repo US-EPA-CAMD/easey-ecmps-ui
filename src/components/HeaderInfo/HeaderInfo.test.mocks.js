@@ -322,7 +322,10 @@ export const storeForEmissionsModule = {
       fuelFlows: [],
       systemComponents: [],
       analyzerRanges: [],
-      matsMethods: []
+      matsMethods: [],
+      matsReportTypeCodes: {
+        matsReportTypeCodes: [],
+      },
     },
     currentTabIndex: 0
   }

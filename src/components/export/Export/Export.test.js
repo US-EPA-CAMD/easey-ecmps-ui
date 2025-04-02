@@ -1,10 +1,12 @@
+import { render, act } from '@testing-library/react';
 import React from "react";
 
 import Export from "./Export";
 import { Provider } from 'react-redux';
 import configureStore from "../../../store/configureStore.dev";
 import initialState from "../../../store/reducers/initialState";
-import render from "../../../mocks/render";
+
+const selectedConfigId = 'TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A';
 
 initialState.openedFacilityTabs.export = [
   {
@@ -20,7 +22,7 @@ initialState.openedFacilityTabs.export = [
       'Methods'
     ],
     selectedConfig: {
-      id: 'TWCORNEL5-C0E3879920A14159BAA98E03F1980A7A',
+      id: selectedConfigId,
       facId: 1,
       orisCode: 3,
       name: '1, 2, CS0AAN',
@@ -79,26 +81,25 @@ initialState.openedFacilityTabs.export = [
       false
     ],
     exportState: {
-      checkedDataTypes: [
-        'monitoring-plan'
-      ],
       reportingPeriodId: 118
     }
   }
 ];
+
 let store = configureStore(initialState);
-//testing redux connected component to mimic props passed as argument
 
 const props = {
   orisCode: 51,
-  selectedConfig: initialState.openedFacilityTabs.export[0].selectedConfig,
+  selectedConfigId,
   title: "Barry (1, 2, CS0AAN)",
 };
 
 test('renders Export', async () => {
-  await render(
-    <Provider store={store}>
-      <Export {...props} />
-    </Provider>
-  )
+  await act(async () => {
+    render(
+      <Provider store={store}>
+        <Export {...props} />
+      </Provider>
+    );
+  })
 })
