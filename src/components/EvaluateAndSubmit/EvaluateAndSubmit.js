@@ -71,7 +71,6 @@ export const EvaluateAndSubmit = ({
   const qaCertEventRef = useRef([]);
   const qaTeeRef = useRef([]);
   const emissionsRef = useRef([]);
-  const matsBulkFilesRef = useRef([]);
   const monPlanRef = useRef([]);
 
   const [showSuccesModal, setShowSuccessModal] = useState(false);
