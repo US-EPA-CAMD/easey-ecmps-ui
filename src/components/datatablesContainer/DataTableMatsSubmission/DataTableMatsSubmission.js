@@ -26,7 +26,7 @@ const DataTableMatsSubmission = ({
       relative: "path",
       state: {
         selectedConfigId,
-        originalSubmissionId: row.id,
+        originalSubmission: row,
       },
     });
   };

@@ -1,12 +1,13 @@
-import React from "react";
-import { connect, useSelector } from "react-redux";
+import React from 'react';
+import { connect, useSelector } from 'react-redux';
 
-import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
-import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
-import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
-import HeaderInfoMatsReportTypeCodeSelect from "./HeaderInfoMatsReportTypeCodeSelect";
-import HeaderInfoMatsSubmissionButton from "./HeaderInfoMatsSubmissionButton";
+import { MATS_REPORT_TYPE_CODES_STORE_NAME } from '../../additional-functions/data-table-section-and-store-names';
+import { MATS_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import HeaderInfoCheckoutButton from '../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton';
+import HeaderInfoFacility from '../HeaderInfoFacility/HeaderInfoFacility';
+import HeaderInfoLocationSelect from '../HeaderInfoLocationSelect/HeaderInfoLocationSelect';
+import MatsCodeSelect from '../MatsCodeSelect/MatsCodeSelect';
+import HeaderInfoMatsSubmissionButton from './HeaderInfoMatsSubmissionButton';
 
 export const MatsHeaderInfo = ({
   canSubmit = false,
@@ -21,7 +22,7 @@ export const MatsHeaderInfo = ({
   checkedOutConfigs,
 }) => {
   const selectedConfig = useSelector((state) =>
-    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId),
   );
 
   return (
@@ -56,12 +57,14 @@ export const MatsHeaderInfo = ({
             />
           </div>
           <div className="grid-col-4">
-            <HeaderInfoMatsReportTypeCodeSelect
-              selected={selectedReportType}
-              setSelected={setSelectedReportType}
+            <MatsCodeSelect
+              label="Report Types"
+              optionsStoreName={MATS_REPORT_TYPE_CODES_STORE_NAME}
+              setValue={setSelectedReportType}
+              value={selectedReportType}
             />
-          </div>{" "}
-          <div className="grid-col-3"></div>{" "}
+          </div>{' '}
+          <div className="grid-col-3"></div>{' '}
         </div>
       </div>
     </div>

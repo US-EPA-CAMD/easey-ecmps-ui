@@ -2,6 +2,7 @@ import React from "react";
 import { Label, Select, FormGroup } from "@trussworks/react-uswds";
 export const DropdownSelection = ({
   caption,
+  disabled = false,
   selectKey, // the key in the object property to identify
   viewKey, // the key in the object property to display in dropdown
   options, // array of objects with at least 2 properties
@@ -48,6 +49,7 @@ export const DropdownSelection = ({
               {caption}
             </Label>
             <Select
+              disabled={disabled}
               id={caption}
               name={caption}
               epa-testid={caption}
@@ -70,6 +72,7 @@ export const DropdownSelection = ({
             {caption}
           </Label>
           <Select
+            disabled={disabled}
             id={caption}
             name={caption}
             epa-testid={caption}

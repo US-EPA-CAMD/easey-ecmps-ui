@@ -152,14 +152,9 @@ export const getMatsBulkFilesReviewSubmit = async (
     .catch(handleError);
 };
 
-export const getMatsSubmissions = async (monPlanId, params = {}) => {
-  const paramKeys = ["locationId", "reportTypeCode"];
-  const queryString = Object.entries(params)
-    .filter(([key]) => paramKeys.includes(key))
-    .map(([key, value]) => `${key}=${value}`)
-    .join("&");
-  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission/${monPlanId}?${queryString}`;
-  return secureAxios({ url: url, method: "GET" })
+export const getMatsSubmissions = async (monPlanId) => {
+  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?monPlanIds=${monPlanId}`;
+  return secureAxios({ url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };

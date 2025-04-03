@@ -124,6 +124,24 @@ export const getAllMatsReportTypeCodes = async () => {
 		.catch(handleError)
 }
 
+export const getAllMatsPollutantCodes = async () => {
+	return secureAxios({
+		method: "GET",
+		url: `${config.services.mdm.uri}/mats-pollutant-codes`,
+	})
+		.then(handleResponse)
+		.catch(handleError)
+}
+
+export const getAllMatsTestMethodCodes = async () => {
+	return secureAxios({
+		method: "GET",
+		url: `${config.services.mdm.uri}/mats-test-method-codes`,
+	})
+		.then(handleResponse)
+		.catch(handleError)
+}
+
 // System Fuel Flows
 export const getAllMaxRateSourceCodes = async () => {
 	return secureAxios({

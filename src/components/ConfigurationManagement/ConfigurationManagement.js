@@ -478,7 +478,7 @@ const dateCell = ({
           id={`${id}-input`}
           name={`${id}-input`}
           onChange={(e) => onChange(row.id, parseDatePickerString(e))}
-          placeholder="Select a date..."
+          placeholder="mm/dd/yyyy"
           required={required}
           value={column.selector(row) ?? ""}
         />

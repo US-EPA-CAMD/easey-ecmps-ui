@@ -1,0 +1,21 @@
+import React, { useMemo } from 'react';
+
+import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+
+const emptyOption = { id: '', name: '-- Select a value --' };
+
+const LocationSelect = ({ options = [], setValue, value }) => {
+  const allOptions = useMemo(() => [emptyOption, ...options], [options]);
+  return (
+    <DropdownSelection
+      caption="Location Name"
+      options={allOptions}
+      viewKey="name"
+      selectKey="id"
+      initialSelection={allOptions.findIndex((option) => option.id === value)}
+      selectionHandler={([_index, id]) => setValue(id)}
+    />
+  );
+};
+
+export default LocationSelect;

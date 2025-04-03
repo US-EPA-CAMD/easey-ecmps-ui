@@ -45,7 +45,7 @@ import {
   getUser,
   displayReport,
   getPreviouslyFullSubmitedQuarter,
-  getQuarter,
+  getReportingPeriods,
   formatErrorResponse,
 } from "../../utils/functions";
 import { EmissionsImportTypeModalContent } from "./EmissionsImportTypeModalContent";
@@ -77,23 +77,6 @@ export const generateArrayOfYears = (min) => {
     years.push(i);
   }
   return years;
-};
-
-export const getReportingPeriods = (minYear = 2009) => {
-  const quarters = [4, 3, 2, 1];
-  const maxYear = new Date().getFullYear();
-  const reportingPeriods = [];
-
-  const currentYearQuarter = parseInt(`${maxYear}${getQuarter()}`);
-
-  for (let year = maxYear; year >= minYear; year--) {
-    for (const quarter of quarters) {
-      if (parseInt(`${year}${quarter}`) <= currentYearQuarter)
-        reportingPeriods.push(`${year} Q${quarter}`);
-    }
-  }
-
-  return reportingPeriods;
 };
 
 // MP

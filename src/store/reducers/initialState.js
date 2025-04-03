@@ -41,6 +41,12 @@ const initialState = {
     matsReportTypeCodes: {
       matsReportTypeCodes: [],
     },
+    matsPollutantCodes: {
+      matsPollutantCodes: [],
+    },
+    matsTestMethodCodes: {
+      matsTestMethodCodes: [],
+    },
   },
   workspaceState: "monitoringPlans",
   currentTabIndex: 0,

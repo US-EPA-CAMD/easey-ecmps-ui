@@ -326,6 +326,12 @@ export const storeForEmissionsModule = {
       matsReportTypeCodes: {
         matsReportTypeCodes: [],
       },
+      matsPollutantCodes: {
+        matsPollutantCodes: [],
+      },
+      matsTestMethodCodes: {
+        matsTestMethodCodes: [],
+      },
     },
     currentTabIndex: 0
   }
