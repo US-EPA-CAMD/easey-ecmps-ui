@@ -6,6 +6,7 @@ const emptyOption = { id: '', name: '-- Select a value --' };
 
 const LocationSelect = ({ options = [], setValue, value }) => {
   const allOptions = useMemo(() => [emptyOption, ...options], [options]);
+
   return (
     <DropdownSelection
       caption="Location Name"

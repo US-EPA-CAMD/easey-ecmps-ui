@@ -56,6 +56,7 @@ export const MATS_METHODS_STORE_NAME = "matsMethods";
 export const MATS_REPORT_TYPE_CODES_STORE_NAME = "matsReportTypeCodes";
 export const MATS_POLLUTANT_CODES_STORE_NAME = "matsPollutantCodes";
 export const MATS_TEST_METHOD_CODES_STORE_NAME = "matsTestMethodCodes";
+export const MATS_AVERAGING_GROUP_CODES_STORE_NAME = "matsAveragingGroupCodes";
 
 // qa & cert
 
@@ -128,6 +129,9 @@ export const convertSectionToStoreName = (dataTableName) => {
       break;
     case MATS_TEST_METHOD_CODES_STORE_NAME:
       storeName = MATS_TEST_METHOD_CODES_STORE_NAME;
+      break;
+    case MATS_AVERAGING_GROUP_CODES_STORE_NAME:
+      storeName = MATS_AVERAGING_GROUP_CODES_STORE_NAME;
       break;
     case UNIT_FUELS_SECTION_NAME:
       storeName = UNIT_FUELS_STORE_NAME;

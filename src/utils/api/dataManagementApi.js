@@ -142,6 +142,15 @@ export const getAllMatsTestMethodCodes = async () => {
 		.catch(handleError)
 }
 
+export const getAllMatsAveragingGroupCodes = async () => {
+	return secureAxios({
+		method: "GET",
+		url: `${config.services.mdm.uri}/mats-averaging-group-codes`,
+	})
+		.then(handleResponse)
+		.catch(handleError)
+}
+
 // System Fuel Flows
 export const getAllMaxRateSourceCodes = async () => {
 	return secureAxios({

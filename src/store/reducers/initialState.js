@@ -47,6 +47,9 @@ const initialState = {
     matsTestMethodCodes: {
       matsTestMethodCodes: [],
     },
+    matsAveragingGroupCodes: {
+      matsAveragingGroupCodes: [],
+    },
   },
   workspaceState: "monitoringPlans",
   currentTabIndex: 0,

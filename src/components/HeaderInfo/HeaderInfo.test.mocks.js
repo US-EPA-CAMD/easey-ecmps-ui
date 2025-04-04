@@ -332,6 +332,9 @@ export const storeForEmissionsModule = {
       matsTestMethodCodes: {
         matsTestMethodCodes: [],
       },
+      matsAveragingGroupCodes: {
+        matsAveragingGroupCodes: [],
+      },
     },
     currentTabIndex: 0
   }

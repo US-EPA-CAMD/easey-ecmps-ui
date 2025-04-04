@@ -10,7 +10,7 @@ import classnames from 'classnames'
 import { FilePreview } from './FilePreview'
 import { makeSafeForID } from './utils'
 
-export const FileInputForwardRef= (
+export const FileInputForwardRef = (
   {
     name,
     id,
@@ -102,8 +102,9 @@ export const FileInputForwardRef= (
     if (accept) {
       const acceptedTypes = accept.split(',')
       let allFilesAllowed = true
-      for (let i = 0; i < e.dataTransfer.files.length; i += 1) {
-        const file = e.dataTransfer.files[parseInt(`${i}`)]
+      const newFiles = (e.dataTransfer || e.target).files
+      for (let i = 0; i < newFiles.length; i += 1) {
+        const file = newFiles[parseInt(`${i}`)]
         if (allFilesAllowed) {
           for (let j = 0; j < acceptedTypes.length; j += 1) {
             const fileType = acceptedTypes[parseInt(`${j}`)]
@@ -120,20 +121,24 @@ export const FileInputForwardRef= (
         setShowError(true)
         e.preventDefault()
         e.stopPropagation()
+        return false;
       }
     }
+    return true;
   }
 
   // Event handlers
   const handleDragOver = () => setIsDragging(true)
   const handleDragLeave = () => setIsDragging(false)
   const handleDrop = (e) => {
-    preventInvalidFiles(e)
+    //preventInvalidFiles(e) TODO: Test if this is necessary after the addition to `handleChange`
     setIsDragging(false)
     if (onDrop) onDrop(e)
   }
 
   const handleChange = (e) => {
+    if (!preventInvalidFiles(e)) return;
+
     setShowError(false)
 
     // Map input FileList to array of Files
@@ -167,9 +172,11 @@ export const FileInputForwardRef= (
             data-testid="file-input-preview-heading"
             className="usa-file-input__preview-heading">
             {previewHeaderText}{' '}
-            <span className="usa-file-input__choose">
-              Change file{filePreviews.length > 1 && 's'}
-            </span>
+            {!disabled && (
+              <span className="usa-file-input__choose">
+                Change file{filePreviews.length > 1 && 's'}
+              </span>
+            )}
           </div>
         )}
         <div
@@ -213,3 +220,5 @@ export const FileInputForwardRef= (
 }
 
 export const FileInput = forwardRef(FileInputForwardRef)
+
+export default FileInput;

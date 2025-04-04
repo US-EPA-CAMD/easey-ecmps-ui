@@ -15,6 +15,7 @@ export const DatePicker = ({
   value,
 }) => {
   const [id] = useState(uniqueId(`${label.replace(' ', '')}-date-picker-`));
+
   return (
     <>
       <Label htmlFor={id}>{label}</Label>

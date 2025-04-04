@@ -9,6 +9,7 @@ const TextInput = ({
   value,
 }) => {
   const [id] = useState(uniqueId(`${label.replace(' ', '')}-text-input-`));
+
   return (
     <>
       <Label htmlFor={id}>{label}</Label>

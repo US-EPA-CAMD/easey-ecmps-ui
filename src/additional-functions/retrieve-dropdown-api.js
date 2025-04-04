@@ -749,6 +749,18 @@ export const retrieveDropdowns = async (
         break;
       }
 
+      case "matsAveragingGroupCodes": {
+        const res = await dmApi.getAllMatsAveragingGroupCodes();
+        const averagingGroupCodes = res.data?.items?.map((option) => ({
+          code: option.matsAveragingGroupCode,
+          name: option.matsAveragingGroupDescription,
+        })) ?? [];
+        const sortedAveragingGroupCodes = averagingGroupCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedAveragingGroupCodes, fieldName);
+        break;
+      }
+
       default:
         break;
     }
