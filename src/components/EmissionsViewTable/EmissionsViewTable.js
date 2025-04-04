@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 
-export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply }) => {
+export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply, user }) => {
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -24,44 +24,42 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
 
-        if ( filterApply) {
+        if (filterApply) {
             const timeOutApply = setTimeout(() => {
                 setViewData(reduxCurrentTab?.viewData || []);
                 setFilterApply(false)
-                if ( reduxCurrentTab?.viewData?.length === 0) {
+                if (reduxCurrentTab?.viewData?.length === 0) {
                     setPendingMessage(true)
                 }
             }, 1000);
 
             return () => clearTimeout(timeOutApply);
-       }
-        else
-        {
+        }
+        else {
             setViewData(reduxCurrentTab?.viewData || []);
             setMessage('Select a Reporting Period, Location, and Template, then click the Apply Filter button to view the data.');
         }
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
     useEffect(() => {
-        if(pendingMessage)
-        {
-            if ( viewData?.length === 0) {
+        if (pendingMessage) {
+            if (viewData?.length === 0) {
                 const timeOutApply = setTimeout(() => {
                     setPendingMessage(false)
                 }, 1000);
                 setMessage(
                     <div>
-                      <p>There are no records to display</p>
-                      <p>
-                        Select another Reporting Period, Location, and Template, then
-                        click the Apply Filter button to view the data
-                      </p>
+                        <p>There are no records to display</p>
+                        <p>
+                            Select another Reporting Period, Location, and Template, then
+                            click the Apply Filter button to view the data
+                        </p>
                     </div>
-                  );
-            return () => clearTimeout(timeOutApply);
-           }
+                );
+                return () => clearTimeout(timeOutApply);
+            }
         }
-        
+
     }, [pendingMessage]);
 
     // If the error has an errorCode then we want to show a "View Error" link on the first column to the left of the actual data of the first column, see Zenhub ticket#5756 for more details
@@ -87,7 +85,16 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
             return [];
 
         let tableColumns = viewColumnInfo
-            .filter(vc => vc.value !== "errorCodes")
+            .filter(vc => vc.value !== "errorCodes").filter((vc) => {
+                if (user) {
+                    return true;
+                }
+                // Other Daily Tests View's label calc desnot contain '.' after calc || Moisture View cantain Calculated % H2O
+                if (vc.label?.includes('Calc.') || vc.label === 'Calc Test Result' || vc.label === 'Calculated % H2O') {
+                    return false;
+                }
+                return true;
+            })
             .map((vc) => {
                 // wrapping the header and cell in div makes it so that the the table lib doesn't cut off the text
                 return {
@@ -98,23 +105,26 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
                 }
             });
 
-        tableColumns.unshift({
-            name: <div>Report Errors</div>,
-            cell: (row) => getFormattedCellForFirstRow(row),
-            sortable: true,
-            sortFunction: (rowA, rowB) => {
-                // The errorCodes field can only be either Y or null
-                if (rowA.errorCodes === 'Y' && rowB.errorCodes === null) {
-                    return 1;
-                }
+        if (user) {
+            tableColumns.unshift({
+                name: <div>Report Errors</div>,
+                cell: (row) => getFormattedCellForFirstRow(row),
+                sortable: true,
+                sortFunction: (rowA, rowB) => {
+                    // The errorCodes field can only be either Y or null
+                    if (rowA.errorCodes === 'Y' && rowB.errorCodes === null) {
+                        return 1;
+                    }
 
-                if (rowB.errorCodes === 'Y' && rowA.errorCodes === null) {
-                    return -1;
-                }
+                    if (rowB.errorCodes === 'Y' && rowA.errorCodes === null) {
+                        return -1;
+                    }
 
-                return 0;
-            }
-        })
+                    return 0;
+                }
+            })
+        }
+
         return tableColumns;
     }, [getFormattedCellForFirstRow, viewColumnInfo])
 
@@ -124,22 +134,22 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply 
     }, [viewColumnInfo, createTableColumns]);
 
 
-    return (         
-            <div className="padding-left-0 margin-left-0 padding-right-0">
-                <DataTable
-                    sortIcon={
-                        <ArrowDownwardSharp className="margin-left-2 text-primary" />
-                    }
-                    noHeader={true}
-                    fixedHeader={true}
-                    fixedHeaderScrollHeight="50vh"
-                    columns={tableColumns}
-                    data={viewData}
-                    className={`data-display-table react-transition fade-in`}
-                    progressPending={filterApply}
-                    noDataComponent={message}
-                    progressComponent={<Preloader />}
-                />
-            </div>
+    return (
+        <div className="padding-left-0 margin-left-0 padding-right-0">
+            <DataTable
+                sortIcon={
+                    <ArrowDownwardSharp className="margin-left-2 text-primary" />
+                }
+                noHeader={true}
+                fixedHeader={true}
+                fixedHeaderScrollHeight="50vh"
+                columns={tableColumns}
+                data={viewData}
+                className={`data-display-table react-transition fade-in`}
+                progressPending={filterApply}
+                noDataComponent={message}
+                progressComponent={<Preloader />}
+            />
+        </div>
     )
 }

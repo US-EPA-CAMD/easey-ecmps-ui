@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { connect } from "react-redux";
+
 import {
   setLocationSelectionState,
   setCheckoutState,
@@ -12,22 +12,15 @@ import {
 } from "../../additional-functions/workspace-section-and-store-names";
 import EmissionsTabRender from "../EmissionsTabRender/EmissionsTabRender";
 export const EmissionsTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-
   orisCode,
   selectedConfigId,
   title,
   user,
-  tabs,
 
+  tabs,
   setLocation,
   setCheckout,
   setInactive,
-  checkedOutLocations,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -37,37 +30,26 @@ export const EmissionsTab = ({
   const [locationSelect, setLocationSelect] = useState(currentTab.location);
 
   useEffect(() => {
-    setLocation(locationSelect, title, workspaceSection);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+    setLocation(locationSelect, title, EMISSIONS_STORE_NAME);
+  }, [locationSelect, setLocation, title]);
 
   return (
-    <div>
-      <div>
-        <EmissionsTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
-          title={title}
-          orisCode={orisCode}
-          selectedConfigId={selectedConfigId}
-          locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
-          user={user}
-          checkout={currentTab.checkout}
-          setCheckout={setCheckout}
-          setInactive={setInactive}
-          inactive={currentTab.inactive}
-          checkedOutLocations={checkedOutLocations}
-          workspaceSection={workspaceSection}
-          currentTab={currentTab}
-        />
-      </div>
-    </div>
+    <EmissionsTabRender
+      title={title}
+      orisCode={orisCode}
+      selectedConfigId={selectedConfigId}
+      locationSelect={locationSelect}
+      setLocationSelect={(location) => setLocationSelect(location)}
+      user={user}
+      checkout={currentTab.checkout}
+      setCheckout={setCheckout}
+      setInactive={setInactive}
+      inactive={currentTab.inactive}
+    />
   );
 };
-const mapStateToProps = (state) => {
+
+export const mapStateToProps = (state) => {
   return {
     tabs: state.openedFacilityTabs[
       convertSectionToStoreName(EMISSIONS_STORE_NAME)
@@ -75,7 +57,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch) => {
   return {
     setLocation: (location, title, workspaceSection) =>
       dispatch(
@@ -103,6 +85,5 @@ const mapDispatchToProps = (dispatch) => {
       ),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(EmissionsTab);
-export { mapStateToProps };
-export { mapDispatchToProps };

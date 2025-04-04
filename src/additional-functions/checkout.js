@@ -1,10 +1,12 @@
 import log from "loglevel";
+
 import * as mpApi from "../utils/api/monitoringPlansApi";
 import { MONITORING_PLAN_STORE_NAME } from "../additional-functions/workspace-section-and-store-names";
+import { setCheckedOutLocations } from "../store/actions/checkedOutLocations";
+import { setCheckoutState, } from "../store/actions/dynamicFacilityTab";
+
 // Takes a direction to check a record in or out,the configID, and a dispatcher to the redux store
 export const checkoutAPI = (direction, monitorPlanId, setCheckout) => {
-  const user = JSON.parse(localStorage.getItem("ecmps_user"));
-
   if (!direction) {
     return mpApi
       .deleteCheckInMonitoringPlanConfiguration(monitorPlanId)
@@ -27,5 +29,31 @@ export const checkoutAPI = (direction, monitorPlanId, setCheckout) => {
           log.log("this configuration is already checked out");
         }
       });
+  }
+};
+
+export const checkPlanOut = (dispatch) => async (monitorPlanId) => {
+  try {
+    await mpApi.postCheckoutMonitoringPlanConfiguration(monitorPlanId);
+    dispatch(setCheckoutState(true, monitorPlanId, MONITORING_PLAN_STORE_NAME));
+  } catch (err) {
+    log.error(err);
+  } finally {
+    const res = await mpApi.getCheckedOutLocations();
+    const checkedOutLocations = res.data?.items ?? [];
+    dispatch(setCheckedOutLocations(checkedOutLocations));
+  }
+};
+
+export const checkPlanIn = (dispatch) => async (monitorPlanId) => {
+  try {
+    await mpApi.deleteCheckInMonitoringPlanConfiguration(monitorPlanId);
+    dispatch(setCheckoutState(false, monitorPlanId, MONITORING_PLAN_STORE_NAME));
+  } catch (err) {
+    log.error(err);
+  } finally {
+    const res = await mpApi.getCheckedOutLocations();
+    const checkedOutLocations = res.data?.items ?? [];
+    dispatch(setCheckedOutLocations(checkedOutLocations));
   }
 };

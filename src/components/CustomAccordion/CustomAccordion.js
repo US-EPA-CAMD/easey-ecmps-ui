@@ -11,9 +11,7 @@ const CustomAccordion = ({
   headerButtonText,
   id,
   headingLevel = "h4",
-  section,
   tables,
-  title,
 }) => {
   const [open, setOpen] = useState(tables.map((item, index) => true));
 
