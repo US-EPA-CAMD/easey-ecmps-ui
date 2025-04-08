@@ -112,6 +112,12 @@ export const MonitoringPlanTabRender = ({
       checked = false;
       disableCheckbox = true;
     }
+    else
+    {
+        // Doesn't have any records
+        checked = false;
+        disableCheckbox = true;
+    }
 
 
     // Update the global inactive state
