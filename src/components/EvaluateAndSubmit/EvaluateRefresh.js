@@ -48,7 +48,7 @@ export const EvaluateRefresh = ({
 
           if (
             rowEntry &&
-            rowEntry.evalStatusCode !== r.evalStatusCode &&
+            rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription && 
             (new Date().getTime() - lastEvalTime.current) / 1000 >
               config.app.refreshEvalStatusRate / 1000 + 1
           ) {
