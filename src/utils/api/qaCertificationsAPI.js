@@ -152,6 +152,16 @@ export const getMatsBulkFilesReviewSubmit = async (
     .catch(handleError);
 };
 
+export const createMatsSubmission = async (payload, { draft = false, shouldHandleError = false }) => {
+  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?draft=${draft}`;
+  return secureAxios({ url, method: "POST", data: payload })
+    .then(handleResponse)
+    .catch((err) => {
+      if (!shouldHandleError) throw err;
+      return handleError(err);
+    });
+};
+
 export const getMatsSubmissions = async (monPlanId) => {
   const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?monPlanIds=${monPlanId}`;
   return secureAxios({ url, method: "GET" })

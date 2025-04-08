@@ -24,6 +24,7 @@ const errorBoundaryId = uuidv4();
 
 root.render(
   <Provider store={store}>
+    <React.StrictMode>
       <BrowserRouter basename={config.app.path}>
         <ErrorBoundary
           FallbackComponent={({ error, resetErrorBoundary }) => (
@@ -43,6 +44,7 @@ root.render(
           <App />
         </ErrorBoundary>
       </BrowserRouter>
+    </React.StrictMode>
   </Provider>
 );
 
