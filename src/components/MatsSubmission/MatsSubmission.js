@@ -249,7 +249,7 @@ const MatsSubmission = ({
 
     setSubmissionCheckStatus(dataStatus.PENDING);
     try {
-      const res = await createMatsSubmission(payload, { draft: true });
+      const res = await createMatsSubmission(payload);
       const { warnings } = res.data;
       setSubmissionCheckStatus(dataStatus.SUCCESS);
       setSubmissionCheckWarnings(warnings);

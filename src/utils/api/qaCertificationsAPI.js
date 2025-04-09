@@ -152,8 +152,8 @@ export const getMatsBulkFilesReviewSubmit = async (
     .catch(handleError);
 };
 
-export const createMatsSubmission = async (payload, { draft = false, shouldHandleError = false }) => {
-  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?draft=${draft}`;
+export const createMatsSubmission = async (payload, { shouldHandleError = false }) => {
+  const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission`;
   return secureAxios({ url, method: "POST", data: payload })
     .then(handleResponse)
     .catch((err) => {
