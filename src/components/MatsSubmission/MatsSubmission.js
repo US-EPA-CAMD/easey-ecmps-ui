@@ -1,5 +1,11 @@
 import { ArrowBackSharp } from '@material-ui/icons';
-import { Button, Grid, GridContainer, Label } from '@trussworks/react-uswds';
+import {
+  Alert,
+  Button,
+  Grid,
+  GridContainer,
+  Label,
+} from '@trussworks/react-uswds';
 import { uniqueId } from 'lodash';
 import log from 'loglevel';
 import React, {
@@ -19,9 +25,13 @@ import {
   MATS_TEST_METHOD_CODES_STORE_NAME,
 } from '../../additional-functions/data-table-section-and-store-names';
 import { parseErrorMessage } from '../../utils/api/apiUtils';
-import { createMatsSubmission } from '../../utils/api/qaCertificationsAPI';
+import {
+  createMatsSubmission,
+  deleteMatsSubmission,
+} from '../../utils/api/qaCertificationsAPI';
 import { dataStatus } from '../../utils/constants/dataStatus';
 import { matsModule } from '../../utils/constants/moduleTitles';
+import { formatErrorResponse } from '../../utils/functions';
 import FileInput from '../FileInput/FileInput';
 import MatsCodeSelect from '../MatsCodeSelect/MatsCodeSelect';
 import Modal from '../Modal/Modal';
@@ -29,6 +39,8 @@ import SizedPreloader from '../SizedPreloader/SizedPreloader';
 import DatePicker from './DatePicker';
 import LocationSelect from './LocationSelect';
 import ReportingPeriodSelect from './ReportingPeriodSelect';
+import SubmissionSignSubmitModal from './SubmissionSignSubmitModal';
+import SubmissionWarningsModal from './SubmissionWarningsModal';
 import TextInput from './TextInput';
 
 const reportTypeInputMappings = [
@@ -221,17 +233,16 @@ const MatsSubmission = ({
     payloadFile: null,
     supportingFiles: [],
   });
+  const [metadataPayload, setMetadataPayload] = useState({});
   const [reportType, setReportType] = useState(
     originalSubmission?.reportType.code ?? '',
   );
-  const [metadataPayload, setMetadataPayload] = useState({});
-  const [submissionStatus, setSubmissionStatus] = useState(dataStatus.IDLE);
   const [submissionErrors, setSubmissionErrors] = useState([]);
-  const [submissionCheckStatus, setSubmissionCheckStatus] = useState(
+  const [submissionId, setSubmissionId] = useState(null);
+  const [submissionInitStatus, setSubmissionInitStatus] = useState(
     dataStatus.IDLE,
   );
-  const [submissionCheckWarnings, setSubmissionCheckWarnings] = useState([]);
-  const [submissionCheckErrors, setSubmissionCheckErrors] = useState([]);
+  const [submissionInitWarnings, setSubmissionInitWarnings] = useState([]);
 
   /* CALCULATED VALUES */
 
@@ -242,22 +253,52 @@ const MatsSubmission = ({
 
   /* HANDLERS */
 
+  const cancelSubmission = () => {
+    const locationId = metadataPayload.locationId;
+    if (submissionId && locationId) {
+      deleteMatsSubmission(submissionId, locationId);
+    }
+    setSubmissionInitStatus(dataStatus.IDLE);
+  };
+
+  const handleSignSubmitModalClose = () => {
+    cancelSubmission();
+  };
+
+  const handleSignSubmitModalSave = () => {
+    setSubmissionInitStatus(dataStatus.IDLE);
+  };
+
+  const handleWarningsModalClose = () => {
+    cancelSubmission();
+    setSubmissionInitWarnings([]);
+  };
+
+  const handleWarningsModalSave = () => {
+    setSubmissionInitWarnings([]);
+  };
+
   const handleInitialSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = createSubmissionPayload(metadataPayload, files);
-
-    setSubmissionCheckStatus(dataStatus.PENDING);
+    setSubmissionErrors([]);
+    setSubmissionId(null);
+    setSubmissionInitWarnings([]);
+    setSubmissionInitStatus(dataStatus.PENDING);
     try {
-      const res = await createMatsSubmission(payload);
-      const { warnings } = res.data;
-      setSubmissionCheckStatus(dataStatus.SUCCESS);
-      setSubmissionCheckWarnings(warnings);
+      const res = await createMatsSubmission(
+        createSubmissionPayload(metadataPayload, files),
+        metadataPayload.locationId,
+      );
+      const { id, warnings } = res.data;
+      setSubmissionId(id);
+      setSubmissionInitStatus(dataStatus.SUCCESS);
+      if (warnings.length) {
+        setSubmissionInitWarnings(warnings);
+      }
     } catch (err) {
-      const parsedError = parseErrorMessage(err);
-      setSubmissionCheckStatus(dataStatus.ERROR);
-      // TODO: Try to parse if the error message is a JSON array.
-      setSubmissionCheckErrors([parsedError]);
+      setSubmissionInitStatus(dataStatus.ERROR);
+      setSubmissionErrors(formatErrorResponse(parseErrorMessage(err)));
     }
   };
 
@@ -313,15 +354,37 @@ const MatsSubmission = ({
             <FileInputs onUpdate={setFiles} reportType={reportType} />
           </>
         )}
-        {submissionCheckStatus === dataStatus.PENDING ? (
+        {submissionInitStatus === dataStatus.PENDING ? (
           <SizedPreloader size={5} />
         ) : (
           <Button type="submit" className="margin-top-2">
             Submit
           </Button>
         )}
-        {submissionCheckStatus === dataStatus.SUCCESS && (
-          <>{submissionCheckWarnings.length > 0 ? <></> : <></>}</>
+        {submissionInitStatus === dataStatus.SUCCESS && (
+          <>
+            {submissionInitWarnings.length > 0 ? (
+              <SubmissionWarningsModal
+                onClose={handleWarningsModalClose}
+                onSave={handleWarningsModalSave}
+                warnings={submissionInitWarnings}
+              />
+            ) : (
+              <SubmissionSignSubmitModal
+                onClose={handleSignSubmitModalClose}
+                onSave={handleSignSubmitModalSave}
+              />
+            )}
+          </>
+        )}
+        {submissionInitStatus === dataStatus.ERROR && (
+          <>
+            {submissionErrors.map((error) => (
+              <Alert key={error} type="error" slim noIcon headingLevel="h3">
+                {error}
+              </Alert>
+            ))}
+          </>
         )}
       </form>
     </div>
@@ -382,6 +445,14 @@ const MetadataInputs = ({
     [fieldIsInReportType],
   );
 
+  const tryParseInt = (value) => {
+    const parsedValue = parseInt(value, 10);
+    if (isNaN(parsedValue)) {
+      return null;
+    }
+    return parsedValue;
+  };
+
   useEffect(() => {
     onUpdate({
       locationId: includeIfInReportType('location', location),
@@ -397,11 +468,11 @@ const MetadataInputs = ({
       testMethodCodes: includeIfInReportType('testMethods', testMethods),
       year: includeIfInReportType(
         'reportingPeriod',
-        reportingPeriod.split(' ')[0],
+        tryParseInt(reportingPeriod.split(' ')[0]),
       ),
       quarter: includeIfInReportType(
         'reportingPeriod',
-        reportingPeriod.split(' ')[1]?.substring(1),
+        tryParseInt(reportingPeriod.split(' ')[1]?.substring(1)),
       ),
       originalSubmissionId: originalSubmission?.id,
       facilityId: selectedConfig.facId,
