@@ -121,110 +121,13 @@ const MatsSubmission = ({
 
   /* EXTERNAL STATE */
 
-  // TODO: Uncomment this and remove mock data when done developing the UI.
-  //const originalSubmission = location.state?.originalSubmission;
-  const originalSubmission = useMemo(
-    () => ({
-      id: 2,
-      averagingGroup: {
-        code: 'NONE',
-        description: 'EGU is not in an emissions averaging group',
-      },
-      facilityName: 'Delta Energy Park',
-      frsId: null,
-      location: {
-        id: 'CBS-6ac708a8-0127-4ef4-806e-9388b544e4ab',
-        name: 'DEPC2',
-      },
-      orisCode: 63259,
-      pollutants: [],
-      quarter: 1,
-      reportType: {
-        code: 'CR',
-        description: 'Compliance Report',
-      },
-      status: {
-        code: 'COMPLETE',
-        description: 'Completed',
-      },
-      testComment: 'THIS IS ANOTHER TEST',
-      testDate: '2025-02-27T05:00:00.000Z',
-      testMethods: [],
-      testNumber: '12345',
-      year: 2025,
-    }),
-    [],
-  );
+  const originalSubmission = location.state?.originalSubmission;
   const selectedConfigId = location.state?.selectedConfigId;
 
-  // TODO: Uncomment this and remove mock data when done developing the UI.
-  //const selectedConfig = useSelector((state) =>
-  //  Object.values(state.monitoringPlans)
-  //    .flat()
-  //    .find((mp) => mp.id === selectedConfigId),
-  //);
-
-  const selectedConfig = useMemo(
-    () => ({
-      id: 'SDM4661-9D60966839D048AD989BDD49DB09CC80',
-      facId: 8470,
-      facilityName: 'Delta Energy Park',
-      facilityRegistrySystemId: null,
-      configTypeCode: null,
-      lastUpdated: '2024-11-01T18:09:28.226Z',
-      updatedStatusFlag: 'N',
-      needsEvalFlag: 'Y',
-      checkSessionId: 'a37696bf-6aa3-5f70-f195-283a6927bc60',
-      orisCode: 63259,
-      name: 'DEPC2',
-      beginReportPeriodId: 116,
-      endReportPeriodId: null,
-      active: true,
-      monitoringPlanCommentData: [],
-      pendingStatusCode: null,
-      evalStatusCode: 'PASS',
-      evalStatusCodeDescription: 'Passed',
-      unitStackConfigurationData: [],
-      reportingFrequencies: [],
-      monitoringLocationData: [
-        {
-          id: 'CBS-6ac708a8-0127-4ef4-806e-9388b544e4ab',
-          unitRecordId: 91368,
-          unitId: 'DEPC2',
-          stackPipeRecordId: null,
-          stackPipeId: null,
-          name: 'DEPC2',
-          type: 'unit',
-          active: true,
-          activeDate: null,
-          retireDate: null,
-          nonLoadBasedIndicator: 0,
-          monitoringLocationAttribData: [],
-          unitCapacityData: [],
-          unitControlData: [],
-          unitFuelData: [],
-          monitoringMethodData: [],
-          supplementalMATSMonitoringMethodData: [],
-          monitoringFormulaData: [],
-          monitoringDefaultData: [],
-          monitoringSpanData: [],
-          rectangularDuctWAFData: [],
-          monitoringLoadData: [],
-          componentData: [],
-          monitoringSystemData: [],
-          monitoringQualificationData: [],
-        },
-      ],
-      userId: 'MDIEBOLD_DP',
-      addDate: '2021-09-24T16:21:12.000Z',
-      updateDate: '2024-11-01T18:09:28.226Z',
-      submissionId: 464,
-      submissionAvailabilityCode: 'UPDATED',
-      submissionAvailabilityCodeDescription: 'Updated on Host',
-      lastEvaluatedDate: '2024-11-01T18:12:04.346Z',
-      beginReportPeriodDescription: '2021 Q4',
-    }),
-    [],
+  const selectedConfig = useSelector((state) =>
+    Object.values(state.monitoringPlans)
+      .flat()
+      .find((mp) => mp.id === selectedConfigId),
   );
 
   /* INTERNAL STATE */
@@ -236,7 +139,7 @@ const MatsSubmission = ({
   });
   const [metadataPayload, setMetadataPayload] = useState({});
   const [reportType, setReportType] = useState(
-    originalSubmission?.reportType.code ?? '',
+    originalSubmission?.reportTypeCode ?? '',
   );
   const [submissionErrors, setSubmissionErrors] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
@@ -310,10 +213,9 @@ const MatsSubmission = ({
     return <Navigate to=".." relative="path" />;
   }
 
-  // TODO: Uncomment this when done developing the UI.
-  //if (!isCheckedOutByUser) {
-  //  return <Navigate to=".." relative="path" />;
-  //}
+  if (!isCheckedOutByUser) {
+    return <Navigate to=".." relative="path" />;
+  }
 
   return (
     <div
@@ -412,13 +314,13 @@ const MetadataInputs = ({
   reportType,
 }) => {
   const [averagingGroup, setAveragingGroup] = useState(
-    originalSubmission?.averagingGroup.code ?? '',
+    originalSubmission?.averagingGroupCode ?? '',
   );
   const [location, setLocation] = useState(
-    originalSubmission?.location.id ?? '',
+    originalSubmission?.locationId ?? '',
   );
   const [pollutants, setPollutants] = useState(
-    originalSubmission?.pollutants ?? [],
+    originalSubmission?.pollutantCodes ?? [],
   );
   const [pollutantsDisabled, setPollutantsDisabled] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState(
@@ -433,7 +335,7 @@ const MetadataInputs = ({
     (originalSubmission?.testDate ?? '').substring(0, 10),
   );
   const [testMethods, setTestMethods] = useState(
-    originalSubmission?.testMethods ?? [],
+    originalSubmission?.testMethodCodes ?? [],
   );
   const [testNumber, setTestNumber] = useState(
     originalSubmission?.testNumber ?? '',

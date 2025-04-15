@@ -464,13 +464,11 @@ const App = () => {
           <Route
             path="/workspace/mats-data-submission/create"
             element={
-              // TODO: Uncomment this when done developing the UI.
-              false ? (
-                //!facilityCheckoutPermission([
-                //  config.app.sponsorRole,
-                //  config.app.submitterRole,
-                //  config.app.initialAuthorizerRole,
-                //]) ? (
+              !facilityCheckoutPermission([
+                config.app.sponsorRole,
+                config.app.submitterRole,
+                config.app.initialAuthorizerRole,
+              ]) ? (
                 <Navigate key="navigate" to="/workspace/mats-data-submission" />
               ) : (
                 <MatsSubmission user={user} />
