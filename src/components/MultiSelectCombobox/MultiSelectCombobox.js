@@ -4,13 +4,13 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from "react";
-import { Label } from "@trussworks/react-uswds";
-import PillButton from "../PillButton/PillButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCheck } from "@fortawesome/free-solid-svg-icons";
-import "./MultiSelectCombobox.scss";
-import { debounce } from "lodash";
+} from 'react';
+import { Label } from '@trussworks/react-uswds';
+import PillButton from '../PillButton/PillButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
+import './MultiSelectCombobox.scss';
+import { debounce } from 'lodash';
 
 const getComboboxEnabledItems = (arr) => {
   return arr.filter((e) => e.enabled);
@@ -19,6 +19,7 @@ const getComboboxEnabledItems = (arr) => {
 export const DEBOUNCE_MILLISECONDS = 200;
 
 const MultiSelectCombobox = ({
+  className = '',
   items,
   label,
   entity,
@@ -31,10 +32,10 @@ const MultiSelectCombobox = ({
   favicon = true,
   disabled = false,
 }) => {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [_items, _setItems] = useState(items.filter((e) => e.enabled));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items))),
   );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -50,7 +51,7 @@ const MultiSelectCombobox = ({
 
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
-      `multi-select-combobox-${entity}`
+      `multi-select-combobox-${entity}`,
     );
     if (multiSelectComboboxDiv && !multiSelectComboboxDiv.contains(e.target)) {
       setShowListBox(false);
@@ -61,13 +62,13 @@ const MultiSelectCombobox = ({
     const lowercasedFilter = value.toLowerCase();
     let filteredData = _items;
     if (value.length > 0) {
-      if (searchBy === "contains") {
+      if (searchBy === 'contains') {
         filteredData = _items.filter((item) =>
-          item.label?.toString().toLowerCase().includes(lowercasedFilter)
+          item.label?.toString().toLowerCase().includes(lowercasedFilter),
         );
-      } else if (searchBy === "beginsWith") {
+      } else if (searchBy === 'beginsWith') {
         filteredData = _items.filter((item) =>
-          item.label?.toString().toLowerCase().startsWith(lowercasedFilter)
+          item.label?.toString().toLowerCase().startsWith(lowercasedFilter),
         );
       }
     }
@@ -81,48 +82,48 @@ const MultiSelectCombobox = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedOnSearchHandler = useMemo(
     () => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS),
-    [_items]
+    [_items],
   );
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
       const _itemsCopy = [..._items];
       const index = _itemsCopy.findIndex(
-        (d) => d.id.toString() === id.toString()
+        (d) => d.id.toString() === id.toString(),
       );
       if (index > -1) {
-        _itemsCopy[index].selected = update === "add";
+        _itemsCopy[index].selected = update === 'add';
       }
       _setItems([..._itemsCopy]);
       setData([..._itemsCopy]);
     },
-    [_items]
+    [_items],
   );
 
   const onRemoveHanlder = useCallback(
     (id) => {
       const itemsCopy = [...selectedItemsRef.current];
       const index = itemsCopy.findIndex(
-        (i) => i.id.toString() === id.toString()
+        (i) => i.id.toString() === id.toString(),
       );
       if (index > -1) {
         itemsCopy.splice(index, 1);
         selectedItemsRef.current = itemsCopy;
         setSelectedItems(itemsCopy);
-        updateListDataOnChange(id, "remove");
-        onChangeUpdate(id, "remove");
+        updateListDataOnChange(id, 'remove');
+        onChangeUpdate(id, 'remove');
         inputRef.current.focus();
       }
     },
-    [selectedItemsRef, onChangeUpdate, updateListDataOnChange]
+    [selectedItemsRef, onChangeUpdate, updateListDataOnChange],
   );
 
   const optionClickHandler = (e) => {
-    if (e.target.getAttribute("data-id") === null) {
+    if (e.target.getAttribute('data-id') === null) {
       return;
     }
-    const id = e.target.getAttribute("data-id");
-    const optionLabel = e.target.getAttribute("data-label");
+    const id = e.target.getAttribute('data-id');
+    const optionLabel = e.target.getAttribute('data-label');
     if (!selectedItems.find((s) => s.id.toString() === id.toString())) {
       const _selectedItems = [
         ...selectedItems,
@@ -139,10 +140,10 @@ const MultiSelectCombobox = ({
         },
       ];
       selectedItemsRef.current = _selectedItems;
-      onSearchHandler("");
+      onSearchHandler('');
       setSelectedItems([..._selectedItems]);
-      updateListDataOnChange(id, "add");
-      onChangeUpdate(id, "add");
+      updateListDataOnChange(id, 'add');
+      onChangeUpdate(id, 'add');
     }
   };
 
@@ -169,15 +170,15 @@ const MultiSelectCombobox = ({
   }, [items, onRemoveHanlder]);
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       if (!showListBox) {
         setShowListBox(true);
       } else {
         optionClickHandler(event);
       }
-    } else if (event.key === "Escape") {
+    } else if (event.key === 'Escape') {
       setShowListBox(false);
-      const applyBtn = document.querySelector(".autofocus2");
+      const applyBtn = document.querySelector('.autofocus2');
       if (applyBtn) {
         applyBtn.focus();
       }
@@ -189,14 +190,14 @@ const MultiSelectCombobox = ({
   }, [populateSelectedItems]);
 
   useEffect(() => {
-    window.addEventListener("click", handleMultiSelectClick);
+    window.addEventListener('click', handleMultiSelectClick);
     return () => {
-      window.removeEventListener("click", handleMultiSelectClick);
+      window.removeEventListener('click', handleMultiSelectClick);
     };
   });
 
   return (
-    <>
+    <div className={className}>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
         {label}
       </Label>
@@ -210,7 +211,7 @@ const MultiSelectCombobox = ({
         id={`multi-select-combobox-${entity}`}
         className={
           styling?.combobox ||
-          "margin-top-1 margin-bottom-2 border-1px bg-white multi-select-combobox"
+          'margin-top-1 margin-bottom-2 border-1px bg-white multi-select-combobox'
         }
       >
         <div className="margin-x-05 margin-top-05 display-block maxh-card overflow-y-scroll">
@@ -259,7 +260,7 @@ const MultiSelectCombobox = ({
             tabIndex="-1"
             className={
               styling?.listbox ||
-              "list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden border-top"
+              'list-box bg-white display-block height-15 width-full overflow-y-scroll overflow-x-hidden border-top'
             }
           >
             {data.length > 0 ? (
@@ -274,10 +275,10 @@ const MultiSelectCombobox = ({
                   data-testid={`${entity}-multi-select-option-${i}`}
                   className={
                     (item.selected
-                      ? "item selected padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify"
-                      : "item padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify") +
-                    " " +
-                    (item.disabled ? "disabled " : "")
+                      ? 'item selected padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify'
+                      : 'item padding-y-1 padding-x-2 border-top-0 display-flex flex-row flex-justify') +
+                    ' ' +
+                    (item.disabled ? 'disabled ' : '')
                   }
                   onClick={optionClickHandler}
                   onKeyDown={(e) => handleKeyDown(e)}
@@ -296,13 +297,13 @@ const MultiSelectCombobox = ({
               ))
             ) : (
               <span className="padding-x-2 padding-top-2">
-                No {entity.replace("-", " ")} match your search.
+                No {entity.replace('-', ' ')} match your search.
               </span>
             )}
           </ul>
         ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

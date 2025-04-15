@@ -9,6 +9,7 @@ import MultiSelectCombobox from '../MultiSelectCombobox/MultiSelectCombobox';
 import SizedPreloader from '../SizedPreloader/SizedPreloader';
 
 const MatsCodeSelect = ({
+  className = '',
   disabled = false,
   label,
   multiple = false,
@@ -73,17 +74,25 @@ const MatsCodeSelect = ({
     <>
       {multiple ? (
         <MultiSelectCombobox
+          className={className}
           disabled={disabled}
           entity={optionsStoreName}
+          iconAlignRight={3}
           items={optionsMapped}
           label={label}
           onChangeUpdate={onMultiSelectChange}
           searchBy="contains"
+          styling={{
+            combobox: `border-1px bg-white margin-top-1 multi-select-combobox`,
+            listbox: '',
+          }}
         />
       ) : (
         <DropdownSelection
           caption={label}
+          className={className}
           disabled={disabled}
+          extraSpace
           initialSelection={options.findIndex(
             (option) => option.code === value,
           )}

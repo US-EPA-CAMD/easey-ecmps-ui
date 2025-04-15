@@ -9,6 +9,7 @@ function parseDatePickerString(dateString) {
 }
 
 export const DatePicker = ({
+  className = '',
   label,
   placeholder = 'mm/dd/yyyy',
   setValue,
@@ -17,9 +18,10 @@ export const DatePicker = ({
   const [id] = useState(uniqueId(`${label.replace(' ', '')}-date-picker-`));
 
   return (
-    <>
+    <div className={className}>
       <Label htmlFor={id}>{label}</Label>
       <UswdsDatePicker
+        className="padding-right-15"
         defaultValue={value}
         id={id}
         name={label}
@@ -27,7 +29,7 @@ export const DatePicker = ({
         placeholder={placeholder}
         value={value}
       />
-    </>
+    </div>
   );
 };
 

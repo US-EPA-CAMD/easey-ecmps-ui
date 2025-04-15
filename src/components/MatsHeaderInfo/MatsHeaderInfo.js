@@ -52,12 +52,14 @@ export const MatsHeaderInfo = ({
           <div className="grid-col-4">
             <HeaderInfoLocationSelect
               allowEmpty
+              className="margin-right-2 margin-y-1"
               selectedConfig={selectedConfig}
               workspaceSection={MATS_STORE_NAME}
             />
           </div>
           <div className="grid-col-4">
             <MatsCodeSelect
+              className="margin-y-1"
               label="Report Types"
               optionsStoreName={MATS_REPORT_TYPE_CODES_STORE_NAME}
               setValue={setSelectedReportType}

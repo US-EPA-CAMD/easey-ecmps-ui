@@ -2,6 +2,7 @@ import React from "react";
 import { Label, Select, FormGroup } from "@trussworks/react-uswds";
 export const DropdownSelection = ({
   caption,
+  className = "",
   disabled = false,
   selectKey, // the key in the object property to identify
   viewKey, // the key in the object property to display in dropdown
@@ -41,9 +42,9 @@ export const DropdownSelection = ({
     });
   };
   return (
-    <div>
+    <>
       {!extraSpace ? (
-        <div>
+        <div className={className}>
           <FormGroup className="margin-right-2 margin-bottom-1">
             <Label test-id={caption} htmlFor={caption}>
               {caption}
@@ -67,7 +68,7 @@ export const DropdownSelection = ({
           </FormGroup>
         </div>
       ) : (
-        <div>
+        <div className={className}>
           <Label test-id={caption} htmlFor={caption}>
             {caption}
           </Label>
@@ -80,7 +81,7 @@ export const DropdownSelection = ({
             value={
               options[initialSelection]
                 ? options[initialSelection][selectKey]
-                : options[0][selectKey]
+                : options[0]?.[selectKey]
             }
             onChange={(e) => handleChange(e)}
             tabIndex={0}
@@ -89,7 +90,7 @@ export const DropdownSelection = ({
           </Select>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
 
 const emptyOption = { value: '', label: '-- Select a value --' };
 
-const ReportingPeriodSelect = ({ setValue, value }) => {
+const ReportingPeriodSelect = ({ className = '', setValue, value }) => {
   const options = useMemo(() => {
     const periods = getReportingPeriods();
     return [
@@ -17,6 +17,8 @@ const ReportingPeriodSelect = ({ setValue, value }) => {
   return (
     <DropdownSelection
       caption="Year / Quarter"
+      className={className}
+      extraSpace
       initialSelection={options.findIndex((option) => option.value === value)}
       options={options}
       selectKey="value"

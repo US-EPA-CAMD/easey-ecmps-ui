@@ -14,6 +14,7 @@ const TextInput = ({
     <>
       <Label htmlFor={id}>{label}</Label>
       <UswdsTextInput
+        className="margin-top-1"
         id={id}
         name={label}
         onChange={(e) => setValue(e.target.value)}

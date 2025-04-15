@@ -4,12 +4,14 @@ import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
 
 const emptyOption = { id: '', name: '-- Select a value --' };
 
-const LocationSelect = ({ options = [], setValue, value }) => {
+const LocationSelect = ({ className = '', options = [], setValue, value }) => {
   const allOptions = useMemo(() => [emptyOption, ...options], [options]);
 
   return (
     <DropdownSelection
       caption="Location Name"
+      className={className}
+      extraSpace
       options={allOptions}
       viewKey="name"
       selectKey="id"

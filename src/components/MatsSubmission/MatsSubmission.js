@@ -34,7 +34,6 @@ import { matsModule } from '../../utils/constants/moduleTitles';
 import { formatErrorResponse } from '../../utils/functions';
 import FileInput from '../FileInput/FileInput';
 import MatsCodeSelect from '../MatsCodeSelect/MatsCodeSelect';
-import Modal from '../Modal/Modal';
 import SizedPreloader from '../SizedPreloader/SizedPreloader';
 import DatePicker from './DatePicker';
 import LocationSelect from './LocationSelect';
@@ -42,6 +41,8 @@ import ReportingPeriodSelect from './ReportingPeriodSelect';
 import SubmissionSignSubmitModal from './SubmissionSignSubmitModal';
 import SubmissionWarningsModal from './SubmissionWarningsModal';
 import TextInput from './TextInput';
+
+import './MatsSubmission.scss';
 
 const reportTypeInputMappings = [
   {
@@ -315,7 +316,10 @@ const MatsSubmission = ({
   //}
 
   return (
-    <div className="react-transition fade-in margin-bottom-3 padding-x-3">
+    <div
+      className="react-transition fade-in margin-bottom-3 padding-x-3"
+      id="mats-submission"
+    >
       <Button
         className="margin-top-2"
         onClick={() => navigate(-1)}
@@ -328,64 +332,74 @@ const MatsSubmission = ({
       <form onSubmit={handleInitialSubmit}>
         <h3>Metadata</h3>
         <p>
-          <span className="usa-label">ORIS Code:</span>{' '}
+          <span className="usa-label display-inline">Facility Name:</span>{' '}
+          {selectedConfig.facilityName}
+        </p>
+        <p>
+          <span className="usa-label display-inline">ORIS Code:</span>{' '}
           {selectedConfig.orisCode}
         </p>
         <p>
-          <span className="usa-label">FRS ID:</span>{' '}
+          <span className="usa-label display-inline">FRS ID:</span>{' '}
           {selectedConfig.facilityRegistrySystemId || 'None'}
         </p>
         <MatsCodeSelect
+          className="margin-bottom-2"
           disabled={!!originalSubmission}
           label="Report Type"
           optionsStoreName={MATS_REPORT_TYPE_CODES_STORE_NAME}
           setValue={setReportType}
           value={reportType}
         />
-        {reportType && (
-          <>
-            <MetadataInputs
-              onUpdate={setMetadataPayload}
-              originalSubmission={originalSubmission}
-              reportType={reportType}
-              selectedConfig={selectedConfig}
-            />
-            <h3>File Input</h3>
-            <FileInputs onUpdate={setFiles} reportType={reportType} />
-          </>
-        )}
-        {submissionInitStatus === dataStatus.PENDING ? (
-          <SizedPreloader size={5} />
-        ) : (
-          <Button type="submit" className="margin-top-2">
-            Submit
-          </Button>
-        )}
-        {submissionInitStatus === dataStatus.SUCCESS && (
-          <>
-            {submissionInitWarnings.length > 0 ? (
-              <SubmissionWarningsModal
-                onClose={handleWarningsModalClose}
-                onSave={handleWarningsModalSave}
-                warnings={submissionInitWarnings}
+        <hr className="margin-y-4" />
+        <GridContainer>
+          {reportType && (
+            <>
+              <MetadataInputs
+                onUpdate={setMetadataPayload}
+                originalSubmission={originalSubmission}
+                reportType={reportType}
+                selectedConfig={selectedConfig}
               />
+              <h3>File Input</h3>
+              <FileInputs onUpdate={setFiles} reportType={reportType} />
+            </>
+          )}
+          <div className="display-flex flex-justify-end">
+            {submissionInitStatus === dataStatus.PENDING ? (
+              <SizedPreloader size={5} />
             ) : (
-              <SubmissionSignSubmitModal
-                onClose={handleSignSubmitModalClose}
-                onSave={handleSignSubmitModalSave}
-              />
+              <Button type="submit" className="margin-top-2">
+                Submit
+              </Button>
             )}
-          </>
-        )}
-        {submissionInitStatus === dataStatus.ERROR && (
-          <>
-            {submissionErrors.map((error) => (
-              <Alert key={error} type="error" slim noIcon headingLevel="h3">
-                {error}
-              </Alert>
-            ))}
-          </>
-        )}
+          </div>
+          {submissionInitStatus === dataStatus.SUCCESS && (
+            <>
+              {submissionInitWarnings.length > 0 ? (
+                <SubmissionWarningsModal
+                  onClose={handleWarningsModalClose}
+                  onSave={handleWarningsModalSave}
+                  warnings={submissionInitWarnings}
+                />
+              ) : (
+                <SubmissionSignSubmitModal
+                  onClose={handleSignSubmitModalClose}
+                  onSave={handleSignSubmitModalSave}
+                />
+              )}
+            </>
+          )}
+          {submissionInitStatus === dataStatus.ERROR && (
+            <>
+              {submissionErrors.map((error) => (
+                <Alert key={error} type="error" slim noIcon headingLevel="h3">
+                  {error}
+                </Alert>
+              ))}
+            </>
+          )}
+        </GridContainer>
       </form>
     </div>
   );
@@ -507,65 +521,87 @@ const MetadataInputs = ({
   }
 
   return (
-    <>
-      {fieldIsInReportType('location') && (
-        <LocationSelect
-          options={selectedConfig.monitoringLocationData}
-          setValue={setLocation}
-          value={location}
-        />
-      )}
-      {fieldIsInReportType('averagingGroup') && (
-        <MatsCodeSelect
-          label="Averaging Group"
-          optionsStoreName={MATS_AVERAGING_GROUP_CODES_STORE_NAME}
-          setValue={setAveragingGroup}
-          value={averagingGroup}
-        />
-      )}
-      {fieldIsInReportType('pollutants') && (
-        <MatsCodeSelect
-          disabled={pollutantsDisabled}
-          label="Pollutants"
-          multiple
-          optionsStoreName={MATS_POLLUTANT_CODES_STORE_NAME}
-          setValue={setPollutants}
-          value={pollutants}
-        />
-      )}
-      {fieldIsInReportType('testMethods') && (
-        <MatsCodeSelect
-          label="Test Methods"
-          multiple
-          optionsStoreName={MATS_TEST_METHOD_CODES_STORE_NAME}
-          setValue={setTestMethods}
-          value={testMethods}
-        />
-      )}
-      {fieldIsInReportType('testNumber') && (
-        <TextInput
-          label="Test Number"
-          setValue={setTestNumber}
-          value={testNumber}
-        />
-      )}
-      {fieldIsInReportType('testDate') && (
-        <DatePicker label="Test Date" setValue={setTestDate} value={testDate} />
-      )}
-      {fieldIsInReportType('testComment') && (
-        <TextInput
-          label="Test Comment"
-          setValue={setTestComment}
-          value={testComment}
-        />
-      )}
-      {fieldIsInReportType('reportingPeriod') && (
-        <ReportingPeriodSelect
-          setValue={setReportingPeriod}
-          value={reportingPeriod}
-        />
-      )}
-    </>
+    <div className="margin-top-2">
+      <Grid row gap>
+        {fieldIsInReportType('location') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <LocationSelect
+              options={selectedConfig.monitoringLocationData}
+              setValue={setLocation}
+              value={location}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('averagingGroup') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <MatsCodeSelect
+              label="Averaging Group"
+              optionsStoreName={MATS_AVERAGING_GROUP_CODES_STORE_NAME}
+              setValue={setAveragingGroup}
+              value={averagingGroup}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('pollutants') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <MatsCodeSelect
+              disabled={pollutantsDisabled}
+              label="Pollutants"
+              multiple
+              optionsStoreName={MATS_POLLUTANT_CODES_STORE_NAME}
+              setValue={setPollutants}
+              value={pollutants}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('testMethods') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <MatsCodeSelect
+              label="Test Methods"
+              multiple
+              optionsStoreName={MATS_TEST_METHOD_CODES_STORE_NAME}
+              setValue={setTestMethods}
+              value={testMethods}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('testNumber') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <TextInput
+              label="Test Number"
+              setValue={setTestNumber}
+              value={testNumber}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('testDate') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <DatePicker
+              label="Test Date"
+              setValue={setTestDate}
+              value={testDate}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('testComment') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <TextInput
+              label="Test Comment"
+              setValue={setTestComment}
+              value={testComment}
+            />
+          </Grid>
+        )}
+        {fieldIsInReportType('reportingPeriod') && (
+          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
+            <ReportingPeriodSelect
+              setValue={setReportingPeriod}
+              value={reportingPeriod}
+            />
+          </Grid>
+        )}
+      </Grid>
+    </div>
   );
 };
 
@@ -579,18 +615,23 @@ const FileInputRow = ({
   const fileInputRef = useRef(null);
 
   return (
-    <Grid row>
-      <Grid tablet={{ col: 6 }}>
-        <Label htmlFor={id}>{label}</Label>
+    <>
+      <Label className="margin-bottom-1" htmlFor={id}>
+        {label}
+      </Label>
+      <Grid
+        row
+        className="display-flex flex-align-center flex-row flex-justify-start gap"
+      >
         <FileInput
           accept={accept}
+          className="margin-bottom-2"
           id={id}
           onChange={(e) => onChange(e.target?.files[0])}
           ref={fileInputRef}
         />
-      </Grid>
-      <Grid tablet={{ col: 2 }}>
         <Button
+          className="margin-bottom-2 margin-right-0"
           type="button"
           onClick={() => {
             const file = fileInputRef.current?.files[0];
@@ -601,9 +642,8 @@ const FileInputRow = ({
         >
           Preview
         </Button>
-      </Grid>
-      <Grid tablet={{ col: 2 }}>
         <Button
+          className="margin-bottom-2 margin-right-0"
           type="button"
           onClick={() => {
             fileInputRef.current?.clearFiles();
@@ -613,7 +653,7 @@ const FileInputRow = ({
           Remove
         </Button>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
@@ -672,42 +712,43 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
 
   return (
     <>
-      <GridContainer>
-        {fileIsInReportType('ERT') && (
-          <FileInputRow
-            label="ERT XML"
-            accept=".xml"
-            onChange={(file) => setErtFile(file)}
-            onRemove={() => setErtFile(null)}
-          />
-        )}
-        {fileIsInReportType('PAYLOAD') && (
-          <FileInputRow
-            label="Payload PDF, XML, or JSON"
-            accept=".pdf,.xml,.json"
-            onChange={(file) => setPayloadFile(file)}
-            onRemove={() => setPayloadFile(null)}
-          />
-        )}
-      </GridContainer>
+      {fileIsInReportType('ERT') && (
+        <FileInputRow
+          label="ERT XML"
+          accept=".xml"
+          onChange={(file) => setErtFile(file)}
+          onRemove={() => setErtFile(null)}
+        />
+      )}
+      {fileIsInReportType('PAYLOAD') && (
+        <FileInputRow
+          label="Payload PDF, XML, or JSON"
+          accept=".pdf,.xml,.json"
+          onChange={(file) => setPayloadFile(file)}
+          onRemove={() => setPayloadFile(null)}
+        />
+      )}
       {fileIsInReportType('SUPPORTING') && (
         <section>
           <h4>Supporting PDF(s)</h4>
-          <GridContainer>
-            {pdfInputs.map(({ id }, i) => (
-              <FileInputRow
-                accept=".pdf"
-                key={id}
-                label={`PDF ${i + 1}`}
-                onChange={(file) => {
-                  setSupportingFiles((prev) => ({ ...prev, [id]: file }));
-                }}
-                onRemove={() => removePdfInput(id)}
-              />
-            ))}
-          </GridContainer>
-          <Button type="button" onClick={addPdfInput}>
-            Add
+          {pdfInputs.map(({ id }, i) => (
+            <FileInputRow
+              accept=".pdf"
+              key={id}
+              label={`PDF ${i + 1}`}
+              onChange={(file) => {
+                setSupportingFiles((prev) => ({ ...prev, [id]: file }));
+              }}
+              onRemove={() => removePdfInput(id)}
+            />
+          ))}
+          <Button
+            className="margin-top-1"
+            type="button"
+            onClick={addPdfInput}
+            unstyled
+          >
+            Add More
           </Button>
         </section>
       )}
