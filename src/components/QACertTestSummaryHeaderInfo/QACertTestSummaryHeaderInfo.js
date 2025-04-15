@@ -15,7 +15,6 @@ import {
 } from '../../additional-functions/prompt-to-save-unsaved-changes';
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
 import { successResponses } from '../../utils/api/apiUtils';
-import { matsFileUpload } from '../../utils/api/camdServices';
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
@@ -27,7 +26,6 @@ import HeaderInfoCheckoutButton from '../HeaderInfoCheckoutButton/HeaderInfoChec
 import HeaderInfoFacility from '../HeaderInfoFacility/HeaderInfoFacility';
 import HeaderInfoLocationSelect from '../HeaderInfoLocationSelect/HeaderInfoLocationSelect';
 import ImportModal from '../ImportModal/ImportModal';
-import ImportModalMatsContent from '../ImportModal/ImportModalMatsContent/ImportModalMatsContent';
 import Modal from '../Modal/Modal';
 import QAImportHistoricalDataPreview from '../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview';
 import UploadModal from '../UploadModal/UploadModal';
@@ -53,7 +51,6 @@ export const QACertTestSummaryHeaderInfo = ({
 }) => {
   const importTestTitle = 'Import QA Test Data';
   const [showImportModal, setShowImportModal] = useState(false);
-  const [showMatsImport, setShowMatsImport] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
     useState(false);
@@ -77,7 +74,6 @@ export const QACertTestSummaryHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
-  const [disableMatsImportButton, setDisableMatsImportButton] = useState(true);
   const [jsonSchemaVersion, setJsonSchemaVersion] = useState('');
 
   const isCheckedOut = checkoutState;
@@ -214,9 +210,7 @@ export const QACertTestSummaryHeaderInfo = ({
     setFileName('');
     setHasFormatError(false);
     setHasInvalidJsonError(false);
-    setShowMatsImport(false);
     setImportedFile([]);
-    setDisableMatsImportButton(true);
   };
 
   const openModalType = (modalType) => {
@@ -230,9 +224,6 @@ export const QACertTestSummaryHeaderInfo = ({
       case 'historical':
         setShowImportDataPreview(true);
         setShowSelectionTypeImportModal(false);
-        break;
-      case 'mats':
-        setShowMatsImport(true);
         break;
       default:
         throw Error(`modalType of ${modalType} does not exist`);
@@ -270,33 +261,6 @@ export const QACertTestSummaryHeaderInfo = ({
     };
     importQABtn(payload);
     setShowImportDataPreview(false);
-  };
-
-  const importMats = async (payload) => {
-    try {
-      setIsLoading(true);
-      setFinishedLoading(false);
-      const resp = await matsFileUpload(
-        selectedConfigId,
-        selectedTestNumberRef.current,
-        payload,
-      );
-      if (successResponses.includes(resp.status)) {
-        setImportedFileErrorMsgs([]);
-      } else {
-        const errorMsgs = formatErrorResponse(resp);
-        setImportedFileErrorMsgs(errorMsgs);
-      }
-    } catch (error) {
-      log.log('error importing MATS files', error);
-    } finally {
-      setIsLoading(false);
-      setFinishedLoading(true);
-      // set flags to show success/error modal content
-      setUsePortBtn(true);
-      setShowImportModal(true);
-      setShowMatsImport(false); // stop showing mats content
-    }
   };
 
   return (
@@ -384,7 +348,6 @@ export const QACertTestSummaryHeaderInfo = ({
             children={
               <QAImportModalSelect
                 setImportTypeSelection={setImportTypeSelection}
-                importTestTitle={importTestTitle}
               />
             }
           />
@@ -484,30 +447,6 @@ export const QACertTestSummaryHeaderInfo = ({
             />
           }
         />
-      )}
-
-      {/* MATS */}
-      {showMatsImport && (
-        <UploadModal
-          show={showMatsImport}
-          close={closeImportModalHandler}
-          showCancel={true}
-          showSave={true}
-          title="Import MATS Data"
-          mainBTN={'Import'}
-          disablePortBtn={disableMatsImportButton}
-          port={() => importMats(importedFile)}
-          importedFileErrorMsgs={importedFileErrorMsgs}
-        >
-          <ImportModalMatsContent
-            setImportedFile={setImportedFile}
-            importedFile={importedFile}
-            selectedTestNumberRef={selectedTestNumberRef}
-            testCodeLegend={allTestTypeCodes}
-            locations={locations}
-            setDisablePortBtn={setDisableMatsImportButton}
-          />
-        </UploadModal>
       )}
     </div>
   );

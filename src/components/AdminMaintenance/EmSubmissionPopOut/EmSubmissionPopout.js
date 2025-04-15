@@ -137,7 +137,7 @@ export const EmSubmissionModal = ({
       const payload = {
         id: row.id,
         emissionStatusCode: "APPRVD",
-        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        submissionAvailabilityCode: "REQUIRE",
         resubExplanation,
         closeDate: row.closeDate,
       };
