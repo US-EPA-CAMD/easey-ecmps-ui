@@ -131,7 +131,7 @@ export const FileInputForwardRef = (
   const handleDragOver = () => setIsDragging(true)
   const handleDragLeave = () => setIsDragging(false)
   const handleDrop = (e) => {
-    //preventInvalidFiles(e) TODO: Test if this is necessary after the addition to `handleChange`
+    preventInvalidFiles(e);
     setIsDragging(false)
     if (onDrop) onDrop(e)
   }
