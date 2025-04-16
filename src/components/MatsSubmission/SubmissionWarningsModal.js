@@ -1,7 +1,7 @@
-import { Alert } from '@trussworks/react-uswds';
-import React from 'react';
+import { Alert } from "@trussworks/react-uswds";
+import React from "react";
 
-import Modal from '../Modal/Modal';
+import Modal from "../Modal/Modal";
 
 export const SubmissionWarningsModal = ({
   onClose = () => {},

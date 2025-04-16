@@ -1,15 +1,15 @@
-import log from 'loglevel';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import log from "loglevel";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { loadDropdowns } from '../../store/actions/dropdowns';
-import { dataStatus } from '../../utils/constants/dataStatus';
-import DropdownSelection from '../DropdownSelection/DropdownSelection';
-import MultiSelectCombobox from '../MultiSelectCombobox/MultiSelectCombobox';
-import SizedPreloader from '../SizedPreloader/SizedPreloader';
+import { loadDropdowns } from "../../store/actions/dropdowns";
+import { dataStatus } from "../../utils/constants/dataStatus";
+import DropdownSelection from "../DropdownSelection/DropdownSelection";
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import SizedPreloader from "../SizedPreloader/SizedPreloader";
 
 const MatsCodeSelect = ({
-  className = '',
+  className = "",
   disabled = false,
   label,
   multiple = false,
@@ -37,7 +37,7 @@ const MatsCodeSelect = ({
   }, [multiple, options, value]);
 
   const onMultiSelectChange = (code, action) => {
-    if (action === 'add') {
+    if (action === "add") {
       setValue((prev) => [...prev, code]);
     } else {
       setValue((prev) => prev.filter((item) => item !== code));
@@ -84,7 +84,7 @@ const MatsCodeSelect = ({
           searchBy="contains"
           styling={{
             combobox: `border-1px bg-white margin-top-1 multi-select-combobox`,
-            listbox: '',
+            listbox: "",
           }}
         />
       ) : (

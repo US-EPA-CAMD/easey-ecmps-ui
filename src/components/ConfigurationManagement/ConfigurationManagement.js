@@ -6,7 +6,7 @@ import {
   DeleteSharp,
   RemoveSharp,
   UndoSharp,
-} from '@material-ui/icons';
+} from "@material-ui/icons";
 import {
   Alert,
   Button,
@@ -17,7 +17,7 @@ import {
   GridContainer,
   Label,
   TextInput,
-} from '@trussworks/react-uswds';
+} from "@trussworks/react-uswds";
 import React, {
   Fragment,
   useCallback,
@@ -25,48 +25,48 @@ import React, {
   useMemo,
   useReducer,
   useState,
-} from 'react';
-import DataTable from 'react-data-table-component';
-import { connect } from 'react-redux';
-import { v4 as uuid } from 'uuid';
-import log from 'loglevel';
+} from "react";
+import DataTable from "react-data-table-component";
+import { connect } from "react-redux";
+import { v4 as uuid } from "uuid";
+import log from "loglevel";
 
-import { setCheckedOutLocations } from '../../store/actions/checkedOutLocations';
-import { loadFacilities } from '../../store/actions/facilities';
-import { loadMonitoringPlans } from '../../store/actions/monitoringPlans';
-import { handleError, handleImportError } from '../../utils/api/apiUtils';
+import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
+import { loadFacilities } from "../../store/actions/facilities";
+import { loadMonitoringPlans } from "../../store/actions/monitoringPlans";
+import { handleError, handleImportError } from "../../utils/api/apiUtils";
 import {
   getStackPipesByOrisCode,
   getUnitsByOrisCode,
   getUnitStackConfigsByOrisCode,
-} from '../../utils/api/facilityApi';
-import { formatErrorResponse } from '../../utils/functions';
+} from "../../utils/api/facilityApi";
+import { formatErrorResponse } from "../../utils/functions";
 import {
   createSingleUnitMP,
   deleteCheckInMonitoringPlanConfiguration,
   getCheckedOutLocations,
   importMP,
   postCheckoutMonitoringPlanConfiguration,
-} from '../../utils/api/monitoringPlansApi';
-import { dataStatus } from '../../utils/constants/dataStatus';
-import { configurationManagementTitle } from '../../utils/constants/moduleTitles';
-import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import Modal from '../Modal/Modal';
-import SizedPreloader from '../SizedPreloader/SizedPreloader';
-import StatusContent from '../StatusContent/StatusContent';
-import './ConfigurationManagement.scss';
+} from "../../utils/api/monitoringPlansApi";
+import { dataStatus } from "../../utils/constants/dataStatus";
+import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import Modal from "../Modal/Modal";
+import SizedPreloader from "../SizedPreloader/SizedPreloader";
+import StatusContent from "../StatusContent/StatusContent";
+import "./ConfigurationManagement.scss";
 
 /*
 ## CONSTANTS
 */
 
-const DEFAULT_DROPDOWN_TEXT = '-- Select a value --';
+const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
 const errorMessages = {
-  DUPLICATE_STACKPIPE_IDS: 'Stack/Pipe IDs must be unique.',
+  DUPLICATE_STACKPIPE_IDS: "Stack/Pipe IDs must be unique.",
   DUPLICATE_UNIT_STACK_CONFIGS:
-    'Unit/Stack Configurations with the same Unit and Stack/Pipe cannot have the same begin date.',
-  EDITS_PENDING: 'Please complete any pending edits before continuing.',
-  NOT_CHECKED_OUT: 'You must check out the facility before saving.',
+    "Unit/Stack Configurations with the same Unit and Stack/Pipe cannot have the same begin date.",
+  EDITS_PENDING: "Please complete any pending edits before continuing.",
+  NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
 const initialChangeSummaryState = () => ({
   newPlans: [],
@@ -77,10 +77,10 @@ const initialFormState = {
   stackPipes: [],
   unitStackConfigs: [],
 };
-const MONITOR_PLAN_SCHEMA_VERSION = '1.0.0';
+const MONITOR_PLAN_SCHEMA_VERSION = "1.0.0";
 const STACK_PIPE_ID_HINT =
-  'Enter an ID that begins with CS, CP, MS, or MP and is followed by 1 to 4 alphanumeric characters or dash (-) characters';
-const STACK_PIPE_ID_PATTERN = '^[MC][SP][a-zA-Z0-9\\-]{1,4}$';
+  "Enter an ID that begins with CS, CP, MS, or MP and is followed by 1 to 4 alphanumeric characters or dash (-) characters";
+const STACK_PIPE_ID_PATTERN = "^[MC][SP][a-zA-Z0-9\\-]{1,4}$";
 
 /*
 ## HELPERS
@@ -88,31 +88,31 @@ const STACK_PIPE_ID_PATTERN = '^[MC][SP][a-zA-Z0-9\\-]{1,4}$';
 
 function formReducer(state, action) {
   switch (action.type) {
-    case 'ADD_STACK_PIPE': {
+    case "ADD_STACK_PIPE": {
       return {
         ...state,
         stackPipes: [...state.stackPipes, action.payload],
       };
     }
-    case 'ADD_UNIT_STACK_CONFIG': {
+    case "ADD_UNIT_STACK_CONFIG": {
       return {
         ...state,
         unitStackConfigs: [...state.unitStackConfigs, action.payload],
       };
     }
-    case 'ADD_UNIT': {
+    case "ADD_UNIT": {
       return {
         ...state,
         units: [...state.units, action.payload],
       };
     }
-    case 'REMOVE_STACK_PIPE': {
+    case "REMOVE_STACK_PIPE": {
       return {
         ...state,
         stackPipes: state.stackPipes.filter((sp) => sp.id !== action.payload),
       };
     }
-    case 'REMOVE_UNIT_STACK_CONFIG': {
+    case "REMOVE_UNIT_STACK_CONFIG": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.filter(
@@ -120,10 +120,10 @@ function formReducer(state, action) {
         ),
       };
     }
-    case 'RESET_STATE': {
+    case "RESET_STATE": {
       return initialFormState;
     }
-    case 'REVERT_STACK_PIPE': {
+    case "REVERT_STACK_PIPE": {
       return {
         ...state,
         stackPipes: state.stackPipes.map((sp) => {
@@ -144,7 +144,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'REVERT_UNIT_STACK_CONFIG': {
+    case "REVERT_UNIT_STACK_CONFIG": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -166,7 +166,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_STACK_PIPE_ACTIVE_DATE': {
+    case "SET_STACK_PIPE_ACTIVE_DATE": {
       return {
         ...state,
         stackPipes: state.stackPipes.map((sp) => {
@@ -180,7 +180,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_STACK_PIPE_RETIRE_DATE': {
+    case "SET_STACK_PIPE_RETIRE_DATE": {
       return {
         ...state,
         stackPipes: state.stackPipes.map((sp) => {
@@ -194,7 +194,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_STACK_PIPE_STACK_PIPE_ID': {
+    case "SET_STACK_PIPE_STACK_PIPE_ID": {
       return {
         ...state,
         stackPipes: state.stackPipes.map((sp) => {
@@ -208,13 +208,13 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_STACK_PIPES': {
+    case "SET_STACK_PIPES": {
       return {
         ...state,
         stackPipes: action.payload,
       };
     }
-    case 'SET_UNIT_STACK_CONFIG_BEGIN_DATE': {
+    case "SET_UNIT_STACK_CONFIG_BEGIN_DATE": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -228,7 +228,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_UNIT_STACK_CONFIG_END_DATE': {
+    case "SET_UNIT_STACK_CONFIG_END_DATE": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -242,7 +242,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_UNIT_STACK_CONFIG_STACK_PIPE_ID': {
+    case "SET_UNIT_STACK_CONFIG_STACK_PIPE_ID": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -256,7 +256,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_UNIT_STACK_CONFIG_UNIT_ID': {
+    case "SET_UNIT_STACK_CONFIG_UNIT_ID": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -270,19 +270,19 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'SET_UNIT_STACK_CONFIGS': {
+    case "SET_UNIT_STACK_CONFIGS": {
       return {
         ...state,
         unitStackConfigs: action.payload,
       };
     }
-    case 'SET_UNITS': {
+    case "SET_UNITS": {
       return {
         ...state,
         units: action.payload,
       };
     }
-    case 'TOGGLE_EDIT_STACK_PIPE': {
+    case "TOGGLE_EDIT_STACK_PIPE": {
       return {
         ...state,
         stackPipes: state.stackPipes.map((sp) => {
@@ -296,7 +296,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'TOGGLE_EDIT_UNIT_STACK_CONFIG': {
+    case "TOGGLE_EDIT_UNIT_STACK_CONFIG": {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.map((usc) => {
@@ -310,7 +310,7 @@ function formReducer(state, action) {
         }),
       };
     }
-    case 'TOGGLE_ASSOCIATE_UNIT': {
+    case "TOGGLE_ASSOCIATE_UNIT": {
       return {
         ...state,
         units: state.units.map((u) => {
@@ -332,16 +332,16 @@ function formReducer(state, action) {
 
 function formatDateSlashed(dateString) {
   const date = new Date(
-    new Date(dateString).toLocaleString('en-us', {
-      timeZone: 'America/New_York',
+    new Date(dateString).toLocaleString("en-us", {
+      timeZone: "America/New_York",
     }),
   );
 
   return (
-    (date.getMonth() > 8 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)) +
-    '/' +
-    (date.getDate() > 9 ? date.getDate() : '0' + date.getDate()) +
-    '/' +
+    (date.getMonth() > 8 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) +
+    "/" +
+    (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+    "/" +
     date.getFullYear()
   );
 }
@@ -397,15 +397,15 @@ function unusedMonitoringLocationDataFields() {
 const actionCellToggle = (onToggle) => {
   return (row) =>
     row.associatedMonitorPlanIds.length === 0 &&
-    ['OPR', 'FUT'].includes(row.opStatusCd) ? (
+    ["OPR", "FUT"].includes(row.opStatusCd) ? (
       <Button
         aria-label={
           row.isToggled
-            ? 'Cancel creating initial monitor plan from unit'
-            : 'Create initial monitor plan from unit'
+            ? "Cancel creating initial monitor plan from unit"
+            : "Create initial monitor plan from unit"
         }
         onClick={() => onToggle(row.id)}
-        title={row.isToggled ? 'Cancel' : 'Create'}
+        title={row.isToggled ? "Cancel" : "Create"}
         type="button"
         unstyled
       >
@@ -442,13 +442,13 @@ const actionCellEdit = (onToggleEdit, onRemove, onRevert) => {
         </Button>
       )}
       <Button
-        aria-label={`${row.originalRecord ? 'Revert' : 'Delete'} row ${
+        aria-label={`${row.originalRecord ? "Revert" : "Delete"} row ${
           index + 1
         }`}
         onClick={() =>
           row.originalRecord ? onRevert(row.id) : onRemove(row.id)
         }
-        title={row.originalRecord ? 'Revert' : 'Delete'}
+        title={row.originalRecord ? "Revert" : "Delete"}
         type="button"
         unstyled
       >
@@ -459,7 +459,7 @@ const actionCellEdit = (onToggleEdit, onRemove, onRevert) => {
 };
 
 const dateCell = ({
-  defaultValue = '',
+  defaultValue = "",
   disabled = (_row) => false,
   onChange = (_id, _value) => {},
   required = false,
@@ -472,7 +472,7 @@ const dateCell = ({
       return (
         <DatePicker
           aria-label={`Edit ${column.name} for row ${index + 1}`}
-          defaultValue={column.selector(row) ?? ''}
+          defaultValue={column.selector(row) ?? ""}
           disabled={disabled(row)}
           form={`form-${row.id}`}
           id={`${id}-input`}
@@ -480,7 +480,7 @@ const dateCell = ({
           onChange={(e) => onChange(row.id, parseDatePickerString(e))}
           placeholder="mm/dd/yyyy"
           required={required}
-          value={column.selector(row) ?? ''}
+          value={column.selector(row) ?? ""}
         />
       );
     } else {
@@ -503,7 +503,7 @@ const PlanSummary = ({ plan }) => (
         <Grid col={4} className="text-bold">
           End Reporting Period:
         </Grid>
-        <Grid col="auto">{plan.endReportPeriodDescription ?? 'N/A'}</Grid>
+        <Grid col="auto">{plan.endReportPeriodDescription ?? "N/A"}</Grid>
       </Grid>
     </GridContainer>
     <h5 className="display-block text-primary">Plan Reporting Frequencies</h5>
@@ -515,8 +515,8 @@ const PlanSummary = ({ plan }) => (
               Reporting Period Range:
             </Grid>
             <Grid col="auto">
-              {rf.beginReportPeriodDescription} -{' '}
-              {rf.endReportPeriodDescription ?? 'Current'}
+              {rf.beginReportPeriodDescription} -{" "}
+              {rf.endReportPeriodDescription ?? "Current"}
             </Grid>
           </Grid>
           <Grid row>
@@ -524,7 +524,7 @@ const PlanSummary = ({ plan }) => (
               Reporting Frequency:
             </Grid>
             <Grid col="auto">
-              {rf.reportFrequencyCode === 'Q' ? 'Annual' : 'Ozone Season'}
+              {rf.reportFrequencyCode === "Q" ? "Annual" : "Ozone Season"}
             </Grid>
           </Grid>
         </Fragment>
@@ -580,11 +580,11 @@ const textCell = ({
         name={`${id}-input`}
         onChange={(e) => onChange(row.id, e.target.value ?? null)}
         pattern={pattern}
-        placeholder={placeholder ?? 'Enter text...'}
+        placeholder={placeholder ?? "Enter text..."}
         required={required}
         title={title}
         type="text"
-        value={column.selector(row) ?? ''}
+        value={column.selector(row) ?? ""}
       />
     ) : (
       column.selector(row)
@@ -731,28 +731,28 @@ export const ConfigurationManagement = ({
 
   const createStackPipe = (facilityId) => () => {
     formDispatch({
-      type: 'ADD_STACK_PIPE',
+      type: "ADD_STACK_PIPE",
       payload: {
         activeDate: null,
         facilityId,
         id: uuid(),
         isEditing: true,
         retireDate: null,
-        stackPipeId: '',
+        stackPipeId: "",
       },
     });
   };
 
   const createUnitStackConfig = () => {
     formDispatch({
-      type: 'ADD_UNIT_STACK_CONFIG',
+      type: "ADD_UNIT_STACK_CONFIG",
       payload: {
         beginDate: null,
         endDate: null,
         id: uuid(),
         isEditing: true,
-        stackPipeId: '',
-        unitId: '',
+        stackPipeId: "",
+        unitId: "",
       },
     });
   };
@@ -950,15 +950,15 @@ export const ConfigurationManagement = ({
   });
 
   const removeStackPipe = (rowId) => {
-    formDispatch({ type: 'REMOVE_STACK_PIPE', payload: rowId });
+    formDispatch({ type: "REMOVE_STACK_PIPE", payload: rowId });
   };
 
   const removeUnitStackConfig = (rowId) => {
-    formDispatch({ type: 'REMOVE_UNIT_STACK_CONFIG', payload: rowId });
+    formDispatch({ type: "REMOVE_UNIT_STACK_CONFIG", payload: rowId });
   };
 
   const resetFacilityData = () => {
-    formDispatch({ type: 'RESET_STATE' });
+    formDispatch({ type: "RESET_STATE" });
     setMonitoringPlansStatus(dataStatus.IDLE);
     setUnitsStatus(dataStatus.IDLE);
     setStackPipesStatus(dataStatus.IDLE);
@@ -966,11 +966,11 @@ export const ConfigurationManagement = ({
   };
 
   const revertStackPipe = (rowId) => {
-    formDispatch({ type: 'REVERT_STACK_PIPE', payload: rowId });
+    formDispatch({ type: "REVERT_STACK_PIPE", payload: rowId });
   };
 
   const revertUnitStackConfig = (rowId) => {
-    formDispatch({ type: 'REVERT_UNIT_STACK_CONFIG', payload: rowId });
+    formDispatch({ type: "REVERT_UNIT_STACK_CONFIG", payload: rowId });
   };
 
   const sendConfigurationsPayload = (draft) => {
@@ -991,7 +991,7 @@ export const ConfigurationManagement = ({
 
   const setStackPipeActiveDate = (rowId, activeDate) => {
     formDispatch({
-      type: 'SET_STACK_PIPE_ACTIVE_DATE',
+      type: "SET_STACK_PIPE_ACTIVE_DATE",
       payload: {
         id: rowId,
         activeDate,
@@ -1001,7 +1001,7 @@ export const ConfigurationManagement = ({
 
   const setStackPipeRetireDate = (rowId, retireDate) => {
     formDispatch({
-      type: 'SET_STACK_PIPE_RETIRE_DATE',
+      type: "SET_STACK_PIPE_RETIRE_DATE",
       payload: {
         id: rowId,
         retireDate,
@@ -1011,7 +1011,7 @@ export const ConfigurationManagement = ({
 
   const setStackPipeStackPipeId = (rowId, stackPipeId) => {
     formDispatch({
-      type: 'SET_STACK_PIPE_STACK_PIPE_ID',
+      type: "SET_STACK_PIPE_STACK_PIPE_ID",
       payload: {
         id: rowId,
         stackPipeId,
@@ -1021,7 +1021,7 @@ export const ConfigurationManagement = ({
 
   const setUnitStackConfigBeginDate = (rowId, beginDate) => {
     formDispatch({
-      type: 'SET_UNIT_STACK_CONFIG_BEGIN_DATE',
+      type: "SET_UNIT_STACK_CONFIG_BEGIN_DATE",
       payload: {
         id: rowId,
         beginDate,
@@ -1031,7 +1031,7 @@ export const ConfigurationManagement = ({
 
   const setUnitStackConfigEndDate = (rowId, endDate) => {
     formDispatch({
-      type: 'SET_UNIT_STACK_CONFIG_END_DATE',
+      type: "SET_UNIT_STACK_CONFIG_END_DATE",
       payload: {
         id: rowId,
         endDate,
@@ -1041,7 +1041,7 @@ export const ConfigurationManagement = ({
 
   const setUnitStackConfigStackPipeId = (rowId, stackPipeId) => {
     formDispatch({
-      type: 'SET_UNIT_STACK_CONFIG_STACK_PIPE_ID',
+      type: "SET_UNIT_STACK_CONFIG_STACK_PIPE_ID",
       payload: {
         id: rowId,
         stackPipeId,
@@ -1051,7 +1051,7 @@ export const ConfigurationManagement = ({
 
   const setUnitStackConfigUnitId = (rowId, unitId) => {
     formDispatch({
-      type: 'SET_UNIT_STACK_CONFIG_UNIT_ID',
+      type: "SET_UNIT_STACK_CONFIG_UNIT_ID",
       payload: {
         id: rowId,
         unitId,
@@ -1060,15 +1060,15 @@ export const ConfigurationManagement = ({
   };
 
   const toggleEditStackPipe = (rowId) => {
-    formDispatch({ type: 'TOGGLE_EDIT_STACK_PIPE', payload: rowId });
+    formDispatch({ type: "TOGGLE_EDIT_STACK_PIPE", payload: rowId });
   };
 
   const toggleAssociateUnit = (rowId) => {
-    formDispatch({ type: 'TOGGLE_ASSOCIATE_UNIT', payload: rowId });
+    formDispatch({ type: "TOGGLE_ASSOCIATE_UNIT", payload: rowId });
   };
 
   const toggleEditUnitStackConfig = (rowId) => {
-    formDispatch({ type: 'TOGGLE_EDIT_UNIT_STACK_CONFIG', payload: rowId });
+    formDispatch({ type: "TOGGLE_EDIT_UNIT_STACK_CONFIG", payload: rowId });
   };
 
   /* EFFECTS */
@@ -1122,13 +1122,13 @@ export const ConfigurationManagement = ({
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
             res.data.items
-              .filter((d) => d.opStatusCd !== 'CAN') // Filter out canceled units
+              .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
               .map((d) => ({
                 ...d,
-                beginDate: d.beginDate ? d.beginDate.split('T')[0] : null,
-                endDate: d.endDate ? d.endDate.split('T')[0] : null,
+                beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
+                endDate: d.endDate ? d.endDate.split("T")[0] : null,
               })),
-            'SET_UNITS',
+            "SET_UNITS",
           );
         });
       } catch (err) {
@@ -1146,7 +1146,7 @@ export const ConfigurationManagement = ({
         setStackPipesStatus(dataStatus.PENDING);
         getStackPipesByOrisCode(selectedOrisCode).then((res) => {
           setStackPipesStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data.items, 'SET_STACK_PIPES');
+          initializeEditableFormState(res.data.items, "SET_STACK_PIPES");
         });
       } catch (err) {
         setStackPipesStatus(dataStatus.ERROR);
@@ -1163,7 +1163,7 @@ export const ConfigurationManagement = ({
         setUnitStackConfigsStatus(dataStatus.PENDING);
         getUnitStackConfigsByOrisCode(selectedOrisCode).then((res) => {
           setUnitStackConfigsStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data.items, 'SET_UNIT_STACK_CONFIGS');
+          initializeEditableFormState(res.data.items, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
         setUnitStackConfigsStatus(dataStatus.ERROR);
@@ -1279,8 +1279,8 @@ export const ConfigurationManagement = ({
                 </div>
                 {checkedOutLocationsForFacility.length > 0 && (
                   <p className="text-bold">
-                    Currently checked-out by:{' '}
-                    {checkedOutLocationsForFacility[0].checkedOutBy}{' '}
+                    Currently checked-out by:{" "}
+                    {checkedOutLocationsForFacility[0].checkedOutBy}{" "}
                     {formatDateSlashed(
                       checkedOutLocationsForFacility[0].checkedOutOn,
                     )}
@@ -1299,31 +1299,31 @@ export const ConfigurationManagement = ({
                   id="accordion-configuration-management"
                   tables={[
                     {
-                      title: 'Units',
+                      title: "Units",
                       content: (
                         <StatusContent status={unitsStatus} label="units">
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
                               {
-                                name: 'Unit ID',
+                                name: "Unit ID",
                                 selector: (row) => row.unitId,
                                 sortable: true,
                               },
                               {
-                                name: 'Begin Date',
+                                name: "Begin Date",
                                 selector: (row) => row.beginDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('beginDate'),
+                                sortFunction: sortDatesNullsLast("beginDate"),
                               },
                               {
-                                name: 'End Date',
+                                name: "End Date",
                                 selector: (row) => row.endDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('endDate'),
+                                sortFunction: sortDatesNullsLast("endDate"),
                               },
                               {
-                                name: 'Actions',
+                                name: "Actions",
                                 cell: actionCellToggle(toggleAssociateUnit),
                               },
                             ]}
@@ -1337,7 +1337,7 @@ export const ConfigurationManagement = ({
                       ),
                     },
                     {
-                      title: 'Stacks & Pipes',
+                      title: "Stacks & Pipes",
                       content: (
                         <StatusContent
                           status={stackPipesStatus}
@@ -1357,7 +1357,7 @@ export const ConfigurationManagement = ({
                             className="data-display-table react-transition fade-in"
                             columns={[
                               {
-                                name: 'Stack/Pipe ID',
+                                name: "Stack/Pipe ID",
                                 cell: textCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setStackPipeStackPipeId,
@@ -1367,10 +1367,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
-                                sortFunction: sortTextNullsLast('stackPipeId'),
+                                sortFunction: sortTextNullsLast("stackPipeId"),
                               },
                               {
-                                name: 'Active Date',
+                                name: "Active Date",
                                 cell: dateCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setStackPipeActiveDate,
@@ -1378,10 +1378,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.activeDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('activeDate'),
+                                sortFunction: sortDatesNullsLast("activeDate"),
                               },
                               {
-                                name: 'Retire Date',
+                                name: "Retire Date",
                                 cell: dateCell({
                                   disabled: (row) =>
                                     row.originalRecord?.retireDate,
@@ -1389,10 +1389,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.retireDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('retireDate'),
+                                sortFunction: sortDatesNullsLast("retireDate"),
                               },
                               {
-                                name: 'Actions',
+                                name: "Actions",
                                 cell: actionCellEdit(
                                   toggleEditStackPipe,
                                   removeStackPipe,
@@ -1417,7 +1417,7 @@ export const ConfigurationManagement = ({
                       ),
                     },
                     {
-                      title: 'Unit Stack Configurations',
+                      title: "Unit Stack Configurations",
                       content: (
                         <StatusContent
                           status={unitStackConfigsStatus}
@@ -1437,7 +1437,7 @@ export const ConfigurationManagement = ({
                             className="data-display-table react-transition fade-in"
                             columns={[
                               {
-                                name: 'Unit ID',
+                                name: "Unit ID",
                                 cell: textCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setUnitStackConfigUnitId,
@@ -1445,10 +1445,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.unitId,
                                 sortable: true,
-                                sortFunction: sortTextNullsLast('unitId'),
+                                sortFunction: sortTextNullsLast("unitId"),
                               },
                               {
-                                name: 'Stack/Pipe ID',
+                                name: "Stack/Pipe ID",
                                 cell: textCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setUnitStackConfigStackPipeId,
@@ -1458,10 +1458,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.stackPipeId,
                                 sortable: true,
-                                sortFunction: sortTextNullsLast('stackPipeId'),
+                                sortFunction: sortTextNullsLast("stackPipeId"),
                               },
                               {
-                                name: 'Begin Date',
+                                name: "Begin Date",
                                 cell: dateCell({
                                   disabled: (row) => row.originalRecord,
                                   onChange: setUnitStackConfigBeginDate,
@@ -1469,10 +1469,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.beginDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('beginDate'),
+                                sortFunction: sortDatesNullsLast("beginDate"),
                               },
                               {
-                                name: 'End Date',
+                                name: "End Date",
                                 cell: dateCell({
                                   disabled: (row) =>
                                     row.originalRecord?.endDate,
@@ -1480,10 +1480,10 @@ export const ConfigurationManagement = ({
                                 }),
                                 selector: (row) => row.endDate,
                                 sortable: true,
-                                sortFunction: sortDatesNullsLast('endDate'),
+                                sortFunction: sortDatesNullsLast("endDate"),
                               },
                               {
-                                name: 'Actions',
+                                name: "Actions",
                                 cell: actionCellEdit(
                                   toggleEditUnitStackConfig,
                                   removeUnitStackConfig,

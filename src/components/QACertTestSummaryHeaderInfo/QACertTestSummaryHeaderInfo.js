@@ -1,36 +1,36 @@
-import { Button } from '@trussworks/react-uswds';
-import { Preloader } from '@us-epa-camd/easey-design-system';
-import log from 'loglevel';
-import React, { useEffect, useRef, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { Button } from "@trussworks/react-uswds";
+import { Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+import React, { useEffect, useRef, useState } from "react";
+import { connect, useSelector } from "react-redux";
 
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
   returnFocusToLast,
-} from '../../additional-functions/manage-focus';
+} from "../../additional-functions/manage-focus";
 import {
   removeChangeEventListeners,
   unsavedDataMessage,
-} from '../../additional-functions/prompt-to-save-unsaved-changes';
-import { QA_CERT_TEST_SUMMARY_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
-import { successResponses } from '../../utils/api/apiUtils';
+} from "../../additional-functions/prompt-to-save-unsaved-changes";
+import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { successResponses } from "../../utils/api/apiUtils";
 import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
-} from '../../utils/api/dataManagementApi';
-import { importQA } from '../../utils/api/qaCertificationsAPI';
-import { formatErrorResponse } from '../../utils/functions';
-import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
-import HeaderInfoCheckoutButton from '../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton';
-import HeaderInfoFacility from '../HeaderInfoFacility/HeaderInfoFacility';
-import HeaderInfoLocationSelect from '../HeaderInfoLocationSelect/HeaderInfoLocationSelect';
-import ImportModal from '../ImportModal/ImportModal';
-import Modal from '../Modal/Modal';
-import QAImportHistoricalDataPreview from '../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview';
-import UploadModal from '../UploadModal/UploadModal';
-import './QACertTestSummaryHeaderInfo.scss';
-import QAImportModalSelect from './QAImportModalSelect/QAImportModalSelect';
+} from "../../utils/api/dataManagementApi";
+import { importQA } from "../../utils/api/qaCertificationsAPI";
+import { formatErrorResponse } from "../../utils/functions";
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
+import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
+import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
+import ImportModal from "../ImportModal/ImportModal";
+import Modal from "../Modal/Modal";
+import QAImportHistoricalDataPreview from "../QAImportHistoricalDataPreview/QAImportHistoricalDataPreview";
+import UploadModal from "../UploadModal/UploadModal";
+import "./QACertTestSummaryHeaderInfo.scss";
+import QAImportModalSelect from "./QAImportModalSelect/QAImportModalSelect";
 
 export const QACertTestSummaryHeaderInfo = ({
   facility,
@@ -49,7 +49,7 @@ export const QACertTestSummaryHeaderInfo = ({
   /* MAPPED PROPS */
   checkedOutConfigs,
 }) => {
-  const importTestTitle = 'Import QA Test Data';
+  const importTestTitle = "Import QA Test Data";
   const [showImportModal, setShowImportModal] = useState(false);
 
   const [showSelectionTypeImportModal, setShowSelectionTypeImportModal] =
@@ -63,25 +63,25 @@ export const QACertTestSummaryHeaderInfo = ({
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
-  const [importTypeSelection, setImportTypeSelection] = useState('');
+  const [importTypeSelection, setImportTypeSelection] = useState("");
   const [usePortBtn, setUsePortBtn] = useState(false);
   const [finishedLoading, setFinishedLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const [hasFormatError, setHasFormatError] = useState(false);
   const [hasInvalidJsonError, setHasInvalidJsonError] = useState(false);
   const [returnedFocusToLast, setReturnedFocusToLast] = useState(false);
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
-  const [jsonSchemaVersion, setJsonSchemaVersion] = useState('');
+  const [jsonSchemaVersion, setJsonSchemaVersion] = useState("");
 
   const isCheckedOut = checkoutState;
 
   const selectedTestNumberRef = useRef();
 
   const [testTypeGroupOptions, setTestTypeGroupOptions] = useState([
-    { name: 'Loading...' },
+    { name: "Loading..." },
   ]);
 
   const [allTestTypeCodes, setAllTestTypeCodes] = useState([]);
@@ -89,11 +89,11 @@ export const QACertTestSummaryHeaderInfo = ({
   useEffect(() => {
     if (
       testTypeGroupOptions.length > 0 &&
-      testTypeGroupOptions[0]['name'] !== 'Loading...'
+      testTypeGroupOptions[0]["name"] !== "Loading..."
     ) {
       setSectionSelect([
         sectionSelect[0],
-        testTypeGroupOptions[sectionSelect[0]]['name'],
+        testTypeGroupOptions[sectionSelect[0]]["name"],
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,7 +165,7 @@ export const QACertTestSummaryHeaderInfo = ({
   }, [checkoutState, selectedConfigId]);
 
   useEffect(() => {
-    if (importTypeSelection !== 'select' || importedFile.length !== 0) {
+    if (importTypeSelection !== "select" || importedFile.length !== 0) {
       setDisablePortBtn(false);
     } else {
       setDisablePortBtn(true);
@@ -181,17 +181,17 @@ export const QACertTestSummaryHeaderInfo = ({
   }, [importedFile.length, showImportModal]);
 
   const closeImportModalHandler = () => {
-    const importBtn = document.querySelector('#importSelectionQAModal');
+    const importBtn = document.querySelector("#importSelectionQAModal");
 
     if (window.isDataChanged === true) {
       if (window.confirm(unsavedDataMessage) === true) {
         resetImportFlags();
-        removeChangeEventListeners('.modalUserInput');
+        removeChangeEventListeners(".modalUserInput");
         importBtn.focus();
       }
     } else {
       resetImportFlags();
-      removeChangeEventListeners('.modalUserInput');
+      removeChangeEventListeners(".modalUserInput");
       importBtn.focus();
     }
   };
@@ -207,7 +207,7 @@ export const QACertTestSummaryHeaderInfo = ({
     setUsePortBtn(false);
     setFinishedLoading(false);
     setIsLoading(false);
-    setFileName('');
+    setFileName("");
     setHasFormatError(false);
     setHasInvalidJsonError(false);
     setImportedFile([]);
@@ -218,10 +218,10 @@ export const QACertTestSummaryHeaderInfo = ({
     setDisablePortBtn(false);
 
     switch (modalType) {
-      case 'file':
+      case "file":
         setShowImportModal(true);
         break;
-      case 'historical':
+      case "historical":
         setShowImportDataPreview(true);
         setShowSelectionTypeImportModal(false);
         break;
@@ -317,8 +317,8 @@ export const QACertTestSummaryHeaderInfo = ({
               orisCode={orisCode}
               workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
             />
-          </div>{' '}
-          <div className="grid-col-3"></div>{' '}
+          </div>{" "}
+          <div className="grid-col-3"></div>{" "}
         </div>
       </div>
       <div
@@ -327,8 +327,8 @@ export const QACertTestSummaryHeaderInfo = ({
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-            ? 'is-visible'
-            : ''
+            ? "is-visible"
+            : ""
         }`}
       />
       {/* // selects either historical data or file data */}
@@ -340,7 +340,7 @@ export const QACertTestSummaryHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            mainBTN={'Continue'}
+            mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
             port={() => {
               openModalType(importTypeSelection);
@@ -362,7 +362,7 @@ export const QACertTestSummaryHeaderInfo = ({
             showCancel={true}
             showSave={true}
             title={importTestTitle}
-            exitBtn={'Import'}
+            exitBtn={"Import"}
             disablePortBtn={disablePortBtn}
             port={() => importQABtn(importedFile)}
             hasFormatError={hasFormatError}
@@ -384,8 +384,8 @@ export const QACertTestSummaryHeaderInfo = ({
       {/* while uploading, just shows preloader spinner  */}
       {isLoading && !finishedLoading ? (
         <UploadModal
-          width={'30%'}
-          left={'35%'}
+          width={"30%"}
+          left={"35%"}
           setFinishedLoading={setFinishedLoading}
           setShowImportModal={setShowImportModal}
           setIsLoading={setIsLoading}
@@ -397,7 +397,7 @@ export const QACertTestSummaryHeaderInfo = ({
           fileName={fileName}
         />
       ) : (
-        ''
+        ""
       )}
       {/* after it finishes uploading , shows either api errors or success messages */}
       {showImportModal && usePortBtn && finishedLoading ? (
@@ -406,7 +406,7 @@ export const QACertTestSummaryHeaderInfo = ({
           close={closeImportModalHandler}
           showCancel={false}
           showSave={true}
-          exitBtn={'Ok'}
+          exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
           successMsg={`Test Data has been Successfully Imported.`}
@@ -422,14 +422,14 @@ export const QACertTestSummaryHeaderInfo = ({
           }
         />
       ) : (
-        ''
+        ""
       )}
       {showImportDataPreview && (
         <Modal
           show={showImportDataPreview}
           close={() => setShowImportDataPreview(false)}
           showSave={true}
-          exitBtn={'Import'}
+          exitBtn={"Import"}
           title="Import Historical QA Test Data"
           disableExitBtn={disablePortBtn}
           save={() => {

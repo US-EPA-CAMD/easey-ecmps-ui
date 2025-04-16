@@ -1,111 +1,105 @@
-import { ArrowBackSharp } from '@material-ui/icons';
+import { ArrowBackSharp } from "@material-ui/icons";
 import {
   Alert,
   Button,
   Grid,
   GridContainer,
   Label,
-} from '@trussworks/react-uswds';
-import { uniqueId } from 'lodash';
-import log from 'loglevel';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { connect, useSelector } from 'react-redux';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+} from "@trussworks/react-uswds";
+import { uniqueId } from "lodash";
+import log from "loglevel";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { connect, useSelector } from "react-redux";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import {
   MATS_AVERAGING_GROUP_CODES_STORE_NAME,
   MATS_POLLUTANT_CODES_STORE_NAME,
   MATS_REPORT_TYPE_CODES_STORE_NAME,
   MATS_TEST_METHOD_CODES_STORE_NAME,
-} from '../../additional-functions/data-table-section-and-store-names';
-import { parseErrorMessage } from '../../utils/api/apiUtils';
+} from "../../additional-functions/data-table-section-and-store-names";
+import { parseErrorMessage } from "../../utils/api/apiUtils";
 import {
   createMatsSubmission,
   deleteMatsSubmission,
-} from '../../utils/api/qaCertificationsAPI';
-import { dataStatus } from '../../utils/constants/dataStatus';
-import { matsModule } from '../../utils/constants/moduleTitles';
-import { formatErrorResponse } from '../../utils/functions';
-import FileInput from '../FileInput/FileInput';
-import MatsCodeSelect from '../MatsCodeSelect/MatsCodeSelect';
-import SizedPreloader from '../SizedPreloader/SizedPreloader';
-import DatePicker from './DatePicker';
-import LocationSelect from './LocationSelect';
-import ReportingPeriodSelect from './ReportingPeriodSelect';
-import SubmissionSignSubmitModal from './SubmissionSignSubmitModal';
-import SubmissionWarningsModal from './SubmissionWarningsModal';
-import TextInput from './TextInput';
+} from "../../utils/api/qaCertificationsAPI";
+import { dataStatus } from "../../utils/constants/dataStatus";
+import { matsModule } from "../../utils/constants/moduleTitles";
+import { formatErrorResponse } from "../../utils/functions";
+import FileInput from "../FileInput/FileInput";
+import MatsCodeSelect from "../MatsCodeSelect/MatsCodeSelect";
+import SizedPreloader from "../SizedPreloader/SizedPreloader";
+import DatePicker from "./DatePicker";
+import LocationSelect from "./LocationSelect";
+import ReportingPeriodSelect from "./ReportingPeriodSelect";
+import SubmissionSignSubmitModal from "./SubmissionSignSubmitModal";
+import SubmissionWarningsModal from "./SubmissionWarningsModal";
+import TextInput from "./TextInput";
 
-import './MatsSubmission.scss';
+import "./MatsSubmission.scss";
 
 const reportTypeInputMappings = [
   {
-    codes: ['LEED', 'LEEQ', 'PST', 'PS11', 'RATA', 'RCA', 'RRA'],
+    codes: ["LEED", "LEEQ", "PST", "PS11", "RATA", "RCA", "RRA"],
     fields: [
-      'location',
-      'averagingGroup',
-      'pollutants',
-      'testMethods',
-      'testNumber',
-      'testDate',
-      'testComment',
+      "location",
+      "averagingGroup",
+      "pollutants",
+      "testMethods",
+      "testNumber",
+      "testDate",
+      "testComment",
     ],
-    files: ['ERT', 'SUPPORTING'],
+    files: ["ERT", "SUPPORTING"],
   },
   {
-    codes: ['NOTIFY'],
+    codes: ["NOTIFY"],
     fields: [
-      'location',
-      'averagingGroup',
-      'pollutants',
-      'testMethods',
-      'testNumber',
-      'testDate',
-      'testComment',
+      "location",
+      "averagingGroup",
+      "pollutants",
+      "testMethods",
+      "testNumber",
+      "testDate",
+      "testComment",
     ],
-    files: ['ERT', 'SUPPORTING'],
+    files: ["ERT", "SUPPORTING"],
   },
   {
-    codes: ['CR'],
+    codes: ["CR"],
     fields: [
-      'location',
-      'averagingGroup',
-      'pollutants',
-      'testMethods',
-      'testNumber',
-      'testDate',
-      'testComment',
-      'reportingPeriod',
+      "location",
+      "averagingGroup",
+      "pollutants",
+      "testMethods",
+      "testNumber",
+      "testDate",
+      "testComment",
+      "reportingPeriod",
     ],
-    files: ['ERT', 'SUPPORTING'],
+    files: ["ERT", "SUPPORTING"],
   },
   {
-    codes: ['ACA', 'SVA'],
-    fields: ['location', 'pollutants', 'testMethods', 'testNumber', 'testDate'],
-    files: ['PAYLOAD'],
+    codes: ["ACA", "SVA"],
+    fields: ["location", "pollutants", "testMethods", "testNumber", "testDate"],
+    files: ["PAYLOAD"],
   },
   {
-    codes: ['EMPM'],
-    fields: ['location', 'pollutants', 'reportingPeriod'],
-    files: ['PAYLOAD'],
+    codes: ["EMPM"],
+    fields: ["location", "pollutants", "reportingPeriod"],
+    files: ["PAYLOAD"],
   },
 ];
 
 function createSubmissionPayload(metadata, files) {
   const formData = new FormData();
-  formData.append('metadata', JSON.stringify(metadata));
+  formData.append("metadata", JSON.stringify(metadata));
   if (files.ertFile)
-    formData.append('ertFile', files.ertFile, files.ertFile.name);
+    formData.append("ertFile", files.ertFile, files.ertFile.name);
   if (files.payloadFile)
-    formData.append('payloadFile', files.payloadFile, files.payloadFile.name);
+    formData.append("payloadFile", files.payloadFile, files.payloadFile.name);
   files.supportingFiles.forEach((file) => {
-    formData.append('supportingFiles', file, file.name);
+    formData.append("supportingFiles", file, file.name);
   });
   return formData;
 }
@@ -139,7 +133,7 @@ const MatsSubmission = ({
   });
   const [metadataPayload, setMetadataPayload] = useState({});
   const [reportType, setReportType] = useState(
-    originalSubmission?.reportTypeCode ?? '',
+    originalSubmission?.reportTypeCode ?? "",
   );
   const [submissionErrors, setSubmissionErrors] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
@@ -152,7 +146,7 @@ const MatsSubmission = ({
 
   const isCheckedOutByUser =
     selectedConfigId &&
-    checkedOutConfigs.find((config) => config['monPlanId'] === selectedConfigId)
+    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
       ?.checkedOutBy === user.userId;
 
   /* HANDLERS */
@@ -209,7 +203,7 @@ const MatsSubmission = ({
   /* RENDER */
 
   if (!selectedConfig) {
-    log.error('Selected configuration not found');
+    log.error("Selected configuration not found");
     return <Navigate to=".." relative="path" />;
   }
 
@@ -234,16 +228,16 @@ const MatsSubmission = ({
       <form onSubmit={handleInitialSubmit}>
         <h3>Metadata</h3>
         <p>
-          <span className="usa-label display-inline">Facility Name:</span>{' '}
+          <span className="usa-label display-inline">Facility Name:</span>{" "}
           {selectedConfig.facilityName}
         </p>
         <p>
-          <span className="usa-label display-inline">ORIS Code:</span>{' '}
+          <span className="usa-label display-inline">ORIS Code:</span>{" "}
           {selectedConfig.orisCode}
         </p>
         <p>
-          <span className="usa-label display-inline">FRS ID:</span>{' '}
-          {selectedConfig.facilityRegistrySystemId || 'None'}
+          <span className="usa-label display-inline">FRS ID:</span>{" "}
+          {selectedConfig.facilityRegistrySystemId || "None"}
         </p>
         <MatsCodeSelect
           className="margin-bottom-2"
@@ -314,10 +308,10 @@ const MetadataInputs = ({
   reportType,
 }) => {
   const [averagingGroup, setAveragingGroup] = useState(
-    originalSubmission?.averagingGroupCode ?? '',
+    originalSubmission?.averagingGroupCode ?? "",
   );
   const [location, setLocation] = useState(
-    originalSubmission?.locationId ?? '',
+    originalSubmission?.locationId ?? "",
   );
   const [pollutants, setPollutants] = useState(
     originalSubmission?.pollutantCodes ?? [],
@@ -326,19 +320,19 @@ const MetadataInputs = ({
   const [reportingPeriod, setReportingPeriod] = useState(
     originalSubmission?.year && originalSubmission?.quarter
       ? `${originalSubmission.year} Q${originalSubmission.quarter}`
-      : '',
+      : "",
   );
   const [testComment, setTestComment] = useState(
-    originalSubmission?.testComment ?? '',
+    originalSubmission?.testComment ?? "",
   );
   const [testDate, setTestDate] = useState(
-    (originalSubmission?.testDate ?? '').substring(0, 10),
+    (originalSubmission?.testDate ?? "").substring(0, 10),
   );
   const [testMethods, setTestMethods] = useState(
     originalSubmission?.testMethodCodes ?? [],
   );
   const [testNumber, setTestNumber] = useState(
-    originalSubmission?.testNumber ?? '',
+    originalSubmission?.testNumber ?? "",
   );
 
   const reportTypeMapping = reportTypeInputMappings.find((mapping) =>
@@ -371,29 +365,29 @@ const MetadataInputs = ({
 
   useEffect(() => {
     onUpdate({
-      locationId: includeIfInReportType('location', location),
+      locationId: includeIfInReportType("location", location),
       reportTypeCode: reportType,
       averagingGroupCode: includeIfInReportType(
-        'averagingGroup',
+        "averagingGroup",
         averagingGroup,
       ),
-      pollutantCodes: includeIfInReportType('pollutants', pollutants),
-      testNumber: includeIfInReportType('testNumber', testNumber),
-      testDate: includeIfInReportType('testDate', testDate),
-      testComment: includeIfInReportType('testComment', testComment),
-      testMethodCodes: includeIfInReportType('testMethods', testMethods),
+      pollutantCodes: includeIfInReportType("pollutants", pollutants),
+      testNumber: includeIfInReportType("testNumber", testNumber),
+      testDate: includeIfInReportType("testDate", testDate),
+      testComment: includeIfInReportType("testComment", testComment),
+      testMethodCodes: includeIfInReportType("testMethods", testMethods),
       year: includeIfInReportType(
-        'reportingPeriod',
-        tryParseInt(reportingPeriod.split(' ')[0]),
+        "reportingPeriod",
+        tryParseInt(reportingPeriod.split(" ")[0]),
       ),
       quarter: includeIfInReportType(
-        'reportingPeriod',
-        tryParseInt(reportingPeriod.split(' ')[1]?.substring(1)),
+        "reportingPeriod",
+        tryParseInt(reportingPeriod.split(" ")[1]?.substring(1)),
       ),
       originalSubmissionId: originalSubmission?.id,
       facilityId: selectedConfig.facId,
       monitorPlanId: selectedConfig.id,
-      statusCode: 'NEW',
+      statusCode: "NEW",
     });
   }, [
     averagingGroup,
@@ -411,11 +405,11 @@ const MetadataInputs = ({
     testNumber,
   ]);
 
-  const [prevReportType, setPrevReportType] = useState('');
+  const [prevReportType, setPrevReportType] = useState("");
   if (prevReportType !== reportType) {
     setPrevReportType(reportType);
-    if (['ACA', 'SVA', 'EMPM'].includes(reportType)) {
-      setPollutants(['FPM']);
+    if (["ACA", "SVA", "EMPM"].includes(reportType)) {
+      setPollutants(["FPM"]);
       setPollutantsDisabled(true);
     } else {
       setPollutantsDisabled(false);
@@ -425,7 +419,7 @@ const MetadataInputs = ({
   return (
     <div className="margin-top-2">
       <Grid row gap>
-        {fieldIsInReportType('location') && (
+        {fieldIsInReportType("location") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <LocationSelect
               options={selectedConfig.monitoringLocationData}
@@ -434,7 +428,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('averagingGroup') && (
+        {fieldIsInReportType("averagingGroup") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <MatsCodeSelect
               label="Averaging Group"
@@ -444,7 +438,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('pollutants') && (
+        {fieldIsInReportType("pollutants") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <MatsCodeSelect
               disabled={pollutantsDisabled}
@@ -456,7 +450,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('testMethods') && (
+        {fieldIsInReportType("testMethods") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <MatsCodeSelect
               label="Test Methods"
@@ -467,7 +461,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('testNumber') && (
+        {fieldIsInReportType("testNumber") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <TextInput
               label="Test Number"
@@ -476,7 +470,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('testDate') && (
+        {fieldIsInReportType("testDate") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <DatePicker
               label="Test Date"
@@ -485,7 +479,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('testComment') && (
+        {fieldIsInReportType("testComment") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <TextInput
               label="Test Comment"
@@ -494,7 +488,7 @@ const MetadataInputs = ({
             />
           </Grid>
         )}
-        {fieldIsInReportType('reportingPeriod') && (
+        {fieldIsInReportType("reportingPeriod") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <ReportingPeriodSelect
               setValue={setReportingPeriod}
@@ -508,12 +502,12 @@ const MetadataInputs = ({
 };
 
 const FileInputRow = ({
-  accept = '',
+  accept = "",
   label,
   onChange = (_file) => {},
   onRemove = () => {},
 }) => {
-  const [id] = useState(uniqueId(`${label.replace(' ', '')}-file-input-`));
+  const [id] = useState(uniqueId(`${label.replace(" ", "")}-file-input-`));
   const fileInputRef = useRef(null);
 
   return (
@@ -539,7 +533,7 @@ const FileInputRow = ({
             const file = fileInputRef.current?.files[0];
             if (!file) return;
             const fileUrl = URL.createObjectURL(file);
-            window.open(fileUrl, '_blank');
+            window.open(fileUrl, "_blank");
           }}
         >
           Preview
@@ -603,10 +597,10 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
 
   useEffect(() => {
     onUpdate({
-      ertFile: includeIfInReportType('ERT', ertFile),
-      payloadFile: includeIfInReportType('PAYLOAD', payloadFile),
+      ertFile: includeIfInReportType("ERT", ertFile),
+      payloadFile: includeIfInReportType("PAYLOAD", payloadFile),
       supportingFiles: includeIfInReportType(
-        'SUPPORTING',
+        "SUPPORTING",
         Object.values(supportingFiles),
       ),
     });
@@ -614,7 +608,7 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
 
   return (
     <>
-      {fileIsInReportType('ERT') && (
+      {fileIsInReportType("ERT") && (
         <FileInputRow
           label="ERT XML"
           accept=".xml"
@@ -622,7 +616,7 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
           onRemove={() => setErtFile(null)}
         />
       )}
-      {fileIsInReportType('PAYLOAD') && (
+      {fileIsInReportType("PAYLOAD") && (
         <FileInputRow
           label="Payload PDF, XML, or JSON"
           accept=".pdf,.xml,.json"
@@ -630,7 +624,7 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
           onRemove={() => setPayloadFile(null)}
         />
       )}
-      {fileIsInReportType('SUPPORTING') && (
+      {fileIsInReportType("SUPPORTING") && (
         <section>
           <h4>Supporting PDF(s)</h4>
           {pdfInputs.map(({ id }, i) => (

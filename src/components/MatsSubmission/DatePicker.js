@@ -1,21 +1,21 @@
-import { Label, DatePicker as UswdsDatePicker } from '@trussworks/react-uswds';
-import { uniqueId } from 'lodash';
-import React, { useState } from 'react';
+import { Label, DatePicker as UswdsDatePicker } from "@trussworks/react-uswds";
+import { uniqueId } from "lodash";
+import React, { useState } from "react";
 
 function parseDatePickerString(dateString) {
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return '';
+  if (isNaN(date.getTime())) return "";
   return date.toISOString().substring(0, 10);
 }
 
 export const DatePicker = ({
-  className = '',
+  className = "",
   label,
-  placeholder = 'mm/dd/yyyy',
+  placeholder = "mm/dd/yyyy",
   setValue,
   value,
 }) => {
-  const [id] = useState(uniqueId(`${label.replace(' ', '')}-date-picker-`));
+  const [id] = useState(uniqueId(`${label.replace(" ", "")}-date-picker-`));
 
   return (
     <div className={className}>

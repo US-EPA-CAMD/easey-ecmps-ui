@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-const emptyOption = { id: '', name: '-- Select a value --' };
+const emptyOption = { id: "", name: "-- Select a value --" };
 
-const LocationSelect = ({ className = '', options = [], setValue, value }) => {
+const LocationSelect = ({ className = "", options = [], setValue, value }) => {
   const allOptions = useMemo(() => [emptyOption, ...options], [options]);
 
   return (

@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { handleResponse, handleError, handleImportError } from './apiUtils';
-import config from '../../config';
-import { secureAxios } from './easeyAuthApi';
+import { handleResponse, handleError, handleImportError } from "./apiUtils";
+import config from "../../config";
+import { secureAxios } from "./easeyAuthApi";
 
-const getApiUrl = (path = '') => {
+const getApiUrl = (path = "") => {
   let url = config.services.qaCertification.uri;
 
-  if (window.location.href.includes('/workspace')) {
+  if (window.location.href.includes("/workspace")) {
     url = `${url}/workspace`;
   }
 
@@ -23,17 +23,17 @@ export const getQAEvaluationReportData = async (
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
-  type = type.replace('_EVAL', '');
-  const test = testId ? `&testId=${testId}` : '';
-  const batch = batchId ? `&batchId=${batchId}` : '';
+  type = type.replace("_EVAL", "");
+  const test = testId ? `&testId=${testId}` : "";
+  const batch = batchId ? `&batchId=${batchId}` : "";
 
   url = `${url}/evaluations/results?type=${type}&monitorPlanId=${monPlanId}${test}${batch}`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -47,7 +47,7 @@ export const getQATestSummary = async (
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1 || forWorkspace) {
+  if (window.location.href.indexOf("workspace") > -1 || forWorkspace) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
@@ -56,7 +56,7 @@ export const getQATestSummary = async (
     if (selectedTestCode.length === 1) {
       url = `${url}?testTypeCodes=${selectedTestCode}`;
     } else {
-      let additionalUrl = '';
+      let additionalUrl = "";
       for (const x of selectedTestCode) {
         additionalUrl = `${additionalUrl} ${x} |`;
       }
@@ -67,7 +67,7 @@ export const getQATestSummary = async (
   if (beginDate && endDate) {
     url = `${url}?beginDate=${beginDate}&endDate=${endDate}`;
   }
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -77,18 +77,18 @@ export const getQATestSummaryReviewSubmit = async (
   monPlanIds = [],
   quarters = [],
 ) => {
-  let queryString = `orisCodes=${orisCodes.join('|')}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
 
   if (monPlanIds.length > 0) {
-    queryString = queryString + `&monPlanIds=${monPlanIds.join('|')}`;
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
   if (quarters.length > 0) {
-    queryString = queryString + `&quarters=${quarters.join('|')}`;
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
   let url = `${getApiUrl()}/test-summary?${queryString}`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -98,18 +98,18 @@ export const getQACertEventReviewSubmit = async (
   monPlanIds = [],
   quarters = [],
 ) => {
-  let queryString = `orisCodes=${orisCodes.join('|')}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
 
   if (monPlanIds.length > 0) {
-    queryString = queryString + `&monPlanIds=${monPlanIds.join('|')}`;
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
   if (quarters.length > 0) {
-    queryString = queryString + `&quarters=${quarters.join('|')}`;
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
   let url = `${getApiUrl()}/cert-events?${queryString}`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -119,18 +119,18 @@ export const getQATeeReviewSubmit = async (
   monPlanIds = [],
   quarters = [],
 ) => {
-  let queryString = `orisCodes=${orisCodes.join('|')}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
 
   if (monPlanIds.length > 0) {
-    queryString = queryString + `&monPlanIds=${monPlanIds.join('|')}`;
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
   if (quarters.length > 0) {
-    queryString = queryString + `&quarters=${quarters.join('|')}`;
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
   }
 
   let url = `${getApiUrl()}/test-extension-exemption?${queryString}`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -140,14 +140,14 @@ export const getMatsBulkFilesReviewSubmit = async (
   monPlanIds = [],
   quarters = [],
 ) => {
-  let queryString = `orisCodes=${orisCodes.join('|')}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}`;
 
   if (monPlanIds.length > 0) {
-    queryString = queryString + `&monPlanIds=${monPlanIds.join('|')}`;
+    queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
   let url = `${config.services.qaCertification.uri}/workspace/mats-bulk-file?${queryString}`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -158,7 +158,7 @@ export const createMatsSubmission = async (
   { shouldHandleError = false } = {},
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${monLocId}/mats-data-submission`;
-  return secureAxios({ url, method: 'POST', data: payload })
+  return secureAxios({ url, method: "POST", data: payload })
     .then(handleResponse)
     .catch((err) => {
       if (!shouldHandleError) throw err;
@@ -168,14 +168,14 @@ export const createMatsSubmission = async (
 
 export const deleteMatsSubmission = async (submissionId, locationId) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/${submissionId}`;
-  return secureAxios({ url, method: 'DELETE' })
+  return secureAxios({ url, method: "DELETE" })
     .then(handleResponse)
     .catch(handleError);
 };
 
 export const getMatsSubmissions = async (monPlanId) => {
   const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?monPlanIds=${monPlanId}`;
-  return secureAxios({ url, method: 'GET' })
+  return secureAxios({ url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -184,14 +184,14 @@ export const getQATestSummaryByID = async (locID, id) => {
   let url = `${config.services.qaCertification.uri}/`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${id}`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -199,7 +199,7 @@ export const getQATestSummaryByID = async (locID, id) => {
 export const getQATestSummaryOfficial = async (locId) => {
   const url = `${config.services.qaCertification.uri}/locations/${locId}/test-summary`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -216,9 +216,9 @@ export const getQASchema = async () => {
  */
 export const getReportingPeriods = async (isExport) => {
   const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? '?export=true' : ''
+    isExport ? "?export=true" : ""
   }`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -228,7 +228,7 @@ export const importQA = async (payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -266,30 +266,30 @@ export const exportQA = async (
   }
 
   if (unitIds?.length > 0) {
-    const unitIdsQueryParam = unitIds.join('|');
+    const unitIdsQueryParam = unitIds.join("|");
     url = `${url}&unitIds=${unitIdsQueryParam}`;
   }
   if (stackPipeIds?.length > 0) {
-    const stackPipeIdsQueryParam = stackPipeIds.join('|');
+    const stackPipeIdsQueryParam = stackPipeIds.join("|");
     url = `${url}&stackPipeIds=${stackPipeIdsQueryParam}`;
   }
 
   if (testSumIds?.length > 0) {
-    url = `${url}&testSummaryIds=${testSumIds.join('|')}`;
+    url = `${url}&testSummaryIds=${testSumIds.join("|")}`;
   }
 
   if (qceIds?.length > 0) {
-    url = `${url}&qaCertificationEventIds=${qceIds.join('|')}`;
+    url = `${url}&qaCertificationEventIds=${qceIds.join("|")}`;
   }
 
   if (teeIds?.length > 0) {
-    url = `${url}&qaTestExtensionExemptionIds=${teeIds.join('|')}`;
+    url = `${url}&qaTestExtensionExemptionIds=${teeIds.join("|")}`;
   }
 
   if (beginDate && endDate) {
     url = `${url}&beginDate=${beginDate}&endDate=${endDate}`;
   }
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -299,7 +299,7 @@ export const deleteQATestSummary = async (locId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -312,14 +312,14 @@ export const getQALinearitySummary = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -329,7 +329,7 @@ export const deleteQALinearitySummary = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -346,7 +346,7 @@ export const updateQALinearityTestSummary = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -366,7 +366,7 @@ export const updateQALinearitySummaryTestSecondLevel = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -380,7 +380,7 @@ export const createQATestData = async (locId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -399,7 +399,7 @@ export const createQALinearitySummaryTestSecondLevel = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -413,13 +413,13 @@ export const getQALinearityInjection = async (locID, testSumId, linSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -434,7 +434,7 @@ export const editQALinearityInjection = async (
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
@@ -443,7 +443,7 @@ export const editQALinearityInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -461,11 +461,11 @@ export const createQALinearityInjection = async (
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   url = `${url}/workspace/locations/${locID}/test-summary/${testSumId}/linearities/${linSumId}/injections/`;
-  delete payload['id'];
+  delete payload["id"];
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -485,7 +485,7 @@ export const deleteQALinearityInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -498,14 +498,14 @@ export const getProtocolGas = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/protocol-gases`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -515,7 +515,7 @@ export const createProtocolGas = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -535,7 +535,7 @@ export const updateProtocolGas = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -549,7 +549,7 @@ export const deleteProtocolGas = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -562,14 +562,14 @@ export const getRataData = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/rata`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -579,7 +579,7 @@ export const createRataData = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -594,7 +594,7 @@ export const updateRataData = async (id, locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -609,7 +609,7 @@ export const deleteRataData = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -622,14 +622,14 @@ export const getRataSummary = async (locId, testSumId, rataId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -639,7 +639,7 @@ export const createRataSummary = async (locId, testSumId, rataId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -660,7 +660,7 @@ export const updateRataSummary = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -675,7 +675,7 @@ export const deleteRataSummary = async (locId, testSumId, rataId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -688,13 +688,13 @@ export const getRataRunData = async (locId, testSumId, rataId, rataSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -710,7 +710,7 @@ export const createRataRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -734,7 +734,7 @@ export const updateRataRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -755,7 +755,7 @@ export const deleteRataRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -774,12 +774,12 @@ export const getRataTraverseData = async (
 ) => {
   let url = `${config.services.qaCertification.uri}`;
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
   // *** attach the rest of the url
   url = `${url}/locations/${locId}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs/${flowRataRunId}/rata-traverses`;
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -797,7 +797,7 @@ export const createRataTraverse = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -821,7 +821,7 @@ export const updateRataTraverseData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -844,7 +844,7 @@ export const deleteRataTraverseData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -857,14 +857,14 @@ export const getAirEmissions = async (locID, testSumId) => {
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/air-emission-testings`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -874,7 +874,7 @@ export const createAirEmissions = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -889,7 +889,7 @@ export const updateAirEmissions = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -904,7 +904,7 @@ export const deleteAirEmissions = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -923,14 +923,14 @@ export const getFlowRunData = async (
   let url = `${config.services.qaCertification.uri}`;
 
   // *** workspace section url (authenticated)
-  if (window.location.href.indexOf('workspace') > -1) {
+  if (window.location.href.indexOf("workspace") > -1) {
     url = `${url}/workspace`;
   }
 
   // *** attach the rest of the url
   url = `${url}/locations/${locID}/test-summary/${testSumId}/rata/${rataId}/rata-summaries/${rataSumId}/rata-runs/${rataRunId}/flow-rata-runs`;
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -948,7 +948,7 @@ export const createFlowRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -972,7 +972,7 @@ export const updateFlowRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -996,7 +996,7 @@ export const deleteFlowRunData = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1008,7 +1008,7 @@ export const deleteFlowRunData = async (
 export const getTestQualification = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/test-qualifications`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1019,7 +1019,7 @@ export const createTestQualification = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1040,7 +1040,7 @@ export const updateTestQualification = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1055,7 +1055,7 @@ export const deleteTestQualification = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1070,7 +1070,7 @@ export const getAppendixECorrelationSummaryRecords = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1085,7 +1085,7 @@ export const createAppendixECorrelationSummaryRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1106,7 +1106,7 @@ export const updateAppendixECorrelationSummaryRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1126,7 +1126,7 @@ export const deleteAppendixECorrelationSummaryRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1138,7 +1138,7 @@ export const deleteAppendixECorrelationSummaryRecord = async (
 export const getFuelFlowToLoadData = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-tests`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1148,7 +1148,7 @@ export const createFuelFlowToLoad = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1163,7 +1163,7 @@ export const deleteFuelFlowToLoadData = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1177,7 +1177,7 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1190,7 +1190,7 @@ export const updateFuelFlowToLoad = async (locId, testSumId, id, payload) => {
 export const getFuelFlowToLoadBaseline = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flow-to-load-baselines`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1204,7 +1204,7 @@ export const createFuelFlowToLoadBaseline = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1224,7 +1224,7 @@ export const updateFuelFlowToLoadBaseline = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1239,7 +1239,7 @@ export const deleteFuelFlowToLoadBaseline = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1256,7 +1256,7 @@ export const getAppendixERunData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs`;
   const url = getApiUrl(path);
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1272,7 +1272,7 @@ export const createAppendixERun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1291,7 +1291,7 @@ export const getAppendixEHeatInputGasData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestRunId}/appendix-e-heat-input-from-gases`;
   const url = getApiUrl(path);
 
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1308,7 +1308,7 @@ export const createAppendixEHeatInputGas = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1331,7 +1331,7 @@ export const updateAppendixECorrelationHeatInputGas = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1353,7 +1353,7 @@ export const deleteAppendixECorrelationHeatInputGas = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1371,7 +1371,7 @@ export const getAppendixEHeatInputOilData = async (
   const path = `/locations/${locId}/test-summary/${testSumId}/appendix-e-correlation-test-summaries/${appECorrTestSumId}/appendix-e-correlation-test-runs/${appECorrTestrunId}/appendix-e-heat-input-from-oils`;
 
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1388,7 +1388,7 @@ export const createAppendixEHeatInputOil = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1411,7 +1411,7 @@ export const updateAppendixECorrelationHeatInputOil = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1433,7 +1433,7 @@ export const deleteAppendixECorrelationHeatInputOil = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1454,7 +1454,7 @@ export const updateAppendixERun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1474,7 +1474,7 @@ export const deleteAppendixERun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -1486,7 +1486,7 @@ export const deleteAppendixERun = async (
 export const getFlowToLoadCheckRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-checks`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1501,7 +1501,7 @@ export const createFlowToLoadCheckRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1522,7 +1522,7 @@ export const updateFlowToLoadCheckRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1538,7 +1538,7 @@ export const deleteFlowToLoadCheckRecord = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1550,7 +1550,7 @@ export const deleteFlowToLoadCheckRecord = async (locId, testSumId, id) => {
 export const getOnlineOfflineCalibration = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/online-offline-calibration`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1564,7 +1564,7 @@ export const createOnlineOfflineCalibration = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1585,7 +1585,7 @@ export const updateOnlineOfflineCalibration = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1601,7 +1601,7 @@ export const deleteOnlineOfflineCalibration = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1613,7 +1613,7 @@ export const deleteOnlineOfflineCalibration = async (locId, testSumId, id) => {
 export const getCalibrationInjectionRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/calibration-injections`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1628,7 +1628,7 @@ export const createCalibrationInjectionRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1649,7 +1649,7 @@ export const updateCalibrationInjectionRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1669,7 +1669,7 @@ export const deleteCalibrationInjectionRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1681,7 +1681,7 @@ export const deleteCalibrationInjectionRecord = async (
 export const getCycleTimeSummary = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1692,7 +1692,7 @@ export const createCycleTimeSummary = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1708,7 +1708,7 @@ export const updateCycleTimeSummary = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1724,7 +1724,7 @@ export const deleteCycleTimeSummary = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1740,7 +1740,7 @@ export const getCycleTimeInjection = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/cycle-time-summaries/${cycleTimeSumId}/cycle-time-injections`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1756,7 +1756,7 @@ export const createCycleTimeInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1778,7 +1778,7 @@ export const updateCycleTimeInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1799,7 +1799,7 @@ export const deleteCycleTimeInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1811,7 +1811,7 @@ export const deleteCycleTimeInjection = async (
 export const getFuelFlowmeterAccuracyDataRecords = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/fuel-flowmeter-accuracies`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1826,7 +1826,7 @@ export const createFuelFlowmeterAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1847,7 +1847,7 @@ export const updateFuelFlowmeterAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1867,7 +1867,7 @@ export const deleteFuelFlowmeterAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1882,7 +1882,7 @@ export const getTransmitterTransducerAccuracyDataRecords = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/transmitter-transducer-accuracy`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1897,7 +1897,7 @@ export const createTransmitterTransducerAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1918,7 +1918,7 @@ export const updateTransmitterTransducerAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1938,7 +1938,7 @@ export const deleteTransmitterTransducerAccuracyDataRecord = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -1950,7 +1950,7 @@ export const deleteTransmitterTransducerAccuracyDataRecord = async (
 export const getFlowToLoadReference = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/flow-to-load-references`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -1960,7 +1960,7 @@ export const createFlowToLoadReference = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -1980,7 +1980,7 @@ export const updateFlowToLoadReference = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -1995,7 +1995,7 @@ export const deleteFlowToLoadReference = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -2007,7 +2007,7 @@ export const deleteFlowToLoadReference = async (locId, testSumId, id) => {
 export const getUnitDefaultTest = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2018,7 +2018,7 @@ export const createUnitDefaultTest = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2034,7 +2034,7 @@ export const updateUnitDefaultTest = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2050,7 +2050,7 @@ export const deleteUnitDefaultTest = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -2062,7 +2062,7 @@ export const deleteUnitDefaultTest = async (locId, testSumId, id) => {
 export const getHgSummary = async (locId, testSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2073,7 +2073,7 @@ export const createHgSummary = async (locId, testSumId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2089,7 +2089,7 @@ export const updateHgSummary = async (locId, testSumId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2105,7 +2105,7 @@ export const deleteHgSummary = async (locId, testSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -2121,7 +2121,7 @@ export const getUnitDefaultTestRun = async (
 ) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/unit-default-tests/${unitDefaultTestId}/unit-default-test-runs`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2136,7 +2136,7 @@ export const createUnitDefaultTestRun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2157,7 +2157,7 @@ export const updateUnitDefaultTestRun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2170,7 +2170,7 @@ export const updateUnitDefaultTestRun = async (
 export const getHgInjection = async (locId, testSumId, hgTestSumId) => {
   const path = `/locations/${locId}/test-summary/${testSumId}/hg-summaries/${hgTestSumId}/hg-injections`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2186,7 +2186,7 @@ export const createHgInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2207,7 +2207,7 @@ export const updateHgInjection = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2223,7 +2223,7 @@ export const deleteHgInjection = async (locId, testSumId, hgTestSumId, id) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url: url,
       }),
     );
@@ -2244,7 +2244,7 @@ export const deleteUnitDefaultTestRun = async (
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -2256,7 +2256,7 @@ export const deleteUnitDefaultTestRun = async (
 export const getQaCertEvents = async (locId) => {
   const path = `/locations/${locId}/qa-certification-events`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2266,7 +2266,7 @@ export const createQaCertEvents = async (locId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2280,7 +2280,7 @@ export const updateQaCertEvents = async (locId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2296,7 +2296,7 @@ export const deleteQaCertEvents = async (locId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );
@@ -2307,7 +2307,7 @@ export const deleteQaCertEvents = async (locId, id, payload) => {
 export const getTestExtension = async (locId) => {
   const path = `/locations/${locId}/test-extension-exemptions`;
   const url = getApiUrl(path);
-  return secureAxios({ url: url, method: 'GET' })
+  return secureAxios({ url: url, method: "GET" })
     .then(handleResponse)
     .catch(handleError);
 };
@@ -2317,7 +2317,7 @@ export const createTestExtension = async (locId, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'POST',
+        method: "POST",
         url: url,
         data: payload,
       }),
@@ -2331,7 +2331,7 @@ export const updateTestExtension = async (locId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'PUT',
+        method: "PUT",
         url: url,
         data: payload,
       }),
@@ -2346,7 +2346,7 @@ export const deleteTestExtension = async (locId, id, payload) => {
   try {
     return handleResponse(
       await secureAxios({
-        method: 'DELETE',
+        method: "DELETE",
         url,
       }),
     );

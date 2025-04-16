@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { convertSectionToStoreName } from '../../additional-functions/workspace-section-and-store-names';
-import { setLocationSelectionState } from '../../store/actions/dynamicFacilityTab';
-import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+import { convertSectionToStoreName } from "../../additional-functions/workspace-section-and-store-names";
+import { setLocationSelectionState } from "../../store/actions/dynamicFacilityTab";
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-const emptyOption = { id: '', name: '-- Select a value --' };
+const emptyOption = { id: "", name: "-- Select a value --" };
 
 const HeaderInfoLocationSelect = ({
-  className = '',
+  className = "",
   selectedConfig,
   workspaceSection,
   allowEmpty = false,

@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import { getReportingPeriods } from '../../utils/functions';
-import { DropdownSelection } from '../DropdownSelection/DropdownSelection';
+import { getReportingPeriods } from "../../utils/functions";
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 
-const emptyOption = { value: '', label: '-- Select a value --' };
+const emptyOption = { value: "", label: "-- Select a value --" };
 
-const ReportingPeriodSelect = ({ className = '', setValue, value }) => {
+const ReportingPeriodSelect = ({ className = "", setValue, value }) => {
   const options = useMemo(() => {
     const periods = getReportingPeriods();
     return [

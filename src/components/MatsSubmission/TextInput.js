@@ -1,14 +1,14 @@
-import { Label, TextInput as UswdsTextInput } from '@trussworks/react-uswds';
-import { uniqueId } from 'lodash';
-import React, { useState } from 'react';
+import { Label, TextInput as UswdsTextInput } from "@trussworks/react-uswds";
+import { uniqueId } from "lodash";
+import React, { useState } from "react";
 
 const TextInput = ({
   label,
-  placeholder = 'Enter text...',
+  placeholder = "Enter text...",
   setValue,
   value,
 }) => {
-  const [id] = useState(uniqueId(`${label.replace(' ', '')}-text-input-`));
+  const [id] = useState(uniqueId(`${label.replace(" ", "")}-text-input-`));
 
   return (
     <>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import Modal from '../Modal/Modal';
+import Modal from "../Modal/Modal";
 
 export const SubmissionSignSubmitModal = ({
   onClose = () => {},
