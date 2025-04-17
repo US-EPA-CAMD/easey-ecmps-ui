@@ -12,6 +12,7 @@ import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
 import ConfigurationManagement from "../ConfigurationManagement/ConfigurationManagement";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
+import MatsSubmission from "../MatsSubmission/MatsSubmission";
 import ReportingInstructions from "../ReportingInstructions/ReportingInstructions";
 import ReportGenerator from "../ReportGenerator/ReportGenerator";
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
@@ -29,6 +30,7 @@ import {
   QA_CERT_TEST_SUMMARY_STORE_NAME,
   EXPORT_STORE_NAME,
   EMISSIONS_STORE_NAME,
+  MATS_STORE_NAME,
   MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
@@ -38,7 +40,6 @@ import {
   SUBMISSION_ACCESS_STORE_NAME,
 } from "../../additional-functions/system-admin-section-and-store-names";
 
-import * as modules from "../../utils/constants/moduleTitles";
 import * as types from "../../store/actions/actionTypes";
 import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import EvaluateAndSubmit from "../EvaluateAndSubmit/EvaluateAndSubmit";
@@ -56,8 +57,6 @@ const App = () => {
 
   const dispatch = useDispatch();
   const [user, setUser] = useState(false);
-  const [expired, setExpired] = useState(false);
-  const [resetTimer, setResetTimer] = useState(false);
 
   const urlParams = new URLSearchParams(queryParams);
   const message = urlParams.get("message");
@@ -225,14 +224,18 @@ const App = () => {
 
   const roles = JSON.parse(localStorage.getItem("ecmps_user"))?.roles;
 
-  const facilityCheckoutPermission = () => {
+  const facilityCheckoutPermission = (
+    acceptedRoles = [
+      config.app.sponsorRole,
+      config.app.submitterRole,
+      config.app.preparerRole,
+      config.app.initialAuthorizerRole,
+    ]
+  ) => {
     const cdxUser = JSON.parse(localStorage.getItem("ecmps_user"));
     return (
       validUser() &&
-      (cdxUser?.roles?.includes(config.app.sponsorRole) ||
-        cdxUser?.roles?.includes(config.app.submitterRole) ||
-        cdxUser?.roles?.includes(config.app.preparerRole) ||
-        cdxUser?.roles?.includes(config.app.initialAuthorizerRole))
+      cdxUser?.roles?.some((role) => acceptedRoles.includes(role))
     );
   };
 
@@ -298,12 +301,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={MONITORING_PLAN_STORE_NAME}
-                  moduleName={modules.monitoring_plans_module}
                 />
               )
             }
@@ -329,12 +327,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
-                  moduleName={modules.qa_Certifications_Test_Summary_Module}
                 />
               )
             }
@@ -360,12 +353,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={QA_CERT_EVENT_STORE_NAME}
-                  moduleName={modules.qa_Certifications_Event_Module}
                 />
               )
             }
@@ -391,12 +379,7 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={EMISSIONS_STORE_NAME}
-                  moduleName={modules.emissions_module}
                 />
               )
             }
@@ -423,10 +406,6 @@ const App = () => {
               ) : (
                 <MonitoringPlanHome
                   user={user}
-                  resetTimer={setResetTimer}
-                  setExpired={setExpired}
-                  resetTimerFlag={resetTimer}
-                  callApiFlag={expired}
                   workspaceSection={EXPORT_STORE_NAME}
                 />
               )
@@ -467,6 +446,33 @@ const App = () => {
                 <Navigate key="navigate" to="/" />
               ) : (
                 <ConfigurationManagement user={user} />
+              )
+            }
+          />
+          <Route
+            path="/workspace/mats-data-submission"
+            element={
+              !facilityCheckoutPermission() ? (
+                <Navigate key="navigate" to="/" />
+              ) : (
+                <MonitoringPlanHome
+                  user={user}
+                  workspaceSection={MATS_STORE_NAME}
+                />
+              )
+            }
+          />
+          <Route
+            path="/workspace/mats-data-submission/create"
+            element={
+              !facilityCheckoutPermission([
+                config.app.sponsorRole,
+                config.app.submitterRole,
+                config.app.initialAuthorizerRole,
+              ]) ? (
+                <Navigate key="navigate" to="/workspace/mats-data-submission" />
+              ) : (
+                <MatsSubmission user={user} />
               )
             }
           />

@@ -268,6 +268,16 @@ export const getWorkspacePaths = () => {
       ],
     },
     {
+      name: "MATS Data Submission",
+      url: "/workspace/mats-data-submission",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
       name: "Configuration Management",
       url: "/workspace/configuration-management",
       requiredRoles: [
