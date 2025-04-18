@@ -411,11 +411,10 @@ export const EvaluateAndSubmit = ({
     payload.userEmail = user.email;
 
     payload.items = [];
-    payload.hasCritErrors = false;
-
     for (const monPlanId of activeMPSet) {
       const newItem = {};
       newItem.monPlanId = monPlanId;
+
       //First check the monitor plan to see if we should be submitting it
       if (
         monPlanRef.current.filter(
@@ -426,10 +425,6 @@ export const EvaluateAndSubmit = ({
           (f) => f.monPlanId === monPlanId && f.isSelected
         );
 
-        if (plan.evalStatusCode === "ERR") {
-          payload.hasCritErrors = true;
-        }
-
         newItem.submitMonPlan = true;
       } else {
         newItem.submitMonPlan = false;
@@ -439,27 +434,18 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.testExtensionExemptionIdentifier;
         });
@@ -468,9 +454,7 @@ export const EvaluateAndSubmit = ({
       newItem.emissionsReportingPeriods = emissionsRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
+
           return m.periodAbbreviation;
         });
 
