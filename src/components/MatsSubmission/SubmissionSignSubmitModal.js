@@ -12,7 +12,6 @@ export const SubmissionSignSubmitModal = ({
       exitBtn="Sign & Submit"
       save={onSave}
       showDarkBg={true}
-      showCancel={true}
       showSave={true}
     />
   );

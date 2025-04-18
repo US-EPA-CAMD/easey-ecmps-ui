@@ -63,7 +63,7 @@ const reportTypeInputMappings = [
       "testDate",
       "testComment",
     ],
-    files: ["ERT", "SUPPORTING"],
+    files: ["ERT", "PAYLOAD", "SUPPORTING"],
   },
   {
     codes: ["CR"],
@@ -178,6 +178,13 @@ const MatsSubmission = ({
 
   const handleInitialSubmit = async (e) => {
     e.preventDefault();
+
+    // Location ID is required to generate the submission URL.
+    if (!metadataPayload.locationId) {
+      setSubmissionErrors(["Location is required"]);
+      setSubmissionInitStatus(dataStatus.ERROR);
+      return;
+    }
 
     setSubmissionErrors([]);
     setSubmissionId(null);
@@ -350,7 +357,7 @@ const MetadataInputs = ({
   const includeIfInReportType = useCallback(
     (fieldKey, item) => {
       const emptyValue = Array.isArray(item) ? [] : null;
-      return fieldIsInReportType(fieldKey) ? item : emptyValue;
+      return fieldIsInReportType(fieldKey) ? item || emptyValue : emptyValue;
     },
     [fieldIsInReportType],
   );
@@ -366,7 +373,7 @@ const MetadataInputs = ({
   useEffect(() => {
     onUpdate({
       locationId: includeIfInReportType("location", location),
-      reportTypeCode: reportType,
+      reportTypeCode: reportType || null,
       averagingGroupCode: includeIfInReportType(
         "averagingGroup",
         averagingGroup,

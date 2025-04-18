@@ -13,7 +13,6 @@ export const SubmissionWarningsModal = ({
       close={onClose}
       exitBtn="Continue"
       save={onSave}
-      showCancel={true}
       showDarkBg={true}
       showSave={true}
     >
