@@ -376,7 +376,16 @@ const ModalDetails = ({
             defaultValue={datePickerValue}
             disabled={isEditingDisabled}
             maxDate={
-              title !== "Protocol Gas"
+               // Allow future dates up to 90 days for specific components
+              ["Default", "Formula", "Load", "Location Attribute", "Method",
+                "Qualification", "Rectangular Duct WAF", "Span", "System",
+                "Unit Information", "Unit Fuel", "Unit Control", "Unit Capacity"].includes(title)
+                ? (() => {
+                    const futureDate = new Date(d.getTime() + (90 * 24 * 60 * 60 * 1000));
+                    return `${futureDate.getFullYear()}-${futureDate.getMonth() + 1}-${futureDate.getDate()}`;
+                  })()
+
+              : title !== "Protocol Gas"
                 ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
                 : null
             }
