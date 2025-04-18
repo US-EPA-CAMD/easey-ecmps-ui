@@ -35,8 +35,8 @@ export const SubmissionReportData = ({
       submissionId: "Submission ID",
       submissionDateTime:"Submission Date/Time",
       severityLevel: "Severity Level",
-      mostRecet: "Most Recent",
-      submissionCode: "Submission Status",
+      mostRecent: "Most Recent",
+      submissionStatus: "Submission Status",
       criticalErrLevelOne: "Critical Error Level 1",
       criticalErrLevelTwo: "Critical Error Level 2",
       nonCritical: "Non-Critical",
@@ -152,13 +152,13 @@ export const SubmissionReportData = ({
     {
       name: "Most Recent",
       width: "160px",
-      selector: (row) => row.mostRecet,
+      selector: (row) => row.mostRecent,
       sortable: true,
     },
     {
       name: "Submission Status",
       width: "160px",
-      selector: (row) => row.submissionCode,
+      selector: (row) => row.submissionStatus,
       sortable: true,
     },
     {
