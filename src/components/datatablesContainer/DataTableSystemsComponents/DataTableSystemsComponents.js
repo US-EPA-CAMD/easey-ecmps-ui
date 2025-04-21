@@ -211,6 +211,10 @@ export const DataTableSystemsComponents = ({
 
   useEffect(() => {
     if (selected?.locationId && selected?.id) {
+      setDataLoaded(false);
+      setDataComponentsLoaded(false);
+      setFuelDataLoaded(false);
+
       mpApi
         .getMonitoringSystemsComponents(selected.locationId, selected.id)
         .then((res) => {

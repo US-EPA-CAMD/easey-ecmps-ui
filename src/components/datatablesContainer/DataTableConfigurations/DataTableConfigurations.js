@@ -135,11 +135,8 @@ export const DataTableConfigurations = ({
   }, [selectedRow]);
 
   useEffect(() => {
-    const callbackFunction = () => {
-      loadMonitoringPlans(orisCode)(dispatch).then(() => setDataLoaded(true));
-    };
-    // Call the callback function
-    callbackFunction();
+    setDataLoaded(false);
+    loadMonitoringPlans(orisCode)(dispatch).then(() => setDataLoaded(true));
   }, [dispatch, orisCode]);
 
   useEffect(() => {

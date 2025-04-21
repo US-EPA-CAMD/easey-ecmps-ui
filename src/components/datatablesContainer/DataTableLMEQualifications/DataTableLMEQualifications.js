@@ -58,6 +58,7 @@ export const DataTableLMEQualifications = ({
       qualSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getLMEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {

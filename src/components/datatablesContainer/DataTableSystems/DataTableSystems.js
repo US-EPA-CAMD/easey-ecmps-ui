@@ -135,6 +135,7 @@ export const DataTableSystems = ({
       locationSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getMonitoringSystems(locationSelectValue)
         .then((res) => {

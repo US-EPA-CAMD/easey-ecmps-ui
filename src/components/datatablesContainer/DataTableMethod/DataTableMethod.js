@@ -95,6 +95,7 @@ export const DataTableMethod = ({
 
   useEffect(() => {
     const fetchMethods = async () => {
+      setDataLoaded(false);
       try {
         const methods = await mpApi.getMonitoringMethods(locationSelectValue)
           .catch(error => log.log('getMonitoringMethods failed', error));
