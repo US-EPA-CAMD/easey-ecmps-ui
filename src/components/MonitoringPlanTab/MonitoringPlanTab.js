@@ -25,27 +25,19 @@ export const MonitoringPlanTab = ({
   setCheckout,
   setInactive,
 }) => {
-  const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
-  };
+  const currentTab = tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   const currentTabIndex = useMemo(() => {
     return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
   }, [selectedConfigId, tabs]);
 
-  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
+  const [sectionSelect, setSectionSelect] = useState(currentTab.section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
-  const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
-  );
-
-  useEffect(() => {
-    setLocation(locationSelect, title, MONITORING_PLAN_STORE_NAME);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+  const locationSelect = currentTab.location;
+  const setLocationSelect = (location) => setLocation(location, title, MONITORING_PLAN_STORE_NAME);
 
   return (
     <div id="monitoring-plan-tab-container">
@@ -58,7 +50,7 @@ export const MonitoringPlanTab = ({
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
+          setLocationSelect={setLocationSelect}
           user={user}
           checkout={tabs[currentTabIndex].checkout}
           setCheckout={setCheckout}
