@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
@@ -150,7 +150,10 @@ export const DataTableMats = ({
     endDate: "string",
     endHour: 0,
   };
-  const data = useMemo(() => {
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
@@ -161,25 +164,25 @@ export const DataTableMats = ({
       if (activeOnly.length === matsAndMethods.length) {
         // then disable the inactive checkbox and set it as un-checked
         settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+        setData(fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods));
       }
 
       // if ONLY INACTIVE records return
       else if (inactiveOnly.length === matsAndMethods.length) {
         // then disable the inactive checkbox and set it as checked
         settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+        setData(fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods));
       }
 
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(
+        setData(fs.getMonitoringPlansMatsMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(matsMethods)
             : matsMethods
-        );
+        ));
       }
     }
 
@@ -187,9 +190,8 @@ export const DataTableMats = ({
     else {
       // disable the inactive checkbox and set it as un-checked
       // settingInactiveCheckBox(false, true);
-      return [];
+      setData([]);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 

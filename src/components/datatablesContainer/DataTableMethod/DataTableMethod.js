@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import log from "loglevel";
 
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
@@ -311,7 +311,9 @@ export const DataTableMethod = ({
     }
   };
 
-  const data = useMemo(() => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
@@ -322,27 +324,27 @@ export const DataTableMethod = ({
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        setData(fs.getMonitoringPlansMethodsTableRecords(methods));
       }
 
       // only inactive data > disables checkbox and checks it
       else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        setData(fs.getMonitoringPlansMethodsTableRecords(methods));
       }
       // resets checkbox
       else {
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansMethodsTableRecords(
+        setData(fs.getMonitoringPlansMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(methods)
             : methods
-        );
+        ));
       }
     } else {
       // settingInactiveCheckBox(false, true);
-      return [];
+      setData([]);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

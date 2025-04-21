@@ -48,7 +48,7 @@ export const MonitoringPlanTab = ({
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
-          setSectionSelect={(section) => setSectionSelect(section)}
+          setSectionSelect={setSectionSelect}
           locationSelect={locationSelect}
           setLocationSelect={setLocationSelect}
           user={user}
