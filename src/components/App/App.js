@@ -50,6 +50,7 @@ import { validUser } from "../../utils/api/easeyAuthApi";
 import { displayAppError } from "../../additional-functions/app-error";
 import { signInUser } from "./useAuthRedirect";
 import LoadingModal from "../LoadingModal/LoadingModal";
+import { AdminSubmissionReport } from "../AdminSubmissionReport/AdminSubmissionReport";
 
 const App = () => {
   const queryParams = useLocation().search;
@@ -517,6 +518,19 @@ const App = () => {
                   user={user}
                   section={SUBMISSION_ACCESS_STORE_NAME}
                 />
+              )
+            }
+          />
+          <Route
+            path="/admin/submissions-report"
+            element={
+              !validUser() ||
+              !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                config.app.adminRole
+              ) ? (
+                <Navigate to="/" />
+              ) : (
+                <AdminSubmissionReport user={user} />
               )
             }
           />
