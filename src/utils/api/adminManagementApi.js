@@ -3,6 +3,7 @@ import { handleError, handleResponse } from "./apiUtils";
 import { secureAxios } from "./easeyAuthApi";
 
 const url = `${config.services.camd.uri}/admin/em-submission-access`;
+const urlAdminSubmissionReport = `${config.services.camd.uri}/admin/submission-report`;
 const TEST_SUMMARY_ENDPOINT = 'test-summary'
 const CERT_EVENT_ENDPOINT = 'cert-events'
 const EXT_EXEMP_ENDPOINT = 'extension-exemptions'
@@ -28,6 +29,34 @@ export const getEmSubmissionRecords = async (
     .then(handleResponse)
     .catch(handleError);
 };
+
+export const getSubmissionReportRecords = async (
+  orisCode,
+  year,
+  quarter,
+  severityCode,
+  submissionType,
+  submissionFrom,
+  submissionTo
+) => {
+  // At least some kind of filtering is required
+  if (!orisCode && !year && !quarter && !submissionType && !severityCode && !submissionFrom && !submissionTo) return [];
+
+  return secureAxios({
+    url: urlAdminSubmissionReport,
+    params: {
+      orisCode,
+      year,
+      quarter,
+      severityCode,
+      submissionType,
+      submissionFrom,
+      submissionTo
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
 
 export const openEmSubmissionRecord = async (payload) => {
   return secureAxios({
