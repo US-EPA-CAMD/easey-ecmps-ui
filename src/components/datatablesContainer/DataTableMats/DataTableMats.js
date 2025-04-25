@@ -51,6 +51,7 @@ export const DataTableMats = ({
   updateRelatedTables,
   currentTabIndex,
   tabs,
+  reportDataStatus,
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -151,31 +152,32 @@ export const DataTableMats = ({
     endHour: 0,
   };
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
       // Note: settingInactiveCheckbox -> function parameters ( check flag, disable flag )
-
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
       // if ONLY ACTIVE records return,
       if (activeOnly.length === matsAndMethods.length) {
         // then disable the inactive checkbox and set it as un-checked
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+        records =  fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
       }
 
       // if ONLY INACTIVE records return
       else if (inactiveOnly.length === matsAndMethods.length) {
         // then disable the inactive checkbox and set it as checked
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
+        records =  fs.getMonitoringPlansMatsMethodsTableRecords(matsMethods);
       }
 
       // if BOTH ACTIVE & INACTIVE records return
       else {
         // then enable the inactive checkbox (user can mark it as checked/un-checked manually)
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansMatsMethodsTableRecords(
+        records = fs.getMonitoringPlansMatsMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(matsMethods)
             : matsMethods
@@ -183,13 +185,8 @@ export const DataTableMats = ({
       }
     }
 
-    // if NO RECORDS are returned
-    else {
-      // disable the inactive checkbox and set it as un-checked
-      // settingInactiveCheckBox(false, true);
-      return [];
-    }
-
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matsMethods, methods, tabs[currentTabIndex].inactive[0], updateTable]);
 

@@ -310,6 +310,7 @@ export const getMockDataTableMatsProps = () => {
     updateRelatedTables: false,
     currentTabIndex: 0,
     tabs: [{ inactive: [{}] }],
+    reportDataStatus: jest.fn()
   }
 }
 

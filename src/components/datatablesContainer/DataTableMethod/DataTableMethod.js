@@ -52,6 +52,7 @@ export const DataTableMethod = ({
   //
 
   tabs,
+  reportDataStatus,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -312,39 +313,40 @@ export const DataTableMethod = ({
   };
 
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
 
       // only active data >  disable checkbox and unchecks it
       if (activeOnly.length === matsAndMethods.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        records = fs.getMonitoringPlansMethodsTableRecords(methods);
       }
 
       // only inactive data > disables checkbox and checks it
       else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        records =  fs.getMonitoringPlansMethodsTableRecords(methods);
       }
       // resets checkbox
       else {
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansMethodsTableRecords(
+        records = fs.getMonitoringPlansMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(methods)
             : methods
         );
       }
-    } else {
-      // settingInactiveCheckBox(false, true);
-      return [];
-    }
+    } 
 
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, matsMethods, tabs[currentTabIndex].inactive[0], updateTable]);
 
