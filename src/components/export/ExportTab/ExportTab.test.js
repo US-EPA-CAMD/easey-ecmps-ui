@@ -10,7 +10,7 @@ import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
 
 import render from "../../../mocks/render"
 import { getMockExportQa, getMockReportingPeriods } from "../../../mocks/functions";
-import { EXPORT_TAB_TEST_EXPORT_STATE, mockSelectedConfig } from "../../../mocks/constants";
+import { mockSelectedConfig } from "../../../mocks/constants";
 import { Provider } from "react-redux";
 import configureStore from "../../../store/configureStore.dev";
 

@@ -255,13 +255,6 @@ export const mockFacilities = [
   ],
 ];
 
-export const EXPORT_TAB_TEST_EXPORT_STATE = {
-  checkedDataTypes: [
-    'monitoring-plan'
-  ],
-  reportingPeriodId: mockReportingPeriodId
-}
-
 export const mockExportQa = {
   orisCode: 3776,
   testSummaryData: [
@@ -467,23 +460,27 @@ export const mockTestTypeCodes = [
   },
 ]
 
-export const mockTestTypeGroupCodes = [
+export const mockTestTypeGroupCodes =
   {
-    testTypeGroupCode: "LINSUM",
-    testTypeGroupDescription: "Linearity Summary",
-    childDepth: "3"
-  },
-  {
-    testTypeGroupCode: "RELACC",
-    testTypeGroupDescription: "Relative Accuracy",
-    childDepth: "6"
-  },
-  {
-    testTypeGroupCode: 'PEI',
-    testTypeGroupDescription: 'Primary Element Inspection',
-    childDepth: '1',
-  },
-]
+    items:
+      [
+        {
+          testTypeGroupCode: "LINSUM",
+          testTypeGroupDescription: "Linearity Summary",
+          childDepth: "3"
+        },
+        {
+          testTypeGroupCode: "RELACC",
+          testTypeGroupDescription: "Relative Accuracy",
+          childDepth: "6"
+        },
+        {
+          testTypeGroupCode: 'PEI',
+          testTypeGroupDescription: 'Primary Element Inspection',
+          childDepth: '1',
+        },
+      ]
+  }
 
 export const mockSpanScaleCodes = [
   {

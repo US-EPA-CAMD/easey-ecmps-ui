@@ -4,69 +4,45 @@ import {
   convertSectionToStoreName,
   QA_CERT_EVENT_STORE_NAME,
 } from '../../additional-functions/workspace-section-and-store-names';
-import {
-  setSectionSelectionState,
-  setLocationSelectionState,
-  setCheckoutState,
-} from '../../store/actions/dynamicFacilityTab';
+import { setSectionSelectionState, } from '../../store/actions/dynamicFacilityTab';
 import QACertEventTabRender from '../QACertEventTabRender/QACertEventTabRender';
+
 export const QACertEventTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
   orisCode,
   selectedConfigId,
   title,
   user,
   tabs,
   setSection,
-  setLocation,
-  setCheckout,
-  checkedOutLocations,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   };
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
-    setSection(sectionSelect, title, workspaceSection);
+    setSection(sectionSelect, title, QA_CERT_EVENT_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
-  const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
-  );
+  const locationSelect = getCurrentTab().location;
   const [selectedTestCode, setSelectedTestCode] = useState({
     testTypeGroupCode: null,
     testTypeCodes: [],
   });
-  useEffect(() => {
-    setLocation(locationSelect, title);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+
   return (
     <div>
       <div>
         <QACertEventTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
           setSectionSelect={(section) => setSectionSelect(section)}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
           user={user}
           setSelectedTestCode={setSelectedTestCode}
           selectedTestCode={selectedTestCode}
-          setCheckout={setCheckout}
-          checkedOutLocations={checkedOutLocations}
-          workspaceSection={workspaceSection}
           checkoutState={getCurrentTab().checkout}
         />
       </div>
@@ -83,14 +59,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLocation: (location, title) =>
-      dispatch(
-        setLocationSelectionState(
-          location,
-          title,
-          convertSectionToStoreName(QA_CERT_EVENT_STORE_NAME)
-        )
-      ),
     setSection: (section, title) =>
       dispatch(
         setSectionSelectionState(
@@ -105,14 +73,6 @@ const mapDispatchToProps = (dispatch) => {
           section,
           title,
           convertSectionToStoreName(QA_CERT_EVENT_STORE_NAME)
-        )
-      ),
-    setCheckout: (value, configID, workspaceSection) =>
-      dispatch(
-        setCheckoutState(
-          value,
-          configID,
-          convertSectionToStoreName(workspaceSection)
         )
       ),
   };

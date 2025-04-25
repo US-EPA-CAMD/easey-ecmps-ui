@@ -57,9 +57,8 @@ export const LeftNavToSubHeader = (props) => {
 
     function renderNavDropDown(el, i) {
       return (
-        <div>
+        <div key={i}>
           <NavDropDownButton
-            key={i}
             label={el.name}
             menuId={`menu-${el.name}`}
             isOpen={navDropdownOpen[i]}

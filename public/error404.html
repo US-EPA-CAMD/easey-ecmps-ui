@@ -12,7 +12,11 @@
 
   <script src="/env-config.js"></script>
   
-  <script language="javascript">
+  <script nonce="###NONCE###">
+    window.__CSP_NONCE__ = "###NONCE###";
+  </script>
+
+  <script language="javascript" nonce="###NONCE###">
     function toggleGovBanner(obj) {
       var ariaExpanded = obj.getAttribute("aria-expanded");
       obj.setAttribute("aria-expanded", ariaExpanded === "true" ? "false" : "true");
@@ -110,15 +114,15 @@
 </body>
 <script language="javascript">
   var envBanner = document.getElementById('env-banner');
-  if (['prod', 'production'].includes(window._env_.REACT_APP_EASEY_ECMPS_UI_ENV)) {
+  if (['prod', 'production'].includes(window._env_.VITE_EASEY_ECMPS_UI_ENV)) {
     envBanner.hidden = true;
   }
   else {
     envBanner.hidden = false;
-    envBanner.innerHTML = `EPA ${window._env_.REACT_APP_EASEY_ECMPS_UI_ENV} environment: The content on this page is NOT production data and this site is being used for <b>development</b> and/or <b>testing</b> purposes only.`;
+    envBanner.innerHTML = `EPA ${window._env_.VITE_EASEY_ECMPS_UI_ENV} environment: The content on this page is NOT production data and this site is being used for <b>development</b> and/or <b>testing</b> purposes only.`;
   }
 
   var verBanner = document.getElementById('version-banner');  
-  verBanner.innerHTML = `${window._env_.REACT_APP_EASEY_ECMPS_UI_VERSION} published ${window._env_.REACT_APP_EASEY_ECMPS_UI_PUBLISHED}`;
+  verBanner.innerHTML = `${window._env_.VITE_EASEY_ECMPS_UI_VERSION} published ${window._env_.VITE_EASEY_ECMPS_UI_PUBLISHED}`;
 </script>
 </html>

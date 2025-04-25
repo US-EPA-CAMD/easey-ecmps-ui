@@ -29,6 +29,7 @@ import React, {
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { v4 as uuid } from "uuid";
+import log from "loglevel";
 
 import { setCheckedOutLocations } from "../../store/actions/checkedOutLocations";
 import { loadFacilities } from "../../store/actions/facilities";
@@ -52,6 +53,7 @@ import { configurationManagementTitle } from "../../utils/constants/moduleTitles
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
+import StatusContent from "../StatusContent/StatusContent";
 import "./ConfigurationManagement.scss";
 
 /*
@@ -546,22 +548,6 @@ const SaveStatusAlert = ({ status }) => (
   </>
 );
 
-const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
-  <>
-    {status === dataStatus.PENDING && (
-      <div className="display-flex flex-justify-center">
-        <SizedPreloader />
-      </div>
-    )}
-    {status === dataStatus.ERROR && (
-      <Alert noIcon slim type="error" headingLevel={headingLevel}>
-        Error loading {label}.
-      </Alert>
-    )}
-    {status === dataStatus.SUCCESS && children}
-  </>
-);
-
 const SummarySectionPlan = ({ plans, title }) =>
   plans.length ? (
     <section>
@@ -713,11 +699,11 @@ export const ConfigurationManagement = ({
 
   const checkInAllPlansForUser = useCallback(async () => {
     await Promise.all(
-      (await getCheckedOutLocations()).data
-        .filter((loc) => user && loc.checkedOutBy === user.userId)
+      (await getCheckedOutLocations()).data?.items
+        ?.filter((loc) => user && loc.checkedOutBy === user.userId)
         .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
     );
-    setCheckedOutLocations((await getCheckedOutLocations()).data);
+    setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
@@ -737,7 +723,7 @@ export const ConfigurationManagement = ({
       setChangeSummary(results);
       setChangeSummaryStatus(dataStatus.SUCCESS);
     } catch (err) {
-      console.error(err);
+      log.error(err);
       setModalErrorMsgs(formatErrorResponse(handleImportError(err)));
       setChangeSummaryStatus(dataStatus.ERROR);
     }
@@ -786,7 +772,7 @@ export const ConfigurationManagement = ({
       );
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
@@ -809,7 +795,7 @@ export const ConfigurationManagement = ({
       handleError(err);
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
-      setCheckedOutLocations((await getCheckedOutLocations()).data);
+      setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
@@ -837,7 +823,7 @@ export const ConfigurationManagement = ({
       ].forEach((setter) => setter(dataStatus.IDLE));
       checkInAllPlansForUser(); // NOTE: This is only necessary until check-outs are done on the plant level
     } catch (err) {
-      console.error(err);
+      log.error(err);
       setSaveStatus(dataStatus.ERROR);
     }
   };
@@ -885,6 +871,31 @@ export const ConfigurationManagement = ({
     });
   };
 
+  const filterFormState = () => {
+    const filteredUnitStackConfigs = formState.unitStackConfigs.filter(
+      unitStackConfig => unitStackConfig?.endDate !== unitStackConfig?.originalRecord?.endDate
+      || unitStackConfig?.originalRecord == null
+    );
+    const filteredStackPipes = formState.stackPipes.filter(
+      (stackPipe) =>
+        filteredUnitStackConfigs.some(
+          (config) => config.stackPipeId === stackPipe.stackPipeId
+        ) ||
+        stackPipe?.retireDate !== stackPipe?.originalRecord?.retireDate ||
+        stackPipe?.originalRecord == null
+    );
+    const filteredUnits = formState.units.filter(unit => 
+      filteredUnitStackConfigs.some(config => config.unitId === unit.unitId)
+    );
+    
+    return {
+      units: filteredUnits,
+      stackPipes: filteredStackPipes,
+      unitStackConfigs: filteredUnitStackConfigs
+    };
+  };
+  
+
   const initializeEditableFormState = (data, type) => {
     formDispatch({
       type,
@@ -897,18 +908,20 @@ export const ConfigurationManagement = ({
     });
   };
 
-  const mapFormStateToConfigurationsPayload = () => ({
+  const mapFormStateToConfigurationsPayload = () => {
+    const newFormState = filterFormState()
+    return {
     monitoringPlanCommentData: [],
     orisCode: userFacilities.find(
       (f) => f.facilityRecordId === selectedFacility
     ).facilityId,
-    unitStackConfigurationData: formState.unitStackConfigs.map((usc) => ({
+    unitStackConfigurationData: newFormState.unitStackConfigs.map((usc) => ({
       beginDate: usc.beginDate,
       endDate: usc.endDate,
       stackPipeId: usc.stackPipeId,
       unitId: usc.unitId,
     })),
-    monitoringLocationData: formState.stackPipes
+    monitoringLocationData: newFormState.stackPipes
       .map((sp) => ({
         unitId: null,
         stackPipeId: sp.stackPipeId,
@@ -918,7 +931,7 @@ export const ConfigurationManagement = ({
         ...unusedMonitoringLocationDataFields(),
       }))
       .concat(
-        formState.units.map((u) => ({
+        newFormState.units.map((u) => ({
           unitId: u.unitId,
           stackPipeId: null,
           activeDate: null,
@@ -928,7 +941,8 @@ export const ConfigurationManagement = ({
         }))
       ),
     version: MONITOR_PLAN_SCHEMA_VERSION,
-  });
+  };
+};
 
   const mapFormStateToSingleUnitPayload = (unit) => ({
     unitId: unit.unitId,
@@ -1107,7 +1121,7 @@ export const ConfigurationManagement = ({
         getUnitsByOrisCode(selectedOrisCode).then((res) => {
           setUnitsStatus(dataStatus.SUCCESS);
           initializeToggleableFormState(
-            res.data
+            res.data.items
               .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
               .map((d) => ({
                 ...d,
@@ -1132,7 +1146,7 @@ export const ConfigurationManagement = ({
         setStackPipesStatus(dataStatus.PENDING);
         getStackPipesByOrisCode(selectedOrisCode).then((res) => {
           setStackPipesStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data, "SET_STACK_PIPES");
+          initializeEditableFormState(res.data.items, "SET_STACK_PIPES");
         });
       } catch (err) {
         setStackPipesStatus(dataStatus.ERROR);
@@ -1149,7 +1163,7 @@ export const ConfigurationManagement = ({
         setUnitStackConfigsStatus(dataStatus.PENDING);
         getUnitStackConfigsByOrisCode(selectedOrisCode).then((res) => {
           setUnitStackConfigsStatus(dataStatus.SUCCESS);
-          initializeEditableFormState(res.data, "SET_UNIT_STACK_CONFIGS");
+          initializeEditableFormState(res.data.items, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
         setUnitStackConfigsStatus(dataStatus.ERROR);

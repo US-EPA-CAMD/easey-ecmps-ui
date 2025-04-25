@@ -6,48 +6,48 @@ applications:
     buildpacks:
       - nginx_buildpack
     env:
-      REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
-      REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
-      REACT_APP_EASEY_MDM_API: https://((apiHost))/master-data-mgmt
-      REACT_APP_EASEY_FACILITIES_API: https://((apiHost))/facilities-mgmt
-      REACT_APP_EASEY_EMISSIONS_API: https://((apiHost))/emissions-mgmt
-      REACT_APP_EASEY_MONITOR_PLAN_API: https://((apiHost))/monitor-plan-mgmt
-      REACT_APP_EASEY_AUTH_API: https://((apiHost))/auth-mgmt
-      REACT_APP_EASEY_CONTENT_API: https://((apiHost))/content-mgmt
-      REACT_APP_EASEY_QA_CERTIFICATION_API: https://((apiHost))/qa-certification-mgmt
-      REACT_APP_EASEY_CAMD_SERVICES: https://((apiHost))/camd-services
-      REACT_APP_EASEY_ECMPS_UI_SUPPORT_EMAIL: ((email))
-      REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS: ((refreshEvalStatusRateSeconds))
-      REACT_APP_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES: ((refreshEvalStatusTimeoutMinutes))
-      REACT_APP_EASEY_ECMPS_UI_CBS_BASE_URL: https://((cbsBaseUrl))
-      REACT_APP_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH: ((cbsManageDelegationsPath))
-      REACT_APP_EASEY_ECMPS_UI_CDX_BASE_URL: https://((cdxBaseUrl))
-      REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH: ((cdxForgotUserIdPath))
-      REACT_APP_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH: ((cdxForgotPasswordPath))
-      REACT_APP_EASEY_ECMPS_UI_CDX_REGISTER_PATH: ((cdxRegisterPath))
-      REACT_APP_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS: ((enableManageDelegations))
-      REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
-      REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
-      REACT_APP_EASEY_ECMPS_UI_PAGINATION_PER_PAGE: ((paginationPerPage))
-      REACT_APP_GOOGLE_ANALYTICS_ENABLED: ((googleAnalyticsEnabled))
-      REACT_APP_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
-      REACT_APP_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
-      REACT_APP_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL_MINUTES: ((refreshLastActivityIntervalMinutes))
-      REACT_APP_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE: ((enableSystemAdminstrationModule))
-      REACT_APP_TOKEN_REFRESH_THRESHOLD_SECONDS: ((tokenRefreshThresholdSeconds))
+      VITE_EASEY_ECMPS_UI_ENV: ((environment))
+      VITE_EASEY_ECMPS_UI_HOST: ((host))
+      VITE_EASEY_MDM_API: https://((apiHost))/master-data-mgmt
+      VITE_EASEY_FACILITIES_API: https://((apiHost))/facilities-mgmt
+      VITE_EASEY_EMISSIONS_API: https://((apiHost))/emissions-mgmt
+      VITE_EASEY_MONITOR_PLAN_API: https://((apiHost))/monitor-plan-mgmt
+      VITE_EASEY_AUTH_API: https://((apiHost))/auth-mgmt
+      VITE_EASEY_CONTENT_API: https://((apiHost))/content-mgmt
+      VITE_EASEY_QA_CERTIFICATION_API: https://((apiHost))/qa-certification-mgmt
+      VITE_EASEY_CAMD_SERVICES: https://((apiHost))/camd-services
+      VITE_EASEY_ECMPS_UI_SUPPORT_EMAIL: ((email))
+      VITE_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_RATE_SECONDS: ((refreshEvalStatusRateSeconds))
+      VITE_EASEY_ECMPS_UI_REFRESH_EVAL_STATUS_TIMEOUT_MINUTES: ((refreshEvalStatusTimeoutMinutes))
+      VITE_EASEY_ECMPS_UI_CBS_BASE_URL: https://((cbsBaseUrl))
+      VITE_EASEY_ECMPS_UI_CBS_MANAGE_DELEGATIONS_PATH: ((cbsManageDelegationsPath))
+      VITE_EASEY_ECMPS_UI_CDX_BASE_URL: https://((cdxBaseUrl))
+      VITE_EASEY_ECMPS_UI_CDX_FORGOT_USERID_PATH: ((cdxForgotUserIdPath))
+      VITE_EASEY_ECMPS_UI_CDX_FORGOT_PASSWORD_PATH: ((cdxForgotPasswordPath))
+      VITE_EASEY_ECMPS_UI_CDX_REGISTER_PATH: ((cdxRegisterPath))
+      VITE_EASEY_ECMPS_UI_ENABLE_MANAGE_DELEGATIONS: ((enableManageDelegations))
+      VITE_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
+      VITE_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
+      VITE_EASEY_ECMPS_UI_PAGINATION_PER_PAGE: ((paginationPerPage))
+      VITE_GOOGLE_ANALYTICS_ENABLED: ((googleAnalyticsEnabled))
+      VITE_GOOGLE_ANALYTICS_AUTHENTICATED_CONTAINER_ID: ((googleAnalyticsAuthenticatedContainerId))
+      VITE_GOOGLE_ANALYTICS_PUBLIC_CONTAINER_ID: ((googleAnalyticsPublicContainerId))
+      VITE_EASEY_ECMPS_UI_REFRESH_LAST_ACTIVITY_INTERVAL_MINUTES: ((refreshLastActivityIntervalMinutes))
+      VITE_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE: ((enableSystemAdminstrationModule))
+      VITE_TOKEN_REFRESH_THRESHOLD_SECONDS: ((tokenRefreshThresholdSeconds))
       EASEY_AUTH_API_SPONSOR_ROLE: Sponsor
       EASEY_AUTH_API_SUBMITTER_ROLE: Submitter
       EASEY_AUTH_API_PREPARER_ROLE: Preparer
       EASEY_AUTH_API_ANALYST_ROLE: ECMPS Analyst
       EASEY_AUTH_API_ADMIN_ROLE: ECMPS Admin
       EASEY_AUTH_API_INITIAL_AUTHORIZER_ROLE: Initial Authorizer
-      REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH: ((cdxHowToGetAccessPath))
-      REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID: ((oidcClientId))
-      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT: ((oidcAuthEndpoint))
-      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE: ((oidcAuthResponseType))
-      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE: ((oidcAuthResponseMode))
-      REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES: ((oidcAuthScopes))
-      REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL: ((cdxUserSignupMigrateUrl))
+      VITE_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH: ((cdxHowToGetAccessPath))
+      VITE_EASEY_ECMPS_UI_OIDC_CLIENT_ID: ((oidcClientId))
+      VITE_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT: ((oidcAuthEndpoint))
+      VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE: ((oidcAuthResponseType))
+      VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE: ((oidcAuthResponseMode))
+      VITE_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES: ((oidcAuthScopes))
+      VITE_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL: ((cdxUserSignupMigrateUrl))
 
     routes:
       - route: ((host))

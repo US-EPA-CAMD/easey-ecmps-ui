@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Select, Label } from "@trussworks/react-uswds";
+import log from "loglevel";
 import { getReportingPeriods } from "../../utils/api/qaCertificationsAPI";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
@@ -27,7 +28,7 @@ const ReportingPeriodSelector = ({
           );
         }
 
-        const periodsFromMostRecent = resp.data.reverse();
+        const periodsFromMostRecent = resp.data.items.reverse();
         // if resp.data is empty this will evaluate to {}
         const mostRecentPeriod = { ...periodsFromMostRecent[0] };
         let curSelectedPeriod = mostRecentPeriod;
@@ -45,7 +46,7 @@ const ReportingPeriodSelector = ({
         reportingPeriodSelectionHandler(curSelectedPeriod);
         setLoading(false);
       } catch (error) {
-        console.log("error fetching reporting periods", error);
+        log.log("error fetching reporting periods", error);
       }
     };
 

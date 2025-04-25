@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import log from "loglevel";
 
 import { Button } from '@trussworks/react-uswds';
 import {
@@ -79,9 +80,9 @@ const QAExpandableRowsRender = ({
       assertSelector
         .getDataTableApis(dataTableName, locationId, id, extraIDs)
         .then(res => {
-          finishedLoadingData(res.data);
+          finishedLoadingData(res.data?.items ?? res.data);
         })
-        .catch(error => console.log(error));
+        .catch(error => log.log(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataTableName, updateTable]);
@@ -244,7 +245,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasLevelCode'],
                     name: d['gasLevelDescription'],
@@ -255,7 +256,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else if (i === 1) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasComponentCode'],
                     name: d['gasComponentDescription'],
@@ -268,7 +269,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['vendorId'],
                     name: d['vendorName'],
@@ -282,7 +283,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Linearity Test':
       case 'Linearity Injection':
@@ -292,7 +293,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasLevelCode'],
                     name: d['gasLevelDescription'],
@@ -303,7 +304,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['gasTypeCode'],
                     name: d['gasTypeDescription'],
@@ -318,7 +319,7 @@ const QAExpandableRowsRender = ({
 
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'RATA Data':
         allPromises.push(dmApi.getAllRataFreqCodes());
@@ -326,7 +327,7 @@ const QAExpandableRowsRender = ({
           .then(values => {
             values.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = val.data.map(d => {
+                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                   return {
                     code: d['rataFrequencyCode'],
                     name: d['rataFrequencyDescription'],
@@ -347,7 +348,7 @@ const QAExpandableRowsRender = ({
             ];
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
 
       case 'RATA Run Data':
@@ -356,7 +357,7 @@ const QAExpandableRowsRender = ({
           .then(response => {
             dropdownArray.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = response[0].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[0].data?.items?.map(d => {
                   return {
                     code: d['runStatusCode'],
                     name: d['runStatusDescription'],
@@ -370,7 +371,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
 
       case 'RATA Summary':
@@ -381,7 +382,7 @@ const QAExpandableRowsRender = ({
           .then(response => {
             dropdownArray.forEach((val, i) => {
               if (i === 0) {
-                dropdowns[dropdownArray[i]] = response[0].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[0].data?.items?.map(d => {
                   return {
                     code: d['opLevelCode'],
                     name: d['opLevelDescription'],
@@ -392,7 +393,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else if (i === 1 || i === 3) {
-                dropdowns[dropdownArray[i]] = response[1].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[1].data?.items?.map(d => {
                   return {
                     code: d['referenceMethodCode'],
                     name: d['referenceMethodDescription'],
@@ -403,7 +404,7 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = response[2].data.map(d => {
+                dropdowns[dropdownArray[i]] = response[2].data?.items?.map(d => {
                   return {
                     code: d['apsCode'],
                     name: d['apsDescription'],
@@ -417,7 +418,7 @@ const QAExpandableRowsRender = ({
             });
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'RATA Traverse Data':
         allPromises.push(dmApi.getAllProbeTypeCodes());
@@ -444,7 +445,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -453,7 +454,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Gas':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(
@@ -471,7 +472,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -480,7 +481,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Appendix E Correlation Heat Input from Oil':
         allPromises.push(dmApi.getAllMonitoringSystemIDCodes(extraIDs[0],
@@ -503,16 +504,16 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
               if (i === 1) {
-                dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data.map(
+                dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
                     return { code: d[codeLabel], name: d[descriptionLabel] };
                   },
                 );
-                dropdowns['oilDensityUnitsOfMeasureCode'] = curResp.data.map(
+                dropdowns['oilDensityUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
                     return { code: d[codeLabel], name: d[descriptionLabel] };
                   },
@@ -524,7 +525,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Transmitter Transducer Accuracy Data':
         allPromises.push(dmApi.getAllAccuracySpecCodes());
@@ -541,14 +542,14 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
               if (i === 0) {
-                dropdowns['midLevelAccuracySpecCode'] = curResp.data.map(d => {
+                dropdowns['midLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
                   return { code: d[codeLabel], name: d[descriptionLabel] };
                 });
-                dropdowns['highLevelAccuracySpecCode'] = curResp.data.map(d => {
+                dropdowns['highLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
                   return { code: d[codeLabel], name: d[descriptionLabel] };
                 });
               }
@@ -558,7 +559,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Flow To Load Reference':
         allPromises.push(dmApi.getRataTestNumber(locationId));
@@ -588,7 +589,7 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data.map(d => {
+              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -597,7 +598,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(error => console.log(error));
+          .catch(error => log.log(error));
         break;
       case 'Unit Default Test Run':
         populateStaticDropdowns(name, dropdowns);
@@ -610,7 +611,7 @@ const QAExpandableRowsRender = ({
         Promise.all(allPromises)
           .then(res => {
             res.forEach((val, i) => {
-              dropdowns[dropdownArray[i]] = val.data.map(d => {
+              dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
                 return {
                   code: d[mdmProps[i].responseProps['code']],
                   name: d[mdmProps[i].responseProps['description']],
@@ -637,7 +638,7 @@ const QAExpandableRowsRender = ({
             }
             setMdmData(dropdowns);
           })
-          .catch(err => console.error(err));
+          .catch(err => log.error(err));
 
         break;
     }
@@ -833,7 +834,7 @@ const QAExpandableRowsRender = ({
 
     const validationErrors = validateUserInput(userInput, dataTableName);
     if (validationErrors.length > 0) {
-      console.log('valid errors', validationErrors);
+      log.log('valid errors', validationErrors);
       setErrorMsgs(validationErrors);
       return;
     }
@@ -854,7 +855,7 @@ const QAExpandableRowsRender = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      console.log('error saving data', error);
+      log.log('error saving data', error);
     }
   };
 
@@ -888,7 +889,7 @@ const QAExpandableRowsRender = ({
         setErrorMsgs(errorResp);
       }
     } catch (error) {
-      console.log('error creating data', error);
+      log.log('error creating data', error);
     }
   };
 
@@ -906,7 +907,7 @@ const QAExpandableRowsRender = ({
         returnsFocusToAddBtn(dataTableName.replaceAll(' ', '-'));
       }
     } catch (error) {
-      console.log(
+      log.log(
         `error deleting data of table: ${dataTableName}, row: ${row}`,
         error,
       );

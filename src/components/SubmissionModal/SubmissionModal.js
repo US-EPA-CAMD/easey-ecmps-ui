@@ -54,7 +54,7 @@ export const SubmissionModal = ({
       setLoading(true);  // Set loading to true before fetching data
       try {
         const result = await getCredentials(monitorPlanIds);
-        const list = result.data.map((el) => ({
+        const list = result.data?.items?.map((el) => ({
           title: "Certification Statement",
           content: el.statementText,
           expanded: false,
@@ -189,7 +189,7 @@ export const SubmissionModal = ({
               )}
                 <div>
                   <h2>Certification Statement(s)</h2>
-                  {statements.length > 0 && (
+                  {statements?.length > 0 && (
                     <SelectableAccordion
                       setCanCheck={setCanCheck}
                       items={statements}

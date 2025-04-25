@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import * as fs from "../../../utils/selectors/monitoringPlanSystems";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -196,13 +198,13 @@ export const DataTableSystemsComponents = ({
   }, [addCompThirdLevelCreateTrigger]);
   useEffect(() => {
     mpApi.getMonitoringSystems(locationSelectValue).then((res) => {
-      for (let value of res.data) {
+      for (let value of res.data?.items ?? []) {
         if (value.monitoringSystemId === systemID) {
           setSelected(value);
         }
       }
     })
-      .catch(error => console.log('getMonitoringSystems failed', error));
+      .catch(error => log.log('getMonitoringSystems failed', error));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [systemID]);
@@ -212,29 +214,29 @@ export const DataTableSystemsComponents = ({
       mpApi
         .getMonitoringSystemsComponents(selected.locationId, selected.id)
         .then((res) => {
-          setMonitoringSystemsComponents(res.data);
+          setMonitoringSystemsComponents(res.data?.items);
           setDataLoaded(true);
           setupdateComponentTable(false);
         })
-        .catch(error => console.log('getMonitoringSystemsComponents failed', error));
+        .catch(error => log.log('getMonitoringSystemsComponents failed', error));
 
       mpApi
         .getMonitoringComponents(selected.locationId)
         .then((res) => {
-          setMonitoringComponents(res.data);
+          setMonitoringComponents(res.data?.items);
           setDataComponentsLoaded(true);
           setupdateComponentList(false);
         })
-        .catch(error => console.log('getMonitoringComponents failed', error));
+        .catch(error => log.log('getMonitoringComponents failed', error));
 
       mpApi
         .getMonitoringSystemsFuelFlows(selected.locationId, selected.id)
         .then((res) => {
-          setMonitoringSystemsFuelFlows(res.data);
+          setMonitoringSystemsFuelFlows(res.data?.items);
           setFuelDataLoaded(true);
           setUpdateFuelFlowTable(false);
         })
-        .catch(error => console.log('getMonitoringSystemsFuelFlows failed', error));
+        .catch(error => log.log('getMonitoringSystemsFuelFlows failed', error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, updateFuelFlowTable, updateComponentTable, updateComponentList]);
@@ -593,7 +595,6 @@ export const DataTableSystemsComponents = ({
                   checkout={checkout}
                   addBtn={openAddComponents}
                   addBtnName={"Add Component"}
-                  show={true}
                   ariaLabel={"System Components"}
                   fixedHeader={false}
                   hasSortIcon={false}
@@ -612,7 +613,6 @@ export const DataTableSystemsComponents = ({
                   actionsBtn={"View"}
                   addBtn={openFuelFlows}
                   addBtnName={"Create New Fuel Flow"}
-                  show={true}
                   ariaLabel={"Fuel Flows"}
                   fixedHeader={false}
                   hasSortIcon={false}

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import log from "loglevel";
+
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 
@@ -21,51 +23,51 @@ const ModalAddComponent = ({
 
   useEffect(() => {
     let main = [];
-    if (comps.length < 1) {
+    if (comps?.length < 1) {
       mpApi
         .getMonitoringComponents(locationId)
         .then((res) => {
-          setComps(res.data);
+          setComps(res.data?.items);
         })
-        .catch((error) => console.log("getMonitoringComponents failed", error));
+        .catch((error) => log.log("getMonitoringComponents failed", error));
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
-          console.log("ress", ress);
-          setSysComps(ress.data);
+          log.log("ress", ress);
+          setSysComps(ress.data?.items);
         })
         .catch((error) =>
-          console.log("getMonitoringSystemsComponents failed", error)
+          log.log("getMonitoringSystemsComponents failed", error)
         );
     } else {
-      main = comps;
+      main = comps || [];
 
       //Filtering system component with system endDate
-      const sysWithEndDate = sysComps.filter(
+      const sysWithEndDate = sysComps?.filter(
         (sy) => sy.endDate && new Date(sy.endDate) < new Date()
       );
 
       //Filtering system component with active | no endDate
-      const activeSystem = sysComps.filter(
+      const activeSystem = sysComps?.filter(
         (sy) => !sy.endDate || new Date(sy?.endDate) > new Date()
       );
 
       // selecting component from main. that has componentId is equal to sysWithEndDate's componentId
-      const componetWithSystemEndDate = main.filter(({ componentId }) =>
+      const componetWithSystemEndDate = main?.filter(({ componentId }) =>
         sysWithEndDate.some(
           ({ componentId: sysCompId }) => sysCompId === componentId
         )
       );
 
       // remove active components
-      const componentWithNonActive = componetWithSystemEndDate.filter(
+      const componentWithNonActive = componetWithSystemEndDate?.filter(
         ({ componentId }) =>
           !activeSystem.some(
             ({ componentId: sysCompId }) => sysCompId === componentId
           )
       );
       // components associated with a monitor location that are NOT already active at the system.
-      main = main.filter(
+      main = main?.filter(
         ({ componentId }) =>
           !sysComps.some(
             ({ componentId: sysCompId }) => sysCompId === componentId

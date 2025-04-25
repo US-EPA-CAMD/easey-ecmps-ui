@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import log from "loglevel";
+
 import {
   getMonitoringPlans,
   getCheckedOutLocations,
@@ -7,7 +9,6 @@ import {
   getQATestSummaryReviewSubmit,
   getQACertEventReviewSubmit,
   getQATeeReviewSubmit,
-  getMatsBulkFilesReviewSubmit,
 } from "../../utils/api/qaCertificationsAPI";
 import { getEmissionsReviewSubmit } from "../../utils/api/emissionsApi";
 import SubmissionModal from "../SubmissionModal/SubmissionModal";
@@ -32,7 +33,6 @@ import {
   emissionsColumns,
   qaCertEventColumns,
   qaTeeColumns,
-  matsBulkFilesColumns,
 } from "./ColumnMappings";
 import { canSelectRow, getDropDownFacilities } from "./utils/functions";
 import useGetContent from "./utils/useGetContent";
@@ -71,7 +71,6 @@ export const EvaluateAndSubmit = ({
   const qaCertEventRef = useRef([]);
   const qaTeeRef = useRef([]);
   const emissionsRef = useRef([]);
-  const matsBulkFilesRef = useRef([]);
   const monPlanRef = useRef([]);
 
   const [showSuccesModal, setShowSuccessModal] = useState(false);
@@ -163,20 +162,8 @@ export const EvaluateAndSubmit = ({
       type: "EM",
       progressPending: useRef(false),
     },
-    {
-      columns: matsBulkFilesColumns,
-      ref: matsBulkFilesRef,
-      call: getMatsBulkFilesReviewSubmit,
-      rowId: "matsBulkFileIdentifier",
-      name: "MATS Data",
-      type: "QA",
-      progressPending: useRef(false),
-    },
   ];
 
-  if (componentType !== "Submission") {
-    dataList = dataList.filter((f) => f.rowId !== "matsBulkFileIdentifier");
-  }
 
   const idToPermissionsMap = useRef(new Map());
   useEffect(() => {
@@ -293,10 +280,10 @@ export const EvaluateAndSubmit = ({
         //proceed to launch the submission modal
         setShowModal(true);
       }
-      console.log("Submission Evaluation");
+      log.log("Submission Evaluation");
     } else {
       finalSubmission(triggerBulkEvaluation);
-      console.log("Emission Evaluation");
+      log.log("Emission Evaluation");
     }
   };
 
@@ -329,7 +316,7 @@ export const EvaluateAndSubmit = ({
   };
 
   const checkOutLocationsOrRollback = async () => {
-    const checkedOutLocations = (await getCheckedOutLocations()).data;
+    const checkedOutLocations = (await getCheckedOutLocations()).data?.items;
 
     const checkOutMapping = new Map(); //store the monPlanId as key and checkedOutBy (userId) as value
     for (const loc of checkedOutLocations) {
@@ -424,11 +411,10 @@ export const EvaluateAndSubmit = ({
     payload.userEmail = user.email;
 
     payload.items = [];
-    payload.hasCritErrors = false;
-
     for (const monPlanId of activeMPSet) {
       const newItem = {};
       newItem.monPlanId = monPlanId;
+
       //First check the monitor plan to see if we should be submitting it
       if (
         monPlanRef.current.filter(
@@ -439,10 +425,6 @@ export const EvaluateAndSubmit = ({
           (f) => f.monPlanId === monPlanId && f.isSelected
         );
 
-        if (plan.evalStatusCode === "ERR") {
-          payload.hasCritErrors = true;
-        }
-
         newItem.submitMonPlan = true;
       } else {
         newItem.submitMonPlan = false;
@@ -452,27 +434,18 @@ export const EvaluateAndSubmit = ({
       newItem.testSumIds = qaTestSumRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.testSumId;
         });
       newItem.qceIds = qaCertEventRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.qaCertEventIdentifier;
         });
       newItem.teeIds = qaTeeRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
 
           return m.testExtensionExemptionIdentifier;
         });
@@ -481,18 +454,9 @@ export const EvaluateAndSubmit = ({
       newItem.emissionsReportingPeriods = emissionsRef.current
         .filter((f) => f.monPlanId === monPlanId && f.isSelected)
         .map((m) => {
-          if (m.evalStatusCode === "ERR") {
-            payload.hasCritErrors = true;
-          }
+
           return m.periodAbbreviation;
         });
-
-      if (componentType === "Submission") {
-        // Iterate MATs bulk files and append them to the submission payload
-        newItem.matsBulkFiles = matsBulkFilesRef.current
-          .filter((f) => f.monPlanId === monPlanId && f.isSelected)
-          .map((m) => m.matsBulkFileIdentifier);
-      }
 
       // Add it to the result set of data sent to the back-end
       payload.items.push(newItem);
@@ -525,7 +489,7 @@ export const EvaluateAndSubmit = ({
         modalType.current = "error";
         modalHeading.current = "Error";
         modalMessage.current =
-          "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+        e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
@@ -589,13 +553,15 @@ export const EvaluateAndSubmit = ({
   };
 
   const retrieveAndFormatData = async (dataListIndex, activeSet) => {
-    const data = (
+    const resp = (
       await dataList[dataListIndex].call(
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
         storedFilters.current.submissionPeriods
       )
-    ).data;
+    );
+
+    let data = resp.data?.items ?? resp.data;
 
     formatDataRows(
       dataList[dataListIndex].ref,
@@ -624,8 +590,8 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
 
     // We have to load monitor plans first to get all of the active locations
-    const [{ data: officialMonitorPlans }, { data: workspaceMonitorPlans }] =
-      await Promise.all([
+    const [{ data: { items: officialMonitorPlans } }, { data: { items: workspaceMonitorPlans } }] =
+    await Promise.all([
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
       ]);
@@ -734,7 +700,7 @@ export const EvaluateAndSubmit = ({
         }
       }
 
-      const dataListLength = isForceReEvaluation ? dataList.length : 3;
+      const dataListLength = isForceReEvaluation ? dataList.length : 4;
 
       for (let i = 0; i < dataListLength; i++) {
         //Determine MP + QA Rerenders

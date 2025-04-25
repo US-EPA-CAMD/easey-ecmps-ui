@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import * as fs from "../../../utils/selectors/monitoringPlanRectangularDucts";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
@@ -11,7 +13,7 @@ import {
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
-import { UseRetrieveDropdownApi } from "../../../additional-functions/retrieve-dropdown-api";
+import { retrieveDropdowns } from "../../../additional-functions/retrieve-dropdown-api";
 import {
   getActiveData,
   getInactiveData,
@@ -88,24 +90,24 @@ export const DataTableRectangularDucts = ({
           mpApi
             .getMonitoringRectangularDucts(locationSelectValue)
             .then((res) => {
-              setDucts(res.data);
+              setDucts(res.data?.items);
               setDataLoaded(true);
               setUpdateTable(false);
             })
-            .catch(error => console.log('getMonitoringRectangularDucts failed', error));
+            .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
           setRevertedState(false);
         }, [1000]);
         return () => clearTimeout(timerFunc);
       }
       mpApi.getMonitoringRectangularDucts(locationSelectValue).then((res) => {
-        setDucts(res.data);
+        setDucts(res.data?.items);
         setDataLoaded(true);
         setUpdateTable(false);
       })
-      .catch(error => console.log('getMonitoringRectangularDucts failed', error));
+      .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
-      UseRetrieveDropdownApi(["wafMethodCode"]).then(resp => {
+      retrieveDropdowns(["wafMethodCode"]).then(resp => {
         setTotalOptions(resp);
         setDataLoaded(true);
         setUpdateTable(false);
@@ -215,7 +217,7 @@ export const DataTableRectangularDucts = ({
   };
 
   const data = useMemo(() => {
-    if (ducts.length > 0) {
+    if (ducts?.length > 0) {
       const activeOnly = getActiveData(ducts);
       const inactiveOnly = getInactiveData(ducts);
 

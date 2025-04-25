@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import log from "loglevel";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import {
   QA_CERT_DATA_MAINTENANCE_STORE_NAME,
@@ -10,6 +11,7 @@ import { DropdownSelection } from "../../DropdownSelection/DropdownSelection";
 import {
   Label,
   Button,
+  Checkbox
 } from "@trussworks/react-uswds";
 import { ComboBox } from "../../ComboBox/ComboBox";
 import {
@@ -46,20 +48,18 @@ const FilterFormAdmin = ({
     initialSelectOption,
   ]);
   // const [availableFacilities, setAvailableFacilities] = useState([]);
-  const [availableConfigurations, setAvailableConfigurations] = useState([
-    initialSelectOption,
-  ]);
-
   const [availStatus] = useState([
     initialSelectOption,
     { code: "Open", name: "Open" },
     { code: "Closed", name: "Closed" },
     { code: "Pending", name: "Pending Approval" },
+    { code: "Cancelled", name: "Cancelled" },
+    { code: "No Window", name: "No Window" },
+    { code: "Not Yet Open", name: "Not Yet Open" },
   ]);
 
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
-  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const [selectedStatus, setSelectedStatus] = useState();
 
@@ -72,10 +72,12 @@ const FilterFormAdmin = ({
     { code: testExtensionExemptionLabel, name: testExtensionExemptionLabel },
   ];
 
+  const [includeHistoricalWindows, setIncludeHistoricalWindows] = useState(false);
+
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
-    const availReportingPeriods = reportingPeriods.map((rp) => {
+    const availReportingPeriods = reportingPeriods?.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
@@ -93,15 +95,9 @@ const FilterFormAdmin = ({
   }, [reportingPeriods, processReportingPeriods]);
 
   const applyFilters = useCallback(async () => {
-    let monitorPlanId;
     let year;
     let quarter;
     let status;
-
-    if (selectedLocation) {
-      const locationIdx = selectedLocation[0];
-      monitorPlanId = availableConfigurations[locationIdx].code;
-    }
 
     if (
       selectedReportingPeriod?.length > 0 &&
@@ -124,13 +120,30 @@ const FilterFormAdmin = ({
       if (section === SUBMISSION_ACCESS_STORE_NAME) {
         const { data } = await getEmSubmissionRecords(
           selectedFacility,
-          monitorPlanId,
           year,
           quarter,
           status
         );
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        
+        data.items.forEach((d) => (d.selected = false));
+
+        //preprocess data to get the latest record for each config
+        const latestOpenDateMap = new Map();
+        data.items.forEach(record => {
+            const location = record.locations;
+            const openDate = new Date(record.openDate);
+
+            if (!latestOpenDateMap.has(location) || openDate > latestOpenDateMap.get(location)) {
+                latestOpenDateMap.set(location, openDate);
+            }
+        });
+        data.items.forEach(record => {
+            record.isLatestRecord = new Date(record.openDate).getTime() === latestOpenDateMap.get(record.locations).getTime();
+        });
+
+        const filteredData = includeHistoricalWindows ? data.items : data.items.filter(record => record.isLatestRecord);
+
+        setTableData(filteredData);
       }
 
       if (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME) {
@@ -142,29 +155,24 @@ const FilterFormAdmin = ({
           case testSummaryLabel:
             resp = await getQaTestMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
-
             break;
           case certEventLabel:
             resp = await getQaCertEventMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
-
             break;
           case testExtensionExemptionLabel:
             resp = await getQaExtensionExemptionMaintenanceRecords(
               selectedFacility,
-              selectedLocation[1]
             );
             break;
           default:
             return;
         }
-        let newData = resp.data;
+        let newData = resp.data.items;
         if (facilities.length > 0) {
-          newData = resp.data.map((obj) => ({
+          newData = resp.data.items.map((obj) => ({
             ...obj,
             facilityName: `${facilities.find((fac) => fac.value === selectedFacility).label
               }`,
@@ -179,16 +187,14 @@ const FilterFormAdmin = ({
       assignAriaSortHandlersToDatatable()
       assignAriaLabelsToDataTableColumns()
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       setIsTableDataLoading(false);
       setSelectedRows([]);
     }
   }, [
-    availableConfigurations,
     section,
     selectedFacility,
-    selectedLocation,
     selectedReportingPeriod,
     selectedStatus,
     setIsTableDataLoading,
@@ -196,7 +202,8 @@ const FilterFormAdmin = ({
     setSelectedRows,
     setTableData,
     typeSelection,
-    facilities
+    facilities,
+    includeHistoricalWindows
   ]);
 
   useEffect(() => {
@@ -207,64 +214,11 @@ const FilterFormAdmin = ({
     }
   }, [reloadTableData, setReloadTableData, applyFilters]);
 
-  const configurationFilterChange = (id) => {
-    setSelectedLocation(id);
-  };
-
-  const facilityFilterChange = async (id) => {
-    const configurationData = (await getMonitoringPlans([id])).data;
-    const configNamesToMonPlan = [];
-    for (const cd of configurationData) {
-      if (cd.active) {
-        const key = `${cd.facilityName} - ${cd.name}`;
-        if (!configNamesToMonPlan[key]) {
-          configNamesToMonPlan[key] = cd.id;
-        }
-      }
-    }
-    const availConfigs = [];
-    for (const [name, monPlanId] of Object.entries(configNamesToMonPlan)) {
-      availConfigs.push({
-        code: monPlanId,
-        name: name,
-      });
-    }
-    availConfigs.unshift(initialSelectOption);
-    setAvailableConfigurations(availConfigs);
-  };
-
-  const convertingArrayObject = (arr) => {
-    const convertedArray = arr.map((item) => {
-      return {
-        code: item.label,
-        name: item.label,
-      };
-    });
-
-    convertedArray.unshift(initialSelectOption);
-    return convertedArray;
-  };
-
-  const individualFacilityFilterChange = useCallback(async (id) => {
-    getLocations(selectedFacility, {
-      locationTypeCode: "LOC",
-    }).then((availLoc) =>
-      setAvailableConfigurations(convertingArrayObject([...availLoc]))
-    );
-  }, [selectedFacility])
-
-  useEffect(() => {
-    section === SUBMISSION_ACCESS_STORE_NAME
-      ? facilityFilterChange(selectedFacility)
-      : individualFacilityFilterChange(selectedFacility);
-  }, [selectedFacility, individualFacilityFilterChange, section]);
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
-    // facilityFilterChange(value);
 
-    if (!value || value === defaultDropdownText) {
+    if (!value) {
       setSelectedFacility(null);
-      setSelectedLocation(null);
     }
   };
 
@@ -276,8 +230,8 @@ const FilterFormAdmin = ({
       element.click();
     });
     setSelectedFacility(null);
+    setSelectedReportingPeriod(null);
     setTypeSelection(null);
-    setSelectedLocation(null);
     setSelectedStatus(null);
     setTableData([]);
   }, [setTableData])
@@ -288,7 +242,7 @@ const FilterFormAdmin = ({
 
   useEffect(() => {
     setTableData([]);
-  }, [setTableData, selectedFacility, selectedLocation, selectedReportingPeriod, selectedStatus, typeSelection]);
+  }, [setTableData, selectedFacility, selectedReportingPeriod, selectedStatus, typeSelection]);
 
   return (
     <div className="margin-05">
@@ -307,24 +261,6 @@ const FilterFormAdmin = ({
               disableFiltering={true}
             />
           </div>
-
-          <div className="padding-left-4 desktop:width-mobile-lg desktop-lg:width-mobile">
-            <DropdownSelection
-              caption={
-                section === SUBMISSION_ACCESS_STORE_NAME
-                  ? "Configuration"
-                  : "Location"
-              }
-              selectionHandler={configurationFilterChange}
-              options={availableConfigurations}
-              viewKey="name"
-              selectKey="code"
-              initialSelection={selectedLocation ? selectedLocation[0] : 0}
-              workspaceSection={section}
-              extraSpace
-            />
-          </div>
-        
           {section === QA_CERT_DATA_MAINTENANCE_STORE_NAME && screenSize.width >= 1400 && (
             <div className="margin-left-4 width-card">
               <DropdownSelection
@@ -338,9 +274,7 @@ const FilterFormAdmin = ({
                 extraSpace
               />
             </div>
-
           )}
-    
           {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width >= 1400 &&(
             <>
               <div className="margin-left-4 width-card">
@@ -386,7 +320,6 @@ const FilterFormAdmin = ({
               />
             </div>
           )}
-
           {section === SUBMISSION_ACCESS_STORE_NAME && screenSize.width < 1400 &&(
             <>
               <div className="width-card">
@@ -427,11 +360,13 @@ const FilterFormAdmin = ({
             <Button
               disabled={
                 !(
-                  (selectedFacility &&
-                    selectedLocation && selectedLocation[1] !== "") &&
-                  ((section === SUBMISSION_ACCESS_STORE_NAME) ||
+                  (section === SUBMISSION_ACCESS_STORE_NAME
+                    && (selectedFacility && (selectedReportingPeriod && selectedReportingPeriod[1] !== '') ) // for EM Submission Access, need to have at least reporting period OR facility to enable the button
+                  ) ||
                     (section === QA_CERT_DATA_MAINTENANCE_STORE_NAME
-                      && typeSelection && typeSelection[1] !== defaultDropdownText))
+                      && selectedFacility
+                      && typeSelection
+                      && typeSelection[1] !== defaultDropdownText) // for QA Maintenance, need both facility and type to enable the button
                 )
               }
               onClick={applyFilters}
@@ -440,6 +375,19 @@ const FilterFormAdmin = ({
               Apply Filter(s)
             </Button>
           </div>
+          {section === SUBMISSION_ACCESS_STORE_NAME ? (
+              <Checkbox
+                id="force-re-evaluation"
+                className="display-flex flex-row flex-justify-center"
+                name="include-historical-windows"
+                label="Include Historical Windows"
+                epa-testid={"include-historical-windows"}
+                data-testid={"include-historical-windows"}
+                checked={includeHistoricalWindows}
+                onChange={(e) => setIncludeHistoricalWindows(e.target.checked)}
+                disabled={false}
+              />
+            ) : ("")}
         </div>
 
     </div>

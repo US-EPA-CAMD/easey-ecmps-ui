@@ -37,6 +37,10 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
    ```
    $ yarn install --ignore-engines
    ```
+5. Initialize project to copy all the necessary Sass, image, font, and Javascript assets from the USWDS source code.
+    ```
+    $ npx gulp init
+    ```
 
 ## Building, Testing, & Running the application
 
@@ -74,40 +78,40 @@ $ yarn start
 
 ## Environment Variables
 
-Environment variables need to be prefixed by REACT_APP in order for the variables to be accessible on the process.env object in JavaScript.
+Environment variables need to be prefixed by VITE in order for the variables to be accessible on the process.env object in JavaScript.
 
 To run application on a specific route path other than root...
 
 - PUBLIC_URL: https://((host))/((path))
-- REACT_APP_EASEY_ECMPS_UI_PATH: /((path))
+- VITE_EASEY_ECMPS_UI_PATH: /((path))
 
 Required by the OIDC provider for Authentication/Authorization.
 
-- REACT_APP_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH=((CBS Faq URL))
-- REACT_APP_EASEY_ECMPS_UI_OIDC_CLIENT_ID=((Oidc Configured Client ID))
-- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT=((OIDC Auth endpoint))
-- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE=code 
-- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE=form_post
-- REACT_APP_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES='openid profile email phone address offline_access'
-- REACT_APP_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL=((Cdx Url))
+- VITE_EASEY_ECMPS_UI_CDX_HOW_TO_GET_ACCESS_PATH=((CBS Faq URL))
+- VITE_EASEY_ECMPS_UI_OIDC_CLIENT_ID=((Oidc Configured Client ID))
+- VITE_EASEY_ECMPS_UI_OIDC_AUTH_ENDPOINT=((OIDC Auth endpoint))
+- VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_TYPE=code 
+- VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE=form_post
+- VITE_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES='openid profile email phone address offline_access'
+- VITE_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL=((Cdx Url))
 - 
 REST API URL's required by the application...
 
-- REACT_APP_EASEY_AUTH_API: https://((host))/api/auth-mgmt
-- REACT_APP_EASEY_MDM_API: https://((host))/api/master-data-mgmt
-- REACT_APP_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
-- REACT_APP_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
-- REACT_APP_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
+- VITE_EASEY_AUTH_API: https://((host))/api/auth-mgmt
+- VITE_EASEY_MDM_API: https://((host))/api/master-data-mgmt
+- VITE_EASEY_FACILITIES_API: https://((host))/api/facility-mgmt
+- VITE_EASEY_EMISSIONS_API: https://((host))/api/emissions-mgmt
+- VITE_EASEY_MONITOR_PLAN_API: https://((host))/api/monitor-plan-mgmt
 
 Other application environment variables:
 
-- REACT_APP_EASEY_ECMPS_UI_HOST: ((host))
-- REACT_APP_EASEY_ECMPS_UI_API_KEY=((api key)) 
-- REACT_APP_EASEY_ECMPS_UI_CLIENT_ID=((client id)) 
-- REACT_APP_EASEY_ECMPS_UI_CLIENT_SECRET=((client secret))
-- REACT_APP_EASEY_ECMPS_UI_ENV: ((environment))
-- REACT_APP_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
-- REACT_APP_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
+- VITE_EASEY_ECMPS_UI_HOST: ((host))
+- VITE_EASEY_ECMPS_UI_API_KEY=((api key)) 
+- VITE_EASEY_ECMPS_UI_CLIENT_ID=((client id)) 
+- VITE_EASEY_ECMPS_UI_CLIENT_SECRET=((client secret))
+- VITE_EASEY_ECMPS_UI_ENV: ((environment))
+- VITE_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
+- VITE_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
 
 Additional Environment Variable instructions found [here](https://github.com/US-EPA-CAMD/devops/blob/master/ENV_INSTRUCTIONS.md).
 

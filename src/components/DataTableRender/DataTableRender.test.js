@@ -180,10 +180,9 @@ describe("renders datatable with all values ", () => {
     const searchInput = container.querySelector("#search-data");
     fireEvent.change(searchInput, { target: { value: "test" } });
     expect(searchInput.value).toBe("test");
-
-    //fireEvent.click(container.querySelector("#searchDataTableBTN"));
+    fireEvent.click(container.querySelector('button'));
     const rows = screen.getAllByRole("row");
-    expect(rows.length).toEqual(6);
+    expect(rows.length).toEqual(5);
   });
   test("test no title with no section title- user is logged in and at a sections data table", async () => {
     const { container } = await waitFor(() =>

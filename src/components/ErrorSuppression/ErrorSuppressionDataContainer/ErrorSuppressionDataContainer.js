@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+
 import { AddErrorSupressionModal } from "../AddErrorSuppressionModal/AddErrorSuppressionModal";
 import DataTable from "react-data-table-component";
 import { getErrorSuppressionRecords } from "../../../utils/api/errorSuppressionApi";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
 import "./ErrorSuppressionDataContainer.scss";
-import { formatDate, getQuarter } from "../../../utils/functions";
+import { exportToCSV, formatDate, getQuarter } from "../../../utils/functions";
 import { DeactivateNotificationModal } from "../DeactivateNotificationModal/DeactivateNotificationModal";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import Modal from "../../Modal/Modal";
@@ -44,7 +46,7 @@ export const ErrorSuppressionDataContainer = () => {
   const [isTableLoading, setIsTableLoading] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const getTableData = () => {
-    if (!checkType || !checkNumber || !checkResult) return;
+    if (!checkType && !checkNumber && !checkResult && !facility && !locations) return;
     // const params = { checkType:"LINEAR", checkNumber:'12', checkResult:'A', facility, locations, active, reason, addDateAfter, addDateBefore, }
     // const params = { checkType:"QUAL", checkNumber:'23', checkResult:'D', facility, locations, active, reason, addDateAfter, addDateBefore, }
     // const params = { checkType:"HOURGEN", checkNumber:'7', checkResult:'C', facility, locations, active, reason, addDateAfter, addDateBefore, }
@@ -64,14 +66,14 @@ export const ErrorSuppressionDataContainer = () => {
 
     getErrorSuppressionRecords(params)
       .then(({ data }) => {
-        data.forEach((d) => (d.selected = false));
-        setTableData(data);
+        data.items.forEach((d) => (d.selected = false));
+        setTableData(data.items);
         setSelectedRows([]);
         assignAriaSortHandlersToDatatable();
         assignAriaLabelsToDataTableColumns();
       })
       .catch((err) => {
-        console.log("error", err);
+        log.log("error", err);
       })
       .finally(() => {
         setIsTableLoading(false);
@@ -98,6 +100,32 @@ export const ErrorSuppressionDataContainer = () => {
     addDateAfter,
     addDateBefore,
   ]);
+
+  const downloadFilteredDataIntoCSV = () => {
+
+    // Extract only the displayed columns
+    let columnMapping = {
+      severityCode: "Severity",
+      facilityName: "Facility Name",
+      orisCode: "Oris Code",
+      locations: "Locations",
+      matchDataTypeCode: "Match Data Criteria",
+      matchTimeTypeCode: "Match Time Criteria",
+      reasonCode: "Reason",
+      active: "Status",
+      note: "Note",
+      userId: "User",
+      addDate: "Add Date & Hour",
+      updateDate: "Update Date",
+      id: "Record Id"
+    };
+
+    const facilityName = tableData[0].facilityName;
+    const orisCode = tableData[0].orisCode
+    
+    exportToCSV(tableData, columnMapping, `Error_Supression_${facilityName}(${orisCode})`, formatMatchTimeCriteriaCell)
+  
+  };
 
   const openViewModalHandler = useCallback(
     async (row, index, isCreate = false) => {
@@ -268,6 +296,14 @@ export const ErrorSuppressionDataContainer = () => {
     setShowViewModal(false);
   };
 
+  function sortDate(key) {
+    return (a, b) => {
+      if (!a[key]) return 1;
+      if (!b[key]) return -1;
+      return new Date(a[key]) - new Date(b[key]);
+    };
+  }
+
   const columns = [
     {
       name: <span>{"Select"}</span>,
@@ -341,12 +377,14 @@ export const ErrorSuppressionDataContainer = () => {
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.addDate),
       sortable: true,
+      sortFunction: sortDate('addDate')
     },
     {
       name: <span>{"Update Date"}</span>,
       width: "200px",
       selector: (row) => formatDateWithHoursMinutesSeconds(row.updateDate),
       sortable: true,
+      sortFunction: sortDate('updateDate')
     },
     {
       name: <span>{"Record Id"}</span>,
@@ -431,7 +469,18 @@ export const ErrorSuppressionDataContainer = () => {
             </Button>
           </div>
         </div>
-        <div className="es-datatable">
+        <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`error-supression-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+              disabled={!tableData || tableData.length === 0}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={"Error Suppression"}></span>
           {isTableLoading ? (
             <Preloader />

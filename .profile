@@ -10,7 +10,7 @@ echo "window._env_ = {" >> ./env-config.js
 env | while IFS= read -r line; do
   value=${line#*=}
   name=${line%%=*}
-  if [[ $name == *"REACT_APP"* ]]; then
+  if [[ $name == *"VITE"* ]]; then
     echo "$name : '$value'," >> ./env-config.js
   fi
 done

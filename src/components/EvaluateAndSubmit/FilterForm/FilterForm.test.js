@@ -25,17 +25,21 @@ const mockFacilities = [
 describe("Review and submit form", () => {
   beforeEach(() => {
     jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValueOnce({
-      data: [
-        { periodAbbreviation: "2022 Q3" },
-        { periodAbbreviation: "2022 Q4" },
-      ]
+      data :{
+        items: [
+          {periodAbbreviation: "2022 Q3"},
+          {periodAbbreviation: "2022 Q4"},
+        ]
+      }
     });
     jest.spyOn(monitoringPlansApi, "getMonitoringPlans").mockResolvedValueOnce({
-      data: [
-        { id: "MOCK-1", active: true, facilityName: "Barry", name: "1" },
-        { id: "MOCK-2", active: true, facilityName: "Barry", name: "2" },
-        { id: "MOCK-3", active: true, facilityName: "Barry", name: "3" },
-      ]
+      data :{
+        items: [
+          { id: "MOCK-1", active: true, facilityName: "Barry", name: "1" },
+          { id: "MOCK-2", active: true, facilityName: "Barry", name: "2" },
+          { id: "MOCK-3", active: true, facilityName: "Barry", name: "3" },
+        ]
+      }
     });
   })
 

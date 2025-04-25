@@ -13,28 +13,17 @@ import {
   MONITORING_PLAN_STORE_NAME,
 } from "../../additional-functions/workspace-section-and-store-names";
 export const MonitoringPlanTab = ({
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-
   orisCode,
   selectedConfigId,
   title,
   user,
-  checkout,
   removeTab,
-  tabs,
 
+  tabs,
   setSection,
   setLocation,
   setCheckout,
   setInactive,
-  checkedOutLocations,
-  setMostRecentlyCheckedInMonitorPlanId,
-  setMostRecentlyCheckedInMonitorPlanIdForTab,
-  mostRecentlyCheckedInMonitorPlanIdForTab,
-  workspaceSection,
 }) => {
   const getCurrentTab = () => {
     return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
@@ -43,7 +32,6 @@ export const MonitoringPlanTab = ({
     return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
   }, [selectedConfigId, tabs]);
 
-  // console.log('workspaceSection',workspaceSection)
   const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
@@ -55,19 +43,15 @@ export const MonitoringPlanTab = ({
   );
 
   useEffect(() => {
-    setLocation(locationSelect, title, workspaceSection);
+    setLocation(locationSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelect]);
 
   return (
-    <div>
+    <div id="monitoring-plan-tab-container">
       <div>
         <MonitoringPlanTabRender
-          resetTimer={resetTimer}
-          setExpired={setExpired}
           removeTab={removeTab}
-          resetTimerFlag={resetTimerFlag}
-          callApiFlag={callApiFlag}
           title={title}
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
@@ -80,15 +64,7 @@ export const MonitoringPlanTab = ({
           setCheckout={setCheckout}
           setInactive={setInactive}
           inactive={tabs[currentTabIndex].inactive}
-          checkedOutLocations={checkedOutLocations}
-          setMostRecentlyCheckedInMonitorPlanId={
-            setMostRecentlyCheckedInMonitorPlanId
-          }
-          setMostRecentlyCheckedInMonitorPlanIdForTab={
-            setMostRecentlyCheckedInMonitorPlanIdForTab
-          }
           currentTabIndex={currentTabIndex}
-          workspaceSection={workspaceSection}
         />
       </div>
     </div>

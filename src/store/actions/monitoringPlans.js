@@ -1,3 +1,4 @@
+import log from "loglevel";
 import * as mpApi from "../../utils/api/monitoringPlansApi";
 import { beginMonitoringPlansApiCall } from "./apiStatusActions";
 import * as types from "./actionTypes";
@@ -25,9 +26,9 @@ export function loadMonitoringPlans(orisCode) {
       .getMonitoringPlans(orisCode)
       .then((res) => {
         if (res) {
-          dispatch(loadMonitoringPlansSuccess(orisCode, res.data));
+          dispatch(loadMonitoringPlansSuccess(orisCode, res.data?.items));
         }
       })
-      .catch((error) => console.log("getMonitoringPlans failed", error));
+      .catch((error) => log.log("getMonitoringPlans failed", error));
   };
 }

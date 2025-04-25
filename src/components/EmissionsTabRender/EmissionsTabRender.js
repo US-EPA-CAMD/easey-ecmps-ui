@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import log from "loglevel";
+
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
@@ -19,7 +21,6 @@ export const EmissionsTabRender = ({
   setCheckout,
   setInactive,
   inactive,
-  workspaceSection,
 }) => {
   const currentTab = useSelector((state) =>
     state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -33,13 +34,13 @@ export const EmissionsTabRender = ({
   const [updateRelatedTables, setUpdateRelatedTables] = useState(false);
 
   const [viewTemplateSelect, setViewTemplateSelect] = useState(null);
+  const [filterApply, setFilterApply] = useState(false);
 
   // Determines if a user has just navigated to the page without applying any filters yet
   const isInitialLoadOfPage = currentTab?.isViewDataLoaded === undefined;
 
   useEffect(() => {
     setViewTemplateSelect(currentTab?.viewTemplateSelect ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab.viewTemplateSelect]);
 
   const handleDownload = async () => {
@@ -79,7 +80,7 @@ export const EmissionsTabRender = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        log.log(error);
       });
   };
 
@@ -99,10 +100,11 @@ export const EmissionsTabRender = ({
           inactive={inactive}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
-          workspaceSection={workspaceSection}
+          workspaceSection={EMISSIONS_STORE_NAME}
           viewTemplateSelect={viewTemplateSelect}
           setViewTemplateSelect={setViewTemplateSelect}
           currentTab={currentTab}
+          setFilterApply={setFilterApply}
         />
       </div>
       <hr />
@@ -127,13 +129,12 @@ export const EmissionsTabRender = ({
         <div>
           <div className="grid-row overflow-x-auto">
             <CustomAccordion
-              title={viewTemplateSelect?.name}
               headerButtonText="Download To CSV"
               headerButtonClickHandler={handleDownload}
               tables={[
                 {
                   content: (
-                    <EmissionsViewTable monitorPlanId={selectedConfigId} />
+                    <EmissionsViewTable monitorPlanId={selectedConfigId} filterApply={filterApply} setFilterApply={setFilterApply} user={user}/>
                   ),
                   title: viewTemplateSelect?.name ?? "",
                 },

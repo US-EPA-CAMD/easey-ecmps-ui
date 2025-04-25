@@ -115,6 +115,15 @@ export const getAllMatsMethodCodes = async () => {
 		.catch(handleError)
 }
 
+export const getAllMatsReportTypeCodes = async () => {
+	return secureAxios({
+		method: "GET",
+		url: `${config.services.mdm.uri}/mats-report-type-codes`,
+	})
+		.then(handleResponse)
+		.catch(handleError)
+}
+
 // System Fuel Flows
 export const getAllMaxRateSourceCodes = async () => {
 	return secureAxios({
@@ -597,7 +606,7 @@ export const getAllMonitoringSystemIDCodes = async (
 		.then((response) => {
 			const actualResponse = response
 			const dataArray = []
-			response.data.map((monitorCode) => {
+			response.data?.items?.map((monitorCode) => {
 				if (systemTypeCodes.includes(monitorCode.systemTypeCode)) {
 					dataArray.push({
 						monitoringSystemIDCode: monitorCode.monitoringSystemId,
@@ -607,7 +616,7 @@ export const getAllMonitoringSystemIDCodes = async (
 
 				return 1
 			})
-			actualResponse.data = dataArray
+			actualResponse.data.items = dataArray
 			return actualResponse
 		})
 		.catch(handleError)

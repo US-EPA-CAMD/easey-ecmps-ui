@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import log from "loglevel";
 
 import {
   getQATestSummary,
@@ -159,7 +160,7 @@ const QATestSummaryDataTable = ({
             setLoading(false);
           })
           .catch((error) => {
-            console.log("error fetching test summary", error);
+            log.log("error fetching test summary", error);
           });
         setUpdateTable(false);
       }
@@ -190,7 +191,7 @@ const QATestSummaryDataTable = ({
       .then((response) => {
         dropdownArray[0].forEach((val, i) => {
           if (i === 0) {
-            const options = response[0].data.map((d) =>
+            const options = response[0].data?.items?.map((d) =>
               getOptions(d, "testTypeCode", "testTypeDescription")
             );
             setAllTestTypeCodes(options);
@@ -198,19 +199,19 @@ const QATestSummaryDataTable = ({
               selectedTestCode.testTypeCodes.includes(option.code)
             );
           } else if (i === 1) {
-            dropdowns[dropdownArray[0][i]] = response[1].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[1].data?.items?.map((d) =>
               getOptions(d, "spanScaleCode", "spanScaleDescription")
             );
           } else if (i === 2) {
-            dropdowns[dropdownArray[0][i]] = response[2].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[2].data?.items?.map((d) =>
               getOptions(d, "testReasonCode", "testReasonDescription")
             );
           } else if (i === 3) {
-            dropdowns[dropdownArray[0][i]] = response[3].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[3].data?.items?.map((d) =>
               getOptions(d, "testResultCode", "testResultDescription")
             );
           } else if (i === 5) {
-            dropdowns[dropdownArray[0][i]] = response[5].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[5].data?.items?.map((d) =>
               getOptions(d, "componentId", "componentId")
             );
             if (
@@ -222,7 +223,7 @@ const QATestSummaryDataTable = ({
               });
             }
           } else if (i === 6) {
-            dropdowns[dropdownArray[0][i]] = response[6].data.map((d) =>
+            dropdowns[dropdownArray[0][i]] = response[6].data?.items?.map((d) =>
               getOptions(d, "monitoringSystemId", "monitoringSystemId")
             );
             if (
@@ -234,14 +235,14 @@ const QATestSummaryDataTable = ({
               });
             }
           } else if (i === 7) {
-            let noDupesTestCodes = response[4].data.map((code) => {
+            let noDupesTestCodes = response[4].data?.items?.map((code) => {
               return code["testTypeCode"];
             });
             noDupesTestCodes = [...new Set(noDupesTestCodes)];
             dropdowns[dropdownArray[0][i]] = organizePrefilterMDMData(
               noDupesTestCodes,
               "testTypeCode",
-              response[4].data
+              response[4].data?.items
             );
           } else if (i === 4) {
             dropdowns[dropdownArray[0][i]] = locations.map((l) => {
@@ -270,7 +271,7 @@ const QATestSummaryDataTable = ({
         setDropdownsLoading(false);
       })
       .catch((err) => {
-        console.log("error", err);
+        log.log("error", err);
       });
   };
   useEffect(() => {
@@ -557,7 +558,7 @@ const QATestSummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        log.error("error", error);
       });
   };
 
@@ -599,7 +600,7 @@ const QATestSummaryDataTable = ({
         }
       })
       .catch((error) => {
-        console.error("error", error);
+        log.error("error", error);
         returnsFocusToAddBtn(dataTableName.replaceAll(" ", "-"));
       });
   };

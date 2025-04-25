@@ -1,35 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
+import log from "loglevel";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DataTable from "../datatablesContainer/SelectFacilitiesDataTable/SelectFacilitiesDataTable";
-import MonitoringPlanTab from "../MonitoringPlanTab/MonitoringPlanTab";
-import QACertTestSummaryTab from "../QACertTestSummaryTab/QACertTestSummaryTab";
-import QACertEventTab from "../QACertEventTab/QACertEventTab";
-import EmissionsTab from "../EmissionsTab/EmissionsTab";
-import Export from "../export/Export/Export";
-import DynamicTabs from "../DynamicTabs/DynamicTabs";
 
-import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
-
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-
-import { setWorkspaceState } from "../../store/actions/workspace";
-import "./MonitoringPlanHome.scss";
 import {
-  MONITORING_PLAN_STORE_NAME,
-  QA_CERT_TEST_SUMMARY_STORE_NAME,
   EMISSIONS_STORE_NAME,
   EXPORT_STORE_NAME,
+  MATS_STORE_NAME,
+  MONITORING_PLAN_STORE_NAME,
   QA_CERT_EVENT_STORE_NAME,
+  QA_CERT_TEST_SUMMARY_STORE_NAME
 } from "../../additional-functions/workspace-section-and-store-names";
+import { setWorkspaceState } from "../../store/actions/workspace";
+import * as mpApi from "../../utils/api/monitoringPlansApi";
+import { getCheckedOutLocations } from "../../utils/api/monitoringPlansApi";
 import * as modules from "../../utils/constants/moduleTitles";
+import DynamicTabs from "../DynamicTabs/DynamicTabs";
+import "./MonitoringPlanHome.scss";
 
 export const MonitoringPlanHome = ({
   user,
-  resetTimer,
-  setExpired,
-  resetTimerFlag,
-  callApiFlag,
-  // openedFacilityTabs,
   workspaceSection,
 }) => {
   const dispatch = useDispatch();
@@ -75,6 +64,10 @@ export const MonitoringPlanHome = ({
         document.title = modules.emissions_module;
         setTitleName(modules.emissions_module);
         break;
+      case MATS_STORE_NAME:
+        document.title = modules.matsModule;
+        setTitleName(modules.matsModule);
+        break;
       default:
         break;
     }
@@ -89,8 +82,8 @@ export const MonitoringPlanHome = ({
 
     let checkedOutLocationList = [];
     if (checkedOutLocationResult) {
-      if (checkedOutLocationResult.data) {
-        checkedOutLocationList = checkedOutLocationResult.data;
+      if (checkedOutLocationResult.data?.items) {
+        checkedOutLocationList = checkedOutLocationResult.data?.items;
       }
       // *** find locations currently checked out by the user
       const currentlyCheckedOutMonPlanId = checkedOutLocationList.filter(
@@ -116,7 +109,7 @@ export const MonitoringPlanHome = ({
         )
         .then((res) => {})
         .catch((error) =>
-          console.log("deleteCheckInMonitoringPlanConfiguration failed", error)
+          log.log("deleteCheckInMonitoringPlanConfiguration failed", error)
         );
     }
   };
@@ -132,23 +125,7 @@ export const MonitoringPlanHome = ({
   // works if you go from modules to home back and then back
   const handleTabState = () => {
     const tabArr = [
-      {
-        title: "Select Configurations",
-        component: (
-          <DataTable
-            user={user}
-            keyField="col2"
-            openedFacilityTabs={openedFacilityTabs}
-            mostRecentlyCheckedInMonitorPlanIdForTab={
-              mostRecentlyCheckedInMonitorPlanIdForTab
-            }
-            setMostRecentlyCheckedInMonitorPlanIdForTab={
-              setMostRecentlyCheckedInMonitorPlanIdForTab
-            }
-            workspaceSection={workspaceSection}
-          />
-        ),
-      },
+      { title: "Select Configurations" },
     ];
     // uses Redux to put the saved Tabs back in the UI if the user leaves the page
     switch (workspaceState) {
@@ -156,31 +133,9 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: (
-              <MonitoringPlanTab
-                resetTimer={resetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimerFlag}
-                callApiFlag={callApiFlag}
-                orisCode={row.orisCode}
-                selectedConfigId={row.selectedConfig.id}
-                title={row.name}
-                user={user}
-                checkout={row.checkout}
-                checkedOutLocations={checkedOutLocations}
-                mostRecentlyCheckedInMonitorPlanIdForTab={
-                  mostRecentlyCheckedInMonitorPlanIdForTab
-                }
-                setMostRecentlyCheckedInMonitorPlanIdForTab={
-                  setMostRecentlyCheckedInMonitorPlanIdForTab
-                }
-                workspaceSection={workspaceSection}
-              />
-            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
-            workspaceSection: workspaceSection,
           });
         }
         break;
@@ -188,20 +143,6 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: (
-              <QACertTestSummaryTab
-                resetTimer={resetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimerFlag}
-                callApiFlag={callApiFlag}
-                orisCode={row.orisCode}
-                selectedConfigId={row.selectedConfig.id}
-                title={row.name}
-                user={user}
-                isCheckedOut={row.checkout}
-                checkedOutLocations={checkedOutLocations}
-              />
-            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
@@ -212,25 +153,9 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: (
-              <QACertEventTab
-                resetTimer={resetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimerFlag}
-                callApiFlag={callApiFlag}
-                orisCode={row.orisCode}
-                selectedConfigId={row.selectedConfig.id}
-                title={row.name}
-                user={user}
-                isCheckedOut={row.checkout}
-                checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspaceSection}
-              />
-            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
-            workspaceSection: workspaceSection,
           });
         }
         break;
@@ -238,21 +163,6 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: (
-              <EmissionsTab
-                resetTimer={resetTimer}
-                setExpired={setExpired}
-                resetTimerFlag={resetTimerFlag}
-                callApiFlag={callApiFlag}
-                orisCode={row.orisCode}
-                selectedConfigId={row.selectedConfig.id}
-                title={row.name}
-                user={user}
-                checkout={row.checkout}
-                checkedOutLocations={checkedOutLocations}
-                workspaceSection={workspaceState}
-              />
-            ),
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
@@ -263,15 +173,16 @@ export const MonitoringPlanHome = ({
         for (const row of openedFacilityTabs) {
           tabArr.push({
             title: row.name,
-            component: (
-              <Export
-                orisCode={row.orisCode}
-                selectedConfigId={row.selectedConfig.id}
-                title={row.name}
-                user={user}
-                workspaceSection={workspaceSection}
-              />
-            ),
+            orisCode: row.orisCode,
+            selectedConfig: row.selectedConfig,
+            checkout: row.checkout,
+          });
+        }
+        break;
+      case MATS_STORE_NAME:
+        for (const row of openedFacilityTabs) {
+          tabArr.push({
+            title: row.name,
             orisCode: row.orisCode,
             selectedConfig: row.selectedConfig,
             checkout: row.checkout,
@@ -309,9 +220,6 @@ export const MonitoringPlanHome = ({
           checkedOutLocations={checkedOutLocations}
           user={user}
           workspaceSection={workspaceSection}
-          mostRecentlyCheckedInMonitorPlanIdForTab={
-            mostRecentlyCheckedInMonitorPlanIdForTab
-          }
           setMostRecentlyCheckedInMonitorPlanIdForTab={
             setMostRecentlyCheckedInMonitorPlanIdForTab
           }

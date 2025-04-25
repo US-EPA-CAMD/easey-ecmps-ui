@@ -7,6 +7,7 @@ import {
   Textarea,
   Checkbox,
 } from "@trussworks/react-uswds";
+import log from "loglevel";
 import Modal from "../../Modal/Modal";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { currentDateTime, dateToEstString } from "../../../utils/functions";
@@ -136,7 +137,7 @@ export const EmSubmissionModal = ({
       const payload = {
         id: row.id,
         emissionStatusCode: "APPRVD",
-        submissionAvailabilityCode: row.submissionAvailabilityCode,
+        submissionAvailabilityCode: "REQUIRE",
         resubExplanation,
         closeDate: row.closeDate,
       };
@@ -171,7 +172,7 @@ export const EmSubmissionModal = ({
       }
       setReloadTableData(true);
     } catch (e) {
-      console.error(e);
+      log.error(e);
     } finally {
       close();
     }
@@ -191,7 +192,7 @@ export const EmSubmissionModal = ({
       setSelectedOpenDate(getDateString(selectedRow?.openDate));
       setSelectedCloseDate(getDateString(selectedRow?.closeDate));
     } else if (isCloseModal) {
-      setTitle("Close");
+      setTitle("Cancel");
     } else if (isApproveModal) {
       setTitle("Approve");
     }
@@ -239,7 +240,7 @@ export const EmSubmissionModal = ({
         showDarkBg
         show={showModal}
         save={saveFunc}
-        exitBtn={"Save and Close"}
+        exitBtn={"Save"}
         showSave
         disableExitBtn={disableSaveBtn}
         title={`${title} Submission Access`}

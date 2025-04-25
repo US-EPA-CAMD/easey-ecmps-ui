@@ -187,6 +187,10 @@ export const systemAdmin = [
         name: "Emission Submission Access",
         url: "/admin/em-submission-access",
       },
+      {
+        name: "Submission Report",
+        url: "/admin/submissions-report",
+      },
     ],
   },
 ];
@@ -256,6 +260,16 @@ export const getWorkspacePaths = () => {
     {
       name: "Export & Report",
       url: "/workspace/export",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "MATS Data Submission",
+      url: "/workspace/mats-data-submission",
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,

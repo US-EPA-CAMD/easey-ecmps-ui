@@ -8,6 +8,8 @@ import {
   TextInput,
   Checkbox,
 } from "@trussworks/react-uswds";
+import log from "loglevel";
+
 import { ComboBox } from "../../ComboBox/ComboBox";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
@@ -212,10 +214,10 @@ export const AddErrorSupressionModal = ({
   useEffect(() => {
     getSeverityCodes()
       .then(({ data }) => {
-        setSeverityCodeList(data);
+        setSeverityCodeList(data?.items);
       })
       .catch((error) => {
-        console.log("Error getting Severity Codes", error);
+        log.log("Error getting Severity Codes", error);
       });
   }, []);
 
@@ -306,7 +308,7 @@ export const AddErrorSupressionModal = ({
           setLocationData([...availLoc]);
         })
         .catch((err) => {
-          console.log("error", err);
+          log.log("error", err);
         });
     }
   };
@@ -405,7 +407,7 @@ export const AddErrorSupressionModal = ({
 
     try {
       const resp = await createErrorSuppression(payload).catch((error) =>
-        console.log("create failed", error)
+        log.log("create failed", error)
       );
       if (successResponses.includes(resp.status)) {
         close();
@@ -542,7 +544,7 @@ export const AddErrorSupressionModal = ({
                   onChange={(e) => setSelectedSeverityCode(e.target.value)}
                 >
                   <option value={"false"}>{defaultDropdownText}</option>
-                  {severityCodeList.map((d) => (
+                  {severityCodeList?.map((d) => (
                     <option
                       key={d.severityCode}
                       value={d.severityCode}
@@ -626,7 +628,8 @@ export const AddErrorSupressionModal = ({
             </Grid>
             {/* Dropdown is hidden if no check result is selected and in the case that check result's matchDataType is PARAM, it is not shown if there is no data for matchDataList.
                             See ticket 4621 for the explanation of PARAM match type */}
-            {!selectedCheckResultObj ||
+            {!selectedCheckResultObj || 
+            selectedCheckResultObj?.dataTypeCode === "TESTNUM" ||
             (selectedCheckResultObj?.dataTypeCode === "PARAM" &&
               matchDataList?.length === 0) ? null : (
               <Grid row gap={2}>
@@ -649,6 +652,24 @@ export const AddErrorSupressionModal = ({
                       </option>
                     ))}
                   </Select>
+                </Grid>
+              </Grid>
+            )}
+
+            { selectedCheckResultObj?.dataTypeCode === "TESTNUM" && (
+              <Grid row gap={2}>
+                <Grid col={5}>
+                  <Label test-id={"add-test-sum"} htmlFor={"add-test-sum"}>
+                    {selectedCheckResultObj.dataTypeLabel}
+                  </Label>
+                  <TextInput
+                    className="maxw-full"
+                    id={"add-test-sum"}
+                    name={"add-test-sum"}
+                    type="text"
+                    value={selectedMatchDataValue}
+                    onChange={onMatchDataTypeChange}
+                  />
                 </Grid>
               </Grid>
             )}

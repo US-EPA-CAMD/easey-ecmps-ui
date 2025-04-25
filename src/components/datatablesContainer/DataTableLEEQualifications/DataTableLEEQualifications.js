@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanLEEQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
@@ -66,14 +68,14 @@ export const DataTableLEEQualifications = ({
       mpApi
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualLeeData(res.data);
+          setQualLeeData(res.data?.items);
 
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
           setUpdateLEE(false);
         })
-        .catch(error => console.log('getLEEQualifications failed', error))
+        .catch(error => log.log('getLEEQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLEE]);
@@ -103,7 +105,7 @@ export const DataTableLEEQualifications = ({
   ];
 
   const data = useMemo(() => {
-    if (qualLeeData.length > 0) {
+    if (qualLeeData?.length > 0) {
       return fs.getMonitoringPlansLEEQualifications(qualLeeData);
     }
     return [];

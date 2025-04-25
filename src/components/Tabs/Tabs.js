@@ -1,15 +1,14 @@
-import React from "react";
+import React from 'react';
+import log from 'loglevel';
+import { Button } from '@trussworks/react-uswds';
+import { ClearSharp, CreateSharp, LockSharp } from '@material-ui/icons';
 
-import { Button } from "@trussworks/react-uswds";
-import { ClearSharp, CreateSharp, LockSharp } from "@material-ui/icons";
-
-import "./Tabs.scss";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { EXPORT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import { addElementToLastFocusedArray } from "../../additional-functions/manage-focus";
+import './Tabs.scss';
+import * as mpApi from '../../utils/api/monitoringPlansApi';
+import { EXPORT_STORE_NAME } from '../../additional-functions/workspace-section-and-store-names';
+import { addElementToLastFocusedArray } from '../../additional-functions/manage-focus';
 
 const Tabs = ({
-  children,
   dynamic = false,
   removeTabs,
   checkedOutLocations,
@@ -18,6 +17,7 @@ const Tabs = ({
   workspaceSection,
   setCurrentTabIndex,
   currentTabIndex,
+  panes,
 }) => {
   const removeTab = (index) => {
     removeTabs(index);
@@ -30,12 +30,12 @@ const Tabs = ({
       mpApi
         .getCheckedOutLocations()
         .then((resOne) => {
-          const configs = resOne.data;
+          const configs = resOne.data?.items ?? resOne.data;
           if (
             configs.some(
               (plan) =>
                 plan.monPlanId === configId &&
-                plan.checkedOutBy === user["userId"]
+                plan.checkedOutBy === user['userId'],
             )
           ) {
             mpApi
@@ -47,16 +47,16 @@ const Tabs = ({
                 removeTab(index);
               })
               .catch((error) =>
-                console.log(
-                  "deleteCheckInMonitoringPlanConfiguration failed",
-                  error
-                )
+                log.log(
+                  'deleteCheckInMonitoringPlanConfiguration failed',
+                  error,
+                ),
               );
           } else {
             removeTab(index);
           }
         })
-        .catch((error) => console.log("getCheckedOutLocations failed", error));
+        .catch((error) => log.log('getCheckedOutLocations failed', error));
     } else {
       removeTab(index);
     }
@@ -66,7 +66,7 @@ const Tabs = ({
     if (workspaceSection !== EXPORT_STORE_NAME) {
       return (
         checkedOutLocations
-          .map((location) => location["monPlanId"])
+          .map((location) => location['monPlanId'])
           .indexOf(locationId) > -1
       );
     }
@@ -76,58 +76,81 @@ const Tabs = ({
     if (workspaceSection !== EXPORT_STORE_NAME) {
       return (
         checkedOutLocations
-          .map((location) => location["monPlanId"])
+          .map((location) => location['monPlanId'])
           .indexOf(locationId) > -1 &&
         checkedOutLocations[
           checkedOutLocations
-            .map((location) => location["monPlanId"])
+            .map((location) => location['monPlanId'])
             .indexOf(locationId)
-        ]["checkedOutBy"] === user["userId"]
+        ]['checkedOutBy'] === user['userId']
       );
     }
   };
 
   const cleanConfigStr = (name) => {
     return name
-      .replaceAll(",", "")
-      .replaceAll("(", "")
-      .replaceAll(")", "")
+      .replaceAll(',', '')
+      .replaceAll('(', '')
+      .replaceAll(')', '')
       .trim()
-      .replaceAll(" ", "-");
+      .replaceAll(' ', '-');
   };
   let tabBtnSelector;
   const updateTabBtnSelectorAndReturnAriaLabel = (arg) => {
     tabBtnSelector = `[aria-label="${arg}"]`;
     return arg;
   };
+  const makeTabButtonAriaLabel = (pane) => {
+    const parts = [
+      'open',
+      pane.title.split('(')[0].trim(),
+      user &&
+      pane.locationId &&
+      pane.facId &&
+      workspaceSection !== EXPORT_STORE_NAME &&
+      (isCheckedOut(pane.locationId) ||
+        checkedOutLocations.some((loc) => loc.facId === parseInt(pane.facId)))
+        ? '(locked)'
+        : '',
+      pane.title
+        .split('(')[1]
+        .replace(')', '')
+        .replace('Inactive', '(Inactive)')
+        .replace('Active', '(Active)')
+        .trim(),
+      pane.locationId && isCheckedOutByUser(pane.locationId)
+        ? '(checked-out)'
+        : '',
+      'tab',
+    ].filter(Boolean);
+
+    return parts.join(' ');
+  };
+
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
         <ul className="usa-button-group margin-top-1">
-          {children.map((el, i) => (
+          {panes.map((pane, i) => (
             <li
               key={i}
               className="usa-button-group__item usa-tooltip"
               data-position="bottom"
-              title={el.props.title}
+              title={pane.title}
             >
-              {" "}
-              {el.props.title.toLowerCase() === "select configurations" ? (
+              {' '}
+              {pane.title.toLowerCase() === 'select configurations' ? (
                 <>
                   <Button
                     type="button"
                     outline={currentTabIndex !== i}
-                    tabIndex="0"
+                    tabIndex={0}
                     id="select-config"
-                    aria-label={`open ${el.props.title} tab`}
-                    className={
-                      currentTabIndex === i
-                        ? "initial-tab-button active-tab-button"
-                        : "initial-tab-button"
-                    }
+                    aria-label={`open ${pane.title} tab`}
+                    className="initial-tab-button"
                     onClick={() => setCurrentTabIndex(i)}
                   >
-                    {el.props.title}
+                    {pane.title}
                   </Button>
                 </>
               ) : (
@@ -136,39 +159,19 @@ const Tabs = ({
                   id="tabBtn"
                   className={
                     currentTabIndex === i
-                      ? "tab-button react-transition flip-in-y active-tab-button"
-                      : "tab-button react-transition flip-in-y"
+                      ? 'tab-button react-transition flip-in-y active-tab-button'
+                      : 'tab-button react-transition flip-in-y'
                   }
                   tabIndex="0"
                   aria-label={updateTabBtnSelectorAndReturnAriaLabel(
-                    `open ${el.props.title.split("(")[0]}${
-                      user &&
-                      el.props.locationId &&
-                      el.props.facId &&
-                      workspaceSection !== EXPORT_STORE_NAME &&
-                      (isCheckedOut(el.props.locationId) ||
-                        checkedOutLocations.some(
-                          (loc) => loc.facId === parseInt(el.props.facId)
-                        ))
-                        ? "(locked)"
-                        : ""
-                    } ${el.props.title
-                      .split("(")[1]
-                      .replace(")", "")
-                      .replace("Inactive", "(Inactive)")
-                      .replace("Active", "(Active)")} ${
-                      el.props.locationId &&
-                      isCheckedOutByUser(el.props.locationId)
-                        ? "(checked-out)"
-                        : ""
-                    } tab`
+                    makeTabButtonAriaLabel(pane),
                   )}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
                     setCurrentTabIndex(i);
                   }}
                   onKeyPress={(event) => {
-                    if (event.key === "Enter") {
+                    if (event.key === 'Enter') {
                       addElementToLastFocusedArray(tabBtnSelector);
                       setCurrentTabIndex(i);
                     }
@@ -177,60 +180,56 @@ const Tabs = ({
                   <div className="text-center tab-button-text-container ellipsis-text position-relative">
                     {user &&
                     workspaceSection !== EXPORT_STORE_NAME &&
-                    el.props.locationId &&
-                    el.props.facId &&
-                    (isCheckedOut(el.props.locationId) ||
+                    pane.locationId &&
+                    pane.facId &&
+                    (isCheckedOut(pane.locationId) ||
                       checkedOutLocations.some(
-                        (plan) => plan.facId === parseInt(el.props.facId)
+                        (plan) => plan.facId === parseInt(pane.facId),
                       )) ? (
                       <LockSharp
                         role="img"
                         className="text-bold tab-icon margin-right-1"
                         aria-hidden="false"
-                        title={`Locked Facility - ${
-                          el.props.title.split("(")[0]
-                        }`}
+                        title={`Locked Facility - ${pane.title.split('(')[0]}`}
                       />
                     ) : null}
                     {workspaceSection !== EXPORT_STORE_NAME &&
-                      el.props.locationId &&
-                      isCheckedOutByUser(el.props.locationId) && (
+                      pane.locationId &&
+                      isCheckedOutByUser(pane.locationId) && (
                         <CreateSharp
                           role="img"
                           className="text-bold tab-icon margin-right-1"
                           aria-hidden="false"
-                          title={`Checked-out Configuration - ${el.props.title
-                            .split("(")[1]
-                            .replace(")", "")}`}
+                          title={`Checked-out Configuration - ${pane.title
+                            .split('(')[1]
+                            .replace(')', '')}`}
                         />
                       )}
-                    {el.props.title.split("(")[0]}
+                    {pane.title.split('(')[0]}
                   </div>
                   <div className="text-center">
                     <span className="position-relative top-neg-105 locations-display">
-                      {el.props.selectedConfigName}
+                      {pane.selectedConfigName}
                     </span>
                   </div>
 
                   {dynamic ? (
                     <ClearSharp
                       className="text-bold margin-left-2 float-right position-relative left-neg-1 top-neg-1 margin-top-neg-3 cursor-pointer closeXBtnTab"
-                      onClick={(e) => closeHandler(e, i, el.props.locationId)}
+                      onClick={(e) => closeHandler(e, i, pane.locationId)}
                       onKeyPress={(event) => {
-                        if (event.key === "Enter") {
+                        if (event.key === 'Enter') {
                           closeHandler(event, i);
                         }
                       }}
-                      title={`Click to close ${el.props.title} tab`}
-                      name={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
-                      id={`closeXBtnTab-${cleanConfigStr(el.props.title)}`}
+                      title={`Click to close ${pane.title} tab`}
+                      name={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
+                      id={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
                       data-test-id={`closeXBtnTab-${cleanConfigStr(
-                        el.props.title
+                        pane.title,
                       )}`}
                       data-testid="closeXBtnTab"
-                      epa-testid={`closeXBtnTab-${cleanConfigStr(
-                        el.props.title
-                      )}`}
+                      epa-testid={`closeXBtnTab-${cleanConfigStr(pane.title)}`}
                       role="button"
                       tabIndex="0"
                       aria-hidden="false"
@@ -243,7 +242,7 @@ const Tabs = ({
         </ul>
       </div>
       <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
-        {children[currentTabIndex]}
+        {panes[currentTabIndex]?.content}
       </div>
     </div>
   );

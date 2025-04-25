@@ -85,7 +85,7 @@ export const DataTableAssert = ({
 
   const [updateTable, setUpdateTable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const dropdownArrayIsEmpty = dropdownArray[0].length === 0;
+  const dropdownArrayIsEmpty = dropdownArray[0]?.length === 0;
 
   const selectText = "-- Select a value --";
 
@@ -126,7 +126,7 @@ export const DataTableAssert = ({
   useEffect(() => {
     if (
       updateTable ||
-      dataPulled.length <= 0 ||
+      dataPulled?.length <= 0 ||
       locationSelectValue ||
       revertedState ||
       updateRelatedTables
@@ -134,7 +134,7 @@ export const DataTableAssert = ({
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
         .then((res) => {
-          finishedLoadingData(res.data);
+          finishedLoadingData(res.data?.items);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,7 +174,7 @@ export const DataTableAssert = ({
   const inactiveCheckboxFiltering = () => {
     let hasActive = false;
     let hasInactive = false;
-    if (dataPulled.length > 0) {
+    if (dataPulled?.length > 0) {
       const activeRecords = getActiveData(dataPulled);
       const inactiveRecords = getInactiveData(dataPulled);
       hasActive = activeRecords.length > 0;
@@ -272,12 +272,12 @@ export const DataTableAssert = ({
   const [prefilteredMdmData, setPrefilteredMdmData] = useState(false);
 
   useEffect(() => {
-    const prefilteredDataName = dropdownArray[0][0];
+    const prefilteredDataName = dropdownArray[0]?.[0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
         (data) => data[prefilteredDataName] === mainDropdownChange
       );
-      if (result.length > 0) {
+      if (result?.length > 0) {
         for (const modalDetailData of selectedModalData) {
           if (modalDetailData[4] === "dropdown") {
             const selectedCodes = result[0];

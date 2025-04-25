@@ -41,8 +41,6 @@ export const MonitoringPlanTabRender = ({
   setInactive,
   inactive,
   currentTabIndex,
-
-  workspaceSection,
 }) => {
   const locations = useSelector(
     (state) =>
@@ -923,7 +921,6 @@ export const MonitoringPlanTabRender = ({
 
   // not tested ***
   // const resetInactivityTimerApiCall = () => {
-  //   console.log(mpApi.putLockTimerUpdateConfiguration(configID), "api called");
   // };
 
   return (
@@ -947,7 +944,7 @@ export const MonitoringPlanTabRender = ({
           setRevertedState={setRevertedState}
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
-          workspaceSection={workspaceSection}
+          workspaceSection={MONITORING_PLAN_STORE_NAME}
         />
       </div>
       <hr />

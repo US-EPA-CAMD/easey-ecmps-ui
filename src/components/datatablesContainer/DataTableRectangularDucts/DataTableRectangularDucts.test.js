@@ -6,7 +6,7 @@ import {
 } from './DataTableRectangularDucts';
 import * as mpApi from '../../../utils/api/monitoringPlansApi';
 import { extractUserInput } from '../../../additional-functions/extract-user-input';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 // import { handleResponse, handleError } from "../../../utils/api/apiUtils";
 // import { secureAxios } from "../../../utils/api/easeyAuthApi";

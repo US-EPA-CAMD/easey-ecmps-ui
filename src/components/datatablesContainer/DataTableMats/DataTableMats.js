@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
   extractUserInput,
   validateUserInput,
 } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitoringPlanMethods";
-import { DataTableRender } from "../../DataTableRender/DataTableRender";
+import DataTableRender from "../../DataTableRender/DataTableRender";
 import {
   assignFocusEventListeners,
   cleanupFocusEventListeners,
@@ -34,7 +35,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { ensure508 } from "../../../additional-functions/ensure-508";
-import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
 
 export const DataTableMats = ({
   mdmData,
@@ -104,10 +105,10 @@ export const DataTableMats = ({
       updateRelatedTables
     ) {
       mpApi.getMonitoringMatsMethods(locationSelectValue).then((res) => {
-        if(res?.data){
-          setMatsMethods(res.data);
+        if (res?.data?.items) {
+          setMatsMethods(res.data?.items);
           mpApi.getMonitoringMethods(locationSelectValue).then((mets) => {
-            setMethods(mets.data);
+            setMethods(mets.data?.items);
             setUpdateTable(false);
             setDataLoaded(true);
             setUpdateRelatedTables(false);
@@ -200,8 +201,9 @@ export const DataTableMats = ({
       return;
     }
     try {
-      const resp = await mpApi.saveMonitoringMats(userInput)
-        .catch(error => console.log('saveMonitoringMats failed', error));
+      const resp = await mpApi
+        .saveMonitoringMats(userInput)
+        .catch((error) => log.log("saveMonitoringMats failed", error));
       if (resp.status === 200) {
         setShow(false);
         setUpdateTable(true);
@@ -222,8 +224,9 @@ export const DataTableMats = ({
       return;
     }
     try {
-      const resp = await mpApi.createMats(userInput)
-        .catch(error => console.log('createMats failed', error));
+      const resp = await mpApi
+        .createMats(userInput)
+        .catch((error) => log.log("createMats failed", error));
       if (resp.status === 201) {
         setShow(false);
         setUpdateTable(true);
@@ -361,7 +364,7 @@ export const DataTableMats = ({
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
     if (createNewMats) {
-      returnsFocusMpDatatableCreateBTN("Create MATS")
+      returnsFocusMpDatatableCreateBTN("Create MATS");
     }
   };
 

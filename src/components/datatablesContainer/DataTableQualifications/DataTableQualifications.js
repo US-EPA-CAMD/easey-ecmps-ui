@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import _ from "lodash";
+import log from "loglevel";
 
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
@@ -114,14 +115,14 @@ export const DataTableQualifications = ({
   useEffect(() => {
     if (
       updateTable ||
-      qualificationData.length <= 0 ||
+      qualificationData?.length <= 0 ||
       locationSelectValue ||
       revertedState
     ) {
       mpApi
         .getQualifications(locationSelectValue)
         .then((res) => {
-          setQualificationsData(res.data);
+          setQualificationsData(res.data?.items);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
@@ -130,14 +131,14 @@ export const DataTableQualifications = ({
           setUpdateLME(false);
           setUpdateCPMS(false);
         })
-        .catch((error) => console.log("getQualifications failed", error));
+        .catch((error) => log.log("getQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState]);
 
   // load dropdowns data (called once)
   useEffect(() => {
-    if (mdmData.length === 0) {
+    if (mdmData?.length === 0) {
       loadDropdownsData(QUALIFICATIONS_SECTION_NAME, dropdownArray);
     } else {
       setDropdownsLoaded(true);
@@ -196,7 +197,7 @@ export const DataTableQualifications = ({
   };
 
   const data = useMemo(() => {
-    if (qualificationData.length > 0) {
+    if (qualificationData?.length > 0) {
       const activeOnly = getActiveData(qualificationData);
       const inactiveOnly = getInactiveData(qualificationData);
 
@@ -390,7 +391,7 @@ export const DataTableQualifications = ({
     let qualData = null;
     setCreating(create);
     setCreateNewQualificationData(create);
-    if (qualificationData.length > 0 && !create) {
+    if (qualificationData?.length > 0 && !create) {
       qualData = qualificationData.filter(
         (element) => element.id === row[`col${Object.keys(row).length - 1}`]
       )[0];

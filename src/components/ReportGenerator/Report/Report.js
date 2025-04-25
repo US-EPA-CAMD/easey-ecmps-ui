@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, GovBanner } from "@trussworks/react-uswds";
 import { AppVersion, Preloader } from "@us-epa-camd/easey-design-system";
+import log from "loglevel";
+
 import DefaultTemplate from "../DefaultTemplate/DefaultTemplate";
 import PropertyTableTemplate from "../PropertyTableTemplate/PropertyTableTemplate";
 import config from "../../../config";
@@ -24,7 +26,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
         );
         setEvalResultMessage(resultMessage);
       } catch (error) {
-        console.error("Error fetching eval status", error);
+        log.error("Error fetching eval status", error);
       } finally {
         setLoading(false);
       }
@@ -176,7 +178,7 @@ export const Report = ({ reportData, dataLoaded, paramsObject }) => {
             <img
               alt="EPA Logo"
               title="EPA Logo"
-              src={`${process.env.PUBLIC_URL}/images/epa-logo-blue.svg`}
+              src={`/images/epa-logo-blue.svg`}
             />
             {displayCloseButton ? (
               <Button

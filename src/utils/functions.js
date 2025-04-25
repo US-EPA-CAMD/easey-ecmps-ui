@@ -7,6 +7,8 @@ import {
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
 import { isNumber } from "lodash";
+import log from "loglevel";
+import { displayAppError } from "../additional-functions/app-error";
 
 export const getUser = () => {
   const ecmpsUser = localStorage.getItem("ecmps_user")
@@ -261,8 +263,12 @@ export const getEvalStatus = async (paramsArray) => {
   const orisCode = paramsArray[1][1],
     isEmissions = paramsArray[0][1] === "EM_EVAL",
     id = paramsArray[2][1],
-    type = isEmissions ? "emissions" : paramsArray[2][0],
-    api = tableRowApi[type];
+    type = isEmissions ? "emissions" : paramsArray[2][0];
+    if(!tableRowApi.hasOwnProperty(type) || typeof tableRowApi[type] !== 'function')
+    {
+      return;
+    }
+  const api = tableRowApi[type];
   if (!api) return;
   const { ids, identifier } = getIdentfierAndIds(type, id);
   const response = await api(
@@ -270,10 +276,13 @@ export const getEvalStatus = async (paramsArray) => {
     ids,
     getYearQuarter(type, paramsArray)
   );
-  const items = response?.data.filter((el) => el[identifier] === id);
-  if (!response?.data?.length) return;
+
+  let dataList = response.data?.items ?? response.data;
+  
+  const items = dataList.filter((el) => el[identifier] === id);
+  if (!dataList.length) return;
   if (identifier) return items[0].evalStatusCode;
-  return response.data[0]?.evalStatusCode;
+  return dataList[0]?.evalStatusCode;
 };
 
 export const getEvalResultMessage = (reportData, paramsObject, evalStatus) => {
@@ -431,5 +440,52 @@ export const parseBool = (str) => {
     return str > 0;
   } else {
     return String(str).toLocaleLowerCase() == "true";
+  }
+};
+
+export const exportToCSV = (data, columnMapping, fileNamePrefix, formatMatchTimeCriteriaCell) => {
+  try {
+
+    const headers = Object.keys(columnMapping);
+    const csvHeaders = headers.map(key => columnMapping[key]);
+
+    // Convert data to CSV format
+    const csvRows = data.map(row =>
+      headers.map(header => {
+        let value = row[header];
+
+        if (header === "active") {
+          value = value ? "Active" : "Inactive";
+        }
+
+        if (header === "matchTimeTypeCode" && formatMatchTimeCriteriaCell) {
+          value = formatMatchTimeCriteriaCell(row);
+        }
+
+        return value !== null && value !== undefined ? `"${value}"` : '""';
+      }).join(',')
+    );
+
+    // Combine headers and data rows
+    const csvString = [csvHeaders.join(','), ...csvRows].join('\n');
+
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Assemble file name
+    let fileName = `${fileNamePrefix}_${new Date().toISOString().slice(0, 19)}.csv`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+
+    // Cleanup
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    displayAppError("Generate CSV file failed, please try it again!");
+    log.log("generate csv file failed", error);
   }
 };

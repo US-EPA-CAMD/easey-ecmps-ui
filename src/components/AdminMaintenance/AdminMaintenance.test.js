@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import {AdminMaintenance} from "./AdminMaintenance";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 describe("<AdminMaintenance />", () => {
   test("renders component with correct title and facilities", async () => {
@@ -10,7 +10,7 @@ describe("<AdminMaintenance />", () => {
    
     jest.mock("../../utils/api/facilityApi", () => ({
       getAllFacilities: jest.fn().mockResolvedValue({
-        data: [
+        data: {items: [
           {
             facilityId: 1,
             facilityName: "Facility 1",
@@ -19,7 +19,7 @@ describe("<AdminMaintenance />", () => {
             facilityId: 2,
             facilityName: "Facility 2",
           },
-        ],
+        ]},
       }),
     }));
 

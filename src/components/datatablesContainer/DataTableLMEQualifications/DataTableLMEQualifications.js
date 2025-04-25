@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import log from "loglevel";
+
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as fs from "../../../utils/selectors/monitoringPlanLMEQualifications";
 import { DataTableRender } from "../../DataTableRender/DataTableRender";
@@ -59,13 +61,13 @@ export const DataTableLMEQualifications = ({
       mpApi
         .getLMEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
-          setQualLmeData(res.data);
+          setQualLmeData(res.data?.items);
           setDataLoaded(true);
           setUpdateTable(false);
           setRevertedState(false);
           setUpdateLME(false);
         })
-        .catch(error => console.log('getLMEQualifications failed', error))
+        .catch(error => log.log('getLMEQualifications failed', error))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, updateLME]);

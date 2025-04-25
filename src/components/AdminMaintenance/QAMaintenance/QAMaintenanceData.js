@@ -21,6 +21,9 @@ import QAMaintenanceModalPopout, {
   QA_MAINTENANCE_MODAL_DELETE,
   QA_MAINTENANCE_MODAL_REQUIRE_RESUBMISSION,
 } from './QAMaintenanceModalPopout';
+import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
+import { getLocations } from "../../ErrorSuppression/ErrorSuppressionFilters/ErrorSuppressionFilters";
+import { exportToCSV } from '../../../utils/functions';
 
 let controlInputs;
 
@@ -36,11 +39,156 @@ const QAMaintenanceData = ({
   const [disableActionBtns, setDisableActionBtns] = useState(true);
 
   const [selectedViewModalData, setSelectedViewModalData] = useState(null);
-  const [modalDataSelections, setModalDataSelections] = useState(null);
+
+  const [currentUnitStack, setCurrentUnitStack] = useState([]);
+  const [availableUnitStackState, setAvailableUnitStackState] = useState([]);
+
+  const [currentTestTypeCode, setCurrentTestTypeCode] = useState([]);
+  const [availableTestTypeCodeState, setAvailableTestTypeCodeState] = useState([]);
+
+  const [filteredData, setFilteredData] = useState(data);
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
+  const downloadFilteredDataIntoCSV = () => {
+
+    // Extract only the displayed columns
+    let columnMapping = [];
+
+    if (typeSelection === 'Test Summary') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        testTypeCode: "Test Type Code",
+        yearQuarter: "Reporting Period",
+        beginDateTime: "Begin Date/Time",
+        endDateTime: "End Date/Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Cert Events') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        certEventCode: "Cert Event Code",
+        eventDateTime: "Event Date/Time",
+        requiredTestCode: "Required Test Code",
+        conditionalDateTime: "Conditional Date/Time",
+        lastCompletedDateTime: "Last Completed Date Time",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    } else if (typeSelection === 'Test Extension Exemption') {
+      columnMapping = {
+        facilityName: "Facility Name/ID",
+        unitStack: "Unit Stack",
+        locationId: "MP Location",
+        componentIdentifier: "System/Component ID",
+        fuelCode: "Fuel Code",
+        extensionExemptionCode: "Extension Exemption Code",
+        hoursUsed: "Hours Used",
+        spanScaleCode: "Span Scale Code",
+        submissionAvailabilityDescription: "Submission Availability Description",
+        severityDescription: "Severity Description",
+        resubExplanation: "Resubmission Reason",
+        id: "Record Id"
+      };
+    }
+
+    const facilityName = filteredData[0].facilityName;
+
+    exportToCSV(filteredData, columnMapping, `QA/Cert_Data_Maintenance_${facilityName}`)
+  
+  };
+  
+  // fetch and initialize options for lower grid filter(s)
+  useEffect(() => {
+    const fetchAndSetOptions = async () => {
+      try {
+        const orisCode = data[0]?.orisCode; //grab the orisCode from any record
+  
+        // fetch all the locations for the current facility
+        const allLocations = await getLocations(orisCode, {
+          locationTypeCode: "LOC",
+        });
+  
+        setCurrentUnitStack(allLocations);
+        setAvailableUnitStackState(allLocations);
+  
+        // populate the options for Test Type Code filter if needed
+        if (typeSelection === "Test Summary") {
+          //gather all the test type codes from the data table set
+          const testTypeCodes = [...new Set(data.map(({ testTypeCode }) => testTypeCode))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  
+          const availTestTypeCode = testTypeCodes.map((testTypeCode) => ({
+            id: testTypeCode,
+            label: testTypeCode,
+            selected: false,
+            enabled: true,
+          }));
+  
+          setCurrentTestTypeCode(availTestTypeCode);
+          setAvailableTestTypeCodeState(availTestTypeCode);
+        }
+      } catch (error) {
+        console.error("Error fetching locations or setting data:", error);
+      }
+    };
+    fetchAndSetOptions();
+  }, [data]);
+  
+  const unitStackFilterChange = (id, action) => {
+
+    const objectEntry = currentUnitStack.find((item) => item.id === id);
+
+    // mark the objectEntry as selected if the action is add, otherwise set the selected field false.
+    objectEntry && (objectEntry.selected = action === "add");
+  };
+
+  const testTypeCodeFilterChange = (id, action) => {
+
+    const objectEntry = currentTestTypeCode.find((item) => item.id === id);
+
+    // mark the objectEntry as selected if the action is add, otherwise set the selected field false.
+    objectEntry && (objectEntry.selected = action === "add");
+  };
+
+  const applyFilters = useCallback(() => {
+
+    const selectedUnitStackLabels = currentUnitStack.filter(item => item.selected).map(item => item.label);
+
+    let updatedFilteredData = data;
+
+    if (selectedUnitStackLabels?.length !== 0) {
+      updatedFilteredData = updatedFilteredData.filter((it) => 
+        selectedUnitStackLabels.includes(it.unitStack)
+      );
+    } 
+    
+    if (typeSelection === 'Test Summary') {
+      const selectedTestTypeCodeIds = currentTestTypeCode.filter(item => item.selected).map(item => item.id);
+      if (selectedTestTypeCodeIds?.length !== 0) {
+        updatedFilteredData = updatedFilteredData.filter((it) => 
+          selectedTestTypeCodeIds.includes(it.testTypeCode)
+        );
+      }
+    }
+
+    setFilteredData(updatedFilteredData);
+  }); 
 
   const openViewModalHandler = useCallback(
     async (row, index, isCreate = false) => {
-      const selectedData = data[index];
+      const selectedData = row;
       const { systemIdentifier, componentIdentifier } = selectedData;
 
       selectedData.systemComponentID =
@@ -75,7 +223,7 @@ const QAMaintenanceData = ({
       );
       setShowViewModal(true);
     },
-    [data],
+    []
   );
 
   const onRowSelection = (row, checked) => {
@@ -145,14 +293,14 @@ const QAMaintenanceData = ({
       ),
     },
     {
-      name: <span>{'Facility Name / ID'}</span>,
+      name: <span>{'Facility Name/ID'}</span>,
       width: '210px',
       selector: row => row.facilityName,
 
       sortable: true,
     },
     {
-      name: <span>{'MP Location'}'</span>,
+      name: <span>{'MP Location'}</span>,
       width: '200px',
       selector: row => row.locationId,
       sortable: true,
@@ -282,18 +430,82 @@ const QAMaintenanceData = ({
             </div>
           </div>
         </div>
+        <div className="grid-row row-width" style={{ display: 'flex' }}>
+          <div className="grid-col-6">
+            <div className="grid-col-8" >
+              <MultiSelectCombobox
+                data-testid="unitStack-dropdown"
+                key={`unitStack-${availableUnitStackState.length}`}
+                items={currentUnitStack}
+                entity={"unit stack"}
+                label={"Unit Stack"}
+                searchBy="contains"
+                onChangeUpdate={unitStackFilterChange}
+                autoFocus={false}
+                iconAlignRight={3}
+              />
+            </div>
+          </div>
+          {typeSelection === 'Test Summary' && (
+            <>
+              <div className="grid-col-6">
+                <div className="grid-col-8">
+                  <MultiSelectCombobox
+                    data-testid="testTypeCode-dropdown"
+                    key={`testTypeCode-${availableTestTypeCodeState.length}`}
+                    items={currentTestTypeCode}
+                    entity={"test type code"}
+                    label={"Test Type Code"}
+                    searchBy="contains"
+                    onChangeUpdate={testTypeCodeFilterChange}
+                    autoFocus={false}
+                    iconAlignRight={3}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <br/>
+        <div className="grid-row row-width" style={{ display: 'flex' }}>
+          <div className="grid-col-6"></div>
+          <div className="grid-col-6">
+            <div className="grid-col-8" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                  disabled={ false}
+                  onClick={applyFilters}
+                  outline={false}
+                >
+                  Apply Filter(s)
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="es-datatable margin-top-5">
+          <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="button"
+              data-testid={`qa-maintenance-download-csv-button`}
+              title={"Download To CSV"}
+              onClick={downloadFilteredDataIntoCSV}
+              disabled={!filteredData || filteredData.length === 0}
+            >
+              {"Download To CSV"}
+            </Button>
+          </div>
           <span data-aria-label={'QA/Cert Data Maintenance'}></span>
           <DataTable
             sortIcon={
               <ArrowDownwardSharp className="margin-left-2 text-primary" />
             }
             noHeader={true}
-            fixedHeader={true}
-            fixedHeaderScrollHeight="50vh"
+            fixedHeader={false}
             columns={columns}
-            data={data}
+            data={filteredData}
             className={`data-display-table react-transition fade-in`}
+            pagination={true}
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[10, 25, 50]}
           />
         </div>
       </div>
@@ -307,7 +519,6 @@ const QAMaintenanceData = ({
           showCancel
         >
           <ModalDetails
-            modalData={modalDataSelections}
             data={selectedViewModalData}
             cols={3}
             viewOnly={true}

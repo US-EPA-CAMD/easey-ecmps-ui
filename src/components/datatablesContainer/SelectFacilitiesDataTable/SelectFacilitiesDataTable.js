@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import log from "loglevel";
+
+import { setCheckedOutLocations } from "../../../store/actions/checkedOutLocations";
 import * as fs from "../../../utils/selectors/facilities";
 import MonitoringPlanTab from "../../MonitoringPlanTab/MonitoringPlanTab";
 import QACertTestSummaryTab from "../../QACertTestSummaryTab/QACertTestSummaryTab";
@@ -25,15 +28,18 @@ export const SelectFacilitiesDataTable = ({
   addtabs,
   setMostRecentlyCheckedInMonitorPlanIdForTab,
   workspaceSection,
+
+  /* MAPPED PROPS */
+  checkedOutLocations,
   workspaceState,
 }) => {
+  const dispatch = useDispatch();
   const openedFacilityTabs = useSelector(
     (state) => state.openedFacilityTabs[workspaceSection]
   );
 
-  const [facilities, setFacilities] = useState("");
+  const [facilities, setFacilities] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [checkedOutLocations, setCheckedOutLocations] = useState([]);
   const [
     mostRecentlyCheckedInMonitorPlanId,
     setMostRecentlyCheckedInMonitorPlanId,
@@ -45,13 +51,13 @@ export const SelectFacilitiesDataTable = ({
       .getAllFacilities()
       .then((res) => {
         setDataLoaded(true);
-        setFacilities(res.data);
+        setFacilities(res.data.items);
         if (history?.action === "POP") {
           resetTabOrder();
         }
       })
       .catch((error) => {
-        console.error("Error getting facilities", error);
+        log.error("Error getting facilities", error);
       });
     return () => {
       setFacilities([]); // This worked for me
@@ -60,25 +66,11 @@ export const SelectFacilitiesDataTable = ({
   }, []);
 
   useEffect(() => {
-    obtainCheckedOutLocations().then();
-  }, [openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
-  const obtainCheckedOutLocations = async () => {
-    const checkedOutLocationResult = await getCheckedOutLocations().then();
-    let checkedOutLocationsList = [];
-    if (checkedOutLocationResult) {
-      if (
-        checkedOutLocationResult.data &&
-        checkedOutLocationResult.data.length > 0
-      ) {
-        checkedOutLocationsList = checkedOutLocationResult.data;
-      }
-    }
+    getCheckedOutLocations().then((res) => {
+      dispatch(setCheckedOutLocations(res.data?.items));
+    });
+  }, [dispatch, openedFacilityTabs, mostRecentlyCheckedInMonitorPlanId]);
 
-    setCheckedOutLocations(checkedOutLocationsList);
-    return () => {
-      setCheckedOutLocations([]); // This worked for me
-    };
-  };
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
   const columnNames = ["Facility", "ORIS", "State"];
@@ -240,6 +232,7 @@ export const SelectFacilitiesDataTable = ({
 };
 
 const mapStateToProps = (state) => ({
+  checkedOutLocations: state.checkedOutLocations,
   workspaceState: state.workspaceState,
 });
 

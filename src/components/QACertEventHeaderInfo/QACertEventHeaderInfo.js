@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Button } from "@trussworks/react-uswds";
-
-import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
-
+import log from "loglevel";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+
+import HeaderInfoCheckoutButton from "../HeaderInfoCheckoutButton/HeaderInfoCheckoutButton";
+import HeaderInfoFacility from "../HeaderInfoFacility/HeaderInfoFacility";
+import HeaderInfoLocationSelect from "../HeaderInfoLocationSelect/HeaderInfoLocationSelect";
+import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 import { cleanupFocusEventListeners } from "../../additional-functions/manage-focus";
 import {
   removeChangeEventListeners,
@@ -19,28 +22,25 @@ import {
   getAllTestTypeCodes,
   getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
-import { CreateOutlined, LockOpenSharp } from "@material-ui/icons";
-import * as mpApi from "../../utils/api/monitoringPlansApi";
-import { checkoutAPI } from "../../additional-functions/checkout";
 import { QA_CERT_EVENT_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import QAImportModalSelect from "../QACertTestSummaryHeaderInfo/QAImportModalSelect/QAImportModalSelect";
 import { successResponses } from "../../utils/api/apiUtils";
 import { formatErrorResponse } from "../../utils/functions";
+
 export const QACertEventHeaderInfo = ({
   facility,
   selectedConfigId,
   orisCode,
   user,
   //redux sets
-  setLocationSelect,
   setSectionSelect,
-  setCheckout,
   // redux store
   checkoutState,
   sectionSelect,
-  locationSelect,
   setSelectedTestCode,
   setUpdateRelatedTables,
+  // mapped props
+  checkedOutConfigs,
 }) => {
   const importTestTitle = "Import QA Cert Events, Extension & Exemption Data";
   const [showImportModal, setShowImportModal] = useState(false);
@@ -51,12 +51,6 @@ export const QACertEventHeaderInfo = ({
 
   const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
   const locations = selectedConfig?.monitoringLocationData ?? [];
-
-  // *** parse apart facility name
-  const facilityMainName = facility.split("(")[0];
-  const facilityAdditionalName =
-    facility.split("(")[1].replace(")", "") +
-    (selectedConfig?.active ? "" : " Inactive");
 
   // import modal states
   const [disablePortBtn, setDisablePortBtn] = useState(true);
@@ -70,14 +64,9 @@ export const QACertEventHeaderInfo = ({
   const [importedFile, setImportedFile] = useState([]);
   const [importedFileErrorMsgs, setImportedFileErrorMsgs] = useState();
   const [selectedHistoricalData, setSelectedHistoricalData] = useState({});
-  const [isCheckedOut, setIsCheckedOut] = useState(checkoutState);
-  const [checkedOutConfigs, setCheckedOutConfigs] = useState([]);
-  const [refresherInfo, setRefresherInfo] = useState(null);
-  const [currentConfig, setCurrentConfig] = useState(false);
-  const [lockedFacility, setLockedFacility] = useState(false);
-  const [userHasCheckout, setUserHasCheckout] = useState(false);
-  const [checkedOutByUser, setCheckedOutByUser] = useState(false);
   const [jsonSchemaVersion, setJsonSchemaVersion] = useState("");
+
+  const isCheckedOut = checkoutState;
 
   const qaCertEventOptions = [
     { name: "QA Certification Event" },
@@ -92,16 +81,16 @@ export const QACertEventHeaderInfo = ({
     const fetchTestTypeCodes = () => {
       getAllTestTypeCodes()
         .then((res) => {
-          setAllTestTypeCodes(res.data);
+          setAllTestTypeCodes(res.data?.items);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
 
       getAllTestTypeGroupCodes()
         .then((res) => {
-          const options = res.data
-            .map((e) => {
+          const options = res.data?.items
+            ?.map((e) => {
               return {
                 name: e.testTypeGroupDescription,
                 code: e.testTypeGroupCode,
@@ -111,7 +100,7 @@ export const QACertEventHeaderInfo = ({
           setTestTypeGroupOptions(options);
         })
         .catch((error) => {
-          console.log(error);
+          log.log(error);
         });
     };
     fetchTestTypeCodes();
@@ -122,7 +111,7 @@ export const QACertEventHeaderInfo = ({
     const selectedTestTypeGroupOptionObj = testTypeGroupOptions[selectedIndex];
 
     const codesForSelectedTestTypeGroup = allTestTypeCodes
-      .filter((data) => {
+      ?.filter((data) => {
         return data.testTypeGroupCode === selectedTestTypeGroupOptionObj?.code;
       })
       .map((obj) => {
@@ -140,59 +129,10 @@ export const QACertEventHeaderInfo = ({
 
   // *** Clean up focus event listeners
   useEffect(() => {
-    mpApi
-      .getRefreshInfo(selectedConfigId)
-      .then((info) =>
-        setRefresherInfo({
-          checkedOutBy: "N/A",
-          lastUpdatedBy: info.data.userId,
-          updateDate: info.data.updateDate,
-        })
-      )
-      .catch((err) => console.log(err));
-    mpApi
-      .getCheckedOutLocations()
-      .then((res) => setCheckedOutConfigs(res.data))
-      .catch((err) => console.log(err));
-
     return () => {
       cleanupFocusEventListeners();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkoutState]);
-
-  const isCheckedOutByUser = (configs) => {
-    return (
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id) > -1 &&
-      configs[
-      configs
-        .map((location) => location["monPlanId"])
-        .indexOf(selectedConfig.id)
-      ]["checkedOutBy"] === user["userId"]
-    );
-  };
-
-  useEffect(() => {
-    if (checkedOutConfigs) {
-      setUserHasCheckout(
-        checkedOutConfigs.some((plan) => plan["checkedOutBy"] === user.userId)
-      );
-      setCheckedOutByUser(isCheckedOutByUser(checkedOutConfigs));
-      const result =
-        checkedOutConfigs[
-        checkedOutConfigs
-          .map((con) => con["monPlanId"])
-          .indexOf(selectedConfig.id)
-        ];
-      if (result) {
-        setLockedFacility(true);
-        setCurrentConfig(result);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedOutConfigs]);
+  }, [checkoutState, selectedConfigId]);
 
   useEffect(() => {
     if (importTypeSelection !== "select" || importedFile.length !== 0) {
@@ -266,7 +206,7 @@ export const QACertEventHeaderInfo = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        log.log(err);
       })
       .finally(() => {
         setIsLoading(false);
@@ -284,77 +224,17 @@ export const QACertEventHeaderInfo = ({
     setShowImportDataPreview(false);
   };
 
-  const formatDate = (dateString, isUTC = false) => {
-    const date = new Date(dateString);
-    //HANDLE -1 days from DB dates which are UTC
-    const day = isUTC ? date.getDate() + 1 : date.getDate();
-    return (
-      (date.getMonth() > 8
-        ? date.getMonth() + 1
-        : "0" + (date.getMonth() + 1)) +
-      "/" +
-      (day > 9 ? day : "0" + day) +
-      "/" +
-      date.getFullYear()
-    );
-  };
-
-  // Create audit message for header info
-  const createAuditMessage = () => {
-    if (checkedOutConfigs) {
-      // WORKSPACE view
-      if (user) {
-        // when config is checked out by someone
-        if (isCheckedOut) {
-          return `Currently checked-out by: ${currentConfig["checkedOutBy"]
-            } ${formatDate(currentConfig["checkedOutOn"])}`;
-        }
-        // when config is not checked out
-        return `Last updated by: ${refresherInfo?.lastUpdatedBy} ${formatDate(
-          refresherInfo?.updateDate,
-          true
-        )}`;
-      }
-    }
-  };
-
-  // direction -> false = check back in
-  // true = check out
-  const checkoutStateHandler = (direction) => {
-    // trigger checkout API
-    //    - POST endpoint if direction is TRUE (adding new record to checkouts table)
-    //    - DELETE endpoint if direction is FALSE (removing record from checkouts table)
-    checkoutAPI(direction, selectedConfig.id, setCheckout)
-      .then(() => {
-        setCheckedOutByUser(direction);
-        setLockedFacility(direction);
-        setIsCheckedOut(direction);
-      })
-      .catch((error) => {
-        console.error("Error during checkout", error);
-      });
-  };
-
   return (
     <div className="header QACertHeader ">
       <div className="grid-container width-full clearfix position-relative">
         <div className="grid-row">
           <div className="grid-col-9">
-            <h3
-              className="font-body-lg margin-y-0"
-              data-testid="facility-name-header"
-            >
-              {facilityMainName}
-            </h3>
-            <h3
-              className="facility-header-text-cutoff margin-y-0"
-              title={facilityAdditionalName}
-            >
-              {facilityAdditionalName}
-            </h3>
-            <p className="text-bold font-body-2xs margin-top-0">
-              {createAuditMessage()}
-            </p>
+            <HeaderInfoFacility
+              checkedOutConfigs={checkedOutConfigs}
+              facility={facility}
+              selectedConfig={selectedConfig}
+              user={user}
+            />
           </div>
 
           <div className="display-flex grid-col-3 flex-align-start flex-justify-end">
@@ -372,58 +252,16 @@ export const QACertEventHeaderInfo = ({
         </div>
 
         <div className="grid-row">
-          {user && (
-            <>
-              {checkedOutByUser ? (
-                <Button
-                  type="button"
-                  autoFocus
-                  outline={false}
-                  tabIndex="0"
-                  aria-label={`Check back in the configuration `}
-                  onClick={() => checkoutStateHandler(false)}
-                  id="checkInBTN"
-                  epa-testid="checkInBTN"
-                >
-                  <LockOpenSharp /> {"Check Back In"}
-                </Button>
-              ) : !lockedFacility &&
-                !userHasCheckout &&
-                selectedConfig.active &&
-                checkedOutConfigs
-                  .map((location) => location["monPlanId"])
-                  .indexOf(selectedConfig.id) === -1 ? (
-                <Button
-                  type="button"
-                  autoFocus
-                  outline={true}
-                  tabIndex="0"
-                  aria-label={`Check out the configuration`}
-                  onClick={() => checkoutStateHandler(true)}
-                  id="checkOutBTN"
-                  epa-testid="checkOutBTN"
-                >
-                  <CreateOutlined color="primary" /> {"Check Out"}
-                </Button>
-              ) : null}
-              {/***  Un-comment this block once the button-click behavior is implemented ***
-                isCheckedOut && (
-              <Button autoFocus type="button" outline={true}>Revert to Official Record</Button>
-              )
-              */}
-            </>
-          )}
+          <HeaderInfoCheckoutButton
+            checkedOutConfigs={checkedOutConfigs}
+            selectedConfig={selectedConfig}
+            user={user}
+          />
         </div>
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
-            <DropdownSelection
-              caption="Locations"
-              orisCode={orisCode}
-              options={locations}
-              viewKey="name"
-              selectKey="id"
-              initialSelection={locationSelect ? locationSelect[0] : null}
-              selectionHandler={setLocationSelect}
+            <HeaderInfoLocationSelect
+              selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_EVENT_STORE_NAME}
             />
           </div>
@@ -436,7 +274,6 @@ export const QACertEventHeaderInfo = ({
               viewKey="name"
               selectKey="name"
               initialSelection={sectionSelect ? sectionSelect[0] : null}
-              orisCode={orisCode}
               workspaceSection={QA_CERT_EVENT_STORE_NAME}
             />
           </div>{" "}
@@ -459,19 +296,17 @@ export const QACertEventHeaderInfo = ({
             show={showSelectionTypeImportModal}
             close={closeImportModalHandler}
             showCancel={true}
-            showSave={true}
             title={importTestTitle}
             mainBTN={"Continue"}
             disablePortBtn={disablePortBtn}
             port={() => {
               openModalType(importTypeSelection);
             }}
-            children={
-              <QAImportModalSelect
-                setImportTypeSelection={setImportTypeSelection}
-              />
-            }
-          />
+          >
+            <QAImportModalSelect
+              setImportTypeSelection={setImportTypeSelection}
+            />
+          </UploadModal>
         </div>
       ) : null}
       {/* // file data */}
@@ -491,18 +326,16 @@ export const QACertEventHeaderInfo = ({
             hasFormatError={hasFormatError}
             hasInvalidJsonError={hasInvalidJsonError}
             label={"Upload QA JSON File"}
-            children={
-              <ImportModal
-                setDisablePortBtn={setDisablePortBtn}
-                disablePortBtn={disablePortBtn}
-                setFileName={setFileName}
-                setHasFormatError={setHasFormatError}
-                setHasInvalidJsonError={setHasInvalidJsonError}
-                setImportedFile={setImportedFile}
-                workspaceSection={QA_CERT_EVENT_STORE_NAME}
-              />
-            }
-          />
+          >
+            <ImportModal
+              setDisablePortBtn={setDisablePortBtn}
+              setFileName={setFileName}
+              setHasFormatError={setHasFormatError}
+              setHasInvalidJsonError={setHasInvalidJsonError}
+              setImportedFile={setImportedFile}
+              workspaceSection={QA_CERT_EVENT_STORE_NAME}
+            />
+          </UploadModal>
         </div>
       ) : null}
       {/* while uploading, just shows preloader spinner  */}
@@ -510,16 +343,11 @@ export const QACertEventHeaderInfo = ({
         <UploadModal
           width={"30%"}
           left={"35%"}
-          setFinishedLoading={setFinishedLoading}
-          setShowImportModal={setShowImportModal}
-          setIsLoading={setIsLoading}
-          timer={true}
-          children={<Preloader />}
           preloader
           importedFileErrorMsgs={importedFileErrorMsgs}
-          setImportedFileErrorMsgs={setImportedFileErrorMsgs}
-          fileName={fileName}
-        />
+        >
+          <Preloader />
+        </UploadModal>
       ) : (
         ""
       )}
@@ -529,24 +357,20 @@ export const QACertEventHeaderInfo = ({
           show={showImportModal}
           close={closeImportModalHandler}
           showCancel={false}
-          showSave={true}
-          exitBtn={"Ok"}
           complete={true}
           importedFileErrorMsgs={importedFileErrorMsgs}
           successMsg={
             "QA Certification Events, Test Extension & Exemption data has been Successfully Imported."
           }
           setUpdateRelatedTables={setUpdateRelatedTables}
-          children={
-            <ImportModal
-              setDisablePortBtn={setDisablePortBtn}
-              disablePortBtn={disablePortBtn}
-              complete={true}
-              fileName={fileName}
-              importedFileErrorMsgs={importedFileErrorMsgs}
-            />
-          }
-        />
+        >
+          <ImportModal
+            setDisablePortBtn={setDisablePortBtn}
+            complete={true}
+            fileName={fileName}
+            importedFileErrorMsgs={importedFileErrorMsgs}
+          />
+        </UploadModal>
       ) : (
         ""
       )}
@@ -558,25 +382,27 @@ export const QACertEventHeaderInfo = ({
           exitBtn={"Import"}
           title="Import Historical QA Cert Event, Extension & Exemption Data"
           disableExitBtn={disablePortBtn}
-          save={() => {
-            importHistoricalData();
-          }}
-          children={
-            <QAImportHistoricalDataPreview
-              locations={locations}
-              workspaceSection={{ QA_CERT_EVENT_STORE_NAME }}
-              setSelectedHistoricalData={setSelectedHistoricalData}
-              setFileName={setFileName}
-              setDisablePortBtn={setDisablePortBtn}
-              orisCode={orisCode}
-              showTestSummaryTable={false}
-              setJsonSchemaVersion={setJsonSchemaVersion}
-            />
-          }
-        />
+          save={() => importHistoricalData()}
+        >
+          <QAImportHistoricalDataPreview
+            locations={locations}
+            setSelectedHistoricalData={setSelectedHistoricalData}
+            setFileName={setFileName}
+            setDisablePortBtn={setDisablePortBtn}
+            orisCode={orisCode}
+            showTestSummaryTable={false}
+            setJsonSchemaVersion={setJsonSchemaVersion}
+          />
+        </Modal>
       )}
     </div>
   );
 };
 
-export default QACertEventHeaderInfo;
+export const mapStateToProps = (state) => {
+  return {
+    checkedOutConfigs: state.checkedOutLocations,
+  };
+};
+
+export default connect(mapStateToProps)(QACertEventHeaderInfo);

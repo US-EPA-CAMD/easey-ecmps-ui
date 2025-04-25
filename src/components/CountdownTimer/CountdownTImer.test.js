@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { CountdownTimer, CountdownTimerRender } from "./CountdownTimer";
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom';
 describe("CountdownTimer", () => {
   it("renders the countdown timer with the correct duration and message", () => {
     const duration = 60;

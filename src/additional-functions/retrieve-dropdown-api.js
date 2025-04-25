@@ -1,3 +1,5 @@
+import log from "loglevel";
+
 import * as dmApi from "../utils/api/dataManagementApi";
 
 export const dataYearOptions = async () => {
@@ -12,11 +14,10 @@ export const dataYearOptions = async () => {
   return availableYears;
 };
 
-export const UseRetrieveDropdownApi = async (
+export const retrieveDropdowns = async (
   dropDownFields,
   mats = false,
   equipmentControl = false,
-  selectedTestCode = false
 ) => {
   let totalOptions = {};
 
@@ -42,7 +43,7 @@ export const UseRetrieveDropdownApi = async (
       case "parameterCode":
         if (mats) {
           await dmApi.getAllMatsParameterCodes().then((response) => {
-            options = response.data.map((option) => {
+            options = response.data?.items?.map((option) => {
               return {
                 code: option["matsMethodParameterCode"],
                 name: option["matsMethodParameterDescription"],
@@ -51,12 +52,12 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, "supplementalMATSParameterCode");
           })
-          .catch(error => console.log('getAllMatsParameterCodes failed', error));
+          .catch(error => log.log('getAllMatsParameterCodes failed', error));
         } else if (equipmentControl) {
           await dmApi
             .getAllControlEquipmentParameterCodes()
             .then((response) => {
-              options = response.data.map((option) => {
+              options = response.data?.items?.map((option) => {
                 return {
                   code: option["controlEquipParamCode"],
                   name: option["controlEquipParamDescription"],
@@ -65,10 +66,10 @@ export const UseRetrieveDropdownApi = async (
 
               setDefaultOptions(options, "parameterCode");
             })
-            .catch(error => console.log('getAllControlEquipmentParameterCodes failed', error));
+            .catch(error => log.log('getAllControlEquipmentParameterCodes failed', error));
         } else {
           await dmApi.getAllParameterCodes().then((response) => {
-            options = response.data.map((option) => {
+            options = response.data?.items?.map((option) => {
               return {
                 code: option["parameterCode"],
                 name: option["parameterDescription"],
@@ -77,14 +78,14 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, fieldName);
           })
-          .catch(error => console.log('getAllParameterCodes failed', error));
+          .catch(error => log.log('getAllParameterCodes failed', error));
         }
         break;
 
       case "monitoringMethodCode":
         if (mats) {
           await dmApi.getAllMatsMethodCodes().then((response) => {
-            options = response.data.map((option) => {
+            options = response.data?.items?.map((option) => {
               return {
                 code: option["matsMethodCode"],
                 name: option["matsMethodDescription"],
@@ -93,10 +94,10 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, "supplementalMATSMonitoringMethodCode");
           })
-          .catch(error => console.log('getAllMatsMethodCodes failed', error));
+          .catch(error => log.log('getAllMatsMethodCodes failed', error));
         } else {
           await dmApi.getAllMethodCodes().then((response) => {
-            options = response.data.map((option) => {
+            options = response.data?.items?.map((option) => {
               return {
                 code: option["methodCode"],
                 name: option["methodDescription"],
@@ -105,12 +106,12 @@ export const UseRetrieveDropdownApi = async (
 
             setDefaultOptions(options, fieldName);
           })
-          .catch(error => console.log('getAllMethodCodes failed', error));
+          .catch(error => log.log('getAllMethodCodes failed', error));
         }
         break;
       case "substituteDataCode":
         await dmApi.getAllSubstituteDataCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["substituteDataCode"],
               name: option["substituteDataDescription"],
@@ -119,12 +120,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSubstituteDataCodes failed', error));
+        .catch(error => log.log('getAllSubstituteDataCodes failed', error));
         break;
 
       case "bypassApproachCode":
         await dmApi.getAllBypassApproachCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["bypassApproachCode"],
               name: option["bypassApproachDescription"],
@@ -133,12 +134,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllBypassApproachCodes failed', error));
+        .catch(error => log.log('getAllBypassApproachCodes failed', error));
         break;
       //Analyzer Range
       case "analyzerRangeCode":
         await dmApi.getAllRangeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["analyzerRangeCode"],
               name: option["analyzerRangeDescription"],
@@ -147,12 +148,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllRangeCodes failed', error));
+        .catch(error => log.log('getAllRangeCodes failed', error));
         break;
       // System Fuel Flows
       case "maximumFuelFlowRateSourceCode":
         await dmApi.getAllMaxRateSourceCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["maxRateSourceCode"],
               name: option["maxRateSourceDescription"],
@@ -161,7 +162,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllMaxRateSourceCodes failed', error));
+        .catch(error => log.log('getAllMaxRateSourceCodes failed', error));
         break;
       case "defaultUnitsOfMeasureCode":
       case "spanUnitsOfMeasureCode":
@@ -169,7 +170,7 @@ export const UseRetrieveDropdownApi = async (
       case "systemFuelFlowUnitsOfMeasureCode":
       case "unitsOfStandard":
         await dmApi.getAllUnitsOfMeasureCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["unitOfMeasureCode"],
               name: option["unitOfMeasureDescription"],
@@ -178,12 +179,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllUnitsOfMeasureCodes failed', error));
+        .catch(error => log.log('getAllUnitsOfMeasureCodes failed', error));
         break;
 
       case "fuelType":
         await dmApi.getAllFuelTypes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["fuelTypeCode"],
               name: option["fuelTypeDescription"],
@@ -192,12 +193,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, "fuelCode");
         })
-        .catch(error => console.log('getAllFuelTypes failed', error));
+        .catch(error => log.log('getAllFuelTypes failed', error));
         break;
 
       case "fuelCode":
         await dmApi.getAllFuelCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["fuelCode"],
               name: option["fuelDescription"],
@@ -206,11 +207,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFuelCodes failed', error));
+        .catch(error => log.log('getAllFuelCodes failed', error));
         break;
       case "indicatorCode":
         await dmApi.getAllFuelIndicatorCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["fuelIndicatorCode"],
               name: option["fuelIndicatorDescription"],
@@ -219,12 +220,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFuelIndicatorCodes failed', error));
+        .catch(error => log.log('getAllFuelIndicatorCodes failed', error));
         break;
         ///
       case "demGCV":
         await dmApi.getAllDemonstrationMethodCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["demonstrationMethodCode"],
               name: option["demonstrationMethodDescription"],
@@ -233,12 +234,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
+        .catch(error => log.log('getAllDemonstrationMethodCodes failed', error));
         break;
         ///  same as above?
       case "demSO2":
         await dmApi.getAllDemonstrationMethodCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response.data?.items?.map((option) => {
             return {
               code: option["demonstrationMethodCode"],
               name: option["demonstrationMethodDescription"],
@@ -247,11 +248,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDemonstrationMethodCodes failed', error));
+        .catch(error => log.log('getAllDemonstrationMethodCodes failed', error));
         break;
       case "systemTypeCode":
         await dmApi.getAllSystemTypeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["systemTypeCode"],
               name: option["systemTypeDescription"],
@@ -260,11 +261,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSystemTypeCodes failed', error));
+        .catch(error => log.log('getAllSystemTypeCodes failed', error));
         break;
       case "systemDesignationCode":
         await dmApi.getAllSystemDesignationCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["systemDesignationCode"],
               name: option["systemDesignationDescription"],
@@ -273,12 +274,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSystemDesignationCodes failed', error));
+        .catch(error => log.log('getAllSystemDesignationCodes failed', error));
         break;
 
       case "sampleAcquisitionMethodCode":
         await dmApi.getAllAcquisitionMethodCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["acquisitionMethodCode"],
               name: option["acquisitionMethodDescription"],
@@ -287,11 +288,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllAcquisitionMethodCodes failed', error));
+        .catch(error => log.log('getAllAcquisitionMethodCodes failed', error));
         break;
       case "componentTypeCode":
         await dmApi.getAllComponentTypeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["componentTypeCode"],
               name: option["componentTypeDescription"],
@@ -300,11 +301,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllComponentTypeCodes failed', error));
+        .catch(error => log.log('getAllComponentTypeCodes failed', error));
         break;
       case "basisCode":
         await dmApi.getAllBasisCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["basisCode"],
               name: option["basisDescription"],
@@ -313,13 +314,13 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllBasisCodes failed', error));
+        .catch(error => log.log('getAllBasisCodes failed', error));
         break;
       // for spans
 
       case "spanScaleCode":
         await dmApi.getAllSpanScaleCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["spanScaleCode"],
               name: option["spanScaleDescription"],
@@ -328,11 +329,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSpanScaleCodes failed', error));
+        .catch(error => log.log('getAllSpanScaleCodes failed', error));
         break;
       case "spanMethodCode":
         await dmApi.getAllSpanMethodCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["spanMethodCode"],
               name: option["spanMethodDescription"],
@@ -341,13 +342,13 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllSpanMethodCodes failed', error));
+        .catch(error => log.log('getAllSpanMethodCodes failed', error));
         break;
       case "normalLevelCode":
       case "secondLevelCode":
       case "operatingLevelCode":
         await dmApi.getAllOperatingLevelCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["opLevelCode"],
               name: option["opLevelDescription"],
@@ -356,14 +357,14 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllOperatingLevelCodes failed', error));
+        .catch(error => log.log('getAllOperatingLevelCodes failed', error));
         break;
 
       // for defaults
 
       case "operatingConditionCode":
         await dmApi.getAllOperatingConditionCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["operatingConditionCode"],
               name: option["operatingConditionDescription"],
@@ -372,11 +373,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllOperatingConditionCodes failed', error));
+        .catch(error => log.log('getAllOperatingConditionCodes failed', error));
         break;
       case "defaultSourceCode":
         await dmApi.getAllDefaultSourceCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["defaultSourceCode"],
               name: option["defaultSourceDescription"],
@@ -385,11 +386,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDefaultSourceCodes failed', error));
+        .catch(error => log.log('getAllDefaultSourceCodes failed', error));
         break;
       case "defaultPurposeCode":
         await dmApi.getAllDefaultPurposeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["defaultPurposeCode"],
               name: option["defaultPurposeDescription"],
@@ -398,11 +399,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllDefaultPurposeCodes failed', error));
+        .catch(error => log.log('getAllDefaultPurposeCodes failed', error));
         break;
       case "formulaCode":
         await dmApi.getAllFormulaCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["equationCode"],
               name: option["equationDescription"],
@@ -411,12 +412,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllFormulaCodes failed', error));
+        .catch(error => log.log('getAllFormulaCodes failed', error));
         break;
 
       case "wafMethodCode":
         await dmApi.getAllRectangularDuctsCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["wafMethodCode"],
               name: option["wafMethodDescription"],
@@ -425,11 +426,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllRectangularDuctsCodes failed', error));
+        .catch(error => log.log('getAllRectangularDuctsCodes failed', error));
         break;
       case "controlCode":
         await dmApi.getAllControlTechnologies().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["controlCode"],
               name: option["controlDescription"],
@@ -438,11 +439,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllControlTechnologies failed', error));
+        .catch(error => log.log('getAllControlTechnologies failed', error));
         break;
       case "qualificationTypeCode":
         await dmApi.getAllQualificationTypeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["qualificationTypeCode"],
               name: option["qualificationTypeDescription"],
@@ -452,7 +453,7 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationTypeCodes failed', error));
         break;
       case "qualificationYear":
       case "yr1QualificationDataYear":
@@ -475,7 +476,7 @@ export const UseRetrieveDropdownApi = async (
       case "yr2QualificationDataTypeCode":
       case "yr3QualificationDataTypeCode":
         await dmApi.getAllQualificationDataTypeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["qualificationDataTypeCode"],
               name: option["qualificationDataTypeDescription"],
@@ -484,11 +485,11 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationDataTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationDataTypeCodes failed', error));
         break;
       case "qualificationTestType":
         await dmApi.getAllQualificationLEETestTypeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["qualifiationLEETestTypeCode"],
               name: option["qualifiationLEETestTypeDescription"],
@@ -497,12 +498,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllQualificationLEETestTypeCodes failed', error));
+        .catch(error => log.log('getAllQualificationLEETestTypeCodes failed', error));
         break;
 
       case "materialCode":
         await dmApi.getAllMaterialCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["materialCode"],
               name: option["materialDescription"],
@@ -511,12 +512,12 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllMaterialCodes failed', error));
+        .catch(error => log.log('getAllMaterialCodes failed', error));
         break;
 
       case "shapeCode":
         await dmApi.getAllShapeCodes().then((response) => {
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               code: option["shapeCode"],
               name: option["shapeDescription"],
@@ -525,14 +526,14 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(options, fieldName);
         })
-        .catch(error => console.log('getAllShapeCodes failed', error));
+        .catch(error => log.log('getAllShapeCodes failed', error));
         break;
 
       case "prefilteredMatsMethods":
         let noDupesMatsMethodCodes = [];
         // returns all the parameter codes
         await dmApi.getPrefilteredMatsMethods().then((response) => {
-          const viewData = response.data;
+          const viewData = response.data?.items;
 
           // Get parameter codes
           noDupesMatsMethodCodes = viewData.map((code) => {
@@ -545,20 +546,20 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesMatsMethodCodes,
             "supplementalMATSParameterCode",
-            response.data
+            response.data?.items
           );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredMatsMethods failed', error));
+        .catch(error => log.log('getPrefilteredMatsMethods failed', error));
         break;
 
       case "prefilteredMethods":
         let noDupesMethodCodes = [];
         // returns all the parameter codes
         await dmApi.getPrefilteredMethods().then((response) => {
-          const viewData = response.data;
+          const viewData = response.data?.items;
 
           // Get parameter codes
           noDupesMethodCodes = viewData.map((code) => {
@@ -571,20 +572,20 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesMethodCodes,
             "parameterCode",
-            response.data
+            response.data?.items
           );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredMethods failed', error));
+        .catch(error => log.log('getPrefilteredMethods failed', error));
         break;
 
       case "prefilteredFormulas":
         let noDupesFormulaCodes = [];
         // returns all the parameter codes
         await dmApi.getPrefilteredFormulas().then((response) => {
-          const viewData = response.data;
+          const viewData = response.data?.items;
 
           // Get parameter codes
           noDupesFormulaCodes = viewData.map((code) => {
@@ -597,19 +598,19 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesFormulaCodes,
             "parameterCode",
-            response.data
+            response.data?.items
           );
 
           // Afterwards, we should have an array that has all the possible formula codes for each parameter code
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredFormulas failed', error));
+        .catch(error => log.log('getPrefilteredFormulas failed', error));
         break;
 
       case "prefilteredSpans":
         let noDupesSpanCodes = [];
         await dmApi.getPrefilteredSpans().then((response) => {
-          noDupesSpanCodes = response.data.map((code) => {
+          noDupesSpanCodes = response?.data?.items?.map((code) => {
             return code["componentTypeCode"];
           });
 
@@ -618,17 +619,17 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesSpanCodes,
             "componentTypeCode",
-            response.data
+            response.data?.items
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSpans failed', error));
+        .catch(error => log.log('getPrefilteredSpans failed', error));
         break;
       case "prefilteredDefaults":
         let noDupesDefaultCodes = [];
         await dmApi.getPrefilteredDefaults().then((response) => {
-          noDupesDefaultCodes = response.data.map((code) => {
+          noDupesDefaultCodes = response?.data?.items?.map((code) => {
             return code["parameterCode"];
           });
 
@@ -637,32 +638,32 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesDefaultCodes,
             "parameterCode",
-            response.data
+            response.data?.items
           );
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredDefaults failed', error));
+        .catch(error => log.log('getPrefilteredDefaults failed', error));
         break;
 
       case "prefilteredLoads":
         await dmApi.getPrefilteredLoads().then((response) => {
-          setStaticDropdown(response.data, fieldName);
+          setStaticDropdown(response.data?.items, fieldName);
         })
-        .catch(error => console.log('getPrefilteredLoads failed', error));
+        .catch(error => log.log('getPrefilteredLoads failed', error));
         break;
       case "prefilteredUnitFuels":
         await dmApi.getPrefilteredUnitFuels().then((response) => {
-          setStaticDropdown(response.data, fieldName);
+          setStaticDropdown(response.data?.items, fieldName);
         })
-        .catch(error => console.log('getPrefilteredUnitFuels failed', error));
+        .catch(error => log.log('getPrefilteredUnitFuels failed', error));
         break;
       case "prefilteredUnitControls":
         let noDupesFormCodesControls = [];
         await dmApi.getPrefilteredUnitControls().then((response) => {
-          noDupesFormCodesControls = response.data.map((code) => {
+          noDupesFormCodesControls = response?.data?.items?.map((code) => {
             return code["controlEquipParamCode"];
           });
-          options = response.data.map((option) => {
+          options = response?.data?.items?.map((option) => {
             return {
               parameterCode: option["controlEquipParamCode"],
               controlCode: option["controlCode"],
@@ -677,25 +678,25 @@ export const UseRetrieveDropdownApi = async (
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredUnitControls failed', error));
+        .catch(error => log.log('getPrefilteredUnitControls failed', error));
         break;
       case "prefilteredLEEQualifications":
         await dmApi.prefilteredLEEQualifications().then((response) => {
-          setStaticDropdown(response.data, fieldName);
+          setStaticDropdown(response.data?.items, fieldName);
         })
-        .catch(error => console.log('prefilteredLEEQualifications failed', error));
+        .catch(error => log.log('prefilteredLEEQualifications failed', error));
         break;
       case "prefilteredSystemFuelFlows":
         await dmApi.getPrefilteredSystemFuelFlows().then((response) => {
-          setStaticDropdown(response.data, fieldName);
+          setStaticDropdown(response.data?.items, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSystemFuelFlows failed', error));
+        .catch(error => log.log('getPrefilteredSystemFuelFlows failed', error));
         break;
 
       case "prefilteredSystemsComponents":
         let noDupesSysComps = [];
         await dmApi.getPrefilteredSystemComponents().then((response) => {
-          noDupesSysComps = response.data.map((code) => {
+          noDupesSysComps = response?.data?.items?.map((code) => {
             return code["componentTypeCode"];
           });
 
@@ -704,13 +705,24 @@ export const UseRetrieveDropdownApi = async (
           const prefilteredMdmOptions = organizePrefilterMDMData(
             noDupesSysComps,
             "componentTypeCode",
-            response.data
+            response.data?.items
           );
 
           setDefaultOptions(prefilteredMdmOptions, fieldName);
         })
-        .catch(error => console.log('getPrefilteredSystemComponents failed', error));
+        .catch(error => log.log('getPrefilteredSystemComponents failed', error));
         break;
+      case "matsReportTypeCodes": {
+        const res = await dmApi.getAllMatsReportTypeCodes();
+        const reportTypeCodes = res.data?.items?.map((option) => ({
+          code: option.matsReportTypeCode,
+          name: option.matsReportTypeDescription,
+        }));
+        const sortedReportTypeCodes = reportTypeCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedReportTypeCodes, fieldName);
+        break;
+      }
       default:
         break;
     }

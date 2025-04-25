@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import log from "loglevel";
 
 import config from "./config";
 import App from "./components/App/App";
@@ -14,7 +15,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { logServerError } from "./utils/api/apiUtils";
 
 import "@trussworks/react-uswds/lib/index.css";
-import "./styles/index.scss";
 
 const store = configureStore();
 document.title = config.app.title;
@@ -31,13 +31,13 @@ root.render(
             <ErrorFallbackModal error={error} resetErrorBoundary={resetErrorBoundary} errorId={errorBoundaryId} />
           )}
           onReset={() => {
-            console.info("reloading the page...");
+            log.info("reloading the page...");
             window.location.reload();
           }}
           onError={(error, info) =>{
-            console.debug("error id", errorBoundaryId);
-            console.debug("error message", error.message);
-            console.debug("error componentStack", info.componentStack);
+            log.debug("error id", errorBoundaryId);
+            log.debug("error message", error.message);
+            log.debug("error componentStack", info.componentStack);
             logServerError(errorBoundaryId, error.message, info.componentStack);
           }}
         >
