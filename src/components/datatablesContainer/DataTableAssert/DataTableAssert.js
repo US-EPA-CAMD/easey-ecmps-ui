@@ -126,7 +126,7 @@ export const DataTableAssert = ({
   useEffect(() => {
     if (
       updateTable ||
-      dataPulled.length <= 0 ||
+      dataPulled?.length <= 0 ||
       locationSelectValue ||
       revertedState ||
       updateRelatedTables

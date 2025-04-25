@@ -187,6 +187,10 @@ export const systemAdmin = [
         name: "Emission Submission Access",
         url: "/admin/em-submission-access",
       },
+      {
+        name: "Submission Report",
+        url: "/admin/submissions-report",
+      },
     ],
   },
 ];
