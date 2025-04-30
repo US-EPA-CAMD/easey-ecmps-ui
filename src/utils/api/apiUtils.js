@@ -27,7 +27,7 @@ export function handleError(error) {
 }
 
 export function handleImportError(error, monitoringPlan = false) {
-  return parseErrorMessage(error, monitoringPlan = false);
+  return parseErrorMessage(error, monitoringPlan);
 }
 
 //Clearer field names for user in UI
