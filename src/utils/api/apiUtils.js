@@ -26,8 +26,8 @@ export function handleError(error) {
   }
 }
 
-export function handleImportError(error) {
-  return parseErrorMessage(error);
+export function handleImportError(error, monitoringPlan = false) {
+  return parseErrorMessage(error, monitoringPlan = false);
 }
 
 //Clearer field names for user in UI
@@ -58,7 +58,7 @@ function replaceStringValues(inputString) {
   return outputString;
 }
 
-export function parseErrorMessage(error) {
+export function parseErrorMessage(error ,  monitoringPlansApi = false) {
   let errorMessage = "";
 
   if (error.response) {
@@ -69,7 +69,10 @@ export function parseErrorMessage(error) {
       status: error.response.status,
       headers: error.response.headers,
     });
+    if(monitoringPlansApi)
     errorMessage = replaceStringValues(error?.response?.data?.message)?.replaceAll(null, ' ');
+    else
+    errorMessage = error.response.data?.message;
   } else if (error.request) {
     // client never received a response, or request never left
     log.error({ error: error.request });
