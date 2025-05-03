@@ -440,7 +440,7 @@ export const formatErrorResponse = (errorResp) => {
   } catch (err) {
     // Do nothing.
   }
-  return Array.isArray(errorMsgs) ? errorMsgs : [JSON.stringify(errorMsgs)];
+  return Array.isArray(errorMsgs) ? errorMsgs : errorMsgs?.split("\n").filter(Boolean) ?? [];
 };
 
 // Returns the amount of seconds until the users front-end session expires

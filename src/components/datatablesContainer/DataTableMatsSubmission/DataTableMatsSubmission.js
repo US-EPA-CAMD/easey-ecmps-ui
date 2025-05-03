@@ -41,7 +41,7 @@ const DataTableMatsSubmission = ({
   const filteredData = data
     .filter((row) => !selectedLocation || row.locationId === selectedLocation)
     .filter(
-      (row) => !selectedReportType || row.reportTypeCode === selectedReportType
+      (row) => !selectedReportType || row.reportTypeCode === selectedReportType,
     );
 
   const columns = [
@@ -78,29 +78,37 @@ const DataTableMatsSubmission = ({
       name: "Facility Name",
       selector: (row) => selectedConfig?.facilityName,
     },
-    { name: "FRS ID", selector: (row) => selectedConfig?.facilityRegistrySystemId },
-    { name: "Location", selector: (row) => selectedConfig?.monitoringLocationData.find((loc) => loc.id === row.locationId)?.name },
+    {
+      name: "FRS ID",
+      selector: (row) => selectedConfig?.facilityRegistrySystemId,
+    },
+    {
+      name: "Location",
+      selector: (row) =>
+        selectedConfig?.monitoringLocationData.find(
+          (loc) => loc.id === row.locationId,
+        )?.name,
+    },
     {
       name: "Averaging Group",
-      selector: (row) => row.averagingGroupCode
+      selector: (row) => row.averagingGroupCode,
     },
     { name: "Report Type", selector: (row) => row.reportTypeCode },
     {
       name: "Pollutants",
-      selector: (row) =>
-        row.pollutantCodes.join(", "),
+      selector: (row) => row.pollutantCodes.join(", "),
     },
     {
       name: "Test Methods",
-      selector: (row) =>
-        row.testMethodCodes.join(", "),
+      selector: (row) => row.testMethodCodes.join(", "),
     },
     { name: "Test Number", selector: (row) => row.testNumber },
     { name: "Test Date", selector: (row) => formatDate(row.testDate) },
     { name: "Test Comment", selector: (row) => row.testComment },
     {
       name: "Year / Quarter",
-      selector: (row) => `${row.year} Q${row.quarter}`,
+      selector: (row) =>
+        row.year && row.quarter ? `${row.year} Q${row.quarter}` : null,
     },
     { name: "Status", selector: (row) => row.statusCode },
   ].map((column) => ({

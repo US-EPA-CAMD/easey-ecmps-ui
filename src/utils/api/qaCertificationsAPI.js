@@ -166,6 +166,13 @@ export const createMatsSubmission = async (
     });
 };
 
+export const deleteMatsFile = async (fileName, locationId) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/file/${fileName}`;
+  return secureAxios({ url, method: "DELETE" })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const deleteMatsSubmission = async (submissionId, locationId) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/${submissionId}`;
   return secureAxios({ url, method: "DELETE" })
@@ -176,6 +183,13 @@ export const deleteMatsSubmission = async (submissionId, locationId) => {
 export const getMatsSubmissions = async (monPlanId) => {
   const url = `${config.services.qaCertification.uri}/workspace/mats-data-submission?monPlanIds=${monPlanId}`;
   return secureAxios({ url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
+export const uploadMatsFile = async (formData, locationId) => {
+  const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/file`;
+  return secureAxios({ url, method: "POST", data: formData })
     .then(handleResponse)
     .catch(handleError);
 };

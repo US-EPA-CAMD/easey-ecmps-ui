@@ -21,12 +21,15 @@ import {
 import { parseErrorMessage } from "../../utils/api/apiUtils";
 import {
   createMatsSubmission,
+  deleteMatsFile,
   deleteMatsSubmission,
+  uploadMatsFile,
 } from "../../utils/api/qaCertificationsAPI";
 import { dataStatus } from "../../utils/constants/dataStatus";
 import { matsModule } from "../../utils/constants/moduleTitles";
 import { formatErrorResponse } from "../../utils/functions";
 import FileInput from "../FileInput/FileInput";
+import LoadingModal from "../LoadingModal/LoadingModal";
 import MatsCodeSelect from "../MatsCodeSelect/MatsCodeSelect";
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import DatePicker from "./DatePicker";
@@ -91,17 +94,11 @@ const reportTypeInputMappings = [
   },
 ];
 
-function createSubmissionPayload(metadata, files) {
-  const formData = new FormData();
-  formData.append("metadata", JSON.stringify(metadata));
-  if (files.ertFile)
-    formData.append("ertFile", files.ertFile, files.ertFile.name);
-  if (files.payloadFile)
-    formData.append("payloadFile", files.payloadFile, files.payloadFile.name);
-  files.supportingFiles.forEach((file) => {
-    formData.append("supportingFiles", file, file.name);
-  });
-  return formData;
+function createSubmissionPayload(metadata, fileNames) {
+  return {
+    metadata,
+    fileNames,
+  };
 }
 
 const MatsSubmission = ({
@@ -126,11 +123,14 @@ const MatsSubmission = ({
 
   /* INTERNAL STATE */
 
-  const [files, setFiles] = useState({
-    ertFile: null,
-    payloadFile: null,
+  const [fileNames, setFileNames] = useState({
+    ertFile: "",
+    payloadFile: "",
     supportingFiles: [],
   });
+  const [locationId, setLocationId] = useState(
+    originalSubmission?.locationId ?? "",
+  );
   const [metadataPayload, setMetadataPayload] = useState({});
   const [reportType, setReportType] = useState(
     originalSubmission?.reportTypeCode ?? "",
@@ -192,7 +192,7 @@ const MatsSubmission = ({
     setSubmissionInitStatus(dataStatus.PENDING);
     try {
       const res = await createMatsSubmission(
-        createSubmissionPayload(metadataPayload, files),
+        createSubmissionPayload(metadataPayload, fileNames),
         metadataPayload.locationId,
       );
       const { id, warnings } = res.data;
@@ -254,18 +254,34 @@ const MatsSubmission = ({
           setValue={setReportType}
           value={reportType}
         />
+        <LocationSelect
+          options={selectedConfig.monitoringLocationData}
+          setValue={setLocationId}
+          value={locationId}
+        />
         <hr className="margin-y-4" />
         <GridContainer>
           {reportType && (
             <>
               <MetadataInputs
+                location={locationId}
                 onUpdate={setMetadataPayload}
                 originalSubmission={originalSubmission}
                 reportType={reportType}
                 selectedConfig={selectedConfig}
               />
               <h3>File Input</h3>
-              <FileInputs onUpdate={setFiles} reportType={reportType} />
+              {locationId ? (
+                <FileInputs
+                  locationId={locationId}
+                  onUpdate={setFileNames}
+                  reportType={reportType}
+                />
+              ) : (
+                <Alert type="info" headingLevel="h4">
+                  Select a location to upload files.
+                </Alert>
+              )}
             </>
           )}
           <div className="display-flex flex-justify-end">
@@ -309,6 +325,7 @@ const MatsSubmission = ({
 };
 
 const MetadataInputs = ({
+  location,
   onUpdate = (_newMetadataPayload) => {},
   originalSubmission,
   selectedConfig,
@@ -316,9 +333,6 @@ const MetadataInputs = ({
 }) => {
   const [averagingGroup, setAveragingGroup] = useState(
     originalSubmission?.averagingGroupCode ?? "",
-  );
-  const [location, setLocation] = useState(
-    originalSubmission?.locationId ?? "",
   );
   const [pollutants, setPollutants] = useState(
     originalSubmission?.pollutantCodes ?? [],
@@ -394,7 +408,6 @@ const MetadataInputs = ({
       originalSubmissionId: originalSubmission?.id,
       facilityId: selectedConfig.facId,
       monitorPlanId: selectedConfig.id,
-      statusCode: "NEW",
     });
   }, [
     averagingGroup,
@@ -426,15 +439,6 @@ const MetadataInputs = ({
   return (
     <div className="margin-top-2">
       <Grid row gap>
-        {fieldIsInReportType("location") && (
-          <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
-            <LocationSelect
-              options={selectedConfig.monitoringLocationData}
-              setValue={setLocation}
-              value={location}
-            />
-          </Grid>
-        )}
         {fieldIsInReportType("averagingGroup") && (
           <Grid className="margin-bottom-2" tablet={{ col: 6 }}>
             <MatsCodeSelect
@@ -560,19 +564,50 @@ const FileInputRow = ({
   );
 };
 
-const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
+const FileInputs = ({
+  locationId,
+  onUpdate = (_newFiles) => {},
+  reportType,
+}) => {
+  const [uploadStatus, setUploadStatus] = useState(dataStatus.IDLE);
   const [pdfInputs, setPdfInputs] = useState([{ id: uniqueId() }]);
 
-  const [ertFile, setErtFile] = useState(null);
-  const [payloadFile, setPayloadFile] = useState(null);
-  const [supportingFiles, setSupportingFiles] = useState({});
+  const [ertFileName, setErtFileName] = useState("");
+  const [payloadFileName, setPayloadFileName] = useState("");
+  const [supportingFileNames, setSupportingFileNames] = useState({});
 
   const addPdfInput = () => {
     setPdfInputs((prev) => [...prev, { id: uniqueId() }]);
   };
 
+  const handleFileChange = async (file, prevFileName) => {
+    if (!locationId) throw new Error("Location ID is required");
+
+    setUploadStatus(dataStatus.PENDING);
+    try {
+      if (prevFileName) {
+        await deleteMatsFile(prevFileName, locationId).catch(log.error);
+      }
+
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+      await uploadMatsFile(formData, locationId);
+    } catch (err) {
+      log.error(err);
+      setUploadStatus(dataStatus.ERROR);
+    } finally {
+      setUploadStatus(dataStatus.IDLE);
+    }
+  };
+
+  const handleFileRemoval = async (fileName) => {
+    await handleFileChange(null, fileName);
+  };
+
   const removePdfInput = (id) => {
-    setSupportingFiles((prev) => {
+    setSupportingFileNames((prev) => {
       const newFiles = { ...prev };
       delete newFiles[id];
       return newFiles;
@@ -589,6 +624,7 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
   const fileIsInReportType = useCallback(
     (fileKey) => {
       if (!reportTypeMapping) return false;
+
       return reportTypeMapping.files.includes(fileKey);
     },
     [reportTypeMapping],
@@ -596,39 +632,67 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
 
   const includeIfInReportType = useCallback(
     (fileKey, item) => {
-      const emptyValue = Array.isArray(item) ? [] : null;
-      return fileIsInReportType(fileKey) ? item : emptyValue;
+      const emptyValue = Array.isArray(item) ? [] : "";
+      return fileIsInReportType(fileKey) ? item ?? emptyValue : emptyValue;
     },
     [fileIsInReportType],
   );
 
   useEffect(() => {
     onUpdate({
-      ertFile: includeIfInReportType("ERT", ertFile),
-      payloadFile: includeIfInReportType("PAYLOAD", payloadFile),
+      ertFile: includeIfInReportType("ERT", ertFileName),
+      payloadFile: includeIfInReportType("PAYLOAD", payloadFileName),
       supportingFiles: includeIfInReportType(
         "SUPPORTING",
-        Object.values(supportingFiles),
+        Object.values(supportingFileNames),
       ),
     });
-  }, [ertFile, includeIfInReportType, onUpdate, payloadFile, supportingFiles]);
+  }, [
+    ertFileName,
+    includeIfInReportType,
+    onUpdate,
+    payloadFileName,
+    supportingFileNames,
+  ]);
 
   return (
     <>
+      {uploadStatus === dataStatus.PENDING && (
+        <LoadingModal loading={true} type="Loading" />
+      )}
+      {uploadStatus === dataStatus.ERROR && (
+        <Alert type="error" headingLevel="h4">
+          An error occurred while uploading the file.
+        </Alert>
+      )}
       {fileIsInReportType("ERT") && (
         <FileInputRow
           label="ERT XML"
           accept=".xml"
-          onChange={(file) => setErtFile(file)}
-          onRemove={() => setErtFile(null)}
+          onChange={(file) => {
+            handleFileChange(file, ertFileName).then(() => {
+              setErtFileName(file?.name);
+            });
+          }}
+          onRemove={() => {
+            handleFileRemoval(ertFileName).then(() => setErtFileName(""));
+          }}
         />
       )}
       {fileIsInReportType("PAYLOAD") && (
         <FileInputRow
           label="Payload PDF, XML, or JSON"
           accept=".pdf,.xml,.json"
-          onChange={(file) => setPayloadFile(file)}
-          onRemove={() => setPayloadFile(null)}
+          onChange={(file) => {
+            handleFileChange(file, payloadFileName).then(() => {
+              setPayloadFileName(file?.name);
+            });
+          }}
+          onRemove={() => {
+            handleFileRemoval(payloadFileName).then(() => {
+              setPayloadFileName("");
+            });
+          }}
         />
       )}
       {fileIsInReportType("SUPPORTING") && (
@@ -640,9 +704,18 @@ const FileInputs = ({ onUpdate = (_newFiles) => {}, reportType }) => {
               key={id}
               label={`PDF ${i + 1}`}
               onChange={(file) => {
-                setSupportingFiles((prev) => ({ ...prev, [id]: file }));
+                handleFileChange(file, supportingFileNames[id]).then(() => {
+                  setSupportingFileNames((prev) => ({
+                    ...prev,
+                    [id]: file?.name,
+                  }));
+                });
               }}
-              onRemove={() => removePdfInput(id)}
+              onRemove={() => {
+                handleFileRemoval(supportingFileNames[id]).then(() => {
+                  removePdfInput(id);
+                });
+              }}
             />
           ))}
           <Button
