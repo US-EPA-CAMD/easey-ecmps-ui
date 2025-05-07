@@ -48,8 +48,11 @@ export const QAImportHistoricalDataPreview = ({
   const [tableData, setTableData] = useState(null);
   const [previewData, setPreviewData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [dataTableId, setDataTableId] = useState('');
+  const [rowsAriaLabelData, setRowsAriaLabelData] = useState(null);
 
   const selectedRows = useRef();
+  const userClicked = useRef(false);
 
   const fetchDataPreviewRecords = async () => {
     if (reportingPeriodObj && !previewData) {
@@ -76,9 +79,11 @@ export const QAImportHistoricalDataPreview = ({
             ? [TEST_SUMMARY_KEY]
             : [CERT_EVENT_KEY, TEST_EXT_EXE_KEY];
           for (const dataKey of dataKeys) {
-            const rowsAriaLabelData = response.data[dataKey].map((e) => e.id);
+            const rowsAriaLabelData = response.data[dataKey].map((e) => e.unitId ?? e.id);
+            setRowsAriaLabelData(rowsAriaLabelData)
             const dataTableId = `#import-${dataKey}`;
-            assignAriaLabelsToDataTable(dataTableId, rowsAriaLabelData);
+            setDataTableId(dataTableId)
+            userClicked.current = true;
           }
         }
       } catch (err) {
@@ -86,6 +91,15 @@ export const QAImportHistoricalDataPreview = ({
       }
     }
   };
+
+  useEffect(() => {
+    //Runs only when button is clicked
+    if (userClicked.current) {
+      setTimeout(() => {
+          assignAriaLabelsToDataTable(dataTableId, rowsAriaLabelData);
+          userClicked.current = false;
+      }, 500); // ensure the DOM is fully updated
+  }}, [tableData, previewData]); // Runs when tableData or previewData changes
 
   useEffect(() => {
     setDisablePortBtn(true);
