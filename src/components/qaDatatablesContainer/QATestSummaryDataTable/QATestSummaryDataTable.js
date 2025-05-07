@@ -149,13 +149,19 @@ const QATestSummaryDataTable = ({
         setLoading(true);
         getQATestSummary(locationSelectValue, testTypeCodes)
           .then((res) => {
-            if (res !== undefined && res.data.length > 0) {
-              finishedLoadingData(res.data);
-              setQATestSummary(res.data);
-              setShow(false);
-            } else {
-              finishedLoadingData([]);
-              setQATestSummary([]);
+            if(res !== undefined)
+            {
+              let items = res.data?.items;
+              if (items?.length > 0) {
+                finishedLoadingData(items);
+                setQATestSummary(items);
+                setShow(false);
+              }
+              else {
+
+                finishedLoadingData([]);
+                setQATestSummary([]);
+              }
             }
             setLoading(false);
           })
