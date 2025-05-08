@@ -13,7 +13,6 @@ import log from "loglevel";
 import { ComboBox } from "../../ComboBox/ComboBox";
 import Modal from "../../Modal/Modal";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
-import { getReportingPeriods } from "../../HeaderInfo/HeaderInfo";
 import { getSeverityCodes } from "../../../utils/api/mdmApi";
 import { defaultDropdownText } from "../ErrorSuppression";
 import { ErrorSuppressionFiltersContext } from "../context/error-suppression-context";
@@ -21,7 +20,11 @@ import {
   getUniqueCheckTypeDescription,
   getLocations,
 } from "../ErrorSuppressionFilters/ErrorSuppressionFilters";
-import { formatDate, getQuarter } from "../../../utils/functions";
+import {
+  formatDate,
+  getQuarter,
+  getReportingPeriods,
+} from "../../../utils/functions";
 import {
   convertYearQuarterToDateString,
   createMatchTypeDropdownLists,

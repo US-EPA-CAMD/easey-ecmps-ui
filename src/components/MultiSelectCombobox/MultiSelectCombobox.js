@@ -19,14 +19,15 @@ const getComboboxEnabledItems = (arr) => {
 export const DEBOUNCE_MILLISECONDS = 200;
 
 const MultiSelectCombobox = ({
+  className = "",
   items,
   label,
   entity,
   onChangeUpdate,
   searchBy,
-  hideInput,
-  styling,
-  autoFocus,
+  hideInput = false,
+  styling = { listbox: "", combobox: "" },
+  autoFocus = false,
   iconAlignRight = 1,
   favicon = true,
   disabled = false,
@@ -34,7 +35,7 @@ const MultiSelectCombobox = ({
   const [filter, setFilter] = useState("");
   const [_items, _setItems] = useState(items.filter((e) => e.enabled));
   const [data, setData] = useState(
-    JSON.parse(JSON.stringify(getComboboxEnabledItems(items)))
+    JSON.parse(JSON.stringify(getComboboxEnabledItems(items))),
   );
   const [showListBox, setShowListBox] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -50,7 +51,7 @@ const MultiSelectCombobox = ({
 
   const handleMultiSelectClick = (e) => {
     const multiSelectComboboxDiv = document.getElementById(
-      `multi-select-combobox-${entity}`
+      `multi-select-combobox-${entity}`,
     );
     if (multiSelectComboboxDiv && !multiSelectComboboxDiv.contains(e.target)) {
       setShowListBox(false);
@@ -63,11 +64,11 @@ const MultiSelectCombobox = ({
     if (value.length > 0) {
       if (searchBy === "contains") {
         filteredData = _items.filter((item) =>
-          item.label?.toString().toLowerCase().includes(lowercasedFilter)
+          item.label?.toString().toLowerCase().includes(lowercasedFilter),
         );
       } else if (searchBy === "beginsWith") {
         filteredData = _items.filter((item) =>
-          item.label?.toString().toLowerCase().startsWith(lowercasedFilter)
+          item.label?.toString().toLowerCase().startsWith(lowercasedFilter),
         );
       }
     }
@@ -81,14 +82,14 @@ const MultiSelectCombobox = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedOnSearchHandler = useMemo(
     () => debounce(onSearchHandler, DEBOUNCE_MILLISECONDS),
-    [_items]
+    [_items],
   );
 
   const updateListDataOnChange = useCallback(
     (id, update) => {
       const _itemsCopy = [..._items];
       const index = _itemsCopy.findIndex(
-        (d) => d.id.toString() === id.toString()
+        (d) => d.id.toString() === id.toString(),
       );
       if (index > -1) {
         _itemsCopy[index].selected = update === "add";
@@ -96,14 +97,14 @@ const MultiSelectCombobox = ({
       _setItems([..._itemsCopy]);
       setData([..._itemsCopy]);
     },
-    [_items]
+    [_items],
   );
 
   const onRemoveHanlder = useCallback(
     (id) => {
       const itemsCopy = [...selectedItemsRef.current];
       const index = itemsCopy.findIndex(
-        (i) => i.id.toString() === id.toString()
+        (i) => i.id.toString() === id.toString(),
       );
       if (index > -1) {
         itemsCopy.splice(index, 1);
@@ -114,7 +115,7 @@ const MultiSelectCombobox = ({
         inputRef.current.focus();
       }
     },
-    [selectedItemsRef, onChangeUpdate, updateListDataOnChange]
+    [selectedItemsRef, onChangeUpdate, updateListDataOnChange],
   );
 
   const optionClickHandler = (e) => {
@@ -196,7 +197,7 @@ const MultiSelectCombobox = ({
   });
 
   return (
-    <>
+    <div className={className}>
       <Label id={`${entity}-label`} htmlFor={`${entity}-searchbox`}>
         {label}
       </Label>
@@ -302,7 +303,7 @@ const MultiSelectCombobox = ({
           </ul>
         ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import { Button } from "@trussworks/react-uswds";
 import log from "loglevel";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +19,12 @@ const DataTableMatsSubmission = ({
 }) => {
   const navigate = useNavigate();
 
+  const selectedConfig = useSelector((state) =>
+    Object.values(state.monitoringPlans)
+      .flat()
+      .find((mp) => mp.id === selectedConfigId),
+  );
+
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(dataStatus.IDLE);
 
@@ -26,15 +33,15 @@ const DataTableMatsSubmission = ({
       relative: "path",
       state: {
         selectedConfigId,
-        originalSubmissionId: row.id,
+        originalSubmission: row,
       },
     });
   };
 
   const filteredData = data
-    .filter((row) => !selectedLocation || row.location.id === selectedLocation)
+    .filter((row) => !selectedLocation || row.locationId === selectedLocation)
     .filter(
-      (row) => !selectedReportType || row.reportType.code === selectedReportType
+      (row) => !selectedReportType || row.reportTypeCode === selectedReportType,
     );
 
   const columns = [
@@ -48,7 +55,7 @@ const DataTableMatsSubmission = ({
             cell: (row) => (
               <Button
                 className="margin-left-1 text-no-wrap"
-                disabled={row.status.code !== "COMPLETE"}
+                disabled={row.statusCode !== "COMPLETE"}
                 onClick={() => onResubmit(row)}
                 type="button"
                 unstyled
@@ -65,37 +72,45 @@ const DataTableMatsSubmission = ({
     },
     {
       name: "ORIS Code",
-      selector: (row) => row.orisCode,
+      selector: (row) => selectedConfig?.orisCode,
     },
     {
       name: "Facility Name",
-      selector: (row) => row.facilityName,
+      selector: (row) => selectedConfig?.facilityName,
     },
-    { name: "FRS ID", selector: (row) => row.frsId },
-    { name: "Location", selector: (row) => row.location?.name },
+    {
+      name: "FRS ID",
+      selector: (row) => selectedConfig?.facilityRegistrySystemId,
+    },
+    {
+      name: "Location",
+      selector: (row) =>
+        selectedConfig?.monitoringLocationData.find(
+          (loc) => loc.id === row.locationId,
+        )?.name,
+    },
     {
       name: "Averaging Group",
-      selector: (row) => row.averagingGroup?.description,
+      selector: (row) => row.averagingGroupCode,
     },
-    { name: "Report Type", selector: (row) => row.reportType?.description },
+    { name: "Report Type", selector: (row) => row.reportTypeCode },
     {
       name: "Pollutants",
-      selector: (row) =>
-        row.pollutants?.map((pollutant) => pollutant.description).join(", "),
+      selector: (row) => row.pollutantCodes.join(", "),
     },
     {
       name: "Test Methods",
-      selector: (row) =>
-        row.testMethods?.map((method) => method.description).join(", "),
+      selector: (row) => row.testMethodCodes.join(", "),
     },
     { name: "Test Number", selector: (row) => row.testNumber },
     { name: "Test Date", selector: (row) => formatDate(row.testDate) },
     { name: "Test Comment", selector: (row) => row.testComment },
     {
       name: "Year / Quarter",
-      selector: (row) => `${row.year} Q${row.quarter}`,
+      selector: (row) =>
+        row.year && row.quarter ? `${row.year} Q${row.quarter}` : null,
     },
-    { name: "Status", selector: (row) => row.status?.description },
+    { name: "Status", selector: (row) => row.statusCode },
   ].map((column) => ({
     ...column,
     sortable: true,

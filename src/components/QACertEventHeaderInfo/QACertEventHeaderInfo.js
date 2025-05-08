@@ -49,7 +49,9 @@ export const QACertEventHeaderInfo = ({
     useState(false);
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
 
-  const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId),
+  );
   const locations = selectedConfig?.monitoringLocationData ?? [];
 
   // import modal states
@@ -261,6 +263,7 @@ export const QACertEventHeaderInfo = ({
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
             <HeaderInfoLocationSelect
+              className="margin-right-2 margin-bottom-1 margin-top-3"
               selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_EVENT_STORE_NAME}
             />
@@ -281,13 +284,14 @@ export const QACertEventHeaderInfo = ({
         </div>
       </div>
       <div
-        className={`usa-overlay ${showImportModal ||
+        className={`usa-overlay ${
+          showImportModal ||
           showSelectionTypeImportModal ||
           showImportDataPreview ||
           isLoading
-          ? "is-visible"
-          : ""
-          }`}
+            ? "is-visible"
+            : ""
+        }`}
       />
       {/* // selects either historical data or file data */}
       {showSelectionTypeImportModal ? (
