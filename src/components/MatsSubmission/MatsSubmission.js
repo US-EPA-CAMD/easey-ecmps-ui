@@ -29,7 +29,7 @@ import {
 } from "../../utils/api/qaCertificationsAPI";
 import { dataStatus } from "../../utils/constants/dataStatus";
 import { matsModule } from "../../utils/constants/moduleTitles";
-import { formatErrorResponse } from "../../utils/functions";
+import { canSubmitMats, formatErrorResponse } from "../../utils/functions";
 import FileInput from "../FileInput/FileInput";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import MatsCodeSelect from "../MatsCodeSelect/MatsCodeSelect";
@@ -144,13 +144,6 @@ const MatsSubmission = ({
   );
   const [submissionInitWarnings, setSubmissionInitWarnings] = useState([]);
 
-  /* CALCULATED VALUES */
-
-  const isCheckedOutByUser =
-    selectedConfigId &&
-    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
-      ?.checkedOutBy === user.userId;
-
   /* HANDLERS */
 
   const cancelSubmission = () => {
@@ -216,7 +209,7 @@ const MatsSubmission = ({
     return <Navigate to=".." relative="path" />;
   }
 
-  if (!isCheckedOutByUser) {
+  if (!canSubmitMats(user, selectedConfig, checkedOutConfigs)) {
     return <Navigate to=".." relative="path" />;
   }
 
