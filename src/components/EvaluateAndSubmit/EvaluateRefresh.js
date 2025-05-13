@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import config from "../../config";
 import _ from "lodash";
+import { getEvaluationQueueOrder } from '../../utils/api/camdServices'
 
 export const EvaluateRefresh = ({
   dataList,
@@ -8,9 +9,10 @@ export const EvaluateRefresh = ({
   lastEvalTime,
   forceReloadTables
 }) => {
-  
+
   const refreshPage = async () => {
     if (storedFilters.current !== null) {
+      const evaluationQueueOrder = await getEvaluationQueueOrder(storedFilters.current.orisCodes);
       for (const value of dataList) {
         let data;
 
@@ -35,6 +37,26 @@ export const EvaluateRefresh = ({
           ).data?.items;
         }
 
+        const evaluationQueueOrderData = evaluationQueueOrder && evaluationQueueOrder.data && evaluationQueueOrder.data.items
+        if (data && data.length && evaluationQueueOrderData && evaluationQueueOrderData.length) {
+          data.forEach((d) => {
+            if (d.evalStatusCode === 'INQ') {
+              if (key !== "MP") {
+                const row = evaluationQueueOrderData.find((item) => (item.testSumIdentifier && item.testSumIdentifier === d.testSumId) || (item.qaCertEventIdentifier && item.qaCertEventIdentifier === d.qaCertEventIdentifier) || (item.testExtensionExemptionIdentifier && item.testExtensionExemptionIdentifier === d.testExtensionExemptionIdentifier) || (item.periodAbbreviation && item.monPlanIdentifier === d.monPlanId && item.periodAbbreviation === d.periodAbbreviation));
+                if (row) {
+                  d.evalStatusCodeDescription = `In Queue (${row.queuePosition} in queue)`
+                }
+              } else if (key === "MP") {
+                const row = evaluationQueueOrderData.find((item) => (item.monPlanIdentifier && item.monPlanIdentifier === d.id));
+                if (row) {
+                  d.evalStatusCodeDescription = `In Queue (${row.queuePosition} in queue)`
+                }
+              }
+            }
+          })
+        }
+
+
         // Extra formatting to make all data sets uniform
         let changes = 0;
         for (const r of data) {
@@ -48,9 +70,9 @@ export const EvaluateRefresh = ({
 
           if (
             rowEntry &&
-            rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription && 
+            rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription &&
             (new Date().getTime() - lastEvalTime.current) / 1000 >
-              config.app.refreshEvalStatusRate / 1000 + 1
+            config.app.refreshEvalStatusRate / 1000 + 1
           ) {
             changes++;
             rowEntry.evalStatusCode = r.evalStatusCode;
