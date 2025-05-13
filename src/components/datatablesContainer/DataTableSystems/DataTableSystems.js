@@ -66,6 +66,7 @@ export const DataTableSystems = ({
   selectedSysIdTest = false,
 
   showModal = false,
+  reportDataStatus
 }) => {
   const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
@@ -739,38 +740,36 @@ export const DataTableSystems = ({
     setErrorMsgs([]);
   };
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     if (monitoringSystems.length > 0) {
       const activeOnly = getActiveData(monitoringSystems);
       const inactiveOnly = getInactiveData(monitoringSystems);
 
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
       // active records only
       if (activeOnly.length === monitoringSystems.length) {
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
+        records = fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
       // inactive records only
       else if (inactiveOnly.length === monitoringSystems.length) {
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
+        records = fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
       // both active & inactive records
       else {
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansSystemsTableRecords(
+        records = fs.getMonitoringPlansSystemsTableRecords(
           !tabs[currentTabIndex].inactive[0]
             ? getActiveData(monitoringSystems)
             : monitoringSystems
         );
       }
     }
-
-    // no records
-    else {
-      return [];
-    }
-
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, tabs[currentTabIndex].inactive[0]]);
 

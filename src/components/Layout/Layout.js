@@ -140,7 +140,7 @@ const Layout = (props) => {
             </main>
           </div>
         </div>
-        <div id="footer" className="position-fixed bottom-0 width-full">
+        <div id="footer" className="position-fixed bottom-0 width-full z-100">
           <AppVersion
             version={config.app.version}
             publishDate={config.app.published}

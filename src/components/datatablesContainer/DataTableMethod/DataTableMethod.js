@@ -19,7 +19,10 @@ import {
   cleanupFocusEventListeners,
 } from "../../../additional-functions/manage-focus";
 
-import { extractUserInput, validateUserInput } from "../../../additional-functions/extract-user-input";
+import {
+  extractUserInput,
+  validateUserInput,
+} from "../../../additional-functions/extract-user-input";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import * as mpApi from "../../../utils/api/monitoringPlansApi";
 import {
@@ -33,7 +36,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { successResponses } from "../../../utils/api/apiUtils";
-import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
+import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
 
 export const DataTableMethod = ({
   mdmData,
@@ -52,6 +55,7 @@ export const DataTableMethod = ({
   //
 
   tabs,
+  reportDataStatus,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -78,7 +82,6 @@ export const DataTableMethod = ({
 
   const selectText = "-- Select a value --";
 
-
   // *** Assign initial event listeners after loading data/dropdowns
   useEffect(() => {
     if (dataLoaded && dropdownsLoaded) {
@@ -97,13 +100,14 @@ export const DataTableMethod = ({
     const fetchMethods = async () => {
       setDataLoaded(false);
       try {
-        const methods = await mpApi.getMonitoringMethods(locationSelectValue)
-          .catch(error => log.log('getMonitoringMethods failed', error));
+        const methods = await mpApi
+          .getMonitoringMethods(locationSelectValue)
+          .catch((error) => log.log("getMonitoringMethods failed", error));
         setMethods(methods?.data?.items ?? []);
         setDataLoaded(true);
-        const matsMethods = await mpApi.getMonitoringMatsMethods(
-          locationSelectValue
-        ).catch(error => log.log('getMonitoringMatsMethods failed', error));
+        const matsMethods = await mpApi
+          .getMonitoringMatsMethods(locationSelectValue)
+          .catch((error) => log.log("getMonitoringMatsMethods failed", error));
         setMatsMethods(matsMethods?.data?.items ?? []);
         setUpdateTable(false);
         setRevertedState(false);
@@ -175,7 +179,8 @@ export const DataTableMethod = ({
     const prefilteredDataName = dropdownArray[0][0];
     if (prefilteredMdmData) {
       const result = prefilteredMdmData.filter(
-        (prefiltered) => prefiltered[prefilteredDataName] === mainDropdownChange
+        (prefiltered) =>
+          prefiltered[prefilteredDataName] === mainDropdownChange,
       );
 
       if (result.length > 0) {
@@ -189,7 +194,7 @@ export const DataTableMethod = ({
             const filteredOutSubDropdownOptions = mdmData[
               modalDetailData[0]
             ].filter((option) =>
-              selectedCodes[modalDetailData[0]].includes(option.code)
+              selectedCodes[modalDetailData[0]].includes(option.code),
             );
 
             // Add select option
@@ -227,7 +232,7 @@ export const DataTableMethod = ({
     openMethodModal(
       { col7: "CAMD-BAC9D84563F24FE08057AF5643C8602C" },
       false,
-      false
+      false,
     );
   };
 
@@ -252,8 +257,8 @@ export const DataTableMethod = ({
     // Get the descriptions from the original dropdowns set
     const mainDropdownResult = mdmData[mainDropdownName].filter((o) =>
       mdmData[prefilteredDataName].some(
-        (element, index, arr) => o.code === element[mainDropdownName]
-      )
+        (element, index, arr) => o.code === element[mainDropdownName],
+      ),
     );
 
     // Add the select text if necessary
@@ -284,8 +289,8 @@ export const DataTableMethod = ({
         mainDropdownName,
         mainDropdownResult,
         true,
-        prefilteredDataName
-      )
+        prefilteredDataName,
+      ),
     );
     setShow(true);
     setTimeout(() => {
@@ -308,46 +313,49 @@ export const DataTableMethod = ({
     setShow(false);
     removeChangeEventListeners(".modalUserInput");
     if (createNewMethod) {
-      returnsFocusMpDatatableCreateBTN("Create Method")
+      returnsFocusMpDatatableCreateBTN("Create Method");
     }
   };
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    let hasActive = false;
+    let hasInactive = false;
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
 
       // only active data >  disable checkbox and unchecks it
       if (activeOnly.length === matsAndMethods.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
-        settingInactiveCheckBox(false, true);
         setData(fs.getMonitoringPlansMethodsTableRecords(methods));
       }
 
       // only inactive data > disables checkbox and checks it
       else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
-        settingInactiveCheckBox(true, true);
         setData(fs.getMonitoringPlansMethodsTableRecords(methods));
       }
       // resets checkbox
       else {
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        setData(fs.getMonitoringPlansMethodsTableRecords(
-          tabs[currentTabIndex].inactive[0] === false
-            ? getActiveData(methods)
-            : methods
-        ));
+        setData(
+          fs.getMonitoringPlansMethodsTableRecords(
+            tabs[currentTabIndex].inactive[0] === false
+              ? getActiveData(methods)
+              : methods,
+          ),
+        );
       }
     } else {
-      // settingInactiveCheckBox(false, true);
       setData([]);
     }
 
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, matsMethods, tabs[currentTabIndex].inactive[0], updateTable]);
 
@@ -366,8 +374,9 @@ export const DataTableMethod = ({
     }
 
     try {
-      const resp = await mpApi.saveMonitoringMethods(userInput)
-        .catch(error => log.log('saveMonitoringMethods failed', error));
+      const resp = await mpApi
+        .saveMonitoringMethods(userInput)
+        .catch((error) => log.log("saveMonitoringMethods failed", error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
@@ -391,8 +400,9 @@ export const DataTableMethod = ({
     }
 
     try {
-      const resp = await mpApi.createMethods(userInput)
-        .catch(error => log.log('createMethods failed', error));
+      const resp = await mpApi
+        .createMethods(userInput)
+        .catch((error) => log.log("createMethods failed", error));
       if (successResponses.includes(resp.status)) {
         setShow(false);
         setUpdateTable(true);
@@ -494,7 +504,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     loadDropdownsData: async (section, dropdownArray) => {
       dispatch(
-        loadDropdowns(convertSectionToStoreName(section), dropdownArray)
+        loadDropdowns(convertSectionToStoreName(section), dropdownArray),
       );
     },
   };

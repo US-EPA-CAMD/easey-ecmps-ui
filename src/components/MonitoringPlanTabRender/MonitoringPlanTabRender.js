@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import HeaderInfo from "../HeaderInfo/HeaderInfo";
 import "../MonitoringPlanTab/MonitoringPlanTab.scss";
@@ -49,6 +49,13 @@ export const MonitoringPlanTabRender = ({
   );
   const selectedLocation = locations.find((l) => l.id === locationSelect[1]);
 
+  const checkboxToggledRef = useRef(false);
+
+  const handleCheckboxChange = (check, disable) => {
+    checkboxToggledRef.current = true; // Set flag to true when checkbox is changed
+    settingInactiveCheckBox(check, disable); // Update inactive state only for checkbox trigger
+  };
+
   const settingInactiveCheckBox = (check, disable) => {
     setInactive([check, disable], title, MONITORING_PLAN_STORE_NAME);
   };
@@ -73,7 +80,13 @@ export const MonitoringPlanTabRender = ({
     setTableDataStatuses({});
   }
 
+  //useEffect to set checkbox for all records across tables 
+  //useEffec runs when title and tableDataStatuses changes
   useEffect(() => {
+    if (checkboxToggledRef.current) {
+      checkboxToggledRef.current = false; // Reset the flag
+      return;
+    }
     const statuses = Object.values(tableDataStatuses);
 
     // Determine if there are active and/or inactive records across all tables
@@ -81,26 +94,42 @@ export const MonitoringPlanTabRender = ({
     const hasAnyInactive = statuses.some((status) => status.hasInactive);
 
     let disableCheckbox = false;
-
-    if (hasAnyActive && hasAnyInactive) {
+    let checked = false;
+    if (hasAnyActive && hasAnyInactive) 
+    {
       // Both active and inactive data exist
+      checked = false;
       disableCheckbox = false;
-    } else {
-      // Only active or only inactive data across all tables
+    } 
+    else if(!hasAnyActive && hasAnyInactive)
+    {
+      // Only inactive
+      checked = true;
       disableCheckbox = true;
     }
+    else if (hasAnyActive && !hasAnyInactive) 
+    {
+      // Only active
+      checked = false;
+      disableCheckbox = true;
+    }
+    else
+    {
+        // Doesn't have any records
+        checked = false;
+        disableCheckbox = true;
+    }
 
-    const inactiveDisabled = inactive[1];
 
     // Update the global inactive state
-    if (inactiveDisabled !== disableCheckbox) {
+    if (inactive[0] !== checked || inactive[1] !== disableCheckbox) {
       setInactive(
-        [inactive[0], disableCheckbox],
+        [checked, disableCheckbox],
         title,
         MONITORING_PLAN_STORE_NAME
       );
     }
-  }, [tableDataStatuses, inactive, setInactive, title]);
+  }, [tableDataStatuses,title]);
 
   // updates all tables whenever a location is changed
   useEffect(
@@ -311,6 +340,7 @@ export const MonitoringPlanTabRender = ({
                 setUpdateRelatedTables={setUpdateRelatedTables}
                 updateRelatedTables={updateRelatedTables}
                 currentTabIndex={currentTabIndex}
+                reportDataStatus={handleReportDataStatus}
               />
             ),
             title: "Methods",
@@ -328,6 +358,7 @@ export const MonitoringPlanTabRender = ({
                 setUpdateRelatedTables={setUpdateRelatedTables}
                 updateRelatedTables={updateRelatedTables}
                 currentTabIndex={currentTabIndex}
+                reportDataStatus={handleReportDataStatus}
               />
             ),
             title: "Supplemental Methods",
@@ -347,6 +378,8 @@ export const MonitoringPlanTabRender = ({
                 setUpdateRelatedTables={setUpdateRelatedTables}
                 updateRelatedTables={updateRelatedTables}
                 currentTabIndex={currentTabIndex}
+                reportDataStatus={handleReportDataStatus}
+                dataTableName={"Qualifications"}
               />
             ),
             title: "Qualifications",
@@ -441,6 +474,7 @@ export const MonitoringPlanTabRender = ({
                 setUpdateRelatedTables={setUpdateRelatedTables}
                 updateRelatedTables={updateRelatedTables}
                 currentTabIndex={currentTabIndex}
+                reportDataStatus={handleReportDataStatus}
               />
             ),
             title: "Systems",
@@ -809,6 +843,7 @@ export const MonitoringPlanTabRender = ({
             setUpdateRelatedTables={setUpdateRelatedTables}
             updateRelatedTables={updateRelatedTables}
             currentTabIndex={currentTabIndex}
+            reportDataStatus={handleReportDataStatus}
           />
         ),
         title: "Methods",
@@ -826,6 +861,7 @@ export const MonitoringPlanTabRender = ({
             setUpdateRelatedTables={setUpdateRelatedTables}
             updateRelatedTables={updateRelatedTables}
             currentTabIndex={currentTabIndex}
+            reportDataStatus={handleReportDataStatus}
           />
         ),
         title: "Supplemental Methods",
@@ -866,6 +902,7 @@ export const MonitoringPlanTabRender = ({
           setUpdateRelatedTables={setUpdateRelatedTables}
           updateRelatedTables={updateRelatedTables}
           workspaceSection={MONITORING_PLAN_STORE_NAME}
+          handleCheckboxChange={handleCheckboxChange}
         />
       </div>
       <hr />
