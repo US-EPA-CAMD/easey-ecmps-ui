@@ -53,149 +53,133 @@ export const SubmissionReportData = ({
     
   };
 
-  const onRowSelection = (row, checked) => {
-    row.selected = checked;
-    if (checked) {
-      setSelectedRows((prev) => [...prev, row]);
-    } else {
-      const currSelectedRows = selectedRows.filter((r) => r.id !== row.id);
-      setSelectedRows(currSelectedRows);
-    }
-  };
 
   const columns = [
     {
-      name: "Select",
-      width: "95px",
-      cell: (row, idx) => (
-        <div>
-          <Checkbox
-            data-testid={`select-cb-${idx}`}
-            className="margin-bottom-5"
-            aria-label={`select row for submission list record with id ${row.id}`}
-            id={idx}
-            key={idx}
-            onChange={(e) => {
-              onRowSelection(row, e.target.checked);
-            }}
-            onKeyUp={(event) => {
-              if (event.key === "Enter") {
-                onRowSelection(row, !event.target.checked);
-                event.target.checked = !event.target.checked;
-              }
-            }}
-            defaultChecked={row.selected}
-          />
-        </div>
-      ),
-    },
-    {
       name: "Facility ID",
-      width: "210px",
       selector: (row) => `${row.orisCode}`,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Facility Name",
-      width: "210px",
       selector: (row) => `${row.facilityName}`,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "State",
-      width: "210px",
       selector: (row) => row.state,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "MP location",
-      width: "210px",
       selector: (row) => row.locations,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Reporting Period",
-      width: "210px",
       selector: (row) => row.reportingPeriodAbbreviation,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 2 
     },
     {
       name: "Reporting Frequency",
-      width: "230px",
       selector: (row) => row.reportingFrequencyCode,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Submission Type",
-      width: "150px",
       selector: (row) => row.submissionTypeCode,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Submission ID",
-      width: "150px",
       selector: (row) => row.submissionId,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Submission Date/Time",
-      width: "150px",
       selector: (row) => row.submissionDateTime,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Severity Level",
-      width: "200px",
       selector: (row) => row.severityLevel,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Most Recent",
-      width: "160px",
       selector: (row) => row.mostRecent,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Submission Status",
-      width: "160px",
       selector: (row) => row.submissionStatus,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Critical Error Level 1",
-      width: "160px",
       selector: (row) => row.criticalErrLevelOne,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Critical Error Level 2",
-      width: "160px",
       selector: (row) => row.criticalErrLevelTwo,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Non-Critical",
-      width: "160px",
       selector: (row) => row.nonCritical,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Informational Message",
-      width: "160px",
       selector: (row) => row.infoMessage,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Administrative Override",
-      width: "160px",
       selector: (row) => row.adminOverride,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
     {
       name: "Submitter",
-      width: "160px",
       selector: (row) => row.submitter,
       sortable: true,
+      wrap: true,   // Enables wrapping of both header and cell content
+      grow: 1 
     },
   ];
 
@@ -235,7 +219,7 @@ export const SubmissionReportData = ({
               fixedHeader={false}
               columns={columns}
               data={filteredData}
-              className={`data-display-table react-transition fade-in`}
+              className={`data-display-table-cat react-transition fade-in`}
               pagination={true}
               paginationPerPage={10}
               paginationRowsPerPageOptions={[10, 25, 50]}

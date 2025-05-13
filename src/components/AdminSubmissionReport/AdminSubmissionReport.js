@@ -15,6 +15,7 @@ export const AdminSubmissionReport = () => {
   const [reportingPeriods, setReportingPeriods] = useState([]);
 
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
+  // TBD feature
   const [selectedRows, setSelectedRows] = useState([]);
 
    useEffect(() => {
