@@ -116,7 +116,7 @@ export async function getEvaluationQueueOrder(orisCodes) {
     .catch(handleError);
 }
 
-export async function getSubmissionnQueueOrder(orisCodes) {
+export async function getSubmissionQueueOrder(orisCodes) {
   const queryString = `orisCodes=${orisCodes.join("|")}`;
   const url = `${config.services.camd.uri}/submission/queueOrder?${queryString}`;
 

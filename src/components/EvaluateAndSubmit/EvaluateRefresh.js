@@ -44,12 +44,12 @@ export const EvaluateRefresh = ({
               if (key !== "MP") {
                 const row = evaluationQueueOrderData.find((item) => (item.testSumIdentifier && item.testSumIdentifier === d.testSumId) || (item.qaCertEventIdentifier && item.qaCertEventIdentifier === d.qaCertEventIdentifier) || (item.testExtensionExemptionIdentifier && item.testExtensionExemptionIdentifier === d.testExtensionExemptionIdentifier) || (item.periodAbbreviation && item.monPlanIdentifier === d.monPlanId && item.periodAbbreviation === d.periodAbbreviation));
                 if (row) {
-                  d.evalStatusCodeDescription = `In Queue (${row.queuePosition} in queue)`
+                  d.evalStatusCodeDescription = `In Queue (#${row.queuePosition} in queue)`
                 }
               } else if (key === "MP") {
-                const row = evaluationQueueOrderData.find((item) => (item.monPlanIdentifier && item.monPlanIdentifier === d.id));
+                const row = evaluationQueueOrderData.find((item) => (item.monPlanIdentifier && item.processCode === 'MP' && item.monPlanIdentifier === d.id));
                 if (row) {
-                  d.evalStatusCodeDescription = `In Queue (${row.queuePosition} in queue)`
+                  d.evalStatusCodeDescription = `In Queue (#${row.queuePosition} in queue)`
                 }
               }
             }
