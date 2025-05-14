@@ -196,6 +196,7 @@ const MatsSubmission = ({
       const res = await createMatsSubmission(
         createSubmissionPayload(metadataPayload, fileNames),
         metadataPayload.locationId,
+        { shouldHandleError: false },
       );
       const { id, warnings } = res.data;
       setSubmissionId(id);
@@ -518,15 +519,15 @@ const FileInputRow = ({
   accept = "",
   existingFileNames = [],
   label,
-  onChange = (_file) => {},
-  onRemove = () => {},
+  onChange = (_file) => Promise.resolve(),
+  onRemove = () => Promise.resolve(),
 }) => {
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [id] = useState(uniqueId(`${label.replace(" ", "")}-file-input-`));
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (ev) => {
+  const handleFileChange = async (ev) => {
     const newFile = ev.target?.files[0] ?? null;
 
     // Enforce unique file names.
@@ -549,7 +550,12 @@ const FileInputRow = ({
         setFile({ contents: reader.result, type: newFile.type });
       };
       reader.readAsArrayBuffer(newFile);
-      onChange(newFile);
+      await onChange(newFile).catch((err) => {
+        log.error(err);
+        setError("An error occurred while uploading the file.");
+        setFile(null);
+        fileInputRef.current?.clearFiles();
+      });
     }
   };
 
@@ -561,10 +567,10 @@ const FileInputRow = ({
     window.open(fileUrl, "_blank");
   };
 
-  const handleFileRemoval = (_ev) => {
+  const handleFileRemoval = async (_ev) => {
     fileInputRef.current?.clearFiles();
     setFile(null);
-    onRemove();
+    await onRemove();
   };
 
   return (
@@ -624,20 +630,19 @@ const FileInputs = ({
     setUploadStatus(dataStatus.PENDING);
     try {
       if (prevFileName) {
-        await deleteMatsFile(prevFileName, locationId).catch(log.error);
+        await deleteMatsFile(prevFileName, locationId);
+      }
+      if (newFile) {
+        const formData = new FormData();
+        formData.append("file", newFile, newFile.name);
+        await uploadMatsFile(formData, locationId, { shouldHandleError: false });
       }
       setFileName(newFile?.name || "");
-
-      if (!newFile) return;
-
-      const formData = new FormData();
-      formData.append("file", newFile, newFile.name);
-      await uploadMatsFile(formData, locationId);
+      setUploadStatus(dataStatus.SUCCESS);
     } catch (err) {
-      log.error(err);
+      setFileName("");
       setUploadStatus(dataStatus.ERROR);
-    } finally {
-      setUploadStatus(dataStatus.IDLE);
+      throw err; // Rethrow to handle in the calling function
     }
   };
 
@@ -703,18 +708,13 @@ const FileInputs = ({
       {uploadStatus === dataStatus.PENDING && (
         <LoadingModal loading={true} type="Loading" />
       )}
-      {uploadStatus === dataStatus.ERROR && (
-        <Alert type="error" headingLevel="h4" className="margin-bottom-2">
-          An error occurred while uploading the file.
-        </Alert>
-      )}
       {fileIsInReportType("ERT") && (
         <FileInputRow
           accept=".xml"
           existingFileNames={existingFileNames}
           label="ERT XML"
           onChange={(file) => {
-            handleFileChange(file, ertFileName, setErtFileName);
+            return handleFileChange(file, ertFileName, setErtFileName);
           }}
           onRemove={() => handleFileRemoval(ertFileName, setErtFileName)}
         />
@@ -725,10 +725,10 @@ const FileInputs = ({
           existingFileNames={existingFileNames}
           label="Payload PDF, XML, or JSON"
           onChange={(file) => {
-            handleFileChange(file, payloadFileName, setPayloadFileName);
+            return handleFileChange(file, payloadFileName, setPayloadFileName);
           }}
           onRemove={() => {
-            handleFileRemoval(payloadFileName, setPayloadFileName);
+            return handleFileRemoval(payloadFileName, setPayloadFileName);
           }}
         />
       )}
@@ -742,15 +742,19 @@ const FileInputs = ({
               key={id}
               label={`PDF ${i + 1}`}
               onChange={(file) => {
-                handleFileChange(file, supportingFileNames[id], (_file) => {
-                  setSupportingFileNames((prev) => ({
-                    ...prev,
-                    [id]: file?.name || "",
-                  }));
-                });
+                return handleFileChange(
+                  file,
+                  supportingFileNames[id],
+                  (_file) => {
+                    setSupportingFileNames((prev) => ({
+                      ...prev,
+                      [id]: file?.name || "",
+                    }));
+                  },
+                );
               }}
               onRemove={() => {
-                handleFileRemoval(supportingFileNames[id], (_file) => {
+                return handleFileRemoval(supportingFileNames[id], (_file) => {
                   removePdfInput(id);
                 });
               }}
