@@ -60,28 +60,24 @@ export const SubmissionReportData = ({
       selector: (row) => row.orisCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Facility Name",
       selector: (row) => row.facilityName,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "State",
       selector: (row) => row.state,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "MP Location(s)",
       selector: (row) => row.locations,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Reporting Period",
@@ -99,28 +95,24 @@ export const SubmissionReportData = ({
         return a.reportingPeriodAbbreviation.toLowerCase().localeCompare(b.reportingPeriodAbbreviation.toLowerCase());
       },
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 2 
     },
     {
       name: "Reporting Frequency",
       selector: (row) => row.reportingFrequencyCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Submission Type",
       selector: (row) => row.submissionTypeCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Submission ID",
       selector: (row) => row.submissionId,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Submission Date/Time",
@@ -130,70 +122,60 @@ export const SubmissionReportData = ({
         return a.submissionDateTime.toLowerCase().localeCompare(b.submissionDateTime.toLowerCase());   // alphabetical sort
       },
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Severity Level",
       selector: (row) => row.severityLevel,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Most Recent",
       selector: (row) => row.mostRecent,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Submission Status",
       selector: (row) => row.submissionStatus,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Critical Error Level 1",
       selector: (row) => row.criticalErrLevelOne,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Critical Error Level 2",
       selector: (row) => row.criticalErrLevelTwo,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Non-Critical",
       selector: (row) => row.nonCritical,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Informational Message",
       selector: (row) => row.infoMessage,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Administrative Override",
       selector: (row) => row.adminOverride,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
     {
       name: "Submitter",
       selector: (row) => row.submitter,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
-      grow: 1 
     },
   ];
 

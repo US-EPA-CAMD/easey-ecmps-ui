@@ -255,7 +255,9 @@
   .rdt_TableCol_Sortable {
     color: $epa-black !important;
     white-space: normal !important;
-    margin-right: 1em !important;
+    position: relative;
+    padding-right: 3em;
+    margin-right: 0 !important; 
     overflow: visible !important;
   }
   .rdt_TableRow {
