@@ -28,7 +28,7 @@ export const SubmissionReportData = ({
       orisCode: "Facility ID",
       facilityName: "Facility Name",
       state: "State",
-      locations: "MP Location ",
+      locations: "MP Location(s) ",
       reportingPeriodAbbreviation: "Reporting Period",
       reportingFrequencyCode: "Reporting Frequency",
       submissionTypeCode: "Submission Type",
@@ -57,14 +57,14 @@ export const SubmissionReportData = ({
   const columns = [
     {
       name: "Facility ID",
-      selector: (row) => `${row.orisCode}`,
+      selector: (row) => row.orisCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
       grow: 1 
     },
     {
       name: "Facility Name",
-      selector: (row) => `${row.facilityName}`,
+      selector: (row) => row.facilityName,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
       grow: 1 
@@ -77,7 +77,7 @@ export const SubmissionReportData = ({
       grow: 1 
     },
     {
-      name: "MP location",
+      name: "MP Location(s)",
       selector: (row) => row.locations,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
@@ -85,8 +85,19 @@ export const SubmissionReportData = ({
     },
     {
       name: "Reporting Period",
-      selector: (row) => row.reportingPeriodAbbreviation,
+      selector: (row) => row?.reportingPeriodAbbreviation,
       sortable: true,
+      sortFunction: (a, b) => {  
+        // Have to sort the nulls as well
+        // a and b null don't change
+        if (!a?.reportingPeriodAbbreviation && !b?.reportingPeriodAbbreviation) return 0;
+  
+        // Put null/undefined values at the end
+        if (!a?.reportingPeriodAbbreviation) return 1;
+        if (!b?.reportingPeriodAbbreviation) return -1;
+  
+        return a.reportingPeriodAbbreviation.toLowerCase().localeCompare(b.reportingPeriodAbbreviation.toLowerCase());
+      },
       wrap: true,   // Enables wrapping of both header and cell content
       grow: 2 
     },
@@ -115,6 +126,9 @@ export const SubmissionReportData = ({
       name: "Submission Date/Time",
       selector: (row) => row.submissionDateTime,
       sortable: true,
+      sortFunction: (a, b) => {
+        return a.submissionDateTime.toLowerCase().localeCompare(b.submissionDateTime.toLowerCase());   // alphabetical sort
+      },
       wrap: true,   // Enables wrapping of both header and cell content
       grow: 1 
     },
