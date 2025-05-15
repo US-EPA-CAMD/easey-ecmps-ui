@@ -29,7 +29,7 @@ export const SubmissionReportData = ({
       facilityName: "Facility Name",
       state: "State",
       locations: "MP Location(s) ",
-      reportingPeriodAbbreviation: "Reporting Period",
+      reportingPeriodAbbreviation: "Identifying Information",
       reportingFrequencyCode: "Reporting Frequency",
       submissionTypeCode: "Submission Type",
       submissionId: "Submission ID",
@@ -80,7 +80,7 @@ export const SubmissionReportData = ({
       wrap: true,   // Enables wrapping of both header and cell content
     },
     {
-      name: "Reporting Period",
+      name: "Identifying Information",
       selector: (row) => row?.reportingPeriodAbbreviation,
       sortable: true,
       sortFunction: (a, b) => {  
