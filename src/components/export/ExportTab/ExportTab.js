@@ -205,7 +205,7 @@ export const ExportTab = ({
 
     // export monitoring plan
     if (dataTypes.current[0].selectedRows.current.length > 0) {
-      promises.push(exportMonitoringPlanDownload(selectedConfigId));
+      promises.push(exportMonitoringPlanDownload(selectedConfigId, selectedConfig?.name));
     }
 
     //export qa
