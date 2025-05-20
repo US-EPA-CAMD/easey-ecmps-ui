@@ -28,7 +28,7 @@ export const SubmissionReportData = ({
       facilityName: "Facility Name",
       state: "State",
       locations: "MP Location(s) ",
-      reportingPeriodAbbreviation: "Identifying Information",
+      identifyingInformation: "Identifying Information",
       reportingFrequencyCode: "Reporting Frequency",
       submissionTypeCode: "Submission Type",
       submissionId: "Submission ID",
@@ -76,18 +76,18 @@ export const SubmissionReportData = ({
     },
     {
       name: "Identifying Information",
-      selector: (row) => row?.reportingPeriodAbbreviation,
+      selector: (row) => row?.identifyingInformation,
       sortable: true,
       sortFunction: (a, b) => {  
         // Have to sort the nulls as well
         // a and b null don't change
-        if (!a?.reportingPeriodAbbreviation && !b?.reportingPeriodAbbreviation) return 0;
+        if (!a?.identifyingInformation && !b?.identifyingInformation) return 0;
   
         // Put null/undefined values at the end
-        if (!a?.reportingPeriodAbbreviation) return 1;
-        if (!b?.reportingPeriodAbbreviation) return -1;
+        if (!a?.identifyingInformation) return 1;
+        if (!b?.identifyingInformation) return -1;
   
-        return a.reportingPeriodAbbreviation.toLowerCase().localeCompare(b.reportingPeriodAbbreviation.toLowerCase());
+        return a.identifyingInformation.toLowerCase().localeCompare(b.identifyingInformation.toLowerCase());
       },
       wrap: true,   // Enables wrapping of both header and cell content
     },

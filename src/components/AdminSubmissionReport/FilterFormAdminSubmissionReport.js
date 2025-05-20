@@ -369,7 +369,8 @@ const FilterFormAdminSubmissionReport = ({
           </div>
         </div>
          
-          { screenSize.width >= 1400 &&(
+         {/* Maybe element can be use in the future */}
+          {/* { screenSize.width >= 1400 &&(
             <>
               <div className="margin-left-4 width-card">
                 <DropdownSelection
@@ -386,7 +387,7 @@ const FilterFormAdminSubmissionReport = ({
               </div>
 
             </>
-          )}
+          )} */}
         </div>
 
         <div className="display-flex flex-row flex-justify-start">
@@ -482,7 +483,8 @@ const FilterFormAdminSubmissionReport = ({
           </div>
 
         <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
-          {screenSize.width < 1400 &&(
+          {/* Maybe element can be use in the future */}
+          {/* {screenSize.width < 1400 &&(
             <>
               <div className="width-card">
                 <DropdownSelection
@@ -498,7 +500,7 @@ const FilterFormAdminSubmissionReport = ({
                 />
               </div>
             </>
-          )}
+          )} */}
           <div className="flex-align-self-end">
             <Button 
               onClick={clearFilters} 
