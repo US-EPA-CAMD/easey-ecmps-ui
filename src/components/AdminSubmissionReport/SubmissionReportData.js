@@ -4,7 +4,6 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button, Checkbox } from "@trussworks/react-uswds";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionReportTitle } from "../../utils/constants/moduleTitles";
-
 import { exportToCSV } from "../../utils/functions";
 
 
@@ -44,12 +43,8 @@ export const SubmissionReportData = ({
       adminOverride: "Administrative Override",
       submitter: "Submitter"
     };
-
-    const facilityName = filteredData[0].facilityName;
-    const orisCode = filteredData[0].orisCode
-    const reportingPeriod = filteredData[0].reportingPeriodAbbreviation
   
-    exportToCSV(filteredData, columnMapping, `Submission_Report_${facilityName}(${orisCode})_${reportingPeriod}`)
+    exportToCSV(filteredData, columnMapping, `Submission_Report`)
     
   };
 
