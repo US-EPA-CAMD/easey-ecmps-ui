@@ -103,7 +103,10 @@ const DataTableMatsSubmission = ({
       selector: (row) => row.testMethodCodes.join(", "),
     },
     { name: "Test Number", selector: (row) => row.testNumber },
-    { name: "Test Date", selector: (row) => formatDate(row.testDate) },
+    {
+      name: "Test Date",
+      selector: (row) => (row.testDate ? formatDate(row.testDate) : null),
+    },
     { name: "Test Comment", selector: (row) => row.testComment },
     {
       name: "Year / Quarter",
