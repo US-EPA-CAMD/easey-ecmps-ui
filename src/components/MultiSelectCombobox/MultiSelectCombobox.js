@@ -115,7 +115,7 @@ const MultiSelectCombobox = ({
         inputRef.current.focus();
       }
     },
-    [selectedItemsRef, onChangeUpdate, updateListDataOnChange],
+    [disabled, selectedItemsRef, onChangeUpdate, updateListDataOnChange],
   );
 
   const optionClickHandler = (e) => {
@@ -131,6 +131,7 @@ const MultiSelectCombobox = ({
           id: id,
           component: (
             <PillButton
+              disabled={disabled}
               key={id}
               index={id}
               label={optionLabel}
@@ -155,6 +156,7 @@ const MultiSelectCombobox = ({
         id: s.id,
         component: (
           <PillButton
+            disabled={disabled}
             key={s.id}
             index={s.id}
             label={s.label}
