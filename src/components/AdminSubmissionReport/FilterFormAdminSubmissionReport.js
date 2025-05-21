@@ -109,8 +109,8 @@ const FilterFormAdminSubmissionReport = ({
 
     const [qADataType ] = useState([
     initialSelectOption,
-    { code: "Test", name: "Test Summary" },
-    { code: "Event", name: "Cert Events" },
+    { code: "QAT", name: "Test Summary" },
+    { code: "QCE", name: "Cert Events" },
     { code: "TEE", name: "Test Extension Exemption" },
   ] );
 
@@ -369,8 +369,7 @@ const FilterFormAdminSubmissionReport = ({
           </div>
         </div>
          
-         {/* Maybe element can be use in the future */}
-          {/* { screenSize.width >= 1400 &&(
+          { screenSize.width >= 1400 &&(
             <>
               <div className="margin-left-4 width-card">
                 <DropdownSelection
@@ -387,7 +386,7 @@ const FilterFormAdminSubmissionReport = ({
               </div>
 
             </>
-          )} */}
+          )}
         </div>
 
         <div className="display-flex flex-row flex-justify-start">
@@ -483,8 +482,7 @@ const FilterFormAdminSubmissionReport = ({
           </div>
 
         <div className="display-flex flex-row desktop:flex-justify widescreen:flex-justify-end padding-2">
-          {/* Maybe element can be use in the future */}
-          {/* {screenSize.width < 1400 &&(
+          {screenSize.width < 1400 &&(
             <>
               <div className="width-card">
                 <DropdownSelection
@@ -500,7 +498,7 @@ const FilterFormAdminSubmissionReport = ({
                 />
               </div>
             </>
-          )} */}
+          )}
           <div className="flex-align-self-end">
             <Button 
               onClick={clearFilters} 
