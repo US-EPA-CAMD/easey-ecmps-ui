@@ -58,6 +58,23 @@ export const formatDateToISO = (date) => {
   return [year, month, day].join("-");
 };
 
+export const getReportingPeriods = (minYear = 2009) => {
+  const quarters = [4, 3, 2, 1];
+  const maxYear = new Date().getFullYear();
+  const reportingPeriods = [];
+
+  const currentYearQuarter = parseInt(`${maxYear}${getQuarter()}`);
+
+  for (let year = maxYear; year >= minYear; year--) {
+    for (const quarter of quarters) {
+      if (parseInt(`${year}${quarter}`) <= currentYearQuarter)
+        reportingPeriods.push(`${year} Q${quarter}`);
+    }
+  }
+
+  return reportingPeriods;
+};
+
 //** review and submit utility functions
 export const isLocationUserCheckedOut = (
   checkedOutLocationsMap,
@@ -428,7 +445,7 @@ export const formatErrorResponse = (errorResp) => {
         .filter(line => line.length > 0);
     }
   }
-  return Array.isArray(errorMsgs) ? errorMsgs : [JSON.stringify(errorMsgs)];
+  return Array.isArray(errorMsgs) ? errorMsgs : errorMsgs?.split("\n").filter(Boolean) ?? [];
 };
 
 // Returns the amount of seconds until the users front-end session expires
