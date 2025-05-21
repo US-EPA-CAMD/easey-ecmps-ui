@@ -116,7 +116,7 @@ function formReducer(state, action) {
       return {
         ...state,
         unitStackConfigs: state.unitStackConfigs.filter(
-          (usc) => usc.id !== action.payload
+          (usc) => usc.id !== action.payload,
         ),
       };
     }
@@ -334,7 +334,7 @@ function formatDateSlashed(dateString) {
   const date = new Date(
     new Date(dateString).toLocaleString("en-us", {
       timeZone: "America/New_York",
-    })
+    }),
   );
 
   return (
@@ -478,7 +478,7 @@ const dateCell = ({
           id={`${id}-input`}
           name={`${id}-input`}
           onChange={(e) => onChange(row.id, parseDatePickerString(e))}
-          placeholder="Select a date..."
+          placeholder="mm/dd/yyyy"
           required={required}
           value={column.selector(row) ?? ""}
         />
@@ -607,10 +607,10 @@ export const ConfigurationManagement = ({
   /* STATE */
 
   const [changeSummary, setChangeSummary] = useState(
-    initialChangeSummaryState()
+    initialChangeSummaryState(),
   );
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
-    dataStatus.IDLE
+    dataStatus.IDLE,
   );
   const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
   const [errorMsgs, setErrorMsgs] = useState([]);
@@ -619,21 +619,21 @@ export const ConfigurationManagement = ({
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
-    dataStatus.IDLE
+    dataStatus.IDLE,
   );
   const [saveStatus, setSaveStatus] = useState(dataStatus.IDLE);
   const [selectedFacility, setSelectedFacility] = useState(undefined);
   const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
   const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
-    dataStatus.IDLE
+    dataStatus.IDLE,
   );
 
   /* CALCULATED VALUES */
 
   const userFacilities = facilities.filter(
     (f) =>
-      user?.facilities.some((uf) => uf.facId === f.facilityRecordId) ?? false
+      user?.facilities.some((uf) => uf.facId === f.facilityRecordId) ?? false,
   );
 
   // Format facilities for dropdown.
@@ -657,18 +657,18 @@ export const ConfigurationManagement = ({
     facilityMonitoringPlans.length > 0;
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
-    (loc) => loc.facId === selectedFacility
+    (loc) => loc.facId === selectedFacility,
   );
   const isCheckedOutByUser =
     user &&
     checkedOutLocationsForFacility.length &&
     checkedOutLocationsForFacility.every(
-      (loc) => loc.checkedOutBy === user.userId
+      (loc) => loc.checkedOutBy === user.userId,
     );
   const isCheckedOutByOtherUser =
     !user ||
     checkedOutLocationsForFacility.some(
-      (loc) => loc.checkedOutBy !== user.userId
+      (loc) => loc.checkedOutBy !== user.userId,
     );
 
   const changedPlansCount = Object.values(changeSummary).flat().length;
@@ -701,7 +701,7 @@ export const ConfigurationManagement = ({
     await Promise.all(
       (await getCheckedOutLocations()).data?.items
         ?.filter((loc) => user && loc.checkedOutBy === user.userId)
-        .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId))
+        .map((loc) => deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)),
     );
     setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
   }, [setCheckedOutLocations, user]);
@@ -767,8 +767,8 @@ export const ConfigurationManagement = ({
       setCheckInOutStatus(dataStatus.PENDING);
       await Promise.all(
         locationsCheckedOutByUserForFacility.map((loc) =>
-          deleteCheckInMonitoringPlanConfiguration(loc.monPlanId)
-        )
+          deleteCheckInMonitoringPlanConfiguration(loc.monPlanId),
+        ),
       );
     } finally {
       setCheckInOutStatus(dataStatus.IDLE);
@@ -787,8 +787,8 @@ export const ConfigurationManagement = ({
 
       await Promise.all(
         facilityMonitoringPlans.map((mp) =>
-          postCheckoutMonitoringPlanConfiguration(mp.id, false)
-        )
+          postCheckoutMonitoringPlanConfiguration(mp.id, false),
+        ),
       );
     } catch (err) {
       await checkInAllPlansForUser();
@@ -873,28 +873,28 @@ export const ConfigurationManagement = ({
 
   const filterFormState = () => {
     const filteredUnitStackConfigs = formState.unitStackConfigs.filter(
-      unitStackConfig => unitStackConfig?.endDate !== unitStackConfig?.originalRecord?.endDate
-      || unitStackConfig?.originalRecord == null
+      (unitStackConfig) =>
+        unitStackConfig?.endDate !== unitStackConfig?.originalRecord?.endDate ||
+        unitStackConfig?.originalRecord == null,
     );
     const filteredStackPipes = formState.stackPipes.filter(
       (stackPipe) =>
         filteredUnitStackConfigs.some(
-          (config) => config.stackPipeId === stackPipe.stackPipeId
+          (config) => config.stackPipeId === stackPipe.stackPipeId,
         ) ||
         stackPipe?.retireDate !== stackPipe?.originalRecord?.retireDate ||
-        stackPipe?.originalRecord == null
+        stackPipe?.originalRecord == null,
     );
-    const filteredUnits = formState.units.filter(unit => 
-      filteredUnitStackConfigs.some(config => config.unitId === unit.unitId)
+    const filteredUnits = formState.units.filter((unit) =>
+      filteredUnitStackConfigs.some((config) => config.unitId === unit.unitId),
     );
-    
+
     return {
       units: filteredUnits,
       stackPipes: filteredStackPipes,
-      unitStackConfigs: filteredUnitStackConfigs
+      unitStackConfigs: filteredUnitStackConfigs,
     };
   };
-  
 
   const initializeEditableFormState = (data, type) => {
     formDispatch({
@@ -909,40 +909,40 @@ export const ConfigurationManagement = ({
   };
 
   const mapFormStateToConfigurationsPayload = () => {
-    const newFormState = filterFormState()
+    const newFormState = filterFormState();
     return {
-    monitoringPlanCommentData: [],
-    orisCode: userFacilities.find(
-      (f) => f.facilityRecordId === selectedFacility
-    ).facilityId,
-    unitStackConfigurationData: newFormState.unitStackConfigs.map((usc) => ({
-      beginDate: usc.beginDate,
-      endDate: usc.endDate,
-      stackPipeId: usc.stackPipeId,
-      unitId: usc.unitId,
-    })),
-    monitoringLocationData: newFormState.stackPipes
-      .map((sp) => ({
-        unitId: null,
-        stackPipeId: sp.stackPipeId,
-        activeDate: sp.activeDate,
-        retireDate: sp.retireDate,
-        nonLoadBasedIndicator: null,
-        ...unusedMonitoringLocationDataFields(),
-      }))
-      .concat(
-        newFormState.units.map((u) => ({
-          unitId: u.unitId,
-          stackPipeId: null,
-          activeDate: null,
-          retireDate: null,
-          nonLoadBasedIndicator: u.nonLoadBasedIndicator,
+      monitoringPlanCommentData: [],
+      orisCode: userFacilities.find(
+        (f) => f.facilityRecordId === selectedFacility,
+      ).facilityId,
+      unitStackConfigurationData: newFormState.unitStackConfigs.map((usc) => ({
+        beginDate: usc.beginDate,
+        endDate: usc.endDate,
+        stackPipeId: usc.stackPipeId,
+        unitId: usc.unitId,
+      })),
+      monitoringLocationData: newFormState.stackPipes
+        .map((sp) => ({
+          unitId: null,
+          stackPipeId: sp.stackPipeId,
+          activeDate: sp.activeDate,
+          retireDate: sp.retireDate,
+          nonLoadBasedIndicator: null,
           ...unusedMonitoringLocationDataFields(),
         }))
-      ),
-    version: MONITOR_PLAN_SCHEMA_VERSION,
+        .concat(
+          newFormState.units.map((u) => ({
+            unitId: u.unitId,
+            stackPipeId: null,
+            activeDate: null,
+            retireDate: null,
+            nonLoadBasedIndicator: u.nonLoadBasedIndicator,
+            ...unusedMonitoringLocationDataFields(),
+          })),
+        ),
+      version: MONITOR_PLAN_SCHEMA_VERSION,
+    };
   };
-};
 
   const mapFormStateToSingleUnitPayload = (unit) => ({
     unitId: unit.unitId,
@@ -985,7 +985,7 @@ export const ConfigurationManagement = ({
       .filter((u) => u.isToggled)
       .map(mapFormStateToSingleUnitPayload)
       .map((payload) =>
-        createSingleUnitMP(payload, { draft, shouldHandleError: false })
+        createSingleUnitMP(payload, { draft, shouldHandleError: false }),
       );
   };
 
@@ -1082,7 +1082,7 @@ export const ConfigurationManagement = ({
       try {
         setMonitoringPlansStatus(dataStatus.PENDING);
         loadMonitoringPlans(orisCode).then(() =>
-          setMonitoringPlansStatus(dataStatus.SUCCESS)
+          setMonitoringPlansStatus(dataStatus.SUCCESS),
         );
       } catch (err) {
         setMonitoringPlansStatus(dataStatus.ERROR);
@@ -1128,7 +1128,7 @@ export const ConfigurationManagement = ({
                 beginDate: d.beginDate ? d.beginDate.split("T")[0] : null,
                 endDate: d.endDate ? d.endDate.split("T")[0] : null,
               })),
-            "SET_UNITS"
+            "SET_UNITS",
           );
         });
       } catch (err) {
@@ -1212,7 +1212,10 @@ export const ConfigurationManagement = ({
     </Alert>
   ) : (
     <>
-      <div className="react-transition fade-in padding-x-3">
+      <div
+        className="react-transition fade-in padding-x-3"
+        id="configuration-management"
+      >
         <h2 className="page-header margin-top-2">Configuration Management</h2>
         <hr />
         <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
@@ -1279,7 +1282,7 @@ export const ConfigurationManagement = ({
                     Currently checked-out by:{" "}
                     {checkedOutLocationsForFacility[0].checkedOutBy}{" "}
                     {formatDateSlashed(
-                      checkedOutLocationsForFacility[0].checkedOutOn
+                      checkedOutLocationsForFacility[0].checkedOutOn,
                     )}
                   </p>
                 )}
@@ -1393,7 +1396,7 @@ export const ConfigurationManagement = ({
                                 cell: actionCellEdit(
                                   toggleEditStackPipe,
                                   removeStackPipe,
-                                  revertStackPipe
+                                  revertStackPipe,
                                 ),
                               },
                             ]}
@@ -1484,7 +1487,7 @@ export const ConfigurationManagement = ({
                                 cell: actionCellEdit(
                                   toggleEditUnitStackConfig,
                                   removeUnitStackConfig,
-                                  revertUnitStackConfig
+                                  revertUnitStackConfig,
                                 ),
                               },
                             ]}
@@ -1544,7 +1547,7 @@ export const ConfigurationManagement = ({
                       user &&
                       changeSummaryStatus === dataStatus.SUCCESS &&
                       [dataStatus.IDLE, dataStatus.PENDING].includes(
-                        saveStatus
+                        saveStatus,
                       ) &&
                       (!canCheckOut || isCheckedOutByUser) &&
                       !modalErrorMsgs.length &&
@@ -1601,5 +1604,5 @@ export const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ConfigurationManagement);
