@@ -5,19 +5,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect, useSelector } from "react-redux";
 
 import {
-    assignFocusEventListeners,
-    cleanupFocusEventListeners,
-    returnFocusToLast,
+  assignFocusEventListeners,
+  cleanupFocusEventListeners,
+  returnFocusToLast,
 } from "../../additional-functions/manage-focus";
 import {
-    removeChangeEventListeners,
-    unsavedDataMessage,
+  removeChangeEventListeners,
+  unsavedDataMessage,
 } from "../../additional-functions/prompt-to-save-unsaved-changes";
 import { QA_CERT_TEST_SUMMARY_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
 import { successResponses } from "../../utils/api/apiUtils";
 import {
-    getAllTestTypeCodes,
-    getAllTestTypeGroupCodes,
+  getAllTestTypeCodes,
+  getAllTestTypeGroupCodes,
 } from "../../utils/api/dataManagementApi";
 import { importQA } from "../../utils/api/qaCertificationsAPI";
 import { formatErrorResponse } from "../../utils/functions";
@@ -57,7 +57,7 @@ export const QACertTestSummaryHeaderInfo = ({
   const [showImportDataPreview, setShowImportDataPreview] = useState(false);
 
   const selectedConfig = useSelector((state) =>
-    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId),
   );
   const locations = selectedConfig?.monitoringLocationData ?? [];
 
@@ -300,6 +300,7 @@ export const QACertTestSummaryHeaderInfo = ({
         <div className="grid-row positon-relative">
           <div className="grid-col-2">
             <HeaderInfoLocationSelect
+              className="margin-right-2 margin-bottom-1 margin-top-3"
               selectedConfig={selectedConfig}
               workspaceSection={QA_CERT_TEST_SUMMARY_STORE_NAME}
             />

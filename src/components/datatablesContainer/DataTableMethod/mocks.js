@@ -572,6 +572,8 @@ export const getMockDataTableMethodsProps = () => {
     updateRelatedTables: false,
     currentTabIndex: 0,
     tabs: [{ inactive: [{}] }],
+    reportDataStatus: jest.fn()
+
   }
 }
 
