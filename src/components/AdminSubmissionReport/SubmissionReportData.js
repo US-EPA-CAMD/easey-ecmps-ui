@@ -55,6 +55,7 @@ export const SubmissionReportData = ({
       selector: (row) => row.orisCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
+      sortFunction: (a, b) => a.orisCode - b.orisCode // ensuring its sort as a number
     },
     {
       name: "Facility Name",
@@ -87,7 +88,7 @@ export const SubmissionReportData = ({
         if (!a?.identifyingInformation) return 1;
         if (!b?.identifyingInformation) return -1;
   
-        return a.identifyingInformation.toLowerCase().localeCompare(b.identifyingInformation.toLowerCase());
+        return a.identifyingInformation.toLowerCase().localeCompare(b.identifyingInformation.toLowerCase()); // ensuring alphabetical sort
       },
       wrap: true,   // Enables wrapping of both header and cell content
     },
@@ -102,21 +103,23 @@ export const SubmissionReportData = ({
       selector: (row) => row.submissionTypeCode,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
+      sortFunction: (a, b) => {
+        return a.submissionTypeCode.toLowerCase().localeCompare(b.submissionTypeCode.toLowerCase());   // ensuring alphabetical sort
+      },
     },
     {
       name: "Submission ID",
       selector: (row) => row.submissionId,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
+      sortFunction: (a, b) => a.submissionId - b.submissionId // ensuring its sort as a number
     },
     {
       name: "Submission Date/Time",
       selector: (row) => row.submissionDateTime,
       sortable: true,
-      sortFunction: (a, b) => {
-        return a.submissionDateTime.toLowerCase().localeCompare(b.submissionDateTime.toLowerCase());   // alphabetical sort
-      },
       wrap: true,   // Enables wrapping of both header and cell content
+      sortFunction: (a, b) => new Date(a.submissionDateTime) - new Date(b.submissionDateTime)
     },
     {
       name: "Severity Level",
