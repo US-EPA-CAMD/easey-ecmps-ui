@@ -68,11 +68,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       ),
       items: [
         { menu: "Help/Support", link: `/help-support`, tab: false },
-        {
-          menu: "Contact Us",
-          link: `https://www.epa.gov/airmarkets/forms/ecmps-beta-contact-us`,
-          tab: true,
-        },
       ],
     },
     {
