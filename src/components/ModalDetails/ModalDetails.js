@@ -16,6 +16,12 @@ import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 
+import {
+  FUTURE_DATE_ALLOWED_COMPONENTS,
+  getMaxFutureDate,
+  formatDateToInput
+} from "../../utils/constants/futureDateControls";
+
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({
   modalData,
@@ -358,12 +364,11 @@ const ModalDetails = ({
           />
         );
         break;
-
-      case "date":
-        let [year, month, day] = [];
-        if (value[5] || value[5] !== null) {
+        case "date":
+         let [year, month, day] = [];
+         if (value[5] || value[5] !== null) {
           [year, month, day] = value[5].split("-");
-        }
+          }
         const d = new Date();
         const datePickerValue = `${year}-${month}-${day}`;
         comp = (
@@ -376,20 +381,13 @@ const ModalDetails = ({
             defaultValue={datePickerValue}
             disabled={isEditingDisabled}
             maxDate={
-               // Allow future dates up to 90 days for specific components
-              ["Default", "Formula", "Load", "Location Attribute", "Method",
-                "Qualification", "Rectangular Duct WAF", "Span", "System",
-                "Unit Information", "Unit Fuel", "Unit Control", "Unit Capacity"].includes(title)
-                ? (() => {
-                    const futureDate = new Date(d.getTime() + (90 * 24 * 60 * 60 * 1000));
-                    return `${futureDate.getFullYear()}-${futureDate.getMonth() + 1}-${futureDate.getDate()}`;
-                  })()
-
-              : title !== "Protocol Gas"
-                ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-                : null
-            }
-          />
+              FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)
+                ? formatDateToInput(getMaxFutureDate())
+                : title !== "Protocol Gas"
+                  ? formatDateToInput(d)
+                  : null
+              }
+            />
         );
         break;
 
