@@ -138,7 +138,7 @@ export const getQATeeReviewSubmit = async (
 export const createMatsSubmission = async (
   payload,
   monLocId,
-  { shouldHandleError = false } = {},
+  { shouldHandleError = true } = {},
 ) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${monLocId}/mats-data-submission`;
   return secureAxios({ url, method: "POST", data: payload })
@@ -149,18 +149,32 @@ export const createMatsSubmission = async (
     });
 };
 
-export const deleteMatsFile = async (fileName, locationId) => {
+export const deleteMatsFile = async (
+  fileName,
+  locationId,
+  { shouldHandleError = true } = {},
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/file/${fileName}`;
   return secureAxios({ url, method: "DELETE" })
     .then(handleResponse)
-    .catch(handleError);
+    .catch((err) => {
+      if (!shouldHandleError) throw err;
+      return handleError(err);
+    });
 };
 
-export const deleteMatsSubmission = async (submissionId, locationId) => {
+export const deleteMatsSubmission = async (
+  submissionId,
+  locationId,
+  { shouldHandleError = true } = {},
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/${submissionId}`;
   return secureAxios({ url, method: "DELETE" })
     .then(handleResponse)
-    .catch(handleError);
+    .catch((err) => {
+      if (!shouldHandleError) throw err;
+      return handleError(err);
+    });
 };
 
 export const getMatsSubmissions = async (monPlanId) => {
@@ -170,11 +184,18 @@ export const getMatsSubmissions = async (monPlanId) => {
     .catch(handleError);
 };
 
-export const uploadMatsFile = async (formData, locationId) => {
+export const uploadMatsFile = async (
+  formData,
+  locationId,
+  { shouldHandleError = true } = {},
+) => {
   const url = `${config.services.qaCertification.uri}/workspace/locations/${locationId}/mats-data-submission/file`;
   return secureAxios({ url, method: "POST", data: formData })
     .then(handleResponse)
-    .catch(handleError);
+    .catch((err) => {
+      if (!shouldHandleError) throw err;
+      return handleError(err);
+    });
 };
 
 export const getQATestSummaryByID = async (locID, id) => {
