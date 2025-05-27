@@ -175,7 +175,7 @@ const MatsSubmission = ({
       firstName: user.firstName,
       lastName: user.lastName,
       middleInitial: '',
-      activityDescription: `ECMPS Submission for ${user.userId}`,
+      activityDescription: `ECMPS MATS Submission for ${user.userId}`,
     }
 
     //ToDo: Modal Loading;
