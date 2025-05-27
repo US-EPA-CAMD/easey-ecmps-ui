@@ -712,17 +712,55 @@ export const retrieveDropdowns = async (
         })
         .catch(error => log.log('getPrefilteredSystemComponents failed', error));
         break;
+
       case "matsReportTypeCodes": {
         const res = await dmApi.getAllMatsReportTypeCodes();
         const reportTypeCodes = res.data?.items?.map((option) => ({
           code: option.matsReportTypeCode,
           name: option.matsReportTypeDescription,
-        }));
+        })) ?? [];
         const sortedReportTypeCodes = reportTypeCodes.sort((a, b) => a.name.localeCompare(b.name));
 
         setDefaultOptions(sortedReportTypeCodes, fieldName);
         break;
       }
+
+      case "matsPollutantCodes": {
+        const res = await dmApi.getAllMatsPollutantCodes();
+        const pollutantCodes = res.data?.items?.map((option) => ({
+          code: option.matsPollutantCode,
+          name: option.matsPollutantDescription,
+        })) ?? [];
+        const sortedPollutantCodes = pollutantCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedPollutantCodes, fieldName, false);
+        break;
+      }
+
+      case "matsTestMethodCodes": {
+        const res = await dmApi.getAllMatsTestMethodCodes();
+        const testMethodCodes = res.data?.items?.map((option) => ({
+          code: option.matsTestMethodCode,
+          name: option.matsTestMethodDescription,
+        })) ?? [];
+        const sortedTestMethodCodes = testMethodCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedTestMethodCodes, fieldName, false);
+        break;
+      }
+
+      case "matsAveragingGroupCodes": {
+        const res = await dmApi.getAllMatsAveragingGroupCodes();
+        const averagingGroupCodes = res.data?.items?.map((option) => ({
+          code: option.matsAveragingGroupCode,
+          name: option.matsAveragingGroupDescription,
+        })) ?? [];
+        const sortedAveragingGroupCodes = averagingGroupCodes.sort((a, b) => a.name.localeCompare(b.name));
+
+        setDefaultOptions(sortedAveragingGroupCodes, fieldName);
+        break;
+      }
+
       default:
         break;
     }
