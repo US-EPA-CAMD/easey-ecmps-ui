@@ -50,6 +50,7 @@ export const getLocations = (facilityValue, checkResultObj) => {
 
 const FilterFormAdminSubmissionReport = ({
   facilities,
+  testTypeCode,
   setTableData,
   setIsTableDataLoading,
   setSelectedRows,
@@ -80,32 +81,6 @@ const FilterFormAdminSubmissionReport = ({
     { code: "FATAL", name: "Fatal" },
     { code: "CRIT3", name: "Critical Error Level 3" },
   ]);
-
-  const testType = ['7DAY',
-        'APPE',
-        'BCAL',
-        'CYCLE',
-        'DAHS',
-        'DGFMCAL',
-        'F2LCHK',
-        'F2LREF',
-        'FF2LBAS',
-        'FF2LTST',
-        'FFACC',
-        'FFACCTT',
-        'HGLINE',
-        'HGSI3',
-        'LEAK',
-        'LINE',
-        'MFMCAL',
-        'ONOFF',
-        'OTHER',
-        'PEI',
-        'PEMSACC',
-        'QGA',
-        'RATA',
-        'TSCAL',
-        'UNITDEF'];
 
     const [qADataType ] = useState([
     initialSelectOption,
@@ -413,7 +388,7 @@ const FilterFormAdminSubmissionReport = ({
                   />
                 </div>
 
-               <div className="margin-left-2 width-card">
+               <div className="margin-left-2">
                 <div>
                 <Label test-id='Test Type' htmlFor='Test Type'>
                 Test Type
@@ -429,9 +404,9 @@ const FilterFormAdminSubmissionReport = ({
                 tabIndex={0}
                 >
                 <option value="Select">Select</option>
-                {testType.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
+                {testTypeCode.map((item, index) => (
+                  <option key={index} value={item.testTypeCode}>
+                    {item.testTypeCodeDescription}
                   </option>
                 ))}
                 </Select>
