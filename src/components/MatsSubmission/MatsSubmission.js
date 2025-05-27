@@ -40,6 +40,7 @@ import ReportingPeriodSelect from "./ReportingPeriodSelect";
 import SubmissionSignSubmitModal from "./SubmissionSignSubmitModal";
 import SubmissionWarningsModal from "./SubmissionWarningsModal";
 import TextInput from "./TextInput";
+import { matsSubmissionProcess } from '../../utils/api/camdServices';
 
 import "./MatsSubmission.scss";
 
@@ -165,8 +166,21 @@ const MatsSubmission = ({
     cancelSubmission();
   };
 
-  const handleSignSubmitModalSave = () => {
+  const handleSignSubmitModalSave = async () => {
     setSubmissionInitStatus(dataStatus.IDLE);
+    const user = JSON.parse(localStorage.getItem("ecmps_user"));
+    const payload = {
+      matsDataSubmissionId:parseInt(submissionId),
+      userId: user.userId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      middleInitial: '',
+      activityDescription: `ECMPS Submission for ${user.userId}`,
+    }
+
+    //ToDo: Modal Loading;
+    const res = await matsSubmissionProcess(payload);
+
   };
 
   const handleWarningsModalClose = () => {
