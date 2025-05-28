@@ -461,9 +461,6 @@ export const DataTableQualifications = ({
     const selectedCodeData = qualCodeData.find(codeData => codeData.code === selectedQualificationData.qualificationTypeCode)
     return selectedCodeData.groupCode === datatableGroupCode
   }
-
-  const title =createNewQualificationData ? "Create Qualification Data" : "Qualification";
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />

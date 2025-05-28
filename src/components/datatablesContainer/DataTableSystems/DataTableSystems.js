@@ -778,9 +778,6 @@ export const DataTableSystems = ({
   }, [inactive, data]);
 
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
-
-  const title ="Create System";
-
   return (
     <>
       <input

@@ -559,13 +559,6 @@ export const DataTableSystemsComponents = ({
     openFuelFlows(false, false, true);
     openComponent(false, false, true);
   };
-
-  const title = createFuelFlowFlag
-    ? "Create Fuel Flow"
-    : user && checkout
-      ? "Edit Fuel Flow"
-      : `Fuel Code: ${selectedFuelFlows?.fuelCode}, System Type Code: ${selectedFuelFlows?.systemTypeCode}`;
-
   return (
     <div className="methodTable react-transition fade-in">
       <input
