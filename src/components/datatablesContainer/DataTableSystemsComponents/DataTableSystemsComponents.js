@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -566,7 +565,6 @@ export const DataTableSystemsComponents = ({
     : user && checkout
       ? "Edit Fuel Flow"
       : `Fuel Code: ${selectedFuelFlows?.fuelCode}, System Type Code: ${selectedFuelFlows?.systemTypeCode}`;
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes("Fuel Flow");
 
   return (
     <div className="methodTable react-transition fade-in">

@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -177,7 +176,6 @@ export const DataTablePCTQualifications = ({
   };
 
   const title ="Qualification Percent";
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
 
   return (
     <div className="methodTable react-transition fade-in">

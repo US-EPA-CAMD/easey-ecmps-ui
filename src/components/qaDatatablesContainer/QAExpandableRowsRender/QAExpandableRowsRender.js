@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useState, useEffect } from 'react';
 import log from "loglevel";
 
@@ -959,15 +958,6 @@ const QAExpandableRowsRender = ({
     return expandables;
   };
 
-
-  const title = createNewData
-    ? `Add ${dataTableName}`
-    : user && isCheckedOut
-      ? `Edit ${dataTableName}`
-      : `${dataTableName}`;
-
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
-
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? 'is-visible' : ''}`} />
@@ -1056,14 +1046,14 @@ const QAExpandableRowsRender = ({
           }
           exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
-          >
-          {dropdownsLoaded ? (
+          children={
+            dropdownsLoaded ? (
               <div>
-                <ModalDetails allowFutureDates={true}
+                <ModalDetails
                   modalData={selectedRow}
                   data={selectedModalData}
                   cols={2}
-                  title={dataTableName}
+                  title={`${dataTableName}`}
                   viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                 />
@@ -1072,7 +1062,7 @@ const QAExpandableRowsRender = ({
               <Preloader />
             )
           }
-        </Modal>
+        />
       ) : null}
     </div>
   );

@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -159,9 +158,6 @@ export const DataTableLMEQualifications = ({
     }
     returnsFocusMpDatatableCreateBTN("Create Qualification LME")
   };
-
-  const title= "Qualification LME";
-
   return (
     <div className="methodTable react-transition fade-in">
       <input

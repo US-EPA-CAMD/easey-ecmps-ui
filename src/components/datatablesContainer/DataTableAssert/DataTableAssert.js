@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useState } from "react";
 
 import Modal from "../../Modal/Modal";
@@ -433,7 +432,7 @@ export const DataTableAssert = ({
   const title = createNewData
   ? `Create ${dataTableName}`: `${dataTableName}`;
 
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
+  //const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
 
   return (
     <div className="methodTable">

@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ArrowDownwardSharp } from '@material-ui/icons';
 import { Button, Checkbox } from '@trussworks/react-uswds';
@@ -262,7 +261,7 @@ const QAMaintenanceData = ({
           <Checkbox
             data-testid={`select-cb-${idx}`}
             className="margin-bottom-5"
-            aria-label={`select row for QA/Cert Maintenance record with id ${row.id}`}
+            aria-label={`select row for QA/Cert Maintainance record with id ${row.id}`}
             id={idx}
             key={idx}
             onChange={e => {
@@ -286,7 +285,7 @@ const QAMaintenanceData = ({
           <Button
             className=" usa-button usa-button--outline"
             onClick={() => openViewModalHandler(row, idx, false)}
-            aria-label={`view row for QA/Cert Maintenance record with id ${row.id}`}
+            aria-label={`view row for QA/Cert Maintainance record with id ${row.id}`}
           >
             View
           </Button>
@@ -371,8 +370,6 @@ const QAMaintenanceData = ({
   const closeModalHandler = () => {
     setModalState({ isOpen: false, type: null });
   };
-
-  const title = `QA/Cert Data Maintenance`;
 
   return (
     <div>
@@ -521,7 +518,7 @@ const QAMaintenanceData = ({
           showDarkBg
           showCancel
         >
-          <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
+          <ModalDetails
             data={selectedViewModalData}
             cols={3}
             viewOnly={true}

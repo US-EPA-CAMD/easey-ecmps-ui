@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -365,9 +364,6 @@ export const DataTableMats = ({
       returnsFocusMpDatatableCreateBTN("Create MATS");
     }
   };
-
-  const title= "Component: Monitoring MATS Methods";
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />

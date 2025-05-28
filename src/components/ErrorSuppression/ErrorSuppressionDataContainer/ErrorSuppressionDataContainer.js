@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -395,8 +394,6 @@ export const ErrorSuppressionDataContainer = () => {
     },
   ];
 
-  const title = "Error Suppression";
-
   return (
     <div>
       {showAddModal || showCloneModal ? (
@@ -427,7 +424,7 @@ export const ErrorSuppressionDataContainer = () => {
           showCancel
           showDarkBg
         >
-          <ModalDetails allowFutureDates={true} data={selectedViewModalData} cols={3} viewOnly={true} />
+          <ModalDetails data={selectedViewModalData} cols={3} viewOnly={true} />
         </Modal>
       )}
 

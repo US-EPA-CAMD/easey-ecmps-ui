@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
@@ -310,10 +309,6 @@ export const DataTableRectangularDucts = ({
       setUpdateTable(true);
     }
   };
-
-  const title = createDuct ? "Create Rectangular Duct WAF" : "Rectangular Duct WAF";
-  const allowFutureDates= FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />

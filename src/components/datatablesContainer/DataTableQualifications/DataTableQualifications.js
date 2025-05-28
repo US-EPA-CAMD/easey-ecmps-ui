@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import _ from "lodash";
 import log from "loglevel";
@@ -464,7 +463,6 @@ export const DataTableQualifications = ({
   }
 
   const title =createNewQualificationData ? "Create Qualification Data" : "Qualification";
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
 
   return (
     <div className="methodTable">

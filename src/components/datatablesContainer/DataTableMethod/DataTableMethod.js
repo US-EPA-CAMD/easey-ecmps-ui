@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -345,7 +344,7 @@ export const DataTableMethod = ({
             : methods
         );
       }
-    } 
+    }
 
     reportDataStatus(dataTableName, { hasActive, hasInactive });
     return records;
@@ -408,7 +407,6 @@ export const DataTableMethod = ({
   };
 
   const title =createNewMethod ? "Create Method" : "Method";
-  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
 
   return (
     <div className="methodTable">

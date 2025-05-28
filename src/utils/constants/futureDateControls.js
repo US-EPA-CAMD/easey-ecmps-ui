@@ -1,21 +1,3 @@
-export const FUTURE_DATE_ALLOWED_COMPONENTS = [
-  'Protocol Gas',
-  'Qualification',
-  'Component',
-  'Fuel Flows',
-  'System',
-  'Supplemental Methods',
-  'System Components',
-  'Method',
-  'Default',
-  'Location Attribute',
-  'Rectangular Ducts',
-  'Span',
-  'Stack',
-  'Max Load Control',
-  'Test Capacity'
-];
-
 export const getMaxFutureDate = () => {
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 90);

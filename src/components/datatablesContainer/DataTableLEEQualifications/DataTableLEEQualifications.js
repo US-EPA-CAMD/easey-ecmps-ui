@@ -1,4 +1,3 @@
-import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -197,9 +196,6 @@ export const DataTableLEEQualifications = ({
     }
     returnsFocusMpDatatableCreateBTN("Create Qualification LEE")
   };
-
-  const title= "Qualification LEE";
-
   return (
     <div className="methodTable react-transition fade-in">
       {openLEE ? (
