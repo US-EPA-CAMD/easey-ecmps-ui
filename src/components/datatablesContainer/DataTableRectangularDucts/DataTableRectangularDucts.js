@@ -372,7 +372,7 @@ export const DataTableRectangularDucts = ({
           }
           >
           {<div>
-              <ModalDetails allowFutureDates={allowFutureDates}
+              <ModalDetails allowFutureDates={true}
                 modalData={selectedDuct}
                 data={selectedModalData}
                 cols={2}

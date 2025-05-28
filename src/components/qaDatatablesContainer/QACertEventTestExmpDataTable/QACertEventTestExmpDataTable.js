@@ -606,7 +606,7 @@ const QACertEventTestExmpDataTable = ({
           >
           {dropdownsLoaded ? (
               <div>
-                <ModalDetails allowFutureDates={allowFutureDates}
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedRow}
                   data={selectedModalData}
                   // prefilteredMdmData={prefilteredMdmData}

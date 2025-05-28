@@ -204,7 +204,7 @@ export const DataTableLEEQualifications = ({
     <div className="methodTable react-transition fade-in">
       {openLEE ? (
         <div>
-          <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualLee}
             backBtn={backBtnHandler}
             data={selectedModalData}

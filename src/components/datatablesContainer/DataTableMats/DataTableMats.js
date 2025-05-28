@@ -401,7 +401,7 @@ export const DataTableMats = ({
          >
           {dropdownsLoaded ? (
               <div>
-                <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes("Component: Monitoring MATS Methods")}
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedMatsMethods}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}

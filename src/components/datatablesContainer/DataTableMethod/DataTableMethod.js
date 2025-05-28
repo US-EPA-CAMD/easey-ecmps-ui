@@ -464,7 +464,7 @@ export const DataTableMethod = ({
           >
           {dropdownsLoaded ? (
               <div>
-                <ModalDetails allowFutureDates={allowFutureDates}
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedMonitoringMethod}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}

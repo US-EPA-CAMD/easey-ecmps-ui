@@ -470,7 +470,7 @@ export const DataTableAssert = ({
           {dropdownsLoaded ? (
             <div>
               <ModalDetails
-                allowFutureDates={allowFutureDates}
+                allowFutureDates={true}
                 modalData={selectedRow}
                 data={selectedModalData}
                 prefilteredMdmData={prefilteredMdmData}

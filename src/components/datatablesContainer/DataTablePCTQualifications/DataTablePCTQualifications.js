@@ -183,7 +183,7 @@ export const DataTablePCTQualifications = ({
     <div className="methodTable react-transition fade-in">
       {openPCT ? (
         <div>
-          <ModalDetails allowFutureDates={allowFutureDates}
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualPct}
             backBtn={backBtnHandler}
             data={selectedModalData}

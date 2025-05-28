@@ -515,7 +515,7 @@ export const DataTableQualifications = ({
               {openPCT || openLEE || openLME || openCPMS ? (
                 ""
               ) : dropdownsLoaded ? (
-                <ModalDetails allowFutureDates={allowFutureDates}
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedQualificationData}
                   data={selectedModalData}
                   cols={2}

@@ -1059,7 +1059,7 @@ const QAExpandableRowsRender = ({
           >
           {dropdownsLoaded ? (
               <div>
-                <ModalDetails allowFutureDates={allowFutureDates}
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedRow}
                   data={selectedModalData}
                   cols={2}

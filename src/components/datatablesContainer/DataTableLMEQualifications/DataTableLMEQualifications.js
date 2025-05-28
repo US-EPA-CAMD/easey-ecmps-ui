@@ -177,7 +177,7 @@ export const DataTableLMEQualifications = ({
       />
       {openLME ? (
         <div>
-          <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes("Qualification LME")}
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualLme}
             backBtn={backBtnHandler}
             data={selectedModalData}

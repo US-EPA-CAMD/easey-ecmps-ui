@@ -844,7 +844,7 @@ export const DataTableSystems = ({
             }}
             errorMsgs={errorMsgs}
             children={
-              <ModalDetails allowFutureDates={allowFutureDates}
+              <ModalDetails allowFutureDates={true}
                 modalData={selected}
                 data={selectedModalData}
                 cols={2}
@@ -969,7 +969,7 @@ export const DataTableSystems = ({
                 {secondLevel ? (
                   ""
                 ) : dropdownsLoaded ? (
-                  <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
+                  <ModalDetails allowFutureDates={true}
                     modalData={selected}
                     data={selectedModalData}
                     cols={2}

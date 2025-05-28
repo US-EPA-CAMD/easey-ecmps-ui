@@ -427,7 +427,7 @@ export const ErrorSuppressionDataContainer = () => {
           showCancel
           showDarkBg
         >
-          <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)} data={selectedViewModalData} cols={3} viewOnly={true} />
+          <ModalDetails allowFutureDates={true} data={selectedViewModalData} cols={3} viewOnly={true} />
         </Modal>
       )}
 
