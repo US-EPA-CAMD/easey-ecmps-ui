@@ -608,14 +608,14 @@ const FileInputRow = ({
           ref={fileInputRef}
         />
         <Button
-          className="margin-bottom-2 margin-right-0"
+          className="margin-right-0"
           type="button"
           onClick={handleFilePreview}
         >
           Preview
         </Button>
         <Button
-          className="margin-bottom-2 margin-right-0"
+          className="margin-right-0"
           type="button"
           onClick={handleFileRemoval}
         >

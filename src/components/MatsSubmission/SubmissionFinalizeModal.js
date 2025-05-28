@@ -27,7 +27,7 @@ export const SubmissionFinalizeModal = ({
     };
 
     setStatus(DataStatus.PENDING);
-    matsSubmissionProcess(payload)
+    matsSubmissionProcess(payload, false)
       .then(() => {
         setStatus(DataStatus.SUCCESS);
       })

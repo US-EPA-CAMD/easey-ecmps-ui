@@ -15,21 +15,27 @@ export const SubmissionCertificationsModal = ({
 }) => {
   const [checkboxId] = useState(uniqueId("certifications-checkbox-"));
   const [checked, setChecked] = useState(false);
+  const [statement, setStatement] = useState("");
   const [status, setStatus] = useState(DataStatus.IDLE);
-  const [statement, setStatement] = useState([]);
 
   useEffect(() => {
+    if (!monPlanId) return;
+
     setStatus(DataStatus.PENDING);
+    // TODO: The table used under the hood in `getCredentials` may be changing, and it may be preferable to use a different API endpoint to fetch the MATS certification statement by location ID.
     getCredentials([monPlanId])
       .then((res) => {
-        if (!res?.data?.items?.length) {
-          log.error(
-            "No certification statements found for the monitoring plan.",
-          );
-          setStatus(DataStatus.ERROR);
-          return;
+        const matsStatement = res?.data?.items?.find(
+          (item) => item.prgCode === "MATS",
+        );
+        if (!matsStatement?.statementText) {
+          const message =
+            "No MATS certification statement found for this location.";
+          log.warn(message);
+          setStatement(message);
+        } else {
+          setStatement(matsStatement.statementText);
         }
-        setStatement(res.data.items[0].statementText);
         setStatus(DataStatus.SUCCESS);
       })
       .catch((err) => {
@@ -52,7 +58,7 @@ export const SubmissionCertificationsModal = ({
         status={status}
         errorMsg="Error loading certification statement."
       >
-        <p>{statement}</p>
+        <p className="margin-x-2">{statement}</p>
         <div className="modal-footer">
           <Checkbox
             className="display-inline-block margin-right-2"
