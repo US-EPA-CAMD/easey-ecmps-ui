@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
@@ -365,6 +366,8 @@ export const DataTableMats = ({
     }
   };
 
+  const title= "Component: Monitoring MATS Methods";
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -395,10 +398,10 @@ export const DataTableMats = ({
           }
           exitBtn={createNewMats ? "Create MATS" : `Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
+         >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes("Component: Monitoring MATS Methods")}
                   modalData={selectedMatsMethods}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}
@@ -414,7 +417,7 @@ export const DataTableMats = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

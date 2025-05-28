@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import { connect } from 'react-redux';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
@@ -310,6 +311,9 @@ export const DataTableRectangularDucts = ({
     }
   };
 
+  const title = createDuct ? "Create Rectangular Duct WAF" : "Rectangular Duct WAF";
+  const allowFutureDates= FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -366,9 +370,9 @@ export const DataTableRectangularDucts = ({
           exitBtn={
             createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`
           }
-          children={
-            <div>
-              <ModalDetails
+          >
+          {<div>
+              <ModalDetails allowFutureDates={allowFutureDates}
                 modalData={selectedDuct}
                 data={selectedModalData}
                 cols={2}
@@ -377,7 +381,7 @@ export const DataTableRectangularDucts = ({
               />
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

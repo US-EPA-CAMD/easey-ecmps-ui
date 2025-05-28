@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import _ from "lodash";
 import log from "loglevel";
@@ -462,6 +463,9 @@ export const DataTableQualifications = ({
     return selectedCodeData.groupCode === datatableGroupCode
   }
 
+  const title =createNewQualificationData ? "Create Qualification Data" : "Qualification";
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -506,12 +510,12 @@ export const DataTableQualifications = ({
               : "Save and Close"
           }
           errorMsgs={errorMsgs}
-          children={
-            <div>
+          >
+          {<div>
               {openPCT || openLEE || openLME || openCPMS ? (
                 ""
               ) : dropdownsLoaded ? (
-                <ModalDetails
+                <ModalDetails allowFutureDates={allowFutureDates}
                   modalData={selectedQualificationData}
                   data={selectedModalData}
                   cols={2}
@@ -603,7 +607,7 @@ export const DataTableQualifications = ({
               )}
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

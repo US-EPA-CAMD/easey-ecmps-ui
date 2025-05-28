@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useState } from "react";
 
 import Modal from "../../Modal/Modal";
@@ -429,6 +430,11 @@ export const DataTableAssert = ({
     changeGridCellAttributeValue();
   }
 
+  const title = createNewData
+  ? `Create ${dataTableName}`: `${dataTableName}`;
+
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -457,29 +463,29 @@ export const DataTableAssert = ({
           showCancel={!(user && checkout) || nonEditable}
           showSave={user && checkout && !nonEditable}
           nonEditable={nonEditable}
-          title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
+          title={title}
           exitBtn={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
-              <div>
-                <ModalDetails
-                  modalData={selectedRow}
-                  data={selectedModalData}
-                  prefilteredMdmData={prefilteredMdmData}
-                  cols={2}
-                  title={`${dataTableName}`}
-                  viewOnly={!(user && checkout) || nonEditable}
-                  create={createNewData}
-                  setMainDropdownChange={setMainDropdownChange}
-                  mainDropdownChange={mainDropdownChange}
-                />
-              </div>
-            ) : (
-              <Preloader />
-            )
-          }
-        />
+        >
+          {dropdownsLoaded ? (
+            <div>
+              <ModalDetails
+                allowFutureDates={allowFutureDates}
+                modalData={selectedRow}
+                data={selectedModalData}
+                prefilteredMdmData={prefilteredMdmData}
+                cols={2}
+                title={dataTableName}
+                viewOnly={!(user && checkout) || nonEditable}
+                create={createNewData}
+                setMainDropdownChange={setMainDropdownChange}
+                mainDropdownChange={mainDropdownChange}
+              />
+            </div>
+          ) : (
+            <Preloader />
+          )}
+        </Modal>
       ) : null}
     </div>
   );

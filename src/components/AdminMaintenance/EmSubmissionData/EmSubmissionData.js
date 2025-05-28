@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from "../../../utils/constants/futureDateControls.js";
 import React, { useCallback, useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -198,7 +199,7 @@ export const EmSubmissionData = ({
 
     setCurrentConfiguration(availConfigs);
     setAvailableConfigurationState(availConfigs);
-  };
+  }
 
   //the selected facility/facilities will deternmine the avaliable configs to select
   const configurationFilterChange = (id, action) => {
@@ -464,6 +465,8 @@ export const EmSubmissionData = ({
     setShowViewEditModal(false);
   };
 
+  const title = "Maintain EM Submission Access";
+
   return (
     <div>
       {(showOpenModal ||
@@ -692,7 +695,7 @@ export const EmSubmissionData = ({
             showDarkBg
             showCancel
           >
-            <ModalDetails
+            <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
               data={selectedModalData}
               cols={3}
               title="Maintain EM Submission Access"

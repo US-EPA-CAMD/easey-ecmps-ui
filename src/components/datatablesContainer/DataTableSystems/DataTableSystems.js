@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -778,6 +779,10 @@ export const DataTableSystems = ({
   }, [inactive, data]);
 
   const [openFuelFlowsView, setOpenFuelFlowsView] = React.useState(false);
+
+  const title ="Create System";
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
+
   return (
     <>
       <input
@@ -839,7 +844,7 @@ export const DataTableSystems = ({
             }}
             errorMsgs={errorMsgs}
             children={
-              <ModalDetails
+              <ModalDetails allowFutureDates={allowFutureDates}
                 modalData={selected}
                 data={selectedModalData}
                 cols={2}
@@ -959,12 +964,12 @@ export const DataTableSystems = ({
             // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
-            children={
-              <div>
+            >
+              {<div>
                 {secondLevel ? (
                   ""
                 ) : dropdownsLoaded ? (
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
                     modalData={selected}
                     data={selectedModalData}
                     cols={2}
@@ -1027,7 +1032,7 @@ export const DataTableSystems = ({
                 />
               </div>
             }
-          />
+          </Modal>
         )
       ) : null}
     </>

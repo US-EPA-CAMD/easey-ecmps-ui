@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useState, useMemo, useEffect } from "react";
 import log from "loglevel";
 
@@ -521,6 +522,12 @@ const QACertEventTestExmpDataTable = ({
     }
   };
 
+  const title = createNewData
+  ? `Create ${dataTableName}`
+  : `Edit ${dataTableName}`;
+
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -596,10 +603,10 @@ const QACertEventTestExmpDataTable = ({
           title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
           exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
+          >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={allowFutureDates}
                   modalData={selectedRow}
                   data={selectedModalData}
                   // prefilteredMdmData={prefilteredMdmData}
@@ -617,7 +624,7 @@ const QACertEventTestExmpDataTable = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

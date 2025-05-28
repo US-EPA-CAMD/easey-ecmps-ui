@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -34,6 +35,7 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { successResponses } from "../../../utils/api/apiUtils";
 import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
+
 
 export const DataTableMethod = ({
   mdmData,
@@ -405,6 +407,9 @@ export const DataTableMethod = ({
     }
   };
 
+  const title =createNewMethod ? "Create Method" : "Method";
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(title);
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -456,15 +461,15 @@ export const DataTableMethod = ({
           exitBtn={createNewMethod ? "Create Method" : `Save and Close`}
           errorMsgs={errorMsgs}
           returnFocus={true}
-          children={
-            dropdownsLoaded ? (
+          >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={allowFutureDates}
                   modalData={selectedMonitoringMethod}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}
                   cols={2}
-                  title={"Method"}
+                  title={title}
                   viewOnly={!(user && checkout)}
                   create={createNewMethod}
                   setMainDropdownChange={setMainDropdownChange}
@@ -475,7 +480,7 @@ export const DataTableMethod = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

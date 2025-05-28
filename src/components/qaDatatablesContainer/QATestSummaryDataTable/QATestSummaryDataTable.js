@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useState, useMemo, useEffect } from "react";
 import log from "loglevel";
 
@@ -688,6 +689,14 @@ const QATestSummaryDataTable = ({
       isCheckedOut: isCheckedOut,
     };
   };
+
+
+  const title = createNewData
+    ? `Add ${dataTableName}`
+    : `${dataTableName}`;
+
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -775,18 +784,18 @@ const QATestSummaryDataTable = ({
           showCancel={!user || (user && !isCheckedOut)}
           showSave={user && isCheckedOut}
           //nonEditable={nonEditable}
-          title={createNewData ? `Add ${dataTableName}` : `${dataTableName}`}
+          title={title}
           exitBtn={`Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
+         >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={allowFutureDates}
                   modalData={selectedRow}
                   data={selectedModalData}
                   // prefilteredMdmData={prefilteredMdmData}
                   cols={3}
-                  title={`${dataTableName}`}
+                  title={dataTableName}
                   viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
                   setMainDropdownChange={setMainDropdownChange}
@@ -798,7 +807,7 @@ const QATestSummaryDataTable = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

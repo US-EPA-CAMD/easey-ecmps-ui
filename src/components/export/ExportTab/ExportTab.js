@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import download from "downloadjs";
 import log from "loglevel";
@@ -313,6 +314,8 @@ export const ExportTab = ({
     window.open(url, reportTitle, reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
+  const title = "Select Report Criteria";
+
   return (
     <div>
       <div className="border-bottom-1px border-base-lighter padding-bottom-2">
@@ -414,7 +417,7 @@ export const ExportTab = ({
           left="33%"
           fixedWidth={true}
         >
-          <ModalDetails
+          <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
             modalData={null}
             data={selectedModalData}
             cols={3}

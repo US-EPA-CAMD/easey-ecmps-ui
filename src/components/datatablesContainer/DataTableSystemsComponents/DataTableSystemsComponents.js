@@ -1,3 +1,4 @@
+import { FUTURE_DATE_ALLOWED_COMPONENTS } from '../../../utils/constants/futureDateControls';
 import React, { useEffect, useMemo, useState } from "react";
 import log from "loglevel";
 
@@ -559,6 +560,14 @@ export const DataTableSystemsComponents = ({
     openFuelFlows(false, false, true);
     openComponent(false, false, true);
   };
+
+  const title = createFuelFlowFlag
+    ? "Create Fuel Flow"
+    : user && checkout
+      ? "Edit Fuel Flow"
+      : `Fuel Code: ${selectedFuelFlows?.fuelCode}, System Type Code: ${selectedFuelFlows?.systemTypeCode}`;
+  const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes("Fuel Flow");
+
   return (
     <div className="methodTable react-transition fade-in">
       <input
@@ -625,7 +634,7 @@ export const DataTableSystemsComponents = ({
           if (openFuelFlowsView) {
             // fuel flow
             return fuelFlowDropdownsLoaded ? (
-              <ModalDetails
+              <ModalDetails allowFutureDates={allowFutureDates}
                 modalData={selectedFuelFlows}
                 backBtn={() => {
                   setBread()
@@ -675,7 +684,7 @@ export const DataTableSystemsComponents = ({
             return (
               <div>
                 {systemComponentDropdownsLoaded ? (
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
                     modalData={selectedComponent} // need to review from modaladdcomp
                     backBtn={() => {
                       setCreateNewComponentFlag(false);
@@ -708,7 +717,7 @@ export const DataTableSystemsComponents = ({
               <div>
                 {!thirdLevel ? (
                   <div>
-                    <ModalDetails
+                    <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
                       modalData={selectedComponent}
                       backBtn={setBread}
                       data={selectedComponentsModalData}
@@ -753,7 +762,7 @@ export const DataTableSystemsComponents = ({
                   </div>
                 ) : (
                   //EDIT ANALYZER RANGES
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={FUTURE_DATE_ALLOWED_COMPONENTS.includes(title)}
                     modalData={selectedRange}
                     backBtn={() => {
                       setThirdLevel()
