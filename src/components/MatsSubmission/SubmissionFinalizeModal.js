@@ -10,7 +10,6 @@ import StatusContent from "../StatusContent/StatusContent";
 export const SubmissionFinalizeModal = ({
   submissionId,
   onClose = () => {},
-  onSave = () => {},
 }) => {
   const [status, setStatus] = useState(DataStatus.IDLE);
 
@@ -41,9 +40,9 @@ export const SubmissionFinalizeModal = ({
   return (
     <Modal
       title="Finalize MATS Submission"
-      close={status === DataStatus.SUCCESS ? onSave : onClose}
+      close={onClose}
       exitBtn="Close"
-      save={onSave}
+      save={onClose}
       showDarkBg={true}
       showSave={status === DataStatus.SUCCESS}
     >

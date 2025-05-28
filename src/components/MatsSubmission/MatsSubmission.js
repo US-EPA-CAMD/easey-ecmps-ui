@@ -177,7 +177,7 @@ const MatsSubmission = ({
     setSubmissionStage(SubmissionStage.FINALIZE);
   };
 
-  const handleFinalizeModalSave = () => {
+  const handleFinalizeModalClose = () => {
     navigate(-1);
   };
 
@@ -324,8 +324,7 @@ const MatsSubmission = ({
               )}
               {submissionStage === SubmissionStage.FINALIZE && (
                 <SubmissionFinalizeModal
-                  onClose={cancelSubmission}
-                  onSave={handleFinalizeModalSave}
+                  onClose={handleFinalizeModalClose}
                   submissionId={submissionId}
                 />
               )}
