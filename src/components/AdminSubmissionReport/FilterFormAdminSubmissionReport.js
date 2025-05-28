@@ -60,7 +60,7 @@ const FilterFormAdminSubmissionReport = ({
   const [selectedFacility, setSelectedFacility] = useState(null);
 
   const [selectedSubmissionType, setSelectedSubmissionType] = useState();
-  const [selectedSeverityLevel, setSelectedSeverityLevel] = useState();;
+  const [selectedSeverityLevel, setSelectedSeverityLevel] = useState();
 
   addAriaLabelToDatatable();
 
