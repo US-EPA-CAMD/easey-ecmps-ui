@@ -29,7 +29,7 @@ import {
   getMonitoringPlans,
   exportMonitoringPlanDownload,
 } from "../../../utils/api/monitoringPlansApi";
-import { dataStatus } from "../../../utils/constants/dataStatus";
+import { DataStatus } from "../../../utils/constants/dataStatus";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,16 +41,12 @@ import { modalViewData } from "../../../additional-functions/create-modal-input-
 import { getReportingPeriods } from "../../../utils/api/qaCertificationsAPI";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
-export const ExportTab = ({
-  facility,
-  selectedConfigId,
-  orisCode,
-}) => {
+export const ExportTab = ({ facility, selectedConfigId, orisCode }) => {
   const [canExport, setCanExport] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
   const [tableData, setTableData] = useState([]);
-  const [tableDataStatus, setTableDataStatus] = useState(dataStatus.IDLE);
+  const [tableDataStatus, setTableDataStatus] = useState(DataStatus.IDLE);
 
   const storedYear = useRef();
   const storedQuarter = useRef();
@@ -65,7 +61,9 @@ export const ExportTab = ({
 
   const dispatch = useDispatch();
 
-  const selectedConfig = useSelector((state) => state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId));
+  const selectedConfig = useSelector((state) =>
+    state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId),
+  );
 
   // *** parse apart facility name
   const facilityMainName = facility.split("(")[0];
@@ -73,12 +71,14 @@ export const ExportTab = ({
     facility.split("(")[1].replace(")", "") +
     (selectedConfig?.active ? "" : " Inactive");
 
-  const selectedUnits = selectedConfig?.monitoringLocationData
-    .filter((ml) => ml.unitId)
-    .map((data) => data.unitId) ?? [];
-  const selectedStacks = selectedConfig?.monitoringLocationData
-    .filter((ml) => ml.stackPipeId)
-    .map((data) => data.stackPipeId) ?? [];
+  const selectedUnits =
+    selectedConfig?.monitoringLocationData
+      .filter((ml) => ml.unitId)
+      .map((data) => data.unitId) ?? [];
+  const selectedStacks =
+    selectedConfig?.monitoringLocationData
+      .filter((ml) => ml.stackPipeId)
+      .map((data) => data.stackPipeId) ?? [];
 
   const dataTypes = useRef([
     {
@@ -124,31 +124,33 @@ export const ExportTab = ({
     },
   ]);
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchTableData = async () => {
       const promises = dataTypes.current.map((dt) =>
-        dt.dataFetch([orisCode], [selectedConfigId], dt.reportCode === 'MPP' ? null : [reportingPeriod])
+        dt.dataFetch(
+          [orisCode],
+          [selectedConfigId],
+          dt.reportCode === "MPP" ? null : [reportingPeriod],
+        ),
       );
       const responses = await Promise.all(promises);
 
-      const tableData = responses.map((resp) =>
-        {
-          return resp.data?.items ?? resp.data;
-        }
-      );
+      const tableData = responses.map((resp) => {
+        return resp.data?.items ?? resp.data;
+      });
 
       return tableData;
     };
 
-    setTableDataStatus(dataStatus.PENDING);
+    setTableDataStatus(DataStatus.PENDING);
     fetchTableData()
       .then((res) => {
         setTableData(res);
-        setTableDataStatus(dataStatus.SUCCESS);
+        setTableDataStatus(DataStatus.SUCCESS);
       })
       .catch((err) => {
         log.error(err);
-        setTableDataStatus(dataStatus.ERROR);
+        setTableDataStatus(DataStatus.ERROR);
       });
   }, [reportingPeriod, orisCode, selectedConfigId]);
 
@@ -165,7 +167,7 @@ export const ExportTab = ({
     };
 
     dispatch(
-      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME)
+      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME),
     );
   };
 
@@ -178,15 +180,17 @@ export const ExportTab = ({
       null,
       { isOfficial: !getUser(), isHistoricalImport: false },
       dataTypes.current[1].selectedRows.current.map((d) => d.testSumId),
-      dataTypes.current[2].selectedRows.current.map((d) => d.qaCertEventIdentifier),
+      dataTypes.current[2].selectedRows.current.map(
+        (d) => d.qaCertEventIdentifier,
+      ),
       dataTypes.current[3].selectedRows.current.map(
-        (d) => d.testExtensionExemptionIdentifier
-      )
+        (d) => d.testExtensionExemptionIdentifier,
+      ),
     );
 
     download(
       JSON.stringify(exportJson.data, null, "\t"),
-      `QA & Certification | Export - ${facilityMainName}.json`
+      `QA & Certification | Export - ${facilityMainName}.json`,
     );
   };
 
@@ -225,8 +229,8 @@ export const ExportTab = ({
           selectedConfigId,
           storedYear.current,
           storedQuarter.current,
-          getUser() !== null
-        )
+          getUser() !== null,
+        ),
       );
     }
 
@@ -236,7 +240,7 @@ export const ExportTab = ({
 
   const dispatchSetExportState = (newExportState) => {
     dispatch(
-      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME)
+      setExportState(selectedConfigId, newExportState, EXPORT_STORE_NAME),
     );
   };
 
@@ -257,7 +261,7 @@ export const ExportTab = ({
       year: ["Years with Emissions Data", "dropdown", "", ""],
     };
     let resp = await getReportingPeriods(true);
-    resp = resp.data?.items ?? resp.data ;
+    resp = resp.data?.items ?? resp.data;
     const calendarYear = Object.values(
       resp?.reduce(
         (acc, obj) => ({
@@ -267,8 +271,8 @@ export const ExportTab = ({
             name: obj.calendarYear,
           },
         }),
-        {}
-      )
+        {},
+      ),
     );
 
     setSelectedModalData(
@@ -283,8 +287,8 @@ export const ExportTab = ({
         "emissionSummaryReport",
         "emissionSummaryReport",
         true,
-        "emissionSummaryReport"
-      )
+        "emissionSummaryReport",
+      ),
     );
     setShowFilterModal(true);
   };
@@ -358,7 +362,10 @@ export const ExportTab = ({
         </div>
       </div>
 
-      <StatusContent label="table data" status={tableDataStatus}>
+      <StatusContent
+        errorMsg="An error occurred while fetching the table data."
+        status={tableDataStatus}
+      >
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           {dataTypes.current.map((dt, index) => {
             return (

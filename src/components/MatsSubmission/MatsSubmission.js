@@ -27,7 +27,7 @@ import {
   deleteMatsSubmission,
   uploadMatsFile,
 } from "../../utils/api/qaCertificationsAPI";
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import { matsModule } from "../../utils/constants/moduleTitles";
 import { formatErrorResponse } from "../../utils/functions";
 import FileInput from "../FileInput/FileInput";
@@ -37,10 +37,10 @@ import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import DatePicker from "./DatePicker";
 import LocationSelect from "./LocationSelect";
 import ReportingPeriodSelect from "./ReportingPeriodSelect";
-import SubmissionSignSubmitModal from "./SubmissionSignSubmitModal";
+import SubmissionCertificationsModal from "./SubmissionCertificationsModal";
+import SubmissionFinalizeModal from "./SubmissionFinalizeModal";
 import SubmissionWarningsModal from "./SubmissionWarningsModal";
 import TextInput from "./TextInput";
-import { matsSubmissionProcess } from '../../utils/api/camdServices';
 
 import "./MatsSubmission.scss";
 
@@ -97,6 +97,13 @@ const reportTypeInputMappings = [
   },
 ];
 
+const SubmissionStage = {
+  INITIAL: "initial",
+  WARNING: "warning",
+  CERTIFICATION: "certification",
+  FINALIZE: "finalize",
+};
+
 function createSubmissionPayload(metadata, fileNames) {
   return {
     metadata,
@@ -138,12 +145,15 @@ const MatsSubmission = ({
   const [reportType, setReportType] = useState(
     originalSubmission?.reportTypeCode ?? "",
   );
-  const [submissionErrors, setSubmissionErrors] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
+  const [submissionInitErrors, setSubmissionInitErrors] = useState([]);
   const [submissionInitStatus, setSubmissionInitStatus] = useState(
-    dataStatus.IDLE,
+    DataStatus.IDLE,
   );
   const [submissionInitWarnings, setSubmissionInitWarnings] = useState([]);
+  const [submissionStage, setSubmissionStage] = useState(
+    SubmissionStage.INITIAL,
+  );
 
   /* CALCULATED VALUES */
 
@@ -159,37 +169,20 @@ const MatsSubmission = ({
     if (submissionId && locationId) {
       deleteMatsSubmission(submissionId, locationId);
     }
-    setSubmissionInitStatus(dataStatus.IDLE);
+    setSubmissionStage(SubmissionStage.INITIAL);
+    setSubmissionInitStatus(DataStatus.IDLE);
   };
 
-  const handleSignSubmitModalClose = () => {
-    cancelSubmission();
+  const handleCertificationsModalSave = async () => {
+    setSubmissionStage(SubmissionStage.FINALIZE);
   };
 
-  const handleSignSubmitModalSave = async () => {
-    setSubmissionInitStatus(dataStatus.IDLE);
-    const user = JSON.parse(localStorage.getItem("ecmps_user"));
-    const payload = {
-      matsDataSubmissionId:parseInt(submissionId),
-      userId: user.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      middleInitial: '',
-      activityDescription: `ECMPS MATS Submission for ${user.userId}`,
-    }
-
-    //ToDo: Modal Loading;
-    const res = await matsSubmissionProcess(payload);
-
-  };
-
-  const handleWarningsModalClose = () => {
-    cancelSubmission();
-    setSubmissionInitWarnings([]);
+  const handleFinalizeModalSave = () => {
+    navigate(-1);
   };
 
   const handleWarningsModalSave = () => {
-    setSubmissionInitWarnings([]);
+    setSubmissionStage(SubmissionStage.CERTIFICATION);
   };
 
   const handleInitialSubmit = async (e) => {
@@ -197,15 +190,15 @@ const MatsSubmission = ({
 
     // Location ID is required to generate the submission URL.
     if (!metadataPayload.locationId) {
-      setSubmissionErrors(["Location is required"]);
-      setSubmissionInitStatus(dataStatus.ERROR);
+      setSubmissionInitErrors(["Location is required"]);
+      setSubmissionInitStatus(DataStatus.ERROR);
       return;
     }
 
-    setSubmissionErrors([]);
+    setSubmissionInitErrors([]);
     setSubmissionId(null);
     setSubmissionInitWarnings([]);
-    setSubmissionInitStatus(dataStatus.PENDING);
+    setSubmissionInitStatus(DataStatus.PENDING);
     try {
       const res = await createMatsSubmission(
         createSubmissionPayload(metadataPayload, fileNames),
@@ -214,13 +207,16 @@ const MatsSubmission = ({
       );
       const { id, warnings } = res.data;
       setSubmissionId(id);
-      setSubmissionInitStatus(dataStatus.SUCCESS);
+      setSubmissionInitStatus(DataStatus.SUCCESS);
       if (warnings.length) {
         setSubmissionInitWarnings(warnings);
+        setSubmissionStage(SubmissionStage.WARNING);
+      } else {
+        setSubmissionStage(SubmissionStage.CERTIFICATION);
       }
     } catch (err) {
-      setSubmissionInitStatus(dataStatus.ERROR);
-      setSubmissionErrors(formatErrorResponse(parseErrorMessage(err)));
+      setSubmissionInitStatus(DataStatus.ERROR);
+      setSubmissionInitErrors(formatErrorResponse(parseErrorMessage(err)));
     }
   };
 
@@ -302,7 +298,7 @@ const MatsSubmission = ({
             </>
           )}
           <div className="display-flex flex-justify-end">
-            {submissionInitStatus === dataStatus.PENDING ? (
+            {submissionInitStatus === DataStatus.PENDING ? (
               <SizedPreloader size={5} />
             ) : (
               <Button type="submit" className="margin-top-2">
@@ -310,25 +306,34 @@ const MatsSubmission = ({
               </Button>
             )}
           </div>
-          {submissionInitStatus === dataStatus.SUCCESS && (
+          {submissionInitStatus === DataStatus.SUCCESS && (
             <>
-              {submissionInitWarnings.length > 0 ? (
+              {submissionStage === SubmissionStage.WARNING && (
                 <SubmissionWarningsModal
-                  onClose={handleWarningsModalClose}
+                  onClose={cancelSubmission}
                   onSave={handleWarningsModalSave}
                   warnings={submissionInitWarnings}
                 />
-              ) : (
-                <SubmissionSignSubmitModal
-                  onClose={handleSignSubmitModalClose}
-                  onSave={handleSignSubmitModalSave}
+              )}
+              {submissionStage === SubmissionStage.CERTIFICATION && (
+                <SubmissionCertificationsModal
+                  monPlanId={selectedConfigId}
+                  onClose={cancelSubmission}
+                  onSave={handleCertificationsModalSave}
+                />
+              )}
+              {submissionStage === SubmissionStage.FINALIZE && (
+                <SubmissionFinalizeModal
+                  onClose={cancelSubmission}
+                  onSave={handleFinalizeModalSave}
+                  submissionId={submissionId}
                 />
               )}
             </>
           )}
-          {submissionInitStatus === dataStatus.ERROR && (
+          {submissionInitStatus === DataStatus.ERROR && (
             <>
-              {submissionErrors.map((error) => (
+              {submissionInitErrors.map((error) => (
                 <Alert key={error} type="error" slim noIcon headingLevel="h3">
                   {error}
                 </Alert>
@@ -627,7 +632,7 @@ const FileInputs = ({
   onUpdate = (_newFilesNames) => {},
   reportType,
 }) => {
-  const [uploadStatus, setUploadStatus] = useState(dataStatus.IDLE);
+  const [uploadStatus, setUploadStatus] = useState(DataStatus.IDLE);
   const [pdfInputs, setPdfInputs] = useState([{ id: uniqueId() }]);
 
   const [ertFileName, setErtFileName] = useState("");
@@ -641,7 +646,7 @@ const FileInputs = ({
   const handleFileChange = async (newFile, prevFileName, setFileName) => {
     if (!locationId) throw new Error("Location ID is required");
 
-    setUploadStatus(dataStatus.PENDING);
+    setUploadStatus(DataStatus.PENDING);
     try {
       if (prevFileName) {
         await deleteMatsFile(prevFileName, locationId);
@@ -649,13 +654,15 @@ const FileInputs = ({
       if (newFile) {
         const formData = new FormData();
         formData.append("file", newFile, newFile.name);
-        await uploadMatsFile(formData, locationId, { shouldHandleError: false });
+        await uploadMatsFile(formData, locationId, {
+          shouldHandleError: false,
+        });
       }
       setFileName(newFile?.name || "");
-      setUploadStatus(dataStatus.SUCCESS);
+      setUploadStatus(DataStatus.SUCCESS);
     } catch (err) {
       setFileName("");
-      setUploadStatus(dataStatus.ERROR);
+      setUploadStatus(DataStatus.ERROR);
       throw err; // Rethrow to handle in the calling function
     }
   };
@@ -719,7 +726,7 @@ const FileInputs = ({
 
   return (
     <>
-      {uploadStatus === dataStatus.PENDING && (
+      {uploadStatus === DataStatus.PENDING && (
         <LoadingModal loading={true} type="Loading" />
       )}
       {fileIsInReportType("ERT") && (

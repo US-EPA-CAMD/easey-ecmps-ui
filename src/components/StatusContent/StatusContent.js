@@ -1,22 +1,22 @@
 import { Alert } from "@trussworks/react-uswds";
 import React from "react";
 
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
 
-export const StatusContent = ({ children, headingLevel = "h4", label, status }) => (
+export const StatusContent = ({ children, errorMsg = "Error loading data.", headingLevel = "h4", status }) => (
   <>
-    {status === dataStatus.PENDING && (
+    {status === DataStatus.PENDING && (
       <div className="display-flex flex-justify-center">
         <SizedPreloader />
       </div>
     )}
-    {status === dataStatus.ERROR && (
+    {status === DataStatus.ERROR && (
       <Alert noIcon slim type="error" headingLevel={headingLevel}>
-        Error loading {label}.
+        {errorMsg}
       </Alert>
     )}
-    {status === dataStatus.SUCCESS && children}
+    {status === DataStatus.SUCCESS && children}
   </>
 );
 
