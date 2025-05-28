@@ -432,8 +432,6 @@ export const DataTableAssert = ({
   const title = createNewData
   ? `Create ${dataTableName}`: `${dataTableName}`;
 
-  //const allowFutureDates = FUTURE_DATE_ALLOWED_COMPONENTS.includes(dataTableName);
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
