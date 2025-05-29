@@ -625,7 +625,7 @@ export const DataTableSystemsComponents = ({
           if (openFuelFlowsView) {
             // fuel flow
             return fuelFlowDropdownsLoaded ? (
-              <ModalDetails
+              <ModalDetails allowFutureDates={true}
                 modalData={selectedFuelFlows}
                 backBtn={() => {
                   setBread()
@@ -675,7 +675,7 @@ export const DataTableSystemsComponents = ({
             return (
               <div>
                 {systemComponentDropdownsLoaded ? (
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={true}
                     modalData={selectedComponent} // need to review from modaladdcomp
                     backBtn={() => {
                       setCreateNewComponentFlag(false);
@@ -708,7 +708,7 @@ export const DataTableSystemsComponents = ({
               <div>
                 {!thirdLevel ? (
                   <div>
-                    <ModalDetails
+                    <ModalDetails allowFutureDates={true}
                       modalData={selectedComponent}
                       backBtn={setBread}
                       data={selectedComponentsModalData}
@@ -753,7 +753,7 @@ export const DataTableSystemsComponents = ({
                   </div>
                 ) : (
                   //EDIT ANALYZER RANGES
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={true}
                     modalData={selectedRange}
                     backBtn={() => {
                       setThirdLevel()
