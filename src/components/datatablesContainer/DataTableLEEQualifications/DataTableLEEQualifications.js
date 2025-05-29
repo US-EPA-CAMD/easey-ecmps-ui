@@ -65,6 +65,7 @@ export const DataTableLEEQualifications = ({
       qualSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
