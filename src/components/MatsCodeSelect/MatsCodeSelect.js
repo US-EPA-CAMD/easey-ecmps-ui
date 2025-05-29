@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { loadDropdowns } from "../../store/actions/dropdowns";
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import DropdownSelection from "../DropdownSelection/DropdownSelection";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
@@ -23,7 +23,7 @@ const MatsCodeSelect = ({
     (state) => state.dropdowns[optionsStoreName][optionsStoreName],
   );
 
-  const [optionsStatus, setOptionsStatus] = useState(dataStatus.IDLE);
+  const [optionsStatus, setOptionsStatus] = useState(DataStatus.IDLE);
 
   const optionsMapped = useMemo(() => {
     if (!multiple) return options;
@@ -49,24 +49,24 @@ const MatsCodeSelect = ({
   }, [dispatch, optionsStoreName]);
 
   useEffect(() => {
-    if (optionsStatus !== dataStatus.IDLE) return;
+    if (optionsStatus !== DataStatus.IDLE) return;
     if (options.length > 0) {
-      setOptionsStatus(dataStatus.SUCCESS);
+      setOptionsStatus(DataStatus.SUCCESS);
       return;
     }
 
-    setOptionsStatus(dataStatus.PENDING);
+    setOptionsStatus(DataStatus.PENDING);
     loadDropdownsData()
       .then(() => {
-        setOptionsStatus(dataStatus.SUCCESS);
+        setOptionsStatus(DataStatus.SUCCESS);
       })
       .catch((err) => {
         log.error(err);
-        setOptionsStatus(dataStatus.ERROR);
+        setOptionsStatus(DataStatus.ERROR);
       });
   }, [loadDropdownsData, options, optionsStatus]);
 
-  return optionsStatus === dataStatus.PENDING ? (
+  return optionsStatus === DataStatus.PENDING ? (
     <div className="display-flex flex-column flex-justify-end height-full">
       <SizedPreloader size={3} className="margin-bottom-2" />
     </div>
