@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { Button, Checkbox } from "@trussworks/react-uswds";
+import { Button } from "@trussworks/react-uswds";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { submissionReportTitle } from "../../utils/constants/moduleTitles";
 import { exportToCSV } from "../../utils/functions";
@@ -36,11 +36,6 @@ export const SubmissionReportData = ({
       severityLevel: "Severity Level",
       mostRecent: "Most Recent",
       submissionStatus: "Submission Status",
-      criticalErrLevelOne: "Critical Error Level 1",
-      criticalErrLevelTwo: "Critical Error Level 2",
-      nonCritical: "Non-Critical",
-      infoMessage: "Informational Message",
-      adminOverride: "Administrative Override",
       submitter: "Submitter"
     };
   
@@ -136,36 +131,6 @@ export const SubmissionReportData = ({
     {
       name: "Submission Status",
       selector: (row) => row.submissionStatus,
-      sortable: true,
-      wrap: true,   // Enables wrapping of both header and cell content
-    },
-    {
-      name: "Critical Error Level 1",
-      selector: (row) => row.criticalErrLevelOne,
-      sortable: true,
-      wrap: true,   // Enables wrapping of both header and cell content
-    },
-    {
-      name: "Critical Error Level 2",
-      selector: (row) => row.criticalErrLevelTwo,
-      sortable: true,
-      wrap: true,   // Enables wrapping of both header and cell content
-    },
-    {
-      name: "Non-Critical",
-      selector: (row) => row.nonCritical,
-      sortable: true,
-      wrap: true,   // Enables wrapping of both header and cell content
-    },
-    {
-      name: "Informational Message",
-      selector: (row) => row.infoMessage,
-      sortable: true,
-      wrap: true,   // Enables wrapping of both header and cell content
-    },
-    {
-      name: "Administrative Override",
-      selector: (row) => row.adminOverride,
       sortable: true,
       wrap: true,   // Enables wrapping of both header and cell content
     },
