@@ -66,6 +66,7 @@ export const DataTableSystems = ({
   selectedSysIdTest = false,
 
   showModal = false,
+  reportDataStatus
 }) => {
   const [show, setShow] = useState(showModal);
   const [monitoringSystems, setMonitoringSystems] = useState([]);
@@ -645,7 +646,7 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .catch((error) => log.log("createSystemsComponents failed", error));
-      
+
       if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
@@ -680,7 +681,7 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
-    
+
     try {
           let resp;
           let response;
@@ -738,38 +739,36 @@ export const DataTableSystems = ({
     setErrorMsgs([]);
   };
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     if (monitoringSystems.length > 0) {
       const activeOnly = getActiveData(monitoringSystems);
       const inactiveOnly = getInactiveData(monitoringSystems);
 
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
       // active records only
       if (activeOnly.length === monitoringSystems.length) {
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
+        records = fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
       // inactive records only
       else if (inactiveOnly.length === monitoringSystems.length) {
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
+        records = fs.getMonitoringPlansSystemsTableRecords(monitoringSystems);
       }
 
       // both active & inactive records
       else {
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansSystemsTableRecords(
+        records = fs.getMonitoringPlansSystemsTableRecords(
           !tabs[currentTabIndex].inactive[0]
             ? getActiveData(monitoringSystems)
             : monitoringSystems
         );
       }
     }
-
-    // no records
-    else {
-      return [];
-    }
-
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitoringSystems, tabs[currentTabIndex].inactive[0]]);
 
@@ -840,7 +839,7 @@ export const DataTableSystems = ({
             }}
             errorMsgs={errorMsgs}
             children={
-              <ModalDetails
+              <ModalDetails allowFutureDates={true}
                 modalData={selected}
                 data={selectedModalData}
                 cols={2}
@@ -960,12 +959,12 @@ export const DataTableSystems = ({
             // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
-            children={
-              <div>
+            >
+              {<div>
                 {secondLevel ? (
                   ""
                 ) : dropdownsLoaded ? (
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={true}
                     modalData={selected}
                     data={selectedModalData}
                     cols={2}
@@ -1028,7 +1027,7 @@ export const DataTableSystems = ({
                 />
               </div>
             }
-          />
+          </Modal>
         )
       ) : null}
     </>

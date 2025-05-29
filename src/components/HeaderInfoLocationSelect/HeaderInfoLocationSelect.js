@@ -8,6 +8,7 @@ import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
 const emptyOption = { id: "", name: "-- Select a value --" };
 
 const HeaderInfoLocationSelect = ({
+  className = "",
   selectedConfig,
   workspaceSection,
   allowEmpty = false,
@@ -15,12 +16,12 @@ const HeaderInfoLocationSelect = ({
   const dispatch = useDispatch();
   const tabs = useSelector(
     (state) =>
-      state.openedFacilityTabs[convertSectionToStoreName(workspaceSection)]
+      state.openedFacilityTabs[convertSectionToStoreName(workspaceSection)],
   );
   const initialized = useRef(false);
 
   const currentTab = tabs.find(
-    (tab) => tab.selectedConfig.id === selectedConfig.id
+    (tab) => tab.selectedConfig.id === selectedConfig.id,
   );
   const locationSelection = currentTab?.location;
   const locations = selectedConfig?.monitoringLocationData ?? [];
@@ -34,11 +35,11 @@ const HeaderInfoLocationSelect = ({
         setLocationSelectionState(
           newLocationSelection,
           currentTab.name,
-          convertSectionToStoreName(workspaceSection)
-        )
+          convertSectionToStoreName(workspaceSection),
+        ),
       );
     },
-    [currentTab, dispatch, workspaceSection]
+    [currentTab, dispatch, workspaceSection],
   );
 
   useEffect(() => {
@@ -53,6 +54,8 @@ const HeaderInfoLocationSelect = ({
   return (
     <DropdownSelection
       caption="Locations"
+      className={className}
+      extraSpace
       options={locationOptions}
       viewKey="name"
       selectKey="id"

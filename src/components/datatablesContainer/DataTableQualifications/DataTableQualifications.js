@@ -62,6 +62,8 @@ export const DataTableQualifications = ({
   //
 
   tabs,
+  reportDataStatus,
+  dataTableName
 }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [qualificationData, setQualificationsData] = useState([]);
@@ -197,37 +199,40 @@ export const DataTableQualifications = ({
   };
 
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     if (qualificationData?.length > 0) {
       const activeOnly = getActiveData(qualificationData);
       const inactiveOnly = getInactiveData(qualificationData);
-
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
       // only active data >  disable checkbox and unchecks it
       if (activeOnly.length === qualificationData.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
         settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansQualifications(qualificationData);
+        records =  fs.getMonitoringPlansQualifications(qualificationData);
       }
 
       // only inactive data > disables checkbox and checks it
       else if (inactiveOnly.length === qualificationData.length) {
         //check it and disable checkbox
         settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansQualifications(qualificationData);
+        records = fs.getMonitoringPlansQualifications(qualificationData);
       }
       // resets checkbox
       else {
         settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansQualifications(
+        records = fs.getMonitoringPlansQualifications(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(qualificationData)
             : qualificationData
         );
       }
-    } else {
-      return [];
     }
-
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qualificationData, tabs[currentTabIndex].inactive[0]]);
 
@@ -456,7 +461,6 @@ export const DataTableQualifications = ({
     const selectedCodeData = qualCodeData.find(codeData => codeData.code === selectedQualificationData.qualificationTypeCode)
     return selectedCodeData.groupCode === datatableGroupCode
   }
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -501,12 +505,12 @@ export const DataTableQualifications = ({
               : "Save and Close"
           }
           errorMsgs={errorMsgs}
-          children={
-            <div>
+          >
+          {<div>
               {openPCT || openLEE || openLME || openCPMS ? (
                 ""
               ) : dropdownsLoaded ? (
-                <ModalDetails
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedQualificationData}
                   data={selectedModalData}
                   cols={2}
@@ -598,7 +602,7 @@ export const DataTableQualifications = ({
               )}
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

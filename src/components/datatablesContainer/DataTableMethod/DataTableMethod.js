@@ -35,6 +35,7 @@ import {
 import { successResponses } from "../../../utils/api/apiUtils";
 import { returnsFocusMpDatatableCreateBTN } from '../../../additional-functions/ensure-508'
 
+
 export const DataTableMethod = ({
   mdmData,
   loadDropdownsData,
@@ -52,6 +53,7 @@ export const DataTableMethod = ({
   //
 
   tabs,
+  reportDataStatus,
 }) => {
   const [methods, setMethods] = useState([]);
   const [matsMethods, setMatsMethods] = useState([]);
@@ -312,39 +314,40 @@ export const DataTableMethod = ({
   };
 
   const data = useMemo(() => {
+    let hasActive = false;
+    let hasInactive = false;
+    let records = [];
     const matsAndMethods = matsMethods.concat(methods);
     if (matsAndMethods.length > 0) {
       const activeOnly = getActiveData(matsAndMethods);
       const inactiveOnly = getInactiveData(matsAndMethods);
+      hasActive = activeOnly.length > 0;
+      hasInactive = inactiveOnly.length > 0;
 
       // only active data >  disable checkbox and unchecks it
       if (activeOnly.length === matsAndMethods.length) {
         // uncheck it and disable checkbox
         //function parameters ( check flag, disable flag )
-        settingInactiveCheckBox(false, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        records = fs.getMonitoringPlansMethodsTableRecords(methods);
       }
 
       // only inactive data > disables checkbox and checks it
       else if (inactiveOnly.length === matsAndMethods.length) {
         //check it and disable checkbox
-        settingInactiveCheckBox(true, true);
-        return fs.getMonitoringPlansMethodsTableRecords(methods);
+        records =  fs.getMonitoringPlansMethodsTableRecords(methods);
       }
       // resets checkbox
       else {
-        settingInactiveCheckBox(tabs[currentTabIndex].inactive[0], false);
-        return fs.getMonitoringPlansMethodsTableRecords(
+        records = fs.getMonitoringPlansMethodsTableRecords(
           tabs[currentTabIndex].inactive[0] === false
             ? getActiveData(methods)
             : methods
         );
       }
-    } else {
-      // settingInactiveCheckBox(false, true);
-      return [];
     }
 
+    reportDataStatus(dataTableName, { hasActive, hasInactive });
+    return records;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [methods, matsMethods, tabs[currentTabIndex].inactive[0], updateTable]);
 
@@ -403,6 +406,8 @@ export const DataTableMethod = ({
     }
   };
 
+  const title =createNewMethod ? "Create Method" : "Method";
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -454,15 +459,15 @@ export const DataTableMethod = ({
           exitBtn={createNewMethod ? "Create Method" : `Save and Close`}
           errorMsgs={errorMsgs}
           returnFocus={true}
-          children={
-            dropdownsLoaded ? (
+          >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedMonitoringMethod}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}
                   cols={2}
-                  title={"Method"}
+                  title={title}
                   viewOnly={!(user && checkout)}
                   create={createNewMethod}
                   setMainDropdownChange={setMainDropdownChange}
@@ -473,7 +478,7 @@ export const DataTableMethod = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

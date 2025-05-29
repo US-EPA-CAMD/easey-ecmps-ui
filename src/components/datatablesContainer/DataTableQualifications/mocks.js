@@ -59,6 +59,7 @@ export const getMockDataTableQualProps = () => {
     setRevertedState: jest.fn(),
     selectedLocation: "50",
     currentTabIndex: 0,
+    reportDataStatus: jest.fn()
   }
 }
 
