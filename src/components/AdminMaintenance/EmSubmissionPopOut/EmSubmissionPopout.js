@@ -72,6 +72,7 @@ export const EmSubmissionModal = ({
       emissionStatusCode: selectedRow.emissionStatusCode,
       submissionAvailabilityCode: selectedRow.submissionAvailabilityCode,
       resubExplanation: selectedReasonForAction,
+      userid: JSON.parse(localStorage.getItem("ecmps_user"))?.userId,
       closeDate: selectedCloseDate,
       openDate: selectedOpenDate,
       monitorPlanId: selectedRow.monitorPlanId,
@@ -103,6 +104,7 @@ export const EmSubmissionModal = ({
         emissionStatusCode: row.emissionStatusCode,
         submissionAvailabilityCode: row.submissionAvailabilityCode,
         resubExplanation,
+        userid: JSON.parse(localStorage.getItem("ecmps_user"))?.userId,
         closeDate: selectedCloseDate,
       };
       return payload;
@@ -120,6 +122,7 @@ export const EmSubmissionModal = ({
       emissionStatusCode: row.emissionStatusCode,
       submissionAvailabilityCode: "DELETE",
       resubExplanation: selectedReasonForAction,
+      userid: JSON.parse(localStorage.getItem("ecmps_user"))?.userId,
       closeDate: row.closeDate,
     }));
 
@@ -139,6 +142,7 @@ export const EmSubmissionModal = ({
         emissionStatusCode: "APPRVD",
         submissionAvailabilityCode: "REQUIRE",
         resubExplanation,
+        userid: JSON.parse(localStorage.getItem("ecmps_user"))?.userId,
         closeDate: row.closeDate,
       };
       return payload;

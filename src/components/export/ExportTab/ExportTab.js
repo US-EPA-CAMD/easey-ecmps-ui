@@ -29,7 +29,7 @@ import {
   getMonitoringPlans,
   exportMonitoringPlanDownload,
 } from "../../../utils/api/monitoringPlansApi";
-import { dataStatus } from "../../../utils/constants/dataStatus";
+import { DataStatus } from "../../../utils/constants/dataStatus";
 import { getUser } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +50,7 @@ export const ExportTab = ({
   const [isExporting, setIsExporting] = useState(false);
   const [reportingPeriod, setReportingPeriod] = useState("");
   const [tableData, setTableData] = useState([]);
-  const [tableDataStatus, setTableDataStatus] = useState(dataStatus.IDLE);
+  const [tableDataStatus, setTableDataStatus] = useState(DataStatus.IDLE);
 
   const storedYear = useRef();
   const storedQuarter = useRef();
@@ -140,15 +140,15 @@ export const ExportTab = ({
       return tableData;
     };
 
-    setTableDataStatus(dataStatus.PENDING);
+    setTableDataStatus(DataStatus.PENDING);
     fetchTableData()
       .then((res) => {
         setTableData(res);
-        setTableDataStatus(dataStatus.SUCCESS);
+        setTableDataStatus(DataStatus.SUCCESS);
       })
       .catch((err) => {
         log.error(err);
-        setTableDataStatus(dataStatus.ERROR);
+        setTableDataStatus(DataStatus.ERROR);
       });
   }, [reportingPeriod, orisCode, selectedConfigId]);
 
@@ -358,7 +358,9 @@ export const ExportTab = ({
         </div>
       </div>
 
-      <StatusContent label="table data" status={tableDataStatus}>
+      <StatusContent 
+        errorMsg="An error occurred while fetching the table data."
+        status={tableDataStatus}>
         <div className="border-bottom-1px border-base-lighter padding-bottom-2">
           {dataTypes.current.map((dt, index) => {
             return (

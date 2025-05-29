@@ -47,6 +47,7 @@ export const SelectFacilitiesDataTable = ({
   const history = useNavigate();
 
   useEffect(() => {
+    setDataLoaded(false);
     facilitiesApi
       .getAllFacilities()
       .then((res) => {

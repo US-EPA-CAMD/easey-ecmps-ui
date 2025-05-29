@@ -99,7 +99,7 @@ const FilterFormAdminSubmissionReport = ({
   const [locationData, setLocationData] = useState([]);
 
   const [selectedSubmissionType, setSelectedSubmissionType] = useState();
-  const [selectedSeverityLevel, setSelectedSeverityLevel] = useState();;
+  const [selectedSeverityLevel, setSelectedSeverityLevel] = useState();
   const [selectedQADataType, setSelectedQADataType] = useState();
   const [selectedTestType, setSelectedTestType] = useState();
 
