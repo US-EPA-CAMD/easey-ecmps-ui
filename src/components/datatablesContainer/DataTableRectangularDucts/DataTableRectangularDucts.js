@@ -309,7 +309,6 @@ export const DataTableRectangularDucts = ({
       setUpdateTable(true);
     }
   };
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -366,9 +365,9 @@ export const DataTableRectangularDucts = ({
           exitBtn={
             createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`
           }
-          children={
-            <div>
-              <ModalDetails
+          >
+          {<div>
+              <ModalDetails allowFutureDates={true}
                 modalData={selectedDuct}
                 data={selectedModalData}
                 cols={2}
@@ -377,7 +376,7 @@ export const DataTableRectangularDucts = ({
               />
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

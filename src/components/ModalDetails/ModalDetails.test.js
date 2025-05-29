@@ -141,8 +141,7 @@ beforeAll(() => {
 describe("rendering a modal pop up detail ", () => {
   test("renders view only ", () => {
     const { container } = render(
-      <ModalDetails
-        modalData={modalData}
+      <ModalDetails allowFutureDates={true} modalData={modalData}
         data={data}
         cols={cols}
         title={title}

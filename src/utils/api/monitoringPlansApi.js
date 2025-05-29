@@ -690,7 +690,7 @@ export const createMonitoringDuct = async (payload) => {
       })
     );
   } catch (error) {
-    return handleImportError(error);
+    return handleImportError(error,true);
   }
 };
 

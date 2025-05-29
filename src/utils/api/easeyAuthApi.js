@@ -291,7 +291,10 @@ export const createActivity = async (payload) => {
   }
 };
 
-export const getCredentials = async (monitorPlans) => {
+export const getCredentials = async (
+  monitorPlans,
+  { shouldHandleError = true } = {},
+) => {
   try {
     return await secureAxios({
       method: "GET",
@@ -300,6 +303,7 @@ export const getCredentials = async (monitorPlans) => {
       }/certifications/statements?monitorPlanIds=${monitorPlans.join("|")}`,
     });
   } catch (err) {
+    if (!shouldHandleError) throw err;
     displayAppError(err.response?.data?.message || err?.message || err);
   }
   

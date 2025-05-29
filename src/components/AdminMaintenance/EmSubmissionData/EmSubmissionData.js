@@ -43,7 +43,7 @@ export const EmSubmissionData = ({
 
   const [currentConfiguration, setCurrentConfiguration] = useState([]);
   const [availableConfigurationState, setAvailableConfigurationState] = useState([]);
-  
+
   const [currentStatus, setCurrentStatus] = useState([]);
   const [availableStatusState, setAvailableStatusState] = useState([]);
 
@@ -88,9 +88,9 @@ export const EmSubmissionData = ({
     const facilityName = filteredData[0].facilityName;
     const orisCode = filteredData[0].orisCode
     const reportingPeriod = filteredData[0].reportingPeriodAbbreviation
-  
+
     exportToCSV(filteredData, columnMapping, `EM_Submission_Access_${facilityName}(${orisCode})_${reportingPeriod}`)
-    
+
   };
 
   // fetch and initialize options for lower grid filter(s)
@@ -99,14 +99,14 @@ export const EmSubmissionData = ({
     // reset facility filter
     const facilityList = Array.from(
       data.reduce((map, { facilityName, orisCode }) => {
-        const id = parseInt(orisCode, 10); 
+        const id = parseInt(orisCode, 10);
         if (!map.has(id)) {
           map.set(id, { label: `${facilityName} (${orisCode})`, id });
         }
         return map;
-      }, new Map()).values() 
-    ).sort((a, b) => a.id - b.id); 
-    
+      }, new Map()).values()
+    ).sort((a, b) => a.id - b.id);
+
     const availFacility = [];
     for (const fac of facilityList) {
       availFacility.push({
@@ -151,7 +151,7 @@ export const EmSubmissionData = ({
     }
 
     setCurrentStatus(statusList)
-    setAvailableStatusState(statusList) 
+    setAvailableStatusState(statusList)
 
   }, [data, availStatus, reportingPeriods]);
 
@@ -198,7 +198,7 @@ export const EmSubmissionData = ({
 
     setCurrentConfiguration(availConfigs);
     setAvailableConfigurationState(availConfigs);
-  };
+  }
 
   //the selected facility/facilities will deternmine the avaliable configs to select
   const configurationFilterChange = (id, action) => {
@@ -232,25 +232,25 @@ export const EmSubmissionData = ({
     let updatedFilteredData = data
 
     if (selectedConfigurations?.length !== 0) {
-      updatedFilteredData = updatedFilteredData.filter((it) => 
-        selectedConfigurations.includes(it.monitorPlanId) 
+      updatedFilteredData = updatedFilteredData.filter((it) =>
+        selectedConfigurations.includes(it.monitorPlanId)
       );
     } else if (selectedFacilities?.length !== 0){
-      updatedFilteredData = updatedFilteredData.filter((it) => 
-        selectedFacilities.includes(it.orisCode) 
+      updatedFilteredData = updatedFilteredData.filter((it) =>
+        selectedFacilities.includes(it.orisCode)
       );
     }
 
     //filter for the selected reporting period
     if (selectedReportingPeriodIds?.length !== 0) {
-      updatedFilteredData = updatedFilteredData.filter((it) => 
-        selectedReportingPeriodIds.includes(it.reportingPeriodAbbreviation) 
+      updatedFilteredData = updatedFilteredData.filter((it) =>
+        selectedReportingPeriodIds.includes(it.reportingPeriodAbbreviation)
       );
     }
-      
+
     //filter for the selected status
     if (selectedStatusIds?.length !== 0) {
-      updatedFilteredData = updatedFilteredData.filter((it) => 
+      updatedFilteredData = updatedFilteredData.filter((it) =>
         selectedStatusIds.includes(it.status?.toLowerCase())
       );
     }
@@ -456,7 +456,7 @@ export const EmSubmissionData = ({
       approveBtn?.focus();
     } else if (showViewEditModal) {
       returnsFocusDatatableViewBTN("-em-submission-", selectedRowId, true);
-    } 
+    }
     setShowOpenModal(false);
     setShowExtendModal(false);
     setShowCloseModal(false);
@@ -501,16 +501,16 @@ export const EmSubmissionData = ({
                   aria-label="Add"
                   data-testid="es-add"
                   className="usa-button usa-button--outline"
-                  onClick={() => { 
+                  onClick={() => {
                     setShowOpenModal(true);
                   }}
                   id="em-submission-open-btn"
                   disabled={
-                    data.length === 0 
+                    data.length === 0
                     || selectedRows.length !== 1 //we can only submit the open request for one record at a time
                     || selectedRows.some(row => row.status !== 'CLOSED' && row.status !== 'NO WINDOW')
                     || !selectedRows[0]?.isLatestRecord
-                  } 
+                  }
                 >
                   Open
                 </Button>
@@ -523,12 +523,12 @@ export const EmSubmissionData = ({
                   onClick={() => setShowExtendModal(true)}
                   id="em-submission-extend-btn"
                   disabled={
-                    data.length === 0 
-                    || disableApproveBtn 
-                    || selectedRows.length === 0 
+                    data.length === 0
+                    || disableApproveBtn
+                    || selectedRows.length === 0
                     || selectedRows.some(row => row.status !== 'OPEN')
                     || selectedRows.some(row => row.isLatestRecord === false)
-                  } 
+                  }
                 >
                   Extend
                 </Button>
@@ -541,8 +541,8 @@ export const EmSubmissionData = ({
                   onClick={() => setShowCloseModal(true)}
                   id="em-submission-close-btn"
                   disabled={
-                    data.length === 0 
-                    || selectedRows.length === 0 
+                    data.length === 0
+                    || selectedRows.length === 0
                     || selectedRows.some(row => row.status !== 'OPEN')
                     || selectedRows.some(row => row.isLatestRecord === false)
                   }
@@ -558,9 +558,9 @@ export const EmSubmissionData = ({
                   onClick={() => setShowApproveModal(true)}
                   id="em-submission-approve-btn"
                   disabled={
-                    data.length === 0 
-                    || disableApproveBtn 
-                    || selectedRows.length === 0 
+                    data.length === 0
+                    || disableApproveBtn
+                    || selectedRows.length === 0
                     || selectedRows.some(row => row.status !== 'PENDING' && row.status !== 'CANCELLED')
                     || selectedRows.some(row => row.isLatestRecord === false)
                   }
