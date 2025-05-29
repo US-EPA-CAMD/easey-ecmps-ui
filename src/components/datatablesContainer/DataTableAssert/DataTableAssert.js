@@ -131,6 +131,7 @@ export const DataTableAssert = ({
       revertedState ||
       updateRelatedTables
     ) {
+      setDataLoaded(false);
       assertSelector
         .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
         .then((res) => {
