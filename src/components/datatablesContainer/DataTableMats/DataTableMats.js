@@ -364,7 +364,6 @@ export const DataTableMats = ({
       returnsFocusMpDatatableCreateBTN("Create MATS");
     }
   };
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -395,10 +394,10 @@ export const DataTableMats = ({
           }
           exitBtn={createNewMats ? "Create MATS" : `Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
+         >
+          {dropdownsLoaded ? (
               <div>
-                <ModalDetails
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedMatsMethods}
                   data={selectedModalData}
                   prefilteredMdmData={prefilteredMdmData}
@@ -414,7 +413,7 @@ export const DataTableMats = ({
               <Preloader />
             )
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

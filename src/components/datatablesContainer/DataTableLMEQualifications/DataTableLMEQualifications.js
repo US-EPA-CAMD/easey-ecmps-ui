@@ -158,7 +158,6 @@ export const DataTableLMEQualifications = ({
     }
     returnsFocusMpDatatableCreateBTN("Create Qualification LME")
   };
-
   return (
     <div className="methodTable react-transition fade-in">
       <input
@@ -174,7 +173,7 @@ export const DataTableLMEQualifications = ({
       />
       {openLME ? (
         <div>
-          <ModalDetails
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualLme}
             backBtn={backBtnHandler}
             data={selectedModalData}

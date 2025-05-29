@@ -429,6 +429,9 @@ export const DataTableAssert = ({
     changeGridCellAttributeValue();
   }
 
+  const title = createNewData
+  ? `Create ${dataTableName}`: `${dataTableName}`;
+
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -457,29 +460,29 @@ export const DataTableAssert = ({
           showCancel={!(user && checkout) || nonEditable}
           showSave={user && checkout && !nonEditable}
           nonEditable={nonEditable}
-          title={createNewData ? `Create ${dataTableName}` : `${dataTableName}`}
+          title={title}
           exitBtn={createNewData ? `Create ${dataTableName}` : `Save and Close`}
           errorMsgs={errorMsgs}
-          children={
-            dropdownsLoaded ? (
-              <div>
-                <ModalDetails
-                  modalData={selectedRow}
-                  data={selectedModalData}
-                  prefilteredMdmData={prefilteredMdmData}
-                  cols={2}
-                  title={`${dataTableName}`}
-                  viewOnly={!(user && checkout) || nonEditable}
-                  create={createNewData}
-                  setMainDropdownChange={setMainDropdownChange}
-                  mainDropdownChange={mainDropdownChange}
-                />
-              </div>
-            ) : (
-              <Preloader />
-            )
-          }
-        />
+        >
+          {dropdownsLoaded ? (
+            <div>
+              <ModalDetails
+                allowFutureDates={true}
+                modalData={selectedRow}
+                data={selectedModalData}
+                prefilteredMdmData={prefilteredMdmData}
+                cols={2}
+                title={dataTableName}
+                viewOnly={!(user && checkout) || nonEditable}
+                create={createNewData}
+                setMainDropdownChange={setMainDropdownChange}
+                mainDropdownChange={mainDropdownChange}
+              />
+            </div>
+          ) : (
+            <Preloader />
+          )}
+        </Modal>
       ) : null}
     </div>
   );
