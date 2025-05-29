@@ -462,7 +462,6 @@ export const DataTableQualifications = ({
     const selectedCodeData = qualCodeData.find(codeData => codeData.code === selectedQualificationData.qualificationTypeCode)
     return selectedCodeData.groupCode === datatableGroupCode
   }
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -507,12 +506,12 @@ export const DataTableQualifications = ({
               : "Save and Close"
           }
           errorMsgs={errorMsgs}
-          children={
-            <div>
+          >
+          {<div>
               {openPCT || openLEE || openLME || openCPMS ? (
                 ""
               ) : dropdownsLoaded ? (
-                <ModalDetails
+                <ModalDetails allowFutureDates={true}
                   modalData={selectedQualificationData}
                   data={selectedModalData}
                   cols={2}
@@ -604,7 +603,7 @@ export const DataTableQualifications = ({
               )}
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );
