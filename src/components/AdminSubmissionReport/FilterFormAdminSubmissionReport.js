@@ -66,7 +66,6 @@ const FilterFormAdminSubmissionReport = ({
     { code: "EM", name: "Emissions" },
     { code: "MP", name: "Monitor Plan" },
     { code: "QA", name: "Quality Assurance" },
-    { code: "MATS", name: "MATS Data" },
   ]);
 
   const [severityLevel ] = useState([
