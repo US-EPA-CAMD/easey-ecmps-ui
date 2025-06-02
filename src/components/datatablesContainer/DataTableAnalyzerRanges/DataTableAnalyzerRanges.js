@@ -38,6 +38,7 @@ export const DataTableAnalyzerRanges = ({
 
   useEffect(() => {
     if (updateAnalyzerRangeTable || ranges.length <= 0) {
+      setRangesLoaded(false);
       mpApi
         .getMonitoringAnalyzerRanges(
           selectedRanges.locationId,

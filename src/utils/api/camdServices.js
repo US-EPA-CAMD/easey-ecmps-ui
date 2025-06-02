@@ -124,3 +124,16 @@ export async function getSubmissionQueueOrder(orisCodes) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export async function matsSubmissionProcess(payload, shouldHandleError = true) {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.camd.uri}/mats-file-upload/process`,
+    data: payload,
+  })
+    .then(handleResponse)
+    .catch((error) => {
+      if (!shouldHandleError) throw error;
+      return handleError(error);
+    });
+}

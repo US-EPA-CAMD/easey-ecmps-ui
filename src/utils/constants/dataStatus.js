@@ -1,4 +1,4 @@
-export const dataStatus = {
+export const DataStatus = {
   PENDING: "PENDING",
   SUCCESS: "SUCCESS",
   ERROR: "ERROR",

@@ -866,6 +866,7 @@ export const EvaluateAndSubmit = ({
             categoryTitle={category.name}
             columns={category.columns}
             data={category.ref.current}
+            key={category.rowId}
             onChange={handleSelectionChange}
             type={category.type}
             rowId={category.rowId}
