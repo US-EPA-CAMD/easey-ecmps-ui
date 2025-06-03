@@ -27,7 +27,7 @@ import {
   deleteMatsSubmission,
   uploadMatsFile,
 } from "../../utils/api/qaCertificationsAPI";
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import { matsModule } from "../../utils/constants/moduleTitles";
 import { formatErrorResponse } from "../../utils/functions";
 import FileInput from "../FileInput/FileInput";
@@ -37,7 +37,8 @@ import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import DatePicker from "./DatePicker";
 import LocationSelect from "./LocationSelect";
 import ReportingPeriodSelect from "./ReportingPeriodSelect";
-import SubmissionSignSubmitModal from "./SubmissionSignSubmitModal";
+import SubmissionCertificationsModal from "./SubmissionCertificationsModal";
+import SubmissionFinalizeModal from "./SubmissionFinalizeModal";
 import SubmissionWarningsModal from "./SubmissionWarningsModal";
 import TextInput from "./TextInput";
 
@@ -96,6 +97,13 @@ const reportTypeInputMappings = [
   },
 ];
 
+const SubmissionStage = {
+  INITIAL: "initial",
+  WARNING: "warning",
+  CERTIFICATION: "certification",
+  FINALIZE: "finalize",
+};
+
 function createSubmissionPayload(metadata, fileNames) {
   return {
     metadata,
@@ -137,12 +145,15 @@ const MatsSubmission = ({
   const [reportType, setReportType] = useState(
     originalSubmission?.reportTypeCode ?? "",
   );
-  const [submissionErrors, setSubmissionErrors] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
+  const [submissionInitErrors, setSubmissionInitErrors] = useState([]);
   const [submissionInitStatus, setSubmissionInitStatus] = useState(
-    dataStatus.IDLE,
+    DataStatus.IDLE,
   );
   const [submissionInitWarnings, setSubmissionInitWarnings] = useState([]);
+  const [submissionStage, setSubmissionStage] = useState(
+    SubmissionStage.INITIAL,
+  );
 
   /* CALCULATED VALUES */
 
@@ -158,24 +169,20 @@ const MatsSubmission = ({
     if (submissionId && locationId) {
       deleteMatsSubmission(submissionId, locationId);
     }
-    setSubmissionInitStatus(dataStatus.IDLE);
+    setSubmissionStage(SubmissionStage.INITIAL);
+    setSubmissionInitStatus(DataStatus.IDLE);
   };
 
-  const handleSignSubmitModalClose = () => {
-    cancelSubmission();
+  const handleCertificationsModalSave = async () => {
+    setSubmissionStage(SubmissionStage.FINALIZE);
   };
 
-  const handleSignSubmitModalSave = () => {
-    setSubmissionInitStatus(dataStatus.IDLE);
-  };
-
-  const handleWarningsModalClose = () => {
-    cancelSubmission();
-    setSubmissionInitWarnings([]);
+  const handleFinalizeModalClose = () => {
+    navigate(-1);
   };
 
   const handleWarningsModalSave = () => {
-    setSubmissionInitWarnings([]);
+    setSubmissionStage(SubmissionStage.CERTIFICATION);
   };
 
   const handleInitialSubmit = async (e) => {
@@ -183,29 +190,33 @@ const MatsSubmission = ({
 
     // Location ID is required to generate the submission URL.
     if (!metadataPayload.locationId) {
-      setSubmissionErrors(["Location is required"]);
-      setSubmissionInitStatus(dataStatus.ERROR);
+      setSubmissionInitErrors(["Location is required"]);
+      setSubmissionInitStatus(DataStatus.ERROR);
       return;
     }
 
-    setSubmissionErrors([]);
+    setSubmissionInitErrors([]);
     setSubmissionId(null);
     setSubmissionInitWarnings([]);
-    setSubmissionInitStatus(dataStatus.PENDING);
+    setSubmissionInitStatus(DataStatus.PENDING);
     try {
       const res = await createMatsSubmission(
         createSubmissionPayload(metadataPayload, fileNames),
         metadataPayload.locationId,
+        { shouldHandleError: false },
       );
       const { id, warnings } = res.data;
       setSubmissionId(id);
-      setSubmissionInitStatus(dataStatus.SUCCESS);
+      setSubmissionInitStatus(DataStatus.SUCCESS);
       if (warnings.length) {
         setSubmissionInitWarnings(warnings);
+        setSubmissionStage(SubmissionStage.WARNING);
+      } else {
+        setSubmissionStage(SubmissionStage.CERTIFICATION);
       }
     } catch (err) {
-      setSubmissionInitStatus(dataStatus.ERROR);
-      setSubmissionErrors(formatErrorResponse(parseErrorMessage(err)));
+      setSubmissionInitStatus(DataStatus.ERROR);
+      setSubmissionInitErrors(formatErrorResponse(parseErrorMessage(err)));
     }
   };
 
@@ -287,7 +298,7 @@ const MatsSubmission = ({
             </>
           )}
           <div className="display-flex flex-justify-end">
-            {submissionInitStatus === dataStatus.PENDING ? (
+            {submissionInitStatus === DataStatus.PENDING ? (
               <SizedPreloader size={5} />
             ) : (
               <Button type="submit" className="margin-top-2">
@@ -295,25 +306,33 @@ const MatsSubmission = ({
               </Button>
             )}
           </div>
-          {submissionInitStatus === dataStatus.SUCCESS && (
+          {submissionInitStatus === DataStatus.SUCCESS && (
             <>
-              {submissionInitWarnings.length > 0 ? (
+              {submissionStage === SubmissionStage.WARNING && (
                 <SubmissionWarningsModal
-                  onClose={handleWarningsModalClose}
+                  onClose={cancelSubmission}
                   onSave={handleWarningsModalSave}
                   warnings={submissionInitWarnings}
                 />
-              ) : (
-                <SubmissionSignSubmitModal
-                  onClose={handleSignSubmitModalClose}
-                  onSave={handleSignSubmitModalSave}
+              )}
+              {submissionStage === SubmissionStage.CERTIFICATION && (
+                <SubmissionCertificationsModal
+                  monPlanId={selectedConfigId}
+                  onClose={cancelSubmission}
+                  onSave={handleCertificationsModalSave}
+                />
+              )}
+              {submissionStage === SubmissionStage.FINALIZE && (
+                <SubmissionFinalizeModal
+                  onClose={handleFinalizeModalClose}
+                  submissionId={submissionId}
                 />
               )}
             </>
           )}
-          {submissionInitStatus === dataStatus.ERROR && (
+          {submissionInitStatus === DataStatus.ERROR && (
             <>
-              {submissionErrors.map((error) => (
+              {submissionInitErrors.map((error) => (
                 <Alert key={error} type="error" slim noIcon headingLevel="h3">
                   {error}
                 </Alert>
@@ -518,15 +537,15 @@ const FileInputRow = ({
   accept = "",
   existingFileNames = [],
   label,
-  onChange = (_file) => {},
-  onRemove = () => {},
+  onChange = (_file) => Promise.resolve(),
+  onRemove = () => Promise.resolve(),
 }) => {
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [id] = useState(uniqueId(`${label.replace(" ", "")}-file-input-`));
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (ev) => {
+  const handleFileChange = async (ev) => {
     const newFile = ev.target?.files[0] ?? null;
 
     // Enforce unique file names.
@@ -549,7 +568,12 @@ const FileInputRow = ({
         setFile({ contents: reader.result, type: newFile.type });
       };
       reader.readAsArrayBuffer(newFile);
-      onChange(newFile);
+      await onChange(newFile).catch((err) => {
+        log.error(err);
+        setError("An error occurred while uploading the file.");
+        setFile(null);
+        fileInputRef.current?.clearFiles();
+      });
     }
   };
 
@@ -561,10 +585,10 @@ const FileInputRow = ({
     window.open(fileUrl, "_blank");
   };
 
-  const handleFileRemoval = (_ev) => {
+  const handleFileRemoval = async (_ev) => {
     fileInputRef.current?.clearFiles();
     setFile(null);
-    onRemove();
+    await onRemove();
   };
 
   return (
@@ -584,14 +608,14 @@ const FileInputRow = ({
           ref={fileInputRef}
         />
         <Button
-          className="margin-bottom-2 margin-right-0"
+          className="margin-right-0"
           type="button"
           onClick={handleFilePreview}
         >
           Preview
         </Button>
         <Button
-          className="margin-bottom-2 margin-right-0"
+          className="margin-right-0"
           type="button"
           onClick={handleFileRemoval}
         >
@@ -607,7 +631,7 @@ const FileInputs = ({
   onUpdate = (_newFilesNames) => {},
   reportType,
 }) => {
-  const [uploadStatus, setUploadStatus] = useState(dataStatus.IDLE);
+  const [uploadStatus, setUploadStatus] = useState(DataStatus.IDLE);
   const [pdfInputs, setPdfInputs] = useState([{ id: uniqueId() }]);
 
   const [ertFileName, setErtFileName] = useState("");
@@ -621,23 +645,24 @@ const FileInputs = ({
   const handleFileChange = async (newFile, prevFileName, setFileName) => {
     if (!locationId) throw new Error("Location ID is required");
 
-    setUploadStatus(dataStatus.PENDING);
+    setUploadStatus(DataStatus.PENDING);
     try {
       if (prevFileName) {
-        await deleteMatsFile(prevFileName, locationId).catch(log.error);
+        await deleteMatsFile(prevFileName, locationId);
+      }
+      if (newFile) {
+        const formData = new FormData();
+        formData.append("file", newFile, newFile.name);
+        await uploadMatsFile(formData, locationId, {
+          shouldHandleError: false,
+        });
       }
       setFileName(newFile?.name || "");
-
-      if (!newFile) return;
-
-      const formData = new FormData();
-      formData.append("file", newFile, newFile.name);
-      await uploadMatsFile(formData, locationId);
+      setUploadStatus(DataStatus.SUCCESS);
     } catch (err) {
-      log.error(err);
-      setUploadStatus(dataStatus.ERROR);
-    } finally {
-      setUploadStatus(dataStatus.IDLE);
+      setFileName("");
+      setUploadStatus(DataStatus.ERROR);
+      throw err; // Rethrow to handle in the calling function
     }
   };
 
@@ -700,13 +725,8 @@ const FileInputs = ({
 
   return (
     <>
-      {uploadStatus === dataStatus.PENDING && (
+      {uploadStatus === DataStatus.PENDING && (
         <LoadingModal loading={true} type="Loading" />
-      )}
-      {uploadStatus === dataStatus.ERROR && (
-        <Alert type="error" headingLevel="h4" className="margin-bottom-2">
-          An error occurred while uploading the file.
-        </Alert>
       )}
       {fileIsInReportType("ERT") && (
         <FileInputRow
@@ -714,7 +734,7 @@ const FileInputs = ({
           existingFileNames={existingFileNames}
           label="ERT XML"
           onChange={(file) => {
-            handleFileChange(file, ertFileName, setErtFileName);
+            return handleFileChange(file, ertFileName, setErtFileName);
           }}
           onRemove={() => handleFileRemoval(ertFileName, setErtFileName)}
         />
@@ -725,10 +745,10 @@ const FileInputs = ({
           existingFileNames={existingFileNames}
           label="Payload PDF, XML, or JSON"
           onChange={(file) => {
-            handleFileChange(file, payloadFileName, setPayloadFileName);
+            return handleFileChange(file, payloadFileName, setPayloadFileName);
           }}
           onRemove={() => {
-            handleFileRemoval(payloadFileName, setPayloadFileName);
+            return handleFileRemoval(payloadFileName, setPayloadFileName);
           }}
         />
       )}
@@ -742,15 +762,19 @@ const FileInputs = ({
               key={id}
               label={`PDF ${i + 1}`}
               onChange={(file) => {
-                handleFileChange(file, supportingFileNames[id], (_file) => {
-                  setSupportingFileNames((prev) => ({
-                    ...prev,
-                    [id]: file?.name || "",
-                  }));
-                });
+                return handleFileChange(
+                  file,
+                  supportingFileNames[id],
+                  (_file) => {
+                    setSupportingFileNames((prev) => ({
+                      ...prev,
+                      [id]: file?.name || "",
+                    }));
+                  },
+                );
               }}
               onRemove={() => {
-                handleFileRemoval(supportingFileNames[id], (_file) => {
+                return handleFileRemoval(supportingFileNames[id], (_file) => {
                   removePdfInput(id);
                 });
               }}

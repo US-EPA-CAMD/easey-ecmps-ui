@@ -197,12 +197,11 @@ export const DataTableLEEQualifications = ({
     }
     returnsFocusMpDatatableCreateBTN("Create Qualification LEE")
   };
-
   return (
     <div className="methodTable react-transition fade-in">
       {openLEE ? (
         <div>
-          <ModalDetails
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualLee}
             backBtn={backBtnHandler}
             data={selectedModalData}
