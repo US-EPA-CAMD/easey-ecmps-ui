@@ -68,6 +68,7 @@ export const DataTablePCTQualifications = ({
       qualSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getPCTQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
@@ -175,17 +176,19 @@ export const DataTablePCTQualifications = ({
     returnsFocusMpDatatableCreateBTN("Create Qualification Percent")
   };
 
+  const title ="Qualification Percent";
+
   return (
     <div className="methodTable react-transition fade-in">
       {openPCT ? (
         <div>
-          <ModalDetails
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualPct}
             backBtn={backBtnHandler}
             data={selectedModalData}
             cols={3}
             // title={`Qualification Percent: ${selectedQualPct["id"]}`}
-            title={"Qualification Percent"}
+            title={title}
             viewOnly={!(user && checkout)}
           />
         </div>

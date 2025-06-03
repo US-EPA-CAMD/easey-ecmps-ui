@@ -438,7 +438,12 @@ export const formatErrorResponse = (errorResp) => {
   try {
     errorMsgs = JSON.parse(errorResp);
   } catch (err) {
-    // Do nothing.
+    if (errorResp.includes('\n')) {
+      errorMsgs = errorMsgs
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+    }
   }
   return Array.isArray(errorMsgs) ? errorMsgs : errorMsgs?.split("\n").filter(Boolean) ?? [];
 };
