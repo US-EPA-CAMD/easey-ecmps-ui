@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import UploadModal from "../UploadModal/UploadModal";
 import ReportingPeriodSelector from "../ReportingPeriodSelector/ReportingPeriodSelector";
 import {
-  importFromHistorical,
+  exportEmissionsData,
+  importEmissionsData,
 } from "../../utils/api/emissionsApi";
 import { useSelector } from "react-redux";
 import { successResponses } from "../../utils/api/apiUtils";
@@ -33,10 +34,23 @@ export const ImportHistoricalDataModal = ({
     setFinishedLoading(false);
 
     try {
+      const exportResp = await exportEmissionsData(selectedConfig.id, selectedYear, selectedQuarter, false)
+      if (!successResponses.includes(exportResp.status)) {
+        throw exportResp // go to catch block
+      }
 
-      const importResp = await importFromHistorical(selectedConfig.id, selectedYear, selectedQuarter);
+      // if exported data is empty
+      if( Object.keys(exportResp.data).length === 0 ){
+        throw {
+          data:{
+            message:["Import unsuccessful. There is no data for this reporting period"]
+          }
+        }
+      }
+        
+      const importResp = await importEmissionsData(exportResp.data);
       if (!successResponses.includes(importResp.status)) {
-        throw importResp
+        throw importResp // go to catch block
       }
 
       setImportedFileErrorMsgs([]);

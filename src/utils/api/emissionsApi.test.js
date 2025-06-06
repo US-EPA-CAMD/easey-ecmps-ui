@@ -37,39 +37,6 @@ describe("Emissions API", function () {
     });
   });
 
-  describe("importFromHistorical", () => {
-    it("should successfully call the historical import endpoint and return data", async () => {
-      const monitorPlanId = mockResponse.monitorPlanId;
-      const year = mockResponse.year.toString();
-      const quarter = mockResponse.quarter.toString();
-      const url = `${config.services.emissions.uri}/workspace/emissions/import-historical?monitorPlanId=${monitorPlanId}&year=${year}&quarter=${quarter}&reportedValuesOnly=true`;
-
-      mock.onPost(url).reply(201, mockResponse);
-
-      const resp = await emissionsApi.importFromHistorical(
-        monitorPlanId,
-        year,
-        quarter
-      );
-
-      expect(resp.data).toEqual(mockResponse);
-      expect(resp.status).toBe(201);
-    });
-
-    it("should throw an error when the import fails", async () => {
-      const monitorPlanId = mockResponse.monitorPlanId;
-      const year = mockResponse.year.toString();
-      const quarter = mockResponse.quarter.toString();
-      const url = `${config.services.emissions.uri}/workspace/emissions/import-historical?monitorPlanId=${monitorPlanId}&year=${year}&quarter=${quarter}&reportedValuesOnly=true`;
-
-      mock.onPost(url).reply(500);
-
-      await expect(
-        emissionsApi.importFromHistorical(monitorPlanId, year, quarter)
-      ).rejects.toThrow();
-    });
-  });
-
   describe("exportEmissionsData", function () {
     it("should get emissions data given year, quarter and monitoringPlanId", async function () {
       mock
