@@ -33,30 +33,6 @@ export const getEmissionsReviewSubmit = async (
     .catch(handleError);
 };
 
-export const importFromHistorical = async (
-  monitorPlanId,
-  year,
-  quarter,
-) => {
-
-  const url = new URL(`${config.services.emissions.uri}/workspace/emissions/import-historical`);
-
-  const searchParams = new URLSearchParams({
-    monitorPlanId,
-    year,
-    quarter,
-    reportedValuesOnly: true,
-  });
-
-  const response = await secureAxios({
-    url: `${url.toString()}?${searchParams.toString()}`,
-    method: "POST", 
-   });
-
-  return handleResponse(response);
-
-}
-
 export const exportEmissionsData = async (
   monitorPlanId,
   year,
