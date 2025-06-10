@@ -104,10 +104,11 @@ const SubmissionStage = {
   FINALIZE: "finalize",
 };
 
-function createSubmissionPayload(metadata, fileNames) {
+function createSubmissionPayload(metadata, fileNames, user) {
   return {
     metadata,
     fileNames,
+    userEmail:user.email
   };
 }
 
@@ -201,7 +202,7 @@ const MatsSubmission = ({
     setSubmissionInitStatus(DataStatus.PENDING);
     try {
       const res = await createMatsSubmission(
-        createSubmissionPayload(metadataPayload, fileNames),
+        createSubmissionPayload(metadataPayload, fileNames, user),
         metadataPayload.locationId,
         { shouldHandleError: false },
       );
