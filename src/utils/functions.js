@@ -121,12 +121,16 @@ export const updateCheckedOutLocationsOnTable = (
   }
 };
 
-export const evalStatusStyle = (status) => {
+export const evalStatusStyle = (status, severityDescription) => {
   switch (status) {
     case "ERR":
     case "EVAL":
       return "usa-alert--warning";
     case "INFO":
+      if(severityDescription?.includes("Level"))
+        return "usa-alert--warning";
+      else 
+        return "usa-alert--info";
     case "PASS":
       return "usa-alert--success";
     case "INQ":
@@ -138,8 +142,8 @@ export const evalStatusStyle = (status) => {
   return "";
 };
 
-export const alertStyle = (evalStatus) =>
-  `usa-alert usa-alert--slim usa-alert--no-icon ${evalStatusStyle(evalStatus)}`;
+export const alertStyle = (evalStatus, severityDescription ) =>
+  `usa-alert usa-alert--slim usa-alert--no-icon ${evalStatusStyle(evalStatus, severityDescription )}`;
 
 export const reportWindowParams = [
   // eslint-disable-next-line no-restricted-globals
@@ -183,12 +187,13 @@ export const displayEmissionsReport = (
   window.open(url, "Emissions Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
-export const evalStatusesWithLinks = new Set(["PASS", "INFO", "ERR"]);
+export const evalStatusesWithLinks = new Set(["PASS"]);
+export const otherStatusesWithLinks = new Set(["INFO","ERR"]);
 export const addEvalStatusCell = (columns, callback) =>
   columns.map((col) => {
     if (col.name === "Eval Status") {
       col.cell = (row) => (
-        <div className={alertStyle(row.evalStatusCode)}>
+        <div className={alertStyle(row.evalStatusCode, row?.severityDescription)}>
           {evalStatusesWithLinks.has(row.evalStatusCode) ? (
             <button
               className={"hyperlink-btn cursor-pointer"}
@@ -197,6 +202,15 @@ export const addEvalStatusCell = (columns, callback) =>
               }}
             >
               {row.evalStatusCodeDescription}
+            </button>
+          ) : otherStatusesWithLinks.has(row.evalStatusCode)  ? (
+            <button
+              className={"hyperlink-btn cursor-pointer"}
+              onClick={() => {
+                callback(row, false);
+              }}
+            >
+              {row.severityDescription}
             </button>
           ) : (
             <button className={"unstyled-btn"}>

@@ -164,6 +164,7 @@ export const HeaderInfo = ({
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
+  const [severityDescription, setSeverityDescription] = useState("");
   const [evalStatusDescription, setEvalStatusDescription] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
@@ -524,8 +525,8 @@ export const HeaderInfo = ({
           if (res.data?.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
-            setEvalStatusDescription(res.data.evalStatusCodeDescription);
-
+            setEvalStatusDescription(res?.data?.evalStatusCodeDescription);
+            setSeverityDescription(res?.data?.severityDescription)
             setSubmissionStatus(res.data.submissionAvailabilityCode);
             setSubmissionStatusDescription(
               res.data.submissionAvailabilityCodeDescription
@@ -707,12 +708,16 @@ export const HeaderInfo = ({
   };
 
   // chooses correctly styling for evaluation status label
-  const evalStatusStyle = (status) => {
+  const evalStatusStyle = (status, severityDescription) => {
     switch (status) {
       case "ERR":
       case "EVAL":
         return "usa-alert--warning";
       case "INFO":
+        if(severityDescription?.includes("Level"))
+          return "usa-alert--warning";
+        else 
+          return "usa-alert--info";
       case "PASS":
         return "usa-alert--success";
       case "INQ":
@@ -743,7 +748,7 @@ export const HeaderInfo = ({
 
   const evalStatusContent = () => {
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-      evalStatus
+      evalStatus , severityDescription
     )} margin-y-0`;
     const params = {
       reportCode: "MP_EVAL",
@@ -756,7 +761,10 @@ export const HeaderInfo = ({
           className={"hyperlink-btn cursor-pointer"}
           onClick={() => displayReport(params)}
         >
-          {evalStatusDescription}
+          {
+            ['PASS','INQ','WIP','EVAL'].includes(evalStatus) ? 
+              evalStatusDescription : severityDescription ?? evalStatusDescription
+          }
         </button>
       </div>
     );
