@@ -50,7 +50,6 @@ export const EvaluateRefresh = ({
           (new Date().getTime() - lastEvalTime.current) / 1000 >
           config.app.refreshEvalStatusRate / 1000 + 1 ;
 
-          console.log(r.evalStatusCode)
         if (rowEntry && isRefreshDue) {
           //Make sure to always do the In Queue and In Progress
           if (rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription && 
