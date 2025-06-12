@@ -33,12 +33,11 @@ export const ImportHistoricalDataModal = ({
     setFinishedLoading(false);
 
     try {
-
       const importResp = await importFromHistorical(selectedConfig.id, selectedYear, selectedQuarter);
       if (!successResponses.includes(importResp.status)) {
         throw importResp
       }
-
+      
       setImportedFileErrorMsgs([]);
       portCallback(selectedYear, selectedQuarter)
     } catch (error) {
