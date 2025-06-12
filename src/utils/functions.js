@@ -130,7 +130,7 @@ export const evalStatusStyle = (status, severityDescription) => {
       if(severityDescription?.includes("Level"))
         return "usa-alert--warning";
       else 
-        return "usa-alert--info";
+        return "usa-alert--success";
     case "PASS":
       return "usa-alert--success";
     case "INQ":
