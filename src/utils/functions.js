@@ -203,7 +203,7 @@ export const addEvalStatusCell = (columns, callback) =>
             >
               {row.evalStatusCodeDescription}
             </button>
-          ) : otherStatusesWithLinks.has(row.evalStatusCode)  ? (
+          ) : otherStatusesWithLinks.has(row.evalStatusCode) && row?.severityDescription  ? (
             <button
               className={"hyperlink-btn cursor-pointer"}
               onClick={() => {
@@ -211,6 +211,15 @@ export const addEvalStatusCell = (columns, callback) =>
               }}
             >
               {row.severityDescription}
+            </button>
+          ) : otherStatusesWithLinks.has(row.evalStatusCode) ? ( // if no chk session is present
+            <button
+              className={"hyperlink-btn cursor-pointer"}
+              onClick={() => {
+                callback(row, false);
+              }}
+            >
+              {row.evalStatusCodeDescription}
             </button>
           ) : (
             <button className={"unstyled-btn"}>
