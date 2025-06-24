@@ -5,7 +5,7 @@ import ReactDom from "react-dom";
 
 import SizedPreloader from "../SizedPreloader/SizedPreloader";
 import { focusTrap } from "../../additional-functions/focus-trap";
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import "./Modal.scss";
 
 const modalContext = createContext(null, null);
@@ -23,7 +23,7 @@ export const Modal = ({
   left = "25%",
   returnFocus,
   save,
-  saveStatus = dataStatus.IDLE,
+  saveStatus = DataStatus.IDLE,
   show,
   showCancel,
   showDarkBg,
@@ -167,7 +167,7 @@ export const Modal = ({
               <div className="modal-footer  ">
                 {showSave ? (
                   <div className="display-flex flex-align-center">
-                    {saveStatus === dataStatus.PENDING ? (
+                    {saveStatus === DataStatus.PENDING ? (
                       <SizedPreloader size={5} className="margin-right-1" />
                     ) : (
                       <Button
