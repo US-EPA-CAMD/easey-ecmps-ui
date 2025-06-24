@@ -136,6 +136,7 @@ export const DataTableSystems = ({
       locationSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getMonitoringSystems(locationSelectValue)
         .then((res) => {
@@ -646,7 +647,7 @@ export const DataTableSystems = ({
           selectedSystem.id
         )
         .catch((error) => log.log("createSystemsComponents failed", error));
-      
+
       if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
@@ -681,7 +682,7 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
-    
+
     try {
           let resp;
           let response;
@@ -839,7 +840,7 @@ export const DataTableSystems = ({
             }}
             errorMsgs={errorMsgs}
             children={
-              <ModalDetails
+              <ModalDetails allowFutureDates={true}
                 modalData={selected}
                 data={selectedModalData}
                 cols={2}
@@ -959,12 +960,12 @@ export const DataTableSystems = ({
             // disableExitBtn={disableExitBtn}
             breadCrumbBar={currentBar}
             title={`System: ${selected[0]["value"]}`}
-            children={
-              <div>
+            >
+              {<div>
                 {secondLevel ? (
                   ""
                 ) : dropdownsLoaded ? (
-                  <ModalDetails
+                  <ModalDetails allowFutureDates={true}
                     modalData={selected}
                     data={selectedModalData}
                     cols={2}
@@ -1027,7 +1028,7 @@ export const DataTableSystems = ({
                 />
               </div>
             }
-          />
+          </Modal>
         )
       ) : null}
     </>
