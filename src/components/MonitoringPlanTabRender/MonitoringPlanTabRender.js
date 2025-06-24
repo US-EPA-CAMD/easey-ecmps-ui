@@ -47,6 +47,7 @@ export const MonitoringPlanTabRender = ({
       state.monitoringPlans[orisCode]?.find((mp) => mp.id === selectedConfigId)
         ?.monitoringLocationData ?? []
   );
+  const selectedLocation = locations.find((l) => l.id === locationSelect[1]);
 
   const checkboxToggledRef = useRef(false);
 
@@ -484,55 +485,41 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 urlParameters={
                   unitDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["urlParameters"]
                 }
                 dataTableName={"Unit"}
@@ -556,49 +543,35 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 urlParameters={
                   unitFuelDataTableProps(
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["urlParameters"]
                 }
                 dataTableName={"Unit Fuel"}
@@ -621,55 +594,41 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 urlParameters={
                   unitControlDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["urlParameters"]
                 }
                 radioNames={["originalCode", "seasonalControlsIndicator"]}
@@ -692,55 +651,41 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 urlParameters={
                   unitCapacityDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["urlParameters"]
                 }
                 dataTableName={"Unit Capacity"}
@@ -762,47 +707,35 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   unitProgramDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   unitProgramDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   unitProgramDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   unitProgramDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   unitProgramDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 dataTableName={"Unit Program"}
@@ -825,47 +758,35 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
-                selectedLocation={locations.find(
-                  (element) => element.id === locationSelect[1]
-                )}
+                selectedLocation={selectedLocation}
                 payload={
                   reportingFrequencyDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["payload"]
                 }
                 dropdownArray={
                   reportingFrequencyDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["dropdownArray"]
                 }
                 columnNames={
                   reportingFrequencyDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["columnNames"]
                 }
                 controlInputs={
                   reportingFrequencyDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlInputs"]
                 }
                 controlDatePickerInputs={
                   reportingFrequencyDataTableProps(
                     locationSelect[1],
-                    locations.find(
-                      (element) => element.id === locationSelect[1]
-                    )
+                    selectedLocation,
                   )["controlDatePickerInputs"]
                 }
                 dataTableName={"Reporting Frequency"}

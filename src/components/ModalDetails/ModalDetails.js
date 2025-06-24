@@ -15,14 +15,19 @@ import { assignAriaLabelsToDatePickerButtons } from "../../additional-functions/
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import {
+  getMaxFutureDate,
+  formatDateToInput
+} from "../../utils/constants/futureDateControls.js";
 
 // value in data => [0] api label, [1] our UI label, [2] value,[3], required or not for editing, [4] control form type
 const ModalDetails = ({
+  title,
+  allowFutureDates,
   modalData,
   data,
   prefilteredMdmData,
   cols,
-  title,
   viewOnly,
   backBtn,
   create,
@@ -33,6 +38,7 @@ const ModalDetails = ({
   disableEditingForSelectedFields,
   selectedEditingDisabledFields
 }) => {
+  //safe and valid
   // fixes resizing issue with calendar date picker along with help in CSS file
   const containerStyle = {
     textOverflow: "ellipsis",
@@ -376,18 +382,9 @@ const ModalDetails = ({
             defaultValue={datePickerValue}
             disabled={isEditingDisabled}
             maxDate={
-               // Allow future dates up to 90 days for specific components
-              ["Default", "Formula", "Load", "Location Attribute", "Method",
-                "Qualification", "Rectangular Duct WAF", "Span", "System",
-                "Unit Information", "Unit Fuel", "Unit Control", "Unit Capacity"].includes(title)
-                ? (() => {
-                    const futureDate = new Date(d.getTime() + (90 * 24 * 60 * 60 * 1000));
-                    return `${futureDate.getFullYear()}-${futureDate.getMonth() + 1}-${futureDate.getDate()}`;
-                  })()
-
-              : title !== "Protocol Gas"
-                ? `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-                : null
+              allowFutureDates
+                ? formatDateToInput(getMaxFutureDate())
+                : formatDateToInput(d)
             }
           />
         );
