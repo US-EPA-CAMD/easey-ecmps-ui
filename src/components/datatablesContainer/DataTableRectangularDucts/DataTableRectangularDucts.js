@@ -48,6 +48,7 @@ export const DataTableRectangularDucts = ({
   const [selectedDuct, setSelectedDuct] = useState(null);
   const [selectedModalData, setSelectedModalData] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [dropdownsLoaded, setDropdownsLoaded] = useState(false);
   const [totalOptions, setTotalOptions] = useState({})
   const [updateTable, setUpdateTable] = useState(false);
 
@@ -85,21 +86,7 @@ export const DataTableRectangularDucts = ({
       locationSelectValue ||
       revertedState
     ) {
-      if (updateTable) {
-        let timerFunc = setTimeout(() => {
-          mpApi
-            .getMonitoringRectangularDucts(locationSelectValue)
-            .then((res) => {
-              setDucts(res.data?.items);
-              setDataLoaded(true);
-              setUpdateTable(false);
-            })
-            .catch(error => log.log('getMonitoringRectangularDucts failed', error));
-
-          setRevertedState(false);
-        }, [1000]);
-        return () => clearTimeout(timerFunc);
-      }
+      setDataLoaded(false);
       mpApi.getMonitoringRectangularDucts(locationSelectValue).then((res) => {
         setDucts(res.data?.items);
         setDataLoaded(true);
@@ -107,16 +94,19 @@ export const DataTableRectangularDucts = ({
       })
       .catch(error => log.log('getMonitoringRectangularDucts failed', error));
 
-      retrieveDropdowns(["wafMethodCode"]).then(resp => {
-        setTotalOptions(resp);
-        setDataLoaded(true);
-        setUpdateTable(false);
-      })
-
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationSelectValue, updateTable, revertedState, checkout]);
+
+  useEffect(() => {
+    if (dropdownsLoaded) return;
+
+    retrieveDropdowns(["wafMethodCode"]).then(resp => {
+      setTotalOptions(resp);
+      setDropdownsLoaded(true);
+    })
+  }, [dropdownsLoaded]);
 
   // *** column names for dataset (will be passed to normalizeRowObjectFormat later to generate the row object
   // *** in the format expected by the modal / tabs plugins)
@@ -309,7 +299,6 @@ export const DataTableRectangularDucts = ({
       setUpdateTable(true);
     }
   };
-
   return (
     <div className="methodTable">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
@@ -366,9 +355,9 @@ export const DataTableRectangularDucts = ({
           exitBtn={
             createNewDuct ? "Create Rectangular Duct WAF" : `Save and Close`
           }
-          children={
-            <div>
-              <ModalDetails
+          >
+          {<div>
+              <ModalDetails allowFutureDates={true}
                 modalData={selectedDuct}
                 data={selectedModalData}
                 cols={2}
@@ -377,7 +366,7 @@ export const DataTableRectangularDucts = ({
               />
             </div>
           }
-        />
+        </Modal>
       ) : null}
     </div>
   );

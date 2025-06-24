@@ -65,6 +65,7 @@ export const DataTableLEEQualifications = ({
       qualSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getLEEQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {
@@ -196,12 +197,11 @@ export const DataTableLEEQualifications = ({
     }
     returnsFocusMpDatatableCreateBTN("Create Qualification LEE")
   };
-
   return (
     <div className="methodTable react-transition fade-in">
       {openLEE ? (
         <div>
-          <ModalDetails
+          <ModalDetails allowFutureDates={true}
             modalData={selectedQualLee}
             backBtn={backBtnHandler}
             data={selectedModalData}
