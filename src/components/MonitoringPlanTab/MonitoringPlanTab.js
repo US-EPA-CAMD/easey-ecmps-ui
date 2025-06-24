@@ -25,27 +25,23 @@ export const MonitoringPlanTab = ({
   setCheckout,
   setInactive,
 }) => {
-  const getCurrentTab = () => {
-    return tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
-  };
+  const currentTab = tabs.find((tab) => tab.selectedConfig.id === selectedConfigId);
   const currentTabIndex = useMemo(() => {
     return tabs.findIndex((tab) => tab.selectedConfig.id === selectedConfigId);
   }, [selectedConfigId, tabs]);
 
-  const [sectionSelect, setSectionSelect] = useState(getCurrentTab().section);
+  const [sectionSelect, setSectionSelect] = useState(currentTab?.section ?? null);
   useEffect(() => {
     setSection(sectionSelect, title, MONITORING_PLAN_STORE_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelect]);
 
-  const [locationSelect, setLocationSelect] = useState(
-    getCurrentTab().location
-  );
+  const locationSelect = currentTab?.location ?? null;
+  const setLocationSelect = (location) => setLocation(location, title, MONITORING_PLAN_STORE_NAME);
 
-  useEffect(() => {
-    setLocation(locationSelect, title, MONITORING_PLAN_STORE_NAME);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelect]);
+  if (!currentTab) {
+    return null;
+  }
 
   return (
     <div id="monitoring-plan-tab-container">
@@ -56,14 +52,14 @@ export const MonitoringPlanTab = ({
           orisCode={orisCode}
           selectedConfigId={selectedConfigId}
           sectionSelect={sectionSelect}
-          setSectionSelect={(section) => setSectionSelect(section)}
+          setSectionSelect={setSectionSelect}
           locationSelect={locationSelect}
-          setLocationSelect={(location) => setLocationSelect(location)}
+          setLocationSelect={setLocationSelect}
           user={user}
-          checkout={tabs[currentTabIndex].checkout}
+          checkout={currentTab.checkout}
           setCheckout={setCheckout}
           setInactive={setInactive}
-          inactive={tabs[currentTabIndex].inactive}
+          inactive={currentTab.inactive}
           currentTabIndex={currentTabIndex}
         />
       </div>
