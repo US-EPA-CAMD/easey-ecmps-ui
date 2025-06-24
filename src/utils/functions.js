@@ -1,4 +1,4 @@
-import { at } from "lodash";
+import { at, isNumber } from "lodash";
 import React from "react";
 
 import config from "../config";
@@ -9,7 +9,6 @@ import {
 } from "./api/qaCertificationsAPI";
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
-import { isNumber } from "lodash";
 import log from "loglevel";
 import { displayAppError } from "../additional-functions/app-error";
 
