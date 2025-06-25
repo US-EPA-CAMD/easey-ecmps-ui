@@ -66,9 +66,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
           Help/Support
         </span>
       ),
-      items: [
-        { menu: "Help/Support", link: `/help-support`, tab: false },
-      ],
+      link: "/help-support",
+      items: [],
     },
     {
       label: (
@@ -219,8 +218,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                   return (
                     <>
                       <Link
-                        href={config.app.path}
-                        target="_blank"
+                        to={el.link ?? config.app.path}
+                        target={el.tab ? "_blank" : "_self"}
                         title={el.label}
                         aria-label={el.label}
                         onClick={() => handleSubMenuClick(i)}
