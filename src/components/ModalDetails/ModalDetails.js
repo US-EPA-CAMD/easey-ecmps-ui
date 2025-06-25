@@ -675,7 +675,7 @@ const ModalDetails = ({
                 className={
                   data?.[0]?.[0] == "monitoringPlanComment" ? "" :
                   item[0]["key"] !== "false"
-                    ? "grid-row  margin-right-2"
+                    ? "grid-row padding-top-2 margin-right-2"
                     : ""
                 }
                 onChange={(e) => {
