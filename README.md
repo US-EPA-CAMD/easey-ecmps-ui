@@ -113,7 +113,7 @@ Other application environment variables:
 - VITE_EASEY_ECMPS_UI_INACTIVITY_DURATION_MINUTES: ((inactivityDurationMinutes))
 - VITE_EASEY_ECMPS_UI_ACTIVITY_POLLING_FREQUENCY_SECONDS: ((activityPollingFrequencySeconds))
 
-Additional Environment Variable instructions found [here](https://github.com/US-EPA-CAMD/devops/blob/master/ENV_INSTRUCTIONS.md).
+Additional Environment Variable instructions can be found [here](https://github.com/US-EPA-CAMD/devops/blob/master/ENV_INSTRUCTIONS.md).
 
 ## License & Contributing
 
