@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import DataTable from "react-data-table-component";
 import { ArrowDownwardSharp } from "@material-ui/icons";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 
 import { displayEmissionsReport } from "../../utils/functions";
 import { EMISSIONS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import { filterEmissionsRows } from '../../utils/emissions-data-filter';
 
-export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply, user }) => {
+export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply, user, viewTemplateSelect }) => {
 
     const reduxCurrentTab = useSelector((state) =>
         state.openedFacilityTabs[EMISSIONS_STORE_NAME].find(
@@ -17,18 +18,22 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply,
 
     const [tableColumns, setTableColumns] = useState([]);
     const [viewColumnInfo, setViewColumnInfo] = useState([]);
-    const [viewData, setViewData] = useState([]);
     const [pendingMessage, setPendingMessage] = useState(false);
     const [message, setMessage] = useState('');
+
+    // Filter the data based on user authentication and view template
+    const filteredViewData = useMemo(() => {
+        if (user) return reduxCurrentTab?.viewData || [];
+        return filterEmissionsRows(reduxCurrentTab?.viewData, viewTemplateSelect?.code);
+    }, [reduxCurrentTab?.viewData, viewTemplateSelect?.code, user]);
 
     useEffect(() => {
         setViewColumnInfo(reduxCurrentTab?.viewColumns || []);
 
         if (filterApply) {
             const timeOutApply = setTimeout(() => {
-                setViewData(reduxCurrentTab?.viewData || []);
                 setFilterApply(false)
-                if (reduxCurrentTab?.viewData?.length === 0) {
+                if (filteredViewData.length === 0) {
                     setPendingMessage(true)
                 }
             }, 1000);
@@ -36,14 +41,13 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply,
             return () => clearTimeout(timeOutApply);
         }
         else {
-            setViewData(reduxCurrentTab?.viewData || []);
             setMessage('Select a Reporting Period, Location, and Template, then click the Apply Filter button to view the data.');
         }
     }, [reduxCurrentTab.viewColumns, reduxCurrentTab.viewData, filterApply]);
 
     useEffect(() => {
         if (pendingMessage) {
-            if (viewData?.length === 0) {
+            if (filteredViewData === 0) {
                 const timeOutApply = setTimeout(() => {
                     setPendingMessage(false)
                 }, 1000);
@@ -60,7 +64,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply,
             }
         }
 
-    }, [pendingMessage]);
+    }, [pendingMessage, filteredViewData]);
 
     // If the error has an errorCode then we want to show a "View Error" link on the first column to the left of the actual data of the first column, see Zenhub ticket#5756 for more details
     const getFormattedCellForFirstRow = useCallback((row) => {
@@ -144,7 +148,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply,
                 fixedHeader={true}
                 fixedHeaderScrollHeight="50vh"
                 columns={tableColumns}
-                data={viewData}
+                data={filteredViewData}
                 className={`data-display-table react-transition fade-in`}
                 progressPending={filterApply}
                 noDataComponent={message}
