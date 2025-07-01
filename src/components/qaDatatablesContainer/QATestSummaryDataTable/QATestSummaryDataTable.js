@@ -52,6 +52,7 @@ import {
   returnsFocusDatatableViewBTN,
   returnsFocusToAddBtn,
 } from "../../../additional-functions/ensure-508.js";
+import { successResponses } from "../../../utils/api/apiUtils.js";
 
 // contains test summary data table
 
@@ -598,11 +599,17 @@ const QATestSummaryDataTable = ({
     });
     createQATestData(selectedLocationId, userInput)
       .then((res) => {
-        if (Object.prototype.toString.call(res) === "[object Array]") {
-          setErrorMsgs(res);
-        } else {
+        if (successResponses.includes(res.status)) {
           setCreatedId(res.data.id);
           setUpdateTable(true);
+        } else {
+          if (Object.prototype.toString.call(res) === "[object Array]") {
+            setErrorMsgs(res);
+          } else if (res.includes('\n')) {
+            setErrorMsgs(res.split('\n').map(line => line.trim()).filter(line => line.length > 0));
+          } else {
+            setErrorMsgs([res]);
+          }
         }
       })
       .catch((error) => {

@@ -40,6 +40,7 @@ import { CategoryTable } from "./CategoryTable/CategoryTable";
 import { v4 } from "uuid";
 import { displayAppWarning } from "../../additional-functions/app-error";
 import * as modules from "../../utils/constants/moduleTitles";
+import { getSubmissionQueueOrder } from '../../utils/api/camdServices'
 
 export const EvaluateAndSubmit = ({
   checkedOutLocations,
@@ -493,7 +494,7 @@ export const EvaluateAndSubmit = ({
         modalType.current = "error";
         modalHeading.current = "Error";
         modalMessage.current =
-        e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
+          e.response?.data?.message ?? "Error: An error occurred during the file queueing process. Please try again. If you continue to encounter an error, please contact ECMPS Support.";
         setShowSuccessModal(true);
       } else {
         handleError(e);
@@ -528,12 +529,12 @@ export const EvaluateAndSubmit = ({
         isDisabled: isForceReEvaluation
           ? false
           : !canSelectRow(
-              chunk,
-              rowType,
-              componentType,
-              idToPermissionsMap,
-              userId
-            ), //Determine if a record is checked out [If not by user then disable and set isSelected to false]
+            chunk,
+            rowType,
+            componentType,
+            idToPermissionsMap,
+            userId
+          ), //Determine if a record is checked out [If not by user then disable and set isSelected to false]
         checkedOutBy: "",
         // TODO: Add an optional iCheckedOut Flag
       };
@@ -556,7 +557,29 @@ export const EvaluateAndSubmit = ({
     forceReloadTables();
   };
 
-  const retrieveAndFormatData = async (dataListIndex, activeSet) => {
+  const setDescription = (data, submissionQueueOrderData, key) => {
+    const coloumMaping = { 'Test Data': 'submissionCodeDescription', 'QA Certification Events': 'submissionAvailabilityDescription', 'Test Extension Exemptions Data': 'submissionAvailabilityCodeDescription', 'Emissions': 'submissionAvailabilityCodeDescription' }
+    return data.forEach((d) => {
+      if (d.submissionAvailabilityCode === 'PENDING') {
+        if (key !== "MP") {
+          const row = submissionQueueOrderData.find((item) => (item.testSumIdentifier && item.testSumIdentifier === d.testSumId) || (item.qaCertEventIdentifier && item.qaCertEventIdentifier === d.qaCertEventIdentifier) || (item.testExtensionExemptionIdentifier && item.testExtensionExemptionIdentifier === d.testExtensionExemptionIdentifier) || (item.periodAbbreviation && item.monPlanIdentifier === d.monPlanId && item.periodAbbreviation === d.periodAbbreviation));
+          if (row) {
+            const submissionDescriptionColoum = coloumMaping[key]
+            d[submissionDescriptionColoum] = `Submitted, Host Update Pending (#${row.queuePosition} in queue)`
+          }
+        } else if (key === "MP") {
+          const row = submissionQueueOrderData.find((item) => (item.monPlanIdentifier && item.processCode === 'MP' && item.monPlanIdentifier === d.id));
+          if (row) {
+            d.submissionAvailabilityCodeDescription = `Submitted, Host Update Pending (#${row.queuePosition} in queue)`
+          }
+        }
+      }
+    })
+  }
+
+
+  const retrieveAndFormatData = async (dataListIndex, activeSet, submissionQueueOrderData) => {
+
     const resp = (
       await dataList[dataListIndex].call(
         storedFilters.current.orisCodes,
@@ -566,6 +589,10 @@ export const EvaluateAndSubmit = ({
     );
 
     let data = resp.data?.items ?? resp.data;
+
+    if (submissionQueueOrderData && submissionQueueOrderData.length) {
+      setDescription(data, submissionQueueOrderData, dataList[dataListIndex].name);
+    }
 
     formatDataRows(
       dataList[dataListIndex].ref,
@@ -595,7 +622,7 @@ export const EvaluateAndSubmit = ({
 
     // We have to load monitor plans first to get all of the active locations
     const [{ data: { items: officialMonitorPlans } }, { data: { items: workspaceMonitorPlans } }] =
-    await Promise.all([
+      await Promise.all([
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.OFFICIAL),
         dataList[0].call(orisCodes, monPlanIds, DatabaseContext.WORKSPACE),
       ]);
@@ -609,6 +636,16 @@ export const EvaluateAndSubmit = ({
       );
     });
     const activePlanIdSet = new Set(monitorPlans.map((mp) => mp.id));
+
+    // Call submissionQueueOrder
+    let submissionQueueOrderData;
+    if (componentType === "Submission") {
+      const submissionQueueOrder = await getSubmissionQueueOrder(orisCodes);
+      submissionQueueOrderData = submissionQueueOrder && submissionQueueOrder.data && submissionQueueOrder.data.items;
+      // submissionQueueOrderData && submissionQueueOrderData.length && 
+      setDescription(monitorPlans, submissionQueueOrderData, 'MP');
+    }
+
     formatDataRows(dataList[0].ref, monitorPlans, "MP");
 
     dataList[0].progressPending.current = false;
@@ -617,7 +654,7 @@ export const EvaluateAndSubmit = ({
     const promises = [];
     for (let i = 1; i < dataList.length; i++) {
       //Iterate over other non monitor plan sets of data
-      promises.push(retrieveAndFormatData(i, activePlanIdSet));
+      promises.push(retrieveAndFormatData(i, activePlanIdSet, submissionQueueOrderData));
     }
     await Promise.all(promises);
   };
