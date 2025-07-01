@@ -4,6 +4,7 @@ import {
   Label,
   DatePicker,
   Button,
+  Select
 } from "@trussworks/react-uswds";
 import log from "loglevel";
 
@@ -14,13 +15,42 @@ import {
 } from "../../utils/api/adminManagementApi";
 import { addAriaLabelToDatatable, addAriaLabelOnDatePickerCalendar, assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns } from "../../additional-functions/ensure-508"
 import useScreenSize from "../../customHooks/useScreenSize/useScreenSize";
-
+import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
 
 const defaultDropdownText = "Select";
 const initialSelectOption = { code: "", name: defaultDropdownText };
 
+
+export const getLocations = (facilityValue, checkResultObj) => {
+  return getMonitoringPlans(Number(facilityValue)).then(({ data }) => {
+    const locations = data?.items?.map((f) => f.monitoringLocationData).flat(1);
+    let availLoc = locations?.map((l) => ({
+      id: l?.id,
+      label: l?.unitId,
+      selected: false,
+      enabled: true,
+    })) || [];
+    if (checkResultObj.locationTypeCode === "LOC") {
+      const availStackPipe = locations?.map((l) => ({
+        id: l?.id,
+        label: l?.stackPipeId,
+        selected: false,
+        enabled: true,
+      })) || [];
+      availLoc = [...availLoc, ...availStackPipe];
+    }
+    const locName = availLoc?.map((l) => l.label);
+    return availLoc
+      ?.filter(({ label }, index) => !locName.includes(label, index + 1))
+      .filter(({ label }) => label !== null)
+      .sort((a, b) => a.label - b.label);
+  });
+};
+
 const FilterFormAdminSubmissionReport = ({
   facilities,
+  testTypeCode,
   setTableData,
   setIsTableDataLoading,
   setSelectedRows,
@@ -36,7 +66,6 @@ const FilterFormAdminSubmissionReport = ({
     { code: "EM", name: "Emissions" },
     { code: "MP", name: "Monitor Plan" },
     { code: "QA", name: "Quality Assurance" },
-    { code: "MATS", name: "MATS Data" },
   ]);
 
   const [severityLevel ] = useState([
@@ -52,15 +81,26 @@ const FilterFormAdminSubmissionReport = ({
     { code: "CRIT3", name: "Critical Error Level 3" },
   ]);
 
+    const [qADataType ] = useState([
+    initialSelectOption,
+    { code: "QAT", name: "Test Summary" },
+    { code: "QCE", name: "Cert Events" },
+    { code: "TEE", name: "Test Extension Exemption" },
+  ] );
+
   const [selectedAddDateAfter, setSelectedAddDateAfter] = useState();
   const [selectedAddDateBefore, setSelectedAddDateBefore] = useState();
   const [dateAfterKey, setDateAfterKey] = useState(false);
   const [dateBeforeKey, setDateBeforeKey] = useState(false);
   const [selectedReportingPeriod, setSelectedReportingPeriod] = useState();
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [locationData, setLocationData] = useState([]);
 
   const [selectedSubmissionType, setSelectedSubmissionType] = useState();
   const [selectedSeverityLevel, setSelectedSeverityLevel] = useState();
+  const [selectedQADataType, setSelectedQADataType] = useState();
+  const [selectedTestType, setSelectedTestType] = useState();
 
   addAriaLabelToDatatable();
 
@@ -93,6 +133,9 @@ const FilterFormAdminSubmissionReport = ({
     let severityCode;
     let submissionFrom;
     let submissionTo;
+    let qaDataType;
+    let locations;
+    let testType;
 
     // Keep in the the below will convert the dates to UTC
     if (selectedAddDateAfter) {
@@ -132,6 +175,29 @@ const FilterFormAdminSubmissionReport = ({
       severityCode = selectedSeverityLevel?.[1].toUpperCase();
     }
 
+     if (
+      selectedQADataType?.length > 0 &&
+      selectedQADataType?.[1] !== ''
+    ) {
+      qaDataType = selectedQADataType?.[1];
+    }
+
+     if (
+      selectedTestType?.length > 0 &&
+      selectedTestType?.[1] !== ''
+    ) {
+      testType = selectedTestType?.toUpperCase();
+    }
+
+     let labels = selectedLocations
+      ?.map(
+        (selectedId) => locationData.find((ld) => ld.id === selectedId)?.label
+      )
+      ?.filter((loc) => loc !== null && loc !== undefined);
+
+    locations =
+    labels && labels?.length > 0 ? labels?.join("|") : undefined;
+
     try {
         const { data } = await getSubmissionReportRecords(
           selectedFacility,
@@ -140,10 +206,16 @@ const FilterFormAdminSubmissionReport = ({
           severityCode,
           submissionType,
           submissionFrom,
-          submissionTo
+          submissionTo,
+          qaDataType,
+          testType,
+          locations
         );
 
-      setTableData(data.items);
+      if(data)
+            setTableData(data.items);
+      else
+            setTableData([]);
 
       setTimeout(() => {
         addAriaLabelToDatatable();
@@ -163,6 +235,9 @@ const FilterFormAdminSubmissionReport = ({
     selectedAddDateAfter,
     selectedAddDateBefore,
     selectedSeverityLevel,
+    selectedQADataType,
+    selectedLocations,
+    selectedTestType,
     setIsTableDataLoading,
     setSelectedRows,
     setTableData,
@@ -172,10 +247,39 @@ const FilterFormAdminSubmissionReport = ({
 
   const onFacilityChange = (value) => {
     setSelectedFacility(value);
-
-    if (!value) {
+    if (!value || value === defaultDropdownText) {
       setSelectedFacility(null);
-    }
+      setSelectedLocations([]);
+      setLocationData([]);
+      return;
+      }
+
+    const facility = facilities.find((f) => f.value === value);
+    getLocations(facility.value, {
+                locationTypeCode: "LOC",
+                }).then((availLoc) =>
+               {
+                 setLocationData([...availLoc])
+               }
+    )};
+
+    const onChangeOfLocationMultiSelect = (id, changeType) => {      
+    const uniqueLocations = [...new Set([...selectedLocations, id])];
+
+      if (changeType === "add") {
+      setSelectedLocations(uniqueLocations);
+      } else if (changeType === "remove") {
+        const selected = locationData.filter((l) => l.selected).map((l) => l.id);
+        setSelectedLocations(selected);
+      } else return;
+    };
+
+    const handleChange = (val) => {
+      if (!val.target.value || val.target.value === defaultDropdownText) {
+      setSelectedTestType(null)
+      return;
+      }
+    setSelectedTestType(val.target.value);
   };
 
   const clearFilters = useCallback(() => {
@@ -189,6 +293,10 @@ const FilterFormAdminSubmissionReport = ({
     setSelectedReportingPeriod(null);
     setSelectedSubmissionType(null);
     setSelectedSeverityLevel(null);
+    setSelectedQADataType(null);
+    setSelectedTestType(null);
+    setSelectedLocations([]);
+    setLocationData([]);
     setSelectedAddDateAfter(null);
     setSelectedAddDateBefore(null);
     setDateAfterKey((k) => !k);
@@ -218,6 +326,22 @@ const FilterFormAdminSubmissionReport = ({
               disableFiltering={true}
             />
           </div>
+        <div className="grid-col-4">
+           <div className="margin-left-2">
+            <MultiSelectCombobox
+              items={locationData}
+              label="Location Name"
+              entity="es-locations-filter"
+              searchBy="contains"
+              onChangeUpdate={onChangeOfLocationMultiSelect}
+              disabled={
+                !(
+                  selectedFacility
+                )
+              }
+            ></MultiSelectCombobox>
+          </div>
+        </div>
          
           { screenSize.width >= 1400 &&(
             <>
@@ -251,6 +375,42 @@ const FilterFormAdminSubmissionReport = ({
                   extraSpace
                 />
               </div>
+                <div className="margin-left-2 width-card">
+                  <DropdownSelection
+                    caption="QA Data Type"
+                    selectionHandler={(option) => setSelectedQADataType(option)}
+                    options={qADataType}
+                    viewKey="name"
+                    selectKey="code"
+                    initialSelection={selectedQADataType ? selectedQADataType[0] : null}
+                    extraSpace
+                  />
+                </div>
+
+               <div className="margin-left-2">
+                <div>
+                <Label test-id='Test Type' htmlFor='Test Type'>
+                Test Type
+                </Label>
+                <Select
+                id='Test Type'
+                name='Test Type'
+                epa-testid='Test Type'
+                data-testid='Test Type'
+                value={selectedTestType
+                ?selectedTestType: 'Select'}
+                onChange={(e) => handleChange(e)}
+                tabIndex={0}
+                >
+                <option value="Select">Select</option>
+                {testTypeCode.map((item, index) => (
+                  <option key={index} value={item.testTypeCode}>
+                    {item.testTypeCodeDescription}
+                  </option>
+                ))}
+                </Select>
+              </div>
+             </div>
 
               <div className="margin-left-2 width-card">
                 <DropdownSelection
@@ -326,7 +486,7 @@ const FilterFormAdminSubmissionReport = ({
                 !(
                   selectedFacility || selectedReportingPeriod || selectedSubmissionType 
                   || selectedSeverityLevel || selectedAddDateAfter
-                  || selectedAddDateBefore
+                  || selectedAddDateBefore || selectedQADataType || selectedLocations || selectedTestType
                   ) 
                  }
               onClick={applyFilters}
