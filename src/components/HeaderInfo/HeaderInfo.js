@@ -1087,7 +1087,7 @@ export const HeaderInfo = ({
         });
       if (workspaceSection === MONITORING_PLAN_STORE_NAME)
         await mpApi
-          .exportMonitoringPlanDownload(selectedConfigId)
+          .exportMonitoringPlanDownload(selectedConfigId, selectedConfig?.name)
           .catch((error) => {
             log.error("Error during exporting ", error);
           });

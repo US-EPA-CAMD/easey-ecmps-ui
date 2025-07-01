@@ -1,4 +1,7 @@
+import { at, isNumber } from "lodash";
 import React from "react";
+
+import config from "../config";
 import {
   getQACertEventReviewSubmit,
   getQATeeReviewSubmit,
@@ -6,7 +9,6 @@ import {
 } from "./api/qaCertificationsAPI";
 import { getMonitoringPlans } from "./api/monitoringPlansApi";
 import { getEmissionsReviewSubmit } from "./api/emissionsApi";
-import { isNumber } from "lodash";
 import log from "loglevel";
 import { displayAppError } from "../additional-functions/app-error";
 
@@ -534,3 +536,24 @@ export const exportToCSV = (data, columnMapping, fileNamePrefix, formatMatchTime
     log.log("generate csv file failed", error);
   }
 };
+
+export const canSubmitMats = (user, selectedConfig, checkedOutConfigs) => {
+  const selectedConfigId = selectedConfig?.id;
+  const selectedFacilityId = selectedConfig?.facId;
+  const isCheckedOutByUser =
+    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
+      ?.checkedOutBy === user.userId;
+  const acceptedRoles = at(config.app, [
+    "sponsorRole",
+    "submitterRole",
+    "initialAuthorizerRole",
+  ]);
+  const hasRequiredRole = user.roles?.some((role) =>
+    acceptedRoles.includes(role),
+  );
+  const hasRequiredFacilityPermission = user.facilities
+    ?.find((facility) => facility.facId === selectedFacilityId)
+    ?.permissions.includes("DSQA");
+
+  return isCheckedOutByUser && hasRequiredRole && hasRequiredFacilityPermission;
+}
