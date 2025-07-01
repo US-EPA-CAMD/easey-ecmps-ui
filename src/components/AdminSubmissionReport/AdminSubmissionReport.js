@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import log from "loglevel";
 import FilterFormAdminSubmissionReport from "../AdminSubmissionReport/FilterFormAdminSubmissionReport";
 import { getAllFacilities } from "../../utils/api/facilityApi";
+import { getTestTypeCode } from "../../utils/api/camdServices";
 
 import { submissionReportTitle} from "../../utils/constants/moduleTitles";
 import { getReportingPeriods } from "../../utils/api/mdmApi";
@@ -11,10 +12,12 @@ import { SubmissionReportData } from "./SubmissionReportData";
 export const AdminSubmissionReport = () => {
   const [title, setTitle] = useState("");
   const [tableData, setTableData] = useState([]);
+  const [testTypeCode, setTestTypeCode] = useState([]);
   const [isTableDataLoading, setIsTableDataLoading] = useState(false);
   const [reportingPeriods, setReportingPeriods] = useState([]);
 
   // This array contains the rows that are selected in the table. Use this to do logic to disable/enable buttons
+  // TBD feature
   const [selectedRows, setSelectedRows] = useState([]);
 
    useEffect(() => {
@@ -22,7 +25,7 @@ export const AdminSubmissionReport = () => {
           document.title = submissionReportTitle;
           setTitle(submissionReportTitle);
        
-    }, []);
+  }, []);
   const [facilityList, setFacilityList] = useState([]);
 
   useEffect(() => {
@@ -49,6 +52,14 @@ export const AdminSubmissionReport = () => {
         log.error("Error getting reporting periods", error);
       })
 
+      getTestTypeCode()
+      .then(({ data }) => {
+        setTestTypeCode(data?.items);
+      })
+      .catch(error => {
+        log.error("Error getting test type code", error);
+      })
+
   }, []);
 
   return (
@@ -57,6 +68,7 @@ export const AdminSubmissionReport = () => {
       <hr />
       <FilterFormAdminSubmissionReport
         facilities={facilityList}
+        testTypeCode={testTypeCode}
         setTableData={setTableData}
         setIsTableDataLoading={setIsTableDataLoading}
         setSelectedRows={setSelectedRows}
