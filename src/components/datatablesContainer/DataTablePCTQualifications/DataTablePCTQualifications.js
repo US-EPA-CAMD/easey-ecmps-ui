@@ -68,6 +68,7 @@ export const DataTablePCTQualifications = ({
       qualSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getPCTQualifications(locationSelectValue, qualSelectValue)
         .then((res) => {

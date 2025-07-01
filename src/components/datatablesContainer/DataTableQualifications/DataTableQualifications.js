@@ -121,6 +121,7 @@ export const DataTableQualifications = ({
       locationSelectValue ||
       revertedState
     ) {
+      setDataLoaded(false);
       mpApi
         .getQualifications(locationSelectValue)
         .then((res) => {

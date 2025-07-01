@@ -48,7 +48,7 @@ import {
   importMP,
   postCheckoutMonitoringPlanConfiguration,
 } from "../../utils/api/monitoringPlansApi";
-import { dataStatus } from "../../utils/constants/dataStatus";
+import { DataStatus } from "../../utils/constants/dataStatus";
 import { configurationManagementTitle } from "../../utils/constants/moduleTitles";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import Modal from "../Modal/Modal";
@@ -535,12 +535,12 @@ const PlanSummary = ({ plan }) => (
 
 const SaveStatusAlert = ({ status }) => (
   <>
-    {status === dataStatus.ERROR && (
+    {status === DataStatus.ERROR && (
       <Alert noIcon slim type="error" headingLevel="h3">
         Error saving changes.
       </Alert>
     )}
-    {status === dataStatus.SUCCESS && (
+    {status === DataStatus.SUCCESS && (
       <Alert noIcon slim type="success" headingLevel="h3">
         Changes saved successfully.
       </Alert>
@@ -610,23 +610,23 @@ export const ConfigurationManagement = ({
     initialChangeSummaryState(),
   );
   const [changeSummaryStatus, setChangeSummaryStatus] = useState(
-    dataStatus.IDLE,
+    DataStatus.IDLE,
   );
-  const [checkInOutStatus, setCheckInOutStatus] = useState(dataStatus.IDLE);
+  const [checkInOutStatus, setCheckInOutStatus] = useState(DataStatus.IDLE);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [facilitiesStatus, setFacilitiesStatus] = useState(dataStatus.IDLE);
+  const [facilitiesStatus, setFacilitiesStatus] = useState(DataStatus.IDLE);
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
   const [modalErrorMsgs, setModalErrorMsgs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [monitoringPlansStatus, setMonitoringPlansStatus] = useState(
-    dataStatus.IDLE,
+    DataStatus.IDLE,
   );
-  const [saveStatus, setSaveStatus] = useState(dataStatus.IDLE);
+  const [saveStatus, setSaveStatus] = useState(DataStatus.IDLE);
   const [selectedFacility, setSelectedFacility] = useState(undefined);
-  const [stackPipesStatus, setStackPipesStatus] = useState(dataStatus.IDLE);
-  const [unitsStatus, setUnitsStatus] = useState(dataStatus.IDLE);
+  const [stackPipesStatus, setStackPipesStatus] = useState(DataStatus.IDLE);
+  const [unitsStatus, setUnitsStatus] = useState(DataStatus.IDLE);
   const [unitStackConfigsStatus, setUnitStackConfigsStatus] = useState(
-    dataStatus.IDLE,
+    DataStatus.IDLE,
   );
 
   /* CALCULATED VALUES */
@@ -653,7 +653,7 @@ export const ConfigurationManagement = ({
 
   // TODO: Remove this after migrating to checking out by plants.
   const canCheckOut =
-    monitoringPlansStatus === dataStatus.SUCCESS &&
+    monitoringPlansStatus === DataStatus.SUCCESS &&
     facilityMonitoringPlans.length > 0;
 
   const checkedOutLocationsForFacility = checkedOutLocations.filter(
@@ -707,7 +707,7 @@ export const ConfigurationManagement = ({
   }, [setCheckedOutLocations, user]);
 
   const createChangeSummary = async () => {
-    setChangeSummaryStatus(dataStatus.PENDING);
+    setChangeSummaryStatus(DataStatus.PENDING);
 
     try {
       const [bulkResult, ...singleUnitResults] = await Promise.all([
@@ -721,11 +721,11 @@ export const ConfigurationManagement = ({
       });
 
       setChangeSummary(results);
-      setChangeSummaryStatus(dataStatus.SUCCESS);
+      setChangeSummaryStatus(DataStatus.SUCCESS);
     } catch (err) {
       log.error(err);
       setModalErrorMsgs(formatErrorResponse(handleImportError(err)));
-      setChangeSummaryStatus(dataStatus.ERROR);
+      setChangeSummaryStatus(DataStatus.ERROR);
     }
   };
 
@@ -764,14 +764,14 @@ export const ConfigurationManagement = ({
       .filter((loc) => loc.facId === selectedFacility)
       .filter((loc) => user && loc.checkedOutBy === user.userId);
     try {
-      setCheckInOutStatus(dataStatus.PENDING);
+      setCheckInOutStatus(DataStatus.PENDING);
       await Promise.all(
         locationsCheckedOutByUserForFacility.map((loc) =>
           deleteCheckInMonitoringPlanConfiguration(loc.monPlanId),
         ),
       );
     } finally {
-      setCheckInOutStatus(dataStatus.IDLE);
+      setCheckInOutStatus(DataStatus.IDLE);
       setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
@@ -780,7 +780,7 @@ export const ConfigurationManagement = ({
     if (!selectedFacility) return;
 
     try {
-      setCheckInOutStatus(dataStatus.PENDING);
+      setCheckInOutStatus(DataStatus.PENDING);
       await checkInAllPlansForUser();
       const orisCode = getOrisCodeByFacId(userFacilities, selectedFacility);
       if (!orisCode) return;
@@ -794,37 +794,37 @@ export const ConfigurationManagement = ({
       await checkInAllPlansForUser();
       handleError(err);
     } finally {
-      setCheckInOutStatus(dataStatus.IDLE);
+      setCheckInOutStatus(DataStatus.IDLE);
       setCheckedOutLocations((await getCheckedOutLocations()).data?.items);
     }
   };
 
   const handleCloseModal = () => {
-    setChangeSummaryStatus(dataStatus.IDLE);
+    setChangeSummaryStatus(DataStatus.IDLE);
     setChangeSummary(initialChangeSummaryState());
     setModalErrorMsgs([]);
     setModalVisible(false);
-    setSaveStatus(dataStatus.IDLE);
+    setSaveStatus(DataStatus.IDLE);
   };
 
   const handleConfirmSave = async () => {
-    setSaveStatus(dataStatus.PENDING);
+    setSaveStatus(DataStatus.PENDING);
     try {
       await Promise.all([
         sendConfigurationsPayload(false),
         ...sendSingleUnitPayloads(false),
       ]);
-      setSaveStatus(dataStatus.SUCCESS);
+      setSaveStatus(DataStatus.SUCCESS);
       [
         setMonitoringPlansStatus,
         setUnitsStatus,
         setStackPipesStatus,
         setUnitStackConfigsStatus,
-      ].forEach((setter) => setter(dataStatus.IDLE));
+      ].forEach((setter) => setter(DataStatus.IDLE));
       checkInAllPlansForUser(); // NOTE: This is only necessary until check-outs are done on the plant level
     } catch (err) {
       log.error(err);
-      setSaveStatus(dataStatus.ERROR);
+      setSaveStatus(DataStatus.ERROR);
     }
   };
 
@@ -959,10 +959,10 @@ export const ConfigurationManagement = ({
 
   const resetFacilityData = () => {
     formDispatch({ type: "RESET_STATE" });
-    setMonitoringPlansStatus(dataStatus.IDLE);
-    setUnitsStatus(dataStatus.IDLE);
-    setStackPipesStatus(dataStatus.IDLE);
-    setUnitStackConfigsStatus(dataStatus.IDLE);
+    setMonitoringPlansStatus(DataStatus.IDLE);
+    setUnitsStatus(DataStatus.IDLE);
+    setStackPipesStatus(DataStatus.IDLE);
+    setUnitStackConfigsStatus(DataStatus.IDLE);
   };
 
   const revertStackPipe = (rowId) => {
@@ -1077,15 +1077,15 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedFacility) return;
 
-    if (monitoringPlansStatus === dataStatus.IDLE) {
+    if (monitoringPlansStatus === DataStatus.IDLE) {
       const orisCode = getOrisCodeByFacId(facilities, selectedFacility);
       try {
-        setMonitoringPlansStatus(dataStatus.PENDING);
+        setMonitoringPlansStatus(DataStatus.PENDING);
         loadMonitoringPlans(orisCode).then(() =>
-          setMonitoringPlansStatus(dataStatus.SUCCESS),
+          setMonitoringPlansStatus(DataStatus.SUCCESS),
         );
       } catch (err) {
-        setMonitoringPlansStatus(dataStatus.ERROR);
+        setMonitoringPlansStatus(DataStatus.ERROR);
       }
     }
   }, [
@@ -1097,15 +1097,15 @@ export const ConfigurationManagement = ({
 
   // Load facilities.
   useEffect(() => {
-    if (facilitiesStatus === dataStatus.IDLE) {
+    if (facilitiesStatus === DataStatus.IDLE) {
       if (facilities.length > 0) {
-        setFacilitiesStatus(dataStatus.SUCCESS);
+        setFacilitiesStatus(DataStatus.SUCCESS);
       } else {
         try {
-          setFacilitiesStatus(dataStatus.PENDING);
-          loadFacilities().then(() => setFacilitiesStatus(dataStatus.SUCCESS));
+          setFacilitiesStatus(DataStatus.PENDING);
+          loadFacilities().then(() => setFacilitiesStatus(DataStatus.SUCCESS));
         } catch (err) {
-          setFacilitiesStatus(dataStatus.ERROR);
+          setFacilitiesStatus(DataStatus.ERROR);
         }
       }
     }
@@ -1115,11 +1115,11 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedOrisCode) return;
 
-    if (unitsStatus === dataStatus.IDLE) {
+    if (unitsStatus === DataStatus.IDLE) {
       try {
-        setUnitsStatus(dataStatus.PENDING);
+        setUnitsStatus(DataStatus.PENDING);
         getUnitsByOrisCode(selectedOrisCode).then((res) => {
-          setUnitsStatus(dataStatus.SUCCESS);
+          setUnitsStatus(DataStatus.SUCCESS);
           initializeToggleableFormState(
             res.data.items
               .filter((d) => d.opStatusCd !== "CAN") // Filter out canceled units
@@ -1132,7 +1132,7 @@ export const ConfigurationManagement = ({
           );
         });
       } catch (err) {
-        setUnitsStatus(dataStatus.ERROR);
+        setUnitsStatus(DataStatus.ERROR);
       }
     }
   }, [selectedOrisCode, unitsStatus]);
@@ -1141,15 +1141,15 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedOrisCode) return;
 
-    if (stackPipesStatus === dataStatus.IDLE) {
+    if (stackPipesStatus === DataStatus.IDLE) {
       try {
-        setStackPipesStatus(dataStatus.PENDING);
+        setStackPipesStatus(DataStatus.PENDING);
         getStackPipesByOrisCode(selectedOrisCode).then((res) => {
-          setStackPipesStatus(dataStatus.SUCCESS);
+          setStackPipesStatus(DataStatus.SUCCESS);
           initializeEditableFormState(res.data.items, "SET_STACK_PIPES");
         });
       } catch (err) {
-        setStackPipesStatus(dataStatus.ERROR);
+        setStackPipesStatus(DataStatus.ERROR);
       }
     }
   }, [selectedOrisCode, stackPipesStatus]);
@@ -1158,15 +1158,15 @@ export const ConfigurationManagement = ({
   useEffect(() => {
     if (!selectedOrisCode) return;
 
-    if (unitStackConfigsStatus === dataStatus.IDLE) {
+    if (unitStackConfigsStatus === DataStatus.IDLE) {
       try {
-        setUnitStackConfigsStatus(dataStatus.PENDING);
+        setUnitStackConfigsStatus(DataStatus.PENDING);
         getUnitStackConfigsByOrisCode(selectedOrisCode).then((res) => {
-          setUnitStackConfigsStatus(dataStatus.SUCCESS);
+          setUnitStackConfigsStatus(DataStatus.SUCCESS);
           initializeEditableFormState(res.data.items, "SET_UNIT_STACK_CONFIGS");
         });
       } catch (err) {
-        setUnitStackConfigsStatus(dataStatus.ERROR);
+        setUnitStackConfigsStatus(DataStatus.ERROR);
       }
     }
   }, [selectedOrisCode, unitStackConfigsStatus]);
@@ -1221,9 +1221,9 @@ export const ConfigurationManagement = ({
         <GridContainer className="padding-left-0 margin-left-0 padding-right-0">
           <Grid row>
             <StatusContent
+              errorMsg="Error loading facilities."
               headingLevel="h3"
               status={facilitiesStatus}
-              label="facilities"
             >
               <div>
                 <Label htmlFor="facility">Facility Name/ID</Label>
@@ -1243,8 +1243,8 @@ export const ConfigurationManagement = ({
                   </div>
                   {selectedFacility && (
                     <>
-                      {checkInOutStatus === dataStatus.PENDING ||
-                      monitoringPlansStatus === dataStatus.PENDING ? (
+                      {checkInOutStatus === DataStatus.PENDING ||
+                      monitoringPlansStatus === DataStatus.PENDING ? (
                         <SizedPreloader size={5} />
                       ) : (
                         <>
@@ -1301,7 +1301,10 @@ export const ConfigurationManagement = ({
                     {
                       title: "Units",
                       content: (
-                        <StatusContent status={unitsStatus} label="units">
+                        <StatusContent
+                          errorMsg="Error loading units."
+                          status={unitsStatus}
+                        >
                           <DataTable
                             className="data-display-table react-transition fade-in"
                             columns={[
@@ -1340,8 +1343,8 @@ export const ConfigurationManagement = ({
                       title: "Stacks & Pipes",
                       content: (
                         <StatusContent
+                          errorMsg="Error loading stacks & pipes."
                           status={stackPipesStatus}
-                          label="stacks & pipes"
                         >
                           {formState.stackPipes.map((sp) => (
                             <form
@@ -1420,8 +1423,8 @@ export const ConfigurationManagement = ({
                       title: "Unit Stack Configurations",
                       content: (
                         <StatusContent
+                          errorMsg="Error loading unit stack configurations."
                           status={unitStackConfigsStatus}
-                          label="unit stack configurations"
                         >
                           {formState.unitStackConfigs.map((usc) => (
                             <form
@@ -1545,8 +1548,8 @@ export const ConfigurationManagement = ({
                     showCancel={false}
                     showSave={
                       user &&
-                      changeSummaryStatus === dataStatus.SUCCESS &&
-                      [dataStatus.IDLE, dataStatus.PENDING].includes(
+                      changeSummaryStatus === DataStatus.SUCCESS &&
+                      [DataStatus.IDLE, DataStatus.PENDING].includes(
                         saveStatus,
                       ) &&
                       (!canCheckOut || isCheckedOutByUser) &&
@@ -1556,8 +1559,8 @@ export const ConfigurationManagement = ({
                     title="Change Summary"
                   >
                     <StatusContent
+                      errorMsg="Error loading summary of configuration changes."
                       headingLevel="h3"
-                      label="summary of configuration changes"
                       status={changeSummaryStatus}
                     >
                       {changedPlansCount === 0 ? (

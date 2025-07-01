@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import { formatDate } from "../../../utils/functions";
 import { getMatsSubmissions } from "../../../utils/api/qaCertificationsAPI";
-import { dataStatus } from "../../../utils/constants/dataStatus";
+import { DataStatus } from "../../../utils/constants/dataStatus";
 import StatusContent from "../../StatusContent/StatusContent";
 
 const DataTableMatsSubmission = ({
@@ -26,7 +26,7 @@ const DataTableMatsSubmission = ({
   );
 
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState(dataStatus.IDLE);
+  const [status, setStatus] = useState(DataStatus.IDLE);
 
   const onResubmit = (row) => {
     navigate("create", {
@@ -121,22 +121,22 @@ const DataTableMatsSubmission = ({
   }));
 
   useEffect(() => {
-    if (status !== dataStatus.IDLE) return;
+    if (status !== DataStatus.IDLE) return;
 
-    setStatus(dataStatus.PENDING);
+    setStatus(DataStatus.PENDING);
     getMatsSubmissions(selectedConfigId)
       .then((res) => {
         setData(res.data.items);
-        setStatus(dataStatus.SUCCESS);
+        setStatus(DataStatus.SUCCESS);
       })
       .catch((err) => {
         log.error(err);
-        setStatus(dataStatus.ERROR);
+        setStatus(DataStatus.ERROR);
       });
   }, [selectedConfigId, status]);
 
   return (
-    <StatusContent label="MATS Submission" status={status}>
+    <StatusContent errorMsg="Error loading MATS submissions." status={status}>
       <DataTable
         className={`data-display-table react-transition fade-in`}
         columns={columns}
