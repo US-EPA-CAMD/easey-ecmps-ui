@@ -115,6 +115,24 @@ export const matsFileUpload = async (
     .catch(handleImportError);
 };
 
+export async function getEvaluationQueueOrder(orisCodes) {
+  const queryString = `orisCodes=${orisCodes.join("|")}`;
+  const url = `${config.services.camd.uri}/evaluate/queueOrder?${queryString}`;
+
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export async function getSubmissionQueueOrder(orisCodes) {
+  const queryString = `orisCodes=${orisCodes.join("|")}`;
+  const url = `${config.services.camd.uri}/submission/queueOrder?${queryString}`;
+
+  return secureAxios({ url: url, method: "GET" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export async function matsSubmissionProcess(payload, shouldHandleError = true) {
   return secureAxios({
     method: "POST",
