@@ -37,10 +37,13 @@ export const getSubmissionReportRecords = async (
   severityCode,
   submissionType,
   submissionFrom,
-  submissionTo
+  submissionTo,
+  qaDataType,
+  testType,
+  locations
 ) => {
   // At least some kind of filtering is required
-  if (!orisCode && !year && !quarter && !submissionType && !severityCode && !submissionFrom && !submissionTo) return [];
+  if (!orisCode && !locations && !year && !quarter && !submissionType && !severityCode && !submissionFrom && !submissionTo && !qaDataType && !testType) return [];
 
   return secureAxios({
     url: urlAdminSubmissionReport,
@@ -51,7 +54,10 @@ export const getSubmissionReportRecords = async (
       severityCode,
       submissionType,
       submissionFrom,
-      submissionTo
+      submissionTo,
+      qaDataType,
+      testType,
+      locations
     },
   })
     .then(handleResponse)
