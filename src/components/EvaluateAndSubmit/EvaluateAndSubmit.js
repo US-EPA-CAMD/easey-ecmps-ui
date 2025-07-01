@@ -39,6 +39,7 @@ import useGetContent from "./utils/useGetContent";
 import { CategoryTable } from "./CategoryTable/CategoryTable";
 import { v4 } from "uuid";
 import { displayAppWarning } from "../../additional-functions/app-error";
+import * as modules from "../../utils/constants/moduleTitles";
 import { getSubmissionQueueOrder } from '../../utils/api/camdServices'
 
 export const EvaluateAndSubmit = ({
@@ -89,12 +90,15 @@ export const EvaluateAndSubmit = ({
 
   useEffect(() => {
     if (finalSubmitStage && componentType === "Submission") {
-      setTitle("Review & Submit");
+      document.title = modules.reviewAndsubmitModule;
+      setTitle(modules.reviewAndsubmitModule);
     } else if (!finalSubmitStage && componentType === "Submission") {
-      setTitle("Submit");
+      document.title = modules.submitModule;
+      setTitle(modules.submitModule);
       setButtonText("Sign & Submit Selected Files");
     } else {
-      setTitle("Evaluate");
+      document.title = modules.evaluateModule;
+      setTitle(modules.evaluateModule);
       setButtonText("Evaluate");
     }
   }, [finalSubmitStage, componentType]);
