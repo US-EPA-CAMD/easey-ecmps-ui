@@ -15,6 +15,14 @@ export async function getReport(params) {
   });
 }
 
+export async function getTestTypeCode() {
+  const url = `${config.services.camd.uri}/test-type-code`
+  return secureAxios({
+    method: "GET",
+    url,
+  });
+}
+
 export async function downloadReport(params) {
   const url = `${config.services.camd.uri}${formatReportUrl(
     params,
