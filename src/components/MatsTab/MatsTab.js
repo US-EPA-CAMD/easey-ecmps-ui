@@ -1,9 +1,8 @@
-import { at } from "lodash";
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
 
 import { MATS_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
-import config from "../../config";
+import { canSubmitMats } from "../../utils/functions";
 import DataTableMatsSubmission from "../datatablesContainer/DataTableMatsSubmission/DataTableMatsSubmission";
 import MatsHeaderInfo from "../MatsHeaderInfo/MatsHeaderInfo";
 
@@ -16,26 +15,20 @@ export const MatsTab = ({
   /* MAPPED PROPS */
   checkedOutConfigs,
 }) => {
-  const selectedLocation = useSelector(
-    (state) =>
-      state.openedFacilityTabs[MATS_STORE_NAME].find(
-        (tab) => tab.selectedConfig.id === selectedConfigId
-      )?.location[1]
+  const selectedTab = useSelector((state) =>
+    state.openedFacilityTabs[MATS_STORE_NAME].find(
+      (tab) => tab.selectedConfig.id === selectedConfigId,
+    ),
   );
+  const selectedLocation = selectedTab?.location[1];
+
   const [selectedReportType, setSelectedReportType] = useState("");
 
-  const isCheckedOutByUser =
-    checkedOutConfigs.find((config) => config["monPlanId"] === selectedConfigId)
-      ?.checkedOutBy === user.userId;
-  const acceptedRoles = at(config.app, [
-    "sponsorRole",
-    "submitterRole",
-    "initialAuthorizerRole",
-  ]);
-  const hasRequiredRole = user.roles?.some((role) =>
-    acceptedRoles.includes(role)
+  const canSubmit = canSubmitMats(
+    user,
+    selectedTab.selectedConfig,
+    checkedOutConfigs,
   );
-  const canSubmit = isCheckedOutByUser && hasRequiredRole;
 
   return (
     <div className="padding-top-0">
