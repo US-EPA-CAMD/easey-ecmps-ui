@@ -25,7 +25,9 @@ export const getEmissionsReviewSubmit = async (
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  queryString = queryString + `&quarters=${quarters.join("|")}`;
+  if (quarters.length > 0) {
+    queryString = queryString + `&quarters=${quarters.join("|")}`;
+  }
 
   let url = `${getApiUrl()}/emissions?${queryString}`;
   return await secureAxios({ url: url, method: "GET" })
