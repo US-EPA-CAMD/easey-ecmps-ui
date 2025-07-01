@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as modules from "../../utils/constants/moduleTitles";
 import { ErrorSuppressionFilters } from "./ErrorSuppressionFilters/ErrorSuppressionFilters";
 import { ErrorSuppressionDataContainer } from "./ErrorSuppressionDataContainer/ErrorSuppressionDataContainer";
@@ -7,6 +7,10 @@ import { ErrorSuppressionFiltersContextProvider } from "./context/error-suppress
 export const defaultDropdownText = "-- Select a value --";
 
 export const ErrorSuppression = () => {
+
+  useEffect(() => {
+    document.title = modules.error_supression_module;
+  });
 
   return (
       <div className="react-transition fade-in padding-x-3">

@@ -7,6 +7,14 @@ jest.useFakeTimers();
 
 const callFunc = jest.fn();
 
+jest.mock('../../utils/api/camdServices', () => ({
+  getEvaluationQueueOrder: jest.fn().mockResolvedValue({
+    data: {
+      items: []
+    }
+  })
+}));
+
 describe("EvaluateRefresh Component", () => {
   beforeEach(async () => {
     await act(async () => {

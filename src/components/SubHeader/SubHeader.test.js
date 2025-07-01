@@ -22,7 +22,7 @@ describe("SubHeader Component", () => {
 
     //Help/Support
     const help_supportMenuItem = screen.getAllByText("Help/Support");
-    expect(help_supportMenuItem.length).toBe(2);
+    expect(help_supportMenuItem.length).toBe(1);
 
     //Regulation Patterns
     const regpatternsMenuItem = screen.getByText("Regulatory Partners");
