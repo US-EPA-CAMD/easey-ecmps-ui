@@ -95,29 +95,6 @@ export const validateUserInput = (userInput, dataTableName) => {
   return errors;
 };
 
-export const validateUserInputMonitorPlanComment = (userInput) => {
-  const errors = [];
-
-  const beginAfterEndMsg = "Begin date is after end date"
-  const commentError = "You did not provide comment, which is required for Monitor Plan Comment"
-  const { beginDate, beginHour, beginMinute, endDate, endHour, endMinute, monitoringPlanComment } = userInput
-
-  const isBeginBeforeEndDate = (beginDate && endDate)
-    ? checkBeginBeforeEndDate(beginDate, endDate, beginHour, endHour, beginMinute, endMinute)
-    : true
-
-  if (!isBeginBeforeEndDate) {
-        errors.push(beginAfterEndMsg)
-      }
-
-  if(!monitoringPlanComment || monitoringPlanComment.trim() === '')
-  {
-       errors.push(commentError)
-  }
-
-  return errors;
-};
-
 /**
  * Checks if either end date or hour exists
  * and if begin date before end date

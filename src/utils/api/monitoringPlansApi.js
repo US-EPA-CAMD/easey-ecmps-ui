@@ -270,17 +270,15 @@ export const saveMonitoringMats = async (payload) => {
 
 export const saveMonitorPlanComments = async (payload) => {
 
-  const url = getApiUrl(`/plans/${payload.planId}/comments/${payload.id}`);
+  const { planId, id, ...apiPayload } = payload;
+  const url = getApiUrl(`/plans/${planId}/comments/${id}`);
 
-  // *** remove monitor plan comment not needed by the API
-  delete payload["planId"];
-  delete payload["id"];
   try {
     return handleResponse(
       await secureAxios({
         method: "PUT",
         url: url,
-        data: payload,
+        data: apiPayload,
       })
     );
   } catch (error) {
@@ -289,18 +287,15 @@ export const saveMonitorPlanComments = async (payload) => {
 };
 
 export const createMonitorPlanComments = async (payload) => {
-  const url = getApiUrl(`/plans/${payload.planId}/comments`);
-
- // *** remove monitor plan comment not needed by the API
-  delete payload["planId"];
-  delete payload["id"];
+  const { planId, id, ...apiPayload } = payload;
+  const url = getApiUrl(`/plans/${planId}/comments`);
 
   try {
     return handleResponse(
       await secureAxios({
         method: "POST",
         url: url,
-        data: payload,
+        data: apiPayload,
       })
     );
   } catch (error) {

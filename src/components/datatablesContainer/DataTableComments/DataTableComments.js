@@ -3,7 +3,6 @@ import log from "loglevel";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
 import {
   extractUserInput,
-  validateUserInputMonitorPlanComment
 } from "../../../additional-functions/extract-user-input";
 import * as fs from "../../../utils/selectors/monitorPlanComments";
 import DataTableRender from "../../DataTableRender/DataTableRender";
@@ -165,11 +164,6 @@ export const DataTableComments = ({
 
   const saveComments = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    const validationErrors = validateUserInputMonitorPlanComment(userInput);
-    if (validationErrors.length > 0) {
-      setErrorMsgs(validationErrors);
-      return;
-    }
     try {
       const resp = await mpApi
         .saveMonitorPlanComments(userInput)
@@ -188,11 +182,6 @@ export const DataTableComments = ({
   };
   const createMonitorPlan = async () => {
     const userInput = extractUserInput(payload, ".modalUserInput");
-    const validationErrors = validateUserInputMonitorPlanComment(userInput);
-    if (validationErrors.length > 0) {
-      setErrorMsgs(validationErrors);
-      return;
-    }
     try {
       const resp = await mpApi
         .createMonitorPlanComments(userInput)
