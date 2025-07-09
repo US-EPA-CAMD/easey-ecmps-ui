@@ -123,13 +123,13 @@ export const updateCheckedOutLocationsOnTable = (
   }
 };
 
-export const evalStatusStyle = (status, severityDescription) => {
+export const evalStatusStyle = (status, severityCode) => {
   switch (status) {
     case "ERR":
     case "EVAL":
       return "usa-alert--warning";
     case "INFO":
-      if(severityDescription?.includes("Level"))
+      if(['CRIT1','CRIT2','CRIT3','FATAL'].includes(severityCode))
         return "usa-alert--warning";
       else 
         return "usa-alert--success";
@@ -144,8 +144,8 @@ export const evalStatusStyle = (status, severityDescription) => {
   return "";
 };
 
-export const alertStyle = (evalStatus, severityDescription ) =>
-  `usa-alert usa-alert--slim usa-alert--no-icon ${evalStatusStyle(evalStatus, severityDescription )}`;
+export const alertStyle = (evalStatus, severityCode ) =>
+  `usa-alert usa-alert--slim usa-alert--no-icon ${evalStatusStyle(evalStatus, severityCode )}`;
 
 export const reportWindowParams = [
   // eslint-disable-next-line no-restricted-globals
@@ -195,7 +195,7 @@ export const addEvalStatusCell = (columns, callback) =>
   columns.map((col) => {
     if (col.name === "Eval Status") {
       col.cell = (row) => (
-        <div className={alertStyle(row.evalStatusCode, row?.severityDescription)}>
+        <div className={alertStyle(row.evalStatusCode, row?.severityCode)}>
           {evalStatusesWithLinks.has(row.evalStatusCode) ? (
             <button
               className={"hyperlink-btn cursor-pointer"}

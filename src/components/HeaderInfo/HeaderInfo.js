@@ -165,6 +165,7 @@ export const HeaderInfo = ({
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
   const [severityDescription, setSeverityDescription] = useState("");
+  const [severityCode, setSeverityCode] = useState("");
   const [evalStatusDescription, setEvalStatusDescription] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
@@ -527,6 +528,7 @@ export const HeaderInfo = ({
             setEvalStatus(status);
             setEvalStatusDescription(res?.data?.evalStatusCodeDescription);
             setSeverityDescription(res?.data?.severityDescription)
+            setSeverityCode(res?.data?.severityCode)
             setSubmissionStatus(res.data.submissionAvailabilityCode);
             setSubmissionStatusDescription(
               res.data.submissionAvailabilityCodeDescription
@@ -708,13 +710,13 @@ export const HeaderInfo = ({
   };
 
   // chooses correctly styling for evaluation status label
-  const evalStatusStyle = (status, severityDescription) => {
+  const evalStatusStyle = (status, severityCode) => {
     switch (status) {
       case "ERR":
       case "EVAL":
         return "usa-alert--warning";
       case "INFO":
-        if(severityDescription?.includes("Level"))
+        if(['CRIT1','CRIT2','CRIT3','FATAL'].includes(severityCode))
           return "usa-alert--warning";
         else 
           return "usa-alert--info";
@@ -748,7 +750,7 @@ export const HeaderInfo = ({
 
   const evalStatusContent = () => {
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-      evalStatus , severityDescription
+      evalStatus , severityCode
     )} margin-y-0`;
     const params = {
       reportCode: "MP_EVAL",
