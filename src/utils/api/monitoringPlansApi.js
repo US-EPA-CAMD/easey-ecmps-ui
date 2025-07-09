@@ -1322,11 +1322,11 @@ export const getMPSchema = async () => {
     .catch(handleError);
 };
 
-export const exportMonitoringPlanDownload = async (configID) => {
+export const exportMonitoringPlanDownload = async (configID, configName) => {
   try {
     const mpRes = await getMonitoringPlanById(configID);
     const orisCode = mpRes.data["orisCode"];
-    const mpName = mpRes.data["name"];
+    const mpName = configName;
     const date = new Date();
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
