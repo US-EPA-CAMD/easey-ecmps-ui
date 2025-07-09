@@ -210,7 +210,7 @@ export const DataTableComments = ({
     if (commentData.length > 0 && !create) {
       comments = commentData.filter((element) =>
         {
-         return element.id === row[`col${Object.keys(row).length - 1}`]
+         return element.id === row.col4
         }
          
       )[0];
