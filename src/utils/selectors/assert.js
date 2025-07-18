@@ -32,60 +32,47 @@ const reportingFreq = "Reporting Frequency";
 const locationAttribute = "Location Attribute";
 const relationshipData = "Relationship Data";
 // Getting records from API
-export const getDataTableApis = async (name, location, selectedLocation) => {
+export const getDataTableApis = async (name, locationId, selectedLocation, planId) => {
   switch (name) {
     case load:
-      return mpApi.getMonitoringLoads(location)
+      return mpApi.getMonitoringLoads(locationId)
         .catch(error => log.log('getMonitoringLoads failed', error));
     case rectDuctWaf:
-      return mpApi.getMonitoringRectangularDucts(location)
+      return mpApi.getMonitoringRectangularDucts(locationId)
         .catch(error => log.log('getMonitoringRectangularDucts failed', error));
     case span:
-      return mpApi.getMonitoringSpans(location)
+      return mpApi.getMonitoringSpans(locationId)
         .catch(error => log.log('getMonitoringSpans failed', error));
     case form:
-      return mpApi.getMonitoringFormulas(location)
+      return mpApi.getMonitoringFormulas(locationId)
         .catch(error => log.log('getMonitoringFormulas failed', error));
     case def:
-      return mpApi.getMonitoringDefaults(location)
+      return mpApi.getMonitoringDefaults(locationId)
         .catch(error => log.log('getMonitoringDefaults failed', error));
     case unitFuel:
-      return mpApi.getMonitoringPlansFuelDataRecords(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getMonitoringPlansFuelDataRecords(selectedLocation)
         .catch(error => log.log('getMonitoringPlansFuelDataRecords failed', error));
     case unitCon:
-      return mpApi.getMonitoringPlansUnitControlRecords(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getMonitoringPlansUnitControlRecords(selectedLocation)
         .catch(error => log.log('getMonitoringPlansUnitControlRecords failed', error));
     case unitCap:
-      return mpApi.getUnitCapacity(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getUnitCapacity(selectedLocation)
         .catch(error => log.log('getUnitCapacity failed', error));
-
     case unit:
-      return mpApi.getMonitoringPlansUnit(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getMonitoringPlansUnit(selectedLocation)
         .catch(error => log.log('getMonitoringPlansUnit failed', error));
     case unitProg:
-      return mpApi.getUnitProgram(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getUnitProgram(selectedLocation)
         .catch(error => log.log('getUnitProgram failed', error));
     case reportingFreq:
-      return mpApi.getReportingFrequency(
-        selectedLocation ? selectedLocation : location
-      )
+      return mpApi.getReportingFrequency(planId)
         .catch(error => log.log('getReportingFrequency failed', error));
 
     case locationAttribute:
-      return mpApi.getLocationAttributes(location)
+      return mpApi.getLocationAttributes(locationId)
         .catch(error => log.log('getLocationAttributes failed', error));
     case relationshipData:
-      return mpApi.getRelationshipData(location)
+      return mpApi.getRelationshipData(locationId)
         .catch(error => log.log('getRelationshipData failed', error));
 
     default:

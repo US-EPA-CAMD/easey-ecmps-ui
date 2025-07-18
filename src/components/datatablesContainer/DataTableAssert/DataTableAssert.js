@@ -47,34 +47,35 @@ const getErrorListFromResponse = (resp) => {
 };
 
 export const DataTableAssert = ({
-  mdmData,
+  allowToCreateNewData = true,
+  checkout,
+  columnNames,
+  controlDatePickerInputs,
+  controlInputs,
+  currentTabIndex,
+  dataTableName,
+  dropdownArray,
+  filter,
+  inactive,
   loadDropdownsData,
   locationSelectValue,
-  user,
-  checkout,
-  inactive,
-  settingInactiveCheckBox,
-  revertedState,
-  setRevertedState,
-  pagination,
-  filter,
-  controlInputs,
+  mdmData,
   nonEditable = false,
-  allowToCreateNewData = true,
-  controlDatePickerInputs,
-  radioNames,
+  pagination,
   payload,
-  urlParameters,
-  columnNames,
-  dropdownArray,
-  dataTableName,
-  selectedLocation,
-  showModal = false,
-  setUpdateRelatedTables,
-  updateRelatedTables,
-  currentTabIndex,
-  tabs,
+  radioNames,
   reportDataStatus,
+  revertedState,
+  selectedConfigId,
+  selectedLocation,
+  setRevertedState,
+  setUpdateRelatedTables,
+  settingInactiveCheckBox,
+  showModal = false,
+  tabs,
+  updateRelatedTables,
+  urlParameters,
+  user,
 }) => {
   const [dataPulled, setDataPulled] = useState([]);
   const [show, setShow] = useState(showModal);
@@ -133,7 +134,7 @@ export const DataTableAssert = ({
     ) {
       setDataLoaded(false);
       assertSelector
-        .getDataTableApis(dataTableName, locationSelectValue, selectedLocation)
+        .getDataTableApis(dataTableName, locationSelectValue, selectedLocation, selectedConfigId)
         .then((res) => {
           finishedLoadingData(res.data?.items);
         });
