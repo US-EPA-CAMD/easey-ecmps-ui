@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 import {
@@ -27,11 +27,8 @@ export const EmissionsTab = ({
   };
 
   const currentTab = getCurrentTab();
-  const [locationSelect, setLocationSelect] = useState(currentTab.location);
-
-  useEffect(() => {
-    setLocation(locationSelect, title, EMISSIONS_STORE_NAME);
-  }, [locationSelect, setLocation, title]);
+  const locationSelect = currentTab?.location ?? null;
+  const setLocationSelect = (location) => setLocation(location, title, EMISSIONS_STORE_NAME);
 
   return (
     <EmissionsTabRender
