@@ -905,6 +905,7 @@ export const MonitoringPlanTabRender = ({
     <div className=" padding-top-0">
       <div className="grid-row">
         <HeaderInfo
+          key={selectedConfigId}
           facility={title}
           selectedConfigId={selectedConfigId}
           orisCode={orisCode}
