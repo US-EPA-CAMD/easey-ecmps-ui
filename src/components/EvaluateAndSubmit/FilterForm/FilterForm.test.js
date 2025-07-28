@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import { render, act, screen, fireEvent } from "@testing-library/react";
 import FilterForm from "./FilterForm";
@@ -22,17 +23,18 @@ const mockFacilities = [
   },
 ];
 
+// eslint-disable-next-line no-undef
 describe("Review and submit form", () => {
   beforeEach(() => {
-    jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValueOnce({
+    jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValue({
       data :{
         items: [
-          {periodAbbreviation: "2022 Q3"},
-          {periodAbbreviation: "2022 Q4"},
+          {periodAbbreviation: "2022 Q3", calendarYear: 2022, quarter: 3},
+          {periodAbbreviation: "2022 Q4", calendarYear: 2022, quarter: 4},
         ]
       }
     });
-    jest.spyOn(monitoringPlansApi, "getMonitoringPlans").mockResolvedValueOnce({
+    jest.spyOn(monitoringPlansApi, "getMonitoringPlans").mockResolvedValue({
       data :{
         items: [
           { id: "MOCK-1", active: true, facilityName: "Barry", name: "1" },
@@ -41,7 +43,11 @@ describe("Review and submit form", () => {
         ]
       }
     });
-  })
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   test("Render Review and Submit Form with no errors", async () => {
     let container;
@@ -113,6 +119,7 @@ describe("Review and submit form", () => {
       fireEvent.click(configurationInput);
     });
 
+    // eslint-disable-next-line no-undef
     expect(screen.getByText("Barry - 1")).toBeInTheDocument();
   });
 

@@ -77,6 +77,26 @@ export const getReportingPeriods = (minYear = 2009) => {
   return reportingPeriods;
 };
 
+/**
+ * Sorts reporting periods in descending chronological order (most recent first)
+ * @param {Array} reportingPeriods - Array of reporting period objects with calendarYear and quarter properties
+ * @returns {Array} Sorted array of reporting periods
+ */
+export const sortReportingPeriodsDescending = (reportingPeriods) => {
+  if (!Array.isArray(reportingPeriods) || reportingPeriods.length === 0) {
+    return reportingPeriods;
+  }
+
+  return [...reportingPeriods].sort((a, b) => {
+    // Sort by year descending first
+    if (a.calendarYear !== b.calendarYear) {
+      return b.calendarYear - a.calendarYear;
+    }
+    // If years are equal, sort by quarter descending
+    return b.quarter - a.quarter;
+  });
+};
+
 //** review and submit utility functions
 export const isLocationUserCheckedOut = (
   checkedOutLocationsMap,
@@ -131,7 +151,7 @@ export const evalStatusStyle = (status, severityCode) => {
     case "INFO":
       if(['CRIT1','CRIT2','CRIT3','FATAL'].includes(severityCode))
         return "usa-alert--warning";
-      else 
+      else
         return "usa-alert--success";
     case "PASS":
       return "usa-alert--success";
@@ -306,10 +326,10 @@ export const getEvalStatus = async (paramsArray) => {
     isEmissions = paramsArray[0][1] === "EM_EVAL",
     id = paramsArray[2][1],
     type = isEmissions ? "emissions" : paramsArray[2][0];
-    if(!tableRowApi.hasOwnProperty(type) || typeof tableRowApi[type] !== 'function')
-    {
-      return;
-    }
+  if(!tableRowApi.hasOwnProperty(type) || typeof tableRowApi[type] !== 'function')
+  {
+    return;
+  }
   const api = tableRowApi[type];
   if (!api) return;
   const { ids, identifier } = getIdentfierAndIds(type, id);
@@ -320,7 +340,7 @@ export const getEvalStatus = async (paramsArray) => {
   );
 
   let dataList = response.data?.items ?? response.data;
-  
+
   const items = dataList.filter((el) => el[identifier] === id);
   if (!dataList.length) return;
   if (identifier) return items[0].evalStatusCode;

@@ -8,6 +8,7 @@ import {
   evalStatusStyle,
   alertStyle,
   getQuarter,
+  sortReportingPeriodsDescending,
 } from "./functions";
 
 describe("functions.js", function () {
@@ -342,5 +343,67 @@ describe("functions.js", function () {
       expect(getQuarter(new Date("2023/11/01"))).toBe(4);
       expect(getQuarter(new Date("2023/12/31"))).toBe(4);
     });
-  })
+  });
+
+  describe("sortReportingPeriodsDescending tests", () => {
+    const mockReportingPeriods = [
+      { calendarYear: 2023, quarter: 1, periodAbbreviation: "2023 Q1" },
+      { calendarYear: 2024, quarter: 3, periodAbbreviation: "2024 Q3" },
+      { calendarYear: 2023, quarter: 4, periodAbbreviation: "2023 Q4" },
+      { calendarYear: 2024, quarter: 1, periodAbbreviation: "2024 Q1" },
+      { calendarYear: 2024, quarter: 2, periodAbbreviation: "2024 Q2" },
+    ];
+
+    it("should sort reporting periods in descending chronological order", () => {
+      const result = sortReportingPeriodsDescending(mockReportingPeriods);
+
+      expect(result).toEqual([
+        { calendarYear: 2024, quarter: 3, periodAbbreviation: "2024 Q3" },
+        { calendarYear: 2024, quarter: 2, periodAbbreviation: "2024 Q2" },
+        { calendarYear: 2024, quarter: 1, periodAbbreviation: "2024 Q1" },
+        { calendarYear: 2023, quarter: 4, periodAbbreviation: "2023 Q4" },
+        { calendarYear: 2023, quarter: 1, periodAbbreviation: "2023 Q1" },
+      ]);
+    });
+
+    it("should return empty array for empty input", () => {
+      const result = sortReportingPeriodsDescending([]);
+      expect(result).toEqual([]);
+    });
+
+    it("should return the input if not an array", () => {
+      const result = sortReportingPeriodsDescending(null);
+      expect(result).toBeNull();
+    });
+
+    it("should not mutate the original array", () => {
+      const original = [...mockReportingPeriods];
+      sortReportingPeriodsDescending(mockReportingPeriods);
+      expect(mockReportingPeriods).toEqual(original);
+    });
+
+    it("should handle single item array", () => {
+      const singleItem = [{ calendarYear: 2023, quarter: 2, periodAbbreviation: "2023 Q2" }];
+      const result = sortReportingPeriodsDescending(singleItem);
+      expect(result).toEqual(singleItem);
+    });
+
+    it("should handle periods from same year", () => {
+      const sameYearPeriods = [
+        { calendarYear: 2023, quarter: 1, periodAbbreviation: "2023 Q1" },
+        { calendarYear: 2023, quarter: 3, periodAbbreviation: "2023 Q3" },
+        { calendarYear: 2023, quarter: 2, periodAbbreviation: "2023 Q2" },
+        { calendarYear: 2023, quarter: 4, periodAbbreviation: "2023 Q4" },
+      ];
+
+      const result = sortReportingPeriodsDescending(sameYearPeriods);
+
+      expect(result).toEqual([
+        { calendarYear: 2023, quarter: 4, periodAbbreviation: "2023 Q4" },
+        { calendarYear: 2023, quarter: 3, periodAbbreviation: "2023 Q3" },
+        { calendarYear: 2023, quarter: 2, periodAbbreviation: "2023 Q2" },
+        { calendarYear: 2023, quarter: 1, periodAbbreviation: "2023 Q1" },
+      ]);
+    });
+  });
 });
