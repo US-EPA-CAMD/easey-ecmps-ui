@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import { OpenInNew } from "@material-ui/icons";
 import "./ReportingInstructions.scss";
 
