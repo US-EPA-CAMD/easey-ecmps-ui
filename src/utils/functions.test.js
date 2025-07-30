@@ -1,6 +1,4 @@
-import _ from "lodash";
 import {
-  formatDate,
   isLocationUserCheckedOut,
   parseBool,
   updateCheckedOutLocationsOnTable,
@@ -10,6 +8,7 @@ import {
   getQuarter,
   sortReportingPeriodsDescending,
 } from "./functions";
+//import { it } from "../../.yarn/releases/yarn-1.22.19.cjs";
 
 describe("functions.js", function () {
   describe("parseBool", function () {
@@ -266,7 +265,7 @@ describe("functions.js", function () {
     });
 
     // describe("displayReport", () => {
-    //   it("returns returns correct string with eval status", () => {
+    //   it("returns correct string with eval status", () => {
     //     const windowOpenMock = jest.fn();
     //     global.open = () => windowOpenMock();
     //     const monPlanId = "123",

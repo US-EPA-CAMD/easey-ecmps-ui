@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React from "react";
 import { render, act, screen, fireEvent } from "@testing-library/react";
 import FilterForm from "./FilterForm";
@@ -23,7 +22,6 @@ const mockFacilities = [
   },
 ];
 
-// eslint-disable-next-line no-undef
 describe("Review and submit form", () => {
   beforeEach(() => {
     jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValue({
