@@ -68,17 +68,31 @@ export const EvaluateRefresh = ({
             (v) => v["monPlanId"] === r["monPlanId"] && v[rowId] === r[rowId]
           );
 
-          if (
-            rowEntry &&
-            rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription &&
-            (new Date().getTime() - lastEvalTime.current) / 1000 >
-            config.app.refreshEvalStatusRate / 1000 + 1
-          ) {
-            changes++;
-            rowEntry.evalStatusCode = r.evalStatusCode;
-            rowEntry.evalStatusCodeDescription = r.evalStatusCodeDescription;
+          const isRefreshDue =
+          (new Date().getTime() - lastEvalTime.current) / 1000 >
+          config.app.refreshEvalStatusRate / 1000 + 1 ;
+
+         if (rowEntry && isRefreshDue) {
+          //Make sure to always do the In Queue and In Progress
+          if (rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription && 
+            (r.evalStatusCode === "INQ" || r.evalStatusCode === "WIP" || r.evalStatusCode === "EVAL" || r.evalStatusCode === "PASS"))
+          {
+              changes++;
+              rowEntry.evalStatusCode = r.evalStatusCode;
+              rowEntry.evalStatusCodeDescription = r.evalStatusCodeDescription;
+          } 
+          else if (
+            rowEntry.evalStatusCodeDescription !== r.evalStatusCodeDescription ||
+            rowEntry.severityDescription !== r?.severityDescription
+          ) 
+          {
+              changes++;
+              rowEntry.evalStatusCode = r.evalStatusCode;
+              rowEntry.evalStatusCodeDescription = r.evalStatusCodeDescription;
+              rowEntry.severityDescription = r?.severityDescription
           }
         }
+      }
 
         if (changes > 0) {
           if (typeof forceReloadTables === 'function') {

@@ -116,7 +116,7 @@ export const formatTimeStamp = (timeStamp) => {
 export const monPlanColumns = [
   {
     name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
+    selector: (row) => row?.severityDescription ?? row.evalStatusCodeDescription,
     sortable: true,
   },
   {
@@ -156,7 +156,7 @@ export const monPlanColumns = [
 export const qaTestSummaryColumns = [
   {
     name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
+    selector: (row) => row?.severityDescription ?? row.evalStatusCodeDescription,
     sortable: true,
   },
   {
@@ -276,7 +276,7 @@ export const matsBulkFilesColumns = [
 export const qaCertEventColumns = [
   {
     name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
+    selector: (row) => row?.severityDescription ?? row.evalStatusCodeDescription,
     sortable: true,
   },
   {
@@ -353,7 +353,7 @@ export const qaCertEventColumns = [
 export const qaTeeColumns = [
   {
     name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
+    selector: (row) => row?.severityDescription ?? row.evalStatusCodeDescription,
     sortable: true,
   },
   {
@@ -425,7 +425,7 @@ export const qaTeeColumns = [
 export const emissionsColumns = [
   {
     name: "Eval Status",
-    selector: (row) => row.evalStatusCodeDescription,
+    selector: (row) => row?.severityDescription ?? row.evalStatusCodeDescription,
     sortable: true,
   },
   {
