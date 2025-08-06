@@ -204,6 +204,21 @@ export const modalViewData = (
               "input",
             ]);
             break;
+          case "textArea":
+            arr.push([
+              y,
+              inputs[y][0],
+              createNew && inputs[y][3] !== "fixed"
+                ? ""
+                : selected
+                  ? selected[y] === 0
+                    ? "0"
+                    : selected[y]
+                  : "",
+              inputs[y][2] === "required" ? "required" : false,
+              "textArea",
+            ]);
+            break;
           case "date":
             let formattedDate = "";
             if (!createNew) {
