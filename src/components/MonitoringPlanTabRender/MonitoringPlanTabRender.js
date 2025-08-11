@@ -895,6 +895,7 @@ export const MonitoringPlanTabRender = ({
 
     [],
     [], // unit info
+    []  // comments
   ]);
 
   // not tested ***
