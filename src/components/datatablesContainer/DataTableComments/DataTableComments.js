@@ -33,6 +33,7 @@ export const DataTableComments = ({
   user,
   checkout,
   revertedState,
+  setRevertedState,
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
@@ -91,6 +92,7 @@ export const DataTableComments = ({
               setUpdateTable(false);
               setDataLoaded(true);
               setUpdateRelatedTables(false);
+              setRevertedState(false)
             })
             .catch((error) => {
             log.error("Error during getting comments", error);
