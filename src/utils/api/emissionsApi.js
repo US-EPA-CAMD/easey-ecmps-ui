@@ -17,7 +17,8 @@ const getApiUrl = (path = "") => {
 export const getEmissionsReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
-  quarters = []
+  quarters = [],
+  earliestOnly = false,
 ) => {
   let queryString = `orisCodes=${orisCodes.join("|")}`;
 
@@ -27,6 +28,10 @@ export const getEmissionsReviewSubmit = async (
 
   if (quarters.length > 0) {
     queryString = queryString + `&quarters=${quarters.join("|")}`;
+  }
+
+  if (earliestOnly) {
+    queryString = queryString + `&earliest=true`;
   }
 
   let url = `${getApiUrl()}/emissions?${queryString}`;
