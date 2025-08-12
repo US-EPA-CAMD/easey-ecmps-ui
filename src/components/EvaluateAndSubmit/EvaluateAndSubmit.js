@@ -586,7 +586,7 @@ export const EvaluateAndSubmit = ({
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
         storedFilters.current.submissionPeriods,
-        dataItem.type === "EM" ? true : undefined, // The EM call expects an `earliestOnly` parameter
+        dataItem.type === "EM" && componentType === "Submission" ? true : undefined, // The EM call expects an `earliestOnly` parameter (default false)
       )
     );
 
