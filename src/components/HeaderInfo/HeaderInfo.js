@@ -93,6 +93,7 @@ const sections = [
   { name: "Spans" },
   { name: "Systems" },
   { name: "Unit Information" },
+  { name: "Comments"}
 ];
 
 // EM
@@ -499,22 +500,6 @@ export const HeaderInfo = ({
         Comment: " ",
       },
     ];
-  };
-  const openViewComments = () => {
-    mpApi
-      .getMonitoringPlanComments(selectedConfig.id)
-
-      .then((data) => {
-        setCommentsData(formatCommentsToTable(data.data?.items));
-        setShowCommentsModal(true);
-      })
-      .catch((error) => {
-        log.error("Error during getting comments", error);
-      });
-
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
   };
 
   useEffect(() => {
@@ -1363,14 +1348,6 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
               <Grid>
-                <Button
-                  outline
-                  type="button"
-                  title="Open Comments"
-                  onClick={() => openViewComments()}
-                >
-                  View Comments
-                </Button>
                 {/* Hide this button until click behavior is implemented
                 <Button
                   outline

@@ -242,6 +242,17 @@ export const DataTableRender = ({
         });
         break;
 
+      case "Monitor Plan Comment":
+        columns.push({
+        id: `col${index + 1}`,
+        name: <span>{name}</span>,
+        minHeight:"auto",
+        selector: (row) => row[`col${index + 1}`],
+        sortable: true,
+        wrap: true,
+      });
+        break;
+
       default:
         columns.push({
           id: `col${index + 1}`,
