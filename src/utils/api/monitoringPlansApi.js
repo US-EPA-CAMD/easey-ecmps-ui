@@ -268,6 +268,41 @@ export const saveMonitoringMats = async (payload) => {
   }
 };
 
+export const saveMonitorPlanComments = async (payload) => {
+
+  const { planId, id, ...apiPayload } = payload;
+  const url = getApiUrl(`/plans/${planId}/comments/${id}`);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "PUT",
+        url: url,
+        data: apiPayload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
+export const createMonitorPlanComments = async (payload) => {
+  const { planId, id, ...apiPayload } = payload;
+  const url = getApiUrl(`/plans/${planId}/comments`);
+
+  try {
+    return handleResponse(
+      await secureAxios({
+        method: "POST",
+        url: url,
+        data: apiPayload,
+      })
+    );
+  } catch (error) {
+    return handleImportError(error);
+  }
+};
+
 export const deleteCheckInMonitoringPlanConfiguration = async (id) => {
   const url = getApiUrl(`/check-outs/plans/${id}`, DatabaseContext.WORKSPACE);
   try {
