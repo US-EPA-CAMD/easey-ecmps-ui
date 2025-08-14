@@ -252,7 +252,7 @@ export const DataTableComments = ({
     removeChangeEventListeners(".modalUserInput");
     setReturnedFocusToLast(false);
     if (createNewComments) {
-      returnsFocusMpDatatableCreateBTN("Create MATS");
+      returnsFocusMpDatatableCreateBTN("Create Comments");
     }
   };
 
