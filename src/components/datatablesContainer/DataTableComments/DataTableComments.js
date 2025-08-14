@@ -27,12 +27,14 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { ensure508 } from "../../../additional-functions/ensure-508";
 import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+import PropTypes from 'prop-types';
 
 export const DataTableComments = ({
   locationSelectValue,
   user,
   checkout,
   revertedState,
+  setRevertedState,
   setUpdateRelatedTables,
   updateRelatedTables,
   currentTabIndex,
@@ -91,6 +93,7 @@ export const DataTableComments = ({
               setUpdateTable(false);
               setDataLoaded(true);
               setUpdateRelatedTables(false);
+              setRevertedState(false)
             })
             .catch((error) => {
             log.error("Error during getting comments", error);
@@ -312,3 +315,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(DataTableComments);
 export { mapStateToProps };
+
+DataTableComments.propTypes = {
+  setRevertedState: PropTypes.func.isRequired,
+};
