@@ -36,7 +36,7 @@ export const getMonitoringPlanById = async (id) => {
 
 // *** obtain monitoring plans
 export const getMonitoringPlans = async (
-  orisCodes,
+  orisCodes = [],
   monPlanIds = [],
   context = null
 ) => {
@@ -54,7 +54,12 @@ export const getMonitoringPlans = async (
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
   }
 
-  const url = getApiUrl(`/configurations?${queryString}`, context);
+  let url;
+  if (orisCodes.length === 0 && monPlanIds.length === 0) {
+    url = getApiUrl(`/configurations/all`, context);
+  } else {
+    url = getApiUrl(`/configurations?${queryString}`, context);
+  }
   return secureAxios({
     method: "GET",
     url: url,
