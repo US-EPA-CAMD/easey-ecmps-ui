@@ -161,7 +161,10 @@ export const EvaluateAndSubmit = ({
     {
       columns: emissionsColumns,
       ref: emissionsRef,
-      call: getEmissionsReviewSubmit,
+      call: (...args) => {
+        const emArgs = [...args, componentType === "Submission" ? "submit" : "evaluate"];
+        return getEmissionsReviewSubmit(...emArgs);
+      },
       rowId: "periodAbbreviation",
       name: "Emissions",
       type: "EM",
@@ -586,7 +589,6 @@ export const EvaluateAndSubmit = ({
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
         storedFilters.current.submissionPeriods,
-        dataItem.type === "EM" ? true : undefined, // The EM call expects an `earliestOnly` parameter
       )
     );
 

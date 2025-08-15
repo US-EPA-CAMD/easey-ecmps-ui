@@ -18,9 +18,9 @@ export const getEmissionsReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
   quarters = [],
-  earliestOnly = false,
+  mode,
 ) => {
-  let queryString = `orisCodes=${orisCodes.join("|")}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}&mode=${mode}`;
 
   if (monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;
@@ -28,10 +28,6 @@ export const getEmissionsReviewSubmit = async (
 
   if (quarters.length > 0) {
     queryString = queryString + `&quarters=${quarters.join("|")}`;
-  }
-
-  if (earliestOnly) {
-    queryString = queryString + `&earliest=true`;
   }
 
   let url = `${getApiUrl()}/emissions?${queryString}`;
