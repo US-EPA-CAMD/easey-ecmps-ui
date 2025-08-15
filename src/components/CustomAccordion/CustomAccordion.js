@@ -13,27 +13,27 @@ const CustomAccordion = ({
   headingLevel = "h4",
   tables,
 }) => {
-  const [open, setOpen] = useState(tables.map((item, index) => true));
+  const [open, setOpen] = useState(tables?.map((item, index) => true));
 
   // Update 'open' state whenever 'tables' prop changes
   useEffect(() => {
-    setOpen(tables.map((item, index) => true));
+    setOpen(tables?.map((item, index) => true));
   }, [tables]);
 
   // updates all tables whenever a location is changed
   const tableState = (index, val) => {
-    setOpen(tables.map((item, ind) => (ind === index ? val : open[ind])));
+    setOpen(tables?.map((item, ind) => (ind === index ? val : open[ind])));
   };
 
   const Heading = headingLevel;
 
   return (
     <div className={className} id={id}>
-      {tables.map((item, index) => (
+      {tables?.map((item, index) => (
         <div key={index} className={"clearfix"}>
           <div className="text-bold font-body-xl height-auto display-flex flex-align-center">
             <div>
-              {open[index] ? (
+              {open?.[index] ? (
                 <Button
                   aria-label={`Collapse ${item.title}`}
                   className="bg-base-lighter text-black"
@@ -79,7 +79,7 @@ const CustomAccordion = ({
               </div>
             ) : null}
           </div>
-          {open[index] ? <div className=" ">{item.content} </div> : ""}
+          {open?.[index] ? <div className=" ">{item.content} </div> : ""}
           <br />
         </div>
       ))}
