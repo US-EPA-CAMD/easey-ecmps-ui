@@ -72,18 +72,18 @@
     "redux-immutable-state-invariant": "2.1.0",
     "redux-thunk": "^2.4.2",
     "remark-gfm": "^3.0.1",
-    "sass": "^1.89.2",
+    "sass": "^1.90.0",
     "styled-components": "^5.3.9",
     "url": "^0.11.0",
     "uuid": "^9.0.1",
-    "yup": "^1.1.1"
+    "yup": "^1.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
-    "@testing-library/dom": "^10.4.0",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/react-hooks": "^8.0.1",
