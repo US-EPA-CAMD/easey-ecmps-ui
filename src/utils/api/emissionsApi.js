@@ -18,7 +18,7 @@ export const getEmissionsReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
   quarters = [],
-  mode,
+  mode = 'report',
 ) => {
   let queryString = `orisCodes=${orisCodes.join("|")}&mode=${mode}`;
 
