@@ -25,6 +25,7 @@ import {
   reportingFrequencyDataTableProps,
 } from "../../additional-functions/dataTable-props";
 import { MONITORING_PLAN_STORE_NAME } from "../../additional-functions/workspace-section-and-store-names";
+import DataTableComments from "../datatablesContainer/DataTableComments/DataTableComments";
 
 export const MonitoringPlanTabRender = ({
   title,
@@ -806,6 +807,26 @@ export const MonitoringPlanTabRender = ({
             title: "Reporting Frequencies",
           },
         ], // unit info
+            [ {
+        content: (
+          <DataTableComments
+            locationSelectValue={locationSelect[1]}
+            checkout={checkout}
+            user={user}
+            inactive={inactive}
+            settingInactiveCheckBox={settingInactiveCheckBox}
+            revertedState={revertedState}
+            setRevertedState={setRevertedState}
+            setUpdateRelatedTables={setUpdateRelatedTables}
+            updateRelatedTables={updateRelatedTables}
+            currentTabIndex={currentTabIndex}
+            reportDataStatus={handleReportDataStatus}
+            selectedConfigId={selectedConfigId}
+          />
+        ),
+        title: "Comments",
+      },
+    ]
       ];
       setTableState(tableArr);
     },
@@ -874,6 +895,7 @@ export const MonitoringPlanTabRender = ({
 
     [],
     [], // unit info
+    []  // comments
   ]);
 
   // not tested ***
@@ -884,6 +906,7 @@ export const MonitoringPlanTabRender = ({
     <div className=" padding-top-0">
       <div className="grid-row">
         <HeaderInfo
+          key={selectedConfigId}
           facility={title}
           selectedConfigId={selectedConfigId}
           orisCode={orisCode}

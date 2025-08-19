@@ -7,6 +7,7 @@ import {
   Radio,
   Fieldset,
   Button,
+  Textarea
 } from "@trussworks/react-uswds";
 
 import "./ModalDetails.scss";
@@ -476,6 +477,23 @@ const ModalDetails = ({
       //     </>
       //   );
       //   break;
+      case "textArea":
+        comp = (
+            <Textarea
+            className={`modalUserInput `}
+            id={value[1]}
+            epa-testid={value[0].split(" ").join("-")}
+            epadataname={value[0]}
+            name={value[0]}
+            defaultValue={value[2] ? value[2] : ""}
+            disabled={
+              value[0] === "unitId" || value[0] === "stackPipeId" || isEditingDisabled
+                ? "disabled"
+                : undefined
+            }
+          />
+        );
+        break;
 
       case "input":
         comp = (
@@ -655,6 +673,7 @@ const ModalDetails = ({
               <div
                 key={`${index}`}
                 className={
+                  data?.[0]?.[0] == "monitoringPlanComment" ? "" :
                   item[0]["key"] !== "false"
                     ? "grid-row padding-top-2 margin-right-2"
                     : ""

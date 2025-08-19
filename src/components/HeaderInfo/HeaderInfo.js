@@ -93,6 +93,7 @@ const sections = [
   { name: "Spans" },
   { name: "Systems" },
   { name: "Unit Information" },
+  { name: "Comments"}
 ];
 
 // EM
@@ -164,6 +165,8 @@ export const HeaderInfo = ({
   const delayInSeconds = config.app.refreshEvalStatusRate;
   const [openIntervalId, setOpenIntervalId] = useState(null);
   const [evalStatus, setEvalStatus] = useState("");
+  const [severityDescription, setSeverityDescription] = useState("");
+  const [severityCode, setSeverityCode] = useState("");
   const [evalStatusDescription, setEvalStatusDescription] = useState("");
   const [evalStatusLoaded, setEvalStatusLoaded] = useState(false);
 
@@ -498,22 +501,6 @@ export const HeaderInfo = ({
       },
     ];
   };
-  const openViewComments = () => {
-    mpApi
-      .getMonitoringPlanComments(selectedConfig.id)
-
-      .then((data) => {
-        setCommentsData(formatCommentsToTable(data.data?.items));
-        setShowCommentsModal(true);
-      })
-      .catch((error) => {
-        log.error("Error during getting comments", error);
-      });
-
-    setTimeout(() => {
-      attachChangeEventListeners(".modalUserInput");
-    });
-  };
 
   useEffect(() => {
     // get evaluation status
@@ -524,8 +511,9 @@ export const HeaderInfo = ({
           if (res.data?.evalStatusCode) {
             const status = res.data.evalStatusCode;
             setEvalStatus(status);
-            setEvalStatusDescription(res.data.evalStatusCodeDescription);
-
+            setEvalStatusDescription(res?.data?.evalStatusCodeDescription);
+            setSeverityDescription(res?.data?.severityDescription)
+            setSeverityCode(res?.data?.severityCode)
             setSubmissionStatus(res.data.submissionAvailabilityCode);
             setSubmissionStatusDescription(
               res.data.submissionAvailabilityCodeDescription
@@ -707,12 +695,16 @@ export const HeaderInfo = ({
   };
 
   // chooses correctly styling for evaluation status label
-  const evalStatusStyle = (status) => {
+  const evalStatusStyle = (status, severityCode) => {
     switch (status) {
       case "ERR":
       case "EVAL":
         return "usa-alert--warning";
       case "INFO":
+        if(['CRIT1','CRIT2','CRIT3','FATAL'].includes(severityCode))
+          return "usa-alert--warning";
+        else 
+          return "usa-alert--info";
       case "PASS":
         return "usa-alert--success";
       case "INQ":
@@ -743,7 +735,7 @@ export const HeaderInfo = ({
 
   const evalStatusContent = () => {
     const alertStyle = `padding-1 usa-alert usa-alert--no-icon text-center ${evalStatusStyle(
-      evalStatus
+      evalStatus , severityCode
     )} margin-y-0`;
     const params = {
       reportCode: "MP_EVAL",
@@ -756,7 +748,10 @@ export const HeaderInfo = ({
           className={"hyperlink-btn cursor-pointer"}
           onClick={() => displayReport(params)}
         >
-          {evalStatusDescription}
+          {
+            ['PASS','INQ','WIP','EVAL'].includes(evalStatus) ? 
+              evalStatusDescription : severityDescription ?? evalStatusDescription
+          }
         </button>
       </div>
     );
@@ -1353,14 +1348,6 @@ export const HeaderInfo = ({
                 </Grid>
               </Grid>
               <Grid>
-                <Button
-                  outline
-                  type="button"
-                  title="Open Comments"
-                  onClick={() => openViewComments()}
-                >
-                  View Comments
-                </Button>
                 {/* Hide this button until click behavior is implemented
                 <Button
                   outline
