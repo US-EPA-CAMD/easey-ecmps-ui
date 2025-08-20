@@ -60,6 +60,8 @@ export const getDataTableApis = async (name, locationId, selectedLocation, planI
         .catch(error => log.log('getUnitCapacity failed', error));
     case unit:
       return mpApi.getMonitoringPlansUnit(selectedLocation)
+        // This endpoint returns a single unit object, so we need to format it to match the expected data structure
+        .then(res => ({ ...res, data: { items: res.data ? [res.data] : [] } }))
         .catch(error => log.log('getMonitoringPlansUnit failed', error));
     case unitProg:
       return mpApi.getUnitProgram(selectedLocation)
