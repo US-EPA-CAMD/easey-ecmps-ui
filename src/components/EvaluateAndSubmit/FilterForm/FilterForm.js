@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MultiSelectCombobox from "../../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
 import { getReportingPeriods } from "../../../utils/api/mdmApi";
+import { sortReportingPeriodsDescending } from "../../../utils/functions";
 
 const FilterForm = ({
   facilities,
@@ -28,11 +29,11 @@ const FilterForm = ({
 
   async function fetchReportingPeriods() {
     const reportingPeriodList = (await getReportingPeriods()).data?.items;
+    const sortedPeriods = sortReportingPeriodsDescending(reportingPeriodList);
 
     const availReportingPeriods = [];
 
-    for (let i = reportingPeriodList?.length - 1; i >= 0; i--) {
-      const period = reportingPeriodList[i];
+    sortedPeriods?.forEach((period, index) => {
       const objectMapping = {
         id: period.periodAbbreviation,
         label: period.periodAbbreviation,
@@ -40,13 +41,13 @@ const FilterForm = ({
         enabled: true,
       };
 
-      if (i === reportingPeriodList.length - 1) {
+      if (index === 0) {
         objectMapping.selected = true;
         selectedReportingPeriods.current = [period.periodAbbreviation]; //Default selected reporting period
       }
 
       availReportingPeriods.push(objectMapping);
-    }
+    });
 
     setAvailableReportingPeriods(availReportingPeriods);
   }
