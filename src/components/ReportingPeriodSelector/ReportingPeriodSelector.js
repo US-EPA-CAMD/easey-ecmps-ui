@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Select, Label } from "@trussworks/react-uswds";
 import log from "loglevel";
 import { getReportingPeriods } from "../../utils/api/qaCertificationsAPI";
+import { sortReportingPeriodsDescending } from "../../utils/functions";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
 
@@ -28,19 +29,19 @@ const ReportingPeriodSelector = ({
           );
         }
 
-        const periodsFromMostRecent = resp.data.items.reverse();
+        const sortedPeriods = sortReportingPeriodsDescending(resp.data.items);
         // if resp.data is empty this will evaluate to {}
-        const mostRecentPeriod = { ...periodsFromMostRecent[0] };
+        const mostRecentPeriod = { ...sortedPeriods[0] };
         let curSelectedPeriod = mostRecentPeriod;
 
         // set selected period to one from export state if it exists
         if (exportState?.reportingPeriodId) {
-          curSelectedPeriod = periodsFromMostRecent.find(
+          curSelectedPeriod = sortedPeriods.find(
             (period) => period.id === exportState.reportingPeriodId
           );
         }
 
-        setReportingPeriods(periodsFromMostRecent);
+        setReportingPeriods(sortedPeriods);
         setSelectedReportingPeriod(curSelectedPeriod);
         // this reportingPeriodSelectionHandler call sets init selection from dropdown
         reportingPeriodSelectionHandler(curSelectedPeriod);
