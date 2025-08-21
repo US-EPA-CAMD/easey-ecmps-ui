@@ -2501,6 +2501,14 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
+"@types/jest@^30.0.0":
+  version "30.0.0"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-30.0.0.tgz#5e85ae568006712e4ad66f25433e9bdac8801f1d"
+  integrity sha512-XTYugzhuwqWjws0CVz8QpM36+T+Dz5mTEBKhNs/esGLnCIlGdRy+Dq78NRjd7ls7r8BC8ZRMOrKlkO1hU0JOwA==
+  dependencies:
+    expect "^30.0.0"
+    pretty-format "^30.0.0"
+
 "@types/jsdom@^21.1.7":
   version "21.1.7"
   resolved "https://registry.yarnpkg.com/@types/jsdom/-/jsdom-21.1.7.tgz#9edcb09e0b07ce876e7833922d3274149c898cfa"
@@ -2711,10 +2719,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-design-system@^1.37.2":
-  version "1.37.2"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.37.2/f2f97a161e40bb5dfd994fc10b2231aa757cf81e#f2f97a161e40bb5dfd994fc10b2231aa757cf81e"
-  integrity sha512-0V2ocvk45HRrgPRcR4oK/jXabfjAOH5Z2QRWBWBOh17U7+iHnpcHxE4zIQOdjbgEN0SjpdhLg3fABmwD3h7few==
+"@us-epa-camd/easey-design-system@^1.37.3":
+  version "1.37.3"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.37.3/c3d86a39d2277b70f021e2b50dd2278b34eee131#c3d86a39d2277b70f021e2b50dd2278b34eee131"
+  integrity sha512-ZZV/65kYkNj1BaAwNNM0CNWB4+tvKArbkohk/Y1dP8gmIhEBHNeZqzAsRCwbClnegpYHv0RV4dvB7QAG2Ew9jQ==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
@@ -4500,7 +4508,7 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-expect@30.0.5:
+expect@30.0.5, expect@^30.0.0:
   version "30.0.5"
   resolved "https://registry.yarnpkg.com/expect/-/expect-30.0.5.tgz#c23bf193c5e422a742bfd2990ad990811de41a5a"
   integrity sha512-P0te2pt+hHI5qLJkIR+iMvS+lYUZml8rKKsohVHAGY+uClp9XVbdyYNJOIjSRpHVp8s8YqxJCiHUkSYZGr8rtQ==
@@ -7559,7 +7567,7 @@ prettier@^2.8.7:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
-pretty-format@30.0.5:
+pretty-format@30.0.5, pretty-format@^30.0.0:
   version "30.0.5"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-30.0.5.tgz#e001649d472800396c1209684483e18a4d250360"
   integrity sha512-D1tKtYvByrBkFLe2wHJl2bwMJIiT8rW+XA+TiataH79/FszLQMrpGEvzUVkzPau7OCO0Qnrhpe87PqtOAIB8Yw==
