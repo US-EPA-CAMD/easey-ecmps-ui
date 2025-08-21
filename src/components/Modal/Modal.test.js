@@ -71,7 +71,7 @@ describe("testing the creation of a modal", () => {
     events["keydown"](shift);
     events["keydown"](shift);
 
-    expect(document.addEventListener).toBeCalledWith(
+    expect(document.addEventListener).toHaveBeenCalledWith(
       "keydown",
       expect.any(Function)
     );
