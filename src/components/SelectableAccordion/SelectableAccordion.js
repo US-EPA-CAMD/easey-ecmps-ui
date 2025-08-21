@@ -6,6 +6,7 @@ import {
   ensure508,
 } from "../../additional-functions/ensure-508";
 import { oneSecond } from "../../config";
+import DOMPurify from 'dompurify';
 
 const columnMappings = [
   {
@@ -104,7 +105,9 @@ export const SelectableAccordion = ({
                 className="usa-accordion__content margin-4"
                 hidden={!itemStates[idx].expanded}
               >
-                <p className="no-max-width">{element.content}</p>
+                {/* HTML will be text we need to wrap in dangerouslySetInnerHTML only when the HTML comes from a trusted backend. The text HTML should be sanitiz */}
+                <p className="no-max-width"           
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(element.content)}}></p>
               </div>
             </div>
             {idx < items.length - 1 && (

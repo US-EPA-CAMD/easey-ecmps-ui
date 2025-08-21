@@ -7,6 +7,7 @@ import { getCredentials } from "../../utils/api/easeyAuthApi";
 import { DataStatus } from "../../utils/constants/dataStatus";
 import Modal from "../Modal/Modal";
 import StatusContent from "../StatusContent/StatusContent";
+import DOMPurify from 'dompurify';
 
 export const SubmissionCertificationsModal = ({
   monPlanId,
@@ -58,7 +59,9 @@ export const SubmissionCertificationsModal = ({
         status={status}
         errorMsg="Error loading certification statement."
       >
-        <p className="margin-x-2">{statement}</p>
+        {/* HTML will be text we need to wrap in dangerouslySetInnerHTML only when the HTML comes from a trusted backend. The text HTML should be sanitiz */}
+        <p className="margin-x-2"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(element.content)}}></p> 
         <div className="modal-footer">
           <Checkbox
             className="display-inline-block margin-right-2"

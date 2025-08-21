@@ -23,6 +23,7 @@ import {
 import { assignAriaSortHandlersToDatatable, assignAriaLabelsToDataTableColumns, removeAriaSortHandlersFromDatatable } from "../../../additional-functions/ensure-508"
 import { addAriaLabelToDatatable } from "../../../additional-functions/ensure-508";
 import useScreenSize from "../../../customHooks/useScreenSize/useScreenSize";
+import { sortReportingPeriodsDescending } from "../../../utils/functions";
 
 export const testSummaryLabel = "Test Summary";
 export const certEventLabel = "Cert Events";
@@ -77,17 +78,17 @@ const FilterFormAdmin = ({
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
-    const availReportingPeriods = reportingPeriods?.map((rp) => {
+    const sortedPeriods = sortReportingPeriodsDescending(reportingPeriods);
+    const availReportingPeriods = sortedPeriods?.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
       };
     });
 
-    const reversed = availReportingPeriods.sort().reverse();
-    reversed.unshift(initialSelectOption);
+    availReportingPeriods?.unshift(initialSelectOption);
 
-    setAvailableReportingPeriods(reversed);
+    setAvailableReportingPeriods(availReportingPeriods);
   }, [reportingPeriods])
 
   useEffect(() => {
