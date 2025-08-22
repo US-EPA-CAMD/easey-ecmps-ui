@@ -506,6 +506,142 @@ export const EvaluateAndSubmit = ({
     setReloadTables(v4());
   };
 
+  // QA Data Deduplication Functions (mirroring backend logic)
+
+  // Helper functions for consistent sorting and comparison
+  const compareStr = (a, b) => {
+    return (a ?? '').toString().localeCompare((b ?? '').toString());
+  };
+
+  const compareDateAsc = (a, b) => {
+    const da = a ? new Date(a).getTime() : 0;
+    const db = b ? new Date(b).getTime() : 0;
+    return da - db;
+  };
+
+  const compareDateDesc = (a, b) => {
+    return -compareDateAsc(a, b);
+  };
+
+  const parsePeriodAbbrev = (p) => {
+    if (!p) return [0, 0];
+    const m = p.match(/(\d{4})\s*Q?(\d)/i);
+    return m ? [Number(m[1]), Number(m[2])] : [0, 0];
+  };
+
+  const comparePeriodAsc = (a, b) => {
+    const [ya, qa] = parsePeriodAbbrev(a);
+    const [yb, qb] = parsePeriodAbbrev(b);
+    if (ya !== yb) return ya - yb;
+    return qa - qb;
+  };
+
+  const comparePeriodDesc = (a, b) => {
+    return -comparePeriodAsc(a, b);
+  };
+
+  const deduplicateTestSummaryRecords = (records) => {
+    const uniqueMap = new Map();
+
+    for (const record of records) {
+      // Business key: oris + location + system/component + test_type + test_number + year/qtr + end_date
+      const businessKey = `${record.orisCode}_${record.locationInfo}_${record.systemComponentId}_${record.testTypeCode}_${record.testNum}_${record.periodAbbreviation}_${record.endDate}`;
+
+      if (!uniqueMap.has(businessKey)) {
+        uniqueMap.set(businessKey, record);
+      } else {
+        const existing = uniqueMap.get(businessKey);
+
+        // Tie breaker logic
+        // Use endDate via ; if equal, later periodAbbreviation
+        const td = compareDateDesc(record.endDate, existing.endDate);
+        if (td > 0) {
+          uniqueMap.set(businessKey, record);
+        } else if (td === 0) {
+          if (comparePeriodDesc(record.periodAbbreviation, existing.periodAbbreviation) > 0) {
+            uniqueMap.set(businessKey, record);
+          }
+        }
+      }
+    }
+
+    // Final sort via: oris, location, system/component, test type, test number, year/qtr, end date/time
+    return Array.from(uniqueMap.values()).sort((a, b) => {
+      return (
+        compareStr(a.orisCode, b.orisCode) ||
+        compareStr(a.locationInfo, b.locationInfo) ||
+        compareStr(a.systemComponentId, b.systemComponentId) ||
+        compareStr(a.testTypeCode, b.testTypeCode) ||
+        compareStr(a.testNum, b.testNum) ||
+        comparePeriodAsc(a.periodAbbreviation, b.periodAbbreviation) ||
+        compareDateAsc(a.endDate, b.endDate)
+      );
+    });
+  };
+
+  const deduplicateCertEventRecords = (records) => {
+    const uniqueMap = new Map();
+
+    for (const record of records) {
+      // Business key via: oris + location + system/component + event_code + event_date
+      const businessKey = `${record.orisCode}_${record.locationInfo}_${record.systemComponentIdentifier}_${record.qaCertEventCode}_${record.eventDate}`;
+
+      if (!uniqueMap.has(businessKey)) {
+        uniqueMap.set(businessKey, record);
+      } else {
+        const existing = uniqueMap.get(businessKey);
+
+        // Tie breaker logic via: later eventDate
+        const aDate = record?.eventDate ? new Date(record.eventDate).getTime() : 0;
+        const bDate = existing?.eventDate ? new Date(existing.eventDate).getTime() : 0;
+        if (aDate > bDate) {
+          uniqueMap.set(businessKey, record);
+        }
+      }
+    }
+
+    // Final sort via: oris, location, system/component id, event code, event date/time DESC
+    return Array.from(uniqueMap.values()).sort((a, b) => {
+      return (
+        compareStr(a.orisCode, b.orisCode) ||
+        compareStr(a.locationInfo, b.locationInfo) ||
+        compareStr(a.systemComponentIdentifier, b.systemComponentIdentifier) ||
+        compareStr(a.qaCertEventCode, b.qaCertEventCode) ||
+        compareDateDesc(a.eventDate, b.eventDate)
+      );
+    });
+  };
+
+  const deduplicateTeeRecords = (records) => {
+    const uniqueMap = new Map();
+
+    for (const record of records) {
+      // Business key via: oris + location + system/component + year/qtr
+      const businessKey = `${record.orisCode}_${record.locationInfo}_${record.systemComponentIdentifier}_${record.periodAbbreviation}`;
+
+      if (!uniqueMap.has(businessKey)) {
+        uniqueMap.set(businessKey, record);
+      } else {
+        const existing = uniqueMap.get(businessKey);
+
+        // Tie breaker logic via: later periodAbbreviation
+        if (comparePeriodDesc(record.periodAbbreviation, existing.periodAbbreviation) > 0) {
+          uniqueMap.set(businessKey, record);
+        }
+      }
+    }
+
+    // Final sort via: oris, location, system/component id, year/qtr (ASC)
+    return Array.from(uniqueMap.values()).sort((a, b) => {
+      return (
+        compareStr(a.orisCode, b.orisCode) ||
+        compareStr(a.locationInfo, b.locationInfo) ||
+        compareStr(a.systemComponentIdentifier, b.systemComponentIdentifier) ||
+        comparePeriodAsc(a.periodAbbreviation, b.periodAbbreviation)
+      );
+    });
+  };
+
   const formatDataRows = (ref, rows, rowType, activeSet = null) => {
     for (const r of rows) {
       //Formatting to align names for easier reference [Ideally would change the back end to make all of these match, but these apis are being used in lots of locations, so conformity is best solution]
@@ -522,7 +658,17 @@ export const EvaluateAndSubmit = ({
       }
     }
 
-    let formattedData = rows.map((chunk) => {
+    // Apply deduplication for display while preserving monPlanId functionality
+    let deduplicatedRows = rows;
+    if (rowType === "QA Test Summary") {
+      deduplicatedRows = deduplicateTestSummaryRecords(rows);
+    } else if (rowType === "QA Cert Event") {
+      deduplicatedRows = deduplicateCertEventRecords(rows);
+    } else if (rowType === "QA TEE") {
+      deduplicatedRows = deduplicateTeeRecords(rows);
+    }
+
+    let formattedData = deduplicatedRows.map((chunk) => {
       return {
         ...chunk,
         isSelected: false,
