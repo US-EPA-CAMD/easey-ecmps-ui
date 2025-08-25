@@ -709,7 +709,7 @@ export const EvaluateAndSubmit = ({
       //Handle updating of the current dataList Ref
       if (
         selectedItems.has(row[tableIdentifier]) ||
-        (type === "EM" && row[tableIdentifier] <= maxEmPeriod) ||
+        (componentType === "Submission" && type === "EM" && row[tableIdentifier] <= maxEmPeriod) ||
         (row.isDisabled && row.isSelected)
       ) {
         row.isSelected = true;
