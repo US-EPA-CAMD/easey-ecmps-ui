@@ -157,9 +157,17 @@ export const LeftNavToSubHeader = (props) => {
   };
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="padding-y-1 text-bold font-body-lg mobile:display-flex align-middle desktop:display-none bg-base-lightest">
-        <MenuSharp className="margin-left-2 margin-right-1" onClick={() => setIsMobileMenuOpen(true)} />
-        ECMPS Menu
+      <div className="flex-align-center padding-y-1 text-bold font-body-lg mobile:display-flex align-middle desktop:display-none bg-base-lightest">
+        <button
+          type="button"
+          className="margin-left-2 display-flex flex-justify-center flex-align-center usa-button usa-button--unstyled"
+          aria-label="ECMPS menu"
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <MenuSharp  color="primary"/>
+        </button>
+        <span className="margin-left-1">ECMPS Menu</span>
       </div>
       <Header
         className="display-none mobile:display-block desktop-lg:display-none
