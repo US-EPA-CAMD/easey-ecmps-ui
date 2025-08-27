@@ -21,7 +21,6 @@ const displayAppMessage = (messages, type, hideFunc) => {
       .querySelectorAll("svg path")
       .forEach((element) => (element.tabIndex = -1));
 
-    errorMsg.addEventListener("click", hideFunc);
 
     const svgElements = document.querySelectorAll(`${containerId} .MuiSvgIcon-root`);
     const xButtonSvg = svgElements[1];

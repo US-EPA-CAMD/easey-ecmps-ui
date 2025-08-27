@@ -90,7 +90,7 @@ const Layout = (props) => {
             ) : null}
             <div
               id="appErrorMessage"
-              tabIndex="-1"
+              tabIndex="0"
               aria-live="polite"
               className="border-1px margin-y-2 padding-2 bg-secondary-lighter
                          text-bold text-secondary-vivid react-transition display-none"
