@@ -974,7 +974,18 @@ export const ConfigurationManagement = ({
   };
 
   const sendConfigurationsPayload = (draft) => {
-    return importMP(mapFormStateToConfigurationsPayload(), {
+    const payload = mapFormStateToConfigurationsPayload();
+    // If there are no changes to send, return a resolved promise with empty results.
+    if (
+      payload.monitoringLocationData.length === 0 &&
+      payload.unitStackConfigurationData.length === 0
+    ) {
+      return Promise.resolve({
+        data: { newPlans: [], endedPlans: [] },
+      });
+    }
+
+    return importMP(payload, {
       draft,
       shouldHandleError: false,
     });
