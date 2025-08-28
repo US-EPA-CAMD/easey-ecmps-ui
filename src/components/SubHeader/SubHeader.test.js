@@ -130,7 +130,7 @@ describe("SubHeader Component", () => {
 
     // Also verify they are in the same container and close to each other
     expect(allButtons.length).toBeGreaterThan(1);
-    expect(hamburgerIndex - logoutIndex).toBe(1); 
+    expect(hamburgerIndex - logoutIndex).toBe(1);
   });
 
   test("Hamburger menu button is only visible on mobile view", () => {
@@ -144,5 +144,20 @@ describe("SubHeader Component", () => {
 
     // Check that it has the responsive class to hide on desktop
     expect(hamburgerMenuButton).toHaveClass('desktop:display-none');
+  });
+
+  test("Hamburger menu has descriptive alt text 'Expand top navigation menu'", () => {
+    render(
+      <BrowserRouter>
+        <SubHeader user={mockUser} setCurrentLink={jest.fn()} />
+      </BrowserRouter>
+    );
+
+    // Get the hamburger menu image by its alt text
+    const hamburgerImage = screen.getByAltText("Expand top navigation menu");
+
+    // Verify the image exists and has the correct alt text
+    expect(hamburgerImage).toBeInTheDocument();
+    expect(hamburgerImage).toHaveAttribute('alt', 'Expand top navigation menu');
   });
 });
