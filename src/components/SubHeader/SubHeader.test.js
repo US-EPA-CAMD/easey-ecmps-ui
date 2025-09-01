@@ -73,9 +73,6 @@ describe("SubHeader Component", () => {
 
     const logOutBtn = screen.getByText("Log Out");
     fireEvent.click(logOutBtn);
-
-    // const toggleDropDownBTN = screen.getByText("Regulatory Partners");
-    // fireEvent.click(toggleDropDownBTN);
   });
 
   test("User Profile Options availability", () => {
