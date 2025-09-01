@@ -69,15 +69,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       link: "/help-support",
       items: [],
     },
-    {
-      label: (
-        <span className="margin-right-1 text-no-wrap" title="Coming Soon">
-          <span className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
-          Regulatory Partners
-        </span>
-      ),
-      items: [{ menu: "", link: "" }],
-    },
     // {
     //   label: (
     //     <span className="margin-right-1 text-no-wrap">
