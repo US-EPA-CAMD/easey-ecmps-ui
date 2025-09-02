@@ -100,9 +100,9 @@ const Tabs = ({
     tabBtnSelector = `[aria-label="${arg}"]`;
     return arg;
   };
-  const makeTabButtonAriaLabel = (pane) => {
+  const makeTabButtonAriaLabel = (pane, active) => {
     const parts = [
-      'open',
+      active,
       pane.title.split('(')[0].trim(),
       user &&
       pane.locationId &&
@@ -111,7 +111,7 @@ const Tabs = ({
       (isCheckedOut(pane.locationId) ||
         checkedOutLocations.some((loc) => loc.facId === parseInt(pane.facId)))
         ? '(locked)'
-        : '',
+        : '(not locked)',
       pane.title
         .split('(')[1]
         .replace(')', '')
@@ -120,7 +120,7 @@ const Tabs = ({
         .trim(),
       pane.locationId && isCheckedOutByUser(pane.locationId)
         ? '(checked-out)'
-        : '',
+        : '(not checked-out)',
       'tab',
     ].filter(Boolean);
 
@@ -163,9 +163,15 @@ const Tabs = ({
                       : 'tab-button react-transition flip-in-y'
                   }
                   tabIndex="0"
-                  aria-label={updateTabBtnSelectorAndReturnAriaLabel(
-                    makeTabButtonAriaLabel(pane),
+                  aria-label={
+                    updateTabBtnSelectorAndReturnAriaLabel(
+                    makeTabButtonAriaLabel(pane,((currentTabIndex === i)
+                      ? 'active'
+                      : ''))
                   )}
+                  aria-selected={((currentTabIndex === i)
+                      ? 'true'
+                      : 'false')}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
                     setCurrentTabIndex(i);
