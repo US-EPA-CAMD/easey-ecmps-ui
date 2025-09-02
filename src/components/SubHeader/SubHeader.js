@@ -242,8 +242,6 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         onToggle={() => {
                           handleToggleNavDropdown(i);
                         }}
-                        // style={{ fontSize: "18px" }}
-                        // className="font-body-sm"
                       />
                       <Menu
                         id={
