@@ -48,7 +48,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
 
   const subHeaderMenuList = [
     {
-      label: <span className="margin-right-1 text-no-wrap">Resources</span>,
+      label: <span className="margin-right-1 text-no-wrap font-body-sm">Resources</span>,
       items: [
         { menu: "FAQs", link: `/faqs` },
         { menu: "Resources", link: `/resources` },
@@ -56,7 +56,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     },
     {
       label: (
-        <span className="margin-right-1 text-no-wrap">
+        <span className="margin-right-1 text-no-wrap font-body-sm">
           <span
             className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block"
             style={{ color: "#365b8f" }}
@@ -242,6 +242,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                         onToggle={() => {
                           handleToggleNavDropdown(i);
                         }}
+                        // style={{ fontSize: "18px" }}
+                        // className="font-body-sm"
                       />
                       <Menu
                         id={
