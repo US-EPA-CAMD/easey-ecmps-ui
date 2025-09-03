@@ -219,7 +219,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     <>
                       <Link
                         to={el.link ?? config.app.path}
-                        target={el.tab ? "_blank" : "_self"}
+                        target="_blank"
                         title={el.label}
                         aria-label={el.label}
                         onClick={() => handleSubMenuClick(i)}
@@ -260,7 +260,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                               {item.menu}
                             </USWDSLink>
                           ) : (
-                            <Link to={item.link}>{item.menu}</Link>
+                            <Link to={item.link} target="_blank">{item.menu}</Link>
                           )
                         )}
                         isOpen={navDropdownOpen[i]}
