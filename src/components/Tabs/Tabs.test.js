@@ -164,18 +164,9 @@ describe("testing a reusable Tabs component", () => {
       container = renderer.container;
     });
     const findTabButton = async (paneNumber) => {
-      const pane = panes[paneNumber - 1];
-      const tabFacility = pane.title.split("(")[0].trim();
-      const tabLocations = pane.title.match(/\((.*)\)/)?.[1];
-      const isCheckedOut = testCheckedOutLocations.some(
-        (loc) => pane.locationId === loc.monPlanId
-      );
-      const name = `open ${tabFacility} ${
-        isCheckedOut ? `(locked) ${tabLocations}` : `(${tabLocations})`
-      } tab`;
-      return screen.findByRole("button", {
-        name,
-      });
+    return screen.getByRole('button', {
+      name: /tab \(locked\) 2 \(not checked\-out\) tab/i
+      });  
     };
     const tab2Button = await findTabButton(2);
     fireEvent.click(tab2Button);
