@@ -17,6 +17,7 @@ import { addAriaLabelToDatatable, addAriaLabelOnDatePickerCalendar, assignAriaSo
 import useScreenSize from "../../customHooks/useScreenSize/useScreenSize";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 import { getMonitoringPlans } from "../../utils/api/monitoringPlansApi";
+import { sortReportingPeriodsDescending } from "../../utils/functions";
 
 const defaultDropdownText = "Select";
 const initialSelectOption = { code: "", name: defaultDropdownText };
@@ -105,17 +106,17 @@ const FilterFormAdminSubmissionReport = ({
   addAriaLabelToDatatable();
 
   const processReportingPeriods = useCallback(async () => {
-    const availReportingPeriods = reportingPeriods?.map((rp) => {
+    const sortedPeriods = sortReportingPeriodsDescending(reportingPeriods);
+    const availReportingPeriods = sortedPeriods?.map((rp) => {
       return {
         code: rp.periodAbbreviation,
         name: rp.periodAbbreviation,
       };
     });
 
-    const reversed = availReportingPeriods.sort().reverse();
-    reversed.unshift(initialSelectOption);
+    availReportingPeriods?.unshift(initialSelectOption);
 
-    setAvailableReportingPeriods(reversed);
+    setAvailableReportingPeriods(availReportingPeriods);
   }, [reportingPeriods])
 
    useEffect(() => {
