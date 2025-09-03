@@ -759,6 +759,7 @@ export const MonitoringPlanTabRender = ({
             content: (
               <DataTableAssert
                 locationSelectValue={locationSelect[1]}
+                selectedConfigId={selectedConfigId}
                 selectedLocation={selectedLocation}
                 payload={
                   reportingFrequencyDataTableProps(
@@ -895,6 +896,7 @@ export const MonitoringPlanTabRender = ({
 
     [],
     [], // unit info
+    []  // comments
   ]);
 
   // not tested ***
