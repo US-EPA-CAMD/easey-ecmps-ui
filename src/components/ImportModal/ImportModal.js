@@ -74,7 +74,7 @@ const ImportModal = ({
 
   const validateJSON = (name, type, event) => {
     const fileTypeManual = name.split(".");
-    if (fileTypeManual[fileTypeManual.length - 1] !== "json") {
+    if (fileTypeManual[fileTypeManual.length - 1].toLowerCase() !== "json") {
       setHasFormatError(true);
       setDisablePortBtn(true);
     } else {
