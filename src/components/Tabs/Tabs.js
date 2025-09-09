@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
 import log from 'loglevel';
 import { Button } from '@trussworks/react-uswds';
 import { ClearSharp, CreateSharp, LockSharp } from '@material-ui/icons';
