@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import log from 'loglevel';
 import { Button } from '@trussworks/react-uswds';
 import { ClearSharp, CreateSharp, LockSharp } from '@material-ui/icons';
@@ -100,9 +100,9 @@ const Tabs = ({
     tabBtnSelector = `[aria-label="${arg}"]`;
     return arg;
   };
-  const makeTabButtonAriaLabel = (pane, active) => {
+  const makeTabButtonAriaLabel = (pane) => {
     const parts = [
-      active,
+      'open',
       pane.title.split('(')[0].trim(),
       user &&
       pane.locationId &&
@@ -111,7 +111,7 @@ const Tabs = ({
       (isCheckedOut(pane.locationId) ||
         checkedOutLocations.some((loc) => loc.facId === parseInt(pane.facId)))
         ? '(locked)'
-        : '(not locked)',
+        : '',
       pane.title
         .split('(')[1]
         .replace(')', '')
@@ -120,7 +120,7 @@ const Tabs = ({
         .trim(),
       pane.locationId && isCheckedOutByUser(pane.locationId)
         ? '(checked-out)'
-        : '(not checked-out)',
+        : '',
       'tab',
     ].filter(Boolean);
 
@@ -149,6 +149,9 @@ const Tabs = ({
                     aria-label={`open ${pane.title} tab`}
                     className="initial-tab-button"
                     onClick={() => setCurrentTabIndex(i)}
+                    aria-selected={((currentTabIndex === i)
+                      ? 'true'
+                      : 'false')}
                   >
                     {pane.title}
                   </Button>
@@ -163,12 +166,10 @@ const Tabs = ({
                       : 'tab-button react-transition flip-in-y'
                   }
                   tabIndex="0"
-                  aria-label={
-                    updateTabBtnSelectorAndReturnAriaLabel(
-                    makeTabButtonAriaLabel(pane,((currentTabIndex === i)
-                      ? 'active'
-                      : ''))
+                  aria-label={updateTabBtnSelectorAndReturnAriaLabel(
+                    makeTabButtonAriaLabel(pane),
                   )}
+                  aria-live="assertive"
                   aria-selected={((currentTabIndex === i)
                       ? 'true'
                       : 'false')}
