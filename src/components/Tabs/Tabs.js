@@ -130,7 +130,7 @@ const Tabs = ({
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
-        <ul className="usa-button-group margin-top-1">
+        <ul className="usa-button-group margin-top-1" role="tablist">
           {panes.map((pane, i) => (
             <li
               key={i}
@@ -143,6 +143,7 @@ const Tabs = ({
                 <>
                   <Button
                     type="button"
+                    role="tab"
                     outline={currentTabIndex !== i}
                     tabIndex={0}
                     id="select-config"
@@ -158,7 +159,7 @@ const Tabs = ({
                 </>
               ) : (
                 <div
-                  role="button"
+                  role="tab"
                   id="tabBtn"
                   className={
                     currentTabIndex === i
@@ -248,7 +249,7 @@ const Tabs = ({
           ))}
         </ul>
       </div>
-      <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
+      <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4" role="tabpanel">        
         {panes[currentTabIndex]?.content}
       </div>
     </div>
