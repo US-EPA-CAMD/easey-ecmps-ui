@@ -708,6 +708,11 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
     case "Test Extension Exemption": //unique ID is Extension or Exemption Code, i.e. col9
       result = `${action} for ${row.col9}`;
       break;
+    case "Linearity Test": 
+    case "Protocol Gas":
+    case "Linearity Injection":
+      result = `${action} for ${row.col1} ${dataTableName}`;
+      break;
     default:
       result = `not implemented yet`;
       break;

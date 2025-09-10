@@ -129,6 +129,11 @@ const QADataTableRender = ({
           }`}
         aria-expanded={false}
         role="button"
+        aria-label={getTableRowActionAriaLabel(
+            dataTableName,
+            row,
+            "Edit"
+        )}
         tabIndex="0"
         aria-hidden="false"
       />
@@ -162,6 +167,11 @@ const QADataTableRender = ({
         id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
           }`}
         role="button"
+        aria-label={getTableRowActionAriaLabel(
+          dataTableName,
+          row,
+          "Remove"
+        )}
         tabIndex="0"
         aria-expanded={true}
         aria-hidden="false"
