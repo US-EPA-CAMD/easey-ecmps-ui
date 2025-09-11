@@ -2,7 +2,6 @@ import log from "loglevel";
 
 import { getMdmData as getMatchData } from "../../../utils/api/errorSuppressionApi";
 import { getMonitoringPlans } from "../../../utils/api/monitoringPlansApi";
-import { getQATestSummary } from "../../../utils/api/qaCertificationsAPI";
 import { DatabaseContext } from "../../../utils/constants/databaseContext";
 
 // The mdm api returns a data that looks different for each Data Type Code.
@@ -50,7 +49,7 @@ export const getMatchDataFieldNames = (dataTypeCode) => {
       codeField = "parameterCode";
       break;
     case "MONPLAN":
-      descriptionField = "name";
+      descriptionField = "labelName";
       codeField = "id";
       break;
     case "TESTNUM":
@@ -70,7 +69,6 @@ export const getMatchDataFieldNames = (dataTypeCode) => {
 export const createMatchTypeDropdownLists = async (
   checkCatalogResult,
   orisCode,
-  locations = []
 ) => {
   const { dataTypeCode, dataTypeUrl, checkTypeCode, checkNumber } =
     checkCatalogResult;
@@ -86,22 +84,44 @@ export const createMatchTypeDropdownLists = async (
     return [];
   }
 
+  // TESTNUM won't have any match type dropdown
+  if (dataTypeCode === "TESTNUM") {
+    return [];
+  }
+
   const [codeField, descriptionField] = getMatchDataFieldNames(dataTypeCode);
   // sanity check
   if (!codeField || !descriptionField) return [];
 
   const processPromiseData = (data) => {
-    if (!data) return [];
+    if (!data || !data.items ) return [];
+
+    let dataToProcess = data.items;
+
     // SPECIAL CASE - see case for PARAM in ticket 4621
     if (dataTypeCode === "PARAM") {
-      data = data.filter(
+      dataToProcess = dataToProcess.filter(
         (d) =>
           d.checkTypeCode === checkTypeCode && d.checkNumber === checkNumber
       );
     }
 
+    if (dataTypeCode === "MONPLAN") { 
+      dataToProcess = dataToProcess.map((d) => {
+        const reportPeriodRange =
+          d.endReportPeriodId === null
+            ? ""
+            : ` (${d.beginReportPeriodDescription} - ${d.endReportPeriodDescription})`;
+  
+        return {
+          ...d,
+          labelName: `ORIS ${d.orisCode}, ${d.name}${reportPeriodRange}`,
+        };
+      });
+    }
+
     // The following creates a unique list of objects so something like [{label:1, value:1}, {label:1, value:1}] would become [{label:1, value:1}]
-    const objStrList = data
+    const objStrList = dataToProcess
       .map((d) => ({
         label: d[descriptionField],
         value: d[codeField],
@@ -113,37 +133,18 @@ export const createMatchTypeDropdownLists = async (
 
   // SPECIAL CASE - see case for MONPLAN in ticket 4621
   if (dataTypeCode === "MONPLAN") {
-    if (!orisCode) return [];
+    const orisCodes = orisCode ? [orisCode]:[];
 
     try {
-      const { data } = await getMonitoringPlans([orisCode], [], DatabaseContext.WORKSPACE);
-      return processPromiseData(data?.items);
+      const { data } = await getMonitoringPlans(orisCodes, [], DatabaseContext.WORKSPACE);
+      const returnData = processPromiseData(data);
+      return returnData;
     } catch (e) {
       log.error(e);
       return [];
     }
   }
-  // SPECIAL CASE - see case for TESTNUM in ticket 4621
-  else if (dataTypeCode === "TESTNUM") {
-    if (locations.length === 0) {
-      return [];
-    }
-
-    const promiseList = [];
-
-    locations.forEach((l) => {
-      promiseList.push(getQATestSummary(l, null, null, null, true));
-    });
-
-    try {
-      const responses = await Promise.all(promiseList);
-      const data = responses.map(({ data }) => data).flat();
-      return processPromiseData(data);
-    } catch (e) {
-      log.error(e);
-      return [];
-    }
-  } else {
+  else {
     const path = dataTypeUrl.split("/").slice(2).join();
 
     try {
