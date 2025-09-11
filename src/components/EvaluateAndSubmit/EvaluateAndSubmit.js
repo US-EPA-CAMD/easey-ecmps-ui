@@ -161,7 +161,10 @@ export const EvaluateAndSubmit = ({
     {
       columns: emissionsColumns,
       ref: emissionsRef,
-      call: getEmissionsReviewSubmit,
+      call: (...args) => {
+        const emArgs = [...args, componentType === "Submission" ? "submit" : "evaluate"];
+        return getEmissionsReviewSubmit(...emArgs);
+      },
       rowId: "periodAbbreviation",
       name: "Emissions",
       type: "EM",
@@ -580,28 +583,29 @@ export const EvaluateAndSubmit = ({
 
   const retrieveAndFormatData = async (dataListIndex, activeSet, submissionQueueOrderData) => {
 
+    const dataItem = dataList[dataListIndex];
     const resp = (
-      await dataList[dataListIndex].call(
+      await dataItem.call(
         storedFilters.current.orisCodes,
         storedFilters.current.monPlanIds,
-        storedFilters.current.submissionPeriods
+        storedFilters.current.submissionPeriods,
       )
     );
 
     let data = resp.data?.items ?? resp.data;
 
     if (submissionQueueOrderData && submissionQueueOrderData.length) {
-      setDescription(data, submissionQueueOrderData, dataList[dataListIndex].name);
+      setDescription(data, submissionQueueOrderData, dataItem.name);
     }
 
     formatDataRows(
-      dataList[dataListIndex].ref,
+      dataItem.ref,
       data,
-      dataList[dataListIndex].type,
+      dataItem.type,
       activeSet
     );
 
-    dataList[dataListIndex].progressPending.current = false;
+    dataItem.progressPending.current = false;
     forceReloadTables();
   };
 
