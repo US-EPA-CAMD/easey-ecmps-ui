@@ -107,6 +107,8 @@
 .data-display-table {
   .brFloq {
     white-space: pre-wrap !important;
+    overflow: unset;
+    text-overflow: unset;
   }
 
   .rdt_Table {

@@ -41,19 +41,37 @@ describe("testing monitoring plans data fetching APIs", () => {
     expect(apiCall.data).toEqual(mockData);
   });
 
-  test("tests getMonitoringPlans workspace", async () => {
+
+  test("tests getMonitoringPlans with filters (workspace)", async () => {
     delete window.location;
     window.location = new URL(`https://test.com/workspace/monitoring-plans`);
 
-    const apiCall = await mpApi.getMonitoringPlans(3);
+    const apiCall = await mpApi.getMonitoringPlans([3]);
+    const requestUrl = secureAxiosSpy.mock.calls[0][0].url;
+    expect(requestUrl).toContain("/workspace/configurations?orisCodes=3");
     expect(apiCall.data).toEqual(mockData);
   });
 
-  test("tests getMonitoringPlans", async () => {
+  test("tests getMonitoringPlans with filters (official)", async () => {
     delete window.location;
     window.location = new URL(`https://test.com/monitoring-plans`);
 
-    const apiCall = await mpApi.getMonitoringPlans(3);
+    const apiCall = await mpApi.getMonitoringPlans([3], ["MOCK-ID"]);
+    const requestUrl = secureAxiosSpy.mock.calls[0][0].url;
+    expect(requestUrl).toContain("/configurations?orisCodes=3&monPlanIds=MOCK-ID");
+    expect(apiCall.data).toEqual(mockData);
+  });
+
+  test("tests getMonitoringPlans with no filters to get all configurations", async () => {
+    delete window.location;
+    window.location = new URL(`https://test.com/workspace/monitoring-plans`);
+
+    // Call with empty arrays to trigger the "all" endpoint
+    const apiCall = await mpApi.getMonitoringPlans([], []);
+    const requestUrl = secureAxiosSpy.mock.calls[0][0].url;
+    
+    // Verify that the new "all" endpoint is being called
+    expect(requestUrl).toContain("/workspace/configurations/all");
     expect(apiCall.data).toEqual(mockData);
   });
 
