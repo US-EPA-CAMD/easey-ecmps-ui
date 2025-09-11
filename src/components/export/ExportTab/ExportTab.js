@@ -127,7 +127,12 @@ export const ExportTab = ({
   useEffect(() => { 
     const fetchTableData = async () => {
       const promises = dataTypes.current.map((dt) =>
-        dt.dataFetch([orisCode], [selectedConfigId], dt.reportCode === 'MPP' ? null : [reportingPeriod])
+        dt.dataFetch(
+          [orisCode],
+          [selectedConfigId],
+          dt.reportCode === 'MPP' ? null : [reportingPeriod],
+          dt.reportCode === 'EM' ? 'report' : null,
+        )
       );
       const responses = await Promise.all(promises);
 
