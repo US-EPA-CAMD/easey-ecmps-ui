@@ -107,7 +107,8 @@ export const Modal = ({
   const modalClassName = "modal-wrapper radius-md";
 
   return ReactDom.createPortal(
-    <div role="dialog" aria-modal="true">
+    <div role="dialog" aria-modal="true" aria-labelledby="">
+    <h2 id="modal-title">Preview Your Data</h2>
       {showDarkBg ? <div className="usa-overlay is-visible"></div> : null}
       <div ref={modalRef}>
         <modalContext.Provider value={{ close }}>
