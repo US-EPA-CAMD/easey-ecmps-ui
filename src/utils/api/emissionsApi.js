@@ -17,9 +17,10 @@ const getApiUrl = (path = "") => {
 export const getEmissionsReviewSubmit = async (
   orisCodes,
   monPlanIds = [],
-  quarters = []
+  quarters = [],
+  mode = 'report',
 ) => {
-  let queryString = `orisCodes=${orisCodes.join("|")}`;
+  let queryString = `orisCodes=${orisCodes.join("|")}&mode=${mode}`;
 
   if (monPlanIds.length > 0) {
     queryString = queryString + `&monPlanIds=${monPlanIds.join("|")}`;

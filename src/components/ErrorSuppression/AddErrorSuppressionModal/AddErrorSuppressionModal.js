@@ -144,15 +144,6 @@ export const AddErrorSupressionModal = ({
       }
 
       setLocationData(availLoc);
-      if (matchDataTypeCode === "TESTNUM") {
-        createMatchTypeDropdownLists(
-          checkResultObj,
-          orisCode,
-          availLoc.map((l) => l.id)
-        ).then((universalMatchDataList) => {
-          setMatchDataList(universalMatchDataList);
-        });
-      }
     });
 
     if (matchDataTypeCode !== "TESTNUM") {
@@ -226,22 +217,21 @@ export const AddErrorSupressionModal = ({
 
   const onChangeOfLocationMultiSelect = (id, changeType) => {
     const uniqueLocations = [...new Set([...selectedLocations, id])];
+    const facility = facilityList.find((f) => f.value === selectedFacility);
 
     if (changeType === "add") {
       createMatchTypeDropdownLists(
         selectedCheckResultObj,
-        selectedFacility,
-        uniqueLocations
+        facility?.orisCode,
       ).then((universalMatchDataList) => {
         setMatchDataList(universalMatchDataList);
       });
       setSelectedLocations(uniqueLocations);
     } else if (changeType === "remove") {
       const selected = locationData.filter((l) => l.selected).map((l) => l.id);
-      createMatchTypeDropdownLists(
+      createMatchTypeDropdownLists( 
         selectedCheckResultObj,
-        selectedFacility,
-        selected
+        facility?.orisCode,
       ).then((universalMatchDataList) => {
         setMatchDataList(universalMatchDataList);
       });
@@ -306,7 +296,7 @@ export const AddErrorSupressionModal = ({
         selectedCheckNumber
       ].find((r) => r.checkResult === value);
 
-      getLocations(facility.orisCode, checkResultObj)
+      getLocations(facility?.orisCode, checkResultObj)
         .then((availLoc) => {
           setLocationData([...availLoc]);
         })
@@ -329,19 +319,20 @@ export const AddErrorSupressionModal = ({
       selectedCheckResult &&
       prevSelectedFacility !== value
     ) {
-      createMatchTypeDropdownLists(selectedCheckResultObj, value).then(
+      const facility = facilityList.find((f) => f.value === value);
+      createMatchTypeDropdownLists(selectedCheckResultObj, facility?.orisCode).then(
         (universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
         }
       );
-      const facility = facilityList.find((f) => f.value === value);
-
-      const checkResultObj = transformedData[selectedCheckType][
-        selectedCheckNumber
-      ].find((r) => r.checkResult === selectedCheckResult);
-      getLocations(facility.orisCode, checkResultObj).then((availLoc) => {
-        setLocationData([...availLoc]);
-      });
+      if (selectedCheckResultObj?.dataTypeCode !== "MONPLAN") {
+        const checkResultObj = transformedData[selectedCheckType][
+          selectedCheckNumber
+        ].find((r) => r.checkResult === selectedCheckResult);
+        getLocations(facility.orisCode, checkResultObj).then((availLoc) => {
+          setLocationData([...availLoc]);
+        });
+      }
     }
   };
 
@@ -611,7 +602,8 @@ export const AddErrorSupressionModal = ({
                 ) : null}
               </Grid>
               <Grid col={5}>
-                <MultiSelectCombobox
+                { selectedCheckResultObj?.dataTypeCode !== "MONPLAN" ? (
+                  <MultiSelectCombobox
                   items={locationData}
                   label="Locations"
                   entity="es-locations-add"
@@ -627,16 +619,18 @@ export const AddErrorSupressionModal = ({
                     )
                   }
                 ></MultiSelectCombobox>
+                ): null}
               </Grid>
             </Grid>
             {/* Dropdown is hidden if no check result is selected and in the case that check result's matchDataType is PARAM, it is not shown if there is no data for matchDataList.
                             See ticket 4621 for the explanation of PARAM match type */}
             {!selectedCheckResultObj || 
+            !selectedCheckResultObj.dataTypeCode || 
             selectedCheckResultObj?.dataTypeCode === "TESTNUM" ||
             (selectedCheckResultObj?.dataTypeCode === "PARAM" &&
               matchDataList?.length === 0) ? null : (
-              <Grid row gap={2}>
-                <Grid col={5}>
+              <Grid row>
+                <Grid col={10}>
                   <Label test-id={"add-fuel-type"} htmlFor={"add-fuel-type"}>
                     {selectedCheckResultObj.dataTypeLabel}
                   </Label>
@@ -660,8 +654,8 @@ export const AddErrorSupressionModal = ({
             )}
 
             { selectedCheckResultObj?.dataTypeCode === "TESTNUM" && (
-              <Grid row gap={2}>
-                <Grid col={5}>
+              <Grid row>
+                <Grid col={10}>
                   <Label test-id={"add-test-sum"} htmlFor={"add-test-sum"}>
                     {selectedCheckResultObj.dataTypeLabel}
                   </Label>
