@@ -16,19 +16,22 @@ describe("AddErrorSuppressionModal helper functions", () => {
 
   describe("createMatchTypeDropdownLists tests", () => {
     it("successfuly returns data when dataTypeCode=PARAM", async () => {
-      mock.onGet(`${config.services.mdm.uri}/es-parameter-codes`).reply(200, [
-        {
-          checkTypeCode: "WSISTAT",
-          checkNumber: "4",
-          parameterCode: "H2O",
-          parameterDescription: "Moisture Percentage (pct)",
-        },
-      ]);
+      mock.onGet(`${config.services.mdm.uri}/es-parameter-codes`).reply(200, {
+        items: [
+          {
+            checkTypeCode: "WSISTAT",
+            checkNumber: "4",
+            parameterCode: "H2O",
+            parameterDescription: "Moisture Percentage (pct)",
+          },
+        ],
+      });
 
       let result = await createMatchTypeDropdownLists(
         mockParamCheckCatalogResult
       );
 
+      expect(result.length).toBe(1);
       expect(result[0].value).toBe("H2O");
       expect(result[0].label).toBe("Moisture Percentage (pct)");
     });
@@ -38,58 +41,36 @@ describe("AddErrorSuppressionModal helper functions", () => {
         .onGet(
           `${config.services.monitorPlans.uri}/workspace/configurations?orisCodes=3`
         )
-        .reply(200,
-          {
-            items:
-            [
-              {
-                id: "MDC-ABF4B69D22C04494A78DA1667DFE9DE6",
-                facId: 1,
-                facilityName: "Barry",
-                configTypeCode: null,
-                lastUpdated: "2009-02-20T15:09:02.000Z",
-                orisCode: 3,
-                name: "7B",
-              },
-            ]
-          });
+        .reply(200, {
+          items: [
+            {
+              id: "MDC-ABF4B69D22C04494A78DA1667DFE9DE6",
+              facId: 1,
+              facilityName: "Barry",
+              configTypeCode: null,
+              lastUpdated: "2009-02-20T15:09:02.000Z",
+              orisCode: 3,
+              name: "7B",
+              endReportPeriodId: null,
+              beginReportPeriodDescription: "2022 Q1",
+            },
+          ],
+        });
       let result = await createMatchTypeDropdownLists(
         mockMonplanCheckCatalogResult,
         3
       );
 
       expect(result[0]?.value).toBe("MDC-ABF4B69D22C04494A78DA1667DFE9DE6");
-      expect(result[0]?.label).toBe("7B");
+      expect(result[0]?.label).toBe("ORIS 3, 7B");
     });
 
-    it("successfuly returns data when dataTypeCode=TESTNUM", async () => {
-      mock
-        .onGet(
-          `${config.services.qaCertification.uri}/workspace/locations/1/test-summary`
-        )
-        .reply(200, [
-          {
-            testNumber: "1A",
-          },
-        ]);
-      mock
-        .onGet(
-          `${config.services.qaCertification.uri}/workspace/locations/2/test-summary`
-        )
-        .reply(200, [
-          {
-            testNumber: "2A",
-          },
-        ]);
-
+    it("returns an empty array when dataTypeCode=TESTNUM", async () => {
       let result = await createMatchTypeDropdownLists(
-        mockTestnumCheckCatalogResult,
-        3,
-        ["1", "2"]
+        mockTestnumCheckCatalogResult
       );
 
-      expect(result[0].value).toBe("1A");
-      expect(result[0].label).toBe("1A");
+      expect(result).toEqual([]);
     });
   });
 
