@@ -23,6 +23,7 @@ export const Modal = ({
   left = "25%",
   returnFocus,
   save,
+  firstFocusElementById,
   saveStatus = DataStatus.IDLE,
   show,
   showCancel,
@@ -62,7 +63,7 @@ export const Modal = ({
   }, []);
 
   useEffect(() => {
-    const { handleKeyPress } = focusTrap(".modal-content", close);
+    const { handleKeyPress } = focusTrap(".modal-content", close, firstFocusElementById);
 
     // *** FOCUS TRAP
     document.addEventListener("keydown", handleKeyPress);
@@ -73,8 +74,13 @@ export const Modal = ({
     });
 
     setTimeout(() => {
-      if (document.querySelector("#closeModalBtn")) {
-        document.querySelector("#closeModalBtn").focus();
+      if(firstFocusElementById)
+        document.getElementById(firstFocusElementById).focus();
+      else
+      {
+        if (document.querySelector("#closeModalBtn")) {
+          document.querySelector("#closeModalBtn").focus();
+        }
       }
     });
 
@@ -107,7 +113,7 @@ export const Modal = ({
   const modalClassName = "modal-wrapper radius-md";
 
   return ReactDom.createPortal(
-    <div role="dialog" aria-modal="true" aria-labelledby="">
+    <div role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <h2 id="modal-title">Preview Your Data</h2>
       {showDarkBg ? <div className="usa-overlay is-visible"></div> : null}
       <div ref={modalRef}>
