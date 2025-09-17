@@ -58,7 +58,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       label: (
         <span className="margin-right-1 text-no-wrap font-body-sm">
           <span
-            className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block"
+            className="margin-right-2 menu-item-separator display-none desktop-lg:display-inline-block"
             style={{ color: "#365b8f" }}
           >
             |
@@ -72,7 +72,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     {
       label: (
         <span className="margin-right-1 text-no-wrap" title="Coming Soon">
-          <span className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
+          <span className="margin-right-2 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
           Regulatory Partners
         </span>
       ),
