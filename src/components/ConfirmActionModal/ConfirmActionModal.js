@@ -17,6 +17,7 @@ const ConfirmActionModal = ({
   onConfirm,
   onCancel,
   row,
+  rowNumber,
   dataTableName
 }) => {
   const modalRef = useRef()
@@ -25,7 +26,7 @@ const ConfirmActionModal = ({
       <ModalToggleButton 
         modalRef={modalRef} 
         opener outline={true} 
-        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove')}
+        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove', rowNumber)}
         data-testid="Remove"
       >
         {buttonText}

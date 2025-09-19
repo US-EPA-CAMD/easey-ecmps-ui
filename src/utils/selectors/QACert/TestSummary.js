@@ -698,7 +698,7 @@ export const getListOfRadioControls = (controlInputs) => {
 };
 
 // Show aria-label for any action (View, Edit, Remove) in any table provided a unique Id based on table type
-export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
+export const getTableRowActionAriaLabel = (dataTableName, row, action, rowNumber) => {
   let result;
   switch (dataTableName) {
     case "Test Summary Data": //unique ID is test number, i.e. col4
@@ -711,7 +711,7 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action) => {
     case "Linearity Test": 
     case "Protocol Gas":
     case "Linearity Injection":
-      result = `${action} for ${row.col1} ${dataTableName}`;
+      result = `${action} for ${rowNumber} ${dataTableName}`;
       break;
     default:
       result = `not implemented yet`;

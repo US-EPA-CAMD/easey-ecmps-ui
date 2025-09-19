@@ -129,11 +129,6 @@ const QADataTableRender = ({
           }`}
         aria-expanded={false}
         role="button"
-        aria-label={getTableRowActionAriaLabel(
-            dataTableName,
-            row,
-            "Edit"
-        )}
         tabIndex="0"
         aria-hidden="false"
       />
@@ -167,11 +162,6 @@ const QADataTableRender = ({
         id={`collapseRow${dataTableName.replaceAll(" ", "-")}${row.col1}${index + 1
           }`}
         role="button"
-        aria-label={getTableRowActionAriaLabel(
-          dataTableName,
-          row,
-          "Remove"
-        )}
         tabIndex="0"
         aria-expanded={true}
         aria-hidden="false"
@@ -193,6 +183,7 @@ const QADataTableRender = ({
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+          const rowNumber = index + 1;
           return (
             <div>
               {/* user is logged in and config is checked out */}
@@ -213,7 +204,8 @@ const QADataTableRender = ({
                         aria-label={getTableRowActionAriaLabel(
                           dataTableName,
                           row,
-                          "Edit"
+                          "Edit",
+                          rowNumber
                         )}
                         data-testid="Edit"
                       >
@@ -222,6 +214,7 @@ const QADataTableRender = ({
 
                       {!row?.isSubmitted && (
                         <RemoveButton
+                          rowNumber={rowNumber}
                           row={row}
                           dataTableName={dataTableName}
                           onConfirm={() => onRemoveHandler(normalizedRow)}
@@ -242,7 +235,8 @@ const QADataTableRender = ({
                     aria-label={getTableRowActionAriaLabel(
                       dataTableName,
                       row,
-                      "View"
+                      "View",
+                      rowNumber
                     )}
                     outline={true}
                     id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1
@@ -294,12 +288,13 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({ onConfirm, row, dataTableName }) => {
+const RemoveButton = ({ onConfirm, row, dataTableName, rowNumber }) => {
   return (
     <ConfirmActionModal
       buttonText="Remove"
       description="Are you sure you want to remove the selected data?"
       onConfirm={onConfirm}
+      rowNumber={rowNumber}
       row={row}
       dataTableName={dataTableName}
     />
