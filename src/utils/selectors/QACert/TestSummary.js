@@ -711,7 +711,7 @@ export const getTableRowActionAriaLabel = (dataTableName, row, action, rowNumber
     case "Linearity Test": 
     case "Protocol Gas":
     case "Linearity Injection":
-      result = `${action} for ${rowNumber} ${dataTableName}`;
+      result = `${action} for row ${rowNumber} in ${dataTableName}`;
       break;
     default:
       result = `not implemented yet`;
