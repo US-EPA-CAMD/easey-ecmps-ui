@@ -109,7 +109,7 @@ export const FileInputForwardRef = (
           for (let j = 0; j < acceptedTypes.length; j += 1) {
             const fileType = acceptedTypes[parseInt(`${j}`)]
             allFilesAllowed =
-              file.name.indexOf(fileType) > 0 ||
+              (file.name.split('.').pop().toLowerCase() === (fileType.replace(".",""))) > 0 ||
               file.type.includes(fileType.replace(/\*/g, ''))
             if (allFilesAllowed) break
           }

@@ -320,6 +320,7 @@ const MatsSubmission = ({
                 <SubmissionFinalizeModal
                   onClose={handleFinalizeModalClose}
                   submissionId={submissionId}
+                  metadataPayload={metadataPayload}
                 />
               )}
             </>
