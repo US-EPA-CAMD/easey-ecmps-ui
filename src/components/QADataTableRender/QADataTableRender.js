@@ -25,6 +25,7 @@ import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
 const QADataTableRender = ({
   columnNames,
   actionColumnName,
+  title,
   columnWidth,
   openHandler,
   data,
@@ -57,13 +58,9 @@ const QADataTableRender = ({
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      const header = document.querySelector('[role="heading"]');
-
-      if (header !== null) {
-        header.remove();
-      }
-    });
+    // setTimeout(() => {
+    //   const header = document.querySelector('[role="heading"]');
+    // });
     setTimeout(() => {
       ensure508(dataTableName, sectionSelect ? sectionSelect[1] : null);
     }, oneSecond);
@@ -170,6 +167,26 @@ const QADataTableRender = ({
     
   };
 
+  useEffect(() => {
+    // Use a minimal timeout to run this code right after the DOM has updated
+    const timerId = setTimeout(() => {
+      // Find ALL column headers for the first column that are still focusable
+      const focusableHeaders = document.querySelectorAll(
+        'div[data-column-id="1"][role="columnheader"][tabindex="0"]',
+      );
+
+      // Loop through any that were found and fix them
+      focusableHeaders.forEach(header => {
+        header.setAttribute('tabindex', '-1');
+      });
+    }, 0); // A timeout of 0ms defers execution until the next event loop cycle
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [data, totalExpand]);
+
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
@@ -260,6 +277,7 @@ const QADataTableRender = ({
       id={dataTableName.replaceAll(" ", "-")}
     >
       <DataTable
+        title = {title}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
