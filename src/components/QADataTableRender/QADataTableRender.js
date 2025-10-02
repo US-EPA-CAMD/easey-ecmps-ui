@@ -58,9 +58,6 @@ const QADataTableRender = ({
   });
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   const header = document.querySelector('[role="heading"]');
-    // });
     setTimeout(() => {
       ensure508(dataTableName, sectionSelect ? sectionSelect[1] : null);
     }, oneSecond);
@@ -190,13 +187,6 @@ const QADataTableRender = ({
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
-        name: actionColumnName,
-        button: true,
-        width: user ? "20%" : `${columnWidth}%`,
-        style: {
-          justifyContent: "left",
-          // width:'fit-content'
-        },
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
@@ -278,6 +268,15 @@ const QADataTableRender = ({
     >
       <DataTable
         title = {title}
+        subHeader
+        subHeaderComponent={
+         actionsBtn === "View" && 
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+
+        {actionColumnName}
+        </div>
+        }
+        aria-label={dataTableName}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
