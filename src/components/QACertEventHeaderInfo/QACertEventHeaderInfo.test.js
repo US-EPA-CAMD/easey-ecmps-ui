@@ -98,6 +98,37 @@ test('testing QACertEventHeaderInfo component and opening selection modal import
   expect(modal).toBeInTheDocument()
 });
 
+test('should not show Import Historical Data option for QCE import', async () => {
+  await render(
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
+  )
+
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })
+  await act(async () => importTestDataBtn.click())
+
+  // Check that QCE modal shows "Import File Data" caption and no historical option
+  expect(screen.getByText("Import File Data")).toBeInTheDocument()
+  expect(screen.getByText("Import from File")).toBeInTheDocument()
+  expect(screen.queryByText("Import Historical Data")).not.toBeInTheDocument()
+});
+
+test('should show correct caption for QCE import modal', async () => {
+  await render(
+    <Provider store={store}>
+      <QACertEventHeaderInfo {...props} />
+    </Provider>
+  )
+
+  const importTestDataBtn = screen.getByRole('button', { name: /Import Data/i })
+  await act(async () => importTestDataBtn.click())
+
+  // Verify the modal shows the correct caption for QCE
+  expect(screen.getByText("Import File Data")).toBeInTheDocument()
+  expect(screen.queryByText("Import Historical or File Data")).not.toBeInTheDocument()
+});
+
 test('test type dropdown selection renders', async () => {
   // Arrange
   await render(

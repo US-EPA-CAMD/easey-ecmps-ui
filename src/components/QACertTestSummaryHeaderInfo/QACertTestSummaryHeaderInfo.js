@@ -348,6 +348,7 @@ export const QACertTestSummaryHeaderInfo = ({
             children={
               <QAImportModalSelect
                 setImportTypeSelection={setImportTypeSelection}
+                entityType="TEST"
               />
             }
           />

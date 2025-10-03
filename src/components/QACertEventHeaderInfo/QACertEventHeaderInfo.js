@@ -309,6 +309,7 @@ export const QACertEventHeaderInfo = ({
           >
             <QAImportModalSelect
               setImportTypeSelection={setImportTypeSelection}
+              entityType="QCE"
             />
           </UploadModal>
         </div>
