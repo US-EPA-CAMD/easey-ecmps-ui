@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 
 const QAImportModalSelect = ({ setImportTypeSelection, entityType = "TEST" }) => {
@@ -53,6 +54,15 @@ const QAImportModalSelect = ({ setImportTypeSelection, entityType = "TEST" }) =>
       selectionHandler={(value) => setSelection(value[0])}
     />
   );
+};
+
+QAImportModalSelect.propTypes = {
+  setImportTypeSelection: PropTypes.func.isRequired,
+  entityType: PropTypes.oneOf(["QCE", "TEE", "TEST"]),
+};
+
+QAImportModalSelect.defaultProps = {
+  entityType: "TEST",
 };
 
 export default QAImportModalSelect;
