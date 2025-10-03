@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 
-const QAImportModalSelect = ({ setImportTypeSelection, entityType = "TEST"}) => {
+const QAImportModalSelect = ({ setImportTypeSelection, entityType = "TEST" }) => {
   const getSelectOptions = () => {
+
+    // For QCE/TEE: Show only "Import from File" option
+    if (entityType === "QCE" || entityType === "TEE") {
+      return [{ key: "file", name: "Import from File" }];
+    }
+
+    // For TEST: Show all options including placeholder and historical
     const baseOptions = [
     { key: "select", name: "Select Data Type to Import" },
     { key: "file", name: "Import from File" }
   ];
 
-   // Only add historical option for TEST entity
     if (entityType === "TEST") {
       return [...baseOptions, { key: "historical", name: "Import Historical Data" }];
     }
 
-    return baseOptions;
+    // Default fallback
+    return [{ key: "file", name: "Import from File" }];
   };
 
   const getCaption = () => {

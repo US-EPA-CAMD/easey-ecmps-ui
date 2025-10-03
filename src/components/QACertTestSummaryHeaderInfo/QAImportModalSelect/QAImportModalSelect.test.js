@@ -40,6 +40,7 @@ describe("QAImportModalSelect Component", () => {
     expect(screen.getByText("Import File Data")).toBeInTheDocument();
     expect(screen.getByText("Import from File")).toBeInTheDocument();
     expect(screen.queryByText("Import Historical Data")).not.toBeInTheDocument();
+    expect(screen.queryByText("Select Data Type to Import")).not.toBeInTheDocument();
   });
 
   test("should show only file import option for TEE entity type", () => {
@@ -53,6 +54,7 @@ describe("QAImportModalSelect Component", () => {
     expect(screen.getByText("Import File Data")).toBeInTheDocument();
     expect(screen.getByText("Import from File")).toBeInTheDocument();
     expect(screen.queryByText("Import Historical Data")).not.toBeInTheDocument();
+    expect(screen.queryByText("Select Data Type to Import")).not.toBeInTheDocument();
   });
 
   test("should default to TEST behavior when entityType not provided", () => {
@@ -75,5 +77,6 @@ describe("QAImportModalSelect Component", () => {
 
     expect(screen.getByText("Import File Data")).toBeInTheDocument();
     expect(screen.queryByText("Import Historical Data")).not.toBeInTheDocument();
+    expect(screen.queryByText("Select Data Type to Import")).not.toBeInTheDocument();
   });
 });
