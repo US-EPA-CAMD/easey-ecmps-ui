@@ -68,10 +68,10 @@ const ConfirmActionModal = ({
 }
 
 ConfirmActionModal.propTypes = {
-  row: PropTypes.object,
-  rowNumber: PropTypes.number,
-  dataTableName:PropTypes.string,
-  onConfirm: PropTypes.func
+  row: PropTypes.object.isRequired,
+  rowNumber: PropTypes.number.isRequired,
+  dataTableName:PropTypes.string.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };
 
 export default ConfirmActionModal
