@@ -21,6 +21,7 @@ import {
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
+import PropTypes from 'prop-types';
 
 const QADataTableRender = ({
   columnNames,
@@ -299,4 +300,11 @@ const RemoveButton = ({ onConfirm, row, dataTableName, rowNumber }) => {
       dataTableName={dataTableName}
     />
   );
+};
+
+RemoveButton.propTypes = {
+  row: PropTypes.object.isRequired,
+  rowNumber: PropTypes.number.isRequired,
+  dataTableName:PropTypes.string.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };
