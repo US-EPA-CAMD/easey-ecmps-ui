@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
 import { ButtonGroup, Modal, ModalFooter, ModalHeading, ModalToggleButton } from "@trussworks/react-uswds";
-
+import PropTypes from 'prop-types';
 
 const defaultHeading = 'Confirmation'
 const defaultDescription = 'Please confirm your action'
@@ -66,5 +66,12 @@ const ConfirmActionModal = ({
     </>
   )
 }
+
+ConfirmActionModal.propTypes = {
+  row: PropTypes.object,
+  rowNumber: PropTypes.number,
+  dataTableName:PropTypes.string,
+  onConfirm: PropTypes.func
+};
 
 export default ConfirmActionModal
