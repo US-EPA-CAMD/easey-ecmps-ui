@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
 import { ButtonGroup, Modal, ModalFooter, ModalHeading, ModalToggleButton } from "@trussworks/react-uswds";
+import PropTypes from 'prop-types';
 
 const defaultHeading = 'Confirmation'
 const defaultDescription = 'Please confirm your action'
@@ -65,5 +66,9 @@ const ConfirmActionModal = ({
     </>
   )
 }
+
+ConfirmActionModal.propTypes = {
+  rowNumber: PropTypes.number.isRequired,
+};
 
 export default ConfirmActionModal
