@@ -54,6 +54,7 @@ export const QAImportHistoricalDataPreview = ({
   const selectedRows = useRef();
   const userClicked = useRef(false);
 
+
   const fetchDataPreviewRecords = async () => {
     if (reportingPeriodObj && !previewData) {
       setLoading(true);
@@ -162,8 +163,10 @@ export const QAImportHistoricalDataPreview = ({
         </div>
         <div className="grid-col-fill padding-x-9 padding-top-3">
           <Button
+            tabIndex={0}
             className="width-card"
             onClick={() => fetchDataPreviewRecords()}
+            id="preview-button"
           >
             Preview
           </Button>

@@ -387,6 +387,7 @@ export const QACertEventHeaderInfo = ({
           title="Import Historical QA Cert Event, Extension & Exemption Data"
           disableExitBtn={disablePortBtn}
           save={() => importHistoricalData()}
+          firstFocusElementById={"preview-button"}
         >
           <QAImportHistoricalDataPreview
             locations={locations}

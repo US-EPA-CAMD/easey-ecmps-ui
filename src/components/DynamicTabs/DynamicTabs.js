@@ -77,7 +77,14 @@ export const DynamicTabs = ({
         elems[elems.length - 1].focus();
       }
     });
+
+    openNewAddedTab()
   };
+
+  const openNewAddedTab = () => {
+    let index = tabs?.length - 1;
+    setCurrentTabIndex(index)
+  }
 
   const removeTabsHandler = (index) => {
     const prevTabCount = tabs.length;
