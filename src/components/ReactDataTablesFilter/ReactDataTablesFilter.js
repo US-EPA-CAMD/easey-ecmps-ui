@@ -29,7 +29,8 @@ return(
               label="Search Data Table"
               size="big"
               placeholder="Keyword"
-              aria-label="Search Input"
+              aria-label="Filter Input"
+              buttonAriaLabel="Filter"
               onSubmit={onSearch}
             />
           </td>
@@ -52,7 +53,8 @@ return(
               label="Search Data Table"
               size="big"
               placeholder="Keyword"
-              aria-label="Search Input"
+              aria-label="Filter Input"
+              buttonAriaLabel="Filter"
               onSubmit={onSearch}
             />
           </td>
@@ -77,7 +79,8 @@ return(
               label="Search Data Table"
               size="small"
               placeholder="Keyword"
-              aria-label="Search Input"
+              aria-label="Filter Input"
+              buttonAriaLabel="Filter"
               onSubmit={onSearch}
             />
           </td>

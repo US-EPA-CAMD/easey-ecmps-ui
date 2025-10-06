@@ -130,7 +130,7 @@ const Tabs = ({
   return (
     <div>
       <div className="tab-buttons mobile-lg:margin-left-7 mobile-lg:padding-left-5 tablet:margin-left-0 tablet:padding-left-0">
-        <ul className="usa-button-group margin-top-1">
+        <ul className="usa-button-group margin-top-1" role="tablist">
           {panes.map((pane, i) => (
             <li
               key={i}
@@ -143,19 +143,23 @@ const Tabs = ({
                 <>
                   <Button
                     type="button"
+                    role="tab"
                     outline={currentTabIndex !== i}
                     tabIndex={0}
                     id="select-config"
                     aria-label={`open ${pane.title} tab`}
                     className="initial-tab-button"
                     onClick={() => setCurrentTabIndex(i)}
+                    aria-selected={((currentTabIndex === i)
+                      ? 'true'
+                      : 'false')}
                   >
                     {pane.title}
                   </Button>
                 </>
               ) : (
                 <div
-                  role="button"
+                  role="tab"
                   id="tabBtn"
                   className={
                     currentTabIndex === i
@@ -166,6 +170,10 @@ const Tabs = ({
                   aria-label={updateTabBtnSelectorAndReturnAriaLabel(
                     makeTabButtonAriaLabel(pane),
                   )}
+                  aria-live="assertive"
+                  aria-selected={((currentTabIndex === i)
+                      ? 'true'
+                      : 'false')}
                   onClick={() => {
                     addElementToLastFocusedArray(tabBtnSelector);
                     setCurrentTabIndex(i);
@@ -241,7 +249,7 @@ const Tabs = ({
           ))}
         </ul>
       </div>
-      <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4">
+      <div className="tabContent border-top-1px border-base-lighter margin-top-4 padding-top-4" role="tabpanel">        
         {panes[currentTabIndex]?.content}
       </div>
     </div>
