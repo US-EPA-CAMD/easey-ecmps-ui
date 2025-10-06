@@ -184,31 +184,20 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     <div className="subheader-wrapper bg-primary-dark ">
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       <div className="padding-y-2 mobile-lg:padding-x-1 desktop:padding-x-4">
-        <div className="usa-nav-container clearfix padding-x-0 desktop-lg:margin-top-3">
-          <Title className="float-left margin-1 margin-top-0 desktop:margin-top-1  desktop-lg:margin-top-0 ">
-            <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
-              ECMPS
-            </h1>
-            <span
-              className="display-none
-              desktop-lg:display-inline-block desktop-lg:margin-left-1 text-white text-normal font-sans-sm width-card-lg text-wrap"
-            >
-              Emissions Collection and Monitoring Plan System
-            </span>
-          </Title>
+        <div className="usa-nav-container subheader-wrapper-container padding-x-0 desktop-lg:margin-top-3">
+          <div className="subheader-title">
+            <Title className="margin-1 margin-top-0 desktop:margin-top-1 desktop-lg:margin-top-0">
+              <h1 className="display-inline-block text-white text-bold desktop-lg:font-sans-2xl desktop:font-sans-2xl mobile-lg:font-sans-xl margin-0">
+                ECMPS
+              </h1>
+              <span className="display-none desktop-lg:display-inline-block desktop-lg:margin-left-1 text-white text-normal font-sans-sm width-card-lg text-wrap">
+                Emissions Collection and Monitoring Plan System
+              </span>
+            </Title>
+          </div>
 
-          <Button
-            id="btnMobileMenu"
-            type="button"
-            className="bg-transparent margin-0 float-right clearfix desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
-            onClick={()=>setIsMobileMenuOpen(true)}
-          >
-            <img
-              src={"/images/icons/mobile-menu-expand.svg"}
-              alt="Expandable Menu"
-            />
-          </Button>
-          <div className="float-right">
+
+          <div className="subheader-nav">
             <PrimaryNav
               className="float-left desktop:margin-top-1 desktop-lg:margin-top-0"
               mobileExpanded={isMobileMenuOpen}
@@ -273,90 +262,108 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 }
               })}
             />
-            {user ? (
-              <>
-                <span
-                  data-testid="loggedInUserInitials"
-                  data-initials={initials}
-                  className="text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-2"
-                  id="loggedInUserInitials"
-                  aria-expanded="false"
-                >
-                  <img
-                    id="toggleDropDown"
-                    src={userProfileIcon}
-                    className="margin-top-neg-1 position-relative left-neg-1"
-                    tabIndex="0"
-                    alt="Expand menu"
-                    onClick={() => toggleUserProfileDropdown()}
-                    onKeyPress={(event) => {
-                      if (event.key === "Enter") {
-                        toggleUserProfileDropdown();
-                      }
-                    }}
-                  />
-                  <span className="text-bold text-white text-no-wrap position-relative left-neg-2 top-neg-2">
-                    Welcome, {user.firstName}!
-                  </span>
-                  <span className="text-bold text-white text-no-wrap clearfix position-relative top-neg-2 margin-x-2">
-                    <Button
-                      type="button"
-                      id="logoutBtn"
-                      epa-testid="logoutBtn"
-                      outline={true}
-                      onClick={() => logOut()}
-                      title="Click this button to logout"
-                      className="text-white border-white text-no-wrap"
-                    >
-                      Log Out
-                    </Button>
-                  </span>
-                  {userProfileExpanded ? (
-                    <span className="position-relative top-neg-2">
-                      <Menu
-                        className="font-body-sm"
-                        style={{ fontWeight: "normal" }}
-                        items={userProfileMenuLinks.items.map((item) => (
-                          <a
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {item.menu}
-                          </a>
-                        ))}
-                        isOpen={true}
-                      />
+            <div className="display-flex flex-justify-center">
+              {user ? (
+                <>
+                  <span
+                    data-testid="loggedInUserInitials"
+                    data-initials={initials}
+                    className="display-flex flex-align-center position-relative text-bold float-right clearfix cursor-pointer mobile:margin-top-1 desktop:margin-top-1 desktop:margin-top-2 desktop-lg:margin-top-0 margin-left-2"
+                    id="loggedInUserInitials"
+                    aria-expanded="false"
+                  >
+                    <img
+                      id="toggleDropDown"
+                      src={userProfileIcon}
+                      className="margin-top-neg-1 left-neg-1"
+                      tabIndex="0"
+                      alt="Expand menu"
+                      onClick={() => toggleUserProfileDropdown()}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          toggleUserProfileDropdown();
+                        }
+                      }}
+                    />
+                    {userProfileExpanded ? (
+                      <span className="top-neg-2" >
+                        <Menu
+                          className="font-body-sm position-absolute"
+                          style={{ fontWeight: "normal" }}
+                          items={userProfileMenuLinks.items.map((item) => (
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {item.menu}
+                            </a>
+                          ))}
+                          isOpen={true}
+                        />
+                      </span>
+                    ) : null}
+                    <span className="text-bold text-white text-no-wrap left-neg-2 top-neg-2">
+                      Welcome, {user.firstName}!
                     </span>
+                    <span className="text-bold text-white text-no-wrap clearfix top-neg-2 margin-x-2">
+                      <Button
+                        type="button"
+                        id="logoutBtn"
+                        epa-testid="logoutBtn"
+                        outline={true}
+                        onClick={() => logOut()}
+                        title="Click this button to logout"
+                        className="text-white border-white text-no-wrap"
+                      >
+                        Log Out
+                      </Button>
+                    </span>
+                    
+                  </span>
+                </>
+              ) : (
+                <span className="text-bold text-white text-no-wrap clearfix desktop:margin-x-2">
+                  <Button
+                    type="button"
+                    outline={true}
+                    id="openModalBTN"
+                    epa-testid="openModalBTN"
+                    onClick={() => {
+                      window.openModalBtn = document.activeElement;
+                      openModal(true);
+                    }}
+                    className="text-white border-white text-no-wrap"
+                  >
+                    Log In
+                  </Button>
+                  {show ? (
+                    <Modal
+                      show={show}
+                      close={closeModalHandler}
+                      returnFocus={true}
+                      children={<Login isModal={true} maintenanceContent={maintenanceContent} closeModalHandler={closeModalHandler} />}
+                    />
                   ) : null}
                 </span>
-              </>
-            ) : (
-              <span className="text-bold text-white text-no-wrap clearfix position-relative desktop:margin-x-2">
-                <Button
-                  type="button"
-                  outline={true}
-                  id="openModalBTN"
-                  epa-testid="openModalBTN"
-                  onClick={() => {
-                    window.openModalBtn = document.activeElement;
-                    openModal(true);
-                  }}
-                  className="text-white border-white text-no-wrap"
-                >
-                  Log In
-                </Button>
-                {show ? (
-                  <Modal
-                    show={show}
-                    close={closeModalHandler}
-                    returnFocus={true}
-                    children={<Login isModal={true} maintenanceContent={maintenanceContent} closeModalHandler={closeModalHandler} />}
-                  />
-                ) : null}
-              </span>
-            )}
+              )}
+              <Button
+                id="btnMobileMenu"
+                type="button"
+                className="bg-transparent margin-0 desktop:display-none padding-0 width-auto margin-top-1 margin-right-2"
+                onClick={() => setIsMobileMenuOpen(true)}
+                style={{ order: 1 }}
+                aria-label="Expand top navigation menu"
+              >
+                <img
+                  src={"/images/icons/mobile-menu-expand.svg"}
+                  alt="Expand top navigation menu"
+                />
+              </Button>
+            </div>
           </div>
+
+
         </div>
       </div>
     </div>
