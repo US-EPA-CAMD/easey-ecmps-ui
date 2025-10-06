@@ -15,8 +15,19 @@ import "./Layout.scss";
 import { hideAppError, hideAppWarning } from "../../additional-functions/app-error";
 
 import { getContent } from "../../utils/api/contentApi";
+import { IconButton } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+
+//Center IconButton in Error Message
+const useStyles = makeStyles({
+  closeLogin: {
+    padding: 0
+  },
+})
 
 const Layout = (props) => {
+  const classes = useStyles();
+
   const [outageMsgContent, setOutageMsgContent] = useState();
 
   useEffect(() => {
@@ -97,16 +108,16 @@ const Layout = (props) => {
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <ErrorSharp className="margin-right-2" />
-              <CloseSharp
-                aria-label="close error alert message"
+              <IconButton  //IconButton does not have aria-lable as hidden
                 className="float-right cursor-pointer"
+                classes={{ root: classes.closeLogin }}
+                aria-label="close error alert message"
+                title="close error alert message"       
                 onClick={() => hideAppError()}
-                onKeyUp={(event) => {
-                  if (event.key === "Enter") {
-                    hideAppError();
-                  }
-                }}
+              > 
+              <CloseSharp //CloseSharp automatically has aria-label as hidden
               />
+              </IconButton>
               <span
                 id="appErrorMessageText"
                 className="position-relative top-neg-1"
