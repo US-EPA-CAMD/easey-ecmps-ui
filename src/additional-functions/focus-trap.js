@@ -4,9 +4,10 @@
  *    Params:
  *      selector - css selector for component displayed on top
  *      callback - (optional), potential extra functions to call
+ *      firstFocusElementById - Id of element to focus
  *                             [only one implemented so far is 'Escape' press for modal]
  *****/
-export const focusTrap = (selector, callback = () => {}) => {
+export const focusTrap = (selector, callback = () => {}, focustElementById) => {
   // *** identify focusable component elements
   const componentFocusableElements =
     'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -16,6 +17,13 @@ export const focusTrap = (selector, callback = () => {}) => {
   const focusableComponentContent = component.querySelectorAll(
     componentFocusableElements
   );
+  let elementWithId
+  if(focustElementById)
+  {
+     elementWithId = Array.from(focusableComponentContent).find(
+      el => el.id == focustElementById
+    );
+  }
 
   // *** isolate first element to be focused inside component
   const firstComponentFocusableElement = component.querySelectorAll(
@@ -56,7 +64,10 @@ export const focusTrap = (selector, callback = () => {}) => {
   // *** focus on the first element as soon as modal pops open and the first focusable
   // *** element is in scope
   setTimeout(() => {
-    firstComponentFocusableElement.focus();
+    if(focustElementById)
+        elementWithId.focus();
+    else
+        firstComponentFocusableElement.focus();
   });
   return {
     component,
