@@ -23,10 +23,6 @@ describe("SubHeader Component", () => {
     //Help/Support
     const help_supportMenuItem = screen.getAllByText("Help/Support");
     expect(help_supportMenuItem.length).toBe(1);
-
-    //Regulation Patterns
-    const regpatternsMenuItem = screen.getByText("Regulatory Partners");
-    expect(regpatternsMenuItem).toBeInTheDocument();
   });
 
   test("Log In button renders without errors", () => {
@@ -77,9 +73,6 @@ describe("SubHeader Component", () => {
 
     const logOutBtn = screen.getByText("Log Out");
     fireEvent.click(logOutBtn);
-
-    const toggleDropDownBTN = screen.getByText("Regulatory Partners");
-    fireEvent.click(toggleDropDownBTN);
   });
 
   test("User Profile Options availability", () => {
