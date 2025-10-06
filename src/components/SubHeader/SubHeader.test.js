@@ -106,4 +106,58 @@ describe("SubHeader Component", () => {
       expect(screen.getByText("Manage Delegations")).toBeInTheDocument();
     }
   });
+
+  test("Hamburger menu button appears after Log Out button in DOM order for proper tab sequence", () => {
+    render(
+      <BrowserRouter>
+        <SubHeader user={mockUser} setCurrentLink={jest.fn()} />
+      </BrowserRouter>
+    );
+
+    const logoutButton = screen.getByText("Log Out");
+    const hamburgerMenuButton = screen.getByLabelText("Expand top navigation menu");
+
+    expect(logoutButton).toBeInTheDocument();
+    expect(hamburgerMenuButton).toBeInTheDocument();
+
+    const buttonsContainer = hamburgerMenuButton.closest('.display-flex');
+    const allButtons = Array.from(buttonsContainer.querySelectorAll('button'));
+    const logoutIndex = allButtons.findIndex(button => button === logoutButton);
+    const hamburgerIndex = allButtons.findIndex(button => button === hamburgerMenuButton);
+
+    // Verify that hamburger menu comes after Log Out button in DOM order
+    expect(hamburgerIndex).toBeGreaterThan(logoutIndex);
+
+    // Also verify they are in the same container and close to each other
+    expect(allButtons.length).toBeGreaterThan(1);
+    expect(hamburgerIndex - logoutIndex).toBe(1);
+  });
+
+  test("Hamburger menu button is only visible on mobile view", () => {
+    render(
+      <BrowserRouter>
+        <SubHeader user={mockUser} setCurrentLink={jest.fn()} />
+      </BrowserRouter>
+    );
+
+    const hamburgerMenuButton = screen.getByLabelText("Expand top navigation menu");
+
+    // Check that it has the responsive class to hide on desktop
+    expect(hamburgerMenuButton).toHaveClass('desktop:display-none');
+  });
+
+  test("Hamburger menu has descriptive alt text 'Expand top navigation menu'", () => {
+    render(
+      <BrowserRouter>
+        <SubHeader user={mockUser} setCurrentLink={jest.fn()} />
+      </BrowserRouter>
+    );
+
+    // Get the hamburger menu image by its alt text
+    const hamburgerImage = screen.getByAltText("Expand top navigation menu");
+
+    // Verify the image exists and has the correct alt text
+    expect(hamburgerImage).toBeInTheDocument();
+    expect(hamburgerImage).toHaveAttribute('alt', 'Expand top navigation menu');
+  });
 });
