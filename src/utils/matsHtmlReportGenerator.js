@@ -311,7 +311,7 @@ const generateCodeMappingsSection = (data) => {
   if (data.pollutantDescriptions && data.pollutantDescriptions.length > 0) {
     pollutantsHtml = `
       <h3>Pollutants</h3>
-      <table role="table" aria-label="Pollutant codes and descriptions">
+      <table aria-label="Pollutant codes and descriptions">
         <thead>
           <tr>
             <th scope="col">Code</th>
@@ -333,7 +333,7 @@ const generateCodeMappingsSection = (data) => {
   if (data.testMethodDescriptions && data.testMethodDescriptions.length > 0) {
     testMethodsHtml = `
       <h3>Test Methods</h3>
-      <table role="table" aria-label="Test method codes and descriptions">
+      <table aria-label="Test method codes and descriptions">
         <thead>
           <tr>
             <th scope="col">Code</th>

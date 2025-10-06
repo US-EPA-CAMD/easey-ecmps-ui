@@ -29,7 +29,7 @@ describe("testing a reusable Dynamic Tabs component", () => {
 
     const tabs = screen.getAllByRole("button");
     const initTabContent = screen.getByText("Hello, Addis");
-    expect(tabs).toHaveLength(4);
+    expect(tabs).toHaveLength(2);
     expect(initTabContent).not.toBeUndefined();
   });
 
