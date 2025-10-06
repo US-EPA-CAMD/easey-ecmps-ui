@@ -49,6 +49,7 @@ const evalStatusStyle = (status) => {
       <div className={alertStyle}>
         <button
           className={"hyperlink-btn cursor-pointer"}
+          aria-label="open evaluation report in a new tab"
           onClick={() => displayReport(params)}
         >
           {evalStatusText(status)}
