@@ -184,10 +184,8 @@
   .usa-nav__primary button {
     font-family: "Source Sans Pro Web", serif;
     font-weight: normal;
+    height: auto !important;
 
-    @media (max-width: 128em) {
-      font-size: 0.72rem;
-    }
     @media (min-width: 1024px) {
       color: $epa-white;
     }
@@ -196,10 +194,6 @@
   .usa-nav__primary > .usa-nav__primary-item > a {
     font-weight: normal;
     color: $epa-white;
-
-    @media (max-width: 128em) {
-      font-size: 0.72rem;
-    }
   }
 
   .usa-nav__primary button span::after {
