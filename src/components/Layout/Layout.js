@@ -91,7 +91,8 @@ const Layout = (props) => {
             <div
               id="appErrorMessage"
               tabIndex="-1"
-              aria-live="polite"
+              aria-live="assertive"
+              aria-atomic="true"
               className="border-1px margin-y-2 padding-2 bg-secondary-lighter
                          text-bold text-secondary-vivid react-transition display-none"
             >
