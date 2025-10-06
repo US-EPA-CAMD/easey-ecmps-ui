@@ -152,25 +152,32 @@ export const home = [{ name: "Home", url: "/" }];
 
 export const globalView = [
   { name: "Monitoring Plans", url: "/monitoring-plans" },
-  {
-    name: "QA & Certifications",
-    url: "/qa",
-    children: [
-      {
-        name: "Test Data",
-        url: "qa/tests",
-      },
-      {
-        name: "Cert Events, Extensions & Exemptions",
-        url: "qa/qce-tee",
-      },
-    ],
-  },
+  { name: "QA Test Data", url: "qa/tests" },
+  { name: "QA Cert Events, Extensions & Exemptions", url: "qa/qce-tee" },
   { name: "Emissions", url: "/emissions" },
   { name: "Export & Report", url: "/export" },
 ];
 
 export const systemAdmin = [
+  {
+    name: "QA Maintenance",
+    url: "/admin/qa-maintenance",
+  },
+  {
+    name: "Error Suppression",
+    url: "/admin/error-suppression",
+  },
+  {
+    name: "Emission Submission Access",
+    url: "/admin/em-submission-access",
+  },
+  {
+    name: "Submission Report",
+    url: "/admin/submissions-report",
+  },
+];
+
+export const systemAdminForSubHeader = [
   {
     name: "System Administration",
     url: "/admin",
@@ -192,8 +199,8 @@ export const systemAdmin = [
         url: "/admin/submissions-report",
       },
     ],
-  },
-];
+  }
+]
 
 export const getWorkspacePaths = () => {
   const workSpace = [
@@ -208,18 +215,18 @@ export const getWorkspacePaths = () => {
       ],
     },
     {
-      name: "QA & Certifications",
-      url: "/workspace/qa",
-      children: [
-        {
-          name: "Test Data",
-          url: "/workspace/qa/tests",
-        },
-        {
-          name: "Cert Events, Extensions & Exemptions",
-          url: "/workspace/qa/qce-tee",
-        },
+      name: "QA Test Data",
+      url: "/workspace/qa/tests",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
       ],
+    },
+    {
+      name: "QA Cert Events, Extensions & Exemptions",
+      url: "/workspace/qa/qce-tee",
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
@@ -290,4 +297,93 @@ export const getWorkspacePaths = () => {
   ];
 
   return workSpace;
+}
+
+export const getWorkspacePathsForSubHeader = () => {
+  const workSpaceForSubHeader = [
+    {
+      name: "Monitoring Plans",
+      url: "/workspace/monitoring-plans",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    { name: "QA & Certifications",
+      url: "/workspace/qa",
+      children: [
+        {
+          name: "Test Data",
+          url: "/workspace/qa/tests",
+        },
+        {
+          name: "Cert Events, Extensions & Exemptions",
+          url: "/workspace/qa/qce-tee",
+        },
+      ],
+    },
+    {
+      name: "Emissions",
+      url: "/workspace/emissions",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Evaluate",
+      url: "/workspace/evaluate",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Submit",
+      url: "/workspace/submit",
+      requiredRoles: [
+        config.app.submitterRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+      ],
+    },
+    {
+      name: "Export & Report",
+      url: "/workspace/export",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "MATS Data Submission",
+      url: "/workspace/mats-data-submission",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Configuration Management",
+      url: "/workspace/configuration-management",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+  ];
+
+  return workSpaceForSubHeader;
 };
