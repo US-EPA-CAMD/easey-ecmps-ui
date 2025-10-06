@@ -11,12 +11,12 @@ import { MenuSharp } from "@material-ui/icons";
 import config from "../../config";
 import {
   globalView,
-  getWorkspacePaths,
   home,
-  systemAdmin,
+  systemAdminForSubHeader,
+  getWorkspacePathsForSubHeader,
 } from "../../utils/constants/menuTopics";
 
-const workSpace = getWorkspacePaths();
+const workSpaceForSubHeader = getWorkspacePathsForSubHeader();
 export const LeftNavToSubHeader = (props) => {
   const [navDropdownOpen, setNavDropdownOpen] = useState([
     false,
@@ -129,14 +129,14 @@ export const LeftNavToSubHeader = (props) => {
       props.user?.roles?.includes(config.app.initialAuthorizerRole) ||
       props.user?.roles?.includes(config.app.preparerRole)
     ) {
-      workspaceLinks = makeHeader(workSpace, true, true);
+      workspaceLinks = makeHeader(workSpaceForSubHeader, true, true);
     }
 
     if (
       //Include systemAdmin side panel if the user has the correct role
       props.user?.roles?.includes(config.app.adminRole)
     ) {
-      workspaceLinks.push(makeHeader(systemAdmin, true, true));
+      workspaceLinks.push(makeHeader(systemAdminForSubHeader, true, true));
     }
 
     return workspaceLinks;
