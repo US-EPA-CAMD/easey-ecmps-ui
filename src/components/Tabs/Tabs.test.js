@@ -121,7 +121,7 @@ describe("testing a reusable Tabs component", () => {
   test("renders all tabs", () => {
     render(<TabsUsage />);
     const tabs = screen.getAllByRole("button");
-    expect(tabs).toHaveLength(7);
+    expect(tabs).toHaveLength(3);
   });
   test("renders the specified initial tabpane content ", () => {
     render(<TabsUsage />);
@@ -173,7 +173,7 @@ describe("testing a reusable Tabs component", () => {
       const name = `open ${tabFacility} ${
         isCheckedOut ? `(locked) ${tabLocations}` : `(${tabLocations})`
       } tab`;
-      return screen.findByRole("button", {
+      return screen.findByRole("tab", {
         name,
       });
     };
