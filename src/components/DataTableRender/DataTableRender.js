@@ -503,11 +503,10 @@ export const DataTableRender = ({
   // });
 
   const subHeaderComponentMemo = useMemo(() => {
-    //cannot unit test properly
-    const handleSearch = (e) => {
-      e.preventDefault();
+    
+    const handleSearch = (value) => {
       resetExpandedRows();
-      setSearchText(document.querySelector("#search-data").value);
+      setSearchText(value); 
       changeGridCellAttributeValue();
     };
 
