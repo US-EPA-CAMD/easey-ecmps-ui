@@ -48,7 +48,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
 
   const subHeaderMenuList = [
     {
-      label: <span className="margin-right-1 text-no-wrap">Resources</span>,
+      label: <span className="margin-right-1 text-no-wrap font-body-sm">Resources</span>,
       items: [
         { menu: "FAQs", link: `/faqs` },
         { menu: "Resources", link: `/resources` },
@@ -56,9 +56,9 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     },
     {
       label: (
-        <span className="margin-right-1 text-no-wrap">
+        <span className="margin-right-1 text-no-wrap font-body-sm">
           <span
-            className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block"
+            className="margin-right-2 menu-item-separator display-none desktop-lg:display-inline-block"
             style={{ color: "#365b8f" }}
           >
             |
@@ -72,7 +72,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     {
       label: (
         <span className="margin-right-1 text-no-wrap" title="Coming Soon">
-          <span className="margin-right-20 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
+          <span className="margin-right-2 menu-item-separator display-none desktop-lg:display-inline-block">|</span>
           Regulatory Partners
         </span>
       ),
@@ -208,7 +208,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                     <>
                       <Link
                         to={el.link ?? config.app.path}
-                        target={el.tab ? "_blank" : "_self"}
+                        target="_blank"
                         title={el.label}
                         aria-label={el.label}
                         onClick={() => handleSubMenuClick(i)}
@@ -249,7 +249,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                               {item.menu}
                             </USWDSLink>
                           ) : (
-                            <Link to={item.link}>{item.menu}</Link>
+                            <Link to={item.link} target="_blank">{item.menu}</Link>
                           )
                         )}
                         isOpen={navDropdownOpen[i]}

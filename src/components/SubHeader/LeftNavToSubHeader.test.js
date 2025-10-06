@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { LeftNavToSubHeader } from "./LeftNavToSubHeader";
 
 jest.mock('../../utils/constants/menuTopics', () => ({
-  getWorkspacePaths: jest.fn().mockReturnValue([
+  getWorkspacePathsForSubHeader: jest.fn().mockReturnValue([
     {
       name: "Home",
       children: [],
