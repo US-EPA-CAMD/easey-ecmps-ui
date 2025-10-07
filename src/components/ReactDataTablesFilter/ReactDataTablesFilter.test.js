@@ -5,20 +5,22 @@ import FilterComponent from "./ReactDataTablesFilter";
 
 describe("renders datatable search ", () => {
   test("clicks search btn", () => {
-    const { container } = render(
-      <FilterComponent
-        onSearch={jest.fn()}
-        title={"test"}
-      />
-    );
-    const input = container.querySelectorAll("#search-data");
+    const mockOnSearch = jest.fn();
 
-    input.forEach((element) => {
+    const { container } = render(
+      <FilterComponent onSearch={mockOnSearch} title="test" />
+    );
+
+    const inputs = container.querySelectorAll(
+      "#search-desktop-data, #search-tablet-data, #search-mobile-data"
+    );
+
+    inputs.forEach((element) => {
+      fireEvent.change(element, { target: { value: "hello" } });
       fireEvent.keyDown(element, { keyCode: 13, key: "Enter" });
-    });
-    input.forEach((element) => {
       fireEvent.keyDown(element, { keyCode: 9, key: "Tab" });
     });
-    expect(input).toBeDefined();
+
+    expect(inputs.length).toBeGreaterThan(0);
   });
 });

@@ -177,7 +177,7 @@ describe("renders datatable with all values ", () => {
       charCode: 13,
     });
 
-    const searchInput = container.querySelector("#search-data");
+    const searchInput = container.querySelector("#search-desktop-data, #search-tablet-data, #search-mobile-data");
     fireEvent.change(searchInput, { target: { value: "test" } });
     expect(searchInput.value).toBe("test");
     fireEvent.click(container.querySelector('button'));

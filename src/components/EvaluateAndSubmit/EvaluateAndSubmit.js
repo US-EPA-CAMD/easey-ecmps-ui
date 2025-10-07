@@ -844,13 +844,18 @@ export const EvaluateAndSubmit = ({
     const selectedItems = new Set(
       selectionEvent.selectedRows.map((row) => row[tableIdentifier])
     );
+    const maxEmPeriod = type === "EM"
+      ? [...selectedItems].reduce((max, period) => period > max ? period : max, '')
+      : null;
 
     const oldValueOfTable = JSON.stringify(dataList[index].ref.current);
+    const rows = dataList[index].ref.current;
 
-    for (const row of dataList[index].ref.current) {
+    for (const row of rows) {
       //Handle updating of the current dataList Ref
       if (
         selectedItems.has(row[tableIdentifier]) ||
+        (componentType === "Submission" && type === "EM" && row[tableIdentifier] <= maxEmPeriod) ||
         (row.isDisabled && row.isSelected)
       ) {
         row.isSelected = true;
@@ -867,7 +872,7 @@ export const EvaluateAndSubmit = ({
       }
     }
 
-    if (oldValueOfTable !== JSON.stringify(dataList[index].ref.current)) {
+    if (oldValueOfTable !== JSON.stringify(rows)) {
       //Only update this state when we have changes
       hasRenderingChanges = true;
     }
@@ -877,61 +882,58 @@ export const EvaluateAndSubmit = ({
       const selectedMonitorPlans = new Set();
       const selectedMonitorPlansFromEmissions = new Set();
       for (let i = 1; i < dataList.length; i++) {
-        if (dataList[i].rowId !== "matsBulkFileIdentifier") {
-          //Treat mats seperately
-          for (const row of dataList[i].ref.current) {
-            if (row.isSelected) {
-              selectedMonitorPlans.add(row.monPlanId);
-              if (i === 4) {
-                //For emissions create a sep set that drives the QA record selections
-                selectedMonitorPlansFromEmissions.add(row.monPlanId);
-              }
+        for (const row of dataList[i].ref.current) {
+          if (row.isSelected) {
+            selectedMonitorPlans.add(row.monPlanId);
+            if (i === dataList.findIndex(d => d.type === 'EM')) {
+              //For emissions create a sep set that drives the QA record selections
+              selectedMonitorPlansFromEmissions.add(row.monPlanId);
             }
           }
         }
       }
 
-      const dataListLength = isForceReEvaluation ? dataList.length : 4;
+      dataList
+        .filter((d) => isForceReEvaluation ? true : d.type !== 'EM')
+        .forEach((dataItem) => {
+          //Determine MP + QA Rerenders
+          const oldVal = JSON.stringify(dataItem.ref.current);
+          //Force MP selections
+          for (const row of dataItem.ref.current) {
+            //Handle updating of the current dataList Ref
+            let setDisable = false;
+            if (dataItem.type === "MP") {
+              setDisable = selectedMonitorPlans.has(row.monPlanId);
+            } else {
+              setDisable = selectedMonitorPlansFromEmissions.has(row.monPlanId);
+            }
 
-      for (let i = 0; i < dataListLength; i++) {
-        //Determine MP + QA Rerenders
-        const oldVal = JSON.stringify(dataList[i].ref.current);
-        //Force MP selections
-        for (const row of dataList[i].ref.current) {
-          //Handle updating of the current dataList Ref
-          let setDisable = false;
-          if (i === 0) {
-            setDisable = selectedMonitorPlans.has(row.monPlanId);
-          } else {
-            setDisable = selectedMonitorPlansFromEmissions.has(row.monPlanId);
+            if (setDisable && !isForceReEvaluation) {
+              row.isSelected = true;
+              row.isDisabled = true;
+            } else {
+              row.isDisabled = false;
+            }
+
+            if (
+              !canSelectRow(
+                row,
+                dataItem.type,
+                componentType,
+                idToPermissionsMap,
+                userId
+              ) &&
+              !isForceReEvaluation
+            ) {
+              row.isDisabled = true;
+              row.isSelected = false;
+            }
           }
 
-          if (setDisable && !isForceReEvaluation) {
-            row.isSelected = true;
-            row.isDisabled = true;
-          } else {
-            row.isDisabled = false;
+          if (oldVal !== JSON.stringify(dataItem.ref.current)) {
+            hasRenderingChanges = true;
           }
-
-          if (
-            !canSelectRow(
-              row,
-              dataList[i].type,
-              componentType,
-              idToPermissionsMap,
-              userId
-            ) &&
-            !isForceReEvaluation
-          ) {
-            row.isDisabled = true;
-            row.isSelected = false;
-          }
-        }
-
-        if (oldVal !== JSON.stringify(dataList[i].ref.current)) {
-          hasRenderingChanges = true;
-        }
-      }
+        });
     }
     populateSelectedFiles();
 
