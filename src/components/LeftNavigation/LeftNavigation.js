@@ -114,19 +114,11 @@ export const LeftNavigation = (props) => {
       props.user?.roles?.includes(config.app.preparerRole)
     ) {
       workspaceLinks = [
-        <USWDSLink
-          to="/workspace"
-          rel="workspace"
-          title="Go to the workspace page"
-          key="wsKey"
-        >
-          Workspace
-        </USWDSLink>,
         [
           <SideNav
             key="sideNav"
             items={makeHeader(workSpace, true, true)}
-            isSubnav={true}
+            isSubnav={false}
           />,
         ],
       ];

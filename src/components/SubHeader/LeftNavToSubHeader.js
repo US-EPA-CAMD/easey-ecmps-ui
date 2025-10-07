@@ -11,12 +11,12 @@ import { MenuSharp } from "@material-ui/icons";
 import config from "../../config";
 import {
   globalView,
-  getWorkspacePaths,
   home,
-  systemAdmin,
+  systemAdminForSubHeader,
+  getWorkspacePathsForSubHeader,
 } from "../../utils/constants/menuTopics";
 
-const workSpace = getWorkspacePaths();
+const workSpaceForSubHeader = getWorkspacePathsForSubHeader();
 export const LeftNavToSubHeader = (props) => {
   const [navDropdownOpen, setNavDropdownOpen] = useState([
     false,
@@ -129,14 +129,14 @@ export const LeftNavToSubHeader = (props) => {
       props.user?.roles?.includes(config.app.initialAuthorizerRole) ||
       props.user?.roles?.includes(config.app.preparerRole)
     ) {
-      workspaceLinks = makeHeader(workSpace, true, true);
+      workspaceLinks = makeHeader(workSpaceForSubHeader, true, true);
     }
 
     if (
       //Include systemAdmin side panel if the user has the correct role
       props.user?.roles?.includes(config.app.adminRole)
     ) {
-      workspaceLinks.push(makeHeader(systemAdmin, true, true));
+      workspaceLinks.push(makeHeader(systemAdminForSubHeader, true, true));
     }
 
     return workspaceLinks;
@@ -157,9 +157,17 @@ export const LeftNavToSubHeader = (props) => {
   };
   return (
     <div className="left-sidenav-to-header-wrapper">
-      <div className="padding-y-1 text-bold font-body-lg mobile:display-flex align-middle desktop:display-none bg-base-lightest">
-        <MenuSharp className="margin-left-2 margin-right-1" onClick={() => setIsMobileMenuOpen(true)} />
-        ECMPS Menu
+      <div className="flex-align-center padding-y-1 text-bold font-body-lg mobile:display-flex align-middle desktop:display-none bg-base-lightest">
+        <button
+          type="button"
+          className="margin-left-2 display-flex flex-justify-center flex-align-center usa-button usa-button--unstyled"
+          aria-label="ECMPS menu"
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <MenuSharp  color="primary"/>
+        </button>
+        <span className="margin-left-1">ECMPS Menu</span>
       </div>
       <Header
         className="display-none mobile:display-block desktop-lg:display-none

@@ -20,11 +20,11 @@ describe("Left Navigation links", () => {
     expect(mpLink).toBeInTheDocument();
     expect(mpLink).toHaveAttribute('href','/workspace/monitoring-plans');
 
-    const tdLink = screen.getByLabelText("Test Data - Workspace");
+    const tdLink = screen.getByLabelText("QA Test Data - Workspace");
     expect(tdLink).toBeInTheDocument();
     expect(tdLink).toHaveAttribute('href','/workspace/qa/tests');
 
-    const certEvtExtExmLink = screen.getByLabelText("Cert Events, Extensions & Exemptions - Workspace");
+    const certEvtExtExmLink = screen.getByLabelText("QA Cert Events, Extensions & Exemptions - Workspace");
     expect(certEvtExtExmLink).toBeInTheDocument();
     expect(certEvtExtExmLink).toHaveAttribute('href','/workspace/qa/qce-tee');
 
