@@ -302,7 +302,7 @@ export const DataTableRender = ({
                           false
                         )
                       }
-                      aria-label={`open ${row["col1"]} in a new tab`}
+                      aria-label={`open ${row["col1"]} in a new internal tab`}
                     >
                       {"Open"}
                     </Button>
@@ -332,7 +332,7 @@ export const DataTableRender = ({
                               true
                             )
                           }
-                          aria-label={`open and checkout ${row.col1} in a new tab`}
+                          aria-label={`open and checkout ${row.col1} in a new internal tab`}
                         >
                           {"Open & Checkout"}
                         </Button>
@@ -388,7 +388,7 @@ export const DataTableRender = ({
                   onClick={() => {
                     storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
-                  aria-label={`Open ${row.col1} in a new tab`}
+                  aria-label={`Open ${row.col1} in a new internal tab`}
                 >
                   {"Open"}
                 </Button>
@@ -503,11 +503,10 @@ export const DataTableRender = ({
   // });
 
   const subHeaderComponentMemo = useMemo(() => {
-    //cannot unit test properly
-    const handleSearch = (e) => {
-      e.preventDefault();
+    
+    const handleSearch = (value) => {
       resetExpandedRows();
-      setSearchText(document.querySelector("#search-data").value);
+      setSearchText(value); 
       changeGridCellAttributeValue();
     };
 

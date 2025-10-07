@@ -219,6 +219,7 @@ export const addEvalStatusCell = (columns, callback) =>
           {evalStatusesWithLinks.has(row.evalStatusCode) ? (
             <button
               className={"hyperlink-btn cursor-pointer"}
+              aria-label="open evaluation report in a new tab"
               onClick={() => {
                 callback(row, false);
               }}
@@ -228,6 +229,7 @@ export const addEvalStatusCell = (columns, callback) =>
           ) : otherStatusesWithLinks.has(row.evalStatusCode) && row?.severityDescription  ? (
             <button
               className={"hyperlink-btn cursor-pointer"}
+              aria-label="open evaluation report in a new tab"
               onClick={() => {
                 callback(row, false);
               }}
@@ -237,6 +239,7 @@ export const addEvalStatusCell = (columns, callback) =>
           ) : otherStatusesWithLinks.has(row.evalStatusCode) ? ( // if no chk session is present
             <button
               className={"hyperlink-btn cursor-pointer"}
+              aria-label="open evaluation report in a new tab"
               onClick={() => {
                 callback(row, false);
               }}

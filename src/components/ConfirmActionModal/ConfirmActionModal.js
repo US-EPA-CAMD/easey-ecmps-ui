@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { getTableRowActionAriaLabel } from "../../utils/selectors/QACert/TestSummary";
 import { ButtonGroup, Modal, ModalFooter, ModalHeading, ModalToggleButton } from "@trussworks/react-uswds";
-
+import PropTypes from 'prop-types';
 
 const defaultHeading = 'Confirmation'
 const defaultDescription = 'Please confirm your action'
@@ -17,6 +17,7 @@ const ConfirmActionModal = ({
   onConfirm,
   onCancel,
   row,
+  rowNumber,
   dataTableName
 }) => {
   const modalRef = useRef()
@@ -25,7 +26,7 @@ const ConfirmActionModal = ({
       <ModalToggleButton 
         modalRef={modalRef} 
         opener outline={true} 
-        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove')}
+        aria-label={getTableRowActionAriaLabel(dataTableName, row, 'Remove', rowNumber)}
         data-testid="Remove"
       >
         {buttonText}
@@ -65,5 +66,9 @@ const ConfirmActionModal = ({
     </>
   )
 }
+
+ConfirmActionModal.propTypes = {
+  rowNumber: PropTypes.number.isRequired,
+};
 
 export default ConfirmActionModal

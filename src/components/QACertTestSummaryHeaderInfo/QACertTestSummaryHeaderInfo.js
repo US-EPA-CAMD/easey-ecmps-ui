@@ -436,6 +436,7 @@ export const QACertTestSummaryHeaderInfo = ({
           save={() => {
             importHistoricalData();
           }}
+          firstFocusElementById={"preview-button"}
           children={
             <QAImportHistoricalDataPreview
               locations={locations}
