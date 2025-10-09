@@ -108,7 +108,7 @@ const Layout = (props) => {
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <ErrorSharp className="margin-right-2" />
-              <IconButton  //IconButton does not have aria-lable as hidden
+              <IconButton  //IconButton does not have aria-label as hidden
                 className="float-right cursor-pointer"
                 classes={{ root: classes.closeLogin }}
                 aria-label="close error alert message"
@@ -126,21 +126,22 @@ const Layout = (props) => {
             <div
               id="appWarningMessage"
               tabIndex="-1"
-              aria-live="polite"
+              aria-live="assertive"
+              aria-atomic="true"
               className="border-1px margin-y-2 padding-2 bg-accent-warm-lighter
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <WarningSharp className="margin-right-2" />
-              <CloseSharp
-                aria-label="close warning alert message"
+              <IconButton  //IconButton does not have aria-label as hidden
                 className="float-right cursor-pointer"
+                classes={{ root: classes.closeLogin }}
+                aria-label="close warning alert message"
+                title="close warning alert message"       
                 onClick={() => hideAppWarning()}
-                onKeyUp={(event) => {
-                  if (event.key === "Enter") {
-                    hideAppWarning();
-                  }
-                }}
+              > 
+              <CloseSharp //CloseSharp automatically has aria-label as hidden
               />
+              </IconButton>
               <span
                 id="appWarningMessageText"
                 className="position-relative top-neg-1"
