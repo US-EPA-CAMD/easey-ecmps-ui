@@ -137,7 +137,7 @@ const Layout = (props) => {
                 classes={{ root: classes.closeLogin }}
                 aria-label="close warning alert message"
                 title="close warning alert message"       
-                onClick={() => hideAppError()}
+                onClick={() => hideAppWarning()}
               > 
               <CloseSharp //CloseSharp automatically has aria-label as hidden
               />
