@@ -53,6 +53,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
         { menu: "FAQs", link: `/faqs` },
         { menu: "Resources", link: `/resources` },
       ],
+      title: "resources",
     },
     {
       label: (
@@ -68,6 +69,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
       ),
       link: "/help-support",
       items: [],
+      title: "help-support",
     },
     // {
     //   label: (
@@ -200,8 +202,8 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       <Link
                         to={el.link ?? config.app.path}
                         target="_blank"
-                        title={el.label}
-                        aria-label={el.label}
+                        title={el.title}
+                        aria-label={el.title}
                         onClick={() => handleSubMenuClick(i)}
                       >
                         {el.label}
@@ -217,7 +219,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                       <NavDropDownButton
                         key={i}
                         label={el.label}
-                        menuId={`menu-${el.label}`}
+                        menuId={`menu-${el.title}`}
                         isOpen={navDropdownOpen[i]}
                         onToggle={() => {
                           handleToggleNavDropdown(i);
