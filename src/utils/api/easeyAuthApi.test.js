@@ -6,7 +6,7 @@ import * as appError from "../../additional-functions/app-error.js"
 import * as checkoutAPI from "../../additional-functions/checkout";
 
 
-import { authenticate, refreshClientToken, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions, createActivity, validate } from "./easeyAuthApi";
+import { authenticate, secureAxios, refreshToken, getCredentials, logOut, refreshLastActivity, getPermissions, createActivity, validate } from "./easeyAuthApi";
 
 delete window.location;
 window.location = {
@@ -129,40 +129,6 @@ describe("Easey Auth API", () => {
       expect(e.response.data).toEqual("some error");
     }
     expect(localStorage.getItem("ecmps_user")).toEqual(null);
-  });
-
-  it("Can we refresh client Token", async () => {
-    config.app.clientId = "123";
-    config.app.clientSecret = "secret";
-    const data = { token: "token", expiration: "11-22-2022" };
-
-    mock
-      .onPost(`${config.services.authApi.uri}/tokens/client`)
-      .reply(200, data);
-
-    await refreshClientToken();
-    expect(localStorage.getItem("client_token")).toBe(data.token);
-    expect(localStorage.getItem("client_token_expiration")).toBe(
-      data.expiration
-    );
-  });
-
-  it("should call displayAppError while refresh client Token call throws error", async () => {
-    mock
-      .onPost(`${config.services.authApi.uri}/tokens/client`)
-      .reply(500, "some error");
-
-    await refreshClientToken();
-    expect(await refreshClientToken()).toEqual(undefined);
-    expect(displayAppError).toHaveBeenCalledTimes(2);
-  });
-
-  it("should return when clientId and clientSecret does not exist without refreshing client Token", async () => {
-    delete config.app.clientId;
-    delete config.app.clientSecret;
-
-    expect(await refreshClientToken()).toEqual(undefined);
-    expect(displayAppError).toHaveBeenCalledTimes(1);
   });
 
 
