@@ -194,6 +194,10 @@
   .usa-nav__primary > .usa-nav__primary-item > a {
     font-weight: normal;
     color: $epa-white;
+
+    @media (max-width: 1024px) {
+      color: $epa-darker-gray;
+    }
   }
 
   .usa-nav__primary button span::after {
