@@ -24,11 +24,13 @@ export const secureAxios = async (options) => {
           ...options.headers,
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
+          "x-app-identifier": config.app.appIdentifier,
         };
       } else {
         options.headers = {
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
+          "x-app-identifier": config.app.appIdentifier,
         };
       }
     } else {
@@ -36,10 +38,12 @@ export const secureAxios = async (options) => {
         options.headers = {
           ...options.headers,
           "x-api-key": config.app.apiKey,
+          "x-app-identifier": config.app.appIdentifier,
         };
       } else {
         options.headers = {
           "x-api-key": config.app.apiKey,
+          "x-app-identifier": config.app.appIdentifier,
         };
       }
     }
