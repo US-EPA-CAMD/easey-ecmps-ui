@@ -117,7 +117,7 @@ export const config = {
     oidcAuthResponseMode: getConfigValue("VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE"),
     oidcAuthScopes: getConfigValue("VITE_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES"),
     cdxUserSignupMigrateUrl: getConfigValue("VITE_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL"),
-    appIdentifier: getConfigValue("EASEY_AUTH_API_SPONSOR_ROLE", "ecmps-ui"),
+    appIdentifier: getConfigValue("VITE_EASEY_ECMPS_UI_APP_IDENTIFIER", "ecmps-ui"),
     enableDebug: getConfigValueBoolean("VITE_EASEY_ECMPS_UI_ENABLE_DEBUG"),
     sponsorRole: getConfigValue("EASEY_AUTH_API_SPONSOR_ROLE", "Sponsor"),
     submitterRole: getConfigValue("EASEY_AUTH_API_SUBMITTER_ROLE", "Submitter"),
