@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import log from "loglevel";
 
 import {
@@ -103,25 +103,15 @@ export const EvaluateAndSubmit = ({
     }
   }, [finalSubmitStage, componentType]);
 
-  useEffect(() => {
-    const mapping = new Map();
-    for (const obj of checkedOutLocations) {
-      mapping.set(obj.monPlanId, obj.checkedOutBy);
-    }
+  // Create refs once at component level
+  const monPlanProgressPending = useRef(false);
+  const qaTestSumProgressPending = useRef(false);
+  const qaCertEventProgressPending = useRef(false);
+  const qaTeeProgressPending = useRef(false);
+  const emissionsProgressPending = useRef(false);
 
-    for (const list of dataList) {
-      for (const curr of list.ref.current) {
-        if (mapping.has(curr.monPlanId)) {
-          curr.checkedOutBy = mapping.get(curr.monPlanId);
-        } else {
-          curr.checkedOutBy = "";
-        }
-      }
-    }
-    forceReloadTables();
-  }, [checkedOutLocations]);
-
-  let dataList = [
+  // Use useMemo to prevent dataList from being recreated on every render
+  const dataList = useMemo(() => [
     {
       columns: monPlanColumns,
       ref: monPlanRef,
@@ -129,7 +119,7 @@ export const EvaluateAndSubmit = ({
       rowId: "monPlanId",
       name: "Monitoring Plan",
       type: "MP",
-      progressPending: useRef(false),
+      progressPending: monPlanProgressPending,
     },
     {
       columns: qaTestSummaryColumns,
@@ -138,7 +128,7 @@ export const EvaluateAndSubmit = ({
       rowId: "testSumId",
       name: "Test Data",
       type: "QA",
-      progressPending: useRef(false),
+      progressPending: qaTestSumProgressPending,
     },
     {
       columns: qaCertEventColumns,
@@ -147,7 +137,7 @@ export const EvaluateAndSubmit = ({
       rowId: "qaCertEventIdentifier",
       name: "QA Certification Events",
       type: "QA",
-      progressPending: useRef(false),
+      progressPending: qaCertEventProgressPending,
     },
     {
       columns: qaTeeColumns,
@@ -156,7 +146,7 @@ export const EvaluateAndSubmit = ({
       rowId: "testExtensionExemptionIdentifier",
       name: "Test Extension Exemptions Data",
       type: "QA",
-      progressPending: useRef(false),
+      progressPending: qaTeeProgressPending,
     },
     {
       columns: emissionsColumns,
@@ -168,10 +158,46 @@ export const EvaluateAndSubmit = ({
       rowId: "periodAbbreviation",
       name: "Emissions",
       type: "EM",
-      progressPending: useRef(false),
+      progressPending: emissionsProgressPending,
     },
-  ];
+  ], [componentType]);
 
+ useEffect(() => {
+  if (!checkedOutLocations || checkedOutLocations.length === 0) return;
+
+  const mapping = new Map();
+  for (const obj of checkedOutLocations) {
+    mapping.set(obj.monPlanId, obj.checkedOutBy);
+  }
+
+  let hasChanges = false;
+  
+  for (const list of dataList) {
+    const updatedData = list.ref.current.map(curr => {
+      const newCheckedOutBy = mapping.has(curr.monPlanId) 
+        ? mapping.get(curr.monPlanId) 
+        : "";
+      
+      // Only create new object if value actually changed
+      if (curr.checkedOutBy !== newCheckedOutBy) {
+        hasChanges = true;
+        return {
+          ...curr,
+          checkedOutBy: newCheckedOutBy
+        };
+      }
+      return curr;
+    });
+
+    if (hasChanges) {
+      list.ref.current = updatedData;
+    }
+  }
+
+  if (hasChanges) {
+    forceReloadTables();
+  }
+}, [checkedOutLocations, dataList]);
 
   const idToPermissionsMap = useRef(new Map());
   useEffect(() => {

@@ -12,6 +12,18 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 import { LockSharp } from "@material-ui/icons";
 import "./CategoryTable.scss";
 
+// Memoized cell component for better performance
+const CheckedOutCell = React.memo(({ checkedOutBy }) => {
+  return (
+    <div className="grid-row">
+      <div>
+        <div>{checkedOutBy !== "" && <LockSharp />}</div>
+        <div className="checkOutBy">{checkedOutBy}</div>
+      </div>
+    </div>
+  );
+});
+
 export const CategoryTable = ({
   categoryTitle,
   columns,
@@ -106,18 +118,9 @@ export const CategoryTable = ({
 
   mappings.push({
     name: "Checked Out",
-    cell: (row, idx) => {
-      return (
-        <div className="grid-row">
-          {row.checkedOutBy && row.checkedOutBy !== userId && (
-            <div>
-              <div>{row.checkedOutBy !== "" && <LockSharp />}</div>
-              <div className="checkOutBy">{row.checkedOutBy}</div>
-            </div>
-          )}
-        </div>
-      );
-    },
+    cell: (row, idx) => (
+      <CheckedOutCell checkedOutBy={row.checkedOutBy} />
+    ),
     width: "150px",
   });
 
@@ -168,3 +171,5 @@ export const CategoryTable = ({
     </div>
   );
 };
+
+export default CategoryTable;
