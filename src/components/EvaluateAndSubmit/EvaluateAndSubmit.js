@@ -163,7 +163,11 @@ export const EvaluateAndSubmit = ({
   ], [componentType]);
 
  useEffect(() => {
-  if (!checkedOutLocations || checkedOutLocations.length === 0) return;
+  checkOutBy()
+}, [checkedOutLocations, dataList]);
+
+const checkOutBy = () =>{
+if (!checkedOutLocations || checkedOutLocations.length === 0) return;
 
   const mapping = new Map();
   for (const obj of checkedOutLocations) {
@@ -197,7 +201,7 @@ export const EvaluateAndSubmit = ({
   if (hasChanges) {
     forceReloadTables();
   }
-}, [checkedOutLocations, dataList]);
+}
 
   const idToPermissionsMap = useRef(new Map());
   useEffect(() => {
@@ -687,6 +691,7 @@ export const EvaluateAndSubmit = ({
       promises.push(retrieveAndFormatData(i, activePlanIdSet, submissionQueueOrderData));
     }
     await Promise.all(promises);
+    checkOutBy();
   };
 
   const getSelectedMPIds = () => {
