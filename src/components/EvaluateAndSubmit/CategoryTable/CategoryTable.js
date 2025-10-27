@@ -10,19 +10,8 @@ import {
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { LockSharp } from "@material-ui/icons";
+import CheckedOutCell from "./CheckedOutCell";
 import "./CategoryTable.scss";
-
-// Memoized cell component for better performance
-const CheckedOutCell = React.memo(({ checkedOutBy }) => {
-  return (
-    <div className="grid-row">
-      <div>
-        <div>{checkedOutBy !== "" && <LockSharp />}</div>
-        <div className="checkOutBy">{checkedOutBy}</div>
-      </div>
-    </div>
-  );
-});
 
 export const CategoryTable = ({
   categoryTitle,
@@ -118,7 +107,7 @@ export const CategoryTable = ({
 
   mappings.push({
     name: "Checked Out",
-    cell: (row, idx) => (
+    cell: (row, _idx) => (
       <CheckedOutCell checkedOutBy={row.checkedOutBy} />
     ),
     width: "150px",

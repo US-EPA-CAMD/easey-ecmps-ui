@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import log from "loglevel";
+import PropTypes from 'prop-types';
 
 import {
   getMonitoringPlans,
@@ -960,6 +961,24 @@ if (!checkedOutLocations || checkedOutLocations.length === 0) return;
       </div>
     </div>
   );
+};
+
+EvaluateAndSubmit.propTypes = {
+  checkedOutLocations: PropTypes.arrayOf(
+    PropTypes.shape({
+      monPlanId: PropTypes.string.isRequired,
+      checkedOutBy: PropTypes.string.isRequired
+    })
+  ),
+  user: PropTypes.oneOfType([
+    PropTypes.shape({
+      userId: PropTypes.string,
+      email: PropTypes.string,
+      facilities: PropTypes.array
+    }),
+    PropTypes.bool 
+  ]),
+  componentType: PropTypes.oneOf(['Submission', 'Evaluate'])
 };
 
 const mapStateToProps = (state) => ({
