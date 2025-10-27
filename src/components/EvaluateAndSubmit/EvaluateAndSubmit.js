@@ -168,7 +168,9 @@ export const EvaluateAndSubmit = ({
 }, [checkedOutLocations, dataList]);
 
 const checkOutBy = () =>{
-if (!checkedOutLocations || checkedOutLocations.length === 0) return;
+if (!checkedOutLocations || checkedOutLocations.length === 0){
+  return;
+};
 
   const mapping = new Map();
   for (const obj of checkedOutLocations) {

@@ -9,7 +9,6 @@ import {
 } from "../../../utils/functions";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { LockSharp } from "@material-ui/icons";
 import CheckedOutCell from "./CheckedOutCell";
 import "./CategoryTable.scss";
 
@@ -107,8 +106,8 @@ export const CategoryTable = ({
 
   mappings.push({
     name: "Checked Out",
-    cell: (row, _idx) => (
-      <CheckedOutCell checkedOutBy={row.checkedOutBy} />
+    cell: (row, idx) => (
+      <CheckedOutCell key={idx} checkedOutBy={row.checkedOutBy} />
     ),
     width: "150px",
   });
