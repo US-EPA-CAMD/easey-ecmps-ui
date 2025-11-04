@@ -89,4 +89,39 @@ describe("QACertTestSummaryHeaderInfo", () => {
     });
     expect(screen.getByText("Check Out")).toBeInTheDocument();
   });
+
+  test("should continue to show Import Historical Data option for TEST entity", async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <QACertTestSummaryHeaderInfo {...props} checkoutState={true} />
+        </Provider>
+      );
+    });
+
+    const importButton = screen.getByText("Import Data");
+    await act(async () => importButton.click());
+
+    // Verify TEST entity shows both historical and file options
+    expect(screen.getByText("Import Historical or File Data")).toBeInTheDocument();
+    expect(screen.getByText("Import Historical Data")).toBeInTheDocument();
+    expect(screen.getByText("Import from File")).toBeInTheDocument();
+  });
+
+  test("should preserve existing TEST import modal behavior", async () => {
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <QACertTestSummaryHeaderInfo {...props} checkoutState={true} />
+        </Provider>
+      );
+    });
+
+    const importButton = screen.getByText("Import Data");
+    await act(async () => importButton.click());
+
+    // Verify that the TEST entity maintains the original caption
+    expect(screen.getByText("Import Historical or File Data")).toBeInTheDocument();
+    expect(screen.queryByText("Import File Data")).not.toBeInTheDocument();
+  });
 });
