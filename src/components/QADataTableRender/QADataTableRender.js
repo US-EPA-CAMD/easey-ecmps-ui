@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 const QADataTableRender = ({
   columnNames,
   actionColumnName,
+  title,
   columnWidth,
   openHandler,
   data,
@@ -58,13 +59,6 @@ const QADataTableRender = ({
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      const header = document.querySelector('[role="heading"]');
-
-      if (header !== null) {
-        header.remove();
-      }
-    });
     setTimeout(() => {
       ensure508(dataTableName, sectionSelect ? sectionSelect[1] : null);
     }, oneSecond);
@@ -171,16 +165,29 @@ const QADataTableRender = ({
     
   };
 
+  useEffect(() => {
+    // Use a minimal timeout to run this code right after the DOM has updated
+    const timerId = setTimeout(() => {
+      // Find ALL column headers for the first column that are still focusable
+      const focusableHeaders = document.querySelectorAll(
+        'div[data-column-id="1"][role="columnheader"][tabindex="0"]',
+      );
+
+      // Loop through any that were found and fix them
+      focusableHeaders.forEach(header => {
+        header.setAttribute('tabindex', '-1');
+      });
+    }, 0); // A timeout of 0ms defers execution until the next event loop cycle
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [data, totalExpand]);
+
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
-        name: actionColumnName,
-        button: true,
-        width: user ? "20%" : `${columnWidth}%`,
-        style: {
-          justifyContent: "left",
-          // width:'fit-content'
-        },
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
@@ -265,6 +272,16 @@ const QADataTableRender = ({
       id={dataTableName.replaceAll(" ", "-")}
     >
       <DataTable
+        title = {title}
+        subHeader
+        subHeaderComponent={
+         actionsBtn === "View" && 
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+
+        {actionColumnName}
+        </div>
+        }
+        aria-label={dataTableName}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
         columns={columns}
