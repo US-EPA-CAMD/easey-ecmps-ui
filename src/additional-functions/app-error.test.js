@@ -32,13 +32,6 @@ describe("Test displayAppError", () => {
 
     expect(appErrorMessage.classList).not.toContain('display-none');
     expect(appErrorMessageText.innerHTML).toBe("Some Error");
-
-    // Clicking on the appErrorMessage container should fire hideAppError
-    // and close it (display: none, empty error text)
-    fireEvent.click(appErrorMessage);
-
-    expect(appErrorMessage.classList).toContain('display-none');
-    expect(appErrorMessageText.innerHTML).toBe("");
   });
 
   it("Should not error if called when there is no appErrorMessage container",

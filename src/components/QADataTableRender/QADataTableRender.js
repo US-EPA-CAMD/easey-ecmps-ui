@@ -21,6 +21,7 @@ import {
 
 import { cleanUp508, ensure508 } from "../../additional-functions/ensure-508";
 import ConfirmActionModal from "../ConfirmActionModal/ConfirmActionModal";
+import PropTypes from 'prop-types';
 
 const QADataTableRender = ({
   columnNames,
@@ -183,6 +184,7 @@ const QADataTableRender = ({
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
+          const rowNumber = index + 1;
           return (
             <div>
               {/* user is logged in and config is checked out */}
@@ -203,7 +205,8 @@ const QADataTableRender = ({
                         aria-label={getTableRowActionAriaLabel(
                           dataTableName,
                           row,
-                          "Edit"
+                          "Edit",
+                          rowNumber
                         )}
                         data-testid="Edit"
                       >
@@ -212,6 +215,7 @@ const QADataTableRender = ({
 
                       {!row?.isSubmitted && (
                         <RemoveButton
+                          rowNumber={rowNumber}
                           row={row}
                           dataTableName={dataTableName}
                           onConfirm={() => onRemoveHandler(normalizedRow)}
@@ -232,7 +236,8 @@ const QADataTableRender = ({
                     aria-label={getTableRowActionAriaLabel(
                       dataTableName,
                       row,
-                      "View"
+                      "View",
+                      rowNumber
                     )}
                     outline={true}
                     id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1
@@ -284,14 +289,22 @@ const QADataTableRender = ({
 
 export default QADataTableRender;
 
-const RemoveButton = ({ onConfirm, row, dataTableName }) => {
+const RemoveButton = ({ onConfirm, row, dataTableName, rowNumber }) => {
   return (
     <ConfirmActionModal
       buttonText="Remove"
       description="Are you sure you want to remove the selected data?"
       onConfirm={onConfirm}
+      rowNumber={rowNumber}
       row={row}
       dataTableName={dataTableName}
     />
   );
+};
+
+RemoveButton.propTypes = {
+  row: PropTypes.object.isRequired,
+  rowNumber: PropTypes.number.isRequired,
+  dataTableName:PropTypes.string.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };

@@ -15,8 +15,19 @@ import "./Layout.scss";
 import { hideAppError, hideAppWarning } from "../../additional-functions/app-error";
 
 import { getContent } from "../../utils/api/contentApi";
+import { IconButton } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+
+//Center IconButton in Error Message
+const useStyles = makeStyles({
+  closeLogin: {
+    padding: 0
+  },
+})
 
 const Layout = (props) => {
+  const classes = useStyles();
+
   const [outageMsgContent, setOutageMsgContent] = useState();
 
   useEffect(() => {
@@ -91,21 +102,22 @@ const Layout = (props) => {
             <div
               id="appErrorMessage"
               tabIndex="-1"
-              aria-live="polite"
+              aria-live="assertive"
+              aria-atomic="true"
               className="border-1px margin-y-2 padding-2 bg-secondary-lighter
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <ErrorSharp className="margin-right-2" />
-              <CloseSharp
-                aria-label="close error alert message"
+              <IconButton  //IconButton does not have aria-label as hidden
                 className="float-right cursor-pointer"
+                classes={{ root: classes.closeLogin }}
+                aria-label="close error alert message"
+                title="close error alert message"       
                 onClick={() => hideAppError()}
-                onKeyUp={(event) => {
-                  if (event.key === "Enter") {
-                    hideAppError();
-                  }
-                }}
+              > 
+              <CloseSharp //CloseSharp automatically has aria-label as hidden
               />
+              </IconButton>
               <span
                 id="appErrorMessageText"
                 className="position-relative top-neg-1"
@@ -114,21 +126,22 @@ const Layout = (props) => {
             <div
               id="appWarningMessage"
               tabIndex="-1"
-              aria-live="polite"
+              aria-live="assertive"
+              aria-atomic="true"
               className="border-1px margin-y-2 padding-2 bg-accent-warm-lighter
                          text-bold text-secondary-vivid react-transition display-none"
             >
               <WarningSharp className="margin-right-2" />
-              <CloseSharp
-                aria-label="close warning alert message"
+              <IconButton  //IconButton does not have aria-label as hidden
                 className="float-right cursor-pointer"
+                classes={{ root: classes.closeLogin }}
+                aria-label="close warning alert message"
+                title="close warning alert message"       
                 onClick={() => hideAppWarning()}
-                onKeyUp={(event) => {
-                  if (event.key === "Enter") {
-                    hideAppWarning();
-                  }
-                }}
+              > 
+              <CloseSharp //CloseSharp automatically has aria-label as hidden
               />
+              </IconButton>
               <span
                 id="appWarningMessageText"
                 className="position-relative top-neg-1"
