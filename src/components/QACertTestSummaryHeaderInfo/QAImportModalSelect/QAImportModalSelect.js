@@ -1,13 +1,44 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import DropdownSelection from "../../DropdownSelection/DropdownSelection";
 
-const QAImportModalSelect = ({ setImportTypeSelection}) => {
-  const selectOptions = [
+const QAImportModalSelect = ({ setImportTypeSelection, entityType = "TEST" }) => {
+  const getSelectOptions = () => {
+
+    // For QCE/TEE: Show only "Import from File" option
+    if (entityType === "QCE" || entityType === "TEE") {
+      return [{ key: "file", name: "Import from File" }];
+    }
+
+    // For TEST: Show all options including placeholder and historical
+    const baseOptions = [
     { key: "select", name: "Select Data Type to Import" },
-    { key: "file", name: "Import from File" },
-    { key: "historical", name: "Import Historical Data" }
+    { key: "file", name: "Import from File" }
   ];
+
+    if (entityType === "TEST") {
+      return [...baseOptions, { key: "historical", name: "Import Historical Data" }];
+    }
+
+    // Default fallback
+    return [{ key: "file", name: "Import from File" }];
+  };
+
+  const getCaption = () => {
+    switch(entityType) {
+      case "TEST":
+        return "Import Historical or File Data";
+      case "QCE":
+      case "TEE":
+        return "Import File Data";
+      default:
+        return "Import File Data";
+    }
+  };
+
+  const selectOptions = getSelectOptions();
   const [selection, setSelection] = useState(0);
+
   useEffect(() => {
     setImportTypeSelection(selectOptions[selection]["key"]);
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -15,7 +46,7 @@ const QAImportModalSelect = ({ setImportTypeSelection}) => {
 
   return (
     <DropdownSelection
-      caption={"Import Historical or File Data"}
+      caption={getCaption()}
       options={selectOptions}
       viewKey={"name"}
       selectKey={"key"}
@@ -23,6 +54,15 @@ const QAImportModalSelect = ({ setImportTypeSelection}) => {
       selectionHandler={(value) => setSelection(value[0])}
     />
   );
+};
+
+QAImportModalSelect.propTypes = {
+  setImportTypeSelection: PropTypes.func.isRequired,
+  entityType: PropTypes.oneOf(["QCE", "TEE", "TEST"]),
+};
+
+QAImportModalSelect.defaultProps = {
+  entityType: "TEST",
 };
 
 export default QAImportModalSelect;
