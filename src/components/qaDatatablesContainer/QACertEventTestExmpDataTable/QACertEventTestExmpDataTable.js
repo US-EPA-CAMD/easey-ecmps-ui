@@ -528,6 +528,7 @@ const QACertEventTestExmpDataTable = ({
         <QADataTableRender
           columnNames={columns}
           columnWidth={10}
+          title={dataTableName}
           data={data}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
@@ -536,13 +537,11 @@ const QACertEventTestExmpDataTable = ({
           actionColumnName={
             user && isCheckedOut ? (
               <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">
-                  {dataTableName}
-                </span>
                 <Button
                   id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                   epa-testid="btnOpen"
                   className="text-white display-table-cell"
+                  aria-label={`Add ${dataTableName}`}
                   onClick={() => openModal(false, false, true)}
                 >
                   Add
@@ -559,15 +558,16 @@ const QACertEventTestExmpDataTable = ({
               <QADataTableRender
                 columnNames={columns}
                 columnWidth={10}
+                title={dataTableName}
                 data={[]}
                 isCheckedOut={isCheckedOut}
                 actionColumnName={
                   <>
-                    <span className="padding-right-2">Test Data</span>
                     <Button
                       id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
                       epa-testid="btnOpen"
                       className="text-white"
+                      aria-label={`Add ${dataTableName}`}
                       onClick={() => openModal(false, false, true)}
                     >
                       Add

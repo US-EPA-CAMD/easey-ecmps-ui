@@ -11,4 +11,12 @@
   .rdt_TableRow:nth-child(odd) > .rdt_TableCell {
     background-color: $epa-off-white !important;
   }
+
+    div[role="heading"] {
+    display: block !important;
+    color: #000000 !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    min-height:auto;
+  }
 }
