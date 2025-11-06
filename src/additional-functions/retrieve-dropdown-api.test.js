@@ -39,6 +39,11 @@ const dataYearDropdownOptions = dataYears.map((year) => {
 
 dataYearDropdownOptions.unshift({ code: "", name: "-- Select a value --" });
 
+const formulaCodeDropdownOptions = [
+  { code: "", name: "-- Select a value --" },
+  { code: "code", name: "code: description" },
+];
+
 const dropdownOptions = [
   { code: "", name: "-- Select a value --" },
   { code: "", name: "" },
@@ -489,10 +494,10 @@ const testObjects = [
     name: "formulaCode",
     expectedApiResponse: {
       status: successCode,
-      data: { items: [{ equationCode: "", equationDescription: "" }] },
+      data: { items: [{ equationCode: "code", equationDescription: "description" }] },
     },
     expectedDropdownOptions: {
-      formulaCode: dropdownOptions,
+      formulaCode: formulaCodeDropdownOptions,
     },
     case: "formulaCode",
     function: dmApi.getAllFormulaCodes,
