@@ -382,6 +382,7 @@ export const DataTableMethod = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
@@ -408,6 +409,7 @@ export const DataTableMethod = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);

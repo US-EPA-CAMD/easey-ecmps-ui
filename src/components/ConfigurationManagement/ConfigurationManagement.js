@@ -815,6 +815,7 @@ export const ConfigurationManagement = ({
         ...sendSingleUnitPayloads(false),
       ]);
       setSaveStatus(DataStatus.SUCCESS);
+      setErrorMsgs([]);
       [
         setMonitoringPlansStatus,
         setUnitsStatus,

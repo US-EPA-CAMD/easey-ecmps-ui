@@ -405,6 +405,7 @@ export const AddErrorSupressionModal = ({
       );
       if (successResponses.includes(resp.status)) {
         close();
+        setErrorMsgs([]);
       } else {
         const errorResp = Array.isArray(resp) ? resp : [resp];
         setErrorMsgs(errorResp);
