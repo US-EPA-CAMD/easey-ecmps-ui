@@ -521,64 +521,36 @@ const QACertEventTestExmpDataTable = ({
     }
   };
 
+  const addHandler = () => openModal(false, false, true);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
           title={dataTableName}
           data={data}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           isCheckedOut={isCheckedOut}
           dataTableName={dataTableName}
-          actionColumnName={
-            user && isCheckedOut ? (
-              <div className="display-table-row">
-                <Button
-                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                  epa-testid="btnOpen"
-                  className="text-white display-table-cell"
-                  aria-label={`Add ${dataTableName}`}
-                  onClick={() => openModal(false, false, true)}
-                >
-                  Add
-                </Button>
-              </div>
-            ) : (
-              dataTableName
-            )
-          }
           actionsBtn={"View"}
+          addHandler={addHandler}
           user={user}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
                 columnNames={columns}
-                columnWidth={10}
                 title={dataTableName}
                 data={[]}
                 isCheckedOut={isCheckedOut}
-                actionColumnName={
-                  <>
-                    <Button
-                      id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      aria-label={`Add ${dataTableName}`}
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                }
+                addHandler={addHandler}
                 actionsBtn={"View"}
                 user={user}
               />
             ) : (
-              `There're no ${dataTableName} records available.`
+              `There are no ${dataTableName} records available.`
             )
           }
         />

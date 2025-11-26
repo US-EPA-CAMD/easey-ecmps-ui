@@ -958,39 +958,24 @@ const QAExpandableRowsRender = ({
     return expandables;
   };
 
+  const addHandler = () => openModal(false, false, true);
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? 'is-visible' : ''}`} />
       {!loading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
           title={dataTableName}
           data={displayedRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={'View'}
+          addHandler={addHandler}
           isCheckedOut={isCheckedOut}
           dataTableName={dataTableName}
           sectionSelect={sectionSelect}
-          actionColumnName={
-            user && isCheckedOut ? (
-              <div className="display-table-row">
-                <Button
-                  id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
-                  epa-testid="btnOpen"
-                  className="text-white display-table-cell"
-                  aria-label={`Add ${dataTableName}`}
-                  onClick={() => openModal(false, false, true)}
-                >
-                  Add
-                </Button>
-              </div>
-            ) : (
-              dataTableName
-            )
-          }
           expandableRowComp={expandable ? QAExpandableRowsRender : false}
           expandableRowProps={nextExpandableRow(dataTableName)}
           // shows empty table with add if user is logged in
@@ -999,30 +984,17 @@ const QAExpandableRowsRender = ({
               <div>
                 <QADataTableRender
                   columnNames={columns}
-                  columnWidth={10}
                   title={dataTableName}
                   data={[]}
                   isCheckedOut={isCheckedOut}
                   sectionSelect={sectionSelect}
-                  actionColumnName={
-                    <>
-                      <Button
-                        id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        aria-label={`Add ${dataTableName}`}
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  }
+                  addHandler={addHandler}
                   actionsBtn={'View'}
                   user={user}
                 />
               </div>
             ) : (
-              `There're no ${dataTableName} records available.`
+              `There are no ${dataTableName} records available.`
             )
           }
         />
