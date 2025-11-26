@@ -23,7 +23,6 @@ import {
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
-import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as mpApi from "../../../utils/api/monitoringPlansApi.js";

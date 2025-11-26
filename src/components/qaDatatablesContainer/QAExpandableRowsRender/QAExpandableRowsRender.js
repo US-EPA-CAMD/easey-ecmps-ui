@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import log from "loglevel";
 
-import { Button } from '@trussworks/react-uswds';
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
