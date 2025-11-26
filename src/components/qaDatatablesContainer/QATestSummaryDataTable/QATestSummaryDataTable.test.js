@@ -110,6 +110,6 @@ test('renders add button', async () => {
     <QATestSummaryDataTable {...props} />
   )
 
-  const addBtn = screen.getByRole('button', { name: /Add/i })
+  const addBtn = screen.getByRole('button', { name: /Create/i })
   expect(addBtn).toBeInTheDocument()
 })
