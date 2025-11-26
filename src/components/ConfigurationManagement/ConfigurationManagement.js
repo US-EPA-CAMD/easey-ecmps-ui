@@ -844,13 +844,6 @@ export const ConfigurationManagement = ({
       newErrorMsgs.push(errorMessages.NOT_CHECKED_OUT);
     }
 
-    if (checkForDuplicateStackPipeIds()) {
-      newErrorMsgs.push(errorMessages.DUPLICATE_STACKPIPE_IDS);
-    }
-
-    if (checkForDuplicateUnitStackConfigs()) {
-      newErrorMsgs.push(errorMessages.DUPLICATE_UNIT_STACK_CONFIGS);
-    }
 
     setErrorMsgs(newErrorMsgs);
     if (newErrorMsgs.length) return;
