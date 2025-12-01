@@ -25,13 +25,12 @@ import PropTypes from 'prop-types';
 
 const QADataTableRender = ({
   columnNames,
-  actionColumnName,
   title,
-  columnWidth,
   openHandler,
   data,
   user,
   actionsBtn,
+  addHandler,
   expandableRowComp,
   expandableRowProps,
   onRemoveHandler,
@@ -49,7 +48,7 @@ const QADataTableRender = ({
           selector: (row) => row[`col${index + 1}`],
           sortable: true,
           wrap: true,
-          width: `${columnWidth}%`,
+          width: "10rem",
           style: {
             justifyContent: "left",
           },
@@ -165,29 +164,15 @@ const QADataTableRender = ({
     
   };
 
-  useEffect(() => {
-    // Use a minimal timeout to run this code right after the DOM has updated
-    const timerId = setTimeout(() => {
-      // Find ALL column headers for the first column that are still focusable
-      const focusableHeaders = document.querySelectorAll(
-        'div[data-column-id="1"][role="columnheader"][tabindex="0"]',
-      );
-
-      // Loop through any that were found and fix them
-      focusableHeaders.forEach(header => {
-        header.setAttribute('tabindex', '-1');
-      });
-    }, 0); // A timeout of 0ms defers execution until the next event loop cycle
-
-    // Cleanup function to clear the timeout if the component unmounts
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [data, totalExpand]);
-
   if (actionsBtn) {
     if (actionsBtn === "View") {
       columns.unshift({
+        name: "Actions",
+        button: true,
+        width: "10rem",
+        style: {
+          justifyContent: "left",
+        },
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
@@ -196,9 +181,15 @@ const QADataTableRender = ({
             <div>
               {/* user is logged in and config is checked out */}
               {user && isCheckedOut ? (
-                <div className="editViewExpandGroup ">
+                <div className="editViewExpandGroup margin-left-1">
                   {data.length > 0 && (
                     <>
+                      {expandableRowComp ? (
+                        <span className="margin-right-105 display-flex">
+                          {createExpandBTNS(index, row)}
+                        </span>
+                      ) : null}
+
                       <Button
                         type="button"
                         epa-testid="btnOpen"
@@ -209,6 +200,7 @@ const QADataTableRender = ({
                           openHandler(normalizedRow, false, null, index);
                         }}
                         role="button"
+                        unstyled={true}
                         aria-label={getTableRowActionAriaLabel(
                           dataTableName,
                           row,
@@ -221,21 +213,28 @@ const QADataTableRender = ({
                       </Button>
 
                       {!row?.isSubmitted && (
-                        <RemoveButton
-                          rowNumber={rowNumber}
-                          row={row}
-                          dataTableName={dataTableName}
-                          onConfirm={() => onRemoveHandler(normalizedRow)}
-                        />
+                        <>
+                          <span className="margin-x-1">|</span>
+                          <RemoveButton
+                            rowNumber={rowNumber}
+                            row={row}
+                            dataTableName={dataTableName}
+                            onConfirm={() => onRemoveHandler(normalizedRow)}
+                          />
+                        </>
                       )}
-
-                      {expandableRowComp ? createExpandBTNS(index, row) : null}
                     </>
                   )}
                 </div>
               ) : (
                 // user is not logged in (in public record)
-                <div className="editViewExpandGroup ">
+                <div className="editViewExpandGroup margin-left-1">
+                  {expandableRowComp ? (
+                    <span className="margin-right-105 display-flex">
+                      {createExpandBTNS(index, row)}
+                    </span>
+                  ) : null}
+
                   <Button
                     type="button"
                     epa-testid="btnOpen"
@@ -246,7 +245,7 @@ const QADataTableRender = ({
                       "View",
                       rowNumber
                     )}
-                    outline={true}
+                    unstyled={true}
                     id={`btnEditView${dataTableName.replaceAll(" ", "-")}${index + 1
                       }`}
                     onClick={() => {
@@ -256,7 +255,6 @@ const QADataTableRender = ({
                   >
                     {"View"}
                   </Button>
-                  {expandableRowComp ? createExpandBTNS(index, row) : null}
                 </div>
               )}
             </div>
@@ -273,14 +271,6 @@ const QADataTableRender = ({
     >
       <DataTable
         title = {title}
-        subHeader
-        subHeaderComponent={
-         actionsBtn === "View" && 
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
-
-        {actionColumnName}
-        </div>
-        }
         aria-label={dataTableName}
         sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
         className={`data-display-table react-transition fade-in`}
@@ -300,6 +290,19 @@ const QADataTableRender = ({
         noDataComponent={noDataComp}
         sortFunction={hasEvalStatusColumn(dataTableName) ? (rows, selector, direction) => customSort(rows, selector, direction, columns) : null}
       />
+      {addHandler && user && isCheckedOut && (
+        <div className="margin-top-2">
+          <Button
+            id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
+            epa-testid="btnOpen"
+            onClick={addHandler}
+            outline={true}
+            type="button"
+          >
+            Create {dataTableName}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
