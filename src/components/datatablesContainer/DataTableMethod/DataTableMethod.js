@@ -37,6 +37,7 @@ import {
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { successResponses } from "../../../utils/api/apiUtils";
 import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+import { formatErrorResponse } from '../../../utils/functions.js';
 
 
 export const DataTableMethod = ({
@@ -383,7 +384,7 @@ export const DataTableMethod = ({
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -409,7 +410,7 @@ export const DataTableMethod = ({
         setUpdateTable(true);
         setUpdateRelatedTables(true);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {

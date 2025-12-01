@@ -45,6 +45,7 @@ import {
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import { successResponses } from "../../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../../utils/functions";
 import "./DataTableSystems.scss"
 
 export const DataTableSystems = ({
@@ -395,7 +396,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -421,7 +422,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -464,7 +465,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -508,7 +509,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -556,7 +557,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -591,7 +592,7 @@ export const DataTableSystems = ({
         setUpdateRelatedTables(true);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -654,7 +655,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
