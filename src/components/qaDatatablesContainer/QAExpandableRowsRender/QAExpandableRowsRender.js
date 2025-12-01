@@ -43,6 +43,7 @@ import {
   qaHgInjectionDataProps,
   qaUnitDefaultTestRunDataProps,
 } from '../../../additional-functions/qa-dataTable-props';
+import { formatErrorResponse } from '../../../utils/functions.js';
 
 const QAExpandableRowsRender = ({
   user,
@@ -851,7 +852,7 @@ const QAExpandableRowsRender = ({
         setUpdateTable(true);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -885,7 +886,7 @@ const QAExpandableRowsRender = ({
         setUpdateTable(true);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
