@@ -649,7 +649,9 @@ export const DataTableSystems = ({
         )
         .catch((error) => log.log("createSystemsComponents failed", error));
 
-      if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
+    const responseSuccess = response?.status >= 200 && response?.status < 300;
+    const respSuccess = addExistingComponentFlag ? true : (resp?.status >= 200 && resp?.status < 300);
+      if (responseSuccess && respSuccess) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
