@@ -60,6 +60,7 @@ export const DataTableSystems = ({
   setRevertedState,
   selectedRangeInFirstTest,
   setUpdateRelatedTables,
+  updateRelatedTables,
   currentTabIndex,
   //
 
@@ -135,7 +136,8 @@ export const DataTableSystems = ({
       updateSystemTable ||
       monitoringSystems.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       setDataLoaded(false);
       mpApi
@@ -150,7 +152,7 @@ export const DataTableSystems = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, revertedState, checkout, updateSystemTable]);
+  }, [locationSelectValue, revertedState, checkout, updateSystemTable, updateRelatedTables]);
 
   // load dropdowns data (called once)
   useEffect(() => {
