@@ -62,6 +62,9 @@ import "./ConfigurationManagement.scss";
 
 const DEFAULT_DROPDOWN_TEXT = "-- Select a value --";
 const errorMessages = {
+  DUPLICATE_STACKPIPE_IDS: "Stack/Pipe IDs must be unique.",
+  DUPLICATE_UNIT_STACK_CONFIGS:
+    "Unit/Stack Configurations with the same Unit and Stack/Pipe cannot have the same begin date.",
   EDITS_PENDING: "Please complete any pending edits before continuing.",
   NOT_CHECKED_OUT: "You must check out the facility before saving.",
 };
@@ -672,6 +675,22 @@ export const ConfigurationManagement = ({
 
   /* HANDLERS */
 
+  const checkForDuplicateStackPipeIds = () => {
+    const stackPipeIds = formState.stackPipes.map((sp) => sp.stackPipeId);
+    if (new Set(stackPipeIds).size !== stackPipeIds.length) {
+      return true;
+    }
+  };
+
+  const checkForDuplicateUnitStackConfigs = () => {
+    const unitStackConfigs = formState.unitStackConfigs
+      .map((usc) => [usc.unitId, usc.stackPipeId, usc.beginDate])
+      .map(JSON.stringify);
+    if (new Set(unitStackConfigs).size !== unitStackConfigs.length) {
+      return true;
+    }
+  };
+  
   const checkForPendingEdits = () => {
     return Object.values(formState)
       .flat()
@@ -825,6 +844,13 @@ export const ConfigurationManagement = ({
       newErrorMsgs.push(errorMessages.NOT_CHECKED_OUT);
     }
 
+    if (checkForDuplicateStackPipeIds()) {
+      newErrorMsgs.push(errorMessages.DUPLICATE_STACKPIPE_IDS);
+    }
+
+    if (checkForDuplicateUnitStackConfigs()) {
+      newErrorMsgs.push(errorMessages.DUPLICATE_UNIT_STACK_CONFIGS);
+    }
 
     setErrorMsgs(newErrorMsgs);
     if (newErrorMsgs.length) return;
@@ -1173,6 +1199,8 @@ export const ConfigurationManagement = ({
     switch (msg) {
       case errorMessages.NOT_CHECKED_OUT:
         return canCheckOut && !isCheckedOutByUser;
+      case errorMessages.DUPLICATE_STACKPIPE_IDS:
+        return checkForDuplicateStackPipeIds();
       case errorMessages.EDITS_PENDING:
         return checkForPendingEdits();
       default:
