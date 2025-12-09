@@ -45,6 +45,7 @@ import {
   returnFocusToLast,
 } from "../../../additional-functions/manage-focus";
 import { successResponses } from "../../../utils/api/apiUtils";
+import { formatErrorResponse } from "../../../utils/functions";
 import "./DataTableSystems.scss"
 
 export const DataTableSystems = ({
@@ -59,6 +60,7 @@ export const DataTableSystems = ({
   setRevertedState,
   selectedRangeInFirstTest,
   setUpdateRelatedTables,
+  updateRelatedTables,
   currentTabIndex,
   //
 
@@ -134,7 +136,8 @@ export const DataTableSystems = ({
       updateSystemTable ||
       monitoringSystems.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       setDataLoaded(false);
       mpApi
@@ -149,7 +152,7 @@ export const DataTableSystems = ({
       setRevertedState(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, revertedState, checkout, updateSystemTable]);
+  }, [locationSelectValue, revertedState, checkout, updateSystemTable, updateRelatedTables]);
 
   // load dropdowns data (called once)
   useEffect(() => {
@@ -395,7 +398,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -421,7 +424,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -464,7 +467,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -508,7 +511,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -556,7 +559,7 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -591,7 +594,7 @@ export const DataTableSystems = ({
         setUpdateRelatedTables(true);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -648,13 +651,15 @@ export const DataTableSystems = ({
         )
         .catch((error) => log.log("createSystemsComponents failed", error));
 
-      if ((resp?.status >= 200 && resp?.status < 300) || (response?.status >= 200 && response?.status < 300)) {
+    const responseSuccess = response?.status >= 200 && response?.status < 300;
+    const respSuccess = addExistingComponentFlag ? true : (resp?.status >= 200 && resp?.status < 300);
+      if (responseSuccess && respSuccess) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {

@@ -154,7 +154,7 @@ describe("Test cases for QAExpandableRowsRender", () => {
     expect(rows).toHaveLength(protocolGasData.length);
 
     // add row
-    const addBtn = screen.getByRole("button", { name: /Add/i });
+    const addBtn = screen.getByRole("button", { name: /Create/i });
     await userEvent.click(addBtn);
     // let saveAndCloseBtn = screen.getByRole("button", {
     //   name: /Save and Close/i,
