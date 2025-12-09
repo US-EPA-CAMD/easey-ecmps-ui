@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { OpenInNew } from "@material-ui/icons";
 import ReactMarkdown from "react-markdown";
@@ -46,6 +47,13 @@ const getHeadingText = (children) => {
   return "";
 };
 
+const linkComponentPropTypes = {
+  node: PropTypes.object,
+  href: PropTypes.string,
+  children: PropTypes.node,
+  onLinkClick: PropTypes.func.isRequired,
+};
+
 const LinkComponent = ({ node, href, children, onLinkClick, ...props }) => {
   const isExternal = href?.startsWith("http://") || href?.startsWith("https://");
   const linkText = extractTextFromChildren(children);
@@ -64,7 +72,14 @@ const LinkComponent = ({ node, href, children, onLinkClick, ...props }) => {
   );
 };
 
-const Heading2Component = ({ node, children, onLinkClick, ...props }) => {
+LinkComponent.propTypes = linkComponentPropTypes;
+
+const heading2ComponentPropTypes = {
+  node: PropTypes.object,
+  children: PropTypes.node,
+};
+
+const Heading2Component = ({ node, children, ...props }) => {
   const headingText = getHeadingText(children);
   const id = createHeadingId(headingText);
 
@@ -75,7 +90,14 @@ const Heading2Component = ({ node, children, onLinkClick, ...props }) => {
   );
 };
 
-const Heading3Component = ({ node, children, onLinkClick, ...props }) => {
+Heading2Component.propTypes = heading2ComponentPropTypes;
+
+const heading3ComponentPropTypes = {
+  node: PropTypes.object,
+  children: PropTypes.node,
+};
+
+const Heading3Component = ({ node, children, ...props }) => {
   const headingText = getHeadingText(children);
   const id = createHeadingId(headingText);
 
@@ -86,6 +108,13 @@ const Heading3Component = ({ node, children, onLinkClick, ...props }) => {
   );
 };
 
+Heading3Component.propTypes = heading3ComponentPropTypes;
+
+const tableComponentPropTypes = {
+  node: PropTypes.object,
+  children: PropTypes.node,
+};
+
 const TableComponent = ({ node, children, ...props }) => (
   <div className="table-responsive">
     <table className="usa-table usa-table--striped" {...props}>
@@ -93,6 +122,13 @@ const TableComponent = ({ node, children, ...props }) => (
     </table>
   </div>
 );
+
+TableComponent.propTypes = tableComponentPropTypes;
+
+const blockquoteComponentPropTypes = {
+  node: PropTypes.object,
+  children: PropTypes.node,
+};
 
 const BlockquoteComponent = ({ node, children, ...props }) => {
   const text = extractTextFromChildren(children);
@@ -104,6 +140,15 @@ const BlockquoteComponent = ({ node, children, ...props }) => {
       {children}
     </div>
   );
+};
+
+BlockquoteComponent.propTypes = blockquoteComponentPropTypes;
+
+const codeComponentPropTypes = {
+  node: PropTypes.object,
+  inline: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.node,
 };
 
 const CodeComponent = ({ node, inline, className, children, ...props }) => {
@@ -124,25 +169,41 @@ const CodeComponent = ({ node, inline, className, children, ...props }) => {
   );
 };
 
+CodeComponent.propTypes = codeComponentPropTypes;
+
+const createMarkdownComponents = (onLinkClick) => ({
+  a: (props) => <LinkComponent {...props} onLinkClick={onLinkClick} />,
+  h2: Heading2Component,
+  h3: Heading3Component,
+  table: TableComponent,
+  blockquote: BlockquoteComponent,
+  code: CodeComponent,
+});
+
 export const UsersGuideSimple = () => {
   const [mainContent, setMainContent] = useState("");
   const navigate = useNavigate();
 
   const handleLinkClick = useCallback((e, href) => {
-    if (href.startsWith("#")) {
+    if (href?.startsWith("#")) {
       e.preventDefault();
       const element = document.getElementById(href.substring(1));
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
-    } else if (href.includes("http://") || href.includes("https://")) {
+    } else if (href?.includes("http://") || href?.includes("https://")) {
       window.open(href, "_blank", "noopener,noreferrer");
       e.preventDefault();
-    } else if (href.startsWith("/")) {
+    } else if (href?.startsWith("/")) {
       e.preventDefault();
       navigate(href);
     }
   }, [navigate]);
+
+  const components = React.useMemo(() => 
+    createMarkdownComponents(handleLinkClick),
+    [handleLinkClick]
+  );
 
   useEffect(() => {
     document.title = "ECMPS Industry User Guide";
@@ -163,15 +224,6 @@ export const UsersGuideSimple = () => {
       }, 100);
     }
   }, []);
-
-  const components = React.useMemo(() => ({
-    a: (props) => <LinkComponent {...props} onLinkClick={handleLinkClick} />,
-    h2: (props) => <Heading2Component {...props} />,
-    h3: (props) => <Heading3Component {...props} />,
-    table: TableComponent,
-    blockquote: BlockquoteComponent,
-    code: CodeComponent,
-  }), [handleLinkClick]);
 
   return (
     <div className="padding-top-7 padding-2 react-transition fade-in">
