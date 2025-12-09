@@ -23,7 +23,7 @@ export const HelpSupport = () => {
     getContent("/ecmps/help-support/faqs.md").then((resp) =>
       setFaqsContent(resp.data)
     );
-    getContent("/ecmps/help-support/tutorials.md").then((resp) =>
+    getContent("/ecmps/help-support/usersGuide.md").then((resp) =>
       setTutorialsContent(resp.data)
     );
     getContent("/ecmps/help-support/contactUs.md").then((resp) =>
@@ -68,10 +68,27 @@ export const HelpSupport = () => {
       </div>
       <div className="grid-row margin-top-5">
         <ReactMarkdown
-          className="tutorials-content"
+          className="users-guide-content"
           children={tutorialsContent}
           remarkPlugins={[remarkGfm]}
         />
+        <div className="flex-force-break" />
+        <USWDSLink
+          className="usa-button usa-button--outline margin-0 margin-left-05"
+          outline="true"
+          type="button"
+          variant="unstyled"
+          asCustom={Link}
+          to="/users-guide"
+          role="link"
+          exact="true"
+          rel="UsersGuide"
+          title="Go to User's Guide page"
+          key="linkUsersGuide"
+          data-testid="linkUsersGuide"
+        >
+          Visit User's Guide
+        </USWDSLink>
       </div>
       <div className="grid-row margin-top-5">
         <ReactMarkdown

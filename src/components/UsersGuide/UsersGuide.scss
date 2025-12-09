@@ -1,0 +1,128 @@
+@use "../../../public/scss/variables" as *;
+
+.users-guide {
+  &-content {
+    .users-guide-h3 {
+      color: $epa-darkslate-blue;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      scroll-margin-top: 80px;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border: 1px solid $epa-gray;
+      border-radius: 4px;
+
+      .usa-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+
+        th {
+          background-color: $epa-blue-base;
+          color: $epa-white;
+          font-weight: bold;
+          text-align: left;
+          padding: 1rem;
+          border: 1px solid $epa-blue-base;
+        }
+
+        td {
+          padding: 1rem;
+          border: 1px solid $epa-gray;
+        }
+
+        tbody tr:nth-child(odd) {
+          background-color: $epa-white;
+        }
+
+        tbody tr:nth-child(even) {
+          background-color: $epa-off-white;
+        }
+      }
+    }
+
+    .epa-blockquote {
+      border-left: 4px solid $epa-blue-base;
+      padding: 0.5rem 2rem;
+      margin: 2rem 0;
+      background-color: rgba($epa-blue-base, 0.1);
+      font-style: italic;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .alert-blockquote {
+      border-left: 4px solid $epa-yellow;
+      background-color: rgba($epa-yellow, 0.1);
+    }
+
+    ul,
+    ol {
+      margin-left: 2rem;
+      margin-bottom: 1.5rem;
+
+      li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+
+        &::marker {
+          color: $epa-blue-base;
+        }
+      }
+    }
+
+    .code-block {
+      background-color: $epa-off-white;
+      border: 1px solid $epa-gray;
+      border-radius: 4px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: monospace;
+      font-size: 0.95rem;
+
+      code {
+        background-color: transparent;
+        padding: 0;
+        color: $epa-black;
+      }
+    }
+
+    .inline-code {
+      background-color: $epa-off-white;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.9em;
+      color: $epa-red;
+      border: 1px solid $epa-gray;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid $epa-gray;
+    }
+    h2 {
+      color: $epa-blue-base;
+      font-size: 1.7rem;
+    }
+  }
+}
