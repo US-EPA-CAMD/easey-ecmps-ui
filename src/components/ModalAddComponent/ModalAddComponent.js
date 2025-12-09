@@ -33,7 +33,6 @@ const ModalAddComponent = ({
       mpApi
         .getMonitoringSystemsComponents(locationId, systemId)
         .then((ress) => {
-          log.log("ress", ress);
           setSysComps(ress.data?.items);
         })
         .catch((error) =>

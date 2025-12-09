@@ -631,19 +631,20 @@ export const DataTableSystems = ({
       setErrorMsgs(validationErrors);
       return false;
     }
+
     try {
       let resp;
       let response;
-        if (!addExistingComponentFlag) {
-          resp = await mpApi
+      if (!addExistingComponentFlag) {
+        resp = await mpApi
           .createComponents(
             userInput,
             selectedSystem.locationId,
             selectedSystem.id
           )
           .catch((error) => log.log("createComponents failed", error));
-        }
-        response = await mpApi
+      }
+      response = await mpApi
         .createSystemsComponents(
           userInput,
           selectedSystem.locationId,
@@ -651,16 +652,18 @@ export const DataTableSystems = ({
         )
         .catch((error) => log.log("createSystemsComponents failed", error));
 
-    const responseSuccess = response?.status >= 200 && response?.status < 300;
-    const respSuccess = addExistingComponentFlag ? true : (resp?.status >= 200 && resp?.status < 300);
+      const responseSuccess = response?.status >= 200 && response?.status < 300;
+      const respSuccess = addExistingComponentFlag ? true : (resp?.status >= 200 && resp?.status < 300);
+
       if (responseSuccess && respSuccess) {
         setupdateComponentTable(true);
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResp = formatErrorResponse(resp);
-        setErrorMsgs(errorResp);
+        const errorResponse = formatErrorResponse(response);
+        const errorResp = resp ? formatErrorResponse(resp) : [];
+        setErrorMsgs(errorResponse.concat(errorResp));
       }
     } catch (error) {
       setErrorMsgs([JSON.stringify(error)]);
