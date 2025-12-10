@@ -59,6 +59,7 @@ export const DataTableQualifications = ({
   setRevertedState,
   selectedLocation,
   setUpdateRelatedTables,
+  updateRelatedTables,
   currentTabIndex,
   //
 
@@ -120,7 +121,8 @@ export const DataTableQualifications = ({
       updateTable ||
       qualificationData?.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       setDataLoaded(false);
       mpApi
@@ -138,7 +140,7 @@ export const DataTableQualifications = ({
         .catch((error) => log.log("getQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
 
   // load dropdowns data (called once)
   useEffect(() => {
