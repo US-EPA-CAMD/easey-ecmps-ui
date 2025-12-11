@@ -538,7 +538,6 @@ const App = () => {
           <Route path={`/faqs`} element={<FAQ />} />
           <Route path="/signup-migrate" element={<UserAccountStatus />} />
           <Route path="/users-guide" element={<UsersGuide />} />
-          <Route path="/cam-api" element={<ComingSoon />} />
           <Route path="/glossary" element={<ComingSoon />} />
           <Route
             path="/reporting-instructions"
