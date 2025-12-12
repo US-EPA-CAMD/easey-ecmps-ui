@@ -9,7 +9,7 @@ import {
 } from "../../../utils/functions";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import { LockSharp } from "@material-ui/icons";
+import CheckedOutCell from "./CheckedOutCell";
 import "./CategoryTable.scss";
 
 export const CategoryTable = ({
@@ -106,18 +106,9 @@ export const CategoryTable = ({
 
   mappings.push({
     name: "Checked Out",
-    cell: (row, idx) => {
-      return (
-        <div className="grid-row">
-          {row.checkedOutBy && row.checkedOutBy !== userId && (
-            <div>
-              <div>{row.checkedOutBy !== "" && <LockSharp />}</div>
-              <div className="checkOutBy">{row.checkedOutBy}</div>
-            </div>
-          )}
-        </div>
-      );
-    },
+    cell: (row, idx) => (
+      <CheckedOutCell key={idx} checkedOutBy={row.checkedOutBy} />
+    ),
     width: "150px",
   });
 
@@ -168,3 +159,5 @@ export const CategoryTable = ({
     </div>
   );
 };
+
+export default CategoryTable;

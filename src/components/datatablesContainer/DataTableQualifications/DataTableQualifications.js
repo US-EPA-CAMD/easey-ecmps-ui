@@ -44,6 +44,7 @@ import {
   unsavedDataMessage,
 } from "../../../additional-functions/prompt-to-save-unsaved-changes";
 import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
+import { formatErrorResponse } from '../../../utils/functions.js';
 import "./DataTableQualifications.scss";
 
 export const DataTableQualifications = ({
@@ -58,6 +59,7 @@ export const DataTableQualifications = ({
   setRevertedState,
   selectedLocation,
   setUpdateRelatedTables,
+  updateRelatedTables,
   currentTabIndex,
   //
 
@@ -119,7 +121,8 @@ export const DataTableQualifications = ({
       updateTable ||
       qualificationData?.length <= 0 ||
       locationSelectValue ||
-      revertedState
+      revertedState ||
+      updateRelatedTables
     ) {
       setDataLoaded(false);
       mpApi
@@ -137,7 +140,7 @@ export const DataTableQualifications = ({
         .catch((error) => log.log("getQualifications failed", error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationSelectValue, updateTable, revertedState]);
+  }, [locationSelectValue, updateTable, revertedState, updateRelatedTables]);
 
   // load dropdowns data (called once)
   useEffect(() => {
@@ -291,7 +294,7 @@ export const DataTableQualifications = ({
         setUpdateRelatedTables(true);
         setErrorMsgs([]);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {

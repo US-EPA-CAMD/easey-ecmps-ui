@@ -690,7 +690,7 @@ export const ConfigurationManagement = ({
       return true;
     }
   };
-
+  
   const checkForPendingEdits = () => {
     return Object.values(formState)
       .flat()

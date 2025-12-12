@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import log from "loglevel";
 
-import { Button } from '@trussworks/react-uswds';
 import {
   attachChangeEventListeners,
   removeChangeEventListeners,
@@ -43,6 +42,7 @@ import {
   qaHgInjectionDataProps,
   qaUnitDefaultTestRunDataProps,
 } from '../../../additional-functions/qa-dataTable-props';
+import { formatErrorResponse } from '../../../utils/functions.js';
 
 const QAExpandableRowsRender = ({
   user,
@@ -851,7 +851,7 @@ const QAExpandableRowsRender = ({
         setUpdateTable(true);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -885,7 +885,7 @@ const QAExpandableRowsRender = ({
         setUpdateTable(true);
         executeOnClose();
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -958,40 +958,24 @@ const QAExpandableRowsRender = ({
     return expandables;
   };
 
+  const addHandler = () => openModal(false, false, true);
+
   return (
     <div className="padding-y-3">
       <div className={`usa-overlay ${show ? 'is-visible' : ''}`} />
       {!loading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
+          title={dataTableName}
           data={displayedRecords}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           user={user}
           actionsBtn={'View'}
+          addHandler={addHandler}
           isCheckedOut={isCheckedOut}
           dataTableName={dataTableName}
           sectionSelect={sectionSelect}
-          actionColumnName={
-            user && isCheckedOut ? (
-              <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">
-                  {dataTableName}
-                </span>
-                <Button
-                  id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
-                  epa-testid="btnOpen"
-                  className="text-white display-table-cell"
-                  onClick={() => openModal(false, false, true)}
-                >
-                  Add
-                </Button>
-              </div>
-            ) : (
-              dataTableName
-            )
-          }
           expandableRowComp={expandable ? QAExpandableRowsRender : false}
           expandableRowProps={nextExpandableRow(dataTableName)}
           // shows empty table with add if user is logged in
@@ -1000,29 +984,17 @@ const QAExpandableRowsRender = ({
               <div>
                 <QADataTableRender
                   columnNames={columns}
-                  columnWidth={10}
+                  title={dataTableName}
                   data={[]}
                   isCheckedOut={isCheckedOut}
                   sectionSelect={sectionSelect}
-                  actionColumnName={
-                    <>
-                      <span className="padding-right-2">{dataTableName}</span>
-                      <Button
-                        id={`btnAdd${dataTableName.replaceAll(' ', '-')}`}
-                        epa-testid="btnOpen"
-                        className="text-white"
-                        onClick={() => openModal(false, false, true)}
-                      >
-                        Add
-                      </Button>
-                    </>
-                  }
+                  addHandler={addHandler}
                   actionsBtn={'View'}
                   user={user}
                 />
               </div>
             ) : (
-              `There're no ${dataTableName} records available.`
+              `There are no ${dataTableName} records available.`
             )
           }
         />

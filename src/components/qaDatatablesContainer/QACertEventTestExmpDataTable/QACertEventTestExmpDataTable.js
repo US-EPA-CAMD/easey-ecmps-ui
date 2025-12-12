@@ -23,7 +23,6 @@ import {
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
-import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import * as dmApi from "../../../utils/api/dataManagementApi";
 import * as mpApi from "../../../utils/api/monitoringPlansApi.js";
@@ -521,64 +520,36 @@ const QACertEventTestExmpDataTable = ({
     }
   };
 
+  const addHandler = () => openModal(false, false, true);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
+          title={dataTableName}
           data={data}
           openHandler={openModal}
           onRemoveHandler={onRemoveHandler}
           isCheckedOut={isCheckedOut}
           dataTableName={dataTableName}
-          actionColumnName={
-            user && isCheckedOut ? (
-              <div className="display-table-row">
-                <span className="padding-right-2 text-wrap display-table-cell">
-                  {dataTableName}
-                </span>
-                <Button
-                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                  epa-testid="btnOpen"
-                  className="text-white display-table-cell"
-                  onClick={() => openModal(false, false, true)}
-                >
-                  Add
-                </Button>
-              </div>
-            ) : (
-              dataTableName
-            )
-          }
           actionsBtn={"View"}
+          addHandler={addHandler}
           user={user}
           noDataComp={
             user && isCheckedOut ? (
               <QADataTableRender
                 columnNames={columns}
-                columnWidth={10}
+                title={dataTableName}
                 data={[]}
                 isCheckedOut={isCheckedOut}
-                actionColumnName={
-                  <>
-                    <span className="padding-right-2">Test Data</span>
-                    <Button
-                      id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                }
+                addHandler={addHandler}
                 actionsBtn={"View"}
                 user={user}
               />
             ) : (
-              `There're no ${dataTableName} records available.`
+              `There are no ${dataTableName} records available.`
             )
           }
         />
