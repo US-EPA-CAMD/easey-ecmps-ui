@@ -383,6 +383,7 @@ export const DataTableMethod = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
@@ -409,6 +410,7 @@ export const DataTableMethod = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
