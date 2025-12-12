@@ -176,6 +176,7 @@ export const DataTableComments = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
@@ -194,6 +195,7 @@ export const DataTableComments = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);

@@ -229,6 +229,7 @@ export const DataTableAssert = ({
         setDataLoaded(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         setErrorMsgs(getErrorListFromResponse(resp));
       }
@@ -261,6 +262,7 @@ export const DataTableAssert = ({
         setDataLoaded(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         setErrorMsgs(getErrorListFromResponse(resp));
       }
