@@ -406,6 +406,7 @@ export const AddErrorSupressionModal = ({
       );
       if (successResponses.includes(resp.status)) {
         close();
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
