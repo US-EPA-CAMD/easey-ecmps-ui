@@ -109,6 +109,10 @@ export const config = {
       "VITE_EASEY_ECMPS_UI_ENABLE_SYSTEM_ADMINISTRATION_MODULE",
       true
     ),
+    camApiPortalPath: getConfigValue(
+      "VITE_EASEY_ECMPS_UI_CAM_API_PORTAL_PATH",
+      "https://www.epa.gov/power-sector/cam-api-portal"
+    ),
 
 
     oidcClientId: getConfigValue("VITE_EASEY_ECMPS_UI_OIDC_CLIENT_ID"),

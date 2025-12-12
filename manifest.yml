@@ -48,6 +48,7 @@ applications:
       VITE_EASEY_ECMPS_UI_OIDC_AUTH_RESPONSE_MODE: ((oidcAuthResponseMode))
       VITE_EASEY_ECMPS_UI_OIDC_AUTH_SCOPES: ((oidcAuthScopes))
       VITE_EASEY_ECMPS_UI_CDX_SIGNUP_MIGRATE_URL: ((cdxUserSignupMigrateUrl))
+      VITE_EASEY_ECMPS_UI_CAM_API_PORTAL_PATH: ((camApiPortalPath))
 
     routes:
       - route: ((host))

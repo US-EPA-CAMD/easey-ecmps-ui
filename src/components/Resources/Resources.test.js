@@ -2,6 +2,7 @@ import React from "react";
 import Resources from "./Resources";
 import { fireEvent, screen, wait } from "@testing-library/react";
 import render from "../../mocks/render";
+import config from '../../config';
 
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
@@ -49,7 +50,7 @@ describe("Resources component ", () => {
     const repInstLink = screen.getByRole('link', { name: 'Visit Reporting Instructions' })
     expect(repInstLink).toHaveAttribute('href', '/reporting-instructions');
     const camApiLink = screen.getByRole('link', { name: 'Visit CAM API' })
-    expect(camApiLink).toHaveAttribute('href', '/cam-api');
+    expect(camApiLink).toHaveAttribute('href', config.app.camApiPortalPath);
     //screen.debug(null, Infinity);
   });
 });
