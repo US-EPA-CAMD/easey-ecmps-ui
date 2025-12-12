@@ -28,6 +28,7 @@ import {
 import { ensure508 } from "../../../additional-functions/ensure-508";
 import { returnsFocusMpDatatableCreateBTN } from "../../../additional-functions/ensure-508";
 import PropTypes from 'prop-types';
+import { formatErrorResponse } from '../../../utils/functions';
 
 export const DataTableComments = ({
   locationSelectValue,
@@ -175,8 +176,9 @@ export const DataTableComments = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {
@@ -193,8 +195,9 @@ export const DataTableComments = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {

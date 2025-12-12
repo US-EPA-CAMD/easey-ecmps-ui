@@ -271,7 +271,7 @@ export const DataTableRender = ({
       columns.push({
         name: <span>{"Actions"}</span>,
         button: true,
-        width: "25%",
+        width: "15rem",
         cell: (row) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
@@ -384,7 +384,7 @@ export const DataTableRender = ({
                       ? `btnOpen${tableTitle.split(" ").join("")}`
                       : `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
+                  className="cursor-pointer open-modal-button text-no-wrap"
                   onClick={() => {
                     storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}
@@ -402,7 +402,7 @@ export const DataTableRender = ({
       columns.unshift({
         name: <span>{"Actions"}</span>,
         button: true,
-        width: "15%",
+        width: "10rem",
         cell: (row, index) => {
           // *** normalize the row object to be in the format expected by DynamicTabs
           const normalizedRow = normalizeRowObjectFormat(row, columnNames);
@@ -413,10 +413,10 @@ export const DataTableRender = ({
               {user ? (
                 <Button
                   type="button"
-                  unstyled="true"
+                  unstyled={true}
                   epa-testid="btnOpen"
                   data-testid={`viewEditBtn-${index}`}
-                  className="cursor-pointer open-modal-button text-no-wrap"
+                  className="cursor-pointer  open-modal-button text-no-wrap margin-left-1"
                   id={
                     // tableTitle
                     //   ? `btnOpen${tableTitle.split(" ").join("")}`
@@ -438,7 +438,7 @@ export const DataTableRender = ({
                 // user is not logged in (in public record)
                 <Button
                   type="button"
-                  unstyled="true"
+                  unstyled={true}
                   epa-testid="btnOpen"
                   id={
                     // tableTitle
@@ -446,7 +446,7 @@ export const DataTableRender = ({
                     // :
                     `btnOpen_${row[`col${Object.keys(row).length - 1}`]}`
                   }
-                  className="cursor-pointer margin-left-2 open-modal-button text-no-wrap"
+                  className="cursor-pointer  open-modal-button text-no-wrap margin-left-1"
                   onClick={() => {
                     storeActiveElementAndCallOpenHandler(normalizedRow, false);
                   }}

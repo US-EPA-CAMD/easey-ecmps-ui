@@ -37,7 +37,6 @@ import {
 /*********** COMPONENTS ***********/
 
 import QADataTableRender from "../../QADataTableRender/QADataTableRender.js";
-import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import {
   getQAColsByTestCode,
@@ -562,6 +561,7 @@ const QATestSummaryDataTable = ({
         } else {
           setUpdateTable(true);
           executeOnClose();
+          setErrorMsgs([]);
         }
       })
       .catch((error) => {
@@ -602,6 +602,7 @@ const QATestSummaryDataTable = ({
         if (successResponses.includes(res.status)) {
           setCreatedId(res.data.id);
           setUpdateTable(true);
+          setErrorMsgs([]);
         } else {
           if (Object.prototype.toString.call(res) === "[object Array]") {
             setErrorMsgs(res);
@@ -695,13 +696,15 @@ const QATestSummaryDataTable = ({
       isCheckedOut: isCheckedOut,
     };
   };
+
+  const addHandler = () => openModal(false, false, true);
+
   return (
     <div>
       <div className={`usa-overlay ${show ? "is-visible" : ""}`} />
       {!loading || !dropdownsLoading ? (
         <QADataTableRender
           columnNames={columns}
-          columnWidth={10}
           title={dataTableName}
           data={data}
           openHandler={openModal}
@@ -709,24 +712,8 @@ const QATestSummaryDataTable = ({
           isCheckedOut={isCheckedOut}
           dataTableName="Test Summary Data"
           sectionSelect={sectionSelect}
-          actionColumnName={
-            user && isCheckedOut ? (
-              <div className="display-table-row">
-                <Button
-                  id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                  epa-testid="btnOpen"
-                  className="text-white display-table-cell"
-                  onClick={() => openModal(false, false, true)}
-                  aria-label={`Add ${dataTableName}`}
-                >
-                  Add
-              </Button>
-              </div>
-            ) : (
-              "Test Data"
-            )
-          }
           actionsBtn={"View"}
+          addHandler={addHandler}
           user={user}
           expandableRowComp={
             (selectedTestCode.testTypeGroupCode !== "PEI") && (selectedTestCode.testTypeGroupCode !== "MISC")
@@ -745,29 +732,16 @@ const QATestSummaryDataTable = ({
             user && isCheckedOut ? (
               <QADataTableRender
                 columnNames={columns}
-                columnWidth={10}
                 title={dataTableName}
                 data={[]}
                 isCheckedOut={isCheckedOut}
                 sectionSelect={sectionSelect}
-                actionColumnName={
-                  <>
-                    <Button
-                      id={`btnAdd${dataTableName.replaceAll(" ", "-")}`}
-                      epa-testid="btnOpen"
-                      className="text-white"
-                      aria-label={`Add ${dataTableName}`}
-                      onClick={() => openModal(false, false, true)}
-                    >
-                      Add
-                    </Button>
-                  </>
-                }
+                addHandler={addHandler}
                 actionsBtn={"View"}
                 user={user}
               />
             ) : (
-              "There're no test summary records available."
+              "There are no test summary records available."
             )
           }
         />

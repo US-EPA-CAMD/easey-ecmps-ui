@@ -33,6 +33,7 @@ import { createErrorSuppression } from "../../../utils/api/errorSuppressionApi";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import { successResponses } from "../../../utils/api/apiUtils";
+import { formatErrorResponse } from '../../../utils/functions.js';
 
 export const AddErrorSupressionModal = ({
   showModal,
@@ -405,8 +406,9 @@ export const AddErrorSupressionModal = ({
       );
       if (successResponses.includes(resp.status)) {
         close();
+        setErrorMsgs([]);
       } else {
-        const errorResp = Array.isArray(resp) ? resp : [resp];
+        const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
       }
     } catch (error) {

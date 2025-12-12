@@ -690,7 +690,7 @@ export const ConfigurationManagement = ({
       return true;
     }
   };
-
+  
   const checkForPendingEdits = () => {
     return Object.values(formState)
       .flat()
@@ -815,6 +815,7 @@ export const ConfigurationManagement = ({
         ...sendSingleUnitPayloads(false),
       ]);
       setSaveStatus(DataStatus.SUCCESS);
+      setErrorMsgs([]);
       [
         setMonitoringPlansStatus,
         setUnitsStatus,

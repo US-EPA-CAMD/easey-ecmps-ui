@@ -16,18 +16,6 @@ export const secureAxios = async (options) => {
   try {
     const ecmpsUser = localStorage.getItem("ecmps_user");
 
-    if (localStorage.getItem("client_token")) {
-      if (
-        new Date() > new Date(localStorage.getItem("client_token_expiration"))
-      ) {
-        await refreshClientToken();
-      }
-    } else {
-      await refreshClientToken();
-    }
-
-    const clientToken = localStorage.getItem("client_token");
-
     if (ecmpsUser) {
       const token = await refreshToken();
 
@@ -36,15 +24,13 @@ export const secureAxios = async (options) => {
           ...options.headers,
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
-          "x-client-token": `Bearer ${clientToken}`,
-          "x-client-id": config.app.clientId,
+          "x-app-identifier": config.app.appIdentifier,
         };
       } else {
         options.headers = {
           authorization: `Bearer ${token}`,
           "x-api-key": config.app.apiKey,
-          "x-client-token": `Bearer ${clientToken}`,
-          "x-client-id": config.app.clientId,
+          "x-app-identifier": config.app.appIdentifier,
         };
       }
     } else {
@@ -52,14 +38,12 @@ export const secureAxios = async (options) => {
         options.headers = {
           ...options.headers,
           "x-api-key": config.app.apiKey,
-          "x-client-token": `Bearer ${clientToken}`,
-          "x-client-id": config.app.clientId,
+          "x-app-identifier": config.app.appIdentifier,
         };
       } else {
         options.headers = {
           "x-api-key": config.app.apiKey,
-          "x-client-token": `Bearer ${clientToken}`,
-          "x-client-id": config.app.clientId,
+          "x-app-identifier": config.app.appIdentifier,
         };
       }
     }
@@ -70,29 +54,6 @@ export const secureAxios = async (options) => {
   return axios(options);
 };
 
-export const refreshClientToken = async () => {
-  try {
-    const url = `${config.services.authApi.uri}/tokens/client`;
-
-    if (!config.app.clientId || !config.app.clientSecret) {
-      displayAppError(
-        "Application client id/secret is required and was not configured"
-      );
-      return;
-    }
-
-    const response = await axios.post(
-      url,
-      { clientId: config.app.clientId, clientSecret: config.app.clientSecret },
-      { headers: { "x-api-key": config.app.apiKey } }
-    );
-
-    localStorage.setItem("client_token", response.data.token);
-    localStorage.setItem("client_token_expiration", response.data.expiration);
-  } catch (err) {
-    displayAppError(err.response?.data?.message || err?.message || err);
-  }
-};
 
 export const refreshLastActivity = async () => {
   try {
