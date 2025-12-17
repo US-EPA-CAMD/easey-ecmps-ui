@@ -181,8 +181,8 @@ export const refreshToken = async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       waitDuration += 100;
     }
-    localStorage.setItem("ecmps_refreshing_token", "false");
 
+    // Read user AFTER waiting to ensure we have the latest token if another request just refreshed
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
     const currDate = currentDateTime();
@@ -191,27 +191,53 @@ export const refreshToken = async () => {
     tokenExp.setSeconds(tokenExp.getSeconds() - 60);
 
     if (currDate > tokenExp) {
-      localStorage.setItem("ecmps_refreshing_token", "true");
-      const result = await axios({
-        method: "POST",
-        url: `${config.services.authApi.uri}/tokens`,
-        headers: {
-          authorization: `Bearer ${user.token}`,
-          "x-api-key": config.app.apiKey,
-        },
-        data: {
-          userId: user.userId,
-        },
-      });
+      // Atomic check and set the value: only proceed if we successfully claim the lock
+      if (localStorage.getItem("ecmps_refreshing_token") === "true") {
+        // Another request claimed the lock while we were checking expiration, wait for it
+        let retryWait = 0;
+        while (
+          localStorage.getItem("ecmps_refreshing_token") === "true" &&
+          retryWait < config.app.tokenRefreshThresholdSeconds
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          retryWait += 100;
+        }
+        // Re-read user after waiting to get the refreshed token
+        const refreshedUser = JSON.parse(localStorage.getItem("ecmps_user"));
+        return refreshedUser.token;
+      }
 
-      user.token = result.data.token;
-      user.tokenExpiration = result.data.expiration;
-      localStorage.setItem("ecmps_user", JSON.stringify(user));
-      localStorage.setItem("ecmps_refreshing_token", "false");
+      localStorage.setItem("ecmps_refreshing_token", "true");
+
+      try {
+        const result = await axios({
+          method: "POST",
+          url: `${config.services.authApi.uri}/tokens`,
+          headers: {
+            authorization: `Bearer ${user.token}`,
+            "x-api-key": config.app.apiKey,
+          },
+          data: {
+            userId: user.userId,
+          },
+        });
+
+        user.token = result.data.token;
+        user.tokenExpiration = result.data.expiration;
+        localStorage.setItem("ecmps_user", JSON.stringify(user));
+      } finally {
+        localStorage.setItem("ecmps_refreshing_token", "false");
+      }
     }
     return user.token;
   } catch (e) {
+    localStorage.setItem("ecmps_refreshing_token", "false");
     displayAppError(e);
+
+    // Self-healing: Re-read localStorage in case another concurrent request succeeded
+    // If token is still stale, the subsequent API call will fail with 401 and trigger re-login
+    const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
+    return currentUser?.token;
   }
 };
 
