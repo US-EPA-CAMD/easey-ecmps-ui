@@ -173,15 +173,6 @@ export const refreshToken = async () => {
       localStorage.setItem("ecmps_refreshing_token", "false");
     }
 
-    let waitDuration = 0; //Keep track of how long the current call is occuring for, force it through after a certain amount of seconds
-    while (
-      localStorage.getItem("ecmps_refreshing_token") === "true" &&
-      waitDuration < config.app.tokenRefreshThresholdSeconds
-    ) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      waitDuration += 100;
-    }
-
     // Read user AFTER waiting to ensure we have the latest token if another request just refreshed
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
 
