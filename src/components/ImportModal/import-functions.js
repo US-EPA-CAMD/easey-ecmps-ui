@@ -33,7 +33,7 @@ export const checkingCorrectSchema = (
           setDisablePortBtn
         );
       } // incorrect schema with section
-      if (!file.unitStackConfigurationData) {
+      if (!file.monitoringLocationData) {
         errorChecks(true);
         setSchemaErrors(["Only Monitoring Plan (MP) files may be imported"]);
       }
