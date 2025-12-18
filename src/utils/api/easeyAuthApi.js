@@ -216,9 +216,11 @@ export const refreshToken = async () => {
 
           return user.token;
         } catch (error) {
-          // On error, re-read localStorage in case another request succeeded
+          // On error, display error and return current token from localStorage
+          displayAppError(error);
+          // Re-read localStorage in case another concurrent request succeeded
           const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
-          throw error; // Re-throw so caller knows refresh failed
+          return currentUser?.token;
         } finally {
           // Always clean up the promise reference when done
           activeRefreshPromise = null;
