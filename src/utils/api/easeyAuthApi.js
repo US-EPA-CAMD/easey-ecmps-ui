@@ -95,6 +95,9 @@ export const authenticate = async (payload) => {
 function storeUser(response) {
   localStorage.setItem("ecmps_user", JSON.stringify(response.data));
 
+  // Reset token refresh flag to prevent stuck states from previous sessions
+  localStorage.setItem("ecmps_refreshing_token", "false");
+
   const currDate = currentDateTime();
   currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
   localStorage.setItem(
