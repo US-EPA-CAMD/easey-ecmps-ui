@@ -13,11 +13,14 @@ jest.mock("remark-gfm", () => () => {});
 describe("login modal component", ()=>{
 
   beforeEach( async ()=>{
+    // Clear localStorage before each test to ensure clean state
+    localStorage.clear();
     await render(<Login isModal={false} maintenanceContent={false} showSystemNotification={false}  />);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
   });
 
   it("renders component elements", async () => {
