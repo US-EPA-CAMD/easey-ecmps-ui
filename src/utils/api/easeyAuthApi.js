@@ -173,8 +173,13 @@ export const refreshToken = async () => {
       localStorage.setItem("ecmps_refreshing_token", "false");
     }
 
-    // Read user AFTER waiting to ensure we have the latest token if another request just refreshed
+    // Read user to check token expiration
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
+
+    // Early return if no user in localStorage (happens in test environments or logged-out state)
+    if (!user) {
+      return null;
+    }
 
     const currDate = currentDateTime();
     const tokenExp = new Date(user.tokenExpiration);
@@ -195,7 +200,7 @@ export const refreshToken = async () => {
         }
         // Re-read user after waiting to get the refreshed token
         const refreshedUser = JSON.parse(localStorage.getItem("ecmps_user"));
-        return refreshedUser.token;
+        return refreshedUser?.token;
       }
 
       localStorage.setItem("ecmps_refreshing_token", "true");
