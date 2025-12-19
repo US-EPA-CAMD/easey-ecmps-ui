@@ -46,6 +46,15 @@ const    requireResubmissionReasonCol = {
   sortable: true,
 };
 
+const convertToDate = (value) => {
+  // if value is null, undefined, or empty they will be added at the end. 
+  if (!value) return Infinity;
+  // format: MM/DD/YYYY HH:mm to Coordinated Universal Time
+  const [date, time] = value.split(' ');
+  const [month, day, year] = date.split('/');
+  return new Date(year, month - 1, day, ...time.split(':')).getTime();
+};
+
 export const testSummaryCols = [
   unitStackCol,
   systemComponentIdCol,
@@ -72,12 +81,16 @@ export const testSummaryCols = [
     width: '225px',
     selector: row => row.beginDateTime,
     sortable: true,
+    sortFunction: (a, b) =>
+      convertToDate(a.beginDateTime) - convertToDate(b.beginDateTime)
   },
   {
     name: <span>{'End Date/Time'}</span>,
     width: '200px',
     selector: row => row.endDateTime,
     sortable: true,
+    sortFunction: (a, b) =>
+      convertToDate(a.endDateTime) - convertToDate(b.endDateTime)
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
@@ -103,6 +116,8 @@ export const certEventsCols = [
     width: '215px',
     selector: row => row.eventDateTime,
     sortable: true,
+    sortFunction: (a, b) =>
+      convertToDate(a.eventDateTime) - convertToDate(b.eventDateTime)
   },
   {
     name: <span>{'Required Test Code'}</span>,
@@ -115,12 +130,16 @@ export const certEventsCols = [
     width: '250px',
     selector: row => row.conditionalDateTime,
     sortable: true,
+    sortFunction: (a, b) =>
+      convertToDate(a.conditionalDateTime) - convertToDate(b.conditionalDateTime)
   },
   {
     name: <span>{'Last Completed Date/Time'}</span>,
     width: '275px',
     selector: row => row.lastCompletedDateTime,
     sortable: true,
+    sortFunction: (a, b) =>
+      convertToDate(a.lastCompletedDateTime) - convertToDate(b.lastCompletedDateTime)
   },
   submissionAvailabilityDescriptionCol,
   severityDescriptionCol,
