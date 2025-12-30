@@ -841,7 +841,6 @@ const QAExpandableRowsRender = ({
     }
 
     try {
-      console.log("userInputuserInputuserInputuserInput", userInput)
       const resp = await assertSelector.saveDataSwitch(
         userInput,
         dataTableName,
