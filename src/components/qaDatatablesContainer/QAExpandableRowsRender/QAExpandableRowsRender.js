@@ -589,7 +589,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = list.map(d => {
                 return { code: d[codeLabel], name: d[descriptionLabel] };
               });
             });
@@ -840,6 +841,7 @@ const QAExpandableRowsRender = ({
     }
 
     try {
+      console.log("userInputuserInputuserInputuserInput", userInput)
       const resp = await assertSelector.saveDataSwitch(
         userInput,
         dataTableName,
