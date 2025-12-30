@@ -590,9 +590,7 @@ const QAExpandableRowsRender = ({
                   break;
               }
               const list = curResp.data?.items ?? curResp.data ?? [];
-              dropdowns[dropdownArray[i]] = list.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -644,6 +642,11 @@ const QAExpandableRowsRender = ({
         break;
     }
   };
+
+  const mapResponseItems = (response, codeLabel, descriptionLabel) => {
+    return response.map((d) => ({ code: d[codeLabel], name: d[descriptionLabel] }));
+  };
+
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData === null) {
