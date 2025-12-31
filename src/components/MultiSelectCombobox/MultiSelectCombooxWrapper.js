@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import PropTypes from "prop-types";
 import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
 
 const MultiSelectComboboxWrapper = ({
@@ -74,6 +75,19 @@ const MultiSelectComboboxWrapper = ({
       />
     </div>
   );
+};
+
+MultiSelectComboboxWrapper.propTypes = {
+  value: PropTypes.array.isRequired,
+  create: PropTypes.bool,
+  modalData: PropTypes.object,
+  isEditingDisabled: PropTypes.bool
+};
+
+MultiSelectComboboxWrapper.defaultProps = {
+  create: false,
+  modalData: null,
+  isEditingDisabled: false
 };
 
 export default MultiSelectComboboxWrapper;
