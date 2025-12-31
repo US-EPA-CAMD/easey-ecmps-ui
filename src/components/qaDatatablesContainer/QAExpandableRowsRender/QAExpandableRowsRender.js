@@ -445,9 +445,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -472,9 +471,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -504,9 +502,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
               if (i === 1) {
                 dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
@@ -542,16 +539,11 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
               if (i === 0) {
-                dropdowns['midLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
-                  return { code: d[codeLabel], name: d[descriptionLabel] };
-                });
-                dropdowns['highLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
-                  return { code: d[codeLabel], name: d[descriptionLabel] };
-                });
+                dropdowns['midLevelAccuracySpecCode'] = mapResponseItems(list, codeLabel, descriptionLabel);
+                dropdowns['highLevelAccuracySpecCode'] = mapResponseItems(list, codeLabel, descriptionLabel);
               }
             });
             for (const options of Object.values(dropdowns)) {
