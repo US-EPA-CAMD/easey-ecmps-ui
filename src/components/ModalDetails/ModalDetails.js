@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Label,
   FormGroup,
@@ -235,59 +235,48 @@ const ModalDetails = ({
         break;
 
       case "multiSelectDropdown":
-        const items = [...comboBoxItems];
-        if(items.length === 0){
-          for (let valueItem of value[6]) {
-            if (valueItem.code !== "") {
-              let item = {
-                id: "",
-                label: "",
-                selected: "",
-                enabled: "",
-              };
-              item.id = valueItem.code;
-              item.label = valueItem.name;
-              item.selected =
-                modalData?.[value[0]].split(",").includes(item.id) && !create
-                  ? modalData?.[value[0]].split(",").includes(item.id)
-                  : false;
-              item.enabled = true;
-              item.disabled = valueItem.disabled;
-              items.push(item);
-              setComboBoxItems([...items]);
-            }
+        const [comboBoxItems, setComboBoxItems] = useState([]);
+
+        useEffect(() => {
+          if (value[6] && value[6].length > 0) {
+            const items = value[6]
+              .filter(valueItem => valueItem.code !== "")
+              .map(valueItem => ({
+                id: valueItem.code,
+                label: valueItem.name,
+                selected: !create && modalData?.[value[0]]
+                  ? modalData?.[value[0]].split(",").includes(valueItem.code)
+                  : false,
+                enabled: true,
+                disabled: valueItem.disabled || false
+              }));
+            setComboBoxItems(items);
           }
-        }
-        
-        let selectedOptions =
-          modalData?.[value[0]].split(",") && !create
-            ? modalData?.[value[0]].split(",")
-            : comboBoxItems.filter(i => i.selected).map(s => s.id);
-        const handleCodes = (id, updateType) => {
-          const uniqueOptions = [...new Set([...selectedOptions, id])];
-          let item;
-          for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-              item = i;
-            }
+        }, [value[0], value[6], modalData, create]);
+
+        const selectedOptions = useMemo(() => {
+          return comboBoxItems
+            .filter(item => item.selected)
+            .map(item => item.id);
+        }, [comboBoxItems]);
+
+        const handleCodes = useCallback((id, updateType) => {
+          setComboBoxItems(prevItems => {
+            return prevItems.map(item => {
+              if (item.id === id) {
+                return { ...item, selected: updateType === "add" };
+              }
+              return item;
+            });
+          });
+        }, []);
+
+        useEffect(() => {
+          if (document.getElementById(value[1])) {
+            document.getElementById(value[1]).value = selectedOptions.join(",");
           }
-          if (updateType === "add") {
-            items[item].selected = true;
-            selectedOptions = uniqueOptions;
-          } else if (updateType === "remove") {
-            items[item].selected = false;
-            const selected = items
-              .filter((item) => {
-                return item.selected;
-              })
-              .map((item) => {
-                return item.id;
-              });
-            selectedOptions = selected;
-          }
-          setComboBoxItems([...items]);
-          document.getElementById(value[1]).value = selectedOptions.toString();
-        };
+        }, [selectedOptions, value[1]]);
+
         let styles = {
           listbox:
             "list-box bg-white display-block height-15 width-card-lg overflow-y-scroll overflow-x-hidden border-top",
@@ -302,7 +291,7 @@ const ModalDetails = ({
             epadataname={value[0]}
           >
             <MultiSelectCombobox
-              items={items}
+              items={comboBoxItems}
               entity={value[0]}
               searchBy="contains"
               onChangeUpdate={handleCodes}
