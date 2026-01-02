@@ -269,12 +269,8 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
-                  return {
-                    code: d['vendorId'],
-                    name: d['vendorName'],
-                  };
-                });
+                const list = val.data?.items ?? val.data ?? [];
+                dropdowns[dropdownArray[i]] = mapResponseItems(list, 'vendorId', 'vendorName', {concat: true, sortBy: 'code'});
                 dropdowns[dropdownArray[i]].unshift({
                   code: '',
                   name: '-- Select a value --',
@@ -635,8 +631,27 @@ const QAExpandableRowsRender = ({
     }
   };
 
-  const mapResponseItems = (response, codeLabel, descriptionLabel) => {
-    return response.map((d) => ({ code: d[codeLabel], name: d[descriptionLabel] }));
+  const mapResponseItems = (response, codeLabel, descriptionLabel, { concat = false, sortBy, sortOrder = "asc", } = {}) => {
+    let mapped = response.map((d) => {
+      const code = d[codeLabel];
+      const name = d[descriptionLabel];
+
+      return {
+        code,
+        name: concat ? `${code} - ${name}` : name,
+      };
+    });
+    if (sortBy) {
+      mapped.sort((a, b) => {
+        const valA = a[sortBy]?.toString().toLowerCase();
+        const valB = b[sortBy]?.toString().toLowerCase();
+        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return mapped;
   };
 
   useEffect(() => {
