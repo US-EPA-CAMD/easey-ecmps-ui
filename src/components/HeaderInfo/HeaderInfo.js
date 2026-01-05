@@ -874,6 +874,7 @@ export const HeaderInfo = ({
       })
       .catch((err) => {
         log.log(err);
+        setImportedFileErrorMsgs(["There was an error importing the file."]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -920,6 +921,7 @@ export const HeaderInfo = ({
       })
       .catch((err) => {
         log.log(err);
+        setImportedFileErrorMsgs(["There was an error importing the file."]);
       })
       .finally(() => {
         setIsLoading(false);
