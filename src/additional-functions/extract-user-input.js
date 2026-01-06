@@ -12,7 +12,7 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   // *** construct payload
   const payloadInputs = document.querySelectorAll(`${inputSelector},.modalLockedInput`);
   const datepickerPayloads = document.querySelectorAll(
-    ".usa-date-picker__internal-input"
+    ".usa-date-picker__external-input"
   );
   let radioPayload = null;
   const payloadArray = [];
@@ -39,7 +39,13 @@ export const extractUserInput = (payload, inputSelector, radios) => {
   datepickerPayloads.forEach((input) => {
     const item = { name: "", value: "" };
     item.name = input.attributes["epadataname"].value;
-    item.value = input.value;
+    // Convert MM/DD/YYYY -> YYYY-MM-DD
+    if (input.value) {
+      const [month, day, year] = input.value.split("/");
+      item.value = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    } else {
+      item.value = null;
+    }
     payloadArray.push(item);
   });
 

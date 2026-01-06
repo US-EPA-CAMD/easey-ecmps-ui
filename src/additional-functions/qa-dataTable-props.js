@@ -31,6 +31,7 @@ export const qaProtocalGasProps = selectedRow => {
     },
     controlDatePickerInputs: {},
     extraControls: {},
+    futureDateFields: ['expirationDate'],
   };
 };
 
