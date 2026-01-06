@@ -214,8 +214,25 @@ const QAExpandableRowsRender = ({
       expandable: expand,
       user: user,
       isCheckedOut: isCheckedOut,
-      parentId: parentId
+      parentId: parentId,
+      futureDateFields: objProps['futureDateFields'],
     };
+  };
+
+  const shouldAllowFutureDates = () => {
+    const objProps = nextExpandableRow(dataTableName);
+    
+    const futureDateFields = objProps?.futureDateFields || [];
+    if (futureDateFields.length === 0) return false;
+    if (selectedModalData) {
+      for (const field of selectedModalData) {
+        if (futureDateFields.includes(field[0])) { 
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   const populateStaticDropdowns = (tableName, dropdowns) => {
@@ -1028,6 +1045,7 @@ const QAExpandableRowsRender = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
+                  allowFutureDates={shouldAllowFutureDates()}
                 />
               </div>
             ) : (
