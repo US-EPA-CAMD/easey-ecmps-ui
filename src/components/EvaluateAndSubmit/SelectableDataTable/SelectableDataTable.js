@@ -29,11 +29,14 @@ export const SelectableDataTable = ({
           ref={ref}
           onClick={onClick}
           {...rest}
+          aria-label={`Select row`}
         />
         <label
           className="usa-checkbox__label checkbox-margin"
           htmlFor={uniqueID}
-        ></label>
+        >
+          <span className="usa-sr-only">Select row</span>
+        </label>
       </div>
     );
   });
