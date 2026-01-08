@@ -575,9 +575,22 @@ const FileInputRow = ({
   const handleFilePreview = (_ev) => {
     if (!file) return;
 
-    const blob = new Blob([file.contents], { type: file.type });
-    const fileUrl = URL.createObjectURL(blob);
-    window.open(fileUrl, "_blank");
+    const isXml =
+      file.type === "text/xml" ||
+      file.type === "application/xml" ||
+      file.name?.toLowerCase().endsWith(".xml");
+      
+    if(isXml){
+        const blob = new Blob([file.contents], { type: "text/plain" });
+        const fileUrl = URL.createObjectURL(blob);
+        window.open(fileUrl, "_blank");
+      }
+    else
+    {
+        const blob = new Blob([file.contents], { type: file.type });
+        const fileUrl = URL.createObjectURL(blob);
+        window.open(fileUrl, "_blank");
+    }
   };
 
   const handleFileRemoval = async (_ev) => {
