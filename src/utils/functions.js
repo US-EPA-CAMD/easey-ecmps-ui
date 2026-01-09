@@ -578,10 +578,6 @@ export const canSubmitMats = (user, selectedConfig, checkedOutConfigs) => {
     ?.find((facility) => facility.facId === selectedFacilityId)
     ?.permissions.includes("DSQA");
 
-    console.log( user.facilities)
-    console.log(isCheckedOutByUser)
-        console.log(hasRequiredRole)
-    console.log(hasRequiredFacilityPermission)
 
   return isCheckedOutByUser && hasRequiredRole && hasRequiredFacilityPermission;
 }
