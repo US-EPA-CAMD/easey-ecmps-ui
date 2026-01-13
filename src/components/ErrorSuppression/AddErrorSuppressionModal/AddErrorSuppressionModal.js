@@ -72,7 +72,7 @@ export const AddErrorSupressionModal = ({
   const [selectedBeginHour, setSelectedBeginHour] = useState("0");
   const [selectedEndDate, setSelectedEndDate] = useState();
   const [selectedEndHour, setSelectedEndHour] = useState("0");
-  const [selectedIsHistorical, setSelectedIsHistorical] = useState();
+  const [selectedIsHistorical, setSelectedIsHistorical] = useState(false);
   const [selectedBeginQuarter, setSelectedBeginQuarter] = useState();
   const [selectedEndQuarter, setSelectedEndQuarter] = useState();
 
@@ -109,6 +109,7 @@ export const AddErrorSupressionModal = ({
       facilityId,
       orisCode,
       matchDataTypeCode,
+      matchDataValue,
       locations,
       reasonCode,
       severityCode,
@@ -151,8 +152,11 @@ export const AddErrorSupressionModal = ({
       createMatchTypeDropdownLists(checkResultObj, orisCode).then(
         (universalMatchDataList) => {
           setMatchDataList(universalMatchDataList);
+          setSelectedMatchDataValue(matchDataValue);
         }
       );
+    }else{
+      setSelectedMatchDataValue(matchDataValue);
     }
 
     // Match time values
