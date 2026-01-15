@@ -2804,10 +2804,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-design-system@^1.37.4":
-  version "1.37.4"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.37.4/b5085d9af10c83f7609f9e5612f82fdf19147d0b#b5085d9af10c83f7609f9e5612f82fdf19147d0b"
-  integrity sha512-vvaa059Q/Slw2BUFCCDPj9ZJ0aVwCIYmhgqesIsCHd0H3irvdfHymDirwndtujVl//ZJLJc8BbClO7tkHfZlGw==
+"@us-epa-camd/easey-design-system@^1.37.5":
+  version "1.37.5"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.37.5/dd70037eccde509a5a0cc77adc17ebd182d298c2#dd70037eccde509a5a0cc77adc17ebd182d298c2"
+  integrity sha512-edgeWn4TZ3hMF3EU91qpObQwRoT9Sjw+/7siiRugow9GAgm5pFGZHS18ipUSbyV0vWcb6tP8rfCtuiLWnZQmCw==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
