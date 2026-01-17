@@ -8,6 +8,9 @@ import { handleResponse, handleError } from "./apiUtils";
 
 const inactiveDuration = config.app.inactivityDuration / 1000;
 
+// Shared promise for token refresh - prevents concurrent refreshes
+let activeRefreshPromise = null;
+
 axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
@@ -95,6 +98,9 @@ export const authenticate = async (payload) => {
 function storeUser(response) {
   localStorage.setItem("ecmps_user", JSON.stringify(response.data));
 
+  // Reset token refresh flag to prevent stuck states from previous sessions
+  localStorage.setItem("ecmps_refreshing_token", "false");
+
   const currDate = currentDateTime();
   currDate.setSeconds(currDate.getSeconds() + inactiveDuration);
   localStorage.setItem(
@@ -168,22 +174,13 @@ export const logOut = async () => {
 
 export const refreshToken = async () => {
   try {
-    if (!localStorage.getItem("ecmps_refreshing_token")) {
-      //Initialize token refresh variable responsbile for halting refresh if other calls are outgoing
-      localStorage.setItem("ecmps_refreshing_token", "false");
-    }
-
-    let waitDuration = 0; //Keep track of how long the current call is occuring for, force it through after a certain amount of seconds
-    while (
-      localStorage.getItem("ecmps_refreshing_token") === "true" &&
-      waitDuration < config.app.tokenRefreshThresholdSeconds
-    ) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      waitDuration += 100;
-    }
-    localStorage.setItem("ecmps_refreshing_token", "false");
-
+    // Read user to check token expiration
     const user = JSON.parse(localStorage.getItem("ecmps_user"));
+
+    // Early return if no user in localStorage (happens in test environments or logged-out state)
+    if (!user) {
+      return null;
+    }
 
     const currDate = currentDateTime();
     const tokenExp = new Date(user.tokenExpiration);
@@ -191,27 +188,55 @@ export const refreshToken = async () => {
     tokenExp.setSeconds(tokenExp.getSeconds() - 60);
 
     if (currDate > tokenExp) {
-      localStorage.setItem("ecmps_refreshing_token", "true");
-      const result = await axios({
-        method: "POST",
-        url: `${config.services.authApi.uri}/tokens`,
-        headers: {
-          authorization: `Bearer ${user.token}`,
-          "x-api-key": config.app.apiKey,
-        },
-        data: {
-          userId: user.userId,
-        },
-      });
+      // If a refresh is already in progress, return the existing promise
+      // This ensures all concurrent requests wait for the same refresh operation
+      if (activeRefreshPromise) {
+        return activeRefreshPromise;
+      }
 
-      user.token = result.data.token;
-      user.tokenExpiration = result.data.expiration;
-      localStorage.setItem("ecmps_user", JSON.stringify(user));
-      localStorage.setItem("ecmps_refreshing_token", "false");
+      // Create and store a new refresh promise
+      activeRefreshPromise = (async () => {
+        try {
+          const result = await axios({
+            method: "POST",
+            url: `${config.services.authApi.uri}/tokens`,
+            headers: {
+              authorization: `Bearer ${user.token}`,
+              "x-api-key": config.app.apiKey,
+            },
+            data: {
+              userId: user.userId,
+            },
+          });
+
+          // Update the user object with new token and expiration
+          user.token = result.data.token;
+          user.tokenExpiration = result.data.expiration;
+          localStorage.setItem("ecmps_user", JSON.stringify(user));
+
+          return user.token;
+        } catch (error) {
+          // On error, display error and return current token from localStorage
+          displayAppError(error);
+          // Re-read localStorage in case another concurrent request succeeded
+          const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
+          return currentUser?.token;
+        } finally {
+          // Always clean up the promise reference when done
+          activeRefreshPromise = null;
+        }
+      })();
+
+      return activeRefreshPromise;
     }
+
     return user.token;
   } catch (e) {
     displayAppError(e);
+
+    // Self-healing: Re-read localStorage in case another concurrent request succeeded
+    const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
+    return currentUser?.token;
   }
 };
 

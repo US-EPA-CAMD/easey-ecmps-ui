@@ -7,6 +7,7 @@ import "./Resources.scss";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getContent } from "../../utils/api/contentApi";
+import config from "../../config";
 
 export const Resources = () => {
   const [mainContent, setMainContent] = useState();
@@ -107,13 +108,14 @@ export const Resources = () => {
             type="button"
             variant="unstyled"
             asCustom={Link}
-            to="/cam-api"
+            to={config.app.camApiPortalPath}
             role="link"
             exact="true"
             rel="CAM API"
             title="Go to CAM API page"
             key="/cam-api"
             id={"cam-api-link"}
+            target="_blank"
           >
             Visit CAM API
           </USWDSLink>

@@ -33,3 +33,4 @@ oidcAuthResponseType: code
 oidcAuthResponseMode: form_post
 oidcAuthScopes: "openid profile email phone address offline_access"
 cdxUserSignupMigrateUrl: https://dev.epacdx.net
+camApiPortalPath: https://www.epa.gov/power-sector/cam-api-portal

@@ -214,8 +214,25 @@ const QAExpandableRowsRender = ({
       expandable: expand,
       user: user,
       isCheckedOut: isCheckedOut,
-      parentId: parentId
+      parentId: parentId,
+      futureDateFields: objProps['futureDateFields'],
     };
+  };
+
+  const shouldAllowFutureDates = () => {
+    const objProps = nextExpandableRow(dataTableName);
+    
+    const futureDateFields = objProps?.futureDateFields || [];
+    if (futureDateFields.length === 0) return false;
+    if (selectedModalData) {
+      for (const field of selectedModalData) {
+        if (futureDateFields.includes(field[0])) { 
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   const populateStaticDropdowns = (tableName, dropdowns) => {
@@ -269,12 +286,8 @@ const QAExpandableRowsRender = ({
                   name: '-- Select a value --',
                 });
               } else {
-                dropdowns[dropdownArray[i]] = val.data?.items?.map(d => {
-                  return {
-                    code: d['vendorId'],
-                    name: d['vendorName'],
-                  };
-                });
+                const list = val.data?.items ?? val.data ?? [];
+                dropdowns[dropdownArray[i]] = mapResponseItems(list, 'vendorId', 'vendorName', {concat: true, sortBy: 'code'});
                 dropdowns[dropdownArray[i]].unshift({
                   code: '',
                   name: '-- Select a value --',
@@ -445,9 +458,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -472,9 +484,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -504,9 +515,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
               if (i === 1) {
                 dropdowns['oilVolumeUnitsOfMeasureCode'] = curResp.data?.items?.map(
                   d => {
@@ -542,16 +552,11 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
               if (i === 0) {
-                dropdowns['midLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
-                  return { code: d[codeLabel], name: d[descriptionLabel] };
-                });
-                dropdowns['highLevelAccuracySpecCode'] = curResp.data?.items?.map(d => {
-                  return { code: d[codeLabel], name: d[descriptionLabel] };
-                });
+                dropdowns['midLevelAccuracySpecCode'] = mapResponseItems(list, codeLabel, descriptionLabel);
+                dropdowns['highLevelAccuracySpecCode'] = mapResponseItems(list, codeLabel, descriptionLabel);
               }
             });
             for (const options of Object.values(dropdowns)) {
@@ -589,9 +594,8 @@ const QAExpandableRowsRender = ({
                 default:
                   break;
               }
-              dropdowns[dropdownArray[i]] = curResp.data?.items?.map(d => {
-                return { code: d[codeLabel], name: d[descriptionLabel] };
-              });
+              const list = curResp.data?.items ?? curResp.data ?? [];
+              dropdowns[dropdownArray[i]] = mapResponseItems(list, codeLabel, descriptionLabel);
             });
             for (const options of Object.values(dropdowns)) {
               options.unshift({ code: '', name: '-- Select a value --' });
@@ -643,6 +647,30 @@ const QAExpandableRowsRender = ({
         break;
     }
   };
+
+  const mapResponseItems = (response, codeLabel, descriptionLabel, { concat = false, sortBy, sortOrder = "asc", } = {}) => {
+    let mapped = response.map((d) => {
+      const code = d[codeLabel];
+      const name = d[descriptionLabel];
+
+      return {
+        code,
+        name: concat ? `${code} - ${name}` : name,
+      };
+    });
+    if (sortBy) {
+      mapped.sort((a, b) => {
+        const valA = a[sortBy]?.toString().toLowerCase();
+        const valB = b[sortBy]?.toString().toLowerCase();
+        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return mapped;
+  };
+
   useEffect(() => {
     // Load MDM data (for dropdowns) only if we don't have them already
     if (!dropdownArrayIsEmpty && mdmData === null) {
@@ -1028,6 +1056,7 @@ const QAExpandableRowsRender = ({
                   title={`${dataTableName}`}
                   viewOnly={!user || (user && !isCheckedOut)}
                   create={createNewData}
+                  allowFutureDates={shouldAllowFutureDates()}
                 />
               </div>
             ) : (

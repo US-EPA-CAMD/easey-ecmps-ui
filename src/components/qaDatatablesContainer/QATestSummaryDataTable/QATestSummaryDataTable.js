@@ -561,6 +561,7 @@ const QATestSummaryDataTable = ({
         } else {
           setUpdateTable(true);
           executeOnClose();
+          setErrorMsgs([]);
         }
       })
       .catch((error) => {
@@ -601,6 +602,7 @@ const QATestSummaryDataTable = ({
         if (successResponses.includes(res.status)) {
           setCreatedId(res.data.id);
           setUpdateTable(true);
+          setErrorMsgs([]);
         } else {
           if (Object.prototype.toString.call(res) === "[object Array]") {
             setErrorMsgs(res);

@@ -420,6 +420,7 @@ export const ExportTab = ({
           width="34%"
           left="33%"
           fixedWidth={true}
+          exitBtn="View Report"
         >
           <ModalDetails
             modalData={null}

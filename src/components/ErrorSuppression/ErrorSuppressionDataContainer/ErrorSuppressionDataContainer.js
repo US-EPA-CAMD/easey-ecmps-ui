@@ -334,11 +334,12 @@ export const ErrorSuppressionDataContainer = () => {
     {
       name: <span>{"Match Data Criteria"}</span>,
       width: "250px",
-      selector: (row) =>
-        "" +
-        row.matchDataTypeCode +
-        (row.matchDataValue ? ":" + row.matchDataValue : ""),
-      sortable: true,
+      selector: (row) =>{
+        if (!row.matchDataTypeCode) {
+          return "";
+        }
+        return row.matchDataTypeCode + (row.matchDataValue ? ":" + row.matchDataValue : "");
+      },
     },
     {
       name: <span>{"Match Time Criteria"}</span>,

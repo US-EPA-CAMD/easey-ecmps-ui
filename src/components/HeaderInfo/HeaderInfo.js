@@ -338,22 +338,8 @@ export const HeaderInfo = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedReportingPeriods]);
 
-  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in workspace
-  const filterViewDataForWorkspace = (countData, allViews) => {
-    const codesWithData = countData
-      .filter((c) => c.count > 0)
-      .map((c) => c.dataSetCode);
-
-    // This will filter the dropdown values for the views by the ones that have a count > 0
-    return allViews
-      .filter((view) => view.code !== "COUNTS")
-      .filter(
-        (view) => codesWithData.find((d) => d === view.code) !== undefined
-      );
-  };
-
-  // See zenhub ticket#5756 for info on business logic of View Templates dropdown in global
-  const filterViewDataForGlobal = (countData, allViews) => {
+  // See zenhub ticket#5756 for info on business logic of View Templates dropdown
+  const filterViewData = (countData, allViews) => {
     return allViews
       .filter((view) => view.code !== "COUNTS")
       .filter((view) => {
@@ -401,10 +387,7 @@ export const HeaderInfo = ({
 
       let { items: allViews } = (await emApi.getViews()).data;
 
-      let filteredViewData;
-      if (inWorkspace)
-        filteredViewData = filterViewDataForWorkspace(countData, allViews);
-      else filteredViewData = filterViewDataForGlobal(countData, allViews);
+      const filteredViewData = filterViewData(countData, allViews);
 
       filteredViewData.unshift(defaultTemplateValue);
 
@@ -874,6 +857,7 @@ export const HeaderInfo = ({
       })
       .catch((err) => {
         log.log(err);
+        setImportedFileErrorMsgs(["There was an error importing the file."]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -920,6 +904,7 @@ export const HeaderInfo = ({
       })
       .catch((err) => {
         log.log(err);
+        setImportedFileErrorMsgs(["There was an error importing the file."]);
       })
       .finally(() => {
         setIsLoading(false);

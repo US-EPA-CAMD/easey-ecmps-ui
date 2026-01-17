@@ -15,7 +15,7 @@ import { assignAriaLabelsToDatePickerButtons } from "../../additional-functions/
 
 import { ArrowBackSharp } from "@material-ui/icons";
 import SelectBox from "../DetailsSelectBox/DetailsSelectBox";
-import MultiSelectCombobox from "../MultiSelectCombobox/MultiSelectCombobox";
+import MultiSelectDropdownWrapper from "../MultiSelectCombobox/MultiSelectCombooxWrapper.js";
 import {
   getMaxFutureDate,
   formatDateToInput
@@ -45,7 +45,6 @@ const ModalDetails = ({
     textOverflow: "ellipsis",
     overflow: "auto",
   };
-  const [comboBoxItems, setComboBoxItems] = useState([]);
   useEffect(() => {
     assignAriaLabelsToDatePickerButtons();
     let found = false;
@@ -235,82 +234,14 @@ const ModalDetails = ({
         break;
 
       case "multiSelectDropdown":
-        const items = [...comboBoxItems];
-        if(items.length === 0){
-          for (let valueItem of value[6]) {
-            if (valueItem.code !== "") {
-              let item = {
-                id: "",
-                label: "",
-                selected: "",
-                enabled: "",
-              };
-              item.id = valueItem.code;
-              item.label = valueItem.name;
-              item.selected =
-                modalData?.[value[0]].split(",").includes(item.id) && !create
-                  ? modalData?.[value[0]].split(",").includes(item.id)
-                  : false;
-              item.enabled = true;
-              item.disabled = valueItem.disabled;
-              items.push(item);
-              setComboBoxItems([...items]);
-            }
-          }
-        }
-        
-        let selectedOptions =
-          modalData?.[value[0]].split(",") && !create
-            ? modalData?.[value[0]].split(",")
-            : comboBoxItems.filter(i => i.selected).map(s => s.id);
-        const handleCodes = (id, updateType) => {
-          const uniqueOptions = [...new Set([...selectedOptions, id])];
-          let item;
-          for (let i = 0; i < items.length; i++) {
-            if (items[i].id === id) {
-              item = i;
-            }
-          }
-          if (updateType === "add") {
-            items[item].selected = true;
-            selectedOptions = uniqueOptions;
-          } else if (updateType === "remove") {
-            items[item].selected = false;
-            const selected = items
-              .filter((item) => {
-                return item.selected;
-              })
-              .map((item) => {
-                return item.id;
-              });
-            selectedOptions = selected;
-          }
-          setComboBoxItems([...items]);
-          document.getElementById(value[1]).value = selectedOptions.toString();
-        };
-        let styles = {
-          listbox:
-            "list-box bg-white display-block height-15 width-card-lg overflow-y-scroll overflow-x-hidden border-top",
-          combobox:
-            "margin-top-1 margin-bottom-2 border-1px width-card-lg bg-white multi-select-combobox",
-        };
         comp = (
-          <div
-            className="modalUserInput"
-            value={selectedOptions.toString()}
-            id={value[1]}
-            epadataname={value[0]}
-          >
-            <MultiSelectCombobox
-              items={items}
-              entity={value[0]}
-              searchBy="contains"
-              onChangeUpdate={handleCodes}
-              styling={styles}
-              favicon={false}
-              disabled={isEditingDisabled}
-            />
-          </div>
+          <MultiSelectDropdownWrapper
+            value={value}
+            create={create}
+            modalData={modalData}
+            isEditingDisabled={isEditingDisabled}
+            cols={cols}
+          />
         );
         break;
 

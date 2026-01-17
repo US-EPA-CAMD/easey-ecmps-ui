@@ -731,9 +731,10 @@ export const getRataTestNumber = async (locationId) => {
 
 	const allTestSummaries =
 		allPromises.length > 1
-			? [...testSummaries[0].data, ...testSummaries[1].data]
-			: testSummaries[0].data
-	const rataTestNumbers = allTestSummaries.map((testSummary) => {
+			? [...testSummaries[0].data.items, ...testSummaries[1].data.items]
+			: testSummaries[0].data.items
+	const list = allTestSummaries.items ?? allTestSummaries ?? [];
+	const rataTestNumbers = list.map((testSummary) => {
 		const testNumber = testSummary.testNumber
 		return {
 			rataTestNumberCode: testNumber,

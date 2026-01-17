@@ -406,7 +406,7 @@ export const retrieveDropdowns = async (
           options = response?.data?.items?.map((option) => {
             return {
               code: option["equationCode"],
-              name: option["equationDescription"],
+              name: `${option["equationCode"]}: ${option["equationDescription"]}`,
             };
           });
 

@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Login from "./Login";
 import render from "../../mocks/render";
@@ -13,11 +13,14 @@ jest.mock("remark-gfm", () => () => {});
 describe("login modal component", ()=>{
 
   beforeEach( async ()=>{
+    // Clear localStorage before each test to ensure clean state
+    localStorage.clear();
     await render(<Login isModal={false} maintenanceContent={false} showSystemNotification={false}  />);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
   });
 
   it("renders component elements", async () => {
@@ -40,14 +43,17 @@ describe("login modal component", ()=>{
     expect(usernameInput).not.toBeDisabled();
     expect(usernameInput.type).toBe("text");
     await userEvent.type(usernameInput, "myusername");
+    await waitFor(() => {
     expect(usernameInput.value).toBe('myusername');
-
+    })
     const loginBtn = screen.getByTestId("component-login-submit-button");
     expect(loginBtn).toBeInTheDocument();
     await userEvent.click(loginBtn);
     
+    await waitFor(() => {
     expect(mockAuthenticate).toHaveBeenCalled();
   });
+});
   
 });
 

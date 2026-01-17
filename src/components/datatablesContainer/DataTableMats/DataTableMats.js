@@ -214,6 +214,7 @@ export const DataTableMats = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);
@@ -237,6 +238,7 @@ export const DataTableMats = ({
         setShow(false);
         setUpdateTable(true);
         setUpdateRelatedTables(true);
+        setErrorMsgs([]);
       } else {
         const errorResp = formatErrorResponse(resp);
         setErrorMsgs(errorResp);

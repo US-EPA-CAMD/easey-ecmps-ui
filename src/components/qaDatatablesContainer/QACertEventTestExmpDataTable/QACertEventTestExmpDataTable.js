@@ -426,6 +426,7 @@ const QACertEventTestExmpDataTable = ({
 
   const executeOnClose = (data) => {
     setShow(false);
+    setErrorMsgs([]);
     removeChangeEventListeners(".modalUserInput");
 
     let updatedData = [];
