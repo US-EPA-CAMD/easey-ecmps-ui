@@ -2763,8 +2763,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-design-system@../easey-design-system/lib":
-  version "1.37.5"
+"@us-epa-camd/easey-design-system@1.38.0":
+  version "1.38.0"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.38.0/39c93f08b774a155470e81bbe63018498dd22906#39c93f08b774a155470e81bbe63018498dd22906"
+  integrity sha512-ssZrVX0RAoUNig0ujWHIbp9coAWWWf05iyz0yupD/eQWD4QzXMEz98PRNZixE5e48C5SkqyHWVzk/8WyGxktUw==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
