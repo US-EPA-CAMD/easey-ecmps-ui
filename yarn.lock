@@ -2763,10 +2763,10 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-design-system@^1.37.5":
-  version "1.37.5"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.37.5/dd70037eccde509a5a0cc77adc17ebd182d298c2#dd70037eccde509a5a0cc77adc17ebd182d298c2"
-  integrity sha512-edgeWn4TZ3hMF3EU91qpObQwRoT9Sjw+/7siiRugow9GAgm5pFGZHS18ipUSbyV0vWcb6tP8rfCtuiLWnZQmCw==
+"@us-epa-camd/easey-design-system@1.38.0":
+  version "1.38.0"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.38.0/39c93f08b774a155470e81bbe63018498dd22906#39c93f08b774a155470e81bbe63018498dd22906"
+  integrity sha512-ssZrVX0RAoUNig0ujWHIbp9coAWWWf05iyz0yupD/eQWD4QzXMEz98PRNZixE5e48C5SkqyHWVzk/8WyGxktUw==
   dependencies:
     "@ramonak/react-progress-bar" "^4.2.0"
 
@@ -3158,10 +3158,10 @@ axios-retry@^3.4.0:
     "@babel/runtime" "^7.15.4"
     is-retry-allowed "^2.2.0"
 
-axios@^1.13.2:
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
-  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
+axios@^1.13.4:
+  version "1.13.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.4.tgz#15d109a4817fb82f73aea910d41a2c85606076bc"
+  integrity sha512-1wVkUaAO6WyaYtCkcYCOx12ZgpGf9Zif+qXa4n+oYzK558YryKqiL6UWwd5DqiH3VRW0GYhTZQ/vlgJrCoNQlg==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
