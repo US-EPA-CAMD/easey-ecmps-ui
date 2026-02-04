@@ -7831,12 +7831,10 @@ react-error-boundary@^3.1.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-react-error-boundary@^4.0.11:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-4.1.2.tgz#bc750ad962edb8b135d6ae922c046051eb58f289"
-  integrity sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
+react-error-boundary@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-6.1.0.tgz#d2965de0723d65d60d20aef2e120bd2c171ae4d7"
+  integrity sha512-02k9WQ/mUhdbXir0tC1NiMesGzRPaCsJEWU/4bcFrbY1YMZOtHShtZP6zw0SJrBWA/31H0KT9/FgdL8+sPKgHA==
 
 react-error-overlay@6.1.0, react-error-overlay@^6.0.11:
   version "6.1.0"
