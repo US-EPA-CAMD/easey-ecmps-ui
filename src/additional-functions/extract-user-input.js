@@ -148,8 +148,9 @@ const checkFormulaBeginDateAndHour = (userInput, dataTableName, errors) => {
   const [beginDate, beginHour] = ["beginDate", "beginHour"];
   const needsBeginDateTime = "Must enter in both Begin Date/Time";
 
-  // skip validation if not Formula table
-  if (dataTableName !== "Formula") return;
+  // skip validation if not Formula and System Components table
+  const validTables = ["Formula", "System Components"]
+  if(!validTables.includes(dataTableName)) return;
 
   if (userInput[beginDate] === null || userInput[beginHour] === null) {
     errors.push(needsBeginDateTime);
