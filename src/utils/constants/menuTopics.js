@@ -175,6 +175,10 @@ export const systemAdmin = [
     name: "Submission Report",
     url: "/admin/submissions-report",
   },
+  {
+    name: "Units Expected Submit Report",
+    url: "/admin/units-expected-to-submit",
+  },
 ];
 
 export const systemAdminForSubHeader = [
@@ -197,6 +201,10 @@ export const systemAdminForSubHeader = [
       {
         name: "Submission Report",
         url: "/admin/submissions-report",
+      },
+      {
+        name: "Units Expected Submit Report",
+        url: "/admin/units-expected-to-submit",
       },
     ],
   }

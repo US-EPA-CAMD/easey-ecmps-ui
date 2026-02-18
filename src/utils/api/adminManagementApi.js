@@ -64,6 +64,31 @@ export const getSubmissionReportRecords = async (
     .catch(handleError);
 }
 
+export const getUnitsExpectedToSubmit = async (
+  facilityId,
+  state,
+  programCode,
+  windowStatus,
+  year,
+  quarter,
+) => {
+
+
+  return secureAxios({
+    url: `${config.services.camd.uri}/admin/units-expected-to-submit`,
+    params: {
+      facilityId,
+      state,
+      programCode,
+      windowStatus,
+      year,
+      quarter,
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+};
+
 export const openEmSubmissionRecord = async (payload) => {
   return secureAxios({
     method: "POST",
