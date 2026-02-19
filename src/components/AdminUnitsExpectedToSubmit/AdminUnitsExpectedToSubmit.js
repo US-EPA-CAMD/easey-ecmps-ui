@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import log from "loglevel";
 import FilterFormUnitsExpected from "./FilterFormUnitsExpected";
 import { getAllFacilities } from "../../utils/api/facilityApi";
-import { getAllPrograms } from "../../utils/api/dataManagementApi";
+import { getAllPrograms, getAllStates } from "../../utils/api/dataManagementApi";
 import { getReportingPeriods } from "../../utils/api/mdmApi";
-import { getAllStates } from "../../utils/api/dataManagementApi";
 import { unitsExpectedTitle } from "../../utils/constants/moduleTitles";
 import { UnitsExpectedData } from "./UnitsExpectedData";
 

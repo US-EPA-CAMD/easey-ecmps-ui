@@ -3,6 +3,8 @@ import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import { Button } from "@trussworks/react-uswds";
 import { ArrowDownwardSharp } from "@material-ui/icons";
+import PropTypes from "prop-types";
+
 import { unitsExpectedTitle } from "../../utils/constants/moduleTitles";
 import { exportToCSV } from "../../utils/functions";
 
@@ -167,4 +169,26 @@ export const UnitsExpectedData = ({
       </div>
     </div>
   );
+};
+
+
+UnitsExpectedData.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      facilityId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      facilityName: PropTypes.string,
+      state: PropTypes.string,
+      unitId: PropTypes.string,
+      locations: PropTypes.string,
+      submissionTypeDescription: PropTypes.string,
+      accessBeginDate: PropTypes.string,
+      accessEndDate: PropTypes.string,
+      windowStatus: PropTypes.string,
+      submissionStatus: PropTypes.string,
+      submissionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      submissionDate: PropTypes.string,
+      errorLevel: PropTypes.string,
+    })
+  ),
+  isLoading: PropTypes.bool,
 };

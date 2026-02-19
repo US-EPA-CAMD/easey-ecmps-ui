@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Label, Button } from "@trussworks/react-uswds";
 import log from "loglevel";
+import PropTypes from "prop-types";
 
 import { ComboBox } from "../ComboBox/ComboBox";
 import { DropdownSelection } from "../DropdownSelection/DropdownSelection";
@@ -109,6 +110,7 @@ const FilterFormUnitsExpected = ({
   }, [
     selectedFacility,
     selectedProgram,
+    selectedState,
     selectedReportingPeriod,
     selectedWindowStatus,
     setIsTableDataLoading,
@@ -138,6 +140,7 @@ const FilterFormUnitsExpected = ({
     setTableData,
     selectedFacility,
     selectedProgram,
+    selectedState,
     selectedReportingPeriod,
     selectedWindowStatus
   ]);
@@ -238,3 +241,36 @@ const FilterFormUnitsExpected = ({
 };
 
 export default FilterFormUnitsExpected;
+
+FilterFormUnitsExpected.propTypes = {
+  facilities: PropTypes.arrayOf(
+    PropTypes.shape({
+      code: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ),
+
+  programs: PropTypes.arrayOf(
+    PropTypes.shape({
+      programCode: PropTypes.string,
+      programDescription: PropTypes.string,
+    })
+  ),
+
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      stateCode: PropTypes.string,
+      stateName: PropTypes.string,
+    })
+  ),
+
+  reportingPeriods: PropTypes.arrayOf(
+    PropTypes.shape({
+      periodAbbreviation: PropTypes.string,
+    })
+  ),
+
+  setTableData: PropTypes.func.isRequired,
+  setIsTableDataLoading: PropTypes.func.isRequired,
+  setSelectedRows: PropTypes.func.isRequired,
+};
