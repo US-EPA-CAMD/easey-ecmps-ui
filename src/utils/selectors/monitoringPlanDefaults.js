@@ -7,14 +7,15 @@ export const getMonitoringPlansDefaultsTableRecords = (totalData) => {
   data.forEach((el) => {
     records.push({
       col1: el.parameterCode,
-      col2: el.defaultUnitsOfMeasureCode,
-      col3: el.defaultPurposeCode,
-      col4: el.fuelCode,
-      col5: el.operatingConditionCode,
-      col6: el.defaultSourceCode,
-      col7: formatDateTime(el.beginDate, el.beginHour),
-      col8: formatDateTime(el.endDate, el.endHour),
-      col9: el.id,
+      col2: el.defaultValue,
+      col3: el.defaultUnitsOfMeasureCode,
+      col4: el.defaultPurposeCode,
+      col5: el.fuelCode,
+      col6: el.operatingConditionCode,
+      col7: el.defaultSourceCode,
+      col8: formatDateTime(el.beginDate, el.beginHour),
+      col9: formatDateTime(el.endDate, el.endHour),
+      col10: el.id,
     });
   });
 
