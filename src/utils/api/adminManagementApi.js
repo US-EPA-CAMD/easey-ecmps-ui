@@ -66,7 +66,7 @@ export const getSubmissionReportRecords = async (
 
 export const getUnitsExpectedToSubmit = async (
   facilityId,
-  state,
+  stateCode,
   programCode,
   windowStatus,
   year,
@@ -78,7 +78,7 @@ export const getUnitsExpectedToSubmit = async (
     url: `${config.services.camd.uri}/admin/units-expected-to-submit`,
     params: {
       facilityId,
-      state,
+      stateCode,
       programCode,
       windowStatus,
       year,

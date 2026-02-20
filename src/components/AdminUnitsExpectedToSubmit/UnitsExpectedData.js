@@ -54,7 +54,7 @@ export const UnitsExpectedData = ({
     },
     {
       name: "State",
-      selector: (row) => row.state,
+      selector: (row) => row.stateCode,
       sortable: true,
       wrap: true,
     },
@@ -177,7 +177,7 @@ UnitsExpectedData.propTypes = {
     PropTypes.shape({
       facilityId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       facilityName: PropTypes.string,
-      state: PropTypes.string,
+      stateCode: PropTypes.string,
       unitId: PropTypes.string,
       locations: PropTypes.string,
       submissionTypeDescription: PropTypes.string,
