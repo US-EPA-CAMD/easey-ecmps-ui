@@ -16,3 +16,7 @@ updates:
     ignore:
       - dependency-name: "eslint"
         versions: [">=10.0.0"]
+      - dependency-name: "react"
+        versions: [">=19.0.0"]
+      - dependency-name: "react-dom"
+        versions: [">=19.0.0"]
