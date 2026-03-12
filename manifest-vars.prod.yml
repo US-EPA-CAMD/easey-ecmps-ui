@@ -18,4 +18,4 @@ oidcAuthEndpoint: https://icamauthdev.epacdx.net/cdxidbridgedev.onmicrosoft.com/
 oidcAuthResponseType: code
 oidcAuthResponseMode: form_post
 oidcAuthScopes: "openid profile email phone address offline_access"
-cdxUserSignupMigrateUrl: https://dev.epacdx.net
+cdxUserSignupMigrateUrl: https://cdx.epa.gov/
