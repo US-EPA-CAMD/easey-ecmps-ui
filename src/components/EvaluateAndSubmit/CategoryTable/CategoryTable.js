@@ -6,6 +6,7 @@ import {
   addEvalStatusCell,
   getYearQuarterParams,
   isoToYearQuarter,
+  workspaceUrl,
 } from "../../../utils/functions";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
@@ -75,7 +76,7 @@ export const CategoryTable = ({
 
     const yearQuarterParams = getYearQuarterParams(row);
     url =
-      `/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
+      workspaceUrl(`/reports?reportCode=${reportCode}&facilityId=${row.orisCode}`) +
       additionalParams +
       yearQuarterParams;
 
