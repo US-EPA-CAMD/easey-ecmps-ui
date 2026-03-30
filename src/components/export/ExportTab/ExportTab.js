@@ -3,6 +3,7 @@ import download from "downloadjs";
 import log from "loglevel";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
+import config from "../../../config";
 
 import { EXPORT_STORE_NAME } from "../../../additional-functions/workspace-section-and-store-names";
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
@@ -306,7 +307,8 @@ export const ExportTab = ({
       parseInt(year) ? `&year=${year}` : ""
     }`;
     const reportTitle = "Emissions Summary Report";
-    const url = `/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
+    const basePath = config.app.path.replace(/\/$/, '');
+    const url = `${basePath}/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
     const reportWindowParams = [
       // eslint-disable-next-line no-restricted-globals
       `height=${screen.height}`,

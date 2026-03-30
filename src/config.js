@@ -186,7 +186,7 @@ if (config.app.enableDebug) {
   log.log("config: ", config);
 }
 
-if (config.app.env === "production") {
+if (config.app.env === "prod") {
   log.setLevel(log.levels.ERROR);
 } else {
   log.setLevel(log.levels.TRACE);

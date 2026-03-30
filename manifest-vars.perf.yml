@@ -1,6 +1,7 @@
 instances: 2
 environment: performance
 host: ecmps-perf.app.cloud.gov
+appBasePath: /ecmps
 apiHost: api.epa.gov/easey/perf
 inactivityDurationMinutes: 30
 cdxBaseUrl: test.epacdx.net

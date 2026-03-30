@@ -5,6 +5,7 @@ disk: 2048
 instances: 1
 environment: development
 host: ecmps-dev.app.cloud.gov
+appBasePath: /ecmps
 apiHost: api.epa.gov/easey/dev
 inactivityDurationMinutes: 30
 activityPollingFrequencySeconds: 5

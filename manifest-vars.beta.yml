@@ -1,6 +1,7 @@
 instances: 2
 environment: beta
 host: ecmps-beta.app.cloud.gov
+appBasePath: /ecmps
 apiHost: api.epa.gov/easey/beta
 inactivityDurationMinutes: 30
 googleAnalyticsEnabled: true

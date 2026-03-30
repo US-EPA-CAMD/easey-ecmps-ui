@@ -180,17 +180,19 @@ export const formatReportUrl = (params, service) => {
     return `${key}=${[value]}`;
   });
 
+  const basePath = config.app.path.replace(/\/$/, '');
   const url = `/${service}?${urlParams.join("&")}`;
 
   if (window.location.href.includes("/workspace")) {
-    return url.replace(`/${service}`, `/workspace/${service}`);
+    return url.replace(`/${service}`, `${basePath}/workspace/${service}`);
   }
 
-  return url;
+  return `${basePath}${url}`;
 };
 
 export const displayReport = (params) => {
-  const url = `/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
+  const basePath = config.app.path.replace(/\/$/, '');
+  const url = `${basePath}/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
@@ -201,9 +203,10 @@ export const displayEmissionsReport = (
   quarter,
   dateHr
 ) => {
+  const basePath = config.app.path.replace(/\/$/, '');
   const ws = window.location.href.includes("/workspace") ? "/workspace" : "";
 
-  const url = `${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(
+  const url = `${basePath}${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(
     dateHr
   )}&hour=${new Date(dateHr).getHours()}`;
   window.open(url, "Emissions Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps

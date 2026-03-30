@@ -7,6 +7,7 @@ import {
   getYearQuarterParams,
   isoToYearQuarter,
 } from "../../../utils/functions";
+import config from "../../../config";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 import CheckedOutCell from "./CheckedOutCell";
@@ -73,9 +74,10 @@ export const CategoryTable = ({
       }&quarter=${yearQuarter[1].charAt(1)}`;
     }
 
+    const basePath = config.app.path.replace(/\/$/, '');
     const yearQuarterParams = getYearQuarterParams(row);
     url =
-      `/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
+      `${basePath}/workspace/reports?reportCode=${reportCode}&facilityId=${row.orisCode}` +
       additionalParams +
       yearQuarterParams;
 
