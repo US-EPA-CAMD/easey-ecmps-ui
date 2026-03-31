@@ -22,7 +22,8 @@ const UserAccountStatus = ({ viewProps, policyResponse }) => {
 
       // Handle redirection for policies ending with "_BYPASS"
       if (policyResponse.policy.endsWith("_BYPASS")) {
-        const url = `${window.location.origin}/?sessionId=${encodeURIComponent(policyResponse.userId)}`;
+        const basePath = config.app.path.replace(/\/$/, '');
+        const url = `${window.location.origin}${basePath}/?sessionId=${encodeURIComponent(policyResponse.userId)}`;
         window.location.href = url;
         return; // Stop further execution since we're redirecting
       }
