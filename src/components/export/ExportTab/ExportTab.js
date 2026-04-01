@@ -30,7 +30,7 @@ import {
   exportMonitoringPlanDownload,
 } from "../../../utils/api/monitoringPlansApi";
 import { DataStatus } from "../../../utils/constants/dataStatus";
-import { getUser } from "../../../utils/functions";
+import { getUser, workspaceUrl } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
@@ -306,7 +306,7 @@ export const ExportTab = ({
       parseInt(year) ? `&year=${year}` : ""
     }`;
     const reportTitle = "Emissions Summary Report";
-    const url = `/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
+    const url = workspaceUrl(`/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`);
     const reportWindowParams = [
       // eslint-disable-next-line no-restricted-globals
       `height=${screen.height}`,
