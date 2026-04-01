@@ -52,3 +52,5 @@ applications:
 
     routes:
       - route: ((host))
+    services:
+      - log-drain
