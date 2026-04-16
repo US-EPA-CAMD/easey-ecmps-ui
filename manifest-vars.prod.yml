@@ -1,5 +1,5 @@
 instances: 2
-environment: production
+environment: prod
 host: ecmps.app.cloud.gov
 apiHost: api.epa.gov/easey
 inactivityDurationMinutes: 30
