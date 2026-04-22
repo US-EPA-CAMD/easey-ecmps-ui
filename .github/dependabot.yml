@@ -22,3 +22,5 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "vite"
         versions: [">=8.0.0"]
+      - dependency-name: "uuid"
+        versions: [">=12.0.0"]
