@@ -1,6 +1,6 @@
 instances: 2
 environment: staging
-host: ecmps-stg.app.cloud.gov
+host: ecmps-stg.app.cloud.gov/ecmps
 appBasePath: /ecmps
 apiHost: api.epa.gov/easey/staging
 inactivityDurationMinutes: 30

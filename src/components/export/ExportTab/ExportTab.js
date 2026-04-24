@@ -3,7 +3,6 @@ import download from "downloadjs";
 import log from "loglevel";
 import { Button } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
-import config from "../../../config";
 
 import { EXPORT_STORE_NAME } from "../../../additional-functions/workspace-section-and-store-names";
 import ReportingPeriodSelector from "../../ReportingPeriodSelector/ReportingPeriodSelector";
@@ -31,7 +30,7 @@ import {
   exportMonitoringPlanDownload,
 } from "../../../utils/api/monitoringPlansApi";
 import { DataStatus } from "../../../utils/constants/dataStatus";
-import { getUser } from "../../../utils/functions";
+import { getUser, workspaceUrl } from "../../../utils/functions";
 import UploadModal from "../../UploadModal/UploadModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setExportState } from "../../../store/actions/dynamicFacilityTab";
@@ -307,8 +306,7 @@ export const ExportTab = ({
       parseInt(year) ? `&year=${year}` : ""
     }`;
     const reportTitle = "Emissions Summary Report";
-    const basePath = config.app.path.replace(/\/$/, '');
-    const url = `${basePath}/workspace/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`;
+    const url = workspaceUrl(`/reports?reportCode=EMSR&facilityId=${orisCode}${additionalParams}`);
     const reportWindowParams = [
       // eslint-disable-next-line no-restricted-globals
       `height=${screen.height}`,

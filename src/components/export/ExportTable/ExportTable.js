@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import SelectableDataTable from "../SelectableDataTable/SelectableDataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import config from "../../../config";
+import { workspaceUrl } from "../../../utils/functions";
 
 //Selectable data table that automatically refreshes its data based on the dataFetchCall whenever dataFetchParams are changed
 export const ExportTable = ({
@@ -78,8 +78,7 @@ export const ExportTable = ({
       reportTitle = "Emissions Printout Report";
     }
 
-    const basePath = config.app.path.replace(/\/$/, '');
-    const url = `${basePath}/workspace/reports?reportCode=${reportCode}&facilityId=${selectedDataRef.current[0].orisCode}${additionalParams}`;
+    const url = workspaceUrl(`/reports?reportCode=${reportCode}&facilityId=${selectedDataRef.current[0].orisCode}${additionalParams}`);
 
     const reportWindowParams = [
       // eslint-disable-next-line no-restricted-globals

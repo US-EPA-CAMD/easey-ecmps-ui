@@ -175,24 +175,26 @@ export const reportWindowParams = [
   //`fullscreen=yes`,
 ].join(",");
 
+const basePath = config.app.path.replace(/\/$/, '');
+
+export const workspaceUrl = (path) => `${basePath}/workspace${path}`;
+
 export const formatReportUrl = (params, service) => {
   const urlParams = params.map(([key, value]) => {
     return `${key}=${[value]}`;
   });
 
-  const basePath = config.app.path.replace(/\/$/, '');
   const url = `/${service}?${urlParams.join("&")}`;
 
   if (window.location.href.includes("/workspace")) {
-    return url.replace(`/${service}`, `${basePath}/workspace/${service}`);
+    return url.replace(`/${service}`, `/workspace/${service}`);
   }
 
-  return `${basePath}${url}`;
+  return url;
 };
 
 export const displayReport = (params) => {
-  const basePath = config.app.path.replace(/\/$/, '');
-  const url = `${basePath}/workspace/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`;
+  const url = workspaceUrl(`/reports?reportCode=MP_EVAL&facilityId=${params.facilityId}&monitorPlanId=${params.monitorPlanId}`);
   window.open(url, "Monitoring Plan Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 
@@ -203,7 +205,6 @@ export const displayEmissionsReport = (
   quarter,
   dateHr
 ) => {
-  const basePath = config.app.path.replace(/\/$/, '');
   const ws = window.location.href.includes("/workspace") ? "/workspace" : "";
 
   const url = `${basePath}${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(
