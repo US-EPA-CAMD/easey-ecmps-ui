@@ -1408,10 +1408,10 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "7.2.0"
 
-"@fortawesome/react-fontawesome@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-3.3.0.tgz#020364bdd71d785ffbb0e61425f53325f78fc647"
-  integrity sha512-EHmHeTf8WgO29sdY3iX/7ekE3gNUdlc2RW6mm/FzELlHFKfTrA9S4MlyquRR+RRCRCn8+jXfLFpLGB2l7wCWyw==
+"@fortawesome/react-fontawesome@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-3.3.1.tgz#7fb1d1f4b48a15b9c6c4d88d579dacc478ebf3ef"
+  integrity sha512-wGnAPhfzivDwBWYmEG8MSrEXPruoiMMo48NnsRkj1NZkoaawgOijPNAiSHKMYEoCsqTBSgLTzL6EqTTWGaUR4w==
 
 "@gulpjs/messages@^1.1.0":
   version "1.1.0"
@@ -2116,10 +2116,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@ramonak/react-progress-bar@^4.2.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@ramonak/react-progress-bar/-/react-progress-bar-4.4.0.tgz#094ce2275599cc43349ca11f21fb6efa25a84bc0"
-  integrity sha512-/djk0ZzQZXd2x6uMJ1YL5EeFBN1uJQVFcV5NrP1B29m31LL6xb5ahbpz255m3bFY3ZHpI7awE6L4SlfBW4mDWw==
+"@ramonak/react-progress-bar@^5.0.0":
+  version "5.4.0"
+  resolved "https://registry.npmjs.org/@ramonak/react-progress-bar/-/react-progress-bar-5.4.0.tgz#b366c75af79eaff9d143841d796717d21d9af23b"
+  integrity sha512-3MJ0TKPw7xhearDuO6egIRQrvuERoLn6CVc2hKnw89iEegUL6DzMY7Rptmz2KaHjK0zbev+PGyyvDW+IK4FJBg==
 
 "@reduxjs/toolkit@^1.9.5":
   version "1.9.7"
@@ -2749,12 +2749,12 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-design-system@1.38.0":
-  version "1.38.0"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.38.0/39c93f08b774a155470e81bbe63018498dd22906#39c93f08b774a155470e81bbe63018498dd22906"
-  integrity sha512-ssZrVX0RAoUNig0ujWHIbp9coAWWWf05iyz0yupD/eQWD4QzXMEz98PRNZixE5e48C5SkqyHWVzk/8WyGxktUw==
+"@us-epa-camd/easey-design-system@1.38.2":
+  version "1.38.2"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-design-system/1.38.2/2191150e3bb026eebeddd48688a4cdaad29be20c#2191150e3bb026eebeddd48688a4cdaad29be20c"
+  integrity sha512-pvocpzj6WaEUAlytqSQ1TWDz5ELPJzliFuydv6yZqk0zt4fcORBdX99HgiDgmHwGqs86ut3TTvqR0WNfRyJlhA==
   dependencies:
-    "@ramonak/react-progress-bar" "^4.2.0"
+    "@ramonak/react-progress-bar" "^5.0.0"
 
 "@uswds/compile@^1.3.2":
   version "1.3.2"
@@ -3143,10 +3143,10 @@ axios-retry@^3.4.0:
     "@babel/runtime" "^7.15.4"
     is-retry-allowed "^2.2.0"
 
-axios@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.0.tgz#0fcee91ef03d386514474904b27863b2c683bf4f"
-  integrity sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==
+axios@^1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.15.2.tgz#eb8fb6d30349abace6ade5b4cb4d9e8a0dc23e5b"
+  integrity sha512-wLrXxPtcrPTsNlJmKjkPnNPK2Ihe0hn0wGSaTEiHRPxwjvJwT3hKmXF4dpqxmPO9SoNb2FsYXj/xEo0gHN+D5A==
   dependencies:
     follow-redirects "^1.15.11"
     form-data "^4.0.5"
@@ -3964,10 +3964,10 @@ domhandler@5.0.3, domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
-dompurify@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.0.tgz#b1fc33ebdadb373241621e0a30e4ad81573dfd0b"
-  integrity sha512-nolgK9JcaUXMSmW+j1yaSvaEaoXYHwWyGJlkoCTghc97KgGDDSnpoU/PlEnw63Ah+TGKFOyY+X5LnxaWbCSfXg==
+dompurify@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.1.tgz#521d04483ac12631b2aedf434a5f5390933b8789"
+  integrity sha512-JahakDAIg1gyOm7dlgWSDjV4n7Ip2PKR55NIT6jrMfIgLFgWo81vdr1/QGqWtFNRqXP9UV71oVePtjqS2ebnPw==
   optionalDependencies:
     "@types/trusted-types" "^2.0.7"
 
@@ -4283,10 +4283,10 @@ eslint-plugin-jsx-a11y@^6.10.2:
     safe-regex-test "^1.0.3"
     string.prototype.includes "^2.0.1"
 
-eslint-plugin-react-hooks@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-7.0.1.tgz#66e258db58ece50723ef20cc159f8aa908219169"
-  integrity sha512-O0d0m04evaNzEPoSW+59Mezf8Qt0InfgGIBJnpC0h3NH/WjUAR7BIKUfysC6todmtiZ/A0oUVS8Gce0WhBrHsA==
+eslint-plugin-react-hooks@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-7.1.1.tgz#e6742cad75d970c0a3f30d7d3fa80a4784f55927"
+  integrity sha512-f2I7Gw6JbvCexzIInuSbZpfdQ44D7iqdWX01FKLvrPgqxoE7oMj8clOfto8U6vYiz4yd5oKu39rRSVOe1zRu0g==
   dependencies:
     "@babel/core" "^7.24.4"
     "@babel/parser" "^7.24.4"
@@ -7625,10 +7625,10 @@ react-data-table-component-extensions@^1.6.0:
   dependencies:
     react "^16.9.0"
 
-react-data-table-component@^7.5.3:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-7.7.0.tgz#69d0eeace77cd2895792f99e23f99800ba45de1f"
-  integrity sha512-5knL6zMSKlbvzu9P04KM5Lx8/EyQujb4I9z3rWeoVX++IDJadQ7aR4X5J6EeS90wjK0Xoa6btaVeglnCAqD2ag==
+react-data-table-component@^7.7.1:
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-7.7.1.tgz#103ede17c515f114a36c4054a4d1e8636fc28917"
+  integrity sha512-F1qciUONe0EiItxd+LZg9K7UXxvilSQH8WvUoSnPnAVZ/PK2x4Djr3nzkuCqCIfiMuU3imI+8gI7nYRIW2Kfxw==
   dependencies:
     deepmerge "^4.3.1"
 
