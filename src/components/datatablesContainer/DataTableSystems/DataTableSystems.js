@@ -661,8 +661,8 @@ export const DataTableSystems = ({
         setErrorMsgs([]);
         return true;
       } else {
-        const errorResponse = formatErrorResponse(response);
-        const errorResp = resp ? formatErrorResponse(resp) : [];
+        const errorResponse = !responseSuccess ? formatErrorResponse(response) : [];
+        const errorResp = !respSuccess ? formatErrorResponse(resp) : [];
         setErrorMsgs(errorResponse.concat(errorResp));
       }
     } catch (error) {
