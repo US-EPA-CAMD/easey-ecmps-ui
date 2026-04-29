@@ -118,7 +118,7 @@ function storeUser(response) {
   }
 
   const basePath = config.app.path.replace(/\/$/, '');
-  const pathWithoutBase = window.location.pathname.replace(basePath, '') || '/';
+  const pathWithoutBase = globalThis.location.pathname.replace(basePath, '') || '/';
 
   if (
     pathWithoutBase.includes("/workspace") ||
@@ -127,7 +127,7 @@ function storeUser(response) {
   ) {
     window.location.reload();
   } else {
-    window.location.assign(`${basePath}/workspace${pathWithoutBase}`);
+    globalThis.location.assign(`${basePath}/workspace${pathWithoutBase}`);
   }
 }
 
