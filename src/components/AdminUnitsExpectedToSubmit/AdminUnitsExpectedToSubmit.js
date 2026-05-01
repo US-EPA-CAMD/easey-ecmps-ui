@@ -24,7 +24,7 @@ export const UnitsExpectedToSubmit = () => {
     getAllFacilities()
       .then(({ data }) => {
         const formattedFacilities = data.items.map((f) => ({
-          value: f.facilityId,
+          value: f.facilityRecordId,
           label: `${f.facilityName} (${f.facilityId})`,
         }));
         setFacilityList(formattedFacilities);

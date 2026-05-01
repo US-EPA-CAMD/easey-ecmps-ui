@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 import { unitsExpectedTitle } from "../../utils/constants/moduleTitles";
 import { exportToCSV } from "../../utils/functions";
+import AdminUnitsExpectedToSubmitSubRecords from './AdminUnitsExpectedToSubmitSubRecords';
 
 export const UnitsExpectedData = ({
   data = [],
@@ -22,20 +23,53 @@ export const UnitsExpectedData = ({
     const columnMapping = {
       facilityId: "Facility ID (ORISPL)",
       facilityName: "Facility Name",
-      state: "State",
+      stateCode: "State",
       unitId: "Unit ID",
-      mpLocations: "MP Locations",
-      submissionType: "Submission Type",
-      openDate: "Open Date",
-      closeDate: "Close Date",
+      locations: "MP Locations",
+      submissionTypeDescription: "Submission Type",
+      accessBeginDate: "Open Date",
+      accessEndDate: "Close Date",
       windowStatus: "Window Status",
       submissionStatus: "Submission Status",
       submissionId: "Submission ID",
-      submissionDateTime: "Submission Date/Time",
-      errorLevel: "Error Level"
+      submissionDate: "Submission Date/Time",
+      severityDescription: "Error Level",
+
+      programdescription: "Program",
+      unittypedescription: "Unit Classification",
+      commopdate: "Commence Operation Date",
+      comropdate: "Commercial Operation Date",
+      opstatusdescription: "Operating Status",
+      unitmonitorcertbegindate: "Cert Begin",
+      unitmonitorcertdeadline: "Cert Deadline",
+      emissionsrecordingbegindate: "Recording Begin"
     };
 
-    exportToCSV(filteredData, columnMapping, "Units_Expected_To_Submit_Report");
+    const flattenedData = [];
+
+    filteredData.forEach(main => {
+      const subs = main.subRecords || [];
+
+      if (subs.length === 0) {
+        flattenedData.push(main);
+      } else {
+        subs.forEach(sub => {
+          flattenedData.push({
+            ...main,
+            programdescription: sub.programdescription,
+            unittypedescription: sub.unittypedescription,
+            commopdate: sub.commopdate,
+            comropdate: sub.comropdate,
+            opstatusdescription: sub.opstatusdescription,
+            unitmonitorcertbegindate: sub.unitmonitorcertbegindate,
+            unitmonitorcertdeadline: sub.unitmonitorcertdeadline,
+            emissionsrecordingbegindate: sub.emissionsrecordingbegindate
+          });
+        });
+      }
+    });
+
+    exportToCSV(flattenedData, columnMapping, "Units_Expected_To_Submit_Report");
   };
 
   const columns = [
@@ -117,7 +151,7 @@ export const UnitsExpectedData = ({
     },
     {
       name: "Error Level",
-      selector: (row) => row.errorLevel,
+      selector: (row) => row.severityDescription,
       sortable: true,
       wrap: true,
     },
@@ -132,7 +166,7 @@ export const UnitsExpectedData = ({
           </div>
         </div>
         <br />
-        
+
         <div className="es-datatable margin-top-5">
           <div className="grid-row" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
@@ -145,11 +179,11 @@ export const UnitsExpectedData = ({
               Download To CSV
             </Button>
           </div>
-          
+
           <span data-aria-label="Units Expected to Submit Report"></span>
-          
+
           {isLoading && <Preloader />}
-          
+
           {!isLoading && (
             <DataTable
               sortIcon={<ArrowDownwardSharp className="margin-left-2 text-primary" />}
@@ -163,6 +197,8 @@ export const UnitsExpectedData = ({
               paginationRowsPerPageOptions={[10, 25, 50]}
               pointerOnHover={true}
               highlightOnHover={true}
+              expandableRows={true}
+              expandableRowsComponent={AdminUnitsExpectedToSubmitSubRecords}
             />
           )}
         </div>
@@ -188,6 +224,20 @@ UnitsExpectedData.propTypes = {
       submissionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       submissionDate: PropTypes.string,
       errorLevel: PropTypes.string,
+      subRecords: PropTypes.arrayOf(
+        PropTypes.shape({
+          commopdate: PropTypes.string,
+          comropdate: PropTypes.string,
+          emissionsrecordingbegindate: PropTypes.string,
+          opstatusdescription: PropTypes.string,
+          programcode: PropTypes.string,
+          programdescription: PropTypes.string,
+          unitid: PropTypes.string,
+          unitmonitorcertbegindate: PropTypes.string,
+          unitmonitorcertdeadline: PropTypes.string,
+          unittypedescription: PropTypes.string,
+        })
+      )
     })
   ),
   isLoading: PropTypes.bool,
