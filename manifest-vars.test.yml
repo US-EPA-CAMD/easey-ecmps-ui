@@ -1,6 +1,7 @@
 instances: 1
 environment: testing
-host: ecmps-tst.app.cloud.gov
+host: ecmps-tst.app.cloud.gov/ecmps
+appBasePath: /ecmps
 apiHost: api.epa.gov/easey/test
 inactivityDurationMinutes: 30
 cdxBaseUrl: test.epacdx.net

@@ -1,6 +1,7 @@
 instances: 2
-environment: production
-host: ecmps.app.cloud.gov
+environment: prod
+host: easey.epa.gov/ecmps
+appBasePath: /ecmps
 apiHost: api.epa.gov/easey
 inactivityDurationMinutes: 30
 googleAnalyticsEnabled: true
