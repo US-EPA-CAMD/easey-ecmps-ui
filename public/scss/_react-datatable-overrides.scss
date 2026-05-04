@@ -4,6 +4,8 @@
 .data-display-table-report {
   .brFloq {
     white-space: pre-wrap !important;
+    overflow: unset;
+    text-overflow: unset;
   }
 
   .bCAPJe {
@@ -44,6 +46,8 @@
 .data-display-table-export {
   .brFloq {
     white-space: pre-wrap !important;
+    overflow: unset;
+    text-overflow: unset;
   }
 
   .rdt_Table {
@@ -310,4 +314,16 @@
   .__rdt_custom_sort_icon__ {
     @extend .text-indigo;
   }
+}
+
+// Show column table header text in full 
+.rdt_TableCol > div {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+.rdt_TableCol_Sortable > div {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
 }
