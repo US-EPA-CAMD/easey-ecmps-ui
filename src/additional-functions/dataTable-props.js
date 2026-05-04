@@ -29,6 +29,7 @@ export const defaultsDataTableProps = (location) => {
     ],
     columnNames: [
       "Parameter Code",
+      "Default Value",
       "Units of Measure",
       "Purpose",
       "Fuel Code",
