@@ -117,14 +117,17 @@ function storeUser(response) {
     window.history.replaceState({}, '', url.toString());
   }
 
+  const basePath = config.app.path.replace(/\/$/, '');
+  const pathWithoutBase = globalThis.location.pathname.replace(basePath, '') || '/';
+
   if (
-    window.location.pathname.includes("/workspace") ||
-    window.location.pathname.endsWith("/home") ||
-    window.location.pathname.endsWith("/")
+    pathWithoutBase.includes("/workspace") ||
+    pathWithoutBase.endsWith("/home") ||
+    pathWithoutBase.endsWith("/")
   ) {
     window.location.reload();
   } else {
-    window.location.assign(`/workspace${window.location.pathname}`);
+    globalThis.location.assign(`${basePath}/workspace${pathWithoutBase}`);
   }
 }
 

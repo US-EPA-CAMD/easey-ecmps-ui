@@ -10,10 +10,7 @@ import { authenticate, secureAxios, refreshToken, getCredentials, logOut, refres
 
 delete window.location;
 window.location = {
-  pathname: {
-    includes: jest.fn(),
-    endsWith: jest.fn(),
-  },
+  pathname: '/',
   reload: jest.fn(),
   assign: jest.fn(),
 };

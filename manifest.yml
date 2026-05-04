@@ -8,6 +8,7 @@ applications:
     env:
       VITE_EASEY_ECMPS_UI_ENV: ((environment))
       VITE_EASEY_ECMPS_UI_HOST: ((host))
+      VITE_EASEY_ECMPS_UI_PATH: ((appBasePath))
       VITE_EASEY_MDM_API: https://((apiHost))/master-data-mgmt
       VITE_EASEY_FACILITIES_API: https://((apiHost))/facilities-mgmt
       VITE_EASEY_EMISSIONS_API: https://((apiHost))/emissions-mgmt
