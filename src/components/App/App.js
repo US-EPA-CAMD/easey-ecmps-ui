@@ -52,6 +52,7 @@ import { displayAppError } from "../../additional-functions/app-error";
 import { signInUser } from "./useAuthRedirect";
 import LoadingModal from "../LoadingModal/LoadingModal";
 import { AdminSubmissionReport } from "../AdminSubmissionReport/AdminSubmissionReport";
+import { UnitsExpectedToSubmit } from "../AdminUnitsExpectedToSubmit/AdminUnitsExpectedToSubmit";
 
 const App = () => {
   const queryParams = useLocation().search;
@@ -532,6 +533,19 @@ const App = () => {
                 <Navigate to="/" />
               ) : (
                 <AdminSubmissionReport user={user} />
+              )
+            }
+          />
+          <Route
+            path="/admin/units-expected-to-submit"
+            element={
+              !validUser() ||
+                !JSON.parse(localStorage.getItem("ecmps_user"))?.roles?.includes(
+                  config.app.adminRole
+                ) ? (
+                <Navigate to="/" />
+              ) : (
+                <UnitsExpectedToSubmit user={user} />
               )
             }
           />
