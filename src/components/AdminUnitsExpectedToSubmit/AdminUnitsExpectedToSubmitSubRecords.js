@@ -1,6 +1,7 @@
 import React from "react";
 import DataTable from "react-data-table-component";
 import PropTypes from "prop-types";
+import { formatDate } from '../../utils/functions'
 
 
 const AdminUnitsExpectedToSubmitSubRecords = ({ data }) => {
@@ -25,18 +26,18 @@ const AdminUnitsExpectedToSubmitSubRecords = ({ data }) => {
     },
     {
       name: "Unit Classification",
-      selector: row => row.unittypedescription,
+      selector: row => row.unitclassification,
       sortable: true,
       wrap: true,
     },
     {
       name: "Commence Operation Date",
-      selector: row => row.commopdate,
+      selector: row => formatDate(row.commopdate),
       sortable: true,
     },
     {
       name: "Commercial Operation Date",
-      selector: row => row.comropdate,
+      selector: row => formatDate(row.comropdate),
       sortable: true,
     },
     {
@@ -46,17 +47,17 @@ const AdminUnitsExpectedToSubmitSubRecords = ({ data }) => {
     },
     {
       name: "Cert Begin",
-      selector: row => row.unitmonitorcertbegindate,
+      selector: row => formatDate(row.unitmonitorcertbegindate),
       sortable: true,
     },
     {
       name: "Cert Deadline",
-      selector: row => row.unitmonitorcertdeadline,
+      selector: row => formatDate(row.unitmonitorcertdeadline),
       sortable: true,
     },
     {
       name: "Recording Begin",
-      selector: row => row.emissionsrecordingbegindate,
+      selector: row => formatDate(row.emissionsrecordingbegindate),
       sortable: true,
     },
   ];

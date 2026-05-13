@@ -224,7 +224,6 @@ const FilterFormUnitsExpected = ({
           <Button
             disabled={
               !(
-                selectedFacility &&
                 selectedProgram &&
                 selectedReportingPeriod 
               )
