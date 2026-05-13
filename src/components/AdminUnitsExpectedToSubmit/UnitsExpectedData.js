@@ -6,9 +6,8 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import PropTypes from "prop-types";
 
 import { unitsExpectedTitle } from "../../utils/constants/moduleTitles";
-import { exportToCSV } from "../../utils/functions";
+import { exportToCSV, formatDate } from "../../utils/functions";
 import AdminUnitsExpectedToSubmitSubRecords from './AdminUnitsExpectedToSubmitSubRecords';
-import { formatDate, formatDateTime } from '../../utils/functions';
 
 export const UnitsExpectedData = ({
   data = [],
