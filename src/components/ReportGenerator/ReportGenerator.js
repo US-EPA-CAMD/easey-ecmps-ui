@@ -78,7 +78,7 @@ export const ErrorMessage = ({ error }) => (
         <img
           alt="EPA Logo"
           title="EPA Logo"
-          src={`/images/epa-logo-blue.svg`}
+          src={`images/epa-logo-blue.svg`}
         />
         <Button
           type="button"

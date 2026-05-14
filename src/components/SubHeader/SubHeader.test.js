@@ -65,7 +65,7 @@ describe("SubHeader Component", () => {
     expect(screen.getByTestId("loggedInUserInitials")).toBeInTheDocument();
     const image = screen.getByAltText("Expand menu");
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", "/images/icons/menu-item-expand.svg");
+    expect(image).toHaveAttribute("src", "images/icons/menu-item-expand.svg");
     //Welcome message
     expect(screen.getByText("Welcome, FNTest!")).toBeInTheDocument();
     //Log out button
@@ -85,14 +85,14 @@ describe("SubHeader Component", () => {
     //Click image
     const image = screen.getByAltText("Expand menu");
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", "/images/icons/menu-item-expand.svg");
+    expect(image).toHaveAttribute("src", "images/icons/menu-item-expand.svg");
 
     fireEvent.click(image);
 
     //User Profile links
     expect(image).toHaveAttribute(
       "src",
-      "/images/icons/menu-item-collapse.svg"
+      "images/icons/menu-item-collapse.svg"
     );
     expect(screen.getByText("Manage Login")).toBeInTheDocument();
     if (config.app.enableManageDelegations !== "false") {
