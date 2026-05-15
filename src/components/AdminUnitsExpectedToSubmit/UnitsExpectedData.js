@@ -6,7 +6,7 @@ import { ArrowDownwardSharp } from "@material-ui/icons";
 import PropTypes from "prop-types";
 
 import { unitsExpectedTitle } from "../../utils/constants/moduleTitles";
-import { exportToCSV } from "../../utils/functions";
+import { exportToCSV, formatDate } from "../../utils/functions";
 import AdminUnitsExpectedToSubmitSubRecords from './AdminUnitsExpectedToSubmitSubRecords';
 
 export const UnitsExpectedData = ({
@@ -112,14 +112,14 @@ export const UnitsExpectedData = ({
     },
     {
       name: "Open Date",
-      selector: (row) => row.accessBeginDate,
+      selector: (row) => formatDate(row.accessBeginDate),
       sortable: true,
       wrap: true,
       sortFunction: (a, b) => new Date(a.accessBeginDate) - new Date(b.accessBeginDate)
     },
     {
       name: "Close Date",
-      selector: (row) => row.accessEndDate,
+      selector: (row) => formatDate(row.accessEndDate),
       sortable: true,
       wrap: true,
       sortFunction: (a, b) => new Date(a.accessEndDate) - new Date(b.accessEndDate)
