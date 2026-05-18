@@ -27,7 +27,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
   const [maintenanceContent, setMaintenanceContent] = useState();
 
   const [userProfileIcon, setUserProfileIcon] = useState(
-    "/images/icons/menu-item-expand.svg"
+    "images/icons/menu-item-expand.svg"
   );
 
   let profileMenuLinkItems = [
@@ -146,12 +146,12 @@ export const SubHeader = ({ user, setCurrentLink }) => {
     if (userProfileExpanded === true) {
       document.querySelector("#logoutBtn").tabIndex = 0;
       setUserProfileIcon(
-        "/images/icons/menu-item-expand.svg"
+        "images/icons/menu-item-expand.svg"
       );
     } else {
       document.querySelector("#logoutBtn").tabIndex = -1;
       setUserProfileIcon(
-        "/images/icons/menu-item-collapse.svg"
+        "images/icons/menu-item-collapse.svg"
       );
       setNavDropdownOpen((prevNavDropdownOpen) => {
         return Array(prevNavDropdownOpen.length).fill(false);
@@ -349,7 +349,7 @@ export const SubHeader = ({ user, setCurrentLink }) => {
                 aria-label="Expand top navigation menu"
               >
                 <img
-                  src={"/images/icons/mobile-menu-expand.svg"}
+                  src={"images/icons/mobile-menu-expand.svg"}
                   alt="Expand top navigation menu"
                 />
               </Button>

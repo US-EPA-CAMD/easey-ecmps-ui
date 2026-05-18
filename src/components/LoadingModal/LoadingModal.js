@@ -75,14 +75,14 @@ const LoadingModal = (props) => {
                     <img
                       alt="Loading...   Please wait..."
                       title="Loading... Please wait..."
-                      src={"/images/preloaders/scanning.gif"}
+                      src={"images/preloaders/scanning.gif"}
                     />
                   </p>
                   <p className="margin-0">
                     <img
                       alt="Authenticating...   Please wait..."
                       title="Authenticating... Please wait..."
-                      src={"/images/preloaders/authenticating-message.gif"}
+                      src={"images/preloaders/authenticating-message.gif"}
                     />
                   </p>
                 </div>
@@ -93,14 +93,14 @@ const LoadingModal = (props) => {
                     <img
                       alt="Loading...   Please wait..."
                       title="Loading... Please wait..."
-                      src={"/images/preloaders/loading-snake.gif"}
+                      src={"images/preloaders/loading-snake.gif"}
                     />
                   </p>
                   <p className="margin-0">
                     <img
                       alt="Loading Text...   Please wait..."
                       title="Loading Text... Please wait..."
-                      src={"/images/preloaders/loading-text.gif"}
+                      src={"images/preloaders/loading-text.gif"}
                     />
                   </p>
                 </div>
