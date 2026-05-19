@@ -7658,12 +7658,10 @@ react-data-table-component-extensions@^1.6.0:
   dependencies:
     react "^16.9.0"
 
-react-data-table-component@^7.7.1:
-  version "7.7.1"
-  resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-7.7.1.tgz#103ede17c515f114a36c4054a4d1e8636fc28917"
-  integrity sha512-F1qciUONe0EiItxd+LZg9K7UXxvilSQH8WvUoSnPnAVZ/PK2x4Djr3nzkuCqCIfiMuU3imI+8gI7nYRIW2Kfxw==
-  dependencies:
-    deepmerge "^4.3.1"
+react-data-table-component@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/react-data-table-component/-/react-data-table-component-8.1.0.tgz#49eb074017d35be2624d3f32325532e1c13a7287"
+  integrity sha512-wxVZ6EHOLG0JJev/V3xLQhvmsNWzrJHtbxkre23dffhKmcu7SGpMHVi+yLRUTAcbO/FWUv44LESUArUxtXP6fA==
 
 react-datepicker@^4.11.0:
   version "4.25.0"
