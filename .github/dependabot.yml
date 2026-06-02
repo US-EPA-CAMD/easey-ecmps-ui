@@ -28,3 +28,5 @@ updates:
         versions: [">=7.0.0"]
       - dependency-name: "react-router-dom"
         versions: [">=7.0.0"]
+      - dependency-name: "react-data-table-component"
+        versions: [">=8.0.0"]
