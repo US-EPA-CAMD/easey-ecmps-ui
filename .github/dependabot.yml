@@ -34,3 +34,8 @@ updates:
         versions: [>="5.0.0"]
       - dependency-name: "react-redux"
         versions: [>="9.0.0"]
+      - dependency-name: "redux-thunk"
+        versions: [>="3.0.0"]
+      - dependency-name: "@reduxjs/toolkit"
+        versions: [>="2.0.0"]
+
