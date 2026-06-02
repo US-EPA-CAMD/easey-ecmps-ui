@@ -24,3 +24,7 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "@types/react"
         versions: [">=19.0.0"]
+      - dependency-name: "react-router"
+        versions: [">=7.0.0"]
+      - dependency-name: "react-router-dom"
+        versions: [">=7.0.0"]
