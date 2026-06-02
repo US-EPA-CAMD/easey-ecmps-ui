@@ -31,11 +31,11 @@ updates:
       - dependency-name: "react-data-table-component"
         versions: [">=8.0.0"]
       - dependency-name: "redux"
-        versions: [>="5.0.0"]
+        versions: [">=5.0.0"]
       - dependency-name: "react-redux"
-        versions: [>="9.0.0"]
+        versions: [">=9.0.0"]
       - dependency-name: "redux-thunk"
-        versions: [>="3.0.0"]
+        versions: [">=3.0.0"]
       - dependency-name: "@reduxjs/toolkit"
-        versions: [>="2.0.0"]
+        versions: [">=2.0.0"]
 
