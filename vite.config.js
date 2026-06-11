@@ -1,26 +1,9 @@
-import { defineConfig, loadEnv, transformWithOxc } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
-
-// Vite 8 transforms JS with Oxc instead of esbuild. Oxc decides JSX support from the
-// file extension, so JSX in plain `.js` files is rejected ("JSX syntax is disabled").
-// There is no `oxc` config option for this (OxcOptions omits `lang`), so we run a pre
-// transform on src `.js` files. Replaces the deprecated `esbuild`/`optimizeDeps.esbuildOptions`
-// loader config. Uses the automatic runtime so files need not `import React`.
-const jsxInJs = () => ({
-    name: 'jsx-in-js',
-    enforce: 'pre',
-    async transform(code, id) {
-        if (!/\/src\/.*\.js$/.test(id.split('?')[0])) return null;
-        return transformWithOxc(code, id, {
-            lang: 'jsx',
-            jsx: { runtime: 'automatic' },
-        });
-    },
-});
 
 
 export default ({ mode }) => {
@@ -30,8 +13,18 @@ export default ({ mode }) => {
     return defineConfig({
         base: './',
         plugins:
-            [jsxInJs(), react(), svgr()],
+            [react(), svgr()],
+        esbuild: {
+            loader: "jsx",
+            include: /src\/.*\.jsx?$/,
+            exclude: [],
+        },
         optimizeDeps: {
+            esbuildOptions: {
+                loader: {
+                    '.js': 'jsx',
+                },
+            },
             include: ['react', 'react-dom'],
         },
         css: {
