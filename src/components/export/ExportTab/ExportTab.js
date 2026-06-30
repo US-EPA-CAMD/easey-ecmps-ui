@@ -21,6 +21,7 @@ import {
   getQATeeReviewSubmit,
   exportQA,
 } from "../../../utils/api/qaCertificationsAPI";
+import { getReportingPeriods } from "../../../utils/api/mdmApi";
 import {
   getEmissionsReviewSubmit,
   exportEmissionsDataDownload,
@@ -38,7 +39,6 @@ import { setExportState } from "../../../store/actions/dynamicFacilityTab";
 import Modal from "../../Modal/Modal";
 import ModalDetails from "../../ModalDetails/ModalDetails";
 import { modalViewData } from "../../../additional-functions/create-modal-input-controls";
-import { getReportingPeriods } from "../../../utils/api/qaCertificationsAPI";
 import { extractUserInput } from "../../../additional-functions/extract-user-input";
 
 export const ExportTab = ({
@@ -261,7 +261,7 @@ export const ExportTab = ({
     const controlInputs = {
       year: ["Years with Emissions Data", "dropdown", "", ""],
     };
-    let resp = await getReportingPeriods(true);
+    let resp = await getReportingPeriods({ excludeCurrentQuarter: true });
     resp = resp.data?.items ?? resp.data ;
     const calendarYear = Object.values(
       resp?.reduce(
@@ -337,10 +337,10 @@ export const ExportTab = ({
         <div className="display-flex flex-row flex-justify">
           <ReportingPeriodSelector
             isExport={true}
+            includeCurrentQuarter={true}
             dataTypes={dataTypes.current.filter((e) => e.checked)}
             reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
             exportState={exportState}
-            isQaCert={true}
           />
 
           <div className="flex-align-self-center">
