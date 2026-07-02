@@ -19,12 +19,12 @@ jest.mock("../../utils/api/contentApi", () => ({
 }));
 
 describe("HelpSupport", () => {
-  it("expect get content api get called 4 times for 4 sections", async () => {
+  it("expect get content api get called 3 times for 3 sections", async () => {
     render(
       <BrowserRouter>
         <HelpSupport />
       </BrowserRouter>
     );
-    expect(mockGetContent).toHaveBeenCalledTimes(4);
+    expect(mockGetContent).toHaveBeenCalledTimes(3);
   });
 });
