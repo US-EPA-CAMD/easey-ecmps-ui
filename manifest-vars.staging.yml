@@ -1,4 +1,4 @@
-instances: 2
+instances: 1
 environment: staging
 host: ecmps-stg.app.cloud.gov/ecmps
 appBasePath: /ecmps
