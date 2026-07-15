@@ -145,3 +145,83 @@ export async function matsSubmissionProcess(payload, shouldHandleError = true) {
       return handleError(error);
     });
 }
+
+/* ---------- Bulk Import ---------- */
+
+export async function createImportSet(userEmail, shouldHandleError = true) {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.camd.uri}/bulk-import/set`,
+    data: { userEmail },
+  })
+    .then(handleResponse)
+    .catch((error) => {
+      if (!shouldHandleError) throw error;
+      return handleError(error);
+    });
+}
+
+export async function stageImportFiles(
+  importSetId,
+  files,
+  shouldHandleError = true
+) {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("files", file, file.name);
+  }
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/stage`,
+    data: formData,
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(handleResponse)
+    .catch((error) => {
+      if (!shouldHandleError) throw error;
+      return handleImportError(error);
+    });
+}
+
+// Removes specific staged files (pass s3Paths) or, with no s3Paths, clears all
+// staged files for the set.
+export async function deleteImportFiles(importSetId, s3Paths) {
+  return secureAxios({
+    method: "DELETE",
+    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/files`,
+    data: s3Paths ? { s3Paths } : undefined,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export async function submitImport(importSetId, items, shouldHandleError = true) {
+  return secureAxios({
+    method: "POST",
+    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/submit`,
+    data: { items },
+  })
+    .then(handleResponse)
+    .catch((error) => {
+      if (!shouldHandleError) throw error;
+      return handleError(error);
+    });
+}
+
+export async function getLatestImport() {
+  return secureAxios({
+    method: "GET",
+    url: `${config.services.camd.uri}/bulk-import/latest`,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export async function getImportSet(importSetId) {
+  return secureAxios({
+    method: "GET",
+    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}`,
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
