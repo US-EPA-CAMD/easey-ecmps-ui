@@ -1,8 +1,9 @@
 import React from "react";
 import { Alert } from "@trussworks/react-uswds";
+import DataTable from "react-data-table-component";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import { workspaceUrl, reportWindowParams } from "../../utils/functions";
-import Preloader from "../Preloader/Preloader";
 
 // Opens the generated import report for a completed row.
 // TODO: the exact report route is finalized by the (out-of-scope) import job;
@@ -27,43 +28,35 @@ const statusCell = (row) =>
     row.statusCode
   );
 
-const LatestImport = ({ latest, loading }) => {
-  if (loading) return <Preloader />;
+const columns = [
+  { name: "File Name", selector: (row) => row.fileName, sortable: true, grow: 2 },
+  { name: "File Type", selector: (row) => row.fileType, sortable: true, width: "110px" },
+  { name: "ORIS", selector: (row) => row.orisCode, sortable: true, width: "100px" },
+  { name: "Unit/Stack/Pipe", selector: (row) => row.unitStackPipe, sortable: true },
+  {
+    name: "Status",
+    selector: (row) => row.statusCode,
+    cell: statusCell,
+    sortable: true,
+    width: "140px",
+  },
+];
 
-  if (!latest) {
-    return (
+const LatestImport = ({ latest, loading }) => (
+  <DataTable
+    keyField="importId"
+    noHeader
+    columns={columns}
+    data={latest?.files ?? []}
+    progressPending={loading}
+    progressComponent={<Preloader />}
+    noDataComponent={
       <Alert type="info" slim headingLevel="h3">
         You have no bulk imports yet.
       </Alert>
-    );
-  }
-
-  const files = latest.files ?? [];
-
-  return (
-    <table className="usa-table usa-table--borderless width-full">
-      <thead>
-        <tr>
-          <th scope="col">File Name</th>
-          <th scope="col">File Type</th>
-          <th scope="col">ORIS</th>
-          <th scope="col">Unit/Stack/Pipe</th>
-          <th scope="col">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {files.map((row) => (
-          <tr key={row.importId}>
-            <td>{row.fileName}</td>
-            <td>{row.fileType}</td>
-            <td>{row.orisCode}</td>
-            <td>{row.unitStackPipe}</td>
-            <td>{statusCell(row)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+    }
+    className="data-display-table react-transition fade-in"
+  />
+);
 
 export default LatestImport;

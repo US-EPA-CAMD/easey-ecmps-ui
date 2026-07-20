@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "@trussworks/react-uswds";
+import { v4 as uuidv4 } from "uuid";
+import DataTable from "react-data-table-component";
+import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Modal from "../Modal/Modal";
 import { DataStatus } from "../../utils/constants/dataStatus";
 import { parseErrorMessage } from "../../utils/api/apiUtils";
 import { checkoutPlansForImport } from "./importCheckout";
 import {
-  createImportSet,
   stageImportFiles,
   deleteImportFiles,
   submitImport,
@@ -31,27 +33,17 @@ const formatBytes = (bytes) => {
 };
 
 const NewImportModal = ({ user, onClose, onSubmitted }) => {
-  const [importSetId, setImportSetId] = useState(null);
+  // Staging ID: the S3 folder key, and the import_set_id once submitted. No DB
+  // row exists until submit.
+  const [importSetId] = useState(uuidv4);
   const [files, setFiles] = useState([]);
   const [errorMsgs, setErrorMsgs] = useState([]);
-  const [busy, setBusy] = useState(false);
-  const [saveStatus, setSaveStatus] = useState(DataStatus.IDLE);
-  const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await createImportSet(user.email, false);
-        setImportSetId(res.data.importSetId);
-      } catch (error) {
-        setErrorMsgs([parseErrorMessage(error)]);
-      }
-    })();
-  }, [user.email]);
+  const [busy, setBusy] = useState(false); // staging ops: add / remove / cancel
+  const [submitting, setSubmitting] = useState(false);
 
   const addFiles = useCallback(
     async (fileList) => {
-      if (!importSetId || fileList.length === 0) return;
+      if (fileList.length === 0) return;
       setBusy(true);
       setErrorMsgs([]);
       try {
@@ -78,7 +70,13 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
           ]);
         }
 
-        setFiles((prev) => sortFiles([...prev, ...accepted]));
+        // Dedupe by s3Path: re-adding a file overwrites its S3 object, so the
+        // freshly staged version replaces any existing row.
+        setFiles((prev) => {
+          const acceptedPaths = new Set(accepted.map((f) => f.s3Path));
+          const kept = prev.filter((f) => !acceptedPaths.has(f.s3Path));
+          return sortFiles([...kept, ...accepted]);
+        });
       } catch (error) {
         setErrorMsgs([parseErrorMessage(error)]);
       } finally {
@@ -94,18 +92,26 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
   };
 
   const removeFile = async (file) => {
-    await deleteImportFiles(importSetId, [file.s3Path]);
-    setFiles((prev) => prev.filter((f) => f.s3Path !== file.s3Path));
+    setBusy(true);
+    try {
+      await deleteImportFiles(importSetId, [file.s3Path]);
+      setFiles((prev) => prev.filter((f) => f.s3Path !== file.s3Path));
+    } finally {
+      setBusy(false);
+    }
   };
 
-  // Cancel / close: clear the staged S3 files; the NEW set is left as a record.
+  // Cancel / close: clear any staged S3 files. Nothing was persisted.
   const cancel = async () => {
-    if (importSetId) await deleteImportFiles(importSetId);
+    if (files.length > 0) {
+      setBusy(true);
+      await deleteImportFiles(importSetId);
+    }
     onClose();
   };
 
   const submit = async () => {
-    setSaveStatus(DataStatus.PENDING);
+    setSubmitting(true);
     setErrorMsgs([]);
     try {
       const items = files.map((f) => ({
@@ -116,16 +122,51 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
         orisCode: f.orisCode,
         rptPeriodId: f.rptPeriodId,
       }));
-      await submitImport(importSetId, items, false);
+      await submitImport(importSetId, items, user.email, false);
       onSubmitted();
     } catch (error) {
-      // On failure clear the staged files and reset the table; set stays NEW.
+      // On failure clear the staged files and reset the table; nothing persisted.
       await deleteImportFiles(importSetId);
       setFiles([]);
       setErrorMsgs([parseErrorMessage(error)]);
-      setSaveStatus(DataStatus.IDLE);
+      setSubmitting(false);
     }
   };
+
+  const processing = busy || submitting;
+
+  const columns = [
+    { name: "File Name", selector: (row) => row.fileName, sortable: true, grow: 2 },
+    { name: "File Type", selector: (row) => row.fileType, sortable: true, width: "110px" },
+    {
+      name: "Reporting Period",
+      selector: (row) => row.reportingPeriod ?? "",
+      sortable: true,
+      width: "160px",
+    },
+    { name: "ORIS", selector: (row) => row.orisCode, sortable: true, width: "100px" },
+    { name: "Unit/Stack/Pipe", selector: (row) => row.unitStackPipe, sortable: true },
+    {
+      name: "File Size",
+      selector: (row) => row.fileSize,
+      format: (row) => formatBytes(row.fileSize),
+      width: "110px",
+    },
+    {
+      name: "",
+      width: "110px",
+      cell: (row) => (
+        <Button
+          type="button"
+          unstyled
+          onClick={() => removeFile(row)}
+          disabled={processing}
+        >
+          Remove
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <Modal
@@ -135,60 +176,31 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
       exitBtn="Submit"
       close={cancel}
       save={submit}
-      saveStatus={saveStatus}
+      saveStatus={submitting ? DataStatus.PENDING : DataStatus.IDLE}
       errorMsgs={errorMsgs}
-      disableExitBtn={busy || files.length === 0}
+      disableExitBtn={processing || files.length === 0}
       width="75%"
     >
       <div className="padding-top-2">
         <input
-          ref={fileInputRef}
           type="file"
           multiple
           accept=".json"
           className="usa-file-input"
-          disabled={!importSetId || busy}
+          disabled={processing}
           onChange={handleFileChange}
         />
 
-        {files.length > 0 && (
-          <table className="usa-table usa-table--borderless width-full margin-top-2">
-            <thead>
-              <tr>
-                <th scope="col">File Name</th>
-                <th scope="col">File Type</th>
-                <th scope="col">Reporting Period</th>
-                <th scope="col">ORIS</th>
-                <th scope="col">Unit/Stack/Pipe</th>
-                <th scope="col">File Size</th>
-                <th scope="col">
-                  <span className="usa-sr-only">Remove</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {files.map((f) => (
-                <tr key={f.s3Path}>
-                  <td>{f.fileName}</td>
-                  <td>{f.fileType}</td>
-                  <td>{f.reportingPeriod ?? ""}</td>
-                  <td>{f.orisCode}</td>
-                  <td>{f.unitStackPipe}</td>
-                  <td>{formatBytes(f.fileSize)}</td>
-                  <td>
-                    <Button
-                      type="button"
-                      unstyled="true"
-                      onClick={() => removeFile(f)}
-                      disabled={busy}
-                    >
-                      Remove
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {(busy || files.length > 0) && (
+          <DataTable
+            keyField="s3Path"
+            noHeader
+            columns={columns}
+            data={files}
+            progressPending={busy}
+            progressComponent={<Preloader />}
+            className="data-display-table react-transition fade-in margin-top-2"
+          />
         )}
       </div>
     </Modal>

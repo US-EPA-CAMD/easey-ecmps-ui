@@ -148,19 +148,6 @@ export async function matsSubmissionProcess(payload, shouldHandleError = true) {
 
 /* ---------- Bulk Import ---------- */
 
-export async function createImportSet(userEmail, shouldHandleError = true) {
-  return secureAxios({
-    method: "POST",
-    url: `${config.services.camd.uri}/bulk-import/set`,
-    data: { userEmail },
-  })
-    .then(handleResponse)
-    .catch((error) => {
-      if (!shouldHandleError) throw error;
-      return handleError(error);
-    });
-}
-
 export async function stageImportFiles(
   importSetId,
   files,
@@ -195,11 +182,16 @@ export async function deleteImportFiles(importSetId, s3Paths) {
     .catch(handleError);
 }
 
-export async function submitImport(importSetId, items, shouldHandleError = true) {
+export async function submitImport(
+  importSetId,
+  items,
+  userEmail,
+  shouldHandleError = true
+) {
   return secureAxios({
     method: "POST",
     url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/submit`,
-    data: { items },
+    data: { userEmail, items },
   })
     .then(handleResponse)
     .catch((error) => {
