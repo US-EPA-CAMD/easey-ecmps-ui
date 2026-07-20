@@ -14,6 +14,7 @@ function BulkImport({ user }) {
 
   const loadLatest = useCallback(async () => {
     const res = await getLatestImport();
+    console.log(res?.data);
     setLatest(res?.data ?? null);
     setLoading(false);
   }, []);

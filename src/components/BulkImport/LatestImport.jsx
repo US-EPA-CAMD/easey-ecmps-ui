@@ -28,9 +28,18 @@ const statusCell = (row) =>
     row.statusCode
   );
 
+// Reporting period only applies to EM files; year/quarter are null otherwise.
+const reportingPeriod = (row) =>
+  row.year != null && row.quarter != null ? `${row.year} Q${row.quarter}` : "";
+
 const columns = [
   { name: "File Name", selector: (row) => row.fileName, sortable: true, grow: 2 },
   { name: "File Type", selector: (row) => row.fileType, sortable: true, width: "110px" },
+  {
+    name: "Reporting Period",
+    selector: reportingPeriod,
+    sortable: true,
+  },
   { name: "ORIS", selector: (row) => row.orisCode, sortable: true, width: "100px" },
   { name: "Unit/Stack/Pipe", selector: (row) => row.unitStackPipe, sortable: true },
   {
@@ -38,7 +47,6 @@ const columns = [
     selector: (row) => row.statusCode,
     cell: statusCell,
     sortable: true,
-    width: "140px",
   },
 ];
 
