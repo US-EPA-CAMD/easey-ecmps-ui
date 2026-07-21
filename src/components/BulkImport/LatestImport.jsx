@@ -5,18 +5,17 @@ import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import { workspaceUrl, reportWindowParams } from "../../utils/functions";
 
-// Opens the generated import report for a completed row.
-// TODO: the exact report route is finalized by the (out-of-scope) import job;
-// keyed on facility + plan here.
+// Opens the per-file import results report for a processed row.
 const openReport = (row) => {
   const url = workspaceUrl(
-    `/reports?reportCode=IMPORT&facilityId=${row.orisCode}&monitorPlanId=${row.monPlanId}`
+    `/reports?reportCode=BULK_IMPORT&facilityId=${row.orisCode}&importId=${row.importId}`
   );
   window.open(url, "Bulk Import Report", reportWindowParams);
 };
 
+// A finished file (COMPLETE or ERROR) links to its results report.
 const statusCell = (row) =>
-  row.statusCode === "COMPLETE" ? (
+  row.statusCode === "COMPLETE" || row.statusCode === "ERROR" ? (
     <button
       type="button"
       className="usa-button usa-button--unstyled"
