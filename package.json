@@ -55,7 +55,7 @@
     "jsonschema": "^1.4.1",
     "lodash": "^4.18.1",
     "loglevel": "^1.8.1",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "react": "^18.2.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-data-table-component": "^7.7.1",
