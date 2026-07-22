@@ -39,6 +39,32 @@ const RemoveButton = ({ row, onRemove, disabled }) => (
   </Button>
 );
 
+const buildColumns = ({ onRemove, disabled }) => [
+  { name: "File Name", selector: (row) => row.fileName, sortable: true, grow: 2 },
+  { name: "File Type", selector: (row) => row.fileType, sortable: true, width: "110px" },
+  {
+    name: "Reporting Period",
+    selector: (row) => row.reportingPeriod ?? "",
+    sortable: true,
+    width: "160px",
+  },
+  { name: "ORIS", selector: (row) => row.orisCode, sortable: true, width: "100px" },
+  { name: "Unit/Stack/Pipe", selector: (row) => row.unitStackPipe, sortable: true },
+  {
+    name: "File Size",
+    selector: (row) => row.fileSize,
+    format: (row) => formatBytes(row.fileSize),
+    width: "110px",
+  },
+  {
+    name: "",
+    width: "110px",
+    cell: (row) => (
+      <RemoveButton row={row} onRemove={onRemove} disabled={disabled} />
+    ),
+  },
+];
+
 const NewImportModal = ({ user, onClose, onSubmitted }) => {
   // Staging ID: the S3 folder key, and the import_set_id once submitted. No DB
   // row exists until submit.
@@ -142,31 +168,7 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
 
   const processing = busy || submitting;
 
-  const columns = [
-    { name: "File Name", selector: (row) => row.fileName, sortable: true, grow: 2 },
-    { name: "File Type", selector: (row) => row.fileType, sortable: true, width: "110px" },
-    {
-      name: "Reporting Period",
-      selector: (row) => row.reportingPeriod ?? "",
-      sortable: true,
-      width: "160px",
-    },
-    { name: "ORIS", selector: (row) => row.orisCode, sortable: true, width: "100px" },
-    { name: "Unit/Stack/Pipe", selector: (row) => row.unitStackPipe, sortable: true },
-    {
-      name: "File Size",
-      selector: (row) => row.fileSize,
-      format: (row) => formatBytes(row.fileSize),
-      width: "110px",
-    },
-    {
-      name: "",
-      width: "110px",
-      cell: (row) => (
-        <RemoveButton row={row} onRemove={removeFile} disabled={processing} />
-      ),
-    },
-  ];
+  const columns = buildColumns({ onRemove: removeFile, disabled: processing });
 
   return (
     <Modal
