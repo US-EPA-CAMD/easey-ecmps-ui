@@ -13,9 +13,9 @@ const openReport = (row) => {
   window.open(url, "Bulk Import Report", reportWindowParams);
 };
 
-// A finished file (COMPLETE or ERROR) links to its results report.
+// A finished file with ERRORs links to its results report.
 const statusCell = (row) =>
-  row.statusCode === "COMPLETE" || row.statusCode === "ERROR" ? (
+  row.statusCode === "ERROR" ? (
     <button
       type="button"
       className="usa-button usa-button--unstyled"
