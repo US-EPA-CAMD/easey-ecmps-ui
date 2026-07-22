@@ -32,6 +32,13 @@ const formatBytes = (bytes) => {
   return `${(bytes / 1024 ** i).toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
 };
 
+// Remove-file cell.
+const RemoveButton = ({ row, onRemove, disabled }) => (
+  <Button type="button" unstyled onClick={() => onRemove(row)} disabled={disabled}>
+    Remove
+  </Button>
+);
+
 const NewImportModal = ({ user, onClose, onSubmitted }) => {
   // Staging ID: the S3 folder key, and the import_set_id once submitted. No DB
   // row exists until submit.
@@ -156,14 +163,7 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
       name: "",
       width: "110px",
       cell: (row) => (
-        <Button
-          type="button"
-          unstyled
-          onClick={() => removeFile(row)}
-          disabled={processing}
-        >
-          Remove
-        </Button>
+        <RemoveButton row={row} onRemove={removeFile} disabled={processing} />
       ),
     },
   ];
