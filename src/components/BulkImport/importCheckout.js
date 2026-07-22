@@ -5,7 +5,7 @@ import {
 
 // Checks out the given plans for import (skipping ones already ours). Returns
 // the monPlanIds that couldn't be checked out so the caller can drop just those
-// files. Successful checkouts are left in place — no check-in here.
+// files.
 export const checkoutPlansForImport = async (monPlanIds, userId) => {
   const blocked = new Set();
 
