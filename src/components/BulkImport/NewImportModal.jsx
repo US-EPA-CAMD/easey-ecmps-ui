@@ -11,7 +11,7 @@ import { checkoutPlansForImport } from "./importCheckout";
 import {
   stageImportFiles,
   deleteImportFiles,
-  submitImport,
+  queueImport,
 } from "../../utils/api/camdServices";
 
 const TYPE_ORDER = { MP: 1, QA: 2, EM: 3 };
@@ -155,7 +155,7 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
         orisCode: f.orisCode,
         rptPeriodId: f.rptPeriodId,
       }));
-      await submitImport(importSetId, items, user.email, false);
+      await queueImport(importSetId, items, user.email, false);
       onSubmitted();
     } catch (error) {
       // On failure clear the staged files and reset the table; nothing persisted.

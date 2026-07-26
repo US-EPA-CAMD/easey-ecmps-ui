@@ -182,7 +182,7 @@ export async function deleteImportFiles(importSetId, s3Paths) {
     .catch(handleError);
 }
 
-export async function submitImport(
+export async function queueImport(
   importSetId,
   items,
   userEmail,
@@ -190,7 +190,7 @@ export async function submitImport(
 ) {
   return secureAxios({
     method: "POST",
-    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/submit`,
+    url: `${config.services.camd.uri}/bulk-import/set/${importSetId}/queue`,
     data: { userEmail, items },
   })
     .then(handleResponse)
