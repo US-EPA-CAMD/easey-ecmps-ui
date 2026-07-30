@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Button } from "@trussworks/react-uswds";
 import { v4 as uuidv4 } from "uuid";
 import DataTable from "react-data-table-component";
 import { Preloader } from "@us-epa-camd/easey-design-system";
 
 import Modal from "../Modal/Modal";
+import { FileInput } from "../FileInput/FileInput";
 import { DataStatus } from "../../utils/constants/dataStatus";
 import { parseErrorMessage } from "../../utils/api/apiUtils";
 import { checkoutPlansForImport } from "./importCheckout";
@@ -69,6 +70,7 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
   // Staging ID: the S3 folder key, and the import_set_id once submitted. No DB
   // row exists until submit.
   const [importSetId] = useState(uuidv4);
+  const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [errorMsgs, setErrorMsgs] = useState([]);
   const [busy, setBusy] = useState(false); // staging ops: add / remove / cancel
@@ -121,7 +123,8 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
 
   const handleFileChange = (e) => {
     addFiles(Array.from(e.target.files));
-    e.target.value = ""; // allow re-adding the same file
+    e.target.value = ""; // re-fire change if the same file is picked again
+    fileInputRef.current?.clearFiles(); // table is the file list, not FileInput's preview
   };
 
   const removeFile = async (file) => {
@@ -183,12 +186,11 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
       disableExitBtn={processing || files.length === 0}
       width="75%"
     >
-      <div className="padding-top-2">
-        <input
-          type="file"
+      <div className="padding-top-2 display-flex flex-column flex-align-center">
+        <FileInput
+          ref={fileInputRef}
           multiple
           accept=".json"
-          className="usa-file-input"
           disabled={processing}
           onChange={handleFileChange}
         />
