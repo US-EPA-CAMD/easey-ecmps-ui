@@ -1,5 +1,4 @@
 import { getAllFacilities } from "../../../utils/api/facilityApi";
-import { currentDateTime, formatDateToISO } from "../../../utils/functions";
 
 export const getDropDownFacilities = async () => {
   const facilities = (await getAllFacilities()).data.items;
@@ -39,18 +38,9 @@ export const canSelectRow = (
     //Submission page criteria
 
     //Ticket 6189. If there is no window status for an EM, users should not be allowed to submit.
-    if (rowType === "EM")
-    {
+    if (rowType === "EM") {
       if (!row.windowStatus) {
         return false;
-      }
-
-      if (row.windowExpiredDate) {
-        const windowExpiredDate = `${row.windowExpiredDate}`.split("T")[0];
-        const currentDate = formatDateToISO(currentDateTime());
-        if (windowExpiredDate < currentDate) {
-          row.isDisabled = true;
-        }
       }
     }
 
