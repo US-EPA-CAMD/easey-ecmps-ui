@@ -1,5 +1,5 @@
 import { getAllFacilities } from "../../../utils/api/facilityApi";
-import { currentDateTime } from "../../../utils/functions";
+import { currentDateTime, formatDateToISO } from "../../../utils/functions";
 
 export const getDropDownFacilities = async () => {
   const facilities = (await getAllFacilities()).data.items;
@@ -46,11 +46,9 @@ export const canSelectRow = (
       }
 
       if (row.windowExpiredDate) {
-        const expiredDate = new Date(row.windowExpiredDate);
-        const currentDate = currentDateTime();
-        expiredDate.setHours(0, 0, 0, 0);
-        currentDate.setHours(0, 0, 0, 0);
-        if (expiredDate < currentDate) {
+        const windowExpiredDate = `${row.windowExpiredDate}`.split("T")[0];
+        const currentDate = formatDateToISO(currentDateTime());
+        if (windowExpiredDate < currentDate) {
           row.isDisabled = true;
         }
       }
