@@ -2431,10 +2431,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@trussworks/react-uswds@^9.0.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@trussworks/react-uswds/-/react-uswds-9.1.0.tgz#6a60156fd7b7ee90484ccbe2d898784d34f7cb36"
-  integrity sha512-vQsr73oMtDIzLHVtkgD81tL7YxzygTyH9e1P3Lv/C1tGlqoNEUmUgVEmUVzo/IwOvMN0XxxSkNkOpnM9rDzRMg==
+"@trussworks/react-uswds@^11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@trussworks/react-uswds/-/react-uswds-11.2.0.tgz#0d49a400806970b0cfa96583d01b2062993459f0"
+  integrity sha512-tg8/oq4FgikF/7bsUN1cwYGfSetBDYlDCrkr6dXSxxC2o/PRr03tschKxiJ8Aa9XvE131LF95FtqzZlGy4kP5Q==
 
 "@tybys/wasm-util@^0.10.0":
   version "0.10.0"
