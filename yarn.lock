@@ -5174,10 +5174,10 @@ homedir-polyfill@^1.0.1:
   dependencies:
     parse-passwd "^1.0.0"
 
-html-dom-parser@8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-8.0.0.tgz#c962f2a2cdbaf1de19de9bcd7e010e7c14591e55"
-  integrity sha512-cWLJ8mt930VceOzVfY/J+T1ou9v3ENT0BgWqy5aEZjdFp37TYLXULjX8u0vD2rBpFAkK5IofOPl0y4Gq0QLIyA==
+html-dom-parser@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-8.0.2.tgz#eefc78a3c74bff970d956c33ac8827478dcab25e"
+  integrity sha512-UnUW0rcyfkYo9OCgeo+5Pzc4lRaifZB4h8RlGRwYIJmEz97Q3OKIYhNVXhG53jmNKWvBrq9n4ZzZIZAECnatSw==
   dependencies:
     domhandler "6.0.1"
     htmlparser2 "12.0.0"
@@ -5194,13 +5194,13 @@ html-escaper@^2.0.0:
   resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.2.tgz#dfd60027da36a36dfcbe236262c00a5822681453"
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
-html-react-parser@^6.1.5:
-  version "6.1.5"
-  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-6.1.5.tgz#13de73ea175f1274735cd7b4271df2fcf49f249e"
-  integrity sha512-jhdRR0fSkdkVlAmDIk5lS+IMSjCgFSfe+nI69DUwaxkWOgid2mk7RhoYxsQ7B6hzCghAI5YPz2B1jbskHhbaLg==
+html-react-parser@^6.1.7:
+  version "6.1.7"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-6.1.7.tgz#fdf1e5e0686e4233389ecd226aa3fc3ab3dcc251"
+  integrity sha512-TU3KHM2bDXHetJ7mKddkwdMiMJZdgpq2ZmbzGwVo7O4VECTbvczXKwjeA7+LNvy1iAr2/av351VvIis1OPEGfg==
   dependencies:
     domhandler "6.0.1"
-    html-dom-parser "8.0.0"
+    html-dom-parser "8.0.2"
     react-property "2.0.2"
     style-to-js "2.0.2"
 
