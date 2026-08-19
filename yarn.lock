@@ -1407,10 +1407,12 @@
   dependencies:
     is-negated-glob "^1.0.0"
 
-"@hookform/resolvers@^3.1.0":
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.10.0.tgz#7bfd18113daca4e57e27e1205b7d5a2d371aa59a"
-  integrity sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==
+"@hookform/resolvers@^5.9.0":
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-5.9.0.tgz#1b16491c7be803210425bf3d6a608e202c714eb4"
+  integrity sha512-8sNo1IklGaONrsKzXjwZJNsPbccAXLXGX//G+VFEcQOviMtbvR8/fM6HWyA0qrjgpOYauwoodda53CQIWOZ7Ag==
+  dependencies:
+    "@standard-schema/utils" "^0.3.0"
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
@@ -2296,6 +2298,11 @@
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@sooro-io/react-gtm-module/-/react-gtm-module-3.0.1.tgz#0089cc8f0d21dba7c1ecaa553027cd45789d9731"
   integrity sha512-lksbK1vKvkRsritcKObh9DjqiKpGQB99O4R89vT2KdHWU9SbR9eX/EgjBn7m3VR6GC9wF25/YX/D4lADRfjZcw==
+
+"@standard-schema/utils@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
+  integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
 "@svgr/babel-plugin-add-jsx-attribute@8.0.0":
   version "8.0.0"
