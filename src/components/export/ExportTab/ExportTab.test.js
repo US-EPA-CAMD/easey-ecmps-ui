@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as qaCertificationApi from "../../../utils/api/qaCertificationsAPI";
 import * as emissionsApi from "../../../utils/api/emissionsApi";
+import * as mdmApi from "../../../utils/api/mdmApi";
 import * as monitoringPlansApi from "../../../utils/api/monitoringPlansApi";
 
 import render from "../../../mocks/render"
@@ -18,8 +19,8 @@ const store = configureStore();
 
 describe("ExportTab", () => {
   beforeEach(() => {
-    jest.spyOn(qaCertificationApi, "getReportingPeriods").mockResolvedValue({
-      data: getMockReportingPeriods(),
+    jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValue({
+      data: { items: getMockReportingPeriods() },
       status: 200
     });
     jest.spyOn(qaCertificationApi, "exportQA").mockResolvedValue({
@@ -54,6 +55,32 @@ describe("ExportTab", () => {
       );
       const exportButton = screen.getAllByText("Export");
       expect(exportButton[0]).not.toBeEnabled();
+      expect(mdmApi.getReportingPeriods).toHaveBeenCalledWith({
+        excludeCurrentQuarter: false,
+      });
+    });
+
+    test("emissions summary report uses completed quarters only", async () => {
+      const user = userEvent.setup();
+
+      await render(
+        <Provider store={store}>
+          <ExportTab
+            orisCode={3}
+            exportState={null}
+            setExportState={() => null}
+            workspaceSection={"export"}
+            selectedConfig={mockSelectedConfig}
+            facility={"Barry (1, 2, CS0AAN)"}
+          />
+        </Provider>
+      );
+
+      await user.click(screen.getByText("Emissions Summary Report"));
+
+      expect(mdmApi.getReportingPeriods).toHaveBeenNthCalledWith(2, {
+        excludeCurrentQuarter: true,
+      });
     });
   });
 });
