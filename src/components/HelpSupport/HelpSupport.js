@@ -11,7 +11,6 @@ export const HelpSupport = () => {
 
   const [mainContent, setMainContent] = useState();
   const [faqsContent, setFaqsContent] = useState();
-  const [tutorialsContent, setTutorialsContent] = useState();
   const [contactUsContent, setContactUsContent] = useState();
 
   useEffect(() => {
@@ -22,9 +21,6 @@ export const HelpSupport = () => {
     );
     getContent("/ecmps/help-support/faqs.md").then((resp) =>
       setFaqsContent(resp.data)
-    );
-    getContent("/ecmps/help-support/usersGuide.md").then((resp) =>
-      setTutorialsContent(resp.data)
     );
     getContent("/ecmps/help-support/contactUs.md").then((resp) =>
       setContactUsContent(resp.data)
@@ -64,30 +60,6 @@ export const HelpSupport = () => {
           // onClick={(event) => handleRouteChange(event, topic.url)}
         >
           Visit FAQs
-        </USWDSLink>
-      </div>
-      <div className="grid-row margin-top-5">
-        <ReactMarkdown
-          className="users-guide-content"
-          children={tutorialsContent}
-          remarkPlugins={[remarkGfm]}
-        />
-        <div className="flex-force-break" />
-        <USWDSLink
-          className="usa-button usa-button--outline margin-0 margin-left-05"
-          outline="true"
-          type="button"
-          variant="unstyled"
-          asCustom={Link}
-          to="/users-guide"
-          role="link"
-          exact="true"
-          rel="UsersGuide"
-          title="Go to User's Guide page"
-          key="linkUsersGuide"
-          data-testid="linkUsersGuide"
-        >
-          Visit User's Guide
         </USWDSLink>
       </div>
       <div className="grid-row margin-top-5">

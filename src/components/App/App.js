@@ -18,7 +18,6 @@ import ReportGenerator from "../ReportGenerator/ReportGenerator";
 import { handleActiveElementFocus } from "../../additional-functions/add-active-class";
 import FAQ from "../FAQ/FAQ";
 import Resources from "../Resources/Resources";
-import UsersGuide from "../UsersGuide/UsersGuide"
 
 import HelpSupport from "../HelpSupport/HelpSupport";
 import { InactivityTracker } from "../InactivityTracker/InactivityTracker";
@@ -551,7 +550,6 @@ const App = () => {
           />
           <Route path={`/faqs`} element={<FAQ />} />
           <Route path="/signup-migrate" element={<UserAccountStatus />} />
-          <Route path="/users-guide" element={<UsersGuide />} />
           <Route path="/glossary" element={<ComingSoon />} />
           <Route
             path="/reporting-instructions"

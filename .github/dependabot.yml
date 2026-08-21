@@ -20,5 +20,24 @@ updates:
         versions: [">=19.0.0"]
       - dependency-name: "react-dom"
         versions: [">=19.0.0"]
+      - dependency-name: "react-test-renderer"
+        versions: [">=19.0.0"]
+      - dependency-name: "@types/react"
+        versions: [">=19.0.0"]
+      - dependency-name: "react-router"
+        versions: [">=7.0.0"]
+      - dependency-name: "react-router-dom"
+        versions: [">=7.0.0"]
+      - dependency-name: "react-data-table-component"
+        versions: [">=8.0.0"]
+      - dependency-name: "redux"
+        versions: [">=5.0.0"]
+      - dependency-name: "react-redux"
+        versions: [">=9.0.0"]
+      - dependency-name: "redux-thunk"
+        versions: [">=3.0.0"]
+      - dependency-name: "@reduxjs/toolkit"
+        versions: [">=2.0.0"]
       - dependency-name: "vite"
         versions: [">=8.0.0"]
+
