@@ -207,8 +207,8 @@ export const systemAdminForSubHeader = [
         url: "/admin/units-expected-to-submit",
       },
     ],
-  }
-]
+  },
+];
 
 export const getWorkspacePaths = () => {
   const workSpace = [
@@ -302,10 +302,20 @@ export const getWorkspacePaths = () => {
         config.app.submitterRole,
       ],
     },
+    {
+      name: "Bulk Import",
+      url: "/workspace/bulk-import",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
   ];
 
   return workSpace;
-}
+};
 
 export const getWorkspacePathsForSubHeader = () => {
   const workSpaceForSubHeader = [
@@ -319,7 +329,8 @@ export const getWorkspacePathsForSubHeader = () => {
         config.app.submitterRole,
       ],
     },
-    { name: "QA & Certifications",
+    {
+      name: "QA & Certifications",
       url: "/workspace/qa",
       children: [
         {
@@ -384,6 +395,16 @@ export const getWorkspacePathsForSubHeader = () => {
     {
       name: "Configuration Management",
       url: "/workspace/configuration-management",
+      requiredRoles: [
+        config.app.preparerRole,
+        config.app.sponsorRole,
+        config.app.initialAuthorizerRole,
+        config.app.submitterRole,
+      ],
+    },
+    {
+      name: "Bulk Import",
+      url: "/workspace/bulk-import",
       requiredRoles: [
         config.app.preparerRole,
         config.app.sponsorRole,
