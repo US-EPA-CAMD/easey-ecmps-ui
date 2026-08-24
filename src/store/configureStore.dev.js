@@ -1,7 +1,12 @@
 import { legacy_createStore, applyMiddleware, compose } from "redux";
 import rootReducer from "./reducers";
-import reduxImmutableStateInvariant from "redux-immutable-state-invariant";
+import reduxImmutableStateInvariantModule from "redux-immutable-state-invariant";
 import thunk from "redux-thunk";
+
+// Vite 8 returns module.exports for default imports from CommonJS packages.
+const reduxImmutableStateInvariant =
+  reduxImmutableStateInvariantModule.default ??
+  reduxImmutableStateInvariantModule;
 
 const configureStore = (initialState) => {
   const composeEnhancers =

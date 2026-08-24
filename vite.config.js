@@ -1,10 +1,26 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, transformWithOxc } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
+const jsxInJs = () => ({
+    name: 'jsx-in-js',
+    enforce: 'pre',
+    async transform(code, id) {
+        if (!/\/src\/.*\.js(?:\?.*)?$/.test(id)) {
+            return null;
+        }
+
+        return transformWithOxc(code, id, {
+            lang: 'jsx',
+            jsx: {
+                runtime: 'automatic',
+            },
+        });
+    },
+});
 
 export default ({ mode }) => {
 
@@ -13,15 +29,10 @@ export default ({ mode }) => {
     return defineConfig({
         base: './',
         plugins:
-            [react(), svgr()],
-        esbuild: {
-            loader: "jsx",
-            include: /src\/.*\.jsx?$/,
-            exclude: [],
-        },
+            [jsxInJs(), react(), svgr()],
         optimizeDeps: {
-            esbuildOptions: {
-                loader: {
+            rolldownOptions: {
+                moduleTypes: {
                     '.js': 'jsx',
                 },
             },
@@ -42,8 +53,13 @@ export default ({ mode }) => {
         },
         resolve: {
             alias: {
+                // Vite 8 otherwise selects this package's CommonJS browser entry.
+                'react-data-table-component': require.resolve(
+                    'react-data-table-component/dist/index.es.js'
+                ),
                 url: require.resolve("url"),
             },
+            dedupe: ['react', 'react-dom'],
         },
         test: {
             globals: true,
@@ -72,7 +88,7 @@ export default ({ mode }) => {
             outDir: 'build',
             sourcemap: true,
             cssCodeSplit: false,
-            rollupOptions: {
+            rolldownOptions: {
                 output: {
                     entryFileNames: 'static/js/[name]-[hash].js',
                     chunkFileNames: 'static/js/[name]-[hash].js',
@@ -82,7 +98,4 @@ export default ({ mode }) => {
         },
     })
 }
-
-
-
 
