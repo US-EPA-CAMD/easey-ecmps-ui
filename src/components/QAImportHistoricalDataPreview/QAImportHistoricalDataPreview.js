@@ -153,11 +153,11 @@ export const QAImportHistoricalDataPreview = ({
         <div className="grid-col-8 float-left padding-left-3">
           <ReportingPeriodSelector
             isExport={false}
+            includeCurrentQuarter={true}
             dataTypes={null}
             reportingPeriodSelectionHandler={reportingPeriodSelectionHandler}
             exportState={null}
             getInitSelection={getInitSelection}
-            isQaCert={true}
             setLoading={setLoading}
           />
         </div>

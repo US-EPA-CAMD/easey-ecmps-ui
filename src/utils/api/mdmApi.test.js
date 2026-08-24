@@ -24,6 +24,18 @@ describe("MDM Api Test", () => {
     expect(result["data"][0].id).toEqual(1);
   });
 
+  test("Should fetch completed reporting periods from mdm API", async () => {
+
+    mock.onGet(`${config.services.mdm.uri}/reporting-periods?excludeCurrentQuarter=true`).reply(200, [
+      {
+        id: 2,
+      },
+    ]);
+
+    const result = await getReportingPeriods({ excludeCurrentQuarter: true });
+    expect(result["data"][0].id).toEqual(2);
+  });
+
   test("Should get the mdm es catalog results", async () => {
     mock.onGet(`${config.services.mdm.uri}/es-check-catalog-results`).reply(200, [
       {
