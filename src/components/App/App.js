@@ -10,6 +10,7 @@ import NotFound from "../NotFound/NotFound";
 import AboutHome from "../AboutHome/AboutHome";
 import Layout from "../Layout/Layout";
 import MonitoringPlanHome from "../MonitoringPlanHome/MonitoringPlanHome";
+import BulkImport from "../BulkImport/BulkImport";
 import ConfigurationManagement from "../ConfigurationManagement/ConfigurationManagement";
 import { ErrorSuppression } from "../ErrorSuppression/ErrorSuppression";
 import MatsSubmission from "../MatsSubmission/MatsSubmission";
@@ -437,6 +438,16 @@ const App = () => {
                 <div key={"Submit-Component"}>
                   <EvaluateAndSubmit user={user} componentType="Submission" />
                 </div>
+              )
+            }
+          />
+          <Route
+            path="/workspace/bulk-import"
+            element={
+              !validUser() || !facilityCheckoutPermission() ? (
+                <Navigate key="navigate" to="/" />
+              ) : (
+                <BulkImport user={user} />
               )
             }
           />
