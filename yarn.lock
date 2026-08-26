@@ -1018,10 +1018,10 @@
     "@babel/plugin-transform-react-jsx-development" "^7.29.7"
     "@babel/plugin-transform-react-pure-annotations" "^7.29.7"
 
-"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.28.6", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
-  version "7.28.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.6.tgz#d267a43cb1836dc4d182cce93ae75ba954ef6d2b"
-  integrity sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==
+"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.15.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.28.6", "@babel/runtime@^7.29.7", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+  version "7.29.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.29.7.tgz#12022450c45a4da6d8d8287b18a4ff2ddb23f768"
+  integrity sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==
 
 "@babel/template@^7.29.7":
   version "7.29.7"
@@ -1780,12 +1780,12 @@
     "@mui/utils" "^7.3.9"
     prop-types "^15.8.1"
 
-"@mui/styled-engine-sc@^7.3.9":
-  version "7.3.9"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-7.3.9.tgz#98a3922038434678faf4f6ca320aa4b458d05349"
-  integrity sha512-O9JRFpOuqXy7+p9jPk6SHzbkWX/5PqO3j3VrNgGZDy4G/KvvSPbdsx/U+2VF7LHtbSAzQ03Sw6MJTW4bSKJEgA==
+"@mui/styled-engine-sc@^9.3.0":
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-9.3.0.tgz#cc1c3528207dbd6894d5a46e506f18b2750ac504"
+  integrity sha512-SFGOx9B1fwgYDM2ZGftUS+nehIC9lvVliQv52EvgZYVbOMzAQIDCEBp5G6PEW1PA0usADU+UuGHe5skn38CViQ==
   dependencies:
-    "@babel/runtime" "^7.28.6"
+    "@babel/runtime" "^7.29.7"
     "@types/hoist-non-react-statics" "^3.3.7"
     csstype "^3.2.3"
     hoist-non-react-statics "^3.3.2"
