@@ -42,7 +42,7 @@
     "@trussworks/react-uswds": "^9.0.0",
     "@us-epa-camd/easey-design-system": "1.38.7",
     "@uswds/uswds": "^3.14.0",
-    "@welldone-software/why-did-you-render": "^7.0.1",
+    "@welldone-software/why-did-you-render": "^10.0.1",
     "axios": "^1.19.0",
     "axios-mock-adapter": "^1.21.5",
     "axios-retry": "^3.4.0",
