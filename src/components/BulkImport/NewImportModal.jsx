@@ -8,7 +8,10 @@ import Modal from "../Modal/Modal";
 import { FileInput } from "../FileInput/FileInput";
 import { DataStatus } from "../../utils/constants/dataStatus";
 import { parseErrorMessage } from "../../utils/api/apiUtils";
-import { checkoutPlansForImport } from "./importCheckout";
+import {
+  buildBlockedFilesMessage,
+  checkoutPlansForImport,
+} from "./importCheckout";
 import {
   stageImportFiles,
   deleteImportFiles,
@@ -98,11 +101,7 @@ const NewImportModal = ({ user, onClose, onSubmitted }) => {
             importSetId,
             dropped.map((f) => f.s3Path)
           );
-          setErrorMsgs([
-            `These files were skipped because their monitoring plan is checked out by another user: ${dropped
-              .map((f) => f.fileName)
-              .join(", ")}.`,
-          ]);
+          setErrorMsgs([buildBlockedFilesMessage(dropped)]);
         }
 
         // Dedupe by s3Path: re-adding a file overwrites its S3 object, so the
