@@ -12,6 +12,10 @@ function BulkImport({ user }) {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    document.title = "Bulk Import";
+  }, []);
+
   const loadLatest = useCallback(async () => {
     const res = await getLatestImport();
     setLatest(res?.data ?? null);
