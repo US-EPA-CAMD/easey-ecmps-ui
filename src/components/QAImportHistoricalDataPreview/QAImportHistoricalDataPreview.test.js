@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 
 import * as qaCertApi from "../../utils/api/qaCertificationsAPI";
+import * as mdmApi from "../../utils/api/mdmApi";
 
 import render from "../../mocks/render"
 import QAImportHistoricalDataPreview from "./QAImportHistoricalDataPreview";
@@ -26,7 +27,7 @@ beforeEach(() => {
     data: getMockExportQa(),
   });
 
-  jest.spyOn(qaCertApi, "getReportingPeriods").mockResolvedValue({
+  jest.spyOn(mdmApi, "getReportingPeriods").mockResolvedValue({
     data: { items : getMockReportingPeriods() },
     status: 200
   });
@@ -45,6 +46,9 @@ test("renders QAImportHistoricalDataPreview with test summary table", async () =
   const testSummaryTable = screen.getByTestId('test-summary-table')
 
   expect(testSummaryTable).toBeInTheDocument()
+  expect(mdmApi.getReportingPeriods).toHaveBeenCalledWith({
+    excludeCurrentQuarter: false,
+  });
 });
 
 test("renders QAImportHistoricalDataPreview with qa cert table", async () => {
@@ -61,4 +65,7 @@ test("renders QAImportHistoricalDataPreview with qa cert table", async () => {
   const qaCertTable = screen.getByTestId('qa-cert-events-and-tee-table')
 
   expect(qaCertTable).toBeInTheDocument()
+  expect(mdmApi.getReportingPeriods).toHaveBeenCalledWith({
+    excludeCurrentQuarter: false,
+  });
 });

@@ -7,8 +7,12 @@ axios.defaults.headers.common = {
   "x-api-key": config.app.apiKey,
 };
 
-export const getReportingPeriods = async () => {
-  const url = `${config.services.mdm.uri}/reporting-periods`;
+export const getReportingPeriods = async (
+  { excludeCurrentQuarter = false } = {},
+) => {
+  const url = `${config.services.mdm.uri}/reporting-periods${
+    excludeCurrentQuarter ? "?excludeCurrentQuarter=true" : ""
+  }`;
   return secureAxios({ method: "GET", url }).then(handleResponse).catch(handleError);
 };
 

@@ -203,13 +203,32 @@ export const displayEmissionsReport = (
   mpId,
   year,
   quarter,
-  dateHr
+  dateHr,
+  dailyTestSumId
 ) => {
   const ws = window.location.href.includes("/workspace") ? "/workspace" : "";
 
-  const url = `${basePath}${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}&date=${formatDateToISO(
-    dateHr
-  )}&hour=${new Date(dateHr).getHours()}`;
+  let dateParams = "";
+
+  if (dateHr) {
+    const date = new Date(dateHr);
+
+    dateParams = `&date=${formatDateToISO(date)}`;
+
+    // dateHour format: "12/30/2022 08:00"
+    // date format:     "2023-08-26"
+    const hasHour = typeof dateHr === "string" && dateHr.includes(" ");
+
+    if (hasHour) {
+      dateParams += `&hour=${date.getHours()}`;
+    }
+  }
+  let dailyCalcParam = ''
+  if (dailyTestSumId) {
+    dailyCalcParam = `&dailyTestSumId=${dailyTestSumId}`
+  }
+
+  const url = `${basePath}${ws}/reports?reportCode=EM_ERR&facilityId=${orisCode}&monitorPlanId=${mpId}&year=${year}&quarter=${quarter}${dateParams}${dailyCalcParam}`;
   window.open(url, "Emissions Evaluation Report", reportWindowParams); //eslint-disable-next-line react-hooks/exhaustive-deps
 };
 

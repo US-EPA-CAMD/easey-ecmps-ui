@@ -227,20 +227,6 @@ export const getQASchema = async () => {
   return axios.get(url).then(handleResponse).catch(handleError);
 };
 
-/**
- *
- * @param {*} isExport if true excludes most recent/current reporting period
- * @returns list of reporting periods
- */
-export const getReportingPeriods = async (isExport) => {
-  const url = `${config.services.mdm.uri}/reporting-periods${
-    isExport ? "?export=true" : ""
-  }`;
-  return secureAxios({ url: url, method: "GET" })
-    .then(handleResponse)
-    .catch(handleError);
-};
-
 export const importQA = async (payload) => {
   const url = `${config.services.qaCertification.uri}/workspace/import/`;
   try {

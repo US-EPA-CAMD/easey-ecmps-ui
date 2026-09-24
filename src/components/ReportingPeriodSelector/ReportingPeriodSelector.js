@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Select, Label } from "@trussworks/react-uswds";
 import log from "loglevel";
-import { getReportingPeriods } from "../../utils/api/qaCertificationsAPI";
+import { getReportingPeriods } from "../../utils/api/mdmApi";
 import { sortReportingPeriodsDescending } from "../../utils/functions";
 import "./ReportingPeriodSelector.scss";
 import { successResponses } from "../../utils/api/apiUtils";
@@ -11,7 +11,7 @@ const ReportingPeriodSelector = ({
   dataTypes,
   reportingPeriodSelectionHandler,
   exportState,
-  isQaCert = false,
+  includeCurrentQuarter = false,
   setLoading = () => {},
 }) => {
   const [reportingPeriods, setReportingPeriods] = useState(null);
@@ -21,7 +21,9 @@ const ReportingPeriodSelector = ({
     const fetchReportingPeriods = async () => {
       try {
         setLoading(true);
-        const resp = await getReportingPeriods(isQaCert);
+        const resp = await getReportingPeriods({
+          excludeCurrentQuarter: !includeCurrentQuarter,
+        });
 
         if (!successResponses.includes(resp.status)) {
           throw new Error(

@@ -74,7 +74,7 @@ export const EmissionsViewTable = ({ monitorPlanId, filterApply, setFilterApply,
                     <button
                         className={"hyperlink-btn cursor-pointer"}
                         aria-label="open emissions report in a new tab"
-                        onClick={() => displayEmissionsReport(reduxCurrentTab.orisCode, monitorPlanId, row.rptyear, row.rptquarter, row.dateHour)}
+                        onClick={() => displayEmissionsReport(reduxCurrentTab.orisCode, monitorPlanId, row.rptyear, row.rptquarter, row.dateHour || row.date, row.dailyTestSumId)}
                     >
                         View Error
                     </button>
