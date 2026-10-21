@@ -1023,6 +1023,11 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.6.tgz#d267a43cb1836dc4d182cce93ae75ba954ef6d2b"
   integrity sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==
 
+"@babel/runtime@^7.29.7 || ^8.0.5":
+  version "8.0.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-8.0.7.tgz#4f4d0371d27c93c269b57dba49b8427027ddd25e"
+  integrity sha512-k0hagDDq/6w4v+0Sp4wFvIz/yswH5O7Va6aRTnD7N62Tnborp4X+YB+H3XUcWVSR4aE47WPEXiIIZchBs0GmYg==
+
 "@babel/template@^7.29.7":
   version "7.29.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.29.7.tgz#4d9d4004f645cdd304de958c725162784ecac700"
@@ -1806,12 +1811,12 @@
     "@mui/utils" "^7.3.9"
     prop-types "^15.8.1"
 
-"@mui/styled-engine-sc@^7.3.9":
-  version "7.3.9"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-7.3.9.tgz#98a3922038434678faf4f6ca320aa4b458d05349"
-  integrity sha512-O9JRFpOuqXy7+p9jPk6SHzbkWX/5PqO3j3VrNgGZDy4G/KvvSPbdsx/U+2VF7LHtbSAzQ03Sw6MJTW4bSKJEgA==
+"@mui/styled-engine-sc@^9.5.0":
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-9.5.0.tgz#9e19c87a444682431097855f00fce8a42d6097f7"
+  integrity sha512-APk/HmMjfopqTUnEx3sGtp/00AhbI+4ZDKMnbXjPBvzya+qVU5TMn+MJtIckDOV/Tfpf2K1n06DOGJiRIGJhtg==
   dependencies:
-    "@babel/runtime" "^7.28.6"
+    "@babel/runtime" "^7.29.7 || ^8.0.5"
     "@types/hoist-non-react-statics" "^3.3.7"
     csstype "^3.2.3"
     hoist-non-react-statics "^3.3.2"
