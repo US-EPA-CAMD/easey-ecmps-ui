@@ -20,6 +20,7 @@ describe("Easey Auth API", () => {
   let displayAppError
 
   beforeEach(() => {
+    localStorage.clear();
     jest.spyOn(monitoringPlansApi, 'getCheckedOutLocations').mockResolvedValue({
       data: [{
         checkedOutBy: 'subrata',
@@ -79,7 +80,10 @@ describe("Easey Auth API", () => {
       JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
-    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, "token");
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, {
+      token: "token",
+      expiration: new Date(Date.now() + 20 * 60000).toISOString(),
+    });
     mock
       .onGet(`${config.services.authApi.uri}/test`)
       .reply(200, "success message");
@@ -141,7 +145,7 @@ describe("Easey Auth API", () => {
       JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
-    const data = { token: "refreshed token", expiration: "2022-11-23" };
+    const data = { token: "refreshed token", expiration: new Date(Date.now() + 20 * 60000).toISOString() };
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, data);
 
     const res = await refreshToken();
@@ -163,7 +167,7 @@ describe("Easey Auth API", () => {
       JSON.stringify({ token: "xyz", userId: "subrata", tokenExpiration: date })
     );
 
-    const data = { token: "refreshed token", expiration: "2022-11-23" };
+    const data = { token: "refreshed token", expiration: new Date(Date.now() + 20 * 60000).toISOString() };
     mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, data);
 
     const res = await refreshToken();
@@ -173,7 +177,7 @@ describe("Easey Auth API", () => {
     );
   });
 
-  it("Can we refreshToken with error", async () => {
+  it("rejects a refresh error without replacing the current token", async () => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 15);
     localStorage.setItem(
@@ -185,8 +189,147 @@ describe("Easey Auth API", () => {
       .onPost(`${config.services.authApi.uri}/tokens`)
       .reply(500, "some error");
 
-    await refreshToken();
+    await expect(refreshToken()).rejects.toBeDefined();
     expect(JSON.parse(localStorage.getItem("ecmps_user")).token).toBe("xyz");
+    expect(displayAppError).toHaveBeenCalledTimes(1);
+  });
+
+  it("allows the next request to retry after a transient refresh failure", async () => {
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: new Date(Date.now() - 60000).toISOString(),
+      })
+    );
+    const data = {
+      token: "refreshed token",
+      expiration: new Date(Date.now() + 20 * 60000).toISOString(),
+    };
+    mock
+      .onPost(`${config.services.authApi.uri}/tokens`)
+      .replyOnce(500, "some error")
+      .onPost(`${config.services.authApi.uri}/tokens`)
+      .replyOnce(200, data);
+
+    await expect(refreshToken()).rejects.toBeDefined();
+    await expect(refreshToken()).resolves.toBe("refreshed token");
+
+    expect(mock.history.post).toHaveLength(2);
+  });
+
+  it("does not send the business request when token refresh fails", async () => {
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: new Date(Date.now() - 60000).toISOString(),
+      })
+    );
+
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(500, "some error");
+    mock.onGet(`${config.services.authApi.uri}/test`).reply(200, "unexpected");
+
+    await expect(
+      secureAxios({
+        method: "GET",
+        url: `${config.services.authApi.uri}/test`,
+      })
+    ).rejects.toBeDefined();
+
+    expect(mock.history.get).toHaveLength(0);
+  });
+
+  it("shares one refresh across concurrent protected requests", async () => {
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: new Date(Date.now() - 60000).toISOString(),
+      })
+    );
+
+    const data = {
+      token: "refreshed token",
+      expiration: new Date(Date.now() + 20 * 60000).toISOString(),
+    };
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(200, data);
+    mock.onGet(/\/test-[12]$/).reply(200, "success");
+
+    await Promise.all([
+      secureAxios({
+        method: "GET",
+        url: `${config.services.authApi.uri}/test-1`,
+      }),
+      secureAxios({
+        method: "GET",
+        url: `${config.services.authApi.uri}/test-2`,
+      }),
+    ]);
+
+    const refreshCalls = mock.history.post.filter(
+      request => request.url === `${config.services.authApi.uri}/tokens`
+    );
+    expect(refreshCalls).toHaveLength(1);
+  });
+
+  it("displays one error when a shared refresh fails", async () => {
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: new Date(Date.now() - 60000).toISOString(),
+      })
+    );
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(500, "some error");
+
+    const results = await Promise.allSettled([refreshToken(), refreshToken()]);
+
+    expect(results.map(result => result.status)).toEqual([
+      "rejected",
+      "rejected",
+    ]);
+    expect(mock.history.post).toHaveLength(1);
+    expect(displayAppError).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([400, 401])("clears the local session after a %s refresh rejection", async (status) => {
+    const currentLocation = window.location;
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: new Date(Date.now() - 60000).toISOString(),
+      })
+    );
+    mock.onPost(`${config.services.authApi.uri}/tokens`).reply(status, "expired");
+
+    await expect(refreshToken()).rejects.toBeDefined();
+
+    expect(localStorage.getItem("ecmps_user")).toBeNull();
+    window.location = currentLocation;
+  });
+
+  it("compares ISO token expiration as an absolute instant", async () => {
+    const now = Date.parse("2026-10-20T15:42:42.000Z");
+    const dateNowSpy = jest.spyOn(Date, "now").mockReturnValue(now);
+    localStorage.setItem(
+      "ecmps_user",
+      JSON.stringify({
+        token: "xyz",
+        userId: "subrata",
+        tokenExpiration: "2026-10-20T15:44:42.000Z",
+      })
+    );
+
+    await expect(refreshToken()).resolves.toBe("xyz");
+    expect(mock.history.post).toHaveLength(0);
+    dateNowSpy.mockRestore();
   });
 
   it("Can we logOut", async () => {
