@@ -12,7 +12,7 @@ import { uniqueId } from "lodash";
 import log from "loglevel";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 import {
   MATS_AVERAGING_GROUP_CODES_STORE_NAME,
