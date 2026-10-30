@@ -10,7 +10,7 @@
 
 import '@testing-library/jest-dom';
 import nodeCrypto from 'crypto';
-import { TextEncoder } from 'util';
+import { TextEncoder } from 'node:util';
 
 global.TextEncoder = TextEncoder;
 window.crypto = {

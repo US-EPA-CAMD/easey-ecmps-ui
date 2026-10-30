@@ -8,7 +8,7 @@ const HeaderInfoMatsSubmissionButton = ({ selectedConfig }) => {
   const [id] = useState(uuidv4());
 
   const onClick = () => {
-    navigate("create", {
+    void navigate("create", {
       relative: "path",
       state: { selectedConfigId: selectedConfig.id },
     });

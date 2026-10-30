@@ -172,7 +172,7 @@ const MatsSubmission = ({
   };
 
   const handleFinalizeModalClose = () => {
-    navigate(-1);
+    void navigate(-1);
   };
 
   const handleWarningsModalSave = () => {
