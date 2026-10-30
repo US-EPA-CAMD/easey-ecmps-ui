@@ -1,7 +1,7 @@
 import React from "react";
 import AboutHome from "./AboutHome";
 import { render, fireEvent, screen, wait } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import userEvent from '@testing-library/user-event';
 
 jest.mock("react-markdown", () => (props) => {

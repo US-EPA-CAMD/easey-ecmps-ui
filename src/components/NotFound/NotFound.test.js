@@ -1,7 +1,7 @@
 import React from "react";
 import NotFound from "./NotFound";
 import { render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 describe("<NotFound/>", () => {
   test('should take user to a "not found" page', () => {
     const { container } = render(

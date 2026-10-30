@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Link as USWDSLink } from "@trussworks/react-uswds";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { resetTabOrder } from "../../utils/functions";
 import { config } from "../../config";
 import axios from "axios";

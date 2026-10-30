@@ -10,6 +10,9 @@
 
 import '@testing-library/jest-dom';
 import nodeCrypto from 'crypto';
+import { TextEncoder } from 'node:util';
+
+global.TextEncoder = TextEncoder;
 window.crypto = {
   getRandomValues: function (buffer) {
     return nodeCrypto.randomFillSync(buffer);

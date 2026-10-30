@@ -1,15 +1,15 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 
 import configureStore from "../../store/configureStore.dev";
 import ContactUs from "./ContactUs";
 
 const store = configureStore();
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   useNavigate: () => ({
     push: jest.fn(),
   }),

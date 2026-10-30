@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 
 import { Button, GovBanner } from "@trussworks/react-uswds";
 import { Preloader } from "@us-epa-camd/easey-design-system";
