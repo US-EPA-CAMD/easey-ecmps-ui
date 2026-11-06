@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { LeftNavToSubHeader } from "./LeftNavToSubHeader";
 
 jest.mock('../../utils/constants/menuTopics', () => ({

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act, fireEvent } from '@testing-library/react';
 import Layout from './Layout';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import * as contentApi from "../../utils/api/contentApi";
 
 const mockFn = jest.fn();

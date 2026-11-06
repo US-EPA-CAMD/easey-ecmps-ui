@@ -20,7 +20,7 @@ import {
 } from "../../../additional-functions/workspace-section-and-store-names";
 import Export from "../../export/Export/Export";
 import EmissionsTab from "../../EmissionsTab/EmissionsTab";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { resetTabOrder } from "../../../utils/functions";
 
 export const SelectFacilitiesDataTable = ({
