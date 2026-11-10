@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import { OpenInNew } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import "./Resources.scss";
 
 import ReactMarkdown from "react-markdown";

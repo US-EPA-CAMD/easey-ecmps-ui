@@ -1,7 +1,7 @@
 import { isEqual } from "lodash";
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
-import { Route, Routes, Navigate, Outlet, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, Outlet, useLocation } from "react-router";
 
 import TagManager from "@sooro-io/react-gtm-module";
 import UserAccountStatus from "../Login/UserAccountStatus";
