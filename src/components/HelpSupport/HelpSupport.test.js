@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import HelpSupport from "./HelpSupport";
 
 jest.mock("react-markdown", () => (props) => <>{props.children}</>);

@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import log from "loglevel";
 
 import config from "./config";

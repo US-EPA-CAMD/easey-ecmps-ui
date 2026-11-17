@@ -4,7 +4,7 @@ import log from "loglevel";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { formatDate } from "../../../utils/functions";
 import { getMatsSubmissions } from "../../../utils/api/qaCertificationsAPI";
@@ -29,7 +29,7 @@ const DataTableMatsSubmission = ({
   const [status, setStatus] = useState(DataStatus.IDLE);
 
   const onResubmit = (row) => {
-    navigate("create", {
+    void navigate("create", {
       relative: "path",
       state: {
         selectedConfigId,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Link as USWDSLink } from "@trussworks/react-uswds";
 import "./HelpSupport.scss";
 

@@ -41,3 +41,17 @@ it('renders without crashing', () => {
   jest.advanceTimersByTime(10000);
   screen.debug();
 });
+
+it('renders the not found page for an unknown path', () => {
+  render(
+    <MemoryRouter initialEntries={["/missing"]}>
+      <App />
+    </MemoryRouter>
+  );
+
+  expect(
+    screen.getByRole("heading", {
+      name: "Sorry, but this web page does not exist.",
+    })
+  ).toBeInTheDocument();
+});

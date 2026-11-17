@@ -2,7 +2,7 @@ import React from "react";
 import { SideNav, Link as USWDSLink } from "@trussworks/react-uswds";
 import config from "../../config";
 import "./LeftNavigation.scss";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   globalView,
   getWorkspacePaths,
