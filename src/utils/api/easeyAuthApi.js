@@ -51,7 +51,8 @@ export const secureAxios = async (options) => {
       }
     }
   } catch (e) {
-    displayAppError(e);
+    // Do not dispatch the protected request when token refresh fails.
+    throw e;
   }
 
   return axios(options);
@@ -185,12 +186,13 @@ export const refreshToken = async () => {
       return null;
     }
 
-    const currDate = currentDateTime();
-    const tokenExp = new Date(user.tokenExpiration);
-    // set tokenExp back 60 seconds to ensure that we refresh token before expiring
-    tokenExp.setSeconds(tokenExp.getSeconds() - 60);
+    // Compare ISO UTC instants so browser timezones cannot trigger repeated refreshes.
+    const tokenExpiration = Date.parse(user.tokenExpiration);
+    if (!Number.isFinite(tokenExpiration)) {
+      throw new Error("Invalid token expiration");
+    }
 
-    if (currDate > tokenExp) {
+    if (Date.now() >= tokenExpiration - 60000) {
       // If a refresh is already in progress, return the existing promise
       // This ensures all concurrent requests wait for the same refresh operation
       if (activeRefreshPromise) {
@@ -219,11 +221,12 @@ export const refreshToken = async () => {
 
           return user.token;
         } catch (error) {
-          // On error, display error and return current token from localStorage
           displayAppError(error);
-          // Re-read localStorage in case another concurrent request succeeded
-          const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
-          return currentUser?.token;
+          // Auth API uses these statuses when the session cannot be refreshed.
+          if (error.response?.status === 400 || error.response?.status === 401) {
+            handleSignOut();
+          }
+          throw error;
         } finally {
           // Always clean up the promise reference when done
           activeRefreshPromise = null;
@@ -236,10 +239,7 @@ export const refreshToken = async () => {
     return user.token;
   } catch (e) {
     displayAppError(e);
-
-    // Self-healing: Re-read localStorage in case another concurrent request succeeded
-    const currentUser = JSON.parse(localStorage.getItem("ecmps_user"));
-    return currentUser?.token;
+    throw e;
   }
 };
 
